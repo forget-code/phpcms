@@ -31,6 +31,11 @@ class member_setting extends admin {
 			$member_setting = $this->db->get_one(array('module'=>'member'), 'setting');
 			$member_setting = string2array($member_setting['setting']);
 			
+			$email_config = getcache('common', 'commons');
+			if(empty($email_config['mail_user']) || empty($email_config['mail_password'])) {
+				$mail_disabled = 1;
+			}
+			
 			include $this->admin_tpl('member_setting');
 		}
 

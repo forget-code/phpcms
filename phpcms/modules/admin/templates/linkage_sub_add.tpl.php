@@ -19,7 +19,7 @@ include $this->admin_tpl('header');?>
 </tr>
 
 <tr>
-<td><?php echo L('menu_name')?></td>
+<td><?php echo L('linkage_name')?></td>
 <td>
 <textarea name="info[name]" rows="2" cols="20" id="name" class="inputtext" style="height:90px;width:150px;"><?php echo $name?></textarea>
 </td>

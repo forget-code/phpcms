@@ -31,7 +31,7 @@ class html {
 		$now = SYS_TIME;
 		if ($r['setting']) $space_setting = string2array($r['setting']);
 		if ($r['type']=='code') return true;
-		$poster_template = getcache('poster_template', 'commons');
+		$poster_template = getcache('poster_template_'.$siteid, 'commons');
 		if ($poster_template[$r['type']]['option']) {
 			$where = "`spaceid`='".$id."' AND `siteid`='".$siteid."' AND `disabled`=0 AND `startdate`<='".$now."' AND (`enddate`>='".$now."' OR `enddate`=0) ";
 			$pinfo = $this->db->select($where, '*', '', '`listorder` ASC, `id` DESC');
@@ -63,7 +63,8 @@ class html {
 		include template('poster', $type);
 		$data = ob_get_contents();
 		ob_end_clean();
-		$strlen = file_put_contents($file, $data, LOCK_EX);
+		
+		$strlen = pc_base::load_config('system','lock_ex') ? file_put_contents($file, $data, LOCK_EX) : file_put_contents($file, $data);
 		@chmod($file,0777);
 		return true;
 	}

@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET?>" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET;?>" />
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <title><?php echo L('phpcms_logon')?></title>
 <style type="text/css">
@@ -11,6 +11,9 @@
 	.login_iptbox{bottom:90px;_bottom:72px;color:#FFFFFF;font-size:12px;height:30px;left:50%;
 margin-left:-280px;position:absolute;width:560px; overflow:visible;}
 	.login_iptbox .ipt{height:24px; width:110px; margin-right:22px; color:#fff; background:url(<?php echo IMG_PATH?>admin_img/ipt_bg.jpg) repeat-x; *line-height:24px; border:none; color:#000; overflow:hidden;}
+	<?php if(SYS_STYLE=='en'){ ?>
+	.login_iptbox .ipt{width:100px; margin-right:12px;}
+	<?php }?>
 	.login_iptbox label{ *position:relative; *top:-6px;}
 	.login_iptbox .ipt_reg{margin-left:12px;width:46px; margin-right:16px; background:url(<?php echo IMG_PATH?>admin_img/ipt_bg.jpg) repeat-x; *overflow:hidden;text-align:left;padding:2px 0 2px 5px;font-size:16px;font-weight:bold;}
 	.login_tj_btn{ background:url(<?php echo IMG_PATH?>admin_img/login_dl_btn.jpg) no-repeat 0px 0px; width:52px; height:24px; margin-left:16px; border:none; cursor:pointer; padding:0px; float:right;}
@@ -22,7 +25,7 @@ margin-left:-280px;position:absolute;width:560px; overflow:visible;}
 	.cr a{color:#ccc;text-decoration:none;}
 </style>
 <script language="JavaScript">
-<!--YUMN
+<!--
 	if(top!=self)
 	if(self!=top) top.location=self.location;
 //-->
@@ -33,7 +36,7 @@ margin-left:-280px;position:absolute;width:560px; overflow:visible;}
 <div id="login_bg" class="login_box">
 	<div class="login_iptbox">
    	 <form action="index.php?m=admin&c=index&a=login&dosubmit=1" method="post" name="myform"><input name="dosubmit" value="" type="submit" class="login_tj_btn" /><label><?php echo L('username')?>：</label><input name="username" type="text" class="ipt" value="" /><label><?php echo L('password')?>：</label><input name="password" type="password" class="ipt" value="" /><label><?php echo L('security_code')?>：</label><input name="code" type="text" class="ipt ipt_reg" onfocus="document.getElementById('yzm').style.display='block'" />
-    <div id="yzm" class="yzm"><?php echo form::checkcode('code_img')?><br /><a href="javascript:document.getElementById('code_img').src='<?php echo APP_PATH?>api.php?op=checkcode&m=admin&c=index&a=checkcode&time='+Math.random();void(0);"><?php echo L('click_change_validate')?></a></div>
+    <div id="yzm" class="yzm"><?php echo form::checkcode('code_img')?><br /><a href="javascript:document.getElementById('code_img').src='<?php echo SITE_PROTOCOL.SITE_URL.WEB_PATH;?>api.php?op=checkcode&m=admin&c=index&a=checkcode&time='+Math.random();void(0);"><?php echo L('click_change_validate')?></a></div>
      </form>
     </div>
     <div class="cr"><?php echo L("copyright")?></div>

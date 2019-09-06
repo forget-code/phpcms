@@ -32,6 +32,7 @@ include $this->admin_tpl('header', 'admin');
 	</table>
 
 <div class="bk15"></div>
+<input type="hidden" name="old_type" value="<?php echo $info['type']?>">
 <input type="submit" name="dosubmit" id="dosubmit" class='dialog' value="2"/></form>
 </body>
 </html>

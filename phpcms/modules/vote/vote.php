@@ -38,11 +38,27 @@ class vote extends admin {
 		}
 	}
 	
+	/*
+	 *判断结束时间是否比当前时间小  
+	 */
+	public function checkdate() {
+		$nowdate = date('Y-m-d',SYS_TIME);
+		$todate = $_GET['todate'];
+		if($todate > $nowdate){
+			exit('1');
+		}else {
+			exit('0');
+		}
+	}
+	
 	/**
 	 * 添加投票
 	 */
 	public function add() {
-
+		//读取配置文件
+		$data = array();
+		$data = $this->M;
+		$siteid = $this->get_siteid();//当前站点
 		if(isset($_POST['dosubmit'])) {
 			
 			$_POST['subject']['addtime'] = SYS_TIME;
@@ -68,7 +84,7 @@ class vote extends admin {
 		} else {
 			$show_validator = $show_scroll = $show_header = true;
 			pc_base::load_sys_class('form', '', 0);
-			@extract($this->M);
+			@extract($data[$siteid]);
 			//模版
 			pc_base::load_app_func('global', 'admin');
 			$siteid = $this->get_siteid();
@@ -110,7 +126,7 @@ class vote extends admin {
 			}else{
 				$show_validator = $show_scroll = $show_header = true;
 				pc_base::load_sys_class('form', '', 0);
-					
+				
 				//解出投票内容
 				$info = $this->db->get_one(array('subjectid'=>$_GET['subjectid']));
 				if(!$info) showmessage(L('operation_success'));
@@ -185,21 +201,32 @@ class vote extends admin {
 		} else {
 			echo 0;
 		}
-	}
-
+	} 
+	
+	
 	/**
 	 * 投票模块配置
 	 */
 	public function setting() {
-		if(isset($_POST['dosubmit'])) {
- 			setcache('vote', $_POST['setting'], 'commons');  
+		//读取配置文件
+		$data = array();
+ 		$siteid = $this->get_siteid();//当前站点 
+		//更新模型数据库,重设setting 数据. 
+		$m_db = pc_base::load_model('module_model');
+		$data = $m_db->select(array('module'=>'vote'));
+		$setting = string2array($data[0]['setting']);
+		$now_seting = $setting[$siteid]; 
+ 		if(isset($_POST['dosubmit'])) {
+			//多站点存储配置文件
+			$siteid = $this->get_siteid();//当前站点
+			$setting[$siteid] = $_POST['setting'];
+  			setcache('vote', $setting, 'commons');  
 			//更新模型数据库,重设setting 数据. 
-			$m_db = pc_base::load_model('module_model');
-			$setting = array2string($_POST['setting']);
-			$m_db->update(array('setting'=>$setting), array('module'=>ROUTE_M));
+ 			$set = array2string($setting);
+			$m_db->update(array('setting'=>$set), array('module'=>ROUTE_M));
 			showmessage(L('setting_updates_successful'), '?m=vote&c=vote&a=init');
 		} else {
-			@extract($this->M);
+			@extract($now_seting);
 			pc_base::load_sys_class('form', '', 0);
 			//模版
 			pc_base::load_app_func('global', 'admin');

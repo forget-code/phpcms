@@ -15,12 +15,20 @@ include $this->admin_tpl('header','admin');
 	<table width="100%"  class="table_form">
 	<tr>
     <th width="120"><?php echo L('select_module_name')?>：</th>
-    <td class="y-bg"><?php echo form::select($module_data,'','name="module" onchange="change_module(this.value)"')?></td>
+    <td class="y-bg"><?php echo form::select($module_data,$_GET['module'],'name="module" onchange="change_module(this.value)"')?></td>
   </tr>
-<tr id="modelid_display" style="display:none">
+  <?php if($_GET['module'] == 'content') {?>
+  <tr id="modelid_display">
     <th width="120"><?php echo L('select_model_name')?>：</th>
     <td class="y-bg"><?php echo form::select($model_data,'','name="info[modelid]"')?></td>
   </tr>
+  <?php }?>
+  <?php if($_GET['module'] == 'yp') {?>
+  <tr id="yp_modelid_display">
+    <th width="120"><?php echo L('select_model_name')?>：</th>
+    <td class="y-bg"><?php echo form::select($yp_model_data,'','name="info[yp_modelid]"')?></td>
+  </tr>
+  <?php }?>
   <tr>
     <th width="120"><?php echo L('type_name')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="info[name]" id="name" size="30" /></td>
@@ -38,11 +46,7 @@ include $this->admin_tpl('header','admin');
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 	function change_module(module) {
-	if(module=='content') {
-		$('#modelid_display').css('display','');
-	}else {
-		$('#modelid_display').css('display','none');	
-	}
+		redirect('?m=search&c=search_type&a=add&module='+module+'&pc_hash=<?php echo $_SESSION['pc_hash']?>');
 }
 //-->
 </SCRIPT>

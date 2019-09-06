@@ -29,3 +29,8 @@ body .cke_dialog{visibility:visible;}.cke_skin_kama table.cke_dialog.cke_browser
 
 .cke_dialog_ui_hbox_last a span{ position:relative; top:-2px}
 .cke_dialog_footer .cke_dialog_ui_hbox_last a span{top:0}
+
+.Capture{color:#474747; font-size:12px; line-height:20px}
+.Capture a{color:#0075c0;display:inline-block;zoom:1;*display:inline; background:url(images/cdw.png) no-repeat; padding-left:20px; text-decoration:none}
+.Capture a:hover{text-decoration: underline}
+.Capture .CaptureDown {background-image:url(images/cd.png)}

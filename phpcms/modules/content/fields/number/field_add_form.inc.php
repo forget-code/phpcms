@@ -19,6 +19,14 @@
     </tr>
 	<tr> 
       <td>默认值</td>
-      <td><input type="text" name="setting[defaultvalue]" value="<?oho echo $defaultvalue?>" size="40" class="input-text"></td>
+      <td><input type="text" name="setting[defaultvalue]" value="<?php echo $defaultvalue?>" size="40" class="input-text"></td>
     </tr>
+
+	<tr> 
+	  <td>是否作为区间字段</td>
+	  <td>
+	  <input type="radio" name="setting[rangetype]" value="1"/> 是 
+	  <input type="radio" name="setting[rangetype]" value="0" checked />否 　　注：区间字段可以通过filters('字段名称','模型id','自定义数组')调用
+	  </td>
+	</tr>	
 </table>

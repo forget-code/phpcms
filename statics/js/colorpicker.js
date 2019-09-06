@@ -25,7 +25,7 @@ function colorpicker(showid,fun) {
 			   +'<tr height=30><td colspan=21 bgcolor=#eeeeee>'
 			   +'<table cellpadding="0" cellspacing="1" border="0" style="border-collapse: collapse">'
 			   +'<tr><td width="3"><td><input type="text" name="DisColor" size="6" id="background_colorId" disabled style="border:solid 1px #000000;background-color:#ffff00"></td>'
-			   +'<td width="3"><td><input type="text" name="HexColor" size="7" id="input_colorId" style="border:inset 1px;font-family:Arial;" value="#000000"></td></tr></table></td></table>'
+			   +'<td width="3"><td><input type="text" name="HexColor" size="7" id="input_colorId" style="border:inset 1px;font-family:Arial;" value="#000000"></td><td><a href="javascript:;" onclick="clear_title();"> clear</a></td></tr></table></td></table>'
 			   +'<table border="1" cellspacing="0" cellpadding="0" style="border-collapse: collapse" bordercolor="000000" style="cursor:hand;">'
 			   +colorTable+'</table></div>';
 	$('#'+showid).html(colorTable);
@@ -47,4 +47,8 @@ function select_color(showid,color,fun) {
 }
 function closeBox(){
 	$(".colorpanel").html(' ');
+}
+function clear_title() {
+	$('#title').css('color','');
+	$('#title_colorpanel').html(' ');
 }

@@ -12,14 +12,22 @@ class search_admin extends admin {
 	}
 
 	public function setting() {
+		$siteid = get_siteid();
 		if(isset($_POST['dosubmit'])) {
-			$setting = array2string($_POST['setting']);
-			setcache('search', $_POST['setting']);
+			//合并数据库缓存与新提交缓存
+			$r = $this->module_db->get_one(array('module'=>'search'));
+			$search_setting = string2array($r['setting']);
+			
+			$search_setting[$siteid] = $_POST['setting'];
+			$setting = array2string($search_setting);
+			setcache('search', $search_setting);
 			$this->module_db->update(array('setting'=>$setting),array('module'=>'search'));
 			showmessage(L('operation_success'),HTTP_REFERER);
 		} else {
 			$r = $this->module_db->get_one(array('module'=>'search'));
-			extract(string2array($r['setting']));
+			$setting = string2array($r['setting']);
+
+			extract($setting[$siteid]);
 			$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=search&c=search_type&a=add\', title:\''.L('add_search_type').'\', width:\'580\', height:\'240\', lock:true}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('add_search_type'));
 			include $this->admin_tpl('setting');
 		}
@@ -42,12 +50,15 @@ class search_admin extends admin {
 			}
 			//$key typeid 的索引
 			$key = isset($_GET['key']) ? intval($_GET['key']) : 0;
-			
 			foreach ($types as $_k=>$_v) {
 				if($key==$_k) {
 					$typeid = $_v['typeid'];
 					if($_v['modelid']) {
-						$search_api = pc_base::load_app_class('search_api','content');
+						if ($_v['typedir']!=='yp') {
+							$search_api = pc_base::load_app_class('search_api','content');
+						} else {
+							$search_api = pc_base::load_app_class('search_api',$_v['typedir']);
+						}
 						if(!isset($_GET['total'])) {
 							$total = $search_api->total($_v['modelid']);
 						} else {

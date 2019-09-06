@@ -37,44 +37,29 @@ class log extends admin {
 			$where .= "`time` <= '$d'";
 			$this->db->delete($where);
 			showmessage(L('operation_success'),'?m=admin&c=log');
-		}else {
-			if(is_array($_POST['logid'])){
-					foreach($_POST['logid'] as $logid_arr) {
-					$this->db->delete(array('logid'=>$logid_arr));
-					}
-					showmessage(L('operation_success'),'?m=admin&c=log');	
-			}else{
-					$logid = intval($_GET['logid']);
-					if($logid < 1) return false;
-					$result = $this->db->delete(array('logid'=>$logid));
-					if($result)
-					{
-						showmessage(L('operation_success'),'?m=admin&c=log');
-					}else {
-						showmessage(L("operation_failure"),'?m=admin&c=log');
-					}
-			}
+		} else {
+			return false;
 		}
- 		
 	}
+ 		
  	
 	/**
 	 * 日志搜索
 	 */
 	public function search_log() {
- 				$where = '';
-				extract($_GET['search']);
-				if($username){
-					$where .= $where ?  " AND username='$username'" : " username='$username'";
-				}
-				if ($module){
-					$where .= $where ?  " AND module='$module'" : " module='$module'";
-				}
-				if($start_time && $end_time) {
-					$start = $start_time;
-					$end = $end_time;
-					$where .= "AND `time` >= '$start' AND `time` <= '$end' ";
-				}
+ 		$where = '';
+		extract($_GET['search']);
+		if($username){
+			$where .= $where ?  " AND username='$username'" : " username='$username'";
+		}
+		if ($module){
+			$where .= $where ?  " AND module='$module'" : " module='$module'";
+		}
+		if($start_time && $end_time) {
+			$start = $start_time;
+			$end = $end_time;
+			$where .= "AND `time` >= '$start' AND `time` <= '$end' ";
+		}
  
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1; 
 		$infos = $this->db->listinfo($where,$order = 'logid DESC',$page, $pages = '12'); 
@@ -82,8 +67,8 @@ class log extends admin {
  		//模块数组
 		$module_arr = array();
 		$modules = getcache('modules','commons');
-		$default = L('open_module');
-		foreach($modules as $module=>$m) $module_arr[$m['module']] = $m['module'];
+		$default = $module ? $module : L('open_module');//未设定则显示 不限模块 ，设定则显示指定的
+ 		foreach($modules as $module=>$m) $module_arr[$m['module']] = $m['module'];
 		
  		include $this->admin_tpl('log_search_list');
 	} 

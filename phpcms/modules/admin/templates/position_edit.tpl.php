@@ -25,7 +25,7 @@ $(function(){
 </tr>
 <tr>
 <td><?php echo L('posid_catid')?></td> 
-<td id="load_catid"><?php echo form::select_category('category_content',$catid,'name="info[catid]"',L('please_select_parent_category'));?></td>
+<td id="load_catid"><?php echo form::select_category('',$catid,'name="info[catid]"',L('please_select_parent_category'));?></td>
 </tr>
 
 <tr>
@@ -36,13 +36,18 @@ $(function(){
 <td><?php echo L('maxnum')?></td> 
 <td><input type="text" name="info[maxnum]" id="maxnum" class="input-text" size="5" value="<?php echo $maxnum?>"></input><?php echo L('posid_num')?></td>
 </tr> 
+<tr>
+<td><?php echo L('extention_name')?></td> 
+<td><input type="text" name="info[extention]" id="extention" class="input-text" size="30" value="<?php echo $extention?>"></input></td>
+</tr> 
 </table>
 
     <div class="bk15"></div>
     <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="dialog" id="dosubmit">
 </form>
 <div class="explain-col">
-<?php echo L('position_tips')?>
+<?php echo L('position_tips')?><br/>
+<?php echo L('extention_name_tips')?>
 </div>
 </div>
 </div>

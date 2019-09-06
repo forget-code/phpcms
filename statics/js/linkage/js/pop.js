@@ -24,7 +24,7 @@ function get_child(nodeid,nodename,parentid) {
 			get_path(container[2],returnid);
 			$("#parent_"+returnid).attr('parentid',container[2]);
 		} else {
-			set_val(nodename);
+			set_val(nodename,nodeid);
 			$("input[name='info["+returnid+"]']").val(nodeid);
 			//$("#"+returnid).after('<input type="hidden" name="info['+returnid+']" value="'+nodeid+'">');
 			art.dialog({id:'edit_'+returnid}).close();
@@ -66,9 +66,15 @@ function get_path(nodeid,returnid) {
 	})
 }
 
-function set_val(nodename) {
+function set_val(nodename,nodeid) {
 	var path = $("#parent_"+returnid).siblings('span').html();
 	if(level==0) $("#"+returnid).html(nodename);
-	else $("#"+returnid).html(path+nodename);
+	else $("#"+returnid).html(path+nodename);	
+	var url = "api.php?op=get_linkage&act=ajax_gettopparent&linkageid="+nodeid+"&keyid="+returnkeyid;
+	$.getJSON(url+'&callback=?',function(data){
+		if(data) {
+			$("#city").val(data);
+		}
+	})	
 	level = 0;
 }	

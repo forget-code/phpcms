@@ -58,7 +58,7 @@ if(is_array($infos)){
 <!--
 	window.top.$('#display_center_id').css('display','none');
 	function edit(id, name) {
-	window.top.art.dialog({title:'<?php echo L('edit')?>--'+name, id:'edit', iframe:'?m=admin&c=position&a=edit&posid='+id ,width:'500px',height:'300px'}, 	function(){var d = window.top.art.dialog({id:'edit'}).data.iframe;
+	window.top.art.dialog({title:'<?php echo L('edit')?>--'+name, id:'edit', iframe:'?m=admin&c=position&a=edit&posid='+id ,width:'500px',height:'360px'}, 	function(){var d = window.top.art.dialog({id:'edit'}).data.iframe;
 	var form = d.document.getElementById('dosubmit');form.click();return false;}, function(){window.top.art.dialog({id:'edit'}).close()});
 }
 //-->

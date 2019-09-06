@@ -21,17 +21,20 @@ class deposit extends foreground {
 
 	public function init() {
 		pc_base::load_app_class('pay_factory','',0);
+		$where = '';
 		$page = $_GET['page'] ? intval($_GET['page']) : '1';
-		$where .= "AND `userid` = '$this->_userid'";
+		$where = "AND `userid` = '$this->_userid'";
 		$start = $end = $status = '';
 		if($_GET['dosubmit']){
-			extract($_GET['info']);
+			$start_addtime = $_GET['info']['start_addtime'];
+			$end_addtime = $_GET['info']['end_addtime'];
+			$status = $_GET['info']['status'];
 			if($start_addtime && $end_addtime) {
 				$start = strtotime($start_addtime.' 00:00:00');
 				$end = strtotime($end_addtime.' 23:59:59');
 				$where .= "AND `addtime` >= '$start' AND  `addtime` <= '$end'";				
 			}
-			if($status) $where = "AND `status` LIKE '%$status%' ";			
+			if($status) $where .= "AND `status` LIKE '%$status%' ";			
 		}
 		if($where) $where = substr($where, 3);
 		$infos = $this->account_db->listinfo($where, 'addtime DESC', $page, '15');

@@ -15,7 +15,7 @@ class type_manage extends admin {
 	
 	public function init () {
 		$datas = array();
-		$result_datas = $this->db->listinfo(array('siteid'=>$this->siteid,'module'=>'content'),'listorder ASC',$_GET['page']);
+		$result_datas = $this->db->listinfo(array('siteid'=>$this->siteid,'module'=>'content'),'listorder ASC,typeid DESC',$_GET['page']);
 		$pages = $this->db->pages;
 		foreach($result_datas as $r) {
 			$r['modelname'] = $this->model[$r['modelid']]['name'];
@@ -131,7 +131,7 @@ class type_manage extends admin {
 	
 	public function cache() {
 		$datas = array();
-		$result_datas = $this->db->select(array('siteid'=>$this->siteid,'module'=>'content'),'*',1000,'listorder ASC');
+		$result_datas = $this->db->select(array('siteid'=>$this->siteid,'module'=>'content'),'*',1000,'listorder ASC,typeid ASC');
 		foreach($result_datas as $_key=>$_value) {
 			$datas[$_value['typeid']] = $_value;
 		}
@@ -182,7 +182,7 @@ class type_manage extends admin {
 	 */
 	private function category_cache() {
 		$categorys = array();
-		$this->categorys = $this->category_db->select(array('siteid'=>$this->siteid),'*',10000,'listorder ASC');
+		$this->categorys = $this->category_db->select(array('siteid'=>$this->siteid, 'module'=>'content'),'*',10000,'listorder ASC');
 		foreach($this->categorys as $r) {
 			unset($r['module']);
 			$setting = string2array($r['setting']);

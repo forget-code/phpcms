@@ -9,7 +9,8 @@ class poster extends admin {
 		parent::__construct();
 		$this->s_db = pc_base::load_model('poster_space_model');
 		$this->db = pc_base::load_model('poster_model');
-		$this->M = new_html_special_chars(getcache('poster', 'commons'));
+		$setting = new_html_special_chars(getcache('poster', 'commons'));
+		$this->M = $setting[$this->get_siteid()];
 	}
 	
 	/**
@@ -41,17 +42,18 @@ class poster extends admin {
 			$poster['addtime'] = SYS_TIME;
 			$id = $this->db->insert($poster, true);
 			if ($id) {
-
 				$this->s_db->update(array('items'=>'+=1'), array('spaceid'=>$poster['spaceid'], 'siteid'=>$this->get_siteid()));
 				$this->create_js($poster['spaceid']);
-				showmessage(L('add_ads_success'), HTTP_REFERER, '', 'add');
-			}
-			foreach ($setting['images'] as $im) {
+				foreach ($setting['images'] as $im) {
 				$imgs[] = $im['imageurl'];
-			}
-			if (pc_base::load_config('system','attachment_stat')) {
-				$this->attachment_db = pc_base::load_model('attachment_model');
-				$this->attachment_db->api_update($imgs, 'poster-'.$id, 1);
+				}
+				if (pc_base::load_config('system','attachment_stat')) {
+					$this->attachment_db = pc_base::load_model('attachment_model');
+					$this->attachment_db->api_update($imgs, 'poster-'.$id, 1);
+				}
+				showmessage(L('add_ads_success'), HTTP_REFERER, '', 'add');
+			} else {
+				showmessage(L('operation_failure'), HTTP_REFERER, '', 'add');
 			}
 		} else {
 			$spaceid = intval($_GET['spaceid']);

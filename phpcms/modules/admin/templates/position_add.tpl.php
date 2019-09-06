@@ -38,13 +38,19 @@ $(function(){
 <td><?php echo L('maxnum')?></td> 
 <td><input type="text" name="info[maxnum]" id="maxnum" class="input-text" size="5" value="20"></input><?php echo L('posid_num')?></td>
 </tr> 
+
+<tr>
+<td><?php echo L('extention_name')?></td> 
+<td><input type="text" name="info[extention]" id="extention" class="input-text" size="20" value=""></input></td>
+</tr>
 </table>
 
     <div class="bk15"></div>
     <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="dialog" id="dosubmit">
 </form>
 <div class="explain-col">
-<?php echo L('position_tips')?>
+<?php echo L('position_tips')?><br/>
+<?php echo L('extention_name_tips')?>
 </div>
 </div></div>
 </body>

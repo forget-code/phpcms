@@ -6,8 +6,9 @@ class index {
 		pc_base::load_app_func('global');
 		pc_base::load_sys_class('format', '', 0);
 		$this->commentid = isset($_GET['commentid']) && trim(urldecode($_GET['commentid'])) ? trim(urldecode($_GET['commentid'])) : $this->_show_msg(L('illegal_parameters'));
+		$this->commentid = safe_replace($this->commentid);
 		$this->format = isset($_GET['format']) ? $_GET['format'] : '';
-		list($this->modules, $contentid, $this->siteid) = decode_commentid($this->commentid);
+		list($this->modules, $this->contentid, $this->siteid) = decode_commentid($this->commentid);
 		define('SITEID', $this->siteid);
 	}
 	
@@ -55,15 +56,11 @@ class index {
 	public function post() {
 		$comment = pc_base::load_app_class('comment');
 		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) : '';
-		
 		$SITE = siteinfo($this->siteid);
-		
 		$username = param::get_cookie('_username',$SITE['name'].L('phpcms_friends'));
 		$userid = param::get_cookie('_userid');
-		
 		$comment_setting_db = pc_base::load_model('comment_setting_model');
 		$setting = $comment_setting_db->get_one(array('siteid'=>$this->siteid));
-		
 		if (!empty($setting)) {
 			//是否允许游客
 			if (!$setting['guest']) {
@@ -71,7 +68,6 @@ class index {
 					$this->_show_msg(L('landing_users_to_comment'), HTTP_REFERER);
 				}
 			}
-			
 			if ($setting['code']) {
 				$session_storage = 'session_'.pc_base::load_config('system','session_storage');
 				pc_base::load_sys_class($session_storage);
@@ -173,7 +169,7 @@ class index {
 			
 			case 'jsonp':
 				$msg = pc_base::load_config('system', 'charset') == 'gbk' ? iconv('gbk', 'utf-8', $msg) : $msg;
-				echo $_GET['callback'].'('.json_encode(array('msg'=>$msg, 'status'=>$status)).')';
+				echo trim_script($_GET['callback']).'('.json_encode(array('msg'=>$msg, 'status'=>$status)).')';
 				exit;
 			break;
 			

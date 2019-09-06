@@ -15,7 +15,8 @@ class downservers extends admin {
 			$info['siteurl'] = trim($_POST['info']['siteurl']);
 			$info['sitename'] = trim($_POST['info']['sitename']);
 			$info['siteid'] = intval($_POST['info']['siteid']);
-			if(!$info['siteurl'] || !$info['sitename']) showmessage(L('downserver_not_empty'), HTTP_REFERER);			
+			if(empty($info['sitename'])) showmessage(L('downserver_not_empty'), HTTP_REFERER);	
+			if(empty($info['siteurl']) || !preg_match('/(\w+):\/\/(.+)[^\/]$/i', $info['siteurl'])) showmessage(L('downserver_error'), HTTP_REFERER);
 			$insert_id = $this->db->insert($info,true);
 			if($insert_id){
 				$this->_set_cache();
@@ -45,7 +46,8 @@ class downservers extends admin {
 			$info['siteurl'] = trim($_POST['info']['siteurl']);
 			$info['sitename'] = trim($_POST['info']['sitename']);
 			$info['siteid'] = intval($_POST['info']['siteid']);
-			if(!$info['siteurl'] || !$info['sitename']) showmessage(L('downserver_not_empty'), HTTP_REFERER);
+			if(empty($info['sitename'])) showmessage(L('downserver_not_empty'), HTTP_REFERER);	
+			if(empty($info['siteurl']) || !preg_match('/(\w+):\/\/(.+)[^\/]$/i', $info['siteurl'])) showmessage(L('downserver_error'), HTTP_REFERER);
 			$id = intval(trim($_POST['id']));
 			$this->_set_cache();
 			$this->db->update($info,array('id'=>$id));

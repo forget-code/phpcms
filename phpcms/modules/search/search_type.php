@@ -8,6 +8,7 @@ class search_type extends admin {
 		$this->db = pc_base::load_model('type_model');
 		$this->siteid = $this->get_siteid();
 		$this->model = getcache('model','commons');
+		$this->yp_model = getcache('yp_model','model');
 		$this->module_db = pc_base::load_model('module_model');
 	}
 	
@@ -20,22 +21,27 @@ class search_type extends admin {
 			$r['modelname'] = $this->model[$r['modelid']]['name'];
 			$datas[] = $r;
 		}
-
 		$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=search&c=search_type&a=add\', title:\''.L('add_search_type').'\', width:\'580\', height:\'240\', lock:true}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('add_search_type'));
 		$this->cache();
 		include $this->admin_tpl('type_list');
 	}
 	public function add() {
 		if(isset($_POST['dosubmit'])) {
-			
 			$_POST['info']['siteid'] = $this->siteid;
 			$_POST['info']['module'] = 'search';
 			if($_POST['module']=='content') {
 				$_POST['info']['modelid'] = intval($_POST['info']['modelid']);
+				$_POST['info']['typedir'] = $_POST['module'];
+			} elseif($_POST['module']=='yp') {
+				$_POST['info']['modelid'] = intval($_POST['info']['yp_modelid']);
+				$_POST['info']['typedir'] = $_POST['module'];				
 			} else {
 				$_POST['info']['typedir'] = $_POST['module'];
 				$_POST['info']['modelid'] = 0;
 			}
+			
+			//删除黄页模型变量无该字段
+			unset($_POST['info']['yp_modelid']);
 
 			$this->db->insert($_POST['info']);
 			showmessage(L('add_success'), '', '', 'add');
@@ -46,8 +52,12 @@ class search_type extends admin {
 				if($_value['siteid']!=$this->siteid) continue;
 				$model_data[$_key] = $_value['name'];
 			}
+			foreach($this->yp_model as $_key=>$_value) {
+				if($_value['siteid']!=$this->siteid) continue;
+				$yp_model_data[$_key] = $_value['name'];
+			}			
 
-			$module_data = array('special' => L('special'),'content' => L('content').L('module'));
+			$module_data = array('special' => L('special'),'content' => L('content').L('module'),'yp'=>L('yp'));
 
 			include $this->admin_tpl('type_add');
 		}
@@ -55,12 +65,20 @@ class search_type extends admin {
 	public function edit() {
 		if(isset($_POST['dosubmit'])) {
 			$typeid = intval($_POST['typeid']);
+			
 			if($_POST['module']=='content') {
 				$_POST['info']['modelid'] = intval($_POST['info']['modelid']);
+			} elseif($_POST['module']=='yp') {
+				$_POST['info']['modelid'] = intval($_POST['info']['yp_modelid']);
+				$_POST['info']['typedir'] = $_POST['module'];				
 			} else {
-				$_POST['info']['typedir'] = $_POST['module'];
+				$_POST['info']['typedir'] = $_POST['typedir'];
 				$_POST['info']['modelid'] = 0;
 			}
+				
+			//删除黄页模型变量无该字段
+			unset($_POST['info']['yp_modelid']);
+	
 			$this->db->update($_POST['info'],array('typeid'=>$typeid));
 			showmessage(L('update_success'), '', '', 'edit');
 		} else {
@@ -70,9 +88,14 @@ class search_type extends admin {
 				if($_value['siteid']!=$this->siteid) continue;
 				$model_data[$_key] = $_value['name'];
 			}
-			
-			$module_data = array('special' => L('special'),'content' => L('content').L('module'));
+			foreach($this->yp_model as $_key=>$_value) {
+				if($_value['siteid']!=$this->siteid) continue;
+				$yp_model_data[$_key] = $_value['name'];
+			}
+						
+			$module_data = array('special' => L('special'),'content' => L('content').L('module'),'yp'=>L('yp'));
 			$r = $this->db->get_one(array('typeid'=>$typeid));
+
 			extract($r);
 			include $this->admin_tpl('type_edit');
 		}
@@ -116,7 +139,7 @@ class search_type extends admin {
 			$search_model[$_value['typedir']]['typeid'] = $_value['typeid'];
 			$search_model[$_value['typedir']]['name'] = $_value['name'];
 		}
-		setcache('type_module',$datas,'search');
+		setcache('type_module_'.$this->siteid,$datas,'search');
 		//搜索header头中使用类型缓存
 		setcache('search_model_'.$this->siteid,$search_model,'search');
 		return true;

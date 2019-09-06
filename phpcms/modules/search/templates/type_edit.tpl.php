@@ -16,13 +16,31 @@ include $this->admin_tpl('header','admin');
 	<tr>
     <th width="120"><?php echo L('select_module_name')?>：</th>
     <td class="y-bg"><?php
-	$module = $modelid ? 'content' : $module;
-	echo form::select($module_data,$module,'name="module" onchange="change_module(this.value)"')?></td>
+	if($modelid && $typedir == 'yp') {
+		$module = 'yp';
+	} elseif($modelid && $typedir != 'yp') {
+		$module = 'content';
+	} else {
+		$module = $module;
+	}
+	echo form::select($module_data,$module,'name="module" onchange="change_module(this.value)" disabled')?></td>
+	<input name="module" type="hidden" value="<?php echo $module?>"><input name="typedir" type="hidden" value="<?php echo $typedir?>">
   </tr>
-<tr id="modelid_display" style="display:<?php if(!$modelid) echo 'none';?>">
+
+  <?php if($modelid && $typedir != 'yp') {?>
+  <tr id="modelid_display">
     <th width="120"><?php echo L('select_model_name')?>：</th>
     <td class="y-bg"><?php echo form::select($model_data,$modelid,'name="info[modelid]"')?></td>
   </tr>
+  <?php }?>
+
+  <?php if($modelid && $typedir == 'yp') {?>
+  <tr id="yp_modelid_display">
+    <th width="120"><?php echo L('select_model_name')?>：</th>
+    <td class="y-bg"><?php echo form::select($yp_model_data,$modelid,'name="info[yp_modelid]"')?></td>
+  </tr>
+  <?php }?>
+
   <tr>
     <th width="120"><?php echo L('type_name')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="info[name]" id="name" size="30" value="<?php echo $name?>"/></td>
@@ -42,12 +60,8 @@ include $this->admin_tpl('header','admin');
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 	function change_module(module) {
-	if(module=='content') {
-		$('#modelid_display').css('display','');
-	}else {
-		$('#modelid_display').css('display','none');	
+		redirect('?m=search&c=search_type&a=edit&typeid=<?php echo $typeid?>&module='+module+'&pc_hash=<?php echo $_SESSION['pc_hash']?>');
 	}
-}
 //-->
 </SCRIPT>
 </body>

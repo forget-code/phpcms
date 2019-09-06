@@ -23,12 +23,15 @@ class html {
 	 * @param  $upgrade 是否是升级数据
 	 */
 	public function show($file, $data = '', $array_merge = 1,$action = 'add',$upgrade = 0) {
+		if($upgrade) $file = '/'.ltrim($file,WEB_PATH);
 		$allow_visitor = 1;
 		$id = $data['id'];
 		if($array_merge) {
 			$data = new_stripslashes($data);
 			$data = array_merge($data['system'],$data['model']);
 		}
+		//通过rs获取原始值
+		$rs = $data;
 		if(isset($data['paginationtype'])) {
 			$paginationtype = $data['paginationtype'];
 			$maxcharperpage = $data['maxcharperpage'];
@@ -109,7 +112,7 @@ class html {
 					$pagenumber--;
 				}
 				for($i=1; $i<=$pagenumber; $i++) {
-					$upgrade = $upgrade ? $file : '';
+					$upgrade = $upgrade ? '/'.ltrim($file,WEB_PATH) : '';
 					$pageurls[$i] = $this->url->show($id, $i, $catid, $data['inputtime'],'','','edit',$upgrade);
 				}
 				$END_POS = strpos($content, '[/page]');
@@ -152,6 +155,7 @@ class html {
 					if($this->siteid!=1) {
 						$pagefile = $this->html_root.'/'.$site_dir.$pagefile;
 					}
+					$this->queue->add_queue($action,$pagefile,$this->siteid);
 					$pagefile = PHPCMS_PATH.$pagefile;
 					ob_start();
 					include template('content', $template);
@@ -208,7 +212,7 @@ class html {
 		}
 
 		//判断二级域名是否直接绑定到该栏目
-		$root_domain = preg_match('/^http:\/\/([a-z0-9\-\.]+)\/$/',$CAT['url']) ? 1 : 0;
+		$root_domain = preg_match('/^((http|https):\/\/)([a-z0-9\-\.]+)\/$/',$CAT['url']) ? 1 : 0;
 		$count_number = substr_count($CAT['url'], '/');
 		$urlrules = getcache('urlrules','commons');
 		$urlrules = explode('|',$urlrules[$category_ruleid]);
@@ -227,8 +231,15 @@ class html {
 				$this->queue->add_queue('add',$base_file,$this->siteid);
 			}
 			//URLRULES
-			foreach ($urlrules as $_k=>$_v) {
-				$urlrules[$_k] = '/'.$_v;
+			if($CAT['isdomain']) {
+				$second_domain = 1;
+				foreach ($urlrules as $_k=>$_v) {
+					$urlrules[$_k] = $_v;
+				}
+			} else {
+				foreach ($urlrules as $_k=>$_v) {
+					$urlrules[$_k] = '/'.$_v;
+				}
 			}
 		} else {
 			$file = PHPCMS_PATH.substr($this->html_root,1).$base_file;
@@ -272,7 +283,7 @@ class html {
 			if($root_domain) $parentdir = $catdir = '';
 			if($second_domain) {
 				$parentdir = '';
-				if(strpos($catdir, '/')==0) $catdir = '/'.$catdir;
+				$parentdir = str_replace($catdir.'/', '', $CAT['url']);
 			}
 			
 			$GLOBALS['URL_ARRAY'] = array('categorydir'=>$parentdir, 'catdir'=>$catdir, 'catid'=>$catid);
@@ -358,8 +369,11 @@ class html {
 		if(defined('IN_ADMIN')) {
 			$this->siteid = $GLOBALS['siteid'] = get_siteid();
 		} else {
-			param::get_cookie('siteid');
-			$this->siteid = $GLOBALS['siteid'] = param::get_cookie('siteid');
+			if (param::get_cookie('siteid')) {
+				$this->siteid = $GLOBALS['siteid'] = param::get_cookie('siteid');
+			} else {
+				$this->siteid = $GLOBALS['siteid'] = 1;
+			}
 		}
 	}
 	/**

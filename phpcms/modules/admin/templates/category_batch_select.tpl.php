@@ -18,7 +18,7 @@ include $this->admin_tpl('header','admin');?>
     </tr>
 	<tr> 
       <td align="center" rowspan="6">
-<select name='catids[]' id='catids'  multiple="multiple"  style="height:300px;width:400px" title="<?php echo L('push_ctrl_to_select');?>">
+<select name='catids[]' id='catids'  multiple="multiple"  style="height:300px;width:400px" title="<?php echo L('push_ctrl_to_select','','content');?>">
 <?php echo $string;?>
 </select></td>
       <td>

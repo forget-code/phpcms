@@ -30,6 +30,7 @@ class url{
 		//当内容为转换或升级时
 		if($upgrade || (isset($_POST['upgrade']) && defined('IN_ADMIN') && $_POST['upgrade'])) {
 			if($_POST['upgrade']) $upgrade = $_POST['upgrade'];
+			$upgrade = '/'.ltrim($upgrade,WEB_PATH);
 			if($page==1) {
 				$url_arr[0] = $url_arr[1] = $upgrade;
 			} else {
@@ -152,7 +153,7 @@ class url{
 				$url = $urls;
 			}
 		}
-		if (basename($url) == 'index.html') {
+		if (in_array(basename($url), array('index.html', 'index.htm', 'index.shtml'))) {
 			$url = dirname($url).'/';
 		}
 		if (strpos($url, '://')===false) $url = str_replace('//', '/', $url);
@@ -202,8 +203,11 @@ class url{
 		if(defined('IN_ADMIN')) {
 			$this->siteid = get_siteid();
 		} else {
-			param::get_cookie('siteid');
-			$this->siteid = param::get_cookie('siteid');
+			if (param::get_cookie('siteid')) {
+				$this->siteid = param::get_cookie('siteid');
+			} else {
+				$this->siteid = 1;
+			}
 		}
 	}
 }

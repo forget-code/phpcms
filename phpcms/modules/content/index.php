@@ -7,6 +7,9 @@ class index {
 	private $db;
 	function __construct() {
 		$this->db = pc_base::load_model('content_model');
+		$this->_userid = param::get_cookie('_userid');
+		$this->_username = param::get_cookie('_username');
+		$this->_groupid = param::get_cookie('_groupid');
 	}
 	//首页
 	public function init() {
@@ -16,6 +19,10 @@ class index {
 			$siteid = 1;
 		}
 		$siteid = $GLOBALS['siteid'] = max($siteid,1);
+		define('SITEID', $siteid);
+		$_userid = $this->_userid;
+		$_username = $this->_username;
+		$_groupid = $this->_groupid;
 		//SEO
 		$SEO = seo($siteid);
 		$sitelist  = getcache('sitelist','commons');
@@ -29,6 +36,10 @@ class index {
 		$id = intval($_GET['id']);
 
 		if(!$catid || !$id) showmessage(L('information_does_not_exist'),'blank');
+		$_userid = $this->_userid;
+		$_username = $this->_username;
+		$_groupid = $this->_groupid;
+
 		$page = intval($_GET['page']);
 		$page = max($page,1);
 		$siteids = getcache('category_content','commons');
@@ -201,7 +212,10 @@ class index {
 		} elseif($_priv_data=='-2') {
 			showmessage(L('no_priv'));
 		}
-			
+		$_userid = $this->_userid;
+		$_username = $this->_username;
+		$_groupid = $this->_groupid;
+
 		if(!$catid) showmessage(L('category_not_exists'),'blank');
 		$siteids = getcache('category_content','commons');
 		$siteid = $siteids[$catid];
@@ -304,9 +318,9 @@ class index {
 	/**
 	 * 检查支付状态
 	 */
-	private function _check_payment($flag,$paytype) {
-		$_userid = param::get_cookie('_userid');
-		$_username = param::get_cookie('_username');
+	protected function _check_payment($flag,$paytype) {
+		$_userid = $this->_userid;
+		$_username = $this->_username;
 		if(!$_userid) return false;
 		pc_base::load_app_class('spend','pay',0);
 		$setting = $this->category_setting;
@@ -323,10 +337,10 @@ class index {
 	 * 检查阅读权限
 	 *
 	 */
-	private function _category_priv($catid) {
+	protected function _category_priv($catid) {
 		$catid = intval($catid);
 		if(!$catid) return '-2';
-		$_groupid = param::get_cookie('_groupid');
+		$_groupid = $this->_groupid;
 		$_groupid = intval($_groupid);
 		if($_groupid==0) $_groupid = 8;
 		$this->category_priv_db = pc_base::load_model('category_priv_model');
@@ -336,7 +350,7 @@ class index {
 			foreach($result as $r) {
 				if($r['roleid'] == $_groupid) return '1';
 			}
-			return '-1';
+			return '-2';
 		} else {
 			return '1';
 		}

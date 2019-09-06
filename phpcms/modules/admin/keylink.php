@@ -8,7 +8,7 @@ class keylink extends admin {
 	}
 	
 	function init () {
-		$page = $_GET['page'] ? $_GET['page']:'1';
+		$page = $_GET['page'] ? intval($_GET['page']) : '1';
 		$infos = $this->db->listinfo('','keylinkid DESC',$page ,'20');
 		$pages = $this->db->pages;	
 		$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=admin&c=keylink&a=add\', title:\''.L('add_keylink').'\', width:\'450\', height:\'130\'}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('add_keylink'));
@@ -75,11 +75,11 @@ class keylink extends admin {
 	 */
 	function delete() {
  		if(is_array($_POST['keylinkid'])){
-				foreach($_POST['keylinkid'] as $keylinkid_arr) {
-					$this->db->delete(array('keylinkid'=>$keylinkid_arr));
-				}
-				$this->public_cache_file();//更新缓存
-				showmessage(L('operation_success'),'?m=admin&c=keylink');	
+			foreach($_POST['keylinkid'] as $keylinkid_arr) {
+				$this->db->delete(array('keylinkid'=>$keylinkid_arr));
+			}
+			$this->public_cache_file();//更新缓存
+			showmessage(L('operation_success'),'?m=admin&c=keylink');	
 		} else {
 			$keylinkid = intval($_GET['keylinkid']);
 			if($keylinkid < 1) return false;

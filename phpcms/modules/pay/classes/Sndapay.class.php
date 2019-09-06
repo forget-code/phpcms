@@ -44,7 +44,7 @@ class Sndapay extends paymentabstract{
 		$prepare_data['DefaultChannel'] = '04';
 		
 		// 商品信息
-		$prepare_data['ProductDesc'] = urlencode($this->product_info['name']);
+		$prepare_data['ProductDesc'] = $this->product_info['name'];
 		$prepare_data['Amount'] = $this->product_info['price'];
 		$prepare_data['ProductNo'] = '';
 		$prepare_data['ProductUrl'] = '';
@@ -54,7 +54,7 @@ class Sndapay extends paymentabstract{
 		$prepare_data['OrderTime'] = date('YmdHis',$this->order_info['order_time']);
 
 		//买家信息
-		$prepare_data['Remark1'] = urlencode($this->product_info['body']);
+		$prepare_data['Remark1'] = $this->product_info['body'];
 		
 		$data = $prepare_data['Version'].$prepare_data['Amount'].$prepare_data['OrderNo'].$prepare_data['MerchantNo'].$prepare_data['MerchantUserId'].$prepare_data['PayChannel'].$prepare_data['PostBackUrl'].$prepare_data['NotifyUrl'].$prepare_data['BackUrl'].$prepare_data['OrderTime'].$prepare_data['CurrencyType'].$prepare_data['NotifyUrlType'].$prepare_data['SignType'].$prepare_data['ProductNo'].$prepare_data['ProductDesc'].$prepare_data['Remark1'].$prepare_data['DefaultChannel'].$prepare_data['ProductUrl'];
 		

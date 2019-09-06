@@ -156,6 +156,8 @@ switch($step)
 		set_config(array('errorlog'=>'1'),'system');			
 		file_put_contents(CACHE_PATH.'install.lock','');
 		include PHPCMS_PATH."install/step/step".$step.".tpl.php";
+		//删除安装目录
+		delete_install(PHPCMS_PATH.'install/');
 		break;
 	
 	case 'installmodule': //执行SQL
@@ -255,7 +257,7 @@ switch($step)
 						'tablepre'=>$sso_tablepre,
 						'pconnect'=>$pconnect,
 						'charset'=>$dbcharset,
-						);	
+						);
 			set_config($sys_sso_config,'system');	//更改cms中sso配置				
 			set_sso_config($sso_config,'system');   //写入sso中配置信息
 			set_sso_config($sso_db_config,'database'); //写入sso数据库配置信息
@@ -301,7 +303,7 @@ switch($step)
 			file_put_contents(PHPCMS_PATH.'phpsso_server/caches/caches_admin/caches_data/applist.cache.php', $applist);
 		} else {
 			//安装可选模块
-			if(in_array($module,array('announce','comment','link','vote','message','mood','poster'))) {
+			if(in_array($module,array('announce','comment','link','vote','message','mood','poster','formguide','wap','upgrade','tag'))) {
 				$install_module = pc_base::load_app_class('module_api','admin');
 				$install_module->install($module);
 			}
@@ -414,7 +416,7 @@ function _sql_split($sql,$r_tablepre = '',$s_tablepre='phpcms_') {
 	$r_tablepre = $r_tablepre ? $r_tablepre : $tablepre;
 	if(mysql_get_server_info > '4.1' && $dbcharset)
 	{
-		$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "TYPE=\\1 DEFAULT CHARSET=".$dbcharset,$sql);
+		$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=".$dbcharset,$sql);
 	}
 	
 	if($r_tablepre != $s_tablepre) $sql = str_replace($s_tablepre, $r_tablepre, $sql);
@@ -465,7 +467,7 @@ function set_config($config,$cfgfile) {
 	}
 	$str = file_get_contents($configfile);
 	$str = preg_replace($pattern, $replacement, $str);
-	return file_put_contents($configfile, $str, LOCK_EX);		
+	return file_put_contents($configfile, $str);		
 }
 
 function set_sso_config($config,$cfgfile) {
@@ -481,7 +483,7 @@ function set_sso_config($config,$cfgfile) {
 	}
 	$str = file_get_contents($configfile);
 	$str = preg_replace($pattern, $replacement, $str);
-	return file_put_contents($configfile, $str, LOCK_EX);		
+	return file_put_contents($configfile, $str);		
 }
 
 function remote_file_exists($url_file){
@@ -490,5 +492,14 @@ function remote_file_exists($url_file){
 		return false;
 	}
 	return true;
+}
+function delete_install($dir) {
+	$dir = dir_path($dir);
+	if (!is_dir($dir)) return FALSE;
+	$list = glob($dir.'*');
+	foreach($list as $v) {
+		is_dir($v) ? delete_install($v) : @unlink($v);
+	}
+    return rmdir($dir);
 }
 ?>

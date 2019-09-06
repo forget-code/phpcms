@@ -37,7 +37,7 @@ final class cache_factory {
 	 */
 	public static function get_instance($cache_config = '') {
 
-		if(cache_factory::$cache_factory == '') {
+		if(cache_factory::$cache_factory == '' || $cache_config !='') {
 			cache_factory::$cache_factory = new cache_factory();
 			if(!empty($cache_config)) {
 				cache_factory::$cache_factory->cache_config = $cache_config;

@@ -287,6 +287,8 @@ $LANG['checkstatus_flag'] = '审核状态时是否允许修改';
 $LANG['content_page'] = '内容页';
 $LANG['reject_msg'] = '请输入退稿理由，退稿理由将会以短消息方式发送！';
 $LANG['check_status'] = '<font color="#0000FF">当前审核状态 ＞</font>';
+$LANG['cancel_the_picture'] = '取消图片';
+$LANG['model_table_not_exists'] = '模型被禁用或者是模型内容表不存在';
 
 
 //前台部分
@@ -307,5 +309,7 @@ $LANG['guest_not_allowsearch'] = '游客不允许搜索，请先登录';
 
 $LANG['cut_the_picture'] = '裁切图片';
 $LANG['moreinfo'] = '调用副表';
+$LANG['contribute_add_point'] = '投稿奖励';
+
 
 ?>

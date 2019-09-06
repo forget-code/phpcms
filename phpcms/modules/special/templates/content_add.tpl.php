@@ -14,7 +14,7 @@ html,body{ background:#e2e9ea}
 </script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>content_addtop.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>colorpicker.js"></script>
- 
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <form name="myform" id="myform" action="?m=special&c=content&a=add&specialid=<?php echo $_GET['specialid']?>" method="post" enctype="multipart/form-data">
 <div class="addContent">
 <div class="crumbs"><?php echo L('pos_info')?></div>
@@ -23,11 +23,11 @@ html,body{ background:#e2e9ea}
         	<div class="content pad-6">
 	<h6> <?php echo L('content_thumb')?></h6>
 	 <div class="upload-pic img-wrap"><div class="bk10"></div><input type="hidden" name="info[thumb]" id="thumb">
-						<a href="javascript:;" onclick="javascript:flashupload('thumb_images', '<?php echo L('file_upload')?>','thumb',thumb_images,'1,jpg|jpeg|gif|bmp|png,300,300','content','39')"><img src="statics/images/icon/upload-pic.png" id="thumb_preview" width="135" height="113" style="cursor:hand" /></a><input type="button" style="width: 66px;" class="button" onclick="crop_cut($('#thumb').val());return false;" value="<?php echo L('crop_thumb')?>"><script type="text/javascript">function crop_cut(id){
+						<a href="javascript:;" onclick="javascript:flashupload('thumb_images', '<?php echo L('file_upload')?>','thumb',thumb_images,'1,jpg|jpeg|gif|bmp|png,300,300','content','39','<?php echo upload_key('1,jpg|jpeg|gif|bmp|png,300,300')?>')"><img src="statics/images/icon/upload-pic.png" id="thumb_preview" width="135" height="113" style="cursor:hand" /></a><input type="button" style="width: 66px;" class="button" onclick="crop_cut($('#thumb').val());return false;" value="<?php echo L('crop_thumb')?>"><script type="text/javascript">function crop_cut(id){
 	if (id=='') { alert('<?php echo L('please_upload_thumb')?>');return false;}
 	window.top.art.dialog({title:'<?php echo L('crop_thumb')?>', id:'crop', iframe:'index.php?m=content&c=content&a=public_crop&module=phpcms&picurl='+encodeURIComponent(id)+'&input=thumb&preview=thumb_preview', width:'680px', height:'480px'}, 	function(){var d = window.top.art.dialog({id:'crop'}).data.iframe;
 	d.uploadfile();return false;}, function(){window.top.art.dialog({id:'crop'}).close()});
-};</script></div> 
+};</script><input type="button" value="<?php echo L('cancel_thumb')?>" onclick="$('#thumb_preview').attr('src','statics/images/icon/upload-pic.png');$('#thumb').val(' ');return false;" class="button" style="width: 66px;"></div> 
 	<h6> <?php echo L('author')?></h6>
 	 <input type="text" name="data[author]" value="" size="30"> 
 	<h6> <?php echo L('islink')?></h6>
@@ -65,7 +65,7 @@ html,body{ background:#e2e9ea}
     </tr>
 	<tr>
       <th width="80"> <font color="red">*</font> <?php echo L('content')?>	  </th>
-      <td><div id='content_tip'></div><textarea name="data[content]" id="content" boxid="content"></textarea><?php echo form::editor('content', 'full', 'content', '', '', 1, '', 300)?><div class="content_attr"><label><input name="add_introduce" type="checkbox"  value="1" checked><?php echo L('iscutcontent')?></label><input type="text" name="introcude_length" value="200" size="3"><?php echo L('characters_to_contents')?>
+      <td><div id='content_tip'></div><textarea name="data[content]" id="content" boxid="content"></textarea><?php echo form::editor('content', 'full', 'content', '', '', 1, '', '')?><div class="content_attr"><label><input name="add_introduce" type="checkbox"  value="1" checked><?php echo L('iscutcontent')?></label><input type="text" name="introcude_length" value="200" size="3"><?php echo L('characters_to_contents')?>
 <label><input type='checkbox' name='auto_thumb' value="1" checked><?php echo L('iscutcotent_pic')?></label><input type="text" name="auto_thumb_no" value="1" size="2" class=""><?php echo L('picture2thumb')?>
 </div></td>
 	<tr>
@@ -87,9 +87,9 @@ html,body{ background:#e2e9ea}
 </div>
 <div class="fixed-bottom">
 	<div class="fixed-but text-c">
-    <div class="button"><input value="<?php echo L('save')?>" type="submit" class="cu" name="dosubmit"></div>
-    <div class="button"><input value="<?php echo L('save_and_add')?>" type="submit" class="cu" name="dosubmit_continue"></div>
-    <div class="button"><input value="<?php echo L('close')?>" type="button" name="close" class="cu" onclick="close_window()"></div>
+    <div class="button"><input value="<?php echo L('save')?>" type="submit" class="cu" name="dosubmit" onclick="refersh_window();"></div>
+    <div class="button"><input value="<?php echo L('save_and_add')?>" type="submit" class="cu" name="dosubmit_continue" onclick="refersh_window();"></div>
+    <div class="button"><input value="<?php echo L('close')?>" type="button" name="close" class="cu" onclick="refersh_window();close_window()"></div>
       </div>
 </div>
 </form>
@@ -135,5 +135,8 @@ $(function(){
 	$('.edit_content').hide();
 });
 self.moveTo(0, 0);
+function refersh_window() {
+	setcookie('refersh_time', 1);
+}
 //-->
 </script>

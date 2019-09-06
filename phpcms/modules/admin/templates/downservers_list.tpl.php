@@ -63,7 +63,7 @@ if(is_array($infos)){
 <script type="text/javascript">
 <!--
 	function edit(id, name) {
-	window.top.art.dialog({title:'<?php echo L('edit')?>--'+name, id:'edit', iframe:'?m=admin&c=downservers&a=edit&id='+id ,width:'400px',height:'150px'}, 	function(){var d = window.top.art.dialog({id:'edit'}).data.iframe;
+	window.top.art.dialog({title:'<?php echo L('edit')?>--'+name, id:'edit', iframe:'?m=admin&c=downservers&a=edit&id='+id ,width:'520px',height:'150px'}, 	function(){var d = window.top.art.dialog({id:'edit'}).data.iframe;
 	var form = d.document.getElementById('dosubmit');form.click();return false;}, function(){window.top.art.dialog({id:'edit'}).close()});
 }
 //-->

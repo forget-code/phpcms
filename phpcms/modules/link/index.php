@@ -19,11 +19,12 @@ class index {
 	 */
 	public function list_type() {
 		$siteid = SITEID;
- 		$type_id = trim(urldecode($_GET['type_id']));
- 		if($type_id=="" ||!$type_id){
- 			 showmessage(L('choose_true_type'));
+  		$type_id = trim(urldecode($_GET['type_id']));
+		$type_id = intval($type_id);
+  		if($type_id==""){
+ 			$type_id ='0';
  		}
-  		$setting = getcache('link', 'commons');
+   		$setting = getcache('link', 'commons');
 		$SEO = seo(SITEID, '', L('link'), '', '');
   		include template('link', 'list_type');
 	} 
@@ -53,16 +54,16 @@ class index {
  			}
  			$link_db->insert($sql);
  			showmessage(L('add_success'), "?m=link&c=index&siteid=$siteid");
- 		}else {
+ 		} else {
   			$setting = getcache('link', 'commons');
+			$setting = $setting[$siteid];
  			if($setting['is_post']=='0'){
  				showmessage(L('suspend_application'), HTTP_REFERER);
  			}
  			$this->type = pc_base::load_model('type_model');
  			$types = $this->type->get_types($siteid);//获取站点下所有友情链接分类
  			pc_base::load_sys_class('form', '', 0);
- 			$setting = getcache('link', 'commons');
- 			$SEO = seo(SITEID, '', L('application_links'), '', '');
+  			$SEO = seo(SITEID, '', L('application_links'), '', '');
    			include template('link', 'register');
  		}
 	} 

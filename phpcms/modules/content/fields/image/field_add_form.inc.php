@@ -25,6 +25,6 @@
     </tr>
 	<tr> 
       <td>图像大小</td>
-      <td>宽 <input type="text" name="setting[images_width]" value="" size="3">px 高 <input type="text" name="setting[images_height]" value="" size="3">px</td>
+      <td>宽 <input type="text" name="setting[images_width]" value="" size="3" class="input-text">px 高 <input type="text" name="setting[images_height]" value="" size="3" class="input-text">px</td>
     </tr>
 </table>

@@ -108,7 +108,7 @@ class release_point extends admin {
 		$pasv = isset($_GET['pasv']) && trim($_GET['pasv']) ? trim($_GET['pasv']) : 0;
 		$ssl = isset($_GET['ssl']) && trim($_GET['ssl']) ? trim($_GET['ssl']) : 0;
 		$ftp = pc_base::load_sys_class('ftps');
-		if ($ftp->connect($host, $username, $password, $port, $pasv, $ssl)) {
+		if ($ftp->connect($host, $username, $password, $port, $pasv, $ssl, 25)) {
 			if ($ftp->link_time > 15) {
 				exit(L('ftp_connection_a_long_time'));
 			}

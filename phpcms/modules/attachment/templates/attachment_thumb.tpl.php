@@ -24,7 +24,7 @@
 function thumb_delete(filepath,obj){
 	 window.top.art.dialog({content:'<?php echo L('del_confirm')?>', fixed:true, style:'confirm', id:'att_delete'}, 
 	function(){
-	$.get('?m=attachment&c=manage&a=pullic_delthumbs&filepath='+filepath,function(data){
+	$.get('?m=attachment&c=manage&a=pullic_delthumbs&filepath='+filepath+'&pc_hash=<?php echo $_SESSION[pc_hash]?>',function(data){
 				if(data == 1) $(obj).parent().fadeOut("slow");
 			})
 		 	

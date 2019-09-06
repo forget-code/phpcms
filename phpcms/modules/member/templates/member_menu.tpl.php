@@ -44,14 +44,14 @@ include $this->admin_tpl('header', 'admin');?>
 <form name="myform" id="myform" action="?m=member&c=member_menu&a=add" method="post">
 <table width="100%" class="table_form contentWrap">
       <tr>
-        <th width="60"><?php echo L('menu_parentid')?>：</th>
+        <th width="200"><?php echo L('menu_parentid')?>：</th>
         <td><select name="info[parentid]" >
         <option value="0"><?php echo L('no_parent_menu')?></option>
-<?php echo $select_categorys;?>
+
 </select></td>
       </tr>
       <tr>
-        <th width="200"> <?php echo L('chinese_name')?>：</th>
+        <th> <?php echo L('chinese_name')?>：</th>
         <td><input type="text" name="language" id="language" class="input-text" ></td>
       </tr>
 
@@ -118,14 +118,14 @@ include $this->admin_tpl('header', 'admin');?>
 <form name="myform" id="myform" action="?m=member&c=member_menu&a=edit" method="post">
 <table width="100%" class="table_form contentWrap">
       <tr>
-        <th width="60"><?php echo L('menu_parentid')?>：</th>
+        <th width="200"><?php echo L('menu_parentid')?>：</th>
         <td><select name="info[parentid]" style="width:200px;">
  <option value="0"><?php echo L('no_parent_menu')?></option>
-<?php echo $select_categorys;?>
+
 </select></td>
       </tr>
       <tr>
-        <th width="200"> <?php echo L('for_chinese_lan')?>：</th>
+        <th> <?php echo L('for_chinese_lan')?>：</th>
         <td><input type="text" name="language" id="language" class="input-text" value="<?php echo L($name,'','',1)?>"></td>
       </tr>
       <tr>

@@ -30,6 +30,12 @@ $LANG['recharge_quota'] = '充值额度';
 $LANG['increase'] = '增加';
 $LANG['reduce'] = '减少';
 $LANG['trading'] = '交易';
+$LANG['op_notice'] = '提醒操作';
+$LANG['op_sendsms'] = '发送短消息通知会员';
+$LANG['op_sendemail'] = '发送e-mail通知会员';
+$LANG['send_account_changes_notice'] = '账户变更通知';
+$LANG['background_operation'] = '后台操作';
+$LANG['account_changes_notice_tips'] = '尊敬的{username},您好！<br/>您的账户于{time}发生变动,操作：{op},理由:{note},当前余额：{amount}元，{point}积分。';
 
 //payment.php
 $LANG['basic_config'] = '基本设置';
@@ -135,7 +141,7 @@ $LANG['select']['cancel'] = '交易取消';
 
 $LANG['alipay'] = '支付宝';
 $LANG['alipay_account'] = '支付宝帐户';
-$LANG['alipay_tip'] = 'PHPCMS联合支付宝推出优惠套餐：无预付/年费，单笔费率1.5%，无流量限制。<a href="http://www.alipay.com" target="_blank"><font color="red">立即在线申请</font></a>';
+$LANG['alipay_tip'] = '支付宝是国内领先的独立第三方支付平台，由阿里巴巴集团创办。致力于为中国电子商务提供“简单、安全、快速”的在线支付解决方案。<a href="http://www.alipay.com" target="_blank"><font color="red">立即在线申请</font></a>';
 $LANG['alipay_key'] = '交易安全校验码(key)';
 $LANG['alipay_partner'] = '合作者身份(parterID)';
 $LANG['service_type'] = '选择接口类型';
@@ -149,8 +155,8 @@ $LANG['chinabank_tip'] = '网银在线与中国银行、中国工商银行、中
 $LANG['chinabank_account'] = '网银在线商户号';
 $LANG['chinabank_key'] = '网银在线MD5私钥';
 
-$LANG['sndapay'] = '盛付宝';
-$LANG['sndapay_tip'] = '盛大集团旗下交易平台,用户资源完全共享，为您的服务和应用带入1亿活跃用户！<a href="http://pay.sdo.com/" target="_blank"><font color="red">立即在线申请</font>';
+$LANG['sndapay'] = '盛付通';
+$LANG['sndapay_tip'] = '盛付通是盛大网络创办的中国领先的在线支付平台，致力于为互联网用户和企业提供便捷、安全的支付服务。通过与各大银行、通信服务商等签约合作，提供具备相当实力和信誉保障的支付服务。<a href="http://www.shengpay.com/HomePage.aspx?tag=phpcms" target="_blank"><font color="red">立即在线申请</font>';
 $LANG['sndapay_account'] = '盛大支付商户号';
 $LANG['sndapay_key'] = '盛大支付密钥';
 

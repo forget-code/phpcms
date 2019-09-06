@@ -60,7 +60,7 @@ include $this->admin_tpl('header', 'admin');
 		<table width="100%"  class="table_form">
 	  <tr>
     <th width="80"><?php echo L("public_allowpageing")?>：</th>
-    <td class="y-bg"><input type="radio" name="page" value="$_GET[page]"<?php if (isset($_GET['page'])) {echo ' checked';}?> /> <?php echo L("yes")?>  <input type="radio" name="page" value=""<?php if (!isset($_GET['page'])) {echo ' checked';}?> /> <?php echo L("no")?></td>
+    <td class="y-bg"><input type="radio" name="page" value="$page"<?php if (isset($_GET['page'])) {echo ' checked';}?> /> <?php echo L("yes")?>  <input type="radio" name="page" value=""<?php if (!isset($_GET['page'])) {echo ' checked';}?> /> <?php echo L("no")?></td>
   </tr>
     <tr>
     <th width="80"><?php echo L("num")?>：</th>

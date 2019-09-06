@@ -119,6 +119,7 @@ $LANG['check_select'] 					= 	'单击选择';
 $LANG['item'] 							= 	'项';
 $LANG['copy_code']						= 	'复制代码至剪贴板';
 $LANG['submit']							= 	'提交';
-
+$LANG['select_style']					= 	'选择风格';
+$LANG['right_all']						= 	'选择正确';
  
 ?>

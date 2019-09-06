@@ -9,6 +9,7 @@ include $this->admin_tpl('header', 'admin');
 		$("#name").formValidator({onshow:"<?php echo L('input_dbsource_name')?>",onfocus:"<?php echo L('input_dbsource_name')?>"}).inputValidator({min:1,onerror:"<?php echo L('input_dbsource_name')?>"}).regexValidator({regexp:"username",datatype:"enum",param:'i',onerror:"<?php echo L('data_source_of_the_letters_and_figures')?>"}).ajaxValidator({type : "get",url : "",data :"m=dbsource&c=dbsource_admin&a=public_name",datatype : "html",async:'false',success : function(data){	if( data == "1" ){return true;}else{return false;}},buttons: $("#dosubmit"),onerror : "<?php echo L('dbsource_name').L('exists')?>",onwait : "<?php echo L('connecting')?>"});
 		$("#host").formValidator({onshow:"<?php echo L('input').L('server_address')?>",onfocus:"<?php echo L('input').L('server_address')?>"}).inputValidator({min:1,onerror:"<?php echo L('input').L('server_address')?>"});
 		$("#port").formValidator({onshow:"<?php echo L('input').L('server_port')?>",onfocus:"<?php echo L('input').L('server_port')?>"}).inputValidator({min:1,onerror:"<?php echo L('input').L('server_port')?>"}).regexValidator({regexp:"intege1",datatype:"enum",param:'i',onerror:"<?php echo L('server_ports_must_be_positive_integers')?>"});
+		$("#dbtablepre").formValidator({onshow:"<?php echo L('input').L('dbtablepre')?>",onfocus:"<?php echo L('tip_pre')?>"});
 		$("#username").formValidator({onshow:"<?php echo L('input').L('username')?>",onfocus:"<?php echo L('input').L('username')?>"}).inputValidator({min:1,onerror:"<?php echo L('input').L('username')?>"});
 		$("#password").formValidator({onshow:"<?php echo L('input').L('password')?>",onfocus:"<?php echo L('input').L('password')?>"}).inputValidator({min:1,onerror:"<?php echo L('input').L('password')?>"});
 		$("#dbname").formValidator({onshow:"<?php echo L('input').L('database')?>",onfocus:"<?php echo L('input').L('database')?>"}).inputValidator({min:1,onerror:"<?php echo L('input').L('database')?>"});
@@ -44,6 +45,10 @@ include $this->admin_tpl('header', 'admin');
         <tr>
     <th><?php echo L('database')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="dbname" id="dbname"  size="30"/></td>
+  </tr>
+  <tr>
+    <th><?php echo L('dbtablepre');?>：</th>
+    <td class="y-bg"><input type="text" class="input-text" name="dbtablepre" id="dbtablepre"  size="30"/> </td> 
   </tr>
       <tr>
     <th><?php echo L('charset')?>：</th>

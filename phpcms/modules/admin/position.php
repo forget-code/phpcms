@@ -23,7 +23,7 @@ class position extends admin {
 			$infos = $this->db->listinfo($where, $order = 'listorder DESC,posid DESC', $page, $pagesize = 20);
 			$pages = $this->db->pages;
 			$show_dialog = true;
-			$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=admin&c=position&a=add\', title:\''.L('posid_add').'\', width:\'500\', height:\'300\', lock:true}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('posid_add'));
+			$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=admin&c=position&a=add\', title:\''.L('posid_add').'\', width:\'500\', height:\'360\', lock:true}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('posid_add'));
 			include $this->admin_tpl('position_list');
 	}
 	
@@ -51,8 +51,7 @@ class position extends admin {
 			foreach($sitemodel as $value){
 				if($value['siteid'] == get_siteid())$modelinfo[$value['modelid']]=$value['name'];
 			}			
-			$show_header = true;
-			$show_validator = true;
+			$show_header = $show_validator = true;
 			include $this->admin_tpl('position_add');
 		}
 		
@@ -74,7 +73,6 @@ class position extends admin {
 			$this->_set_cache();
 			showmessage(L('operation_success'), '', '', 'edit');
 		} else {
-			$sitelists = $sitelist =array();
 			$info = $this->db->get_one(array('posid'=>$_GET['posid']));
 			extract($info);
 			pc_base::load_sys_class('form');
@@ -84,9 +82,7 @@ class position extends admin {
 			foreach($sitemodel as $value){
 				if($value['siteid'] == get_siteid())$modelinfo[$value['modelid']]=$value['name'];
 			}
-			$show_validator = true;
-			$show_header = true;
-			$show_scroll = true;
+			$show_validator = $show_header = $show_scroll = true;
 			include $this->admin_tpl('position_edit');
 		}
 
@@ -110,6 +106,7 @@ class position extends admin {
 			foreach($_POST['listorders'] as $posid => $listorder) {
 				$this->db->update(array('listorder'=>$listorder),array('posid'=>$posid));
 			}
+			$this->_set_cache();
 			showmessage(L('operation_success'),'?m=admin&c=position');
 		} else {
 			showmessage(L('operation_failure'),'?m=admin&c=position');
@@ -134,6 +131,7 @@ class position extends admin {
 		if(isset($_POST['dosubmit'])) {
 			$items = count($_POST['items']) > 0  ? $_POST['items'] : showmessage(L('posid_select_to_remove'),HTTP_REFERER);
 			if(is_array($items)) {
+				$sql = array();
 				foreach ($items as $item) {
 					$_v = explode('-', $item);
 					$sql['id'] = $_v[0];
@@ -152,6 +150,7 @@ class position extends admin {
 			$page = $_GET['page'] ? $_GET['page'] : '1';
 			$pos_arr = $this->db_data->listinfo(array('posid'=>$posid,'siteid'=>$siteid),'listorder DESC', $page, $pagesize = 20);
 			$pages = $this->db_data->pages;
+			$infos = array();
 			foreach ($pos_arr as $_k => $_v) {
 				$r = string2array($_v['data']);
 				$r['catname'] = $CATEGORY[$_v['catid']]['catname'];
@@ -223,12 +222,13 @@ class position extends admin {
 	public function public_category_load() {
 		$modelid = intval($_GET['modelid']);
 		pc_base::load_sys_class('form');
-		$category = form::select_category('category_content','','name="info[catid]"',L('please_select_parent_category'),$modelid);
+		$category = form::select_category('','','name="info[catid]"',L('please_select_parent_category'),$modelid);
 		echo $category;
 	}
 	
 	private function _set_cache() {
-		$infos = $this->db->select();
+		$infos = $this->db->select('','*',1000,'listorder DESC');
+		$positions = array();
 		foreach ($infos as $info){
 			$positions[$info['posid']] = $info;
 		}

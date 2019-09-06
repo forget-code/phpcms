@@ -27,28 +27,33 @@ class category extends admin {
 		$categorys = array();
 		//读取缓存
 		$result = getcache('category_content_'.$this->siteid,'commons');
+		$show_detail = count($result) < 500 ? 1 : 0;
+		$parentid = $_GET['parentid'] ? $_GET['parentid'] : 0;
 		$html_root = pc_base::load_config('system','html_root');
-		
-		//数据库查询
 		$types = array(0 => L('category_type_system'),1 => L('category_type_page'),2 => L('category_type_link'));
 		if(!empty($result)) {
 			foreach($result as $r) {
-				if($r['siteid']!=$this->siteid) continue;
 				$r['modelname'] = $models[$r['modelid']]['name'];
-				$r['str_manage'] = '<a href="?m=admin&c=category&a=add&parentid='.$r['catid'].'&menuid='.$_GET['menuid'].'&s='.$r['type'].'&pc_hash='.$_SESSION['pc_hash'].'">'.L('add_sub_category').'</a> | ';
+				$r['str_manage'] = '';
+				if(!$show_detail) {
+					if($r['parentid']!=$parentid) continue;
+					$r['parentid'] = 0;
+					$r['str_manage'] .= '<a href="?m=admin&c=category&a=init&parentid='.$r['catid'].'&menuid='.$_GET['menuid'].'&s='.$r['type'].'&pc_hash='.$_SESSION['pc_hash'].'">'.L('manage_sub_category').'</a> | ';
+				}
+				$r['str_manage'] .= '<a href="?m=admin&c=category&a=add&parentid='.$r['catid'].'&menuid='.$_GET['menuid'].'&s='.$r['type'].'&pc_hash='.$_SESSION['pc_hash'].'">'.L('add_sub_category').'</a> | ';
 				
 				$r['str_manage'] .= '<a href="?m=admin&c=category&a=edit&catid='.$r['catid'].'&menuid='.$_GET['menuid'].'&type='.$r['type'].'&pc_hash='.$_SESSION['pc_hash'].'">'.L('edit').'</a> | <a href="javascript:confirmurl(\'?m=admin&c=category&a=delete&catid='.$r['catid'].'&menuid='.$_GET['menuid'].'\',\''.L('confirm',array('message'=>addslashes($r['catname']))).'\')">'.L('delete').'</a> ';
 				$r['typename'] = $types[$r['type']];
 				$r['display_icon'] = $r['ismenu'] ? '' : ' <img src ="'.IMG_PATH.'icon/gear_disable.png" title="'.L('not_display_in_menu').'">';
 				if($r['type'] || $r['child']) {
-					$r['items'] = ''; 
+					$r['items'] = '';
 				} else {
 					$r['items'] = $category_items[$r['modelid']][$r['catid']];
 				}
 				$r['help'] = '';
 				$setting = string2array($r['setting']);
 				if($r['url']) {
-					if(preg_match('/http:\/\//', $r['url'])) {
+					if(preg_match('/^(http|https):\/\//', $r['url'])) {
 						$catdir = $r['catdir'];
 						$prefix = $r['sethtml'] ? '' : $html_root;
 						if($this->siteid==1) {
@@ -135,7 +140,7 @@ class category extends admin {
 				foreach ($batch_adds as $_v) {
 					if(trim($_v)=='') continue;
 					$names = explode('|', $_v);
-					$catname = CHARSET == 'gbk' ? $names[0] : iconv('utf-8','gbk',$names[0]);
+					$catname = $names[0];
 					$_POST['info']['catname'] = $names[0];
 					$letters = gbk_to_pinyin($catname);
 					$_POST['info']['letter'] = strtolower(implode('', $letters));
@@ -195,7 +200,8 @@ class category extends admin {
 	public function edit() {
 		
 		if(isset($_POST['dosubmit'])) {
-			pc_base::load_sys_func('iconv');	
+			pc_base::load_sys_func('iconv');
+			$catid = 0;
 			$catid = intval($_POST['catid']);
 			$setting = $_POST['setting'];
 			//栏目生成静态配置
@@ -220,6 +226,21 @@ class category extends admin {
 			$catname = CHARSET == 'gbk' ? $_POST['info']['catname'] : iconv('utf-8','gbk',$_POST['info']['catname']);
 			$letters = gbk_to_pinyin($catname);
 			$_POST['info']['letter'] = strtolower(implode('', $letters));
+			
+			//应用权限设置到子栏目
+			if($_POST['priv_child']) {
+				$arrchildid = $this->db->get_one(array('catid'=>$catid), 'arrchildid');
+				if(!empty($arrchildid['arrchildid'])) {
+					$arrchildid_arr = explode(',', $arrchildid['arrchildid']);
+					if(!empty($arrchildid_arr)) {
+						foreach ($arrchildid_arr as $arr_v) {
+							$this->update_priv($arr_v, $_POST['priv_groupid'], 0);
+						}
+					}
+				}
+				
+			}
+			
 			$this->db->update($_POST['info'],array('catid'=>$catid,'siteid'=>$this->siteid));
 			$this->update_priv($catid, $_POST['priv_roleid']);
 			$this->update_priv($catid, $_POST['priv_groupid'],0);
@@ -240,7 +261,7 @@ class category extends admin {
 			}
 			
 			
-			$show_validator = '';
+			$show_validator = $catid = $r = '';
 			$catid = intval($_GET['catid']);
 			pc_base::load_sys_class('form','',0);
 			$r = $this->db->get_one(array('catid'=>$catid));
@@ -293,6 +314,8 @@ class category extends admin {
 	 * @param $catid 要删除的栏目id
 	 */
 	private function delete_child($catid) {
+		$catid = intval($catid);
+		if (empty($catid)) return false;
 		$r = $this->db->get_one(array('parentid'=>$catid));
 		if($r) {
 			$this->delete_child($r['catid']);
@@ -315,13 +338,13 @@ class category extends admin {
 			setcache('category_items_'.$modelid, $array,'commons');
 		}
 		$array = array();
-		$categorys = $this->db->select('','catid,siteid',20000,'listorder ASC');
+		$categorys = $this->db->select('`module`=\'content\'','catid,siteid',20000,'listorder ASC');
 		foreach ($categorys as $r) {
 			$array[$r['catid']] = $r['siteid'];
 		}
 		setcache('category_content',$array,'commons');
-		$categorys = array();
-		$this->categorys = $this->db->select(array('siteid'=>$this->siteid),'*',10000,'listorder ASC');
+		$categorys = $this->categorys = array();
+		$this->categorys = $this->db->select(array('siteid'=>$this->siteid, 'module'=>'content'),'*',10000,'listorder ASC');
 		foreach($this->categorys as $r) {
 			unset($r['module']);
 			$setting = string2array($r['setting']);
@@ -332,7 +355,7 @@ class category extends admin {
 			$r['show_ruleid'] = $setting['show_ruleid'];
 			$r['workflowid'] = $setting['workflowid'];
 			$r['isdomain'] = '0';
-			if(strpos($r['url'], 'http://') === false) {
+			if(!preg_match('/^(http|https):\/\//', $r['url'])) {
 				$r['url'] = siteurl($r['siteid']).$r['url'];
 			} elseif ($r['ishtml']) {
 				$r['isdomain'] = '1';
@@ -358,7 +381,7 @@ class category extends admin {
 		@set_time_limit(600);
 		$html_root = pc_base::load_config('system','html_root');
 		$this->categorys = $categorys = array();
-		$this->categorys = $categorys = $this->db->select(array('siteid'=>$this->siteid), '*', '', 'listorder ASC, catid ASC', '', 'catid');
+		$this->categorys = $categorys = $this->db->select(array('siteid'=>$this->siteid,'module'=>'content'), '*', '', 'listorder ASC, catid ASC', '', 'catid');
 		
 		$this->get_categorys($categorys);
 		if(is_array($this->categorys)) {
@@ -384,7 +407,7 @@ class category extends admin {
 				if($setting['ishtml']) {
 				//生成静态时
 					$url = $this->update_url($catid);
-					if(!preg_match('/^http:\/\//i', $url)) {
+					if(!preg_match('/^(http|https):\/\//i', $url)) {
 						$url = $sethtml ? '/'.$url : $html_root.'/'.$url;
 					}
 				} else {
@@ -541,9 +564,11 @@ class category extends admin {
 	 * @param  $catdir 目录
 	 */
 	public function public_check_catdir($return_method = 1,$catdir = '') {
+		$old_dir = '';
 		$catdir = $catdir ? $catdir : $_GET['catdir'];
+		$parentid = intval($_GET['parentid']);
 		$old_dir = $_GET['old_dir'];
-		$r = $this->db->get_one(array('siteid'=>$this->siteid,'module'=>'content','catdir'=>$catdir));
+		$r = $this->db->get_one(array('siteid'=>$this->siteid,'module'=>'content','catdir'=>$catdir,'parentid'=>$parentid));
 		if($r && $old_dir != $r['catdir']) {
 			//目录存在
 			if($return_method) {
@@ -689,7 +714,7 @@ class category extends admin {
 				'show_template'=>form::select_template($style, 'content',$show_template,'name="setting[show_template]"','show')
 			);
 			if (CHARSET == 'gbk') {
-			$html = array_iconv($html, 'gbk', 'utf-8');
+				$html = array_iconv($html, 'gbk', 'utf-8');
 			}
 			echo json_encode($html);
 		}
@@ -705,6 +730,7 @@ class category extends admin {
 			$catid = intval($_POST['catid']);
 			$post_setting = $_POST['setting'];
 			//栏目生成静态配置
+			$infos = $info = array();
 			$infos = $_POST['info'];
 			if(empty($infos)) showmessage(L('operation_success'));
 			$this->attachment_db = pc_base::load_model('attachment_model');
@@ -756,10 +782,11 @@ class category extends admin {
 				
 				$show_validator = $show_header = '';
 				$catid = intval($_GET['catid']);
-				$type = $_POST['type'] ? $_POST['type'] : 0;
+				$type = $_POST['type'] ? intval($_POST['type']) : 0;
 				pc_base::load_sys_class('form','',0);
 				
 				if(empty($_POST['catids'])) showmessage(L('illegal_parameters'));
+				$batch_array = $workflows = array();
 				foreach ($categorys as $catid=>$cat) {
 					if($cat['type']==$type && in_array($catid, $_POST['catids'])) {
 						$batch_array[$catid] = $cat;

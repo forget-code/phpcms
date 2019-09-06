@@ -38,7 +38,7 @@ class special_api {
 			//添加时，无需判断直接加到数据表中，修改时应判断是否为新添加、修改还是删除
 			$siteid = get_siteid();
 			if ($a == 'add' && !$v['del']) {
-				$typeid = $this->type_db->insert(array('siteid'=>$siteid, 'module'=>'special', 'name'=>$v['name'], 'typedir'=>$v['typedir'], 'parentid'=>$specialid, 'listorder'=>$k), true);
+				$typeid = $this->type_db->insert(array('siteid'=>$siteid, 'module'=>'special', 'name'=>$v['name'], 'listorder'=>$v['listorder'], 'typedir'=>$v['typedir'], 'parentid'=>$specialid, 'listorder'=>$k), true);
 				if ($siteid>1) {
 					$site = pc_base::load_app_class('sites', 'admin');
 					$site_info = $site->get_by_id($siteid);
@@ -54,7 +54,7 @@ class special_api {
 				$this->type_db->update(array('url'=>$url), array('typeid'=>$typeid));
 			} elseif ($a == 'edit') {
 				if ((!isset($v['typeid']) || empty($v['typeid'])) && (!isset($v['del']) || empty($v['del']))) {
-					$typeid = $this->type_db->insert(array('siteid'=>$siteid, 'module'=>'special', 'name'=>$v['name'], 'typedir'=>$v['typedir'], 'parentid'=>$specialid, 'listorder'=>$k), true);
+					$typeid = $this->type_db->insert(array('siteid'=>$siteid, 'module'=>'special', 'name'=>$v['name'], 'listorder'=>$v['listorder'], 'typedir'=>$v['typedir'], 'parentid'=>$specialid, 'listorder'=>$k), true);
 					if ($siteid>1) {
 						$site = pc_base::load_app_class('sites', 'admin');
 						$site_info = $site->get_by_id($siteid);
@@ -71,7 +71,7 @@ class special_api {
 					$this->type_db->update($v, array('typeid'=>$typeid));
 				} 
 				if ((!isset($v['del']) || empty($v['del'])) && $v['typeid']) {
-					$this->type_db->update(array('name'=>$v['name'], 'typedir'=>$v['typedir'], 'listorder'=>$k), array('typeid'=>$r['typeid']));
+					$this->type_db->update(array('name'=>$v['name'], 'typedir'=>$v['typedir'], 'listorder'=>$v['listorder']), array('typeid'=>$r['typeid']));
 					if ($siteid>1) {
 						$site = pc_base::load_app_class('sites', 'admin');
 						$site_info = $site->get_by_id($siteid);
@@ -200,6 +200,7 @@ class special_api {
 		$rs = $this->c_db->select(array('specialid'=>$id), 'id');
 
 		$info = $this->db->get_one(array('id'=>$id, 'siteid'=>get_siteid()), 'siteid, ispage, filename, ishtml');
+		
 		//有信息时，循环删除
 		if (is_array($rs) && !empty($rs)) {
 			foreach ($rs as $r) {
@@ -243,7 +244,7 @@ class special_api {
 			}
 		} else {
 			if ($info['ishtml']) {
-				dir_delete(PHPCMS_PATH.pc_base::load_config('system', 'html_root').DIRECTORY_SEPARATOR.'special'.DIRECTORY_SEPARATOR.$info['filename ']); //删除专题目录
+				dir_delete(PHPCMS_PATH.pc_base::load_config('system', 'html_root').DIRECTORY_SEPARATOR.'special'.DIRECTORY_SEPARATOR.$info['filename']); //删除专题目录
 			}
 		}
 		if(pc_base::load_config('system','attachment_stat')) {
@@ -270,7 +271,7 @@ class special_api {
 		if ($info) {
 			$info['curl'] = $info['id'].'|'.$info['catid'];
 			unset($info['id'], $info['catid']);
-			if(!$this->c_db->get_one(array('title'=>addslashes($info['title']), 'specialid'=>$specialid))) {
+			if(!$this->c_db->get_one(array('title'=>addslashes($info['title']), 'specialid'=>$specialid, 'typeid'=>$typeid))) {
 				$info['specialid'] = $specialid;
 				$info['typeid'] = $typeid;
 				$info['islink'] = 1;
@@ -312,8 +313,8 @@ class special_api {
 				}
 			} else {
 				for ($i = 1; $i>0; $i++) {
-					if ($i==1) $file = $info['url'];
-					else $file = str_replace('.html', '-'.$i.'.html', $info['url']);
+					if ($i==1) $file = str_replace(APP_PATH, '', $info['url']);
+					else $file = str_replace(array(APP_PATH, '.html'), array('', '-'.$i.'.html'), $info['url']);
 					if (!file_exists(PHPCMS_PATH.$file)) {
 						break;
 					} else {
@@ -329,13 +330,14 @@ class special_api {
 	/**
 	 * 删除专题信息，同时删除专题的信息，及相关的静态文件、图片
 	 * @param intval $cid 专题信息ID
+	 * @param intval $siteid 所属站点
 	 * @param intval $ishtml 专题是否生成静态
 	 */
 	public function _delete_content($cid = 0, $siteid = 0, $ishtml = 0) {
 		$info = $this->c_db->get_one(array('id'=>$cid), 'inputtime, isdata');
 
 		if ($info['isdata']) {
-			if ($ishtml) {
+			if ($ishtml) {	
 				pc_base::load_app_func('global', 'special');
 				$siteid = $siteid ? intval($siteid) : get_siteid();
 				if ($siteid>1) {
@@ -345,20 +347,20 @@ class special_api {
 					
 					for ($i = 1; $i>0; $i++) {
 						$file = content_url($cid, $i, $info['inputtime'], 'html', $site_info);
-						if (!file_exists(PHPCMS_PATH.$file[2])) {
+						if (!file_exists(PHPCMS_PATH.$file[1])) {
 							break;
 						} else {
-							$queue->add_queue('del', $file[2], $siteid); //并加入到消息队列中，便以其他站点删除文件
-							unlink(PHPCMS_PATH.$file[2]);	//删除生成的静态文件
+							$queue->add_queue('del', $file[1], $siteid); //并加入到消息队列中，便以其他站点删除文件
+							unlink(PHPCMS_PATH.$file[1]);	//删除生成的静态文件
 						}
 					}
 				} else {
 					for ($i = 1; $i>0; $i++) {
 						$file = content_url($cid, $i, $info['inputtime']);
-						if (!file_exists(PHPCMS_PATH.$file[2])) {
+						if (!file_exists(PHPCMS_PATH.$file[1])) {
 							break;
 						} else {
-							unlink(PHPCMS_PATH.$file[2]);	//删除生成的静态文件
+							unlink(PHPCMS_PATH.$file[1]);	//删除生成的静态文件
 						}
 					}
 				}
@@ -388,7 +390,8 @@ class special_api {
 	 */
 	private function search_api($id = 0, $data = array(), $title, $action = 'update') {
 		$this->search_db = pc_base::load_model('search_model');
-		$type_arr = getcache('type_module','search');
+		$siteid = get_siteid();
+		$type_arr = getcache('type_module_'.$siteid,'search');
 		$typeid = $type_arr['special'];
 		if($action == 'update') {
 			$fulltextcontent = $data['content'];

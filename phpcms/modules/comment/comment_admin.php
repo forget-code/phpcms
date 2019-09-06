@@ -56,4 +56,114 @@ class comment_admin extends admin {
 		$pages = pages($comment['total'], $page, $pagesize);
 		include $this->admin_tpl('comment_data_list');
 	}
+
+	public function listinfo() {
+		
+		$r = $max_table = '';
+		$max_table = isset($_GET['max_table']) ? intval($_GET['max_table']) : 0;
+		if (!$max_table) {
+			$r = $this->comment_db->get_one(array(), 'MAX(tableid) AS tableid');
+			if (!$r['tableid']) {
+				showmessage(L('no_comment'));
+			}
+			$max_table = $r['tableid'];
+		}
+		$page = max(intval($_GET['page']), 1);
+		$tableid = isset($_GET['tableid']) ? intval($_GET['tableid']) : $max_table;
+		if ($tableid > $max_table) {
+			$tableid = $max_table;
+		}
+		if (isset($_GET['search'])) {
+			$where = $sql = $t = $comment_id = $order = '';
+			$keywords = safe_replace($_GET['keyword']);
+			$searchtype = intval($_GET['searchtype']);
+			switch ($searchtype) {
+				case '0':
+					$sql = "SELECT `commentid` FROM `phpcms_comment` WHERE `siteid` = '$this->siteid' AND `title` LIKE '%$keywords%' AND `tableid` = '$tableid' ";
+					$this->comment_db->query($sql);
+					$data = $this->comment_db->fetch_array();
+					if (!empty($data)) {
+						foreach ($data as $d) {
+							$comment_id .= $t.'\''.$d['commentid'].'\'';
+							$t = ',';
+						}
+						$where = "`commentid` IN ($comment_id)";
+					}
+				break;
+
+				case '1':
+					$keywords = intval($keywords);
+					$sql = "SELECT `commentid` FROM `phpcms_comment` WHERE `commentid` LIKE 'content_%-$keywords-%' ";
+					$this->comment_db->query($sql);
+					$data = $this->comment_db->fetch_array();
+					foreach ($data as $d) {
+						$comment_id .= $t.'\''.$d['commentid'].'\'';
+						$t = ',';
+					}
+					$where = "`commentid` IN ($comment_id)";
+				break;
+
+				case '2':
+					$where = "`username` = '$keywords'";
+				break;
+			}
+		}
+		//exit($where);
+		$data = array();
+		if (!isset($where)) {
+			$where = 'siteid='.$this->siteid;
+		} else {
+			$where .= ' AND siteid='.$this->siteid;
+		}
+		$order = '`id` DESC';
+		pc_base::load_sys_class('format','', 0);
+		$this->comment_data_db->table_name($tableid);
+		$data = $this->comment_data_db->listinfo($where, $order, $page, 10);
+		$pages = $this->comment_data_db->pages;
+		include $this->admin_tpl('comment_listinfo');
+	}
+
+	public function del() {
+		if (isset($_GET['dosubmit']) && $_GET['dosubmit']) {
+			$ids = $_GET['ids'];
+			$tableid = isset($_GET['tableid']) ? intval($_GET['tableid']) : 0;
+			$r = $this->comment_db->get_one(array(), 'MAX(tableid) AS tableid');
+			$max_table = $r['tableid'];
+			if (!$tableid || $max_table<$tableid) showmessage(L('illegal_operation'));
+			$this->comment_data_db->table_name($tableid);
+			$site = $this->comment_setting_db->site($this->siteid);
+			if (is_array($ids)) {
+				foreach ($ids as $id) {
+					$comment_info = $this->comment_data_db->get_one(array('id'=>$id), 'commentid, userid, username');
+					$this->comment_db->update(array('total'=>'-=1'), array('commentid'=>$comment_info['commentid']));
+					$this->comment_data_db->delete(array('id'=>$id));
+
+					//当评论ID不为空，站点配置了删除的点数，支付模块存在的时候，删除用户的点数。
+					if (!empty($comment_info['userid']) && !empty($site['del_point']) && module_exists('pay')) {
+						pc_base::load_app_class('receipts', 'pay', 0);
+						$op_userid = param::get_cookie('userid');
+						$op_username = param::get_cookie('admin_username');
+						spend::point($site['del_point'], L('comment_point_del', '', 'comment'), $comment_info['userid'], $comment_info['username'], $op_userid, $op_username);
+					}
+				}
+				$ids = implode(',', $ids);
+			} elseif (is_numeric($ids)) {
+				$id = intval($ids);
+				$comment_info = $this->comment_data_db->get_one(array('id'=>$id), 'commentid, userid, username');
+				$this->comment_db->update(array('total'=>'-=1'), array('commentid'=>$comment_info['commentid']));
+				$this->comment_data_db->delete(array('id'=>$id));
+
+				//当评论ID不为空，站点配置了删除的点数，支付模块存在的时候，删除用户的点数。
+				if (!empty($comment_info['userid']) && !empty($site['del_point']) && module_exists('pay')) {
+					pc_base::load_app_class('spend', 'pay', 0);
+					$op_userid = param::get_cookie('userid');
+					$op_username = param::get_cookie('admin_username');
+					spend::point($site['del_point'], L('comment_point_del', '', 'comment'), $comment_info['userid'], $comment_info['username'], $op_userid, $op_username);
+				}
+			} else {
+				showmessage(L('illegal_operation'));
+			}
+			showmessage(L('operation_success'), HTTP_REFERER);
+		}
+	}
 }

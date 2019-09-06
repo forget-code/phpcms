@@ -26,8 +26,10 @@ class comment_api {
 		$cat = $category[$catid];
 		$data_info = array();
 		if ($cat['type']==0) {
-			$this->db->table_name = $this->db->db_tablepre.$model[$cat['modelid']]['tablename'].'_data';
-			$data_info = $this->db->get_one(array('id'=>$contentid));
+			if ($model[$cat['modelid']]['tablename']) {
+				$this->db->table_name = $this->db->db_tablepre.$model[$cat['modelid']]['tablename'].'_data';
+				$data_info = $this->db->get_one(array('id'=>$contentid));
+			}
 		}
 		
 		if ($r) {

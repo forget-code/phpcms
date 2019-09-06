@@ -18,6 +18,7 @@ class menu extends admin {
 		$table_name = $this->db->table_name;
 	
 		$result = $this->db->select('','*','','listorder ASC,id DESC');
+		$array = array();
 		foreach($result as $r) {
 			$r['cname'] = L($r['name']);
 			$r['str_manage'] = '<a href="?m=admin&c=menu&a=add&parentid='.$r['id'].'&menuid='.$_GET['menuid'].'">'.L('add_submenu').'</a> | <a href="?m=admin&c=menu&a=edit&id='.$r['id'].'&menuid='.$_GET['menuid'].'">'.L('modify').'</a> | <a href="javascript:confirmurl(\'?m=admin&c=menu&a=delete&id='.$r['id'].'&menuid='.$_GET['menuid'].'\',\''.L('confirm',array('message'=>$r['cname'])).'\')">'.L('delete').'</a> ';
@@ -57,6 +58,7 @@ class menu extends admin {
 			$show_validator = '';
 			$tree = pc_base::load_sys_class('tree');
 			$result = $this->db->select();
+			$array = array();
 			foreach($result as $r) {
 				$r['cname'] = L($r['name']);
 				$r['selected'] = $r['id'] == $_GET['parentid'] ? 'selected' : '';
@@ -98,7 +100,7 @@ class menu extends admin {
 			//结束语言文件修改
 			showmessage(L('operation_success'));
 		} else {
-			$show_validator = '';
+			$show_validator = $array = $r = '';
 			$tree = pc_base::load_sys_class('tree');
 			$id = intval($_GET['id']);
 			$r = $this->db->get_one(array('id'=>$id));

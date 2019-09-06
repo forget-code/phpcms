@@ -12,6 +12,7 @@ include $this->admin_tpl('header', 'admin');
   <input type="hidden" name="c" value="check">
    <input type="hidden" name="a" value="ajax_checks">
     <input type="hidden" name="type" value="-1">
+    <input type="hidden" name="form" value="1">
     <input type="hidden" name="commentid" value="<?php echo $commentid?>">
 <div class="comment">
 <?php if(is_array($list)) foreach($list as $v) :

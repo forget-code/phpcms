@@ -51,7 +51,7 @@ class html {
 				$arr_content['content'] = str_replace('[page]', '', $arr_content['content']);
 			}
 		}
-		$template = $arr_content['template'] ? $arr_content['template'] : 'show'; //调用模板
+		$template = $arr_content['show_template'] ? $arr_content['show_template'] : 'show'; //调用模板
 		
 		//分站时，计算分站路径
 		if ($s_info['siteid']>1) {
@@ -190,7 +190,7 @@ class html {
 		}
 		if(!$ispage) {
 			$type_db = pc_base::load_model('type_model');
-			$types = $type_db->select(array('module'=>'special', 'parentid'=>$specialid), '*', '', '`listorder` ASC, `typeid` ASC');
+			$types = $type_db->select(array('module'=>'special', 'parentid'=>$specialid), '*', '', '`listorder` ASC, `typeid` ASC', '', 'listorder');
 		}
 		$css = get_css(unserialize($css));
 		$template = $index_template ? $index_template : 'index';
@@ -250,10 +250,10 @@ class html {
 		$s_info = $this->db->get_one(array('id'=>$info['parentid']));
 		extract($s_info);
 		$site_info = $this->site->get_by_id($siteid);
-		define('URLRULE', $site_info['domain'].'html/special/{$specialdir}/{$typedir}/{$typeid}.html~'.$site_info['domain'].'html/special/{$specialdir}/{$typedir}/{$typeid}-{$page}.html');
+		define('URLRULE', $site_info['domain'].substr(pc_base::load_config('system', 'html_root'), 1).'/special/{$specialdir}/{$typedir}/type-{$typeid}.html~'.$site_info['domain'].substr(pc_base::load_config('system', 'html_root'), 1).'/special/{$specialdir}/{$typedir}/type-{$typeid}-{$page}.html');
 		$GLOBALS['URL_ARRAY'] = array('specialdir'=>$filename, 'typedir'=>$info['typedir'], 'typeid'=>$typeid);
 		$SEO = seo($siteid, '', $info['typename'], '');
-		$template = $template_list ? $template_list : 'list';
+		$template = $list_template ? $list_template : 'list';
 		
 		if ($siteid>1) {
 			if ($page==1) $file = pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/'.$filename.'/'.$info['typedir'].'/type-'.$typeid.'.html';

@@ -41,7 +41,7 @@
 			</tr>
 			<tr>
 			<th align="right">数据库密码：</th>
-			<td><input name="dbpw" type="text" id="dbpw" value="<?php echo $password?>" class="input-text" /></td>
+			<td><input name="dbpw" type="password" id="dbpw" value="<?php echo $password?>" class="input-text" /></td>
 			</tr>
 			<tr>
 			<th align="right">数据库名称：</th>

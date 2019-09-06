@@ -1,6 +1,5 @@
 <?php 
-class attachment
-{
+class attachment {
 	var $contentid;
 	var $module;
 	var $catid;
@@ -14,7 +13,7 @@ class attachment
 	var $siteid;
 	var $site = array();
 	
-	function __construct($module='', $catid = 0,$siteid = 0) {
+	function __construct($module='', $catid = 0,$siteid = 0,$upload_dir = '') {
 		$this->catid = intval($catid);
 		$this->siteid = intval($siteid)== 0 ? 1 : intval($siteid);
 		$this->module = $module ? $module : 'content';
@@ -22,6 +21,7 @@ class attachment
 		pc_base::load_sys_class('image','','0');
 		$this->upload_root = pc_base::load_config('system','upload_path');
 		$this->upload_func = 'copy';
+		$this->upload_dir = $upload_dir;
 	}
 	/**
 	 * 附件上传方法
@@ -44,7 +44,7 @@ class attachment
 		$fn = $_GET['CKEditorFuncNum'] ? $_GET['CKEditorFuncNum'] : '1';
 			
 		$this->field = $field;
-		$this->savepath = $this->upload_root.date('Y/md/');
+		$this->savepath = $this->upload_root.$this->upload_dir.date('Y/md/');
 		$this->alowexts = $alowexts;
 		$this->maxsize = $maxsize;
 		$this->overwrite = $overwrite;
@@ -87,6 +87,10 @@ class attachment
 		$aids = array();
 		foreach($uploadfiles as $k=>$file) {
 			$fileext = fileext($file['name']);
+			if($file['error'] != 0) {
+				$this->error = $file['error'];
+				return false;				
+			}
 			if(!preg_match("/^(".$this->alowexts.")$/", $fileext)) {
 				$this->error = '10';
 				return false;

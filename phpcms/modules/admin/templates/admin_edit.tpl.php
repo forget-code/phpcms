@@ -40,6 +40,7 @@ $show_validator = true;include $this->admin_tpl('header');?>
 <input type="text" name="info[realname]" value="<?php echo $realname?>" class="input-text" id="realname"></input>
 </td>
 </tr>
+<?php if ($_SESSION['roleid']==1) {?>
 <tr>
 <td><?php echo L('userinrole')?></td>
 <td>
@@ -55,6 +56,7 @@ foreach($roles as $role)
 </select>
 </td>
 </tr>
+<?php }?>
 </table>
 
     <div class="bk15"></div>

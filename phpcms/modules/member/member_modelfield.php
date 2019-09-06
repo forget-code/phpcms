@@ -182,7 +182,7 @@ class member_modelfield extends admin {
 	public function public_checkfield() {
 		$field = strtolower($_GET['field']);
 		$oldfield = strtolower($_GET['oldfield']);
-		if($field==$oldfiled) exit('1');
+		if($field==$oldfield) exit('1');
 		
 		$modelid = intval($_GET['modelid']);
 		$model_cache = getcache('member_model','commons');

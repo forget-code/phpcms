@@ -23,8 +23,7 @@ include $this->admin_tpl('header','admin');
  <table width="100%" cellspacing="0">
         <thead>
             <tr>
-            <th width="35" align="center"><input type="checkbox" value="" id="check_box" onclick="selectall('logid[]');"></th>
-            <th width="80"><?php echo L('username')?></th>
+             <th width="80"><?php echo L('username')?></th>
             <th ><?php echo L('module')?></th>
             <th ><?php echo L('file')?></th>
              <th width="120"><?php echo L('time')?></th>
@@ -36,10 +35,7 @@ include $this->admin_tpl('header','admin');
 if(is_array($infos)){
 	foreach($infos as $info){
 ?>
-    <tr>
-    <td align="center">
-	<input type="checkbox" name="logid[]" value="<?php echo $info['logid']?>">
-	</td>
+    <tr> 
         <td align="center"><?php echo $info['username']?></td>
         <td align="center"><?php echo $info['module']?></td>
         <td align="left" title="<?php echo $info['querystring']?>"><?php echo str_cut($info['querystring'], 40);?></td>
@@ -51,9 +47,7 @@ if(is_array($infos)){
 }
 ?></tbody>
  </table>
- <div class="btn">
- <a href="#" onClick="javascript:$('input[type=checkbox]').attr('checked', true)"><?php echo L('selected_all')?></a>/<a href="#" onClick="javascript:$('input[type=checkbox]').attr('checked', false)"><?php echo L('cancel')?></a>
-<input type="submit" name="submit" class="button" value="<?php echo L('remove_all_selected')?>" onClick="return confirm('<?php echo L('confirm', array('message' => L('selected')))?>')" />  
+ <div class="btn"> 
 </div> 
 <div id="pages"><?php echo $pages?></div>
 

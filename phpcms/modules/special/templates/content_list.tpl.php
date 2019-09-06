@@ -3,6 +3,7 @@ defined('IN_ADMIN') or exit('No permission resources.');
 $show_header = 1;
 include $this->admin_tpl('header','admin');
 ?>
+
 <div class="subnav"> 
 <div class="content-menu ib-a blue line-x">
 　<?php if(isset($big_menu)) { foreach($big_menu as $big) { echo '<a class="add fb" href="'.$big[0].'"><em>'.$big[1].'</em></a>　'; } }?>&nbsp;<a class="on" href="?m=special&c=special"><em><?php echo L('special_list')?></em></a></div>
@@ -17,7 +18,7 @@ include $this->admin_tpl('header','admin');
             <th width="43"><?php echo L('listorder')?></th>
             <th width="60">ID</th>
 			<th><?php echo L('content_title')?></th>
-            <th width="40"><?php echo L('hits')?></th>
+			<th width="120"><?php echo L('for_type')?></th>
             <th width="90"><?php echo L('inputman')?></th>
             <th width="120"><?php echo L('update_time')?></th>
 			<th width="200"><?php echo L('operations_manage')?></th>
@@ -35,7 +36,7 @@ include $this->admin_tpl('header','admin');
         <td align='center' width='43'><input name='listorders[<?php echo $r['id'];?>]' type='text' size='3' value='<?php echo $r['listorder'];?>' class='input-text-c'></td>
 		<td align='center' width="60"><?php echo $r['id'];?></td>
 		<td><a href="<?php echo $r['url'];?>" target="_blank"><?php echo $r['title'];?></a></td>
-		<td align='center' width="40"><?php echo $r['id'];?></td>
+		<td align='center' width="120"><?php echo $types[$r['typeid']]['name'];?></td>
 		<td align='center' width="90"><?php echo $r['username'];?></td>
 		<td align='center' width="120"><?php echo format::date($r['updatetime'],1);?></td>
 		<td align='center' width="200"><a href="javascript:;" onclick="javascript:openwinx('?m=special&c=content&a=edit&specialid=<?php echo $r['specialid']?>&id=<?php echo $r['id']?>','')"><?php echo L('content_edit')?></a> </td>
@@ -48,5 +49,17 @@ include $this->admin_tpl('header','admin');
 </form>
 </div>
 </div>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
+<script type="text/javascript">
+setcookie('refersh_time', 0);
+function refersh_window() {
+	var refersh_time = getcookie('refersh_time');
+	if(refersh_time==1) {
+		window.location.reload();
+	}
+}
+
+setInterval("refersh_window()", 5000);
+</script>
 </body>
 </html>

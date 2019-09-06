@@ -9,8 +9,7 @@ include $this->admin_tpl('header','admin');
 	$("#subject_title").formValidator({onshow:"<?php echo L("input").L('vote_title')?>",onfocus:"<?php echo L("input").L('vote_title')?>"}).inputValidator({min:1,onerror:"<?php echo L("input").L('vote_title')?>"}).regexValidator({regexp:"notempty",datatype:"enum",param:'i',onerror:"<?php echo L('input_not_space')?>"}).ajaxValidator({type : "get",url : "",data :"m=vote&c=vote&a=public_name&subjectid=<?php echo $subjectid;?>",datatype : "html",async:'false',success : function(data){	if( data == "1" ){return true;}else{return false;}},buttons: $("#dosubmit"),onerror : "<?php echo L('vote_title').L('exists')?>",onwait : "<?php echo L('connecting')?>"}).defaultPassed();
 	$('#fromdate').formValidator({onshow:"<?php echo L('select').L('fromdate')?>",onfocus:"<?php echo L('select').L('fromdate')?>",oncorrect:"<?php echo L('time_is_ok');
 		?>"}).inputValidator();
-	$('#todate').formValidator({onshow:"<?php echo L('select').L('todate')?>",onfocus:"<?php echo L('select').L('todate')?>",oncorrect:"<?php echo L('time_is_ok');
-		?>"}).inputValidator();
+	$("#todate").formValidator({onshow:"<?php echo L('select').L('todate')?>",onfocus:"<?php echo L('select').L('todate')?>",oncorrect:"<?php echo L('time_is_ok');?>"}).inputValidator();
 		
 	});
 //-->

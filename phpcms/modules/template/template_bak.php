@@ -4,8 +4,10 @@ pc_base::load_app_class('admin', 'admin', 0);
 class template_bak extends admin {
 	private $db, $style, $dir, $filename, $filepath, $fileid;
 	public function __construct() {
+		parent::__construct();
 		$this->style = isset($_GET['style']) && trim($_GET['style']) ? str_replace(array('..\\', '../', './', '.\\', '/', '\\'), '', trim($_GET['style'])) : showmessage(L('illegal_operation'));
 		$this->dir = isset($_GET['dir']) && trim($_GET['dir']) ? trim(urldecode($_GET['dir'])) : showmessage(L('illegal_operation'));
+		$this->dir = safe_replace($this->dir);
 		$this->filename = isset($_GET['filename']) && trim($_GET['filename']) ? trim($_GET['filename']) : showmessage(L('illegal_operation'));
 		if (empty($this->style) || empty($this->dir) || empty($this->filename)) {
 			showmessage(L('illegal_operation'), HTTP_REFERER);

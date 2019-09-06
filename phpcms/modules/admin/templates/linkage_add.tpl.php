@@ -12,7 +12,7 @@ include $this->admin_tpl('header');?>
 <form name="myform" action="?m=admin&c=linkage&a=add" method="post" id="myform">
 <table width="100%" class="table_form contentWrap">
 <tr>
-<td><?php echo L('menu_name')?></td>
+<td><?php echo L('linkage_name')?></td>
 <td>
 <input type="text" name="info[name]" value="<?php echo $name?>" class="input-text" id="name" size="30"></input>
 </td>

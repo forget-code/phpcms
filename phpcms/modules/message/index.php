@@ -55,6 +55,7 @@ class index extends foreground {
 		$username = isset($_GET['username']) && trim($_GET['username']) ? (pc_base::load_config('system', 'charset') == 'gbk' ? iconv('utf-8', 'gbk', trim($_GET['username'])) : trim($_GET['username'])) : exit('0');
 		$member_interface = pc_base::load_app_class('member_interface', 'member');
 		if ($username) {
+			$username = safe_replace($username);
 			//判断收件人不能为自己
 			if($username == $this->_username){
 				exit('0');

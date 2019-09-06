@@ -1,3 +1,4 @@
+<?php defined('IN_PHPCMS') or exit('No permission resources.');?>
 <table cellpadding="2" cellspacing="1" width="98%">
 	<tr> 
       <td>菜单ID</td>
@@ -13,10 +14,19 @@
         <input name="setting[showtype]" value="1" type="radio" <?php if($setting['showtype']==1) echo 'checked';?>>
         显示完整路径  
         <input name="setting[showtype]" value="2" type="radio" <?php if($setting['showtype']==2) echo 'checked';?>>
-        返回联动菜单id 		
+        返回联动菜单id
+       <input name="setting[showtype]" value="3" type="radio" <?php if($setting['showtype']==3) echo 'checked';?>>
+        返回菜单层级数组	 		
 	</td></tr>
 	<tr> 
       <td>路径分隔符</td>
       <td><input type="text" name="setting[space]" value="<?php echo $setting['space'];?>" size="5" class="input-text"> 显示完整路径时生效</td>
+    </tr>	
+	<tr> 
+      <td>是否作为筛选字段</td>
+      <td>
+	  <input type="radio" name="setting[filtertype]" value="1" <?php if($setting['filtertype']) echo 'checked';?> /> 是 
+	  <input type="radio" name="setting[filtertype]" value="0" <?php if(!$setting['filtertype']) echo 'checked';?>/> 否
+	  </td>
     </tr>	
 </table>

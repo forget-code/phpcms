@@ -232,7 +232,7 @@ class module_api {
 			$dbcharset = $dbcharset['charset'];
 		}
 		if($this->m_db->version() > '4.1' && $dbcharset) {
-			$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "TYPE=\\1 DEFAULT CHARSET=".$dbcharset, $sql);
+			$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=".$dbcharset, $sql);
 		}
 		if($this->m_db->db_tablepre != "phpcms_") $sql = str_replace("phpcms_", $this->m_db->db_tablepre, $sql);
 		$sql = str_replace(array("\r", '2010-9-05'), array("\n", date('Y-m-d')), $sql);

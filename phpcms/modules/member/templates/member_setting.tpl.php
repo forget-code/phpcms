@@ -1,7 +1,7 @@
 <?php defined('IN_ADMIN') or exit('No permission resources.');?>
 <?php include $this->admin_tpl('header', 'admin');?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidator.js" charset="UTF-8"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formValidatorRegex.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="UTF-8"></script>
 <script type="text/javascript">
 <!--
 $(function(){
@@ -34,8 +34,8 @@ $(function(){
 		<tr>
 			<td width="200"><?php echo L('register_email_auth')?></td> 
 			<td>
-				<?php echo L('yes')?><input type="radio" name="info[enablemailcheck]"  class="input-radio"<?php if($member_setting['enablemailcheck']) {?>checked<?php }?> value='1'>
-				<?php echo L('no')?><input type="radio" name="info[enablemailcheck]"  class="input-radio"<?php if(!$member_setting['enablemailcheck']) {?>checked<?php }?> value='0'>
+				<?php echo L('yes')?><input type="radio" name="info[enablemailcheck]"  class="input-radio"<?php if($member_setting['enablemailcheck']) {?>checked<?php }?> value='1' <?php if($mail_disabled) {?>disabled<?php }?>>
+				<?php echo L('no')?><input type="radio" name="info[enablemailcheck]"  class="input-radio"<?php if(!$member_setting['enablemailcheck']) {?>checked<?php }?> value='0'> <font color=red><?php echo L('enablemailcheck_notice')?></red>
 			</td>
 		</tr>
 		<tr>

@@ -35,7 +35,7 @@ if(is_array($list)):
 	echo '<td align="left"><img src="'.IMG_PATH.'folder-closed.gif" /> <a href="?m=template&c=file&a=init&style='.$this->style.'&dir='.(isset($_GET['dir']) && !empty($_GET['dir']) ? stripslashes($_GET['dir']).DIRECTORY_SEPARATOR : '').$filename.'"><b>'.$filename.'</b></a></td><td align="left"><input type="text" name="file_explan['.$encode_local.']['.$filename.']" value="'.(isset($file_explan[$encode_local][$filename]) ? $file_explan[$encode_local][$filename] : "").'"></td><td></td>';
 } else {
 	if (substr($filename,-4,4) == 'html') {
-	echo '<td align="left"><img src="'.IMG_PATH.'file.gif" /> '.$filename.'</td><td align="left"><input type="text" name="file_explan['.$encode_local.']['.$filename.']" value="'.(isset($file_explan[$encode_local][$filename]) ? $file_explan[$encode_local][$filename] : "").'"></td><td> <a href="javascript:edit_file(\''.$filename.'\')">['.L('edit').']</a> <a href="?m=template&c=file&a=visualization&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'" target="_blank">['.L('visualization').']</a> <a href="javascript:history_file(\''.$filename.'\')">['.L('histroy').']</a></td>';
+	echo '<td align="left"><img src="'.IMG_PATH.'file.gif" /> '.$filename.'</td><td align="left"><input type="text" name="file_explan['.$encode_local.']['.$filename.']" value="'.(isset($file_explan[$encode_local][$filename]) ? $file_explan[$encode_local][$filename] : "").'"></td><td> <a href="?m=template&c=file&a=edit_file&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'">['.L('edit').']</a> <a href="?m=template&c=file&a=visualization&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'" target="_blank">['.L('visualization').']</a> <a href="javascript:history_file(\''.$filename.'\')">['.L('histroy').']</a></td>';
 	}
 }?>
 </tr>
@@ -51,9 +51,6 @@ endif;
 </div>
 <script type="text/javascript">
 <!--
-function edit_file(name) {
-	window.top.art.dialog({title:'<?php echo L("edit")?>《'+name+'》',id:'edit_file',iframe:'?m=template&c=file&a=edit_file&style=<?php echo $this->style;?>&dir=<?php echo urlencode(stripslashes($dir))?>&file='+name,width:'700',height:'521'}, function(){var d = window.top.art.dialog({id:'edit_file'}).data.iframe;d.document.getElementById('dosubmit').click();return false;}, function(){window.top.art.dialog({id:'edit_file'}).close()});
-}
 
 function history_file(name) {
 	window.top.art.dialog({title:'《'+name+'》<?php echo L("histroy")?>',id:'history',iframe:'?m=template&c=template_bak&a=init&style=<?php echo $this->style;?>&dir=<?php echo urlencode(stripslashes($dir))?>&filename='+name,width:'700',height:'521'}, function(){var d = window.top.art.dialog({id:'history'}).close();return false;}, function(){window.top.art.dialog({id:'history'}).close()});

@@ -9,5 +9,5 @@
 		} elseif($fieldtype=='datetime') {
 			$isdatetime = 1;
 		}
-		return form::date("info[$field]",$value,$isdatetime);
+		return form::date("info[$field]",$value,$isdatetime,1);
 	}

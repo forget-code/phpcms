@@ -57,7 +57,7 @@ function view(id, name) {
 function data_delete(obj,id,name){
 	window.top.art.dialog({content:name, fixed:true, style:'confirm', id:'data_delete'}, 
 	function(){
-	$.get('?m=content&c=workflow&a=delete&workflowid='+id,function(data){
+	$.get('?m=content&c=workflow&a=delete&workflowid='+id+'&pc_hash=<?php echo $_SESSION['pc_hash'];?>',function(data){
 				if(data) {
 					$(obj).parent().parent().fadeOut("slow");
 				}

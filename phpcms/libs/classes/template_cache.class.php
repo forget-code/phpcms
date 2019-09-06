@@ -14,7 +14,16 @@ final class template_cache {
 	 */
 	
 	public function template_compile($module, $template, $style = 'default') {
+		if(strpos($module, '/')=== false) {
 		$tplfile = $_tpl = PC_PATH.'templates'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html';
+		} elseif (strpos($module, 'yp/') !== false) {
+			$module = str_replace('/', DIRECTORY_SEPARATOR, $module);
+			$tplfile = $_tpl = PC_PATH.'templates'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html';
+		} else {
+			$plugin = str_replace('plugin/', '', $module);
+			$module = str_replace('/', DIRECTORY_SEPARATOR, $module);
+			$tplfile = $_tpl = PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html';
+		}
 		if ($style != 'default' && !file_exists ( $tplfile )) {
 			$style = 'default';
 			$tplfile = PC_PATH.'templates'.DIRECTORY_SEPARATOR.'default'.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html';
@@ -23,6 +32,7 @@ final class template_cache {
 			showmessage ( "templates".DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.".html is not exists!" );
 		}
 		$content = @file_get_contents ( $tplfile );
+
 		$filepath = CACHE_PATH.'caches_template'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR;
 	    if(!is_dir($filepath)) {
 			mkdir($filepath, 0777, true);
@@ -165,7 +175,7 @@ final class template_cache {
 							$str .= '$offset = ($page - 1) * $pagesize;';
 							$limit = '$offset,$pagesize';
 							if ($sql = preg_replace('/select([^from].*)from/i', "SELECT COUNT(*) as count FROM ", $datas['sql'])) {
-								$str .= '$r = $get_db->sql_query("'.$sql.'");$s = $get_db->fetch_next();$pages=pages($s[\'count\'], $page, $pagesize, \''.$urlrule.'\');';
+								$str .= '$r = $get_db->sql_query("'.$sql.'");$s = $get_db->fetch_next();$pages=pages($s[\'count\'], $page, $pagesize, $urlrule);';
 							}
 						}
 						
@@ -194,7 +204,7 @@ final class template_cache {
 					$datas['limit'] = '$offset.",".$pagesize';
 					$datas['action'] = $action;
 					$str .= '$'.$op.'_total = $'.$op.'_tag->count('.self::arr_to_html($datas).');';
-					$str .= '$pages = pages($'.$op.'_total, $page, $pagesize, \''.$urlrule.'\');';
+					$str .= '$pages = pages($'.$op.'_total, $page, $pagesize, $urlrule);';
 				}
 				$str .= '$'.$return.' = $'.$op.'_tag->'.$action.'('.self::arr_to_html($datas).');';
 				$str .= '}';

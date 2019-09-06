@@ -17,6 +17,7 @@ class member_interface {
 	 * @return $mix {-1:用户不存在;userinfo:用户信息}
 	 */
 	public function get_member_info($mix, $type=1) {
+		$mix = safe_replace($mix);
 		if($type==1) {
 			$userinfo = $this->db->get_one(array('userid'=>$mix));
 		} elseif($type==2) {
@@ -42,6 +43,9 @@ class member_interface {
 	 * @param $mix {-1:加入失败;$id:加入成功，返回收藏id}
 	 */
 	public function add_favorite($cid, $userid, $title) {
+		$cid = intval($cid);
+		$userid = intval($userid);
+		$title = safe_replace($title);
 		$this->favorite_db = pc_base::load_model('favorite_model');
 		$id = $this->favorite_db->insert(array('title'=>$title,'userid'=>$userid, 'cid'=>$cid, 'adddate'=>SYS_TIME), 1);
 		if($id) {
@@ -52,16 +56,13 @@ class member_interface {
 	}
 
 	/**
-	 * 添加好友
-	 * @param int $friendid	好友id
+	 * 根据uid增加用户积分
 	 * @param int $userid	用户id
-	 * @param int $phpssouid	phpssouid
-	 * @param string $username 好友用户名
-	 * @param bool {1:成功}
+	 * @param int $point	点数
+	 * @return boolean
 	 */
-	public function add_friend($friendid, $userid, $phpssouid, $username) {
-		$this->favorite_db = pc_base::load_model('friend_model');
-		$this->friend_db->insert(array('userid'=>$userid,'phpssouid'=>$phpssouid, 'friendid'=>$friendid, 'username'=>$username), 1);
-		return 1;
+	public function add_point($userid, $point) {
+		$point = intval($point);
+		return $this->db->update(array('point'=>"+=$point"), array('userid'=>$userid));
 	}
 }

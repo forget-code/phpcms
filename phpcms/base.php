@@ -28,6 +28,7 @@ define('SYS_START_TIME', microtime());
 //加载公用函数库
 pc_base::load_sys_func('global');
 pc_base::load_sys_func('extention');
+pc_base::auto_load_func();
 
 pc_base::load_config('system','errorlog') ? set_error_handler('my_error_handler') : error_reporting(E_ERROR | E_WARNING | E_PARSE);
 //设置本地时差
@@ -48,6 +49,9 @@ define('CSS_PATH',pc_base::load_config('system','css_path'));
 define('IMG_PATH',pc_base::load_config('system','img_path'));
 //动态程序路径
 define('APP_PATH',pc_base::load_config('system','app_path'));
+
+//应用静态文件路径
+define('PLUGIN_STATICS_PATH',WEB_PATH.'statics/plugin/');
 
 if(pc_base::load_config('system','gzip') && function_exists('ob_gzhandler')) {
 	ob_start('ob_gzhandler');
@@ -138,6 +142,14 @@ class pc_base {
 	}
 	
 	/**
+	 * 自动加载autoload目录下函数库
+	 * @param string $func 函数库名
+	 */
+	public static function auto_load_func($path='') {
+		return self::_auto_load_func($path);
+	}
+	
+	/**
 	 * 加载应用函数库
 	 * @param string $func 函数库名
 	 * @param string $m 模型名
@@ -146,6 +158,47 @@ class pc_base {
 		$m = empty($m) && defined('ROUTE_M') ? ROUTE_M : $m;
 		if (empty($m)) return false;
 		return self::_load_func($func, 'modules'.DIRECTORY_SEPARATOR.$m.DIRECTORY_SEPARATOR.'functions');
+	}
+	
+	/**
+	 * 加载插件类库
+	 */
+	public static function load_plugin_class($classname, $identification = '' ,$initialize = 1) {
+		$identification = empty($identification) && defined('PLUGIN_ID') ? PLUGIN_ID : $identification;
+		if (empty($identification)) return false;
+		return pc_base::load_sys_class($classname, 'plugin'.DIRECTORY_SEPARATOR.$identification.DIRECTORY_SEPARATOR.'classes', $initialize);
+	}
+	
+	/**
+	 * 加载插件函数库
+	 * @param string $func 函数文件名称
+	 * @param string $identification 插件标识
+	 */
+	public static function load_plugin_func($func,$identification) {
+		static $funcs = array();
+		$identification = empty($identification) && defined('PLUGIN_ID') ? PLUGIN_ID : $identification;
+		if (empty($identification)) return false;
+		$path = 'plugin'.DIRECTORY_SEPARATOR.$identification.DIRECTORY_SEPARATOR.'functions'.DIRECTORY_SEPARATOR.$func.'.func.php';
+		$key = md5($path);
+		if (isset($funcs[$key])) return true;
+		if (file_exists(PC_PATH.$path)) {
+			include PC_PATH.$path;
+		} else {
+			$funcs[$key] = false;
+			return false;
+		}
+		$funcs[$key] = true;
+		return true;
+	}
+	
+	/**
+	 * 加载插件数据模型
+	 * @param string $classname 类名
+	 */
+	public static function load_plugin_model($classname,$identification) {
+		$identification = empty($identification) && defined('PLUGIN_ID') ? PLUGIN_ID : $identification;
+		$path = 'plugin'.DIRECTORY_SEPARATOR.$identification.DIRECTORY_SEPARATOR.'model';
+		return self::_load_class($classname,$path);
 	}
 	
 	/**
@@ -169,6 +222,21 @@ class pc_base {
 		return true;
 	}
 	
+	/**
+	 * 加载函数库
+	 * @param string $func 函数库名
+	 * @param string $path 地址
+	 */
+	private static function _auto_load_func($path = '') {
+		if (empty($path)) $path = 'libs'.DIRECTORY_SEPARATOR.'functions'.DIRECTORY_SEPARATOR.'autoload';
+		$path .= DIRECTORY_SEPARATOR.'*.func.php';
+		$auto_funcs = glob(PC_PATH.DIRECTORY_SEPARATOR.$path);
+		if(!empty($auto_funcs) && is_array($auto_funcs)) {
+			foreach($auto_funcs as $func_path) {
+				include $func_path;
+			}
+		}
+	}
 	/**
 	 * 是否有自己的扩展文件
 	 * @param string $filepath 路径

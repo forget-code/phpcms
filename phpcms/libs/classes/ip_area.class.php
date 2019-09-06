@@ -51,6 +51,49 @@ class ip_area {
 	}
 	
 	/**
+	* 通过外部接口方式获取详细地址信息
+	* @return $localinfo province 省份 city城市  sp网络 提供商  pinyin拼音
+	*/
+	public function getcitybyapi($ip) {
+		$api_url = $localinfo = '';
+		$xml = pc_base::load_sys_class('xml');
+		pc_base::load_sys_func('iconv');
+		$api_url = 'http://ipquery.sdo.com/getipinfo.php?ip='.$ip;
+		$data = $xml->xml_unserialize(@file_get_contents($api_url));
+		if (CHARSET == 'gbk') {
+			$data = array_iconv($data, 'utf-8', 'gbk');
+		}		
+		if($data['ip']['result']) {
+			$localinfo['province'] = $data['ip']['country'];
+			$localinfo['city'] = $data['ip']['city'];
+			$localinfo['sp'] = $data['ip']['sp'];		
+			//$name = strtolower(CHARSET) == 'gbk' ? $localinfo['city'] : iconv(CHARSET,'gbk',$localinfo['city']);
+			$name = str_replace(L('city'),'',$localinfo['city']);
+			$letters = gbk_to_pinyin($name);	
+			$localinfo['pinyin'] =strtolower(implode('', $letters));		
+		}		
+		return $localinfo;		
+	}
+	
+	/**
+	*获取城市名称
+	*/
+	public function getcity($ip) {
+		$localinfo = '';
+		$address = $this->get($ip);
+		if(strpos($address,L('province'))!== false && strpos($address,L('city'))!== false){
+			$address = explode(L('province'), $address);
+			$address=$address[1];
+		}
+		$address = str_replace(L('city'),'',$address);
+		$localinfo['city']= trim($address);
+		$name = CHARSET == 'gbk' ? $localinfo['city'] : iconv('utf-8','gbk',$localinfo['city']);
+		$name = str_replace(L('city'),'',$name);
+		$letters = gbk_to_pinyin($name);	
+		$localinfo['pinyin'] =strtolower(implode('', $letters));
+		return $localinfo;
+	}
+	/**
  	 * 使用mini.Dat ip数据包获取地区
  	 * @param  string $ip IP地址
  	 * @ return string/null

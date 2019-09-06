@@ -1,3 +1,4 @@
+<?php defined('IN_PHPCMS') or exit('No permission resources.');?>
 <table cellpadding="2" cellspacing="1" width="98%">
 	<tr> 
       <td>允许上传的图片类型</td>

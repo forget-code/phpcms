@@ -114,7 +114,7 @@ class index extends admin {
 			}
 		}
 		setcache('scan_bad_file', $badfiles, 'scan');
-		showmessage(L('scan_completed'), '?m=scan&c=index&a=scan_report');
+		showmessage(L('scan_completed'), '?m=scan&c=index&a=scan_report&menuid=1005');
 	}
 	
 	public function scan_report() {

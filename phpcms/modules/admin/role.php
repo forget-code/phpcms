@@ -201,7 +201,7 @@ class role extends admin {
 					$v['delete_check'] = isset($priv[$v['catid']]['delete']) ? 'checked' : '';
 					$v['listorder_check'] = isset($priv[$v['catid']]['listorder']) ? 'checked' : '';
 					$v['push_check'] = isset($priv[$v['catid']]['push']) ? 'checked' : '';
-					$v['move_check'] = isset($priv[$v['catid']]['move']) ? 'checked' : '';
+					$v['move_check'] = isset($priv[$v['catid']]['remove']) ? 'checked' : '';
 					$v['edit_check'] = isset($priv[$v['catid']]['edit']) ? 'checked' : '';
 				}
 				$v['init_check'] = isset($priv[$v['catid']]['init']) ? 'checked' : '';
@@ -217,7 +217,7 @@ class role extends admin {
 				  <td align='center'><input type='checkbox' name='priv[\$catid][]' \$disabled \$delete_check  value='delete' ></td>
 				  <td align='center'><input type='checkbox' name='priv[\$catid][]' \$disabled \$listorder_check value='listorder' ></td>
 				  <td align='center'><input type='checkbox' name='priv[\$catid][]' \$disabled \$push_check value='push' ></td>
-				  <td align='center'><input type='checkbox' name='priv[\$catid][]' \$disabled \$move_check value='move' ></td>
+				  <td align='center'><input type='checkbox' name='priv[\$catid][]' \$disabled \$move_check value='remove' ></td>
 			  </tr>";
 			
 			$tree->init($category);
@@ -245,6 +245,7 @@ class role extends admin {
 	private function _cache() {
 
 		$infos = $this->db->select(array('disabled'=>'0'), $data = '`roleid`,`rolename`', '', 'roleid ASC');
+		$role = array();
 		foreach ($infos as $info){
 			$role[$info['roleid']] = $info['rolename'];
 		}
@@ -257,11 +258,12 @@ class role extends admin {
 	 * 缓存站点数据
 	 */
 	private function _cache_siteid($role) {
+		$sitelist = array();
 		foreach($role as $n=>$r) {
 			$sitelists = $this->priv_db->select(array('roleid'=>$n),'siteid', '', 'siteid');
 			foreach($sitelists as $site) {
 				foreach($site as $v){
-					$sitelist[$n][] = $v['siteid'];
+					$sitelist[$n][] = intval($v);
 				}
 			}
 		}

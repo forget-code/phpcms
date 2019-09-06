@@ -1,7 +1,8 @@
+<?php defined('IN_PHPCMS') or exit('No permission resources.');?>
 <table cellpadding="2" cellspacing="1" width="98%">
 	<tr> 
       <td width="100">表单</td>
-      <td><textarea name="setting[formtext]" rows="2" cols="20" id="options" style="height:100px;width:400px;"><?php echo $setting['formtext'];?></textarea><BR>
+		<td><textarea name="setting[formtext]" rows="2" cols="20" id="options" style="height:100px;width:400px;"><?php echo htmlspecialchars($setting['formtext']);?></textarea><BR>
 	  例如：&lt;input type='text' name='info[voteid]' id='voteid' value='{FIELD_VALUE}' style='50' &gt;</td>
     </tr>
 	<tr> 

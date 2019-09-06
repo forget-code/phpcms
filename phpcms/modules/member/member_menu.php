@@ -18,11 +18,12 @@ class member_menu extends admin {
 		$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 		$userid = $_SESSION['userid'];
 		$admin_username = param::get_cookie('admin_username');
-		//$table_name = $this->db->table_name;
+
 		$result = $this->db->select('','*','','listorder ASC,id DESC');
+
 		foreach($result as $r) {
 			$r['cname'] = L($r['name'], '', 'member_menu');
-			$r['str_manage'] = '<a href="?m=member&c=member_menu&a=add&parentid='.$r['id'].'&menuid='.$_GET['menuid'].'">添加子菜单</a> | <a href="?m=member&c=member_menu&a=edit&id='.$r['id'].'&menuid='.$_GET['menuid'].'">修改</a> | <a href="javascript:confirmurl(\'?m=member&c=member_menu&a=delete&id='.$r['id'].'&menuid='.$_GET['menuid'].'\',\''.L('confirm',array('message'=>$r['cname'])).'\')">删除</a> ';
+			$r['str_manage'] = '<a href="?m=member&c=member_menu&a=edit&id='.$r['id'].'&menuid='.$_GET['menuid'].'">'.L('edit').'</a> | <a href="javascript:confirmurl(\'?m=member&c=member_menu&a=delete&id='.$r['id'].'&menuid='.$_GET['menuid'].'\',\''.L('confirm',array('message'=>$r['cname'])).'\')">'.L('delete').'</a> ';
 			$array[] = $r;
 		}
 
@@ -80,7 +81,6 @@ class member_menu extends admin {
 	function edit() {
 		if(isset($_POST['dosubmit'])) {
 			$id = intval($_POST['id']);
-			//print_r($_POST['info']);exit;
 			$this->db->update($_POST['info'],array('id'=>$id));
 			//修改语言文件
 			$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR.'system_menu.lang.php';

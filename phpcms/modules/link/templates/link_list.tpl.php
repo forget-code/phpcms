@@ -9,6 +9,7 @@ include $this->admin_tpl('header', 'admin');
 		<tr>
 		<td><div class="explain-col"> 
 		<?php echo L('all_linktype')?>: &nbsp;&nbsp; <a href="?m=link&c=link"><?php echo L('all')?></a> &nbsp;&nbsp;
+		<a href="?m=link&c=link&typeid=0">默认分类</a>&nbsp;
 		<?php
 	if(is_array($type_arr)){
 	foreach($type_arr as $typeid => $type){

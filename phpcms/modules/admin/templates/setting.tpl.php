@@ -13,7 +13,7 @@ include $this->admin_tpl('header');?>
 			
 		$("#upload_url").formValidator({onshow:"<?php echo L('setting_input').L('setting_upload_url')?>",onfocus:"<?php echo L('setting_upload_url').L('setting_end_with_x')?>"}).inputValidator({onerror:"<?php echo L('setting_upload_url').L('setting_input_error')?>"}).regexValidator({regexp:"(.+)\/$",onerror:"<?php echo L('setting_upload_url').L('setting_end_with_x')?>"});
 		
-		$("#errorlog_size").formValidator({onshow:"<?php echo L('setting_errorlog_hint')?>",onfocus:"<?php echo L('setting_input').L('setting_error_log_size')?>"}).inputValidator({onerror:"<?php echo L('setting_error_log_size').L('setting_input_error')?>"}).regexValidator({regexp:"decmal",datatype:"enum",onerror:"<?php echo L('setting_errorlog_type')?>"});	
+		$("#errorlog_size").formValidator({onshow:"<?php echo L('setting_errorlog_hint')?>",onfocus:"<?php echo L('setting_input').L('setting_error_log_size')?>"}).inputValidator({onerror:"<?php echo L('setting_error_log_size').L('setting_input_error')?>"}).regexValidator({regexp:"num",datatype:"enum",onerror:"<?php echo L('setting_errorlog_type')?>"});	
 			
 		$("#phpsso_api_url").formValidator({onshow:"<?php echo L('setting_phpsso_type')?>",onfocus:"<?php echo L('setting_phpsso_type')?>",tipcss:{width:'300px'},empty:false}).inputValidator({onerror:"<?php echo L('setting_phpsso_type')?>"}).regexValidator({regexp:"http:\/\/(.+)[^/]$",onerror:"<?php echo L('setting_phpsso_type')?>"});
 		
@@ -182,29 +182,27 @@ include $this->admin_tpl('header');?>
   <tr>
     <th width="120"><?php echo L('setting_snda_enable')?></th>
     <td class="y-bg">
-     <input name="setconfig[snda_enable]" checkbox=snda_enable value="blue"  type="radio" <?php echo $snda_enable=='blue' ? ' checked' : ''?>> <?php echo L('blue')?>
-     <img src="<?php echo IMG_PATH?>connect/snda_blue_255x60.gif">
-     <img src="<?php echo IMG_PATH?>connect/snda_blue_75x18.gif">
-     <br />
-     <input name="setconfig[snda_enable]" checkbox="snda_enable" value="red" type="radio" <?php echo $snda_enable=='red' ? ' checked' : ''?>> <?php echo L('red')?> 
-     <img src="<?php echo IMG_PATH?>connect/snda_red_255x60.gif">
-     <img src="<?php echo IMG_PATH?>connect/snda_red_75x18.gif">
-     <br />
-     <input name="setconfig[snda_enable]" checkbox="snda_enable" value="green" type="radio" <?php echo $snda_enable=='green' ? ' checked' : ''?>> <?php echo L('green')?> 
-     <img src="<?php echo IMG_PATH?>connect/snda_green_255x60.gif">
-     <img src="<?php echo IMG_PATH?>connect/snda_green_75x18.gif">
-	 <br />
-	 <?php echo $snda_status?>
+	 APP key <input type="text" class="input-text" name="setconfig[snda_akey]" id="snda_akey" size="20" value="<?php echo $snda_akey ?>"/>
+	 APP secret key <input type="text" class="input-text" name="setconfig[snda_skey]" id="snda_skey" size="40" value="<?php echo $snda_skey ?>"/> <a href="http://code.snda.com/index/oauth" target="_blank"><?php echo L('click_register')?></a>
     </td>
   </tr>
 
   <tr>
     <th><?php echo L('setting_connect_sina')?></th>
     <td class="y-bg">
-	WB_AKEY <input type="text" class="input-text" name="setconfig[sina_akey]" id="sina_akey" size="20" value="<?php echo $sina_akey ?>"/>
-	WB_SKEY <input type="text" class="input-text" name="setconfig[sina_skey]" id="sina_skey" size="40" value="<?php echo $sina_skey ?>"/> <a href="http://open.t.sina.com.cn/wiki/index.php/<?php echo L('connect_micro')?>" target="_blank"><?php echo L('click_register')?></a>
+	App key <input type="text" class="input-text" name="setconfig[sina_akey]" id="sina_akey" size="20" value="<?php echo $sina_akey ?>"/>
+	App secret key <input type="text" class="input-text" name="setconfig[sina_skey]" id="sina_skey" size="40" value="<?php echo $sina_skey ?>"/> <a href="http://open.t.sina.com.cn/wiki/index.php/<?php echo L('connect_micro')?>" target="_blank"><?php echo L('click_register')?></a>
 	</td>
-  </tr>     
+  </tr>
+
+  <tr>
+    <th><?php echo L('setting_connect_qq')?></th>
+    <td class="y-bg">
+	App key <input type="text" class="input-text" name="setconfig[qq_akey]" id="qq_akey" size="20" value="<?php echo $qq_akey ?>"/>
+	App secret key <input type="text" class="input-text" name="setconfig[qq_skey]" id="qq_skey" size="40" value="<?php echo $qq_skey ?>"/> <a href="http://open.t.qq.com/" target="_blank"><?php echo L('click_register')?></a>
+	</td>
+  </tr> 
+
   </table>
 </div>
 

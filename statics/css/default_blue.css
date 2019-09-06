@@ -35,7 +35,7 @@ body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; backgro
 .submit,.submit input{ background: url(../images/member/but.png) no-repeat; height:29px;width:auto;_width:0;overflow:visible !ie}
 .submit input{background-position: right top; border:none; padding:0 10px 0 7px; font-size:14px}
 /* 页面宽度 （更改页面宽度后，需要更改“images/v9/body-bg.png”图片的宽度） */
-.header,.main,.footer{width:960px;margin:0 auto; overflow:auto}
+.header,.main,.footer{width:960px;margin:0 auto;}
 /* 头部 */
 .header{padding:10px 7px;background-position: left -142px}
 .header .logo{float:left;background-position: right -10px;background-repeat: no-repeat; padding:0 20px 0 10px; height:70px; text-align:center;*font-size:40px;}
@@ -392,3 +392,5 @@ body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; backgro
 .itemli li{padding:10px 0px;}
 .itemli li a{background:url(../images/bg_member_1.gif) no-repeat -5px -126px;font-weight:bold; padding-left:14px;color:#004499; font-size:13px;}
 .pd_b0{padding-bottom:0px;}
+/*内容摘要*/
+.summary {background-color:#F6FAFD;border: 1px solid #DCDDDD;font-size: 14px;line-height: 23px;margin: 15px 0 0;padding: 12px 5px 6px;text-align: justify;text-indent: 2em;}

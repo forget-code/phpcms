@@ -12,7 +12,7 @@ class module extends admin {
 	
 	public function init() {
 		$dirs = $module = $dirs_arr = $directory = array();
-		$dirs = glob(PHPCMS_PATH.'phpcms'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'*');
+		$dirs = glob(PC_PATH.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'*');
 		foreach ($dirs as $d) {
 			if (is_dir($d)) {
 				$d = basename($d);

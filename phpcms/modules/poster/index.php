@@ -26,7 +26,7 @@ class index {
 			$siteid = isset($_GET['siteid']) ? intval($_GET['siteid']) : get_siteid();
 			$this->s_db->insert(array('siteid'=>$siteid, 'pid'=>$id, 'username'=>$username, 'area'=>$area, 'ip'=>$ip, 'referer'=>HTTP_REFERER, 'clicktime'=>SYS_TIME, 'type'=> 1));
 		}
-		$this->db->update(array('clicks'=>'+1'), array('id'=>$id));
+		$this->db->update(array('clicks'=>'+=1'), array('id'=>$id));
 		$setting = string2array($r['setting']);
 		if (count($setting)==1) {
 			$url = $setting['1']['linkurl'];
@@ -44,9 +44,10 @@ class index {
 		$id = intval($_GET['id']);
 		$sdb = pc_base::load_model('poster_space_model');
 		$now = SYS_TIME;
-		$r = $sdb->get_one(array('spaceid'=>$_GET['id']));
+		$siteid = get_siteid();
+		$r = $sdb->get_one(array('siteid'=>$siteid, 'spaceid'=>$id));
 		if($r['setting']) $r['setting'] = string2array($r['setting']);
-		$poster_template = getcache('poster_template', 'commons');
+		$poster_template = getcache('poster_template_'.$siteid, 'commons');
 		if ($poster_template[$r['type']]['option']) {
 			$where = "`spaceid`='".$id."' AND `disabled`=0 AND `startdate`<='".$now."' AND (`enddate`>='".$now."' OR `enddate`=0) ";
 			$pinfo = $this->db->select($where, '*', '', '`listorder` ASC, `id` DESC');
@@ -97,7 +98,7 @@ class index {
 	 * @param intval $id 广告ID
 	 * @return boolen 
 	 */
-	private function show_stat($siteid = 0, $spaceid = 0, $id = 0) {
+	protected function show_stat($siteid = 0, $spaceid = 0, $id = 0) {
 		$M = new_html_special_chars(getcache('poster', 'commons'));
 		if($M['enablehits']==0) return true; 
 		//$siteid = intval($siteid);
@@ -113,7 +114,7 @@ class index {
 		$ip_area = pc_base::load_sys_class('ip_area');
 		$area = $ip_area->get($ip);
 		$username = param::get_cookie('username') ? param::get_cookie('username') : '';
-		$this->db->update(array('hits'=>'+1'), array('id'=>$id));
+		$this->db->update(array('hits'=>'+=1'), array('id'=>$id));
 		$this->s_db->insert(array('pid'=>$id, 'siteid'=>$siteid, 'spaceid'=>$spaceid, 'username'=>$username, 'area'=>$area, 'ip'=>$ip, 'referer'=>HTTP_REFERER, 'clicktime'=>SYS_TIME, 'type'=>0));
 		return true;
 	}

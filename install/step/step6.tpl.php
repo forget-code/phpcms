@@ -43,6 +43,8 @@ setting['link'] = '友情链接模块安装成功......';
 setting['vote'] = '投票模块安装成功......';
 setting['mood'] = '心情指数模块安装成功......';
 setting['message'] = '短消息模块安装成功......';
+setting['formguide'] = '表单向导模块安装成功......';
+setting['wap'] = '手机门户模块安装成功......';
 
 var dbhost = '<?php echo $dbhost?>';
 var dbuser = '<?php echo $dbuser?>';

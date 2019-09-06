@@ -37,15 +37,15 @@ class content extends admin {
 			$hitsid = 'special-c-'.$info['specialid'].'-'.$contentid;
 			$count->insert(array('hitsid'=>$hitsid));
 			//如果不是外部链接，将内容加到data表中
+			$html = pc_base::load_app_class('html');
 			if ($info['isdata']) {
 				$data = $this->check($_POST['data'], 'data'); //验证数据的合法性
 				$data['id'] = $contentid;
 				$this->data_db->insert($data);
 				$searchid = $this->search_api($contentid, $data, $info['title'], 'update', $info['inputtime']);
+				$url = $html->_create_content($contentid);
+				$this->db->update(array('url'=>$url[0], 'searchid'=>$searchid), array('id'=>$contentid, 'specialid'=>$_GET['specialid']));
 			}
-			$html = pc_base::load_app_class('html');
-			$url = $html->_create_content($contentid);
-			$this->db->update(array('url'=>$url[1], 'searchid'=>$searchid), array('id'=>$contentid, 'specialid'=>$_GET['specialid']));
 			$html->_index($_GET['specialid'], 20, 5);
 			$html->_list($info['typeid'], 20, 5);
 			//更新附件状态
@@ -89,18 +89,20 @@ class content extends admin {
 			$info = $this->check($_POST['info'], 'info', 'edit', $_POST['data']['content']); //验证数据的合法性
 			//处理外部链接更换情况
 			$r = $this->db->get_one(array('id'=>$_GET['id'], 'specialid'=>$_GET['specialid']));
+			
 			if ($r['islink']!=$info['islink']) { //当外部链接和原来差别时进行操作
+				// 向数据统计表添加数据
+				$count = pc_base::load_model('hits_model');
+				$hitsid = 'special-c-'.$_GET['specialid'].'-'.$_GET['id'];
+				$count->delete(array('hitsid'=>$hitsid));
+				$this->data_db->delete(array('id'=>$_GET['id']));
 				if ($info['islink']) {
 					$info['url'] = $_POST['linkurl'];
 					$info['isdata'] = 0;
-					$this->data_db->delete(array('id'=>$_GET['id']));
 				} else {
 					$data = $this->check($_POST['data'], 'data');
 					$data['id'] = $_GET['id'];
 					$this->data_db->insert($data);
-					// 向数据统计表添加数据
-					$count = pc_base::load_model('hits_model');
-					$hitsid = 'special-c-'.$_GET['specialid'].'-'.$_GET['id'];
 					$count->insert(array('hitsid'=>$hitsid));
 				} 
 			}
@@ -111,17 +113,20 @@ class content extends admin {
 			} else {
 				$info['isdata'] = 1;
 			} 
+			$html = pc_base::load_app_class('html', 'special');
 			if ($info['isdata']) {
 				$data = $this->check($_POST['data'], 'data');
 				$this->data_db->update($data, array('id'=>$_GET['id']));
+				$url = $html->_create_content($_GET['id']);
+				if ($url[0]) {
+					$info['url'] = $url[0];
+					$searchid = $this->search_api($_GET['id'], $data, $info['title'], 'update', $info['inputtime']);
+					$this->db->update(array('url'=>$url[0], 'searchid'=>$searchid), array('id'=>$_GET['id'], 'specialid'=>$_GET['specialid']));
+				}
+			} else {
+				$this->db->update(array('url'=>$info['url']), array('id'=>$_GET['id'], 'specialid'=>$_GET['specialid']));
 			}
 			$this->db->update($info, array('id'=>$_GET['id'], 'specialid'=>$_GET['specialid']));
-			$html = pc_base::load_app_class('html', 'special');
-			$url = $html->_create_content($_GET['id']);
-			if ($url[1]) {
-				$searchid = $this->search_api($_GET['id'], $data, $info['title'], 'update', $info['inputtime']);
-				$this->db->update(array('url'=>$url[1], 'searchid'=>$searchid), array('id'=>$_GET['id'], 'specialid'=>$_GET['specialid']));
-			}
 			//更新附件状态
 			if(pc_base::load_config('system','attachment_stat')) {
 				$this->attachment_db = pc_base::load_model('attachment_model');
@@ -175,6 +180,7 @@ class content extends admin {
 	public function init() {
 		$_GET['specialid'] = intval($_GET['specialid']);
 		if(!$_GET['specialid']) showmessage(L('illegal_action'), HTTP_REFERER);
+		$types = $this->type_db->select(array('module'=>'special', 'parentid'=>$_GET['specialid']), 'name, typeid', '', '`listorder` ASC, `typeid` ASC', '', 'typeid');
 		$page = max(intval($_GET['page']), 1);
 		$datas = $this->db->listinfo(array('specialid'=>$_GET['specialid']), '`listorder` ASC , `id` DESC', $page);
 		$pages = $this->db->pages;
@@ -236,7 +242,8 @@ class content extends admin {
 	 */
 	private function search_api($id = 0, $data = array(), $title, $action = 'update', $addtime) {
 		$this->search_db = pc_base::load_model('search_model');
-		$type_arr = getcache('type_module','search');
+		$siteid = $this->get_siteid();
+		$type_arr = getcache('type_module_'.$siteid,'search');
 		$typeid = $type_arr['special'];
 		if($action == 'update') {
 			$fulltextcontent = $data['content'];

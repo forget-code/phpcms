@@ -197,10 +197,13 @@ class tree {
 	 * @param $myid 表示获得这个ID下的所有子级
 	 * @param $effected_id 需要生成treeview目录数的id
 	 * @param $str 末级样式
+	 * @param $str2 目录级别样式
+	 * @param $showlevel 直接显示层级数，其余为异步显示，0为全部限制
 	 * @param $style 目录样式 默认 filetree 可增加其他样式如'filetree treeview-famfamfam'
+	 * @param $currentlevel 计算当前层级，递归使用 适用改函数时不需要用该参数
 	 * @param $recursion 递归使用 外部调用时为FALSE
 	 */
-    function get_treeview($myid,$effected_id='example',$str="<span class='file'>\$name</span>", $str2="<span class='folder'>\$name</span>" ,$style='filetree ' ,$recursion=FALSE) {
+    function get_treeview($myid,$effected_id='example',$str="<span class='file'>\$name</span>", $str2="<span class='folder'>\$name</span>" ,$showlevel = 0 ,$style='filetree ' , $currentlevel = 1,$recursion=FALSE) {
         $child = $this->get_child($myid);
         if(!defined('EFFECTED_INIT')){
            $effected = ' id="'.$effected_id.'"';
@@ -208,16 +211,23 @@ class tree {
         } else {
            $effected = '';
         }
+		$placeholder = 	'<ul><li><span class="placeholder"></span></li></ul>';
         if(!$recursion) $this->str .='<ul'.$effected.'  class="'.$style.'">';
         foreach($child as $id=>$a) {
+
         	@extract($a);
-        	$floder_status = isset($folder) ? ' class="'.$folder.'"' : '';
-            $this->str .= $recursion ? '<ul><li'.$floder_status.'>' : '<li'.$floder_status.'>';
+			if($showlevel > 0 && $showlevel == $currentlevel && $this->get_child($id)) $folder = 'hasChildren'; //如设置显示层级模式@2011.07.01
+        	$floder_status = isset($folder) ? ' class="'.$folder.'"' : '';		
+            $this->str .= $recursion ? '<ul><li'.$floder_status.' id=\''.$id.'\'>' : '<li'.$floder_status.' id=\''.$id.'\'>';
             $recursion = FALSE;
             if($this->get_child($id)){
             	eval("\$nstr = \"$str2\";");
             	$this->str .= $nstr;
-                $this->get_treeview($id,$effected_id,$str,$str2,$style,TRUE);
+                if($showlevel == 0 || ($showlevel > 0 && $showlevel > $currentlevel)) {
+					$this->get_treeview($id, $effected_id, $str, $str2, $showlevel, $style, $currentlevel+1, TRUE);
+				} elseif($showlevel > 0 && $showlevel == $currentlevel) {
+					$this->str .= $placeholder;
+				}
             } else {
                 eval("\$nstr = \"$str\";");
                 $this->str .= $nstr;
@@ -227,6 +237,34 @@ class tree {
         if(!$recursion)  $this->str .='</ul>';
         return $this->str;
     }
+	
+	/**
+	 * 获取子栏目json
+	 * Enter description here ...
+	 * @param unknown_type $myid
+	 */
+	public function creat_sub_json($myid, $str='') {
+		$sub_cats = $this->get_child($myid);
+		$n = 0;
+		if(is_array($sub_cats)) foreach($sub_cats as $c) {			
+			$data[$n]['id'] = iconv(CHARSET,'utf-8',$c['catid']);
+			if($this->get_child($c['catid'])) {
+				$data[$n]['liclass'] = 'hasChildren';
+				$data[$n]['children'] = array(array('text'=>'&nbsp;','classes'=>'placeholder'));
+				$data[$n]['classes'] = 'folder';
+				$data[$n]['text'] = iconv(CHARSET,'utf-8',$c['catname']);
+			} else {				
+				if($str) {
+					@extract(array_iconv($c,CHARSET,'utf-8'));
+					eval("\$data[$n]['text'] = \"$str\";");
+				} else {
+					$data[$n]['text'] = iconv(CHARSET,'utf-8',$c['catname']);
+				}
+			}
+			$n++;
+		}
+		return json_encode($data);		
+	}
 	private function have($list,$item){
 		return(strpos(',,'.$list.',',','.$item.','));
 	}

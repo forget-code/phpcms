@@ -36,7 +36,7 @@ $LANG['not_vote']						=	'没有此投票';
 $LANG['vote_num']						=	'投票数';
 
 $LANG['statistics']						=	'统计';
-$LANG['lock']							=	'未启用';
+$LANG['lock']							=	'锁定';
 $LANG['check_vote']						=	'查看投票';
 $LANG['call_code']						=	'调用代码';
 $LANG['before_select_operation']		=	'请选择再执行操作';
@@ -119,6 +119,7 @@ $LANG['check_select'] 					= 	'单击选择';
 $LANG['item'] 							= 	'项';
 $LANG['copy_code']						= 	'复制代码至剪贴板';
 $LANG['submit']							= 	'提交';
-
+$LANG['select_style']					= 	'选择风格';
+$LANG['right_all']						= 	'选择正确';
  
 ?>

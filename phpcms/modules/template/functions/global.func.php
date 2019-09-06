@@ -124,6 +124,20 @@ function creat_form($id, $data, $value = '', $op = '') {
 			}
 			$str .= '<input type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" size="30" />'.form::select_category('', $value, "name='select_$id' id='select_$id' onchange=\"$('#$id').val(this.value);$ajax\"", '', (isset($data['data']['modelid']) ? $data['data']['modelid'] : 0), (isset($data['data']['type']) ? $data['data']['type'] : -1), (isset($data['data']['onlysub']) ? $data['data']['onlysub'] : 0));
 			break;
+
+		case 'select_yp_model':
+			if($data['ajax']['name']) {
+				$ajax = ';'.$url;
+			}
+			$yp_models = getcache('yp_model', 'commons');
+			$d = array(L('please_select'));
+			if (is_array($yp_models) && !empty($yp_models)) {
+				foreach ($yp_models as $k =>$v) {
+					$d[$k] = $v['name'];
+				}
+			}
+			$str .= '<input type="text" name="'.$id.'" id="'.$id.'" value="'.$value.'" size="30" />'.form::select($d, $value, "name='select_$id' id='select_$id' onchange=\"$('#$id').val(this.value);$ajax\"");
+			break;
 	}
 	if (!empty($data['validator'])) {
 		$str .= '<script type="text/javascript">$(function(){$("#'.$id.'").formValidator({onshow:"'.L('input').$data['name'].'。",onfocus:"'.L('input').$data['name'].'。"'.($data['empty'] ? ',empty:true' : '').'})';

@@ -11,6 +11,9 @@ class copyfrom extends admin {
 		$this->siteid = $this->get_siteid();
 	}
 	
+	/**
+	 * 来源管理列表
+	 */
 	public function init () {
 		$datas = array();
 		$datas = $this->db->listinfo(array('siteid'=>$this->siteid),'listorder ASC',$_GET['page']);
@@ -20,10 +23,13 @@ class copyfrom extends admin {
 		$this->public_cache();
 		include $this->admin_tpl('copyfrom_list');
 	}
+	
+	/**
+	 * 添加来源
+	 */
 	public function add() {
 		if(isset($_POST['dosubmit'])) {
-			$_POST['info']['siteid'] = $this->siteid;
-			if(empty($_POST['info']['sitename'])) showmessage(L('input').L('copyfrom_name'));
+			$_POST['info'] = $this->check($_POST['info']);
 			$this->db->insert($_POST['info']);
 			showmessage(L('add_success'), '', '', 'add');
 		} else {
@@ -32,23 +38,49 @@ class copyfrom extends admin {
 			include $this->admin_tpl('copyfrom_add');
 		}
 	}
+	
+	/**
+	 * 管理来源
+	 */
 	public function edit() {
 		if(isset($_POST['dosubmit'])) {
 			$id = intval($_POST['id']);
+			$_POST['info'] = $this->check($_POST['info']);
 			$this->db->update($_POST['info'],array('id'=>$id));
 			showmessage(L('update_success'), '', '', 'edit');
 		} else {
 			$show_header = $show_validator = '';
 			$id = intval($_GET['id']);
-			$r = $this->db->get_one(array('id'=>$id));
+			if (!$id) showmessage(L('illegal_action'));
+			$r = $this->db->get_one(array('id'=>$id, 'siteid'=>$this->siteid));
+			if (empty($r)) showmessage(L('illegal_action'));
 			extract($r);
 			include $this->admin_tpl('copyfrom_edit');
 		}
 	}
+	
+	/**
+	 * 删除来源
+	 */
 	public function delete() {
 		$_GET['id'] = intval($_GET['id']);
-		$this->db->delete(array('id'=>$_GET['id']));
+		if (!$_GET['id']) showmessage(L('illegal_action'));
+		$this->db->delete(array('id'=>$_GET['id'], 'siteid'=>$this->siteid));
 		exit('1');
+	}
+	
+	/**
+	 * 检查POST数据
+	 * @param array $data 前台POST数据
+	 * @return array $data
+	 */
+	private function check($data = array()) {
+		if (!is_array($data) || empty($data)) return array();
+		if (!preg_match('/^((http|https):\/\/)?([^\/]+)/i', $data['siteurl'])) showmessage(L('input').L('copyfrom_url'));
+		if (empty($data['sitename'])) showmessage(L('input').L('copyfrom_name'));
+		if ($data['thumb'] && !preg_match('/^((http|https):\/\/)?([^\/]+)/i', $data['thumb'])) showmessage(L('copyfrom_logo').L('format_incorrect'));
+		$data['siteid'] = $this->siteid;
+		return $data;
 	}
 	
 	/**

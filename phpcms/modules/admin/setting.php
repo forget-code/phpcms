@@ -14,20 +14,14 @@ class setting extends admin {
 	 */
 	public function init() {
 		$show_validator = true;
-		$setconfig = pc_base::load_config('system');
-		//查询域名是否通过验证
-		$snda_check_url = "http://open.sdo.com/cas/sso?domain=".$_SERVER['SERVER_NAME'];
-		$snda_status = @file_get_contents($snda_check_url);
-		if(CHARSET != 'utf-8') {
-			$snda_status = iconv('utf-8', CHARSET, $snda_status);
-		}
-		
+		$setconfig = pc_base::load_config('system');	
 		extract($setconfig);
 		if(!function_exists('ob_gzhandler')) $gzip = 0;
 		$info = $this->db->get_one(array('module'=>'admin'));
 		extract(string2array($info['setting']));
 		$show_header = true;
 		$show_validator = 1;
+		
 		include $this->admin_tpl('setting');
 	}
 	
@@ -36,10 +30,9 @@ class setting extends admin {
 	 */
 	public function save() {
 		
+		$setting = array();
 		$setting['admin_email'] = is_email($_POST['setting']['admin_email']) ? trim($_POST['setting']['admin_email']) : showmessage(L('email_illegal'),HTTP_REFERER);
-		//$setting['adminaccessip'] = intval($_POST['setting']['adminaccessip']);
 		$setting['maxloginfailedtimes'] = intval($_POST['setting']['maxloginfailedtimes']);
-		//$setting['maxiplockedtime'] = intval($_POST['setting']['maxiplockedtime']);
 		$setting['minrefreshtime'] = intval($_POST['setting']['minrefreshtime']);
 		$setting['mail_type'] = intval($_POST['setting']['mail_type']);		
 		$setting['mail_server'] = trim($_POST['setting']['mail_server']);	
@@ -54,7 +47,7 @@ class setting extends admin {
 		
 		//如果开始盛大通行证接入，判断服务器是否支持curl
 		$snda_error = '';
-		if($_POST['setconfig']['snda_enable']) {
+		if($_POST['setconfig']['snda_akey'] || $_POST['setconfig']['snda_skey']) {
 			if(function_exists('curl_init') == FALSE) {
 				$snda_error = L('snda_need_curl_init');
 				$_POST['setconfig']['snda_enable'] = 0;

@@ -10,10 +10,9 @@ include $this->admin_tpl('header','admin');
 	$("#option1").formValidator({onshow:"<?php echo L("input").L('vote_option')?>",onfocus:"<?php echo L("input").L('vote_option')?>"}).inputValidator({min:1,onerror:"<?php echo L("input").L('vote_option')?>"}).regexValidator({regexp:"notempty",datatype:"enum",param:'i',onerror:"<?php echo L('input_not_space')?>"});
 	$("#option2").formValidator({onshow:"<?php echo L("input").L('vote_option')?>",onfocus:"<?php echo L("input").L('vote_option')?>"}).inputValidator({min:1,onerror:"<?php echo L("input").L('vote_option')?>"}).regexValidator({regexp:"notempty",datatype:"enum",param:'i',onerror:"<?php echo L('input_not_space')?>"});
 	$("#fromdate").formValidator({onshow:"<?php echo L('select').L('fromdate')?>",onfocus:"<?php echo L('select').L('fromdate')?>",oncorrect:"<?php echo L('time_is_ok');
-	?>"}).inputValidator({min:1,onerror:"<?php echo L('time_is_must')?>"});
-	$("#todate").formValidator({onshow:"<?php echo L('select').L('todate')?>",onfocus:"<?php echo L('select').L('todate')?>",oncorrect:"<?php echo L('time_is_ok');
-		?>"}).inputValidator({min:1,onerror:"<?php echo L('time_is_must')?>"});
-		
+	?>"}).inputValidator();
+	$("#todate").formValidator({onshow:"<?php echo L('select').L('todate')?>",onfocus:"<?php echo L('select').L('todate')?>",oncorrect:"<?php echo L('time_is_ok');?>"}).inputValidator();
+	$('#style').formValidator({onshow:"<?php echo L('select_style')?>",onfocus:"<?php echo L('select_style')?>",oncorrect:"<?php echo L('right_all')?>"}).inputValidator({min:1,onerror:"<?php echo L('select_style')?>"});	
 	});
 //-->
 </script>
@@ -105,15 +104,14 @@ include $this->admin_tpl('header','admin');
 	<tr>
 		<th><?php echo L('vote_style')?>：</th>
 		<td>
-		<?php echo form::select($template_list, $info['default_style'], 'name="vote_subject[style]" id="style" onchange="load_file_list(this.value)"', L('please_select'))?>
-		<script type="text/javascript">$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style=<?php echo $info['default_style']?>&module=vote&templates=vote_tp&name=vote_subject&pc_hash='+pc_hash, function(data){$('#show_template').html(data.vote_tp_template);});</script>
+		<?php echo form::select($template_list, $default_style, 'name="vote_subject[style]" id="style" onchange="load_file_list(this.value)"', L('please_select'))?> 
 		</td>
 	</tr>
 	
 	<tr>
 		<th><?php echo L('template')?>：</th>
 		<td id="show_template">
-		<?php echo form::select_template('default', 'vote', '', 'name="vote_subject[show_template]"', 'vote_tp');?>
+		<?php echo form::select_template($default_style, 'vote', $vote_tp_template, 'name="vote_subject[vote_tp_template]"', 'vote_tp');?>
 		</td>
 	</tr>
 	<tr>
@@ -171,6 +169,6 @@ function del(o){
 }
 
 function load_file_list(id) {
-	$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&module=vote&templates=vote_tp&name=subject&pc_hash='+pc_hash, function(data){$('#show_template').html(data.vote_tp_template);});
+	$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&module=vote&templates=vote_tp&name=vote_subject&pc_hash='+pc_hash, function(data){$('#show_template').html(data.vote_tp_template);});
 }
 </script>

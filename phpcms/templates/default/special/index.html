@@ -7,7 +7,7 @@
 <div class="main">
 	<div class="col-left new">
 			<div class="FocusPic">
-            {pc:special  action="content_list" specialid="$specialid" isthumb="1" listorder="3" num="5"}
+            {pc:special  action="content_list" specialid="$specialid" thumb="1" listorder="3" num="5"}
             	<div class="content" id="main-slide">
                     <div class="changeDiv">  
                     {loop $data $r}
@@ -87,7 +87,7 @@
     <div class="bk10"></div>
     <div class="box">
         		<h5>{$t['name']}<a href="{$t['url']}" class="more">更多>></a></h5>
-				{pc:special action="content_list" specialid="$id" typeid="$t[typeid]" isthumb="1" listorder="3" num="6"}
+				{pc:special action="content_list" specialid="$id" typeid="$t[typeid]" thumb="1" listorder="3" num="6"}
             <ul class="content news-photo picbig">
 			{loop $data $r}
             	<li>
@@ -113,8 +113,8 @@
 	  {if module_exists('comment')}
       <iframe src="{APP_PATH}index.php?m=comment&c=index&a=init&commentid={id_encode("special",$id,$siteid)}&iframe=1" width="100%" height="40%" id="comment_iframe" frameborder="0" scrolling="no"></iframe>
 	  {/if}
+	  <script language='javascript' src='{APP_PATH}index.php?m=formguide&c=index&a=show&formid=48&action=js'></script>
 </div>
-<script language='javascript' src='{APP_PATH}index.php?m=formguide&c=index&a=show&formid=2&action=js'></script>
 <script type="text/javascript"> 
 <!--
 $(function(){

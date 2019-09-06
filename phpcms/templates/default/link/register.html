@@ -21,7 +21,9 @@
 </tr>
 <tr> 
 <th>所属分类</th>
-<td><select  style="width: 36%;" id="typeid" name="typeid">
+<td>
+<select  style="width: 36%;" id="typeid" name="typeid">
+<option value="0">默认分类</option>
 {loop $types $type_arr}
 <option value="{$type_arr['typeid']}">{$type_arr['name']}</option>
 {/loop}
@@ -61,6 +63,7 @@
         <div class="box">
             <h5 class="title-2">友情链接分类</h5>
             <div class="tag_a">
+            <a href="{APP_PATH}index.php?m=link&c=index&a=list_type&type_id=0&siteid={$siteid}" title="默认分类">默认分类</a>
 	            {pc:link action="type_lists" listorder="desc" siteid="$siteid"}
 	            {loop $data $type_v}
 	            <a href="{APP_PATH}index.php?m=link&c=index&a=list_type&type_id={$type_v[typeid]}&siteid={$siteid}" title="{$type_v[name]}">{$type_v[name]}</a>
@@ -105,8 +108,8 @@
 	$(function(){
 	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
 	$("#name").formValidator({onshow:"请输入网站名称",onfocus:"请输入网站名称"}).inputValidator({min:1,max:999,onerror:"网站名称不能为空"});
-	$("#url").formValidator({onshow:"请输入网站网址",onfocus:"请输入网站网址"}).inputValidator({min:1,max:999,onerror:"网址不能为空"}).regexValidator({regexp:"http:\/\/(.+)\/$",onerror:"格式为http://www.phpcms.cn/ 以‘/’结束"});
-	$("#code").formValidator({onshow:"请输入验证码",onfocus:"验证码不能为空"}).inputValidator({min:1,max:999,onerror:"验证码不能为空"}).ajaxValidator({
+ 	$("#url").formValidator({onshow:"请输入网站网址",onfocus:"请输入网站网址"}).inputValidator({min:1,onerror:"请输入网站网址"}).regexValidator({regexp:"^http:\/\/[A-Za-z0-9]+\.[A-Za-z0-9]+[\/=\?%\-&]*([^<>])*$",onerror:"格式应该为http://www.phpcms.cn/"})
+ 	$("#code").formValidator({onshow:"请输入验证码",onfocus:"验证码不能为空"}).inputValidator({min:1,max:999,onerror:"验证码不能为空"}).ajaxValidator({
 	    type : "get",
 		url : "",
 		data :"m=pay&c=deposit&a=public_checkcode",

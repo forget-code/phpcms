@@ -106,6 +106,11 @@ class block_admin extends admin {
 			showmessage(L('nofound'));
 		}
 		if ($this->db->delete(array('id'=>$id)) && $this->history_db->delete(array('blockid'=>$id)) && $this->priv_db->delete(array('blockid'=>$id))) {
+			if (pc_base::load_config('system','attachment_stat')) {
+				$this->attachment_db = pc_base::load_model('attachment_model');
+				$keyid = 'block-'.$id;
+				$this->attachment_db->api_delete($keyid);
+			}
 			showmessage(L('operation_success'), HTTP_REFERER);
 		} else {
 			showmessage(L('operation_failure'), HTTP_REFERER);
@@ -139,6 +144,12 @@ class block_admin extends admin {
 				if ($template) {
 					$block = pc_base::load_app_class('block_tag');
 					$block->template_url($id, $template);
+				}
+				if (is_array($thumb) && !empty($thumb)) {
+					if(pc_base::load_config('system','attachment_stat')) {
+						$this->attachment_db = pc_base::load_model('attachment_model');
+						$this->attachment_db->api_update($thumb, 'block-'.$id, 1);
+					}
 				}
 				$sql = array('data'=>array2string($datas), 'template'=>$template);
 			} elseif ($data['type'] == 1) {
@@ -266,6 +277,7 @@ class block_admin extends admin {
 	public function public_name() {
 		$name = isset($_GET['name']) && trim($_GET['name']) ? (pc_base::load_config('system', 'charset') == 'gbk' ? iconv('utf-8', 'gbk', trim($_GET['name'])) : trim($_GET['name'])) : exit('0');
 		$id = isset($_GET['id']) && intval($_GET['id']) ? intval($_GET['id']) : '';
+		$name = safe_replace($name);
  		$data = array();
 		if ($id) {
 			$data = $this->db->get_one(array('id'=>$id), 'name');

@@ -56,6 +56,11 @@ class file extends admin {
 		}
 		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\'), '', urldecode(trim($_GET['dir']))) : '';
 		$file = isset($_GET['file']) && trim($_GET['file']) ? trim($_GET['file']) : '';
+		if ($file) {
+			preg_match('/^([a-zA-Z0-9])?([^.|-|_]+)/i', $file, $file_t);
+			$file_t = $file_t[0];
+			$file_t_v = array('header'=>array('{$SEO[\'title\']}'=>L('seo_title'), '{$SEO[\'site_title\']}'=>L('site_title'), '{$SEO[\'keyword\']}'=>L('seo_keyword'), '{$SEO[\'description\']}'=>L('seo_des')), 'category'=>array('{$catid}'=>L('cat_id'), '{$catname}'=>L('cat_name'), '{$url}'=>L('cat_url'), '{$r[catname]}'=>L('cat_name'), '{$r[url]}'=>'URL', '{$CATEGORYS}'=>L('cats')), 'list'=>array('{$catid}'=>L('cat_id'), '{$catname}'=>L('cat_name'), '{$url}'=>L('cat_url'), '{$CATEGORYS}'=>L('cats')), 'show'=> array('{$title}'=>L('title'), '{$inputtime}'=>L('inputtime'), '{$copyfrom}'=>L('comeform'), '{$content}'=>L('content'), '{$previous_page[url]}'=>L('pre_url'), '{$previous_page[title]}'=>L('pre_title'), '{$next_page[url]}'=>L('next_url'), '{$next_page[title]}'=>L('next_title')), 'page'=>array('{$CATEGORYS}'=>L('cats'), '{$content}'=>L('content')));
+		}
 		if (substr($file, -4, 4) != 'html') showmessage(L("can_edit_html_files"));
 		$filepath = $this->filepath.$dir.DIRECTORY_SEPARATOR.$file;
 		$is_write = 0;
@@ -68,7 +73,7 @@ class file extends admin {
 				pc_base::load_app_func('global');
 				creat_template_bak($filepath, $this->style, $dir);
 				file_put_contents($filepath,htmlspecialchars_decode($code));
-				showmessage('','','', 'edit_file');
+				showmessage(L('operation_success'), HTTP_REFERER);
 			} else{
 				showmessage(L("file_does_not_writable"), HTTP_REFERER);
 			}

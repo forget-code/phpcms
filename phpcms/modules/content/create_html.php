@@ -63,8 +63,7 @@ class create_html extends admin {
 						$totime = strtotime($todate.' 23:59:59');
 						$where .= " AND `inputtime`<=$totime ";
 					}
-				}
-				elseif($type == 'id') {
+				} elseif($type == 'id') {
 					$fromid = intval($fromid);
 					$toid = intval($toid);
 					if($fromid) $where .= " AND `id`>=$fromid ";
@@ -144,7 +143,7 @@ class create_html extends admin {
 				$rs = $this->db->query("SELECT * FROM `$table_name` $where ORDER BY `id` $order LIMIT $offset,$pagesize");
 				$data = $this->db->fetch_array($rs);
 				foreach($data as $r) {
-					if($r['islink']) continue;
+					if($r['islink'] || $r['upgrade']) continue;
 					//更新URL链接
 					$this->urls($r['id'], $r['catid'], $r['inputtime'], $r['prefix']);
 				}
@@ -224,6 +223,19 @@ class create_html extends admin {
 					$catids = implode(',',$catids);
 					$where .= " AND catid IN($catids) ";
 					$first = 1;
+				} elseif(count($catids)==1 && $catids[0] == 0) {
+					$catids = array();
+					foreach($this->categorys as $catid=>$cat) {
+							if($cat['child'] || $cat['siteid'] != $this->siteid || $cat['type']!=0) continue;
+								$setting = string2array($cat['setting']);
+								if(!$setting['content_ishtml']) continue;
+							$catids[] = $catid;
+						}
+					print_r($catids);
+					setcache('html_show_'.$_SESSION['userid'], $catids,'content');
+					$catids = implode(',',$catids);
+					$where .= " AND catid IN($catids) ";
+					$first = 1;
 				} elseif($first) {
 					$catids = getcache('html_show_'.$_SESSION['userid'],'content');
 					$catids = implode(',',$catids);
@@ -249,8 +261,7 @@ class create_html extends admin {
 						$totime = strtotime($todate.' 23:59:59');
 						$where .= " AND `inputtime`<=$totime ";
 					}
-				}
-				elseif($type == 'id') {
+				} elseif($type == 'id') {
 					$fromid = intval($fromid);
 					$toid = intval($toid);
 					if($fromid) $where .= " AND `id`>=$fromid ";
@@ -389,10 +400,11 @@ class create_html extends admin {
 						$setting = string2array($r['setting']);
 						if(!$setting['content_ishtml']) continue;
 					}
+					$r['disabled'] = $r['child'] ? 'disabled' : '';
 					$categorys[$catid] = $r;
 				}
 			}
-			$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>";
+			$str  = "<option value='\$catid' \$selected \$disabled>\$spacer \$catname</option>";
 
 			$tree->init($categorys);
 			$string .= $tree->get_tree(0, $str);

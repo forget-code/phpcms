@@ -20,7 +20,7 @@ class check extends admin {
 	}
 	
 	public function ajax_checks() {
-		$id =  isset($_GET['id']) && $_GET['id'] ? $_GET['id'] : exit('0');
+		$id =  isset($_GET['id']) && $_GET['id'] ? $_GET['id'] : (isset($_GET['form']) ? showmessage(L('please_chose_comment'), HTTP_REFERER) : exit('0'));
 		$type =  isset($_GET['type']) && intval($_GET['type']) ? intval($_GET['type']) : exit('0');
 		$commentid =  isset($_GET['commentid']) && trim($_GET['commentid']) ? trim($_GET['commentid']) : exit('0');
 		if (is_array($id)) {

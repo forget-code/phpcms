@@ -17,30 +17,30 @@ if(empty($_GET['title']) || empty($_GET['url'])) {
 	}
 	
 	$title = htmlspecialchars($title);
-	$url = urldecode($_GET['url']);
+	$url = safe_replace(urldecode($_GET['url']));
 }
 
 //判断是否登录	
 $phpcms_auth = param::get_cookie('auth');
 if($phpcms_auth) {
-	$auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
+	$auth_key = md5(pc_base::load_config('system', 'auth_key').str_replace('7.0' ,'8.0',$_SERVER['HTTP_USER_AGENT']));
 	list($userid, $password) = explode("\t", sys_auth($phpcms_auth, 'DECODE', $auth_key));
 	if($userid >0) {
 
 	} else {
-		exit($_GET['callback'].'('.json_encode(array('status'=>-1)).')');
+		exit(trim_script($_GET['callback']).'('.json_encode(array('status'=>-1)).')');
 	} 
 } else {
-	exit($_GET['callback'].'('.json_encode(array('status'=>-1)).')');
+	exit(trim_script($_GET['callback']).'('.json_encode(array('status'=>-1)).')');
 }
 
 $favorite_db = pc_base::load_model('favorite_model');
 $data = array('title'=>$title, 'url'=>$url, 'adddate'=>SYS_TIME, 'userid'=>$userid);
 //根据url判断是否已经收藏过。
-$is_exists = $favorite_db->get_one(array('url'=>$url));
+$is_exists = $favorite_db->get_one(array('url'=>$url, 'userid'=>$userid));
 if(!$is_exists) {
 	$favorite_db->insert($data);
 }
-exit($_GET['callback'].'('.json_encode(array('status'=>1)).')');
+exit(trim_script($_GET['callback']).'('.json_encode(array('status'=>1)).')');
 
 ?>

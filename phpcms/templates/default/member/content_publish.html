@@ -2,6 +2,7 @@
 <script type="text/javascript">
 <!--
 	var charset = '{CHARSET}';
+	var uploadurl = '{php echo pc_base::load_config('system','upload_url')}';
 //-->
 </script>
 <link href="{CSS_PATH}dialog.css" rel="stylesheet" type="text/css" />
@@ -25,8 +26,8 @@
 				//-->
 				</script>
 					<tr>
-						<th>{L('please_select_cat')}</th>
-						<td>{form::select_category('category_content', $catid, 'name="info[catid]" onchange="javascript:c_c(this.value);"','','',0,1,$siteid)}</td>
+						<th>{L('please_select_cat')}：</th>
+						<td>{form::select_category('', $catid, 'name="info[catid]" onchange="javascript:c_c(this.value);"','','',0,1,$siteid)}</td>
 					</tr>
 				{/if}
 					{loop $forminfos $k $v}

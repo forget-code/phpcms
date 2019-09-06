@@ -6,6 +6,9 @@ $LANG['logo'] 							= 	'图片LOGO';
 $LANG['url'] 							= 	'网站网址';
 $LANG['link_type'] 						= 	'链接类型';
 $LANG['typeid'] 						= 	'所属分类';
+$LANG['status'] 						= 	'状 态';
+$LANG['type_id'] 						= 	'分类ID';
+
 $LANG['type_name'] 						= 	'分类名称';
 $LANG['list_type'] 						= 	'分类管理';
 $LANG['link_type_listorder'] 			=	'排序权值';
@@ -51,5 +54,5 @@ $LANG['application_or_not']				=	'是否允许申请';
 $LANG['code_or_not']					=	'是否开启验证码';
 $LANG['choose_true_type']				=	'请选择正确的分类！';
 $LANG['application_links']				=	'友情链接申请';
-$LANG['link_onerror']					=	'格式应该为http://www.phpcms.cn/，请以‘/’结束';
+$LANG['link_onerror']					=	'格式应该为http://www.phpcms.cn/';
 ?>

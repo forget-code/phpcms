@@ -11,6 +11,7 @@ class badword extends admin {
 	
 	function init () {
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
+		$infos = $pages = '';
 		$infos = $this->db->listinfo($where = '',$order = 'badid DESC',$page, $pages = '13');
 		$pages = $this->db->pages;
 		$level = array(1=>L('general'),2=>L('danger'));
@@ -80,6 +81,7 @@ class badword extends admin {
 				showmessage(L('operation_success'),'?m=admin&c=badword&a=edit','', 'edit');
 			}else{
 				$show_validator = $show_scroll = $show_header = true;
+				$info = array();
 				$info = $this->db->get_one(array('badid'=>$_GET['badid']));
 				if(!$info) showmessage(L('keywords_no_exist'));
 	 			extract($info);
@@ -113,8 +115,11 @@ class badword extends admin {
 	 * 导出敏感词为文本 一行一条记录
 	 */
 	function export() {
+		$result = $s = '';
 		$result = $this->db->select($where = '', $data = '*', $limit = '', $order = 'badid DESC', $group = '');
-		if(!is_array($result) || empty($result)) return false;
+		if(!is_array($result) || empty($result)){
+			showmessage('暂无敏感词设置，正在返回！','?m=admin&c=badword');
+		}
   		foreach($result as $s){
  			extract($s);
 			$str .= $badword.','.$replaceword.','.$level."\n";		  
@@ -140,6 +145,7 @@ class badword extends admin {
 	 */
 	function import(){
 		if(isset($_POST['dosubmit'])){
+				$arr = $s = $str = $level_arr = '';
 				$s = trim($_POST['info']);
 			    if(empty($s)) showmessage(L('not_information'),'?m=admin&c=badword&a=import');
 	 			$arr = explode("\n",$s); 

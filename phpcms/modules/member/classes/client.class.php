@@ -86,6 +86,15 @@ class client {
 	}
 
 	/**
+	 * 删除用户头像
+	 * @param int $uid				phpsso用户uid
+	 * @return int {1:成功;0:失败}
+	 */
+	public function ps_deleteavatar($uid) {
+		return $this->_ps_send('deleteavatar', array('uid'=>$uid));
+	}
+	
+	/**
 	 * 获取用户信息
 	 * @param $mix 用户id/用户名/email
 	 * @param $type {1:用户id;2:用户名;3:email}
@@ -192,7 +201,7 @@ class client {
 	 * @param int $uid 用户id
 	 */
 	public function ps_getavatar_upload_html($uid) {
-		$auth_data = $this->auth_data(array('uid'=>$uid));
+		$auth_data = $this->auth_data(array('uid'=>$uid, 'ps_auth_key'=>$this->ps_auth_key), '', $this->ps_auth_key);
 		$upurl = base64_encode($this->ps_api_url.'/index.php?m=phpsso&c=index&a=uploadavatar&auth_data='.$auth_data);
 		$str = <<<EOF
 				<div id="phpsso_uploadavatar_flash"></div>

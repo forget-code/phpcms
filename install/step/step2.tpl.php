@@ -71,7 +71,7 @@
                     <td>FTP 扩展</td>
                     <td><?php if(extension_loaded('ftp')){ ?>√<?php }else{ ?>×<?php }?></td>
                     <td>建议开启</td>
-                    <td><?php if(extension_loaded('ftp')){ ?><span><img src="images/correct.gif" /></span><?php }elseif(ISUNIX){ ?><font class="red"><img src="images/error.gif" />&nbsp;不支持在线升级</font><?php }?></td>
+                    <td><?php if(extension_loaded('ftp')){ ?><span><img src="images/correct.gif" /></span><?php }elseif(ISUNIX){ ?><font class="red"><img src="images/error.gif" />&nbsp;不支持FTP形式文件传送</font><?php }?></td>
                   </tr>
                                     
                   <tr>

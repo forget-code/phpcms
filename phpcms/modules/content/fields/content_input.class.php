@@ -47,6 +47,7 @@ class content_input {
 				$value = str_cut($value,$maxlength,'');
 			}
 			if($pattern && $length && !preg_match($pattern, $value) && !$isimport) showmessage($errortips);
+			$MODEL = getcache('model', 'commons');
             $this->db->table_name = $this->fields[$field]['issystem'] ? $this->db_pre.$MODEL[$this->modelid]['tablename'] : $this->db_pre.$MODEL[$this->modelid]['tablename'].'_data';
             if($this->fields[$field]['isunique'] && $this->db->get_one(array($field=>$value),$field) && ROUTE_A != 'edit') showmessage($name.L('the_value_must_not_repeat'));
 			$func = $this->fields[$field]['formtype'];

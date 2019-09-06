@@ -48,7 +48,7 @@ function closeParent() {
 		<div class="explain-col">
  
 				<?php echo L('addtime');?>：
-				<?php echo form::date('start_time',$_GET['start_time']);?>- &nbsp;<?php echo form::date('end_time',$_GET['end_time']);?>
+				<?php echo form::date('start_time',$_GET['start_time'],0,0,'false');?>- &nbsp;<?php echo form::date('end_time',$_GET['end_time'],0,0,'false');?>
 				
 				<select name="posids"><option value='' <?php if($_GET['posids']=='') echo 'selected';?>><?php echo L('all');?></option>
 				<option value="1" <?php if($_GET['posids']==1) echo 'selected';?>><?php echo L('elite');?></option>
@@ -113,12 +113,12 @@ function closeParent() {
 			}
 		} else {
 			echo '<a href="javascript:;" onclick=\'window.open("?m=content&c=content&a=public_preview&steps='.$steps.'&catid='.$catid.'&id='.$r['id'].'","manage")\'>';
-		}?><span<?php echo title_style($r['style'])?>><?php echo $r['title'];?></span></a> <?php if($r['thumb']!='') {echo '<img src="'.IMG_PATH.'icon/small_img.gif" alt="'.L('thumb').'">'; } if($r['posids']) {echo '<img src="'.IMG_PATH.'icon/small_elite.gif" alt="'.L('elite').'">';} if($r['islink']) {echo ' <img src="'.IMG_PATH.'icon/link.png" alt="'.L('islink_url').'">';}?></td>
+		}?><span<?php echo title_style($r['style'])?>><?php echo $r['title'];?></span></a> <?php if($r['thumb']!='') {echo '<img src="'.IMG_PATH.'icon/small_img.gif" title="'.L('thumb').'">'; } if($r['posids']) {echo '<img src="'.IMG_PATH.'icon/small_elite.gif" title="'.L('elite').'">';} if($r['islink']) {echo ' <img src="'.IMG_PATH.'icon/link.png" title="'.L('islink_url').'">';}?></td>
 		<td align='center' title="<?php echo L('today_hits');?>：<?php echo $hits_r['dayviews'];?>&#10;<?php echo L('yestoday_hits');?>：<?php echo $hits_r['yestodayviews'];?>&#10;<?php echo L('week_hits');?>：<?php echo $hits_r['weekviews'];?>&#10;<?php echo L('month_hits');?>：<?php echo $hits_r['monthviews'];?>"><?php echo $hits_r['views'];?></td>
 		<td align='center'>
 		<?php
 		if($r['sysadd']==0) {
-			echo "<a href='?m=member&c=member&a=memberinfo&username=".urlencode($r['username'])."' >".$r['username']."</a>"; 
+			echo "<a href='?m=member&c=member&a=memberinfo&username=".urlencode($r['username'])."&pc_hash=".$_SESSION['pc_hash']."' >".$r['username']."</a>"; 
 			echo '<img src="'.IMG_PATH.'icon/contribute.png" title="'.L('member_contribute').'">';
 		} else {
 			echo $r['username'];
@@ -151,6 +151,7 @@ function closeParent() {
 		</div>
 		<?php }}?>
 		<input type="button" class="button" value="<?php echo L('remove');?>" onclick="myform.action='?m=content&c=content&a=remove&catid=<?php echo $catid;?>';myform.submit();"/>
+		<?php echo runhook('admin_content_init')?>
 	</div>
     <div id="pages"><?php echo $pages;?></div>
 </div>
@@ -196,8 +197,8 @@ function reject_check(type) {
 			alert('<?php echo L('you_do_not_check');?>');
 			return false;
 		}
-		myform.action='?m=content&c=content&a=pass&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&reject=1';
-		myform.submit();
+		document.getElementById('myform').action='?m=content&c=content&a=pass&catid=<?php echo $catid;?>&steps=<?php echo $steps;?>&reject=1';
+		document.getElementById('myform').submit();
 	} else {
 		$('#reject_content').css('display','');
 		return false;

@@ -14,6 +14,10 @@
 			<td><?php echo $memberinfo['username']?><?php if($memberinfo['islock']) {?><img title="<?php echo L('lock')?>" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?><?php if($memberinfo['vip']) {?><img title="<?php echo L('vip')?>" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?></td>
 		</tr>
 		<tr>
+			<td><?php echo L('avatar')?></td> 
+			<td><img src="<?php echo $memberinfo['avatar']?>" onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'" height=90 width=90></td>
+		</tr>
+		<tr>
 			<td><?php echo L('nickname')?></td> 
 			<td><?php echo $memberinfo['nickname']?></td>
 		</tr>

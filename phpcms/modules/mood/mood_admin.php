@@ -10,6 +10,7 @@ class mood_admin extends admin {
 	//排行榜查看
 	public function init() {
 		$mood_program = getcache('mood_program', 'commons');
+		$mood_program = isset($mood_program[$this->get_siteid()]) ? $mood_program[$this->get_siteid()] : array();
 		$mood_db = pc_base::load_model('mood_model');
 		$catid = isset($_GET['catid']) &&  intval($_GET['catid']) ? intval($_GET['catid']) : '';
 		$datetype = isset($_GET['datetype']) &&  intval($_GET['datetype']) ? intval($_GET['datetype']) : 0;
@@ -72,6 +73,7 @@ class mood_admin extends admin {
 	
 	//配置
 	public function setting() {
+		$mood_program = getcache('mood_program', 'commons');
 		if (isset($_POST['dosubmit'])) {
 			$use = isset($_POST['use']) ? $_POST['use'] : '';
 			$name = isset($_POST['name']) ? $_POST['name'] : '';
@@ -80,10 +82,11 @@ class mood_admin extends admin {
 			foreach ($name as $k=>$v) {
 				$data[$k] = array('use'=>$use[$k], 'name'=>$v, 'pic'=>$pic[$k]);
 			}
-			setcache('mood_program', $data, 'commons');
+			$mood_program[$this->get_siteid()] = $data;
+			setcache('mood_program', $mood_program, 'commons');
 			showmessage(L('operation_success'), HTTP_REFERER);
 		} else {
-			$mood_program = getcache('mood_program', 'commons');
+			$mood_program = isset($mood_program[$this->get_siteid()]) ? $mood_program[$this->get_siteid()] : array();
 			include $this->admin_tpl('mood_setting');
 		}
 	}

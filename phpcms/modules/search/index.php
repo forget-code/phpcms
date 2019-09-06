@@ -12,14 +12,15 @@ class index {
 	 * 关键词搜索
 	 */
 	public function init() {
-		//搜索配置
-		$setting = getcache('search');
-		
 		//获取siteid
 		$siteid = isset($_REQUEST['siteid']) && trim($_REQUEST['siteid']) ? intval($_REQUEST['siteid']) : 1;
 		
+		//搜索配置
+		$search_setting = getcache('search');
+		$setting = $search_setting[$siteid];
+
 		$search_model = getcache('search_model_'.$siteid);
-		$type_module = getcache('type_module');
+		$type_module = getcache('type_module_'.$siteid);
 
 		if(isset($_GET['q'])) {
 			if(trim($_GET['q'])=='') {
@@ -140,7 +141,16 @@ class index {
 				//是否读取其他模块接口
 				if($modelid) {
 					$this->content_db->set_model($modelid);
-	
+					
+					/**
+					 * 如果表名为空，则为黄页模型
+					 */
+					if(empty($this->content_db->model_tablename)) {
+						$this->content_db = pc_base::load_model('yp_content_model');
+						$this->content_db->set_model($modelid);
+
+					}
+
 					if($setting['sphinxenable']) {
 						$data = $this->content_db->listinfo($where, 'id DESC', 1, $pagesize);
 						$pages = pages($totalnums, $page, $pagesize);

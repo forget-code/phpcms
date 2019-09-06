@@ -28,7 +28,7 @@ class sitemodel_model extends model {
 	public function sql_split($sql) {
 		global $db;
 		if($this->db->version() > '4.1' && $this->charset) {
-			$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "TYPE=\\1 DEFAULT CHARSET=".$this->charset,$sql);
+			$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=".$this->charset,$sql);
 		}
 		if($this->db_tablepre != "phpcms_") $sql = str_replace("phpcms_", $this->db_tablepre, $sql);
 		$sql = str_replace("\r", "\n", $sql);

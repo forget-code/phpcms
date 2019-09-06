@@ -222,16 +222,23 @@ class payment extends admin {
 					$payment = L('admin_recharge');
 					$receipts = pc_base::load_app_class('receipts');
 					$func = $_POST['pay_type'] == '1' ? 'amount' :'point';
-					$receipts->$func($value, $userinfo['userid'] , $username, create_sn(), 'offline', $payment, param::get_cookie('admin_username'), $status = 'succ');					
+					$receipts->$func($value, $userinfo['userid'] , $username, create_sn(), 'offline', $payment, param::get_cookie('admin_username'), $status = 'succ',$usernote);					
 					
 				} else {
 					$value = floatval($_POST['unit']);
-					$msg ='后台操作';
+					$msg = L('background_operation').$usernote;
 					$spend = pc_base::load_app_class('spend');
 					$func = $_POST['pay_type'] == '1' ? 'amount' :'point';
 					$spend->$func($value,$msg,$userinfo['userid'],$username,param::get_cookie('userid'),param::get_cookie('admin_username'));
 				}
-					showmessage(L('public_discount_succ'));	
+				if(intval($_POST['sendemail'])) {
+					pc_base::load_sys_func('mail');
+					$op = $_POST['pay_unit'] ? $value: '-'.$value;
+					$op = $_POST['pay_type'] ? $op.L('yuan') : $op.L('point');
+					$msg = L('account_changes_notice_tips',array('username'=>$username,'time'=>date('Y-m-d H:i:s',SYS_TIME),'op'=>$op,'note'=>$usernote,'amount'=>$userinfo['amount'],'point'=>$userinfo['point']));
+					sendmail($userinfo['email'],L('send_account_changes_notice'),$msg);
+				}
+				showmessage(L('public_discount_succ'),HTTP_REFERER);	
 			}
 		} else {
 			$show_validator = true;

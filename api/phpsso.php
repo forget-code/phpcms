@@ -34,6 +34,7 @@
 	 * 添加用户
 	 */
 	if ($action == 'member_add') {
+		$userinfo = array();
 		$userinfo['phpssouid'] = isset($arr['uid']) ? $arr['uid'] : exit('0');
 		$userinfo['encrypt'] = isset($arr['random']) ? $arr['random'] : exit('0');
 		$userinfo['username'] = isset($arr['username']) ? $arr['username'] : exit('0');
@@ -147,6 +148,7 @@
 		$groupid = $userinfo['groupid'];
 		$username = $userinfo['username'];
 		$password = $userinfo['password'];
+		$nickname = $userinfo['nickname'];
 		$db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME), array('userid'=>$userid));
 		pc_base::load_sys_class('param', '', 0);
 		
@@ -160,6 +162,7 @@
 		param::set_cookie('auth', $phpcms_auth, $cookietime);
 		param::set_cookie('_userid', $userid, $cookietime);
 		param::set_cookie('_username', $username, $cookietime);
+		param::set_cookie('_nickname', $nickname, $cookietime);
 		param::set_cookie('_groupid', $groupid, $cookietime);
 		param::set_cookie('cookietime', $_cookietime, $cookietime);
 		exit('1');

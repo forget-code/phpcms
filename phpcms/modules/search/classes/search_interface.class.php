@@ -9,7 +9,9 @@ class search_interface {
 		//初始化sphinx
 		pc_base::load_app_class('sphinxapi', '', 0);
 		$this->cl = new SphinxClient();
-		$setting = getcache('search');
+		$siteid = get_siteid();
+		$search_setting = getcache('search');
+		$setting = $search_setting[$siteid];
 		
 		$mode = SPH_MATCH_EXTENDED2;			//匹配模式
 		$host = $setting['sphinxhost'];			//服务ip

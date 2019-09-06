@@ -26,8 +26,8 @@ class call  {
 						}
 						$sql = string2array($data['data']);
 						$sql['action'] = $data['action'];
-						$sql['limit'] = $sql['num'];
-						unset($sql['num']);
+						$sql['limit'] = $data['num'];
+						unset($data['num']);
 						$str  = $pc_tag->$data['action']($sql);
 						
 					} else {

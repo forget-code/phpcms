@@ -159,7 +159,7 @@ class sitemodel_field extends admin {
 		$model_table = $model_cache[$modelid]['tablename'];
 		$tablename = $r['issystem'] ? $model_table : $model_table.'_data';
 		$this->db->drop_field($tablename,$r['field']);
-		showmessage(L('operation_success'));
+		showmessage(L('operation_success'),HTTP_REFERER);
 	}
 	/**
 	 * 排序

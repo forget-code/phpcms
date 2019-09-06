@@ -8,11 +8,12 @@ include $this->admin_tpl('header', 'admin');
 		$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){window.top.art.dialog({content:msg,lock:true,width:'200',height:'50'}, function(){this.close();$(obj).focus();})}});
 		$("#host").formValidator({onshow:"<?php echo L('input').L('server_address')?>",onfocus:"<?php echo L('input').L('server_address')?>"}).inputValidator({min:1,onerror:"<?php echo L('input').L('server_address')?>"});
 		$("#port").formValidator({onshow:"<?php echo L('input').L('server_port')?>",onfocus:"<?php echo L('input').L('server_port')?>"}).inputValidator({min:1,onerror:"<?php echo L('input').L('server_port')?>"}).regexValidator({regexp:"intege1",datatype:"enum",param:'i',onerror:"<?php echo L('server_ports_must_be_positive_integers')?>"});
+		$("#dbtablepre").formValidator({onshow:"<?php echo L('input').L('dbtablepre')?>",onfocus:"<?php echo L('tip_pre')?>"});
 		$("#username").formValidator({onshow:"<?php echo L('input').L('username')?>",onfocus:"<?php echo L('input').L('username')?>"}).inputValidator({min:1,onerror:"<?php echo L('input').L('username')?>"});
 		$("#password").formValidator({onshow:"<?php echo L('input').L('password')?>",onfocus:"<?php echo L('input').L('password')?>"}).inputValidator({min:1,onerror:"<?php echo L('input').L('password')?>"});
 		$("#dbname").formValidator({onshow:"<?php echo L('input').L('database')?>",onfocus:"<?php echo L('input').L('database')?>"}).inputValidator({min:1,onerror:"<?php echo L('input').L('database')?>"});
 	})
-//-->
+	//-->
 </script>
 <div class="pad-10">
 <form action="?m=dbsource&c=dbsource_admin&a=edit&id=<?php echo $id?>" method="post" id="myform">
@@ -43,6 +44,10 @@ include $this->admin_tpl('header', 'admin');
         <tr>
     <th><?php echo L('database')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="dbname" id="dbname"  size="30"  value="<?php echo $data['dbname']?>" /></td>
+  </tr>
+  <tr>
+    <th><?php echo L('dbtablepre');?>：</th>
+    <td class="y-bg"><input type="text" class="input-text" name="dbtablepre" id="dbtablepre" value="<?php echo $data['dbtablepre']?>" size="30"/> </td> 
   </tr>
       <tr>
     <th><?php echo L('charset')?>：</th>

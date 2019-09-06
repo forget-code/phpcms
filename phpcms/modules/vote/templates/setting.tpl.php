@@ -5,27 +5,19 @@ include $this->admin_tpl('header', 'admin');?>
 <table width="100%" cellpadding="0" cellspacing="1" class="table_form">
  
 	<tr>
-		<th width="200"><?php echo L('default_template')?>：</th>
+		<th width="200"><?php echo L('vote_style')?>：</th>
 		<td>
-		<select name="setting[template]" id=""> 
-			<option value="index.html">index.html</option> 
-	   </select>
-		</td>
-	</tr>
-	<tr>
-		<th><?php echo L('vote_style')?>：</th>
-		<td>
-		<?php echo form::select($template_list, $info['default_style'], 'name="vote_subject[style]" id="style" onchange="load_file_list(this.value)"', L('please_select'))?>
-		<script type="text/javascript">$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style=<?php echo $info['default_style']?>&module=vote&templates=vote_tp&name=vote_subject', function(data){$('#show_template').html(data.vote_tp_template);});</script>
-		</td>
+		<?php echo form::select($template_list, $default_style, 'name="setting[default_style]" id="style" onchange="load_file_list(this.value)"', L('please_select'))?>
+		 </td>
 	</tr>
 	
 	<tr>
 		<th><?php echo L('template')?>：</th>
 		<td id="show_template">
-		<?php echo form::select_template('default', 'vote', '', 'name="vote_subject[show_template]"', 'vote_tp');?>
+		<?php echo form::select_template($default_style, 'vote', $vote_tp_template, 'name="setting[vote_tp_template]"', 'vote_tp');?>
 		</td>
 	</tr>
+	
 	<tr>
 		<th><?php echo L('default_guest')?>：</th>
 		<td><input type='radio' name='setting[allowguest]' value='1' <?php if($allowguest == 1) {?>checked<?php }?>> <?php echo L('yes')?>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -56,3 +48,8 @@ include $this->admin_tpl('header', 'admin');?>
 </form>
 </body>
 </html>
+<script language="javascript">
+function load_file_list(id) {
+	$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&module=vote&templates=vote_tp&name=setting&pc_hash='+pc_hash, function(data){$('#show_template').html(data.vote_tp_template);});
+}
+</script>

@@ -45,7 +45,7 @@ class cache_file {
 	    } elseif($this->_setting['type'] == 'serialize') {
 	    	$data = serialize($data);
 	    }
-	    if ($module == 'commons' && substr($name, 0, 16) != 'category_content') {
+	    if ($module == 'commons' || ($module == 'commons' && substr($name, 0, 16) != 'category_content')) {
 		    $db = pc_base::load_model('cache_model');
 		    $datas = new_addslashes($data);
 		    if ($db->get_one(array('filename'=>$filename, 'path'=>'caches_'.$module.'/caches_'.$type.'/'), '`filename`')) {

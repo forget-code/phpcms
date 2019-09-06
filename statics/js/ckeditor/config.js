@@ -13,6 +13,7 @@ CKEDITOR.editorConfig = function( config )
 	config.disableNativeSpellChecker = false;
 	config.resize_dir = 'vertical';
 	config.keystrokes =[[ CKEDITOR.CTRL + 13 /*Enter*/, 'maximize' ]];	
+	config.extraPlugins = 'capture';
 };
 //CKEDITOR.plugins.load('pgrfilemanager');
 function insert_page(editorid)

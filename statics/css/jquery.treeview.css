@@ -17,6 +17,14 @@
 	float: left;
 	cursor: pointer;
 }
+
+.treeview .placeholder {
+    background: url("../images/admin_img/onLoad.gif") no-repeat scroll 0 0 transparent;
+    display: block;
+    height: 16px;
+    width: 16px;
+}
+
 /* fix for IE6 */
 * html .hitarea {
 	display: inline;

@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS `phpcms_poster_space` (
   `spaceid` smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
   `name` char(50) NOT NULL,
-  `type` char(11) NOT NULL,
+  `type` char(30) NOT NULL,
   `path` char(40) NOT NULL,
   `width` smallint(4) unsigned NOT NULL DEFAULT '0',
   `height` smallint(4) unsigned NOT NULL DEFAULT '0',

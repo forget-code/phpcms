@@ -63,14 +63,13 @@ class content_model extends model {
 			$content = stripslashes($modelinfo['content']);
 			$introcude_length = intval($_POST['introcude_length']);
 			$systeminfo['description'] = str_cut(str_replace(array("\r\n","\t",'[page]','[/page]','&ldquo;','&rdquo;','&nbsp;'), '', strip_tags($content)),$introcude_length);
-			$systeminfo['description'] = addslashes($systeminfo['description']);
+			$inputinfo['system']['description'] = $systeminfo['description'] = addslashes($systeminfo['description']);
 		}
 		//自动提取缩略图
 		if(isset($_POST['auto_thumb']) && $systeminfo['thumb'] == '' && isset($modelinfo['content'])) {
 			$content = $content ? $content : stripslashes($modelinfo['content']);
 			$auto_thumb_no = intval($_POST['auto_thumb_no'])-1;
 			if(preg_match_all("/(src)=([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|bmp|png))\\2/i", $content, $matches)) {
-				
 				$systeminfo['thumb'] = $matches[3][$auto_thumb_no];
 			}
 		}
@@ -92,14 +91,17 @@ class content_model extends model {
 		//添加统计
 		$this->hits_db = pc_base::load_model('hits_model');
 		$hitsid = 'c-'.$modelid.'-'.$id;
-		$this->hits_db->insert(array('hitsid'=>$hitsid,'updatetime'=>SYS_TIME));
+		$this->hits_db->insert(array('hitsid'=>$hitsid,'catid'=>$systeminfo['catid'],'updatetime'=>SYS_TIME));
 		//更新到全站搜索
 		$this->search_api($id,$inputinfo);
 		//更新栏目统计数据
 		$this->update_category_items($systeminfo['catid'],'add',1);
 		//调用 update
 		$content_update = new content_update($this->modelid,$id);
-		$content_update->update($data);
+		//合并后，调用update
+		$merge_data = array_merge($systeminfo,$modelinfo);
+		$merge_data['posids'] = $data['posids'];
+		$content_update->update($merge_data);
 		
 		//发布到审核列表中
 		if(!defined('IN_ADMIN') || $data['status']!=99) {
@@ -118,11 +120,12 @@ class content_model extends model {
 		//END发布到审核列表中
 		if(!$isimport) {
 			$html = pc_base::load_app_class('html', 'content');
-			if($urls['content_ishtml']) $html->show($urls[1],$urls['data']);
+			if($urls['content_ishtml'] && $data['status']==99) $html->show($urls[1],$urls['data']);
 			$catid = $systeminfo['catid'];
 		}
 		//发布到其他栏目
 		if($id && isset($_POST['othor_catid']) && is_array($_POST['othor_catid'])) {
+			$linkurl = $urls[0];
 			$r = $this->get_one(array('id'=>$id));
 			foreach ($_POST['othor_catid'] as $cid=>$_v) {
 				$this->set_catid($cid);
@@ -153,7 +156,7 @@ class content_model extends model {
 							);
 						$this->content_check_db->insert($check_data);
 					}
-					if($urls['content_ishtml']) $html->show($urls[1],$urls['data']);
+					if($urls['content_ishtml'] && $data['status']==99) $html->show($urls[1],$urls['data']);
 				} else {
 					//不同模型插入转向链接地址
 					$newid = $this->insert(
@@ -163,7 +166,7 @@ class content_model extends model {
 						'keywords'=>$systeminfo['keywords'],
 						'description'=>$systeminfo['description'],
 						'status'=>$systeminfo['status'],
-						'catid'=>$cid,'url'=>$urls[0],
+						'catid'=>$cid,'url'=>$linkurl,
 						'sysadd'=>1,
 						'username'=>$systeminfo['username'],
 						'inputtime'=>$systeminfo['inputtime'],
@@ -197,7 +200,7 @@ class content_model extends model {
 			$this->attachment_db->api_update('','c-'.$systeminfo['catid'].'-'.$id,2);
 		}
 		//生成静态
-		if(!$isimport) {
+		if(!$isimport && $data['status']==99) {
 			//在添加和修改内容处定义了 INDEX_HTML
 			if(defined('INDEX_HTML')) $html->index();
 			if(defined('RELATION_HTML')) $html->create_relation_html($catid);
@@ -242,21 +245,12 @@ class content_model extends model {
 		} else {
 			$systeminfo['updatetime'] = $data['updatetime'];
 		}
-		if($data['islink']==1) {
-			$systeminfo['url'] = $_POST['linkurl'];
-		} else {
-			//更新URL地址
-			$urls = $this->url->show($id, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix'],$inputinfo,'edit');
-			$systeminfo['url'] = $urls[0];
-		}
-		
 		//自动提取摘要
-		
 		if(isset($_POST['add_introduce']) && $systeminfo['description'] == '' && isset($modelinfo['content'])) {
 			$content = stripslashes($modelinfo['content']);
 			$introcude_length = intval($_POST['introcude_length']);
 			$systeminfo['description'] = str_cut(str_replace(array("\r\n","\t",'[page]','[/page]','&ldquo;','&rdquo;','&nbsp;'), '', strip_tags($content)),$introcude_length);
-			$systeminfo['description'] = addslashes($systeminfo['description']);
+			$inputinfo['system']['description'] = $systeminfo['description'] = addslashes($systeminfo['description']);
 		}
 		//自动提取缩略图
 		if(isset($_POST['auto_thumb']) && $systeminfo['thumb'] == '' && isset($modelinfo['content'])) {
@@ -266,17 +260,22 @@ class content_model extends model {
 				$systeminfo['thumb'] = $matches[3][$auto_thumb_no];
 			}
 		}
-
+		if($data['islink']==1) {
+			$systeminfo['url'] = $_POST['linkurl'];
+		} else {
+			//更新URL地址
+			$urls = $this->url->show($id, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix'],$inputinfo,'edit');
+			$systeminfo['url'] = $urls[0];
+		}
 		//主表
 		$this->table_name = $this->db_tablepre.$model_tablename;
 		$this->update($systeminfo,array('id'=>$id));
-		
+
 		//附属表
 		$this->table_name = $this->table_name.'_data';
 		$this->update($modelinfo,array('id'=>$id));
 		$this->search_api($id,$inputinfo);
 		//调用 update
-		
 		$content_update = new content_update($this->modelid,$id);
 		$content_update->update($data);
 		//更新附件状态
@@ -369,8 +368,8 @@ class content_model extends model {
 	
 	
 	private function search_api($id = 0, $data = array(), $action = 'update') {
-		$type_arr = getcache('type_model','search');
-		$typeid = $type_arr[$this->modelid];
+		$type_arr = getcache('search_model_'.$this->siteid,'search');
+		$typeid = $type_arr[$this->modelid]['typeid'];
 		if($action == 'update') {
 			$fulltext_array = getcache('model_field_'.$this->modelid,'model');
 			foreach($fulltext_array AS $key=>$value){

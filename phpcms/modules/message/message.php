@@ -275,8 +275,8 @@ class message extends admin {
 					//$where .= "AND `message_time` >= '$start' AND `message_time` <= '$end' ";
 					$where .= $where ? "AND `message_time` >= '$start' AND `message_time` <= '$end' " : " `message_time` >= '$start' AND `message_time` <= '$end' ";
 				}
-  		}
- 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
+  		} 
+  		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		$infos = $this->db->listinfo($where,$order = 'messageid DESC',$page, $pages = '12');
 		$pages = $this->db->pages;
  		$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=message&c=message&a=message_send\', title:\''.L('all_send_message').'\', width:\'700\', height:\'450\'}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('all_send_message'));

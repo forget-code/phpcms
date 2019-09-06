@@ -18,16 +18,17 @@
 		        {/loop}
 			{/pc}
          </div>
+		 
+		{pc:link action="lists" typeid="$type_id" siteid="$siteid" linktype="0" order="desc" num="2" page="$page" return="dat"}
         <div class="tag_a">
-        	{pc:link action="lists" typeid="$type_id" siteid="$siteid" linktype="0" order="desc" num="10" return="dat"}
-				{loop $dat $v}
+  				{loop $dat $v}
 	       		 <a href="{$v[url]}" title="{$v[name]}" target="_blank">{$v[name]} </a>
 		        {/loop}
-			{/pc}
+        </div>
+        {/pc}
+		 <div id="pages">{$pages}</div>
          </div>
-    	 
-         	<!--pages-->
-         </div>
+		 
     </div>
     <!--right_bar-->
     <div class="col-auto">
@@ -35,6 +36,7 @@
         <div class="box">
             <h5 class="title-2">友情链接分类</h5>
             <div class="tag_a">
+            <a href="{APP_PATH}index.php?m=link&c=index&a=list_type&type_id=0&siteid={$siteid}" title="默认分类">默认分类</a>
             {pc:link action="type_lists" listorder="desc" siteid="$siteid"}
             {loop $data $type_v}
             <a href="{APP_PATH}index.php?m=link&c=index&a=list_type&type_id={$type_v[typeid]}&siteid={$siteid}" title="{$type_v[name]}">{$type_v[name]}</a>

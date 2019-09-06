@@ -40,7 +40,7 @@ class special extends admin {
 						$url = $site_info['domain'].'index.php?m=special&c=index&id='.$id;
 					}
 				} else {
-					$url = $special['ishtml'] ? APP_PATH.pc_base::load_config('system', 'html_root').'/special/'.$special['filename'].'/' : APP_PATH.'index.php?m=special&c=index&id='.$id;
+					$url = $special['ishtml'] ? APP_PATH.substr(pc_base::load_config('system', 'html_root'), 1).'/special/'.$special['filename'].'/' : APP_PATH.'index.php?m=special&c=index&id='.$id;
 				}
 				$this->db->update(array('url'=>$url), array('id'=>$id, 'siteid'=>$this->get_siteid()));
 				
@@ -89,7 +89,7 @@ class special extends admin {
 				if ($siteid>1) {
 					$special['url'] =  $site_info['domain'].'special/'.$special['filename'].'/';
 				} else {
-					$special['url'] = APP_PATH.pc_base::load_config('system', 'html_root').'/special/'.$special['filename'].'/';
+					$special['url'] = APP_PATH.substr(pc_base::load_config('system', 'html_root'), 1).'/special/'.$special['filename'].'/';
 				}
 			} elseif ($special['ishtml']=='0') {
 				if ($siteid>1) {
@@ -129,7 +129,7 @@ class special extends admin {
 				$vote_info = explode('|', $info['voteid']);
 			}
 			$type_db = pc_base::load_model('type_model');
-			$types = $type_db->select(array('module'=>'special', 'parentid'=>$_GET['specialid'], 'siteid'=>$this->get_siteid()), '`typeid`, `name`, `typedir`', '', '`listorder` ASC, `typeid` ASC');
+			$types = $type_db->select(array('module'=>'special', 'parentid'=>$_GET['specialid'], 'siteid'=>$this->get_siteid()), '`typeid`, `name`, `listorder`, `typedir`', '', '`listorder` ASC, `typeid` ASC');
 			include $this->admin_tpl('special_edit');
 		}
 	}
@@ -153,13 +153,16 @@ class special extends admin {
 			$_GET['catid'] = $_GET['catid'] ? intval($_GET['catid']) : 0;
 			$_GET['page'] = max(intval($_GET['page']), 1);
 			$where = '';
-			if($_GET['catid']) $where .= get_sql_catid('category_content', $_GET['catid'])." AND `status`=99";
+			if($_GET['catid']) $where .= get_sql_catid('category_content_'.$this->get_siteid(), $_GET['catid'])." AND `status`=99";
 			else $where .= " `status`=99";
 			if($_GET['start_time']) {
 				$where .= " AND `inputtime`>=".strtotime($_GET['start_time']);
 			}
 			if($_GET['end_time']) {
 				$where .= " AND `inputtime`<=".strtotime($_GET['end_time']);
+			}
+			if ($_GET['key']) {
+				$where .= " AND `title` LIKE '%$_GET[key]%' OR `keywords` LIKE '%$_GET[key]%'";
 			}
 			$data = $this->special_api->_get_import_data($_GET['modelid'], $where, $_GET['page']);
 			$pages = $this->special_api->pages;
@@ -181,7 +184,7 @@ class special extends admin {
 			$_GET['catid'] = $_GET['catid'] ? intval($_GET['catid']) : 0;
 			$_GET['page'] = max(intval($_GET['page']), 1);
 			$where = '';
-			if($_GET['catid']) $where .= get_sql_catid('category_content', $_GET['catid'])." AND `status`=99";
+			if($_GET['catid']) $where .= get_sql_catid('category_content_'.$this->get_siteid(), $_GET['catid'])." AND `status`=99";
 			else $where .= " `status`=99";
 			if ($_GET['title']) {
 				$where .= " AND `title` LIKE '%".$_GET['title']."%'";
@@ -333,7 +336,7 @@ class special extends admin {
 		foreach ($result as $r) {
 			$html = pc_base::load_app_class('html');
 			$urls = $html->_create_content($r['id']);
-			$c->update(array('url'=>$urls[1]), array('id'=>$r['id']));
+			$c->update(array('url'=>$urls[0]), array('id'=>$r['id']));
 		}
 		if ($page>=$pages) {
 			showmessage(L('content_update_success'), '?m=special&c=special&a=public_create_html&specialid='.$specialid);
@@ -406,10 +409,10 @@ class special extends admin {
 	/**
 	 * 按模型ID列出模型下的栏目
 	 */
-	public function ajax_categorys_list() {
+	public function public_categorys_list() {
 		if(!isset($_GET['modelid']) || empty($_GET['modelid'])) exit('');
 		$modelid = intval($_GET['modelid']);
-		exit(form::select_category('category_content', $_GET['catid'], 'name="catid" id="catid"', L('please_select'), $modelid, 0, 1));
+		exit(form::select_category('', $_GET['catid'], 'name="catid" id="catid"', L('please_select'), $modelid, 0, 1));
 	}
 	
 	/**

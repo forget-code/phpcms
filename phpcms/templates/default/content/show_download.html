@@ -13,7 +13,7 @@
         <tbody><tr>
           <th>授权形式：</th>
           <td>{$copytype}</td>
-          <td width="260" rowspan="7" align="center" valign="middle"><img src="{$thumb}" width="250" height="220" /></td>
+          <td width="260" rowspan="7" align="center" valign="middle">{if $thumb}<img src="{$thumb}" width="250" height="220" />{/if}</td>
         </tr>
         <tr>
           <th>更新时间：</th>
@@ -62,6 +62,17 @@
 	              </div>
       <div class="bk10"></div>
       <div class="Article-Tool">分享到：
+	  <img src="http://v.t.qq.com/share/images/s/weiboicon16.png" style="padding-bottom:3px;" onclick="postToWb();" class="cu" title="分享到腾讯微博"/><script type="text/javascript">
+	function postToWb(){
+		var _t = encodeURI(document.title);
+		var _url = encodeURIComponent(document.location);
+		var _appkey = encodeURI("cba3558104094dbaa4148d8caa436a0b");
+		var _pic = encodeURI('{$thumb}');
+		var _site = '';
+		var _u = 'http://v.t.qq.com/share/share.php?url='+_url+'&appkey='+_appkey+'&site='+_site+'&pic='+_pic+'&title='+_t;
+		window.open( _u,'', 'width=700, height=680, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, location=yes, resizable=no, status=no' );
+	}
+</script>
           <script type="text/javascript">document.write('<a href="http://v.t.sina.com.cn/share/share.php?url='+encodeURIComponent(location.href)+'&appkey=3172366919&title='+encodeURIComponent('{new_addslashes($title)}')+'" title="分享到新浪微博" class="t1" target="_blank">&nbsp;</a>');</script>
 		  <script type="text/javascript">document.write('<a href="http://www.douban.com/recommend/?url='+encodeURIComponent(location.href)+'&title='+encodeURIComponent('{new_addslashes($title)}')+'" title="分享到豆瓣" class="t2" target="_blank">&nbsp;</a>');</script>
 		  <script type="text/javascript">document.write('<a href="http://share.renren.com/share/buttonshare.do?link='+encodeURIComponent(location.href)+'&title='+encodeURIComponent('{new_addslashes($title)}')+'" title="分享到人人" class="t3" target="_blank">&nbsp;</a>');</script>
@@ -70,7 +81,7 @@
       </div>
       <!--评论-->
       <div class="bk10"></div>
-      {if $allow_comment}
+      {if $allow_comment && module_exists('comment')}
    <iframe src="{APP_PATH}index.php?m=comment&c=index&a=init&commentid={id_encode("content_$catid",$id,$siteid)}&iframe=1" width="100%" height="100%" id="comment_iframe" frameborder="0" scrolling="no"></iframe>
 	{/if}
     </div>

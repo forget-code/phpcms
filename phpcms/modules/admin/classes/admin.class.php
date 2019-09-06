@@ -2,9 +2,11 @@
 defined('IN_PHPCMS') or exit('No permission resources.');
 $session_storage = 'session_'.pc_base::load_config('system','session_storage');
 pc_base::load_sys_class($session_storage);
-if(!isset($_SESSION)) {
-	 session_start();
-} 
+if(param::get_cookie('sys_lang')) {
+	define('SYS_STYLE',param::get_cookie('sys_lang'));
+} else {
+	define('SYS_STYLE','zh-cn');
+}
 //定义在后台
 define('IN_ADMIN',true);
 class admin {
@@ -174,17 +176,18 @@ class admin {
 		extract($setconfig);
  		if($admin_log==1){
  			$action = ROUTE_A;
-			if($action == '' || strpos($action,'public') || $action == 'init') {
+ 			if($action == '' || strchr($action,'public') || $action == 'init' || $action=='public_current_pos') {
 				return false;
+			}else {
+				$ip = ip();
+				$log = pc_base::load_model('log_model');
+				$username = param::get_cookie('admin_username');
+				$userid = isset($_SESSION['userid']) ? $_SESSION['userid'] : '';
+				$time = date('Y-m-d H-i-s',SYS_TIME);
+				$url = '?m='.ROUTE_M.'&c='.ROUTE_C.'&a='.ROUTE_A;
+				$log->insert(array('module'=>ROUTE_M,'username'=>$username,'userid'=>$userid,'action'=>ROUTE_C, 'querystring'=>$url,'time'=>$time,'ip'=>$ip));
 			}
-	  		$ip = ip();
-			$log = pc_base::load_model('log_model');
-			$username = param::get_cookie('admin_username');
-			$userid = isset($_SESSION['userid']) ? $_SESSION['userid'] : '';
-			$time = date('Y-m-d H-i-s',SYS_TIME);
-			$url = '?m='.ROUTE_M.'&c='.ROUTE_C.'&a='.ROUTE_A;
-			$log->insert(array('module'=>ROUTE_M,'username'=>$username,'userid'=>$userid,'action'=>ROUTE_C, 'querystring'=>$url,'time'=>$time,'ip'=>$ip));
- 		}
+	  	}
 	}
 	
 	/**

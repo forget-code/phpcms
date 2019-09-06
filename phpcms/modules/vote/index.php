@@ -81,6 +81,17 @@ class index {
 				$vote_data['votes']++ ;
 		}
  		$vote_data['total'] = $total ;
+ 		
+ 		
+		//取出投票结束时间，如果小于当前时间，则选项变灰不可选
+		if(date("Y-m-d",SYS_TIME)>$todate){
+			$check_status = 'disabled';
+			$display = 'display:none;';
+ 		}else {
+ 			$check_status = '';
+ 		}
+ 		
+ 		
   		//JS调用 
 		if($_GET['action']=='js'){
 		 	if(!function_exists('ob_gzhandler')) ob_clean();
@@ -103,6 +114,7 @@ class index {
 			ob_clean();
 			exit(format_js($data));
 		}
+		
  		//SEO设置 
 		$SEO = seo(SITEID, '', $subject, $description, $subject);
  		//前台投票列表调用默认页面,以免页面样式错乱.
@@ -158,10 +170,10 @@ class index {
 	public function result(){
 		$siteid = SITEID;
 		$subjectid = abs(intval($_GET['subjectid']));
-		if(!$subjectid)	showmessage(L(‘vote_novote),'blank');
+		if(!$subjectid)	showmessage(L('vote_novote'),'blank');
 		//取出投票标题
 		$subject_arr = $this->vote->get_subject($subjectid);
-		if(!is_array($subject_arr))showmessage(L(’vote_novote),'blank');
+		if(!is_array($subject_arr)) showmessage(L('vote_novote'),'blank');
 		extract($subject_arr);
 		//获取投票选项
 		$options = $this->vote_option->get_options($subjectid);
@@ -207,19 +219,19 @@ class index {
 			showmessage(L('vote_votepassed'),"?m=vote&c=index&a=result&subjectid=$subjectid&siteid=$siteid");
  		}
  		//游客是否可以投票
-		if($subject_arr['allowguest']==0&&!$this->username){
+		if($subject_arr['allowguest']==0 && !$this->username){
 			showmessage(L('vote_votenoguest'),"?m=vote&c=index&a=result&subjectid=$subjectid&siteid=$siteid");
 		}
  		//是否有投票记录 
-		$user_info = $this->vote_data->select(array('subjectid'=>$subjectid,'ip'=>$this->ip,'username'=>$this->username),'*','1',' time desc'); 
+		$user_info = $this->vote_data->select(array('subjectid'=>$subjectid,'ip'=>$this->ip,'username'=>$this->username),'*','1',' time DESC'); 
 		if(!$user_info){
 			return 1;
-		}else {
+		} else {
 			if($subject_arr['interval']==0){
 				return -1;
 			}
 			if($subject_arr['interval']>0){ 
- 				$condition = (SYS_TIME - $user_info[0]['time'])/(24*3600)> $subject_arr['interval']? 1	: 0;
+ 				$condition = (SYS_TIME - $user_info[0]['time'])/(24*3600)> $subject_arr['interval'] ? 1	: 0;
  				return $condition;
  			}
 		}  

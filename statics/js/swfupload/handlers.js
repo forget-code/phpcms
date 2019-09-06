@@ -93,7 +93,7 @@ function uploadProgress(file, bytesLoaded, bytesTotal)
 	var percent = Math.ceil((bytesLoaded / bytesTotal) * 100);
 	var progress = new FileProgress(file, this.customSettings.progressTarget);
 	progress.setProgress(percent);
-	progress.setStatus("正在上传请稍后...");
+	progress.setStatus("正在上传("+percent+" %)请稍后...");
 }
 function uploadSuccess(file, serverData)
 {

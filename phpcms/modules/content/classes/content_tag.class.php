@@ -14,6 +14,7 @@ class content_tag {
 		if(!$siteids[$catid]) return false;
 		$siteid = $siteids[$catid];
 		$this->category = getcache('category_content_'.$siteid,'commons');
+		if($this->category[$catid]['type']!=0) return false;
 		$this->modelid = $this->category[$catid]['modelid'];
 		$this->db->set_model($this->modelid);
 		$this->tablename = $this->db->table_name;
@@ -54,7 +55,6 @@ class content_tag {
 	public function lists($data) {
 		$catid = intval($data['catid']);
 		if(!$this->set_modelid($catid)) return false;
-		
 		if(isset($data['where'])) {
 			$sql = $data['where'];
 		} else {
@@ -69,6 +69,7 @@ class content_tag {
 			}
 		}
 		$order = $data['order'];
+
 		$return = $this->db->select($sql, '*', $data['limit'], $order, '', 'id');
 						
 		//调用副表的数据
@@ -115,16 +116,17 @@ class content_tag {
 			$keywords = str_replace('%', '',$data['keywords']);
 			$keywords_arr = explode(' ',$keywords);
 			$key_array = array();
+			$number = 0;
 			$i =1;
 			foreach ($keywords_arr as $_k) {
 				$sql2 = $sql." AND `keywords` LIKE '%$_k%'".(isset($data['id']) && intval($data['id']) ? " AND `id` != '".abs(intval($data['id']))."'" : '');
 				$r = $this->db->select($sql2, '*', $limit, '','','id');
-				$number = count($r);
-				if($data['limit']<$number) break;
+				$number += count($r);
 				foreach ($r as $id=>$v) {
 					if($i<= $data['limit'] && !in_array($id, $key_array)) $key_array[$id] = $v;
 					$i++;
-				}	
+				}
+				if($data['limit']<$number) break;
 			}
 		}
 		if($data['id']) unset($key_array[$data['id']]);
@@ -148,6 +150,14 @@ class content_tag {
 		if(isset($data['day'])) {
 			$updatetime = SYS_TIME-intval($data['day'])*86400;
 			$sql .= " AND updatetime>'$updatetime'";
+		}
+		if($this->category[$catid]['child']) {
+			$catids_str = $this->category[$catid]['arrchildid'];
+			$pos = strpos($catids_str,',')+1;
+			$catids_str = substr($catids_str, $pos);
+			$sql .= " AND catid IN ($catids_str)";
+		} else {
+			$sql .= " AND catid='$catid'";
 		}
 		$hits = array();
 		$result = $this->hits_db->select($sql, '*', $data['limit'], $order);
@@ -224,6 +234,8 @@ class content_tag {
 				$sql = "`catid` = '$catid' AND ";
 		}
 		if($thumb) $sql .= "`thumb` = '1' AND ";
+		if(isset($data['where'])) $sql .= $data['where'].' AND ';
+		if(isset($data['expiration']) && $data['expiration']==1) $sql .= '(`expiration` >= \''.SYS_TIME.'\' OR `expiration` = \'0\' ) AND ';
 		$sql .= "`posid` = '$posid' AND `siteid` = '".$siteid."'";
 		$pos_arr = $this->position->select($sql, '*', $data['limit'],$order);
 		if(!empty($pos_arr)) {
@@ -233,6 +245,7 @@ class content_tag {
 				$array[$key]['url'] = go($info['catid'],$info['id']);
 				$array[$key]['id'] = $info['id'];
 				$array[$key]['catid'] = $info['catid'];
+				$array[$key]['listorder'] = $info['listorder'];
 			}
 		}
 		return $array;

@@ -14,6 +14,7 @@ class index extends foreground {
 	
 	function __construct() {
 		parent::__construct();
+		$this->http_user_agent = str_replace('7.0' ,'8.0',$_SERVER['HTTP_USER_AGENT']);
 	}
 
 	public function init() {
@@ -46,28 +47,36 @@ class index extends foreground {
 		
 		header("Cache-control: private");
 		if(isset($_POST['dosubmit'])) {
-			if ($_SESSION['code'] != strtolower($_POST['code'])) {
+			if (empty($_SESSION['connectid']) && $_SESSION['code'] != strtolower($_POST['code'])) {
 				showmessage(L('code_error'));
 			}
-			
+			$userinfo = array();
 			$userinfo['encrypt'] = create_randomstr(6);
-			$userinfo['username'] = isset($_POST['username']) ? $_POST['username'] : exit('0');
-			$userinfo['nickname'] = isset($_POST['nickname']) ? $_POST['nickname'] : '';
+
+			$userinfo['username'] = (isset($_POST['username']) && is_username($_POST['username'])) ? $_POST['username'] : exit('0');
+			$userinfo['nickname'] = (isset($_POST['nickname']) && is_username($_POST['nickname'])) ? $_POST['nickname'] : '';
+			
+			$userinfo['email'] = (isset($_POST['email']) && is_email($_POST['email'])) ? $_POST['email'] : exit('0');
 			$userinfo['password'] = isset($_POST['password']) ? $_POST['password'] : exit('0');
-			$userinfo['email'] = isset($_POST['email']) ? $_POST['email'] : exit('0');
+			
+			$userinfo['email'] = (isset($_POST['email']) && is_email($_POST['email'])) ? $_POST['email'] : exit('0');
+
 			$userinfo['modelid'] = isset($_POST['modelid']) ? intval($_POST['modelid']) : 10;
 			$userinfo['regip'] = ip();
 			$userinfo['point'] = $member_setting['defualtpoint'] ? $member_setting['defualtpoint'] : 0;
 			$userinfo['amount'] = $member_setting['defualtamount'] ? $member_setting['defualtamount'] : 0;
 			$userinfo['regdate'] = $userinfo['lastdate'] = SYS_TIME;
 			$userinfo['siteid'] = $siteid;
+			$userinfo['connectid'] = isset($_SESSION['connectid']) ? $_SESSION['connectid'] : '';
+			$userinfo['from'] = isset($_SESSION['from']) ? $_SESSION['from'] : '';
+			unset($_SESSION['connectid'], $_SESSION['from']);
 			
 			if($member_setting['enablemailcheck']) {	//是否需要邮件验证
 				$userinfo['groupid'] = 7;
 			} elseif($member_setting['registerverify']) {	//是否需要管理员审核
 				$userinfo['modelinfo'] = isset($_POST['info']) ? array2string($_POST['info']) : '';
 				$this->verify_db = pc_base::load_model('member_verify_model');
-				unset($userinfo['lastdate']);
+				unset($userinfo['lastdate'],$userinfo['connectid'],$userinfo['from']);
 				$this->verify_db->insert($userinfo);
 				showmessage(L('operation_success'), 'index.php?m=member&c=index&a=register&t=3');
 			} else {
@@ -105,7 +114,7 @@ class index extends foreground {
 							param::set_cookie('_username', $userinfo['username'], $cookietime);
 							param::set_cookie('email', $userinfo['email'], $cookietime);							
 						} else {
-							$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
+							$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
 							$phpcms_auth = sys_auth($userid."\t".$userinfo['password'], 'ENCODE', $phpcms_auth_key);
 							
 							param::set_cookie('auth', $phpcms_auth, $cookietime);
@@ -119,8 +128,8 @@ class index extends foreground {
 					//如果需要邮箱认证
 					if($member_setting['enablemailcheck']) {
 						pc_base::load_sys_func('mail');
-						$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
-						$code = sys_auth($userid, 'ENCODE', $phpcms_auth_key);
+						$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
+						$code = sys_auth($userid.'|'.md5($phpcms_auth_key), 'ENCODE', $phpcms_auth_key);
 						$url = APP_PATH."index.php?m=member&c=index&a=register&code=$code&verify=1";
 						$message = $member_setting['registerverifymessage'];
 						$message = str_replace(array('{click}','{url}'), array('<a href="'.$url.'">'.L('please_click').'</a>',$url), $message);
@@ -145,8 +154,10 @@ class index extends foreground {
 			
 			if(!empty($_GET['verify'])) {
 				$code = isset($_GET['code']) ? trim($_GET['code']) : showmessage(L('operation_failure'), 'index.php?m=member&c=index');
-				$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
-				$userid = sys_auth($code, 'DECODE', $phpcms_auth_key);
+				$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
+				$code_res = sys_auth($code, 'DECODE', $phpcms_auth_key);
+				$code_arr = explode('|', $code_res);
+				$userid = isset($code_arr[0]) ? $code_arr[0] : '';
 				$userid = is_numeric($userid) ? $userid : showmessage(L('operation_failure'), 'index.php?m=member&c=index');
 
 				$this->db->update(array('groupid'=>$this->_get_usergroup_bypoint()), array('userid'=>$userid));
@@ -158,7 +169,7 @@ class index extends foreground {
 				//过滤非当前站点会员模型
 				$modellist = getcache('member_model', 'commons');
 				foreach($modellist as $k=>$v) {
-					if($v['siteid']!=$siteid) {
+					if($v['siteid']!=$siteid || $v['disabled']) {
 						unset($modellist[$k]);
 					}
 				}
@@ -268,7 +279,8 @@ class index extends foreground {
 		$memberinfo = $this->memberinfo;
 		//初始化phpsso
 		$phpsso_api_url = $this->_init_phpsso();
-		$auth_data = $this->client->auth_data(array('uid'=>$this->memberinfo['phpssouid']));
+		$ps_auth_key = pc_base::load_config('system', 'phpsso_auth_key');
+		$auth_data = $this->client->auth_data(array('uid'=>$this->memberinfo['phpssouid'], 'ps_auth_key'=>$ps_auth_key), '', $ps_auth_key);
 		$upurl = base64_encode($phpsso_api_url.'/index.php?m=phpsso&c=index&a=uploadavatar&auth_data='.$auth_data);
 		//获取头像数组
 		$avatar = $this->client->ps_getavatar($this->memberinfo['phpssouid']);
@@ -381,6 +393,14 @@ class index extends foreground {
 		if(empty($grouplist[$memberinfo['groupid']]['allowupgrade'])) {
 			showmessage(L('deny_upgrade'), HTTP_REFERER);
 		}
+		if(isset($_POST['upgrade_type']) && intval($_POST['upgrade_type']) < 0) {
+			showmessage(L('operation_failure'), HTTP_REFERER);
+		}
+
+		if(isset($_POST['upgrade_date']) && intval($_POST['upgrade_date']) < 0) {
+			showmessage(L('operation_failure'), HTTP_REFERER);
+		}
+
 		if(isset($_POST['dosubmit'])) {
 			$groupid = isset($_POST['groupid']) ? intval($_POST['groupid']) : showmessage(L('operation_failure'), HTTP_REFERER);
 			
@@ -433,10 +453,12 @@ class index extends foreground {
 		}
 		
 		if(isset($_POST['dosubmit'])) {
-			//判断验证码
-			$code = isset($_POST['code']) && trim($_POST['code']) ? trim($_POST['code']) : showmessage(L('input_code'), HTTP_REFERER);
-			if ($_SESSION['code'] != strtolower($code)) {
-				showmessage(L('code_error'), HTTP_REFERER);
+			if(empty($_SESSION['connectid'])) {
+				//判断验证码
+				$code = isset($_POST['code']) && trim($_POST['code']) ? trim($_POST['code']) : showmessage(L('input_code'), HTTP_REFERER);
+				if ($_SESSION['code'] != strtolower($code)) {
+					showmessage(L('code_error'), HTTP_REFERER);
+				}
 			}
 			
 			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : showmessage(L('username_empty'), HTTP_REFERER);
@@ -466,7 +488,16 @@ class index extends foreground {
 						 			'groupid'=>$this->_get_usergroup_bypoint(),	//会员默认组
 						 			'modelid'=>10,	//普通会员
 									);
-
+									
+						//如果是connect用户
+						if(!empty($_SESSION['connectid'])) {
+							$userinfo['connectid'] = $_SESSION['connectid'];
+						}
+						if(!empty($_SESSION['from'])) {
+							$userinfo['from'] = $_SESSION['from'];
+						}
+						unset($_SESSION['connectid'], $_SESSION['from']);
+						
 						$this->db->insert($info);
 						unset($info);
 						$r = $this->db->get_one(array('phpssouid'=>$memberinfo['uid']));
@@ -529,36 +560,24 @@ class index extends foreground {
 				$updatearr['vip'] = 0;
 			}		
 
-			//检查用户积分，更新新用户组，除去邮箱认证、禁止访问、游客组用户
-			if($r['point'] >= 0 && !in_array($r['groupid'], array('1', '7', '8'))) {
-				$grouplist = getcache('grouplist');
-				
-				foreach ($grouplist as $k=>$v) {
-					$grouppointlist[$k] = $v['point'];
-				}
-				arsort($grouppointlist);
-				
-				//如果超出用户组积分设置则为积分最高的用户组
-				if($r['point'] > max($grouppointlist)) {
-					foreach ($grouppointlist as $k=>$v) {
-						$check_groupid = $k;
-						break;
-					}
-				} else {
-					foreach ($grouppointlist as $k=>$v) {
-						if($r['point'] >= $v) {
-							$check_groupid = $tmp_k;
-							break;
-						}
-						$tmp_k = $k;
-					}
-				}
+			//检查用户积分，更新新用户组，除去邮箱认证、禁止访问、游客组用户、vip用户
+			if($r['point'] >= 0 && !in_array($r['groupid'], array('1', '7', '8')) && empty($r[vip])) {
+				$check_groupid = $this->_get_usergroup_bypoint($r['point']);
 
 				if($check_groupid != $r['groupid']) {
 					$updatearr['groupid'] = $groupid = $check_groupid;
 				}
 			}
 
+			//如果是connect用户
+			if(!empty($_SESSION['connectid'])) {
+				$updatearr['connectid'] = $_SESSION['connectid'];
+			}
+			if(!empty($_SESSION['from'])) {
+				$updatearr['from'] = $_SESSION['from'];
+			}
+			unset($_SESSION['connectid'], $_SESSION['from']);
+						
 			$this->db->update($updatearr, array('userid'=>$userid));
 			
 			if(!isset($cookietime)) {
@@ -567,7 +586,7 @@ class index extends foreground {
 			$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 			$cookietime = $_cookietime ? TIME + $_cookietime : 0;
 			
-			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
+			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
 			$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
 			
 			param::set_cookie('auth', $phpcms_auth, $cookietime);
@@ -581,10 +600,36 @@ class index extends foreground {
 		} else {
 			$setting = pc_base::load_config('system');
 			$forward = isset($_GET['forward']) && trim($_GET['forward']) ? urlencode($_GET['forward']) : '';
-			$sndaurl = "https://cas.sdo.com/cas/login?gateway=true&service=".urlencode(APP_PATH.'index.php?m=member&c=index&a=public_snda_login&forward='.$forward)."&appId=200037400&appArea=0";
+			
+			if(!empty($setting['connect_enable'])) {
+				$snda_res = $this->_snda_get_appid();
+				$appid = $snda_res['appid'];
+				$secretkey = $snda_res['secretkey'];
+				$sid = md5("appArea=0appId=".$appid."service=".urlencode(APP_PATH.'index.php?m=member&c=index&a=public_snda_login&forward='.$forward).$secretkey);
+				$sndaurl = "https://cas.sdo.com/cas/login?gateway=true&service=".urlencode(APP_PATH.'index.php?m=member&c=index&a=public_snda_login&forward='.$forward)."&appId=".$appid."&appArea=0&sid=".$sid;
+			}
+			$siteid = isset($_REQUEST['siteid']) && trim($_REQUEST['siteid']) ? intval($_REQUEST['siteid']) : 1;
+			$siteinfo = siteinfo($siteid);
 
 			include template('member', 'login');
 		}
+	}
+	
+	/**
+	 * 
+	 * 获取已申请的appid和secretkey,默认appid为200037400
+	 */
+	private function _snda_get_appid() {
+		$snda_res = pc_base::load_config('snda', 'snda_status');
+		if(strstr($snda_res, '|')) {
+			$snda_res_arr = explode('|', $snda_res);
+			$appid = isset($snda_res_arr[0]) ? $snda_res_arr[0] : '';
+			$secretkey = isset($snda_res_arr[1]) ? $snda_res_arr[1] : '';
+		} else {
+			$appid = 200037400;
+			$secretkey = '';
+		}
+		return array('appid'=>$appid, 'secretkey'=>$secretkey);	
 	}
 	
 	public function logout() {
@@ -606,6 +651,7 @@ class index extends foreground {
 			param::set_cookie('_userid', '');
 			param::set_cookie('_username', '');
 			param::set_cookie('_groupid', '');
+			param::set_cookie('_nickname', '');
 			param::set_cookie('cookietime', '');
 			$forward = isset($_GET['forward']) && trim($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index&a=login';
 			showmessage(L('logout_success').$synlogoutstr, $forward);
@@ -704,7 +750,7 @@ class index extends foreground {
 				showmessage(L('operation_failure'), HTTP_REFERER);
 			}
 		} elseif(isset($_POST['buy'])) {
-			if(!is_numeric($_POST['money'])) {
+			if(!is_numeric($_POST['money']) || $_POST['money'] < 0) {
 				showmessage(L('money_error'), HTTP_REFERER);
 			} else {
 				$money = intval($_POST['money']);
@@ -715,8 +761,8 @@ class index extends foreground {
 			}
 			//此处比率读取用户配置
 			$point = $money*$member_setting['rmb_point_rate'];
-			$this->db->update(array('amount'=>"-=$money", 'point'=>"+=$point"), array('userid'=>$memberinfo['userid']));
-			//加入消费记录
+			$this->db->update(array('point'=>"+=$point"), array('userid'=>$memberinfo['userid']));
+			//加入消费记录，同时扣除金钱
 			pc_base::load_app_class('spend','pay',0);
 			spend::amount($money, L('buy_point'), $memberinfo['userid'], $memberinfo['username']);
 			showmessage(L('operation_success'), HTTP_REFERER);
@@ -755,7 +801,7 @@ class index extends foreground {
 		return $phpsso_api_url;
 	}
 	
-	private function _checkname($username) {
+	protected function _checkname($username) {
 		$username =  trim($username);
 		if ($this->db->get_one(array('username'=>$username))){
 			return false;
@@ -766,15 +812,12 @@ class index extends foreground {
 	private function _session_start() {
 		$session_storage = 'session_'.pc_base::load_config('system','session_storage');
 		pc_base::load_sys_class($session_storage);
-		if(!isset($_SESSION)) {
-			session_start();
-		}
 	}
 	
 	/*
 	 * 通过linkageid获取名字路径
 	 */
-	private function _get_linkage_fullname($linkageid,  $linkagelist) {
+	protected function _get_linkage_fullname($linkageid,  $linkagelist) {
 		$fullname = '';
 		if($linkagelist['data'][$linkageid]['parentid'] != 0) {
 			$fullname = $this->_get_linkage_fullname($linkagelist['data'][$linkageid]['parentid'], $linkagelist);
@@ -788,7 +831,7 @@ class index extends foreground {
 	 *根据积分算出用户组
 	 * @param $point int 积分数
 	 */
-	private function _get_usergroup_bypoint($point=0) {
+	protected function _get_usergroup_bypoint($point=0) {
 		$groupid = 2;
 		if(empty($point)) {
 			$member_setting = getcache('member_setting');
@@ -822,13 +865,19 @@ class index extends foreground {
 	 * @return $status {-4：用户名禁止注册;-1:用户名已经存在 ;1:成功}
 	 */
 	public function public_checkname_ajax() {
-		$this->_init_phpsso();
 		$username = isset($_GET['username']) && trim($_GET['username']) ? trim($_GET['username']) : exit(0);
 		if(CHARSET != 'utf-8') {
 			$username = iconv('utf-8', CHARSET, $username);
 			$username = addslashes($username);
 		}
-
+		
+		//首先判断会员审核表
+		$this->verify_db = pc_base::load_model('member_verify_model');
+		if($this->verify_db->get_one(array('username'=>$username))) {
+			exit('0');
+		}
+	
+		$this->_init_phpsso();
 		$status = $this->client->ps_checkname($username);
 			
 		if($status == -4 || $status == -1) {
@@ -848,6 +897,12 @@ class index extends foreground {
 		if(CHARSET != 'utf-8') {
 			$nickname = iconv('utf-8', CHARSET, $nickname);
 			$nickname = addslashes($nickname);
+		}
+
+		//首先判断会员审核表
+		$this->verify_db = pc_base::load_model('member_verify_model');
+		if($this->verify_db->get_one(array('nickname'=>$nickname))) {
+			exit('0');
 		}
 		
 		$res = $this->db->get_one(array('nickname'=>$nickname));
@@ -896,6 +951,7 @@ class index extends foreground {
 		define('WB_SKEY', pc_base::load_config('system', 'sina_skey'));
 		pc_base::load_app_class('weibooauth', '' ,0);
 		$this->_session_start();
+					
 		if(isset($_GET['callback']) && trim($_GET['callback'])) {
 			$o = new WeiboOAuth(WB_AKEY, WB_SKEY, $_SESSION['keys']['oauth_token'], $_SESSION['keys']['oauth_token_secret']);
 			$_SESSION['last_key'] = $o->getAccessToken($_REQUEST['oauth_verifier']);
@@ -909,35 +965,15 @@ class index extends foreground {
 				$me['screen_name'] = iconv('utf-8', CHARSET, $me['screen_name']);
 			}
 			if(!empty($me['id'])) {
-				$this->_init_phpsso();
-				$status = $this->client->ps_get_member_info('sina_'.$me['id'], 2);
-				//如果sso中有用户
-				if($status != '-1') {
-					$memberinfo = unserialize($status);	//接口返回序列化，进行判断
-				} else {
-					//sso中无此用户，注册用户
-					$status = $this->client->ps_member_register('sina_'.$me['id'], md5($me['id']), $me['id'].'@sina.com', ip());
-					if($status > 0) {
-						$memberinfo['uid'] = $status;
-						$info['phpssouid'] = $status;
-						//取phpsso密码随机数
-						$info['username'] = 'sina_'.$me['id'];
-						$info['password'] = md5($me['id']);
-						$info['email'] = '';
-						$info['nickname'] = $me['name'];
-						$info['modelid'] = 10;
-						$info['regip'] = ip();
-						$info['groupid'] = $this->_get_usergroup_bypoint();
-						$info['regdate'] = $info['lastdate'] = SYS_TIME;
-						$this->db->insert($info);
-					}
-				}
-
-				if(isset($memberinfo['uid']) && is_numeric($memberinfo['uid'])) {
-					//查询帐号信息
-					$r = $this->db->get_one(array('phpssouid'=>$memberinfo['uid']));
-
+				//检查connect会员是否绑定，已绑定直接登录，未绑定提示注册/绑定页面
+				$where = array('connectid'=>$me['id'], 'from'=>'sina');
+				$r = $this->db->get_one($where);
+				
+				//connect用户已经绑定本站用户
+				if(!empty($r)) {
+					//读取本站用户信息，执行登录操作
 					$password = $r['password'];
+					$this->_init_phpsso();
 					$synloginstr = $this->client->ps_member_synlogin($r['phpssouid']);
 					$userid = $r['userid'];
 					$groupid = $r['groupid'];
@@ -949,7 +985,7 @@ class index extends foreground {
 					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 					$cookietime = $_cookietime ? TIME + $_cookietime : 0;
 					
-					$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
+					$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
 					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
 					
 					param::set_cookie('auth', $phpcms_auth, $cookietime);
@@ -959,12 +995,14 @@ class index extends foreground {
 					param::set_cookie('cookietime', $_cookietime, $cookietime);
 					param::set_cookie('_nickname', $nickname, $cookietime);
 					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
-					if(!empty($forward)) {
-						//header('Location: '.$forward);
-					} else {
-						//header('Location: http://'.SITE_URL.'index.php?m=member&c=index');						
-					}
-					showmessage(L('login_success').$synloginstr, 'index.php?m=member&c=index&a=init');
+					showmessage(L('login_success').$synloginstr, $forward);
+					
+				} else {				
+					//弹出绑定注册页面
+					$_SESSION['connectid'] = $me['id'];
+					$_SESSION['from'] = 'sina';
+					$connect_username = $me['name'];
+					include template('member', 'connect');
 				}
 			} else {
 				showmessage(L('login_failure'), 'index.php?m=member&c=index&a=login');
@@ -982,67 +1020,48 @@ class index extends foreground {
 	 * 盛大通行证登陆
 	 */
 	public function public_snda_login() {
-		$ticket = $_GET['ticket'];
-		if(!empty($ticket)) {
-			$callback_url = urlencode(APP_PATH.'index.php?m=member&c=index&a=public_snda_login');
-			//https://pre.cas.sdo.com/cas/Validate.Ex
-			$cas_url ="http://gw.sdo.com/cas/validate/?service=$callback_url&ticket=$ticket&appid=200037400";
-
-			$result = @file_get_contents($cas_url);
-			$result = json_decode($result, 1);
-
-			if(isset($result['error']) && $result['error'] == 0 && is_numeric($result['data']['uid'])) {
-				$userid = $result['data']['uid'];
-			} elseif(isset($result['error']) && $result['errno'] == -1) {
-				showmessage(L('invalid_appid'), 'index.php?m=member&c=index&a=login');
+		define('SNDA_AKEY', pc_base::load_config('system', 'snda_akey'));
+		define('SNDA_SKEY', pc_base::load_config('system', 'snda_skey'));
+		define('SNDA_CALLBACK', urlencode(APP_PATH.'index.php?m=member&c=index&a=public_snda_login&callback=1'));
+		
+		pc_base::load_app_class('OauthSDK', '' ,0);
+		$this->_session_start();		
+		if(isset($_GET['callback']) && trim($_GET['callback'])) {
+					
+			$o = new OauthSDK(SNDA_AKEY, SNDA_SKEY, SNDA_CALLBACK);
+			$code = $_REQUEST['code'];
+			$accesstoken = $o->getAccessToken($code);
+		
+			if(is_numeric($accesstoken['sdid'])) {
+				$userid = $accesstoken['sdid'];
 			} else {
 				showmessage(L('login_failure'), 'index.php?m=member&c=index&a=login');
 			}
 
 			if(!empty($userid)) {
-				$this->_init_phpsso();
-				$status = $this->client->ps_get_member_info('snda_'.$userid, 2);
-				//如果sso中有用户
-				if($status != '-1') {
-					$memberinfo = unserialize($status);	//接口返回序列化，进行判断
-				} else {
-					//sso中无此用户，注册用户
-					$status = $this->client->ps_member_register('snda_'.$userid, md5($userid), $userid.'@sdo.com', ip());
-					if($status > 0) {
-						$memberinfo['uid'] = $status;
-						$info['phpssouid'] = $status;
-						//取phpsso密码随机数
-						$info['username'] = 'snda_'.$userid;
-						$info['password'] = md5($userid);
-						$info['email'] = '';
-						$info['nickname'] = '';
-						$info['modelid'] = 10;
-						$info['regip'] = ip();
-						$info['groupid'] = $this->_get_usergroup_bypoint();
-						$info['regdate'] = $info['lastdate'] = SYS_TIME;
-						$this->db->insert($info);
-					}
-				}
-
-				if(isset($memberinfo['uid']) && is_numeric($memberinfo['uid'])) {
-					//查询帐号信息
-					$r = $this->db->get_one(array('phpssouid'=>$memberinfo['uid']));
-
+				
+				//检查connect会员是否绑定，已绑定直接登录，未绑定提示注册/绑定页面
+				$where = array('connectid'=>$userid, 'from'=>'snda');
+				$r = $this->db->get_one($where);
+				
+				//connect用户已经绑定本站用户
+				if(!empty($r)) {
+					//读取本站用户信息，执行登录操作
 					$password = $r['password'];
+					$this->_init_phpsso();
 					$synloginstr = $this->client->ps_member_synlogin($r['phpssouid']);
 					$userid = $r['userid'];
 					$groupid = $r['groupid'];
 					$username = $r['username'];
 					$nickname = empty($r['nickname']) ? $username : $r['nickname'];
 					$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
-					
 					if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
 					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 					$cookietime = $_cookietime ? TIME + $_cookietime : 0;
 					
-					$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').str_replace('7.0' ,'8.0',$_SERVER['HTTP_USER_AGENT']));
+					$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
 					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
-
+					
 					param::set_cookie('auth', $phpcms_auth, $cookietime);
 					param::set_cookie('_userid', $userid, $cookietime);
 					param::set_cookie('_username', $username, $cookietime);
@@ -1052,19 +1071,106 @@ class index extends foreground {
 					param::set_cookie('_from', 'snda');
 					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
 					showmessage(L('login_success').$synloginstr, $forward);
+				} else {				
+					//弹出绑定注册页面
+					$_SESSION['connectid'] = $userid;
+					$_SESSION['from'] = 'snda';
+					$connect_username = $userid;
+					include template('member', 'connect');
 				}
-			}
-			
+			}	
 		} else {
-			showmessage(L('login_failure'), 'index.php?m=member&c=index&a=login');
+			$o = new OauthSDK(SNDA_AKEY, SNDA_SKEY, SNDA_CALLBACK);
+			$accesstoken = $o->getSystemToken();		
+			$aurl = $o->getAuthorizeURL();
+			
+			include template('member', 'connect_snda');
 		}
 		
 	}
 	
 	/**
+	 * QQ登录
+	 */
+	public function public_qq_login() {
+		define('QQ_AKEY', pc_base::load_config('system', 'qq_akey'));
+		define('QQ_SKEY', pc_base::load_config('system', 'qq_skey'));
+		pc_base::load_app_class('qqoauth', '' ,0);
+		$this->_session_start();
+		if(isset($_GET['callback']) && trim($_GET['callback'])) {
+			$o = new WeiboOAuth(QQ_AKEY, QQ_SKEY, $_SESSION['keys']['oauth_token'], $_SESSION['keys']['oauth_token_secret']);
+			$_SESSION['last_key'] = $o->getAccessToken($_REQUEST['oauth_verifier']);
+			
+			if(!empty($_SESSION['last_key']['name'])) {
+				//检查connect会员是否绑定，已绑定直接登录，未绑定提示注册/绑定页面
+				$where = array('connectid'=>$_SESSION['last_key']['name'], 'from'=>'qq');
+				$r = $this->db->get_one($where);
+				
+				//connect用户已经绑定本站用户
+				if(!empty($r)) {
+					//读取本站用户信息，执行登录操作
+					$password = $r['password'];
+					$this->_init_phpsso();
+					$synloginstr = $this->client->ps_member_synlogin($r['phpssouid']);
+					$userid = $r['userid'];
+					$groupid = $r['groupid'];
+					$username = $r['username'];
+					$nickname = empty($r['nickname']) ? $username : $r['nickname'];
+					$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
+					if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
+					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
+					$cookietime = $_cookietime ? TIME + $_cookietime : 0;
+					
+					$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
+					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+					
+					param::set_cookie('auth', $phpcms_auth, $cookietime);
+					param::set_cookie('_userid', $userid, $cookietime);
+					param::set_cookie('_username', $username, $cookietime);
+					param::set_cookie('_groupid', $groupid, $cookietime);
+					param::set_cookie('cookietime', $_cookietime, $cookietime);
+					param::set_cookie('_nickname', $nickname, $cookietime);
+					param::set_cookie('_from', 'snda');
+					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
+					showmessage(L('login_success').$synloginstr, $forward);
+				} else {				
+					//弹出绑定注册页面
+					$_SESSION['connectid'] = $_SESSION['last_key']['name'];
+					$_SESSION['from'] = 'qq';
+					$connect_username = $_SESSION['last_key']['name'];
+					include template('member', 'connect');
+				}
+			} else {
+				showmessage(L('login_failure'), 'index.php?m=member&c=index&a=login');
+			}
+		} else {
+			$oauth_callback = APP_PATH.'index.php?m=member&c=index&a=public_qq_login&callback=1';
+			$oauth_nonce = md5(SYS_TIME);
+			$oauth_signature_method = 'HMAC-SHA1';
+			$oauth_timestamp = SYS_TIME;
+			$oauth_version = '1.0';
+
+			$url = "https://open.t.qq.com/cgi-bin/request_token?oauth_callback=$oauth_callback&oauth_consumer_key=".QQ_AKEY."&oauth_nonce=$oauth_nonce&oauth_signature=".QQ_SKEY."&oauth_signature_method=HMAC-SHA1&oauth_timestamp=$oauth_timestamp&oauth_version=$oauth_version"; 
+			$o = new WeiboOAuth(QQ_AKEY, QQ_SKEY);
+			
+			$keys = $o->getRequestToken(array('callback'=>$oauth_callback));
+			$_SESSION['keys'] = $keys;
+			$aurl = $o->getAuthorizeURL($keys['oauth_token'] ,false , $oauth_callback);
+			
+			include template('member', 'connect_qq');	
+		}
+
+	}	
+	/**
 	 * 找回密码
 	 */
 	public function public_forget_password () {
+		
+		$email_config = getcache('common', 'commons');
+		if(empty($email_config['mail_user']) || empty($email_config['mail_password'])) {
+			showmessage(L('email_config_empty'), HTTP_REFERER);
+		}
+			
 		$this->_session_start();
 		$member_setting = getcache('member_setting');
 		if(isset($_POST['dosubmit'])) {
@@ -1080,7 +1186,7 @@ class index extends foreground {
 			}
 			
 			pc_base::load_sys_func('mail');
-			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
+			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
 
 			$code = sys_auth($memberinfo['userid']."\t".SYS_TIME, 'ENCODE', $phpcms_auth_key);
 
@@ -1098,7 +1204,7 @@ class index extends foreground {
 			sendmail($email, L('forgetpassword'), $message, '', '', $sitename);
 			showmessage(L('operation_success'), 'index.php?m=member&c=index&a=login');
 		} elseif($_GET['code']) {
-			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
+			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
 			$hour = date('y-m-d h', SYS_TIME);
 			$code = sys_auth($_GET['code'], 'DECODE', $phpcms_auth_key);
 			$code = explode("\t", $code);
@@ -1127,6 +1233,9 @@ class index extends foreground {
 			}
 
 		} else {
+			$siteid = isset($_REQUEST['siteid']) && trim($_REQUEST['siteid']) ? intval($_REQUEST['siteid']) : 1;
+			$siteinfo = siteinfo($siteid);
+			
 			include template('member', 'forget_password');
 		}
 	}

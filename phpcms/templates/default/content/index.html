@@ -29,9 +29,7 @@
         	<div class="box extend">
             	<div class="col-left">争议</div>
                 <div class="col-auto">
-				{pc:block pos="index_block_1"} 
-				 &nbsp;      
-				{/pc}
+				{pc:block pos="index_block_1"}{/pc}
 				</div>
                 <script language="javascript" src="{APP_PATH}caches/poster_js/10.js"></script>
             </div>
@@ -39,7 +37,7 @@
         <div class="bk10"></div>
         <div class="box">
         		<h5>图片新闻</h5>
-          {pc:content  action="position" posid="12" thumb="1" order="id DESC" num="10"}
+          {pc:content  action="position" posid="12" thumb="1" order="listorder DESC" num="10"}
             <ul class="content news-photo picbig">
              {loop $data $r}
             	<li>
@@ -58,7 +56,7 @@
         <div class="box cat-area" {if $num%2!=0}style=" margin-right:10px"{/if}>
         		<h5 class="title-1">{$r[catname]}<a href="{$r[url]}" class="more">更多>></a></h5>
              <div class="content">
-             {pc:content action="lists" catid="$r[catid]" num="1" thumb="1" order="id DESC" return="info"}
+             {pc:content  action="lists" catid="$r[catid]" order="updatetime DESC" thumb="1" num="1" return="info"}
              {loop $info $v}
              	<p>
              		<img src="{thumb($v[thumb],90,0)}" width="90" height="60"/>
@@ -113,7 +111,7 @@
             <h5 class="title-2"><span class="rt fn f12 tab SwapTab"><span class="fb">热点</span> | <span >评论</span> | <span>关注</span></span>排行</h5>
             <div class="tab-content">
             <ul class="content digg">
-			{pc:content action="hits" catid="35" num="10" order="views DESC"}
+			{pc:content action="hits" catid="6" num="10" order="views DESC"}
 				{loop $data $r}
 					<li><a href="{$r[url]}" target="_blank" title="{$r[title]}"{title_style($r[style])}>{$r[title]}</a></li>
 				{/loop}
@@ -127,7 +125,7 @@
 			{/pc}
             </ul>
             <ul class="content digg hidden">
-			{pc:content action="hits" catid="35" num="10" order="views DESC"}
+			{pc:content action="hits" catid="6" num="10" order="views DESC"}
 				{loop $data $r}
 					<li><a href="{$r[url]}" target="_blank">{$r[title]}</a></li>
 				{/loop}

@@ -31,7 +31,7 @@ class index {
 		$css = get_css(unserialize($css));
 		if(!$ispage) {
 			$type_db = pc_base::load_model('type_model');
-			$types = $type_db->select(array('module'=>'special', 'parentid'=>$specialid), '*', '', '`listorder` ASC, `typeid` ASC');
+			$types = $type_db->select(array('module'=>'special', 'parentid'=>$specialid), '*', '', '`listorder` ASC, `typeid` ASC', '', 'listorder');
 		}
 		if ($pics) {
 			$pic_data = get_pic_content($pics);
@@ -44,7 +44,7 @@ class index {
 		$siteid =  $_GET['siteid'] ? $_GET['siteid'] : get_siteid();
 		$SEO = seo($siteid, '', $title, $description);
 		$commentid = id_encode('special', $id, $siteid);
-		$template = $info['template'] ? $info['template'] : 'index';
+		$template = $info['index_template'] ? $info['index_template'] : 'index';
 		include template('special', $template);
 	}
 	
@@ -64,7 +64,7 @@ class index {
 		$type_db = pc_base::load_model('type_model');
 		$info = $type_db->get_one(array('typeid'=>$_GET['typeid']));
 		$SEO = seo($siteid, '', $info['typename'], '');
-		$template = $template_list ? $template_list : 'list';
+		$template = $list_template ? $list_template : 'list';
 		include template('special', $template);
 	}
 	
@@ -105,7 +105,7 @@ class index {
 				$content = str_replace('[page]', '', $content);
 			}
 		}
-		$template = $template ? $template : 'show'; //调用模板
+		$template = $show_template ? $show_template : 'show'; //调用模板
 		$CONTENT_POS = strpos($content, '[page]');
 		if ($CONTENT_POS !== false) {
 			$contents = array_filter(explode('[page]', $content));

@@ -12,6 +12,7 @@ class cache_api {
 	
 	public function __construct() {
 		$this->db = '';
+		$this->siteid = get_siteid();
 	}
 	
 	/**
@@ -46,8 +47,25 @@ class cache_api {
 	 */
 	public function category() {
 		$categorys = array();
-		$this->categorys = $this->db->select();
+		$models = getcache('model','commons');
+		foreach ($models as $modelid=>$model) {
+			$datas = $this->db->select(array('modelid'=>$modelid),'catid,type,items',10000);
+			$array = array();
+			foreach ($datas as $r) {
+				if($r['type']==0) $array[$r['catid']] = $r['items'];
+			}
+			setcache('category_items_'.$modelid, $array,'commons');
+		}
+		$array = array();
+		$categorys = $this->db->select('`module`=\'content\'','catid,siteid',20000,'listorder ASC');
+		foreach ($categorys as $r) {
+			$array[$r['catid']] = $r['siteid'];
+		}
+		setcache('category_content',$array,'commons');
+		$categorys = $this->categorys = array();
+		$this->categorys = $this->db->select(array('siteid'=>$this->siteid, 'module'=>'content'),'*',10000,'listorder ASC');
 		foreach($this->categorys as $r) {
+			unset($r['module']);
 			$setting = string2array($r['setting']);
 			$r['create_to_html_root'] = $setting['create_to_html_root'];
 			$r['ishtml'] = $setting['ishtml'];
@@ -55,9 +73,15 @@ class cache_api {
 			$r['category_ruleid'] = $setting['category_ruleid'];
 			$r['show_ruleid'] = $setting['show_ruleid'];
 			$r['workflowid'] = $setting['workflowid'];
+			$r['isdomain'] = '0';
+			if(!preg_match('/^(http|https):\/\//', $r['url'])) {
+				$r['url'] = siteurl($r['siteid']).$r['url'];
+			} elseif ($r['ishtml']) {
+				$r['isdomain'] = '1';
+			}
 			$categorys[$r['catid']] = $r;
 		}
-		setcache('category_content',$categorys,'commons');
+		setcache('category_content_'.$this->siteid,$categorys,'commons');
 		return true;
 	}
 	
@@ -142,12 +166,32 @@ class cache_api {
 	 * 更新推荐位缓存方法
 	 */
 	public function position () {
-		$infos = $this->db->select();
+		$infos = $this->db->select('','*',1000,'listorder DESC');
 		foreach ($infos as $info){
 			$positions[$info['posid']] = $info;
 		}
 		setcache('position', $positions,'commons');
 		return $infos;
+	}
+	
+	/**
+	 * 更新投票配置
+	 */
+	public function vote_setting() {
+		$m_db = pc_base::load_model('module_model');
+		$data = $m_db->select(array('module'=>'vote'));
+		$setting = string2array($data[0]['setting']);
+		setcache('vote', $setting, 'commons');
+	}
+	
+	/**
+	 * 更新友情链接配置
+	 */
+	public function link_setting() {
+		$m_db = pc_base::load_model('module_model');
+		$data = $m_db->select(array('module'=>'link'));
+		$setting = string2array($data[0]['setting']);
+		setcache('link', $setting, 'commons');
 	}
 	
 	/**
@@ -168,11 +212,12 @@ class cache_api {
 	 */
 	public function cache_siteid($role) {
 		$priv_db = pc_base::load_model('admin_role_priv_model');
+		$sitelist = array();
 		foreach($role as $n=>$r) {
 			$sitelists = $priv_db->select(array('roleid'=>$n),'siteid', '', 'siteid');
 			foreach($sitelists as $site) {
 				foreach($site as $v){
-					$sitelist[$n][] = $v['siteid'];
+					$sitelist[$n][] = intval($v);
 				}
 			}
 		}
@@ -257,12 +302,11 @@ class cache_api {
 	 */
 	public function type($param = '') {
 		$datas = array();
-		$result_datas = $this->db->select(array('siteid'=>get_siteid(),'module'=>$param),'*',1000,'listorder ASC');
+		$result_datas = $this->db->select(array('siteid'=>get_siteid(),'module'=>$param),'*',1000,'listorder ASC,typeid ASC');
 		foreach($result_datas as $_key=>$_value) {
 			$datas[$_value['typeid']] = $_value;
 		}
 		if ($param=='search') {
-			setcache('search_types',$types, 'search');
 			$this->search_type();
 		} else {
 			setcache('type_'.$param, $datas, 'commons');
@@ -287,11 +331,12 @@ class cache_api {
 	 * 更新数据源缓存方法
 	 */
 	public function dbsource() {
-		$list = $this->db->select();
+		$db = pc_base::load_model('dbsource_model');
+		$list = $db->select();
 		$data = array();
 		if ($list) {
 			foreach ($list as $val) {
-				$data[$val['name']] = array('hostname'=>$val['host'].':'.$val['port'], 'database' =>$val['dbname'] ,'username' =>$val['username'],'password' => $val['password'],'charset'=>$val['charset'],'debug'=>0,'pconnect'=>0,'autoconnect'=>0);
+				$data[$val['name']] = array('hostname'=>$val['host'].':'.$val['port'], 'database' =>$val['dbname'] , 'db_tablepre'=>$val['dbtablepre'], 'username' =>$val['username'],'password' => $val['password'],'charset'=>$val['charset'],'debug'=>0,'pconnect'=>0,'autoconnect'=>0);
 			}
 		} else {
 			return false;
@@ -395,7 +440,7 @@ class cache_api {
 				$search_model[$_value['modelid']]['name'] = $_value['name'];
 				$search_model[$_value['modelid']]['sort'] = $_value['listorder'];
 			}
-			setcache('type_model',$datas,'search');
+			setcache('type_model_'.$siteid,$datas,'search');
 			$datas = array();	
 			foreach($result_datas2 as $_key=>$_value) {
 				if($_value['modelid']) continue;
@@ -403,7 +448,7 @@ class cache_api {
 				$search_model[$_value['typedir']]['typeid'] = $_value['typeid'];
 				$search_model[$_value['typedir']]['name'] = $_value['name'];
 			}
-			setcache('type_module',$datas,'search');
+			setcache('type_module_'.$siteid,$datas,'search');
 			//搜索header头中使用类型缓存
 			setcache('search_model_'.$siteid,$search_model,'search');
 		}
@@ -449,7 +494,7 @@ class cache_api {
 		}
 		$filepath = CACHE_PATH.'configs/';
 		$module = "<?php\nreturn ".var_export($module, true).";\n?>";
-		return $file_size = file_put_contents($filepath.'modules.php', $module, LOCK_EX);
+		return $file_size = pc_base::load_config('system','lock_ex') ? file_put_contents($filepath.'modules.php', $module, LOCK_EX) : file_put_contents($filepath.'modules.php', $module);
 	}
 	
 	/**
@@ -474,7 +519,7 @@ class cache_api {
 		if (is_array($result) && !empty($result)) {
 			foreach ($result as $re) {
 				if (!file_exists(CACHE_PATH.$re['path'].$re['filename'])) {
-					$filesize = file_put_contents(CACHE_PATH.$re['path'].$re['filename'], $re['data'], LOCK_EX);
+					$filesize = pc_base::load_config('system','lock_ex') ? file_put_contents(CACHE_PATH.$re['path'].$re['filename'], $re['data'], LOCK_EX) : file_put_contents(CACHE_PATH.$re['path'].$re['filename'], $re['data']);
 				} else {
 					continue;
 				}

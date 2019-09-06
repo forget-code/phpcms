@@ -6,6 +6,7 @@ include $this->admin_tpl('header');?>
 $(function(){
 	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
 	$("#sitename").formValidator({onshow:"<?php echo L('input').L('mirrors_name')?>",onfocus:"<?php echo L('mirrors_name').L('downserver_not_empty')?>"}).inputValidator({min:1,max:999,onerror:"<?php echo L('downserver_name').L('downserver_not_empty')?>"});
+	$("#siteurl").formValidator({onshow:"<?php echo L('mirror_address')?>",onfocus:"<?php echo L('mirror_address')?>"}).inputValidator({onerror:"<?php echo L('downserver_error')?>"}).regexValidator({regexp:"([a-zA-Z]+):\/\/(.+)[^\/]$",onerror:"<?php echo L('downserver_error')?>"});	
 })
 //-->
 </script>

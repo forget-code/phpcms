@@ -2,7 +2,7 @@
 <?php include $this->admin_tpl('header', 'admin');?>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>member_common.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidator.js" charset="UTF-8"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formValidatorRegex.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>formvalidatorregex.js" charset="UTF-8"></script>
 <script type="text/javascript">
   $(document).ready(function() {
 	$.formValidator.initConfig({autotip:true,formid:"myform",onerror:function(msg){}});
@@ -40,8 +40,8 @@
 			}
 		},
 		buttons: $("#dosubmit"),
-		onerror : "{L('already_exist').L('already_exist')}",
-		onwait : "{L('connecting_please_wait')}"
+		onerror : "<?php echo L('username').L('already_exist')?>",
+		onwait : "<?php echo L('connecting_please_wait')?>"
 	}).defaultPassed();
   });
 </script>
@@ -56,6 +56,10 @@
 		<tr>
 			<td width="80"><?php echo L('username')?></td> 
 			<td><?php echo $memberinfo['username']?><?php if($memberinfo['islock']) {?><img title="<?php echo L('lock')?>" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?><?php if($memberinfo['vip']) {?><img title="<?php echo L('lock')?>" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?></td>
+		</tr>
+		<tr>
+			<td><?php echo L('avatar')?></td> 
+			<td><img src="<?php echo $memberinfo['avatar']?>" onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'" height=90 width=90><input type="checkbox" name="delavatar" id="delavatar" class="input-text" value="1" ><label for="delavatar"><?php echo L('delete').L('avatar')?></label></td>
 		</tr>
 		<tr>
 			<td><?php echo L('password')?></td> 
@@ -78,7 +82,7 @@
 		<tr>
 			<td><?php echo L('member_group')?></td>
 			<td>
-			<?php echo form::select($grouplist, $memberinfo['groupid'], 'name="info[groupid]"', '');?>
+			<?php echo form::select($grouplist, $memberinfo['groupid'], 'name="info[groupid]"', '');?> <div class="onShow"><?php echo L('changegroup_notice')?></div>
 			</td>
 		</tr>
 		<tr>
@@ -124,7 +128,7 @@
 <script language="JavaScript">
 <!--
 	function changemodel(modelid) {
-		redirect('?m=member&c=member&a=edit&userid=<?php echo $memberinfo[userid]?>&modelid='+modelid);
+		redirect('?m=member&c=member&a=edit&userid=<?php echo $memberinfo[userid]?>&modelid='+modelid+'&pc_hash=<?php echo $_SESSION['pc_hash']?>');
 	}
 //-->
 </script>

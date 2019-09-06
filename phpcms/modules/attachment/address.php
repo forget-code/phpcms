@@ -21,7 +21,9 @@ class address extends admin {
 		$r = $db->query("show tables");
 		$r = $db->fetch_array($db_list);
 		foreach ($r as $k=>$v) {
-			$table_name = str_replace($db->db_tablepre, '', array_pop($v));
+			$v = array_pop($v);
+			if (strpos($v, $db->db_tablepre)===false) continue;
+			$table_name = str_replace($db->db_tablepre, '', $v);
 			//获取每个表的数据表结构
 			if (!$modle_table_db = pc_base::load_model($table_name.'_model')) {
 				$modle_table_db = $db;
@@ -30,8 +32,8 @@ class address extends admin {
 			if ($s) {
 				$sql = '';
 				foreach ($s as $key=>$val) {
-					//对数据表进行过滤，只有CHAR和TEXT类型的字段才可以保存下附件的地址。
-					if (preg_match('/(char|text)+/i', $val)) {
+					//对数据表进行过滤，只有CHAR、TEXT或mediumtext类型的字段才可以保存下附件的地址。
+					if (preg_match('/(char|text|mediumtext)+/i', $val)) {
 						$sql .= !empty($sql) ? ", `$key`=replace(`$key`, '$old_attachment_path', '$new_attachment_path')" : "`$key`=replace(`$key`, '$old_attachment_path', '$new_attachment_path')";
 					}
 				}

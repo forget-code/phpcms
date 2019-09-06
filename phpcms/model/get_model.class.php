@@ -14,7 +14,11 @@ class get_model extends model {
 		} else {
 			$this->db_setting = $db_setting;
 		}
+		
 		parent::__construct();
+		if ($db_setting && $db_config[$db_setting]['db_tablepre']) {
+			$this->db_tablepre = $db_config[$db_setting]['db_tablepre'];
+		}
 	}
 	
 	public function sql_query($sql) {

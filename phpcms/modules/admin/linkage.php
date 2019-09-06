@@ -1,6 +1,7 @@
 <?php
 defined('IN_PHPCMS') or exit('No permission resources.');
 pc_base::load_app_class('admin','admin',0);
+set_time_limit(0);
 class linkage extends admin {
 	private $db;
 	function __construct() {
@@ -17,7 +18,7 @@ class linkage extends admin {
 	public function init() {
 		$where = array('keyid'=>0);
 		$infos = $this->db->select($where);
-		$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=admin&c=linkage&a=add\', title:\''.L('linkage_add').'\', width:\'500\', height:\'430\', lock:true}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('linkage_add'));
+		$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=admin&c=linkage&a=add\', title:\''.L('linkage_add').'\', width:\'500\', height:\'220\', lock:true}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('linkage_add'));
 		include $this->admin_tpl('linkage_list');
 	}
 	
@@ -34,7 +35,6 @@ class linkage extends admin {
 			$this->db->insert($info);
 			$insert_id = $this->db->insert_id();
 			if($insert_id){
-				$this->_cache($insert_id);
 				showmessage(L('operation_success'), '', '', 'add');
 			}
 		} else {
@@ -63,7 +63,6 @@ class linkage extends admin {
 			if($_POST['info']['parentid']) $info['parentid'] = trim($_POST['info']['parentid']);
 			$this->db->update($info,array('linkageid'=>$linkageid));
 			$id = $info['keyid'] ? $info['keyid'] : $linkageid;
-			$this->_cache($id);
 			showmessage(L('operation_success'), '', '', 'edit');			
 		} else {
 			$linkageid = intval($_GET['linkageid']);
@@ -93,7 +92,6 @@ class linkage extends admin {
 		}
 		$this->db->delete(array('keyid' => $linkageid));
 		$id = $keyid ? $keyid : $linkageid;
-		$this->_cache($id);
 		if(!$keyid)$this->_dlecache($linkageid);
 		showmessage(L('operation_success'));	
 	}
@@ -114,7 +112,6 @@ class linkage extends admin {
 			$this->db->update(array('listorder'=>$value),array('linkageid'=>$linkageid));
 		}
 		$id = intval($_POST['keyid']);
-		$this->_cache($id);
 		showmessage(L('operation_success'),'?m=admin&c=linkage&a=init');
 	}
 
@@ -134,7 +131,7 @@ class linkage extends admin {
 		foreach($result as $areaid => $area){
 			$areas[$area['linkageid']] = array('id'=>$area['linkageid'],'parentid'=>$area['parentid'],'name'=>$area['name'],'listorder'=>$area['listorder'],'style'=>$area['style'],'mod'=>$mod,'file'=>$file,'keyid'=>$keyid,'description'=>$area['description']);
 			$areas[$area['linkageid']]['str_manage'] = ($sum > 40 && $this->_is_last_node($area['keyid'],$area['linkageid'])) ? '<a href="?m=admin&c=linkage&a=public_manage_submenu&keyid='.$area['keyid'].'&parentid='.$area['linkageid'].'">'.L('linkage_manage_submenu').'</a> | ' : '';
-			$areas[$area['linkageid']]['str_manage'] .= '<a href="javascript:void(0);" onclick="add(\''.$keyid.'\',\''.$area['name'].'\',\''.$area['linkageid'].'\')">'.L('linkage_add_submenu').'</a> | <a href="javascript:void(0);" onclick="edit(\''.$area['linkageid'].'\',\''.$area['name'].'\',\''.$area['parentid'].'\')">'.L('edit').'</a> | <a href="javascript:confirmurl(\'?m=admin&c=linkage&a=delete&linkageid='.$area['linkageid'].'&keyid='.$area['keyid'].'\', \''.L('linkage_is_del').'\')">'.L('delete').'</a> ';
+			$areas[$area['linkageid']]['str_manage'] .= '<a href="javascript:void(0);" onclick="add(\''.$keyid.'\',\''.new_addslashes($area['name']).'\',\''.$area['linkageid'].'\')">'.L('linkage_add_submenu').'</a> | <a href="javascript:void(0);" onclick="edit(\''.$area['linkageid'].'\',\''.$area['name'].'\',\''.$area['parentid'].'\')">'.L('edit').'</a> | <a href="javascript:confirmurl(\'?m=admin&c=linkage&a=delete&linkageid='.$area['linkageid'].'&keyid='.$area['keyid'].'\', \''.L('linkage_is_del').'\')">'.L('delete').'</a> ';
 		}
 		
 		$str  = "<tr>
@@ -155,6 +152,7 @@ class linkage extends admin {
 	 */
 	public function public_sub_add() {		
 		if(isset($_POST['dosubmit'])) {
+			$info = array();
 			$info['keyid'] = isset($_POST['keyid']) && trim($_POST['keyid']) ? trim(intval($_POST['keyid'])) : showmessage(L('linkage_parameter_error'));
 			$name = isset($_POST['info']['name']) && trim($_POST['info']['name']) ? trim($_POST['info']['name']) : showmessage(L('linkage_parameter_error'));
 			$info['description'] = trim($_POST['info']['description']);
@@ -168,7 +166,6 @@ class linkage extends admin {
 				$this->db->insert($info);
 			}		
 			if($this->db->insert_id()){
-				$this->_cache($info['keyid']);
 				showmessage(L('operation_success'), '', '', 'add');
 			}
 		} else {
@@ -205,7 +202,8 @@ class linkage extends admin {
 	 */
 	private function _cache($linkageid) {
 		$linkageid = intval($linkageid);
-		$r = $this->db->get_one(array('linkageid'=>$linkageid),'name,siteid,style');
+		$info = array();
+		$r = $this->db->get_one(array('linkageid'=>$linkageid),'name,siteid,style,keyid');
 		$info['title'] = $r['name'];
 		$info['style'] = $r['style'];
 		$info['siteid'] = $r['siteid'];
@@ -230,9 +228,14 @@ class linkage extends admin {
 		$keyid = intval($keyid);
 		$datas = array();
 		$where = ($keyid > 0) ? array('keyid'=>$keyid) : '';
-		$result = $this->db->select($where,'*','','listorder ,linkageid');
-		foreach($result as $r) {
-			$datas[$r['linkageid']] = $r;
+		$result = $this->db->select($where,'*','','listorder ,linkageid');	
+		if(is_array($result)) {
+			foreach($result as $r) {
+				$arrchildid = $r['arrchildid'] = $this->get_arrchildid($r['linkageid'],$result);				
+				$child = $r['child'] =  is_numeric($arrchildid) ? 0 : 1;
+				$this->db->update(array('child'=>$child,'arrchildid'=>$arrchildid),array('linkageid'=>$r['linkageid']));			
+				$datas[$r['linkageid']] = $r;
+			}
 		}
 		return $datas;
 	}
@@ -274,6 +277,24 @@ class linkage extends admin {
 		$where = array('keyid'=>0);
 		$infos = $this->db->select($where);
 		include $this->admin_tpl('linkage_get_list');
-	}	
+	}
+	
+	/**
+	 * 获取子菜单ID列表
+	 * @param $linkageid 联动菜单id
+	 * @param $linkageinfo
+	 */
+	private function get_arrchildid($linkageid,$linkageinfo) {
+		$arrchildid = $linkageid;
+		if(is_array($linkageinfo)) {
+			foreach($linkageinfo as $linkage) {
+				if($linkage['parentid'] && $linkage['linkageid'] != $linkageid && $linkage['parentid']== $linkageid) 	{
+					$arrchildid .= ','.$this->get_arrchildid($linkage['linkageid'],$linkageinfo);
+	
+				}
+			}
+		}
+		return $arrchildid;
+	}		
 }
 ?>

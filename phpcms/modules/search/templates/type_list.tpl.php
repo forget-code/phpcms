@@ -31,8 +31,8 @@ foreach($datas as $r) {
 <td align="center"><input type="text" name="listorders[<?php echo $r['typeid']?>]" value="<?php echo $r['listorder']?>" size="3" class='input-text-c'></td>
 <td align="center"><?php echo $r['typeid']?></td>
 <td align="center"><?php echo $r['name']?></td>
-<td align="center"><?php echo $r['modelid'] ? L('content_module') :$r['typedir'];?></td>
-<td align="center"><?php echo $this->model[$r['modelid']]['name']?></td>
+<td align="center"><?php echo $r['modelid'] && $r['typedir'] !='yp' ? L('content_module') : $r['typedir'];?></td>
+<td align="center"><?php echo $this->model[$r['modelid']]['name'] ? $this->model[$r['modelid']]['name'] : $this->yp_model[$r['modelid']]['name']?></td>
 <td ><?php echo $r['description']?></td>
 <td align="center"><a href="javascript:edit('<?php echo $r['typeid']?>','<?php echo $r['name']?>')"><?php echo L('modify')?></a> | <a href="?m=search&c=search_type&a=delete&typeid=<?php echo $r['typeid']?>" onclick="return confirm('<?php echo L('sure_delete', '', 'member')?>')"><?php echo L('delete')?></a> </td>
 </tr>

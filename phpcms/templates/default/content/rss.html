@@ -22,11 +22,11 @@
 		</div>
 	</div>
 	<div class="col-right rsslist">
-	{loop $subcats $r}
+	{loop $subcats $n $r}
 		{php $i++}
 		<div class="box" {if $i%2!=0}style="margin-right:10px"{/if}>
-			<h5 class="title-1"><span class="xml"><a href="{APP_PATH}index.php?m=content&c=rss&rssid={$r[catid]}" class="xmlbut" target="_blank">xml</a>
-			<div class="rss cu"><dl><dt>订阅到</dt></dl></div>
+			<h5 class="title-1" ><span class="xml"><a rel="{APP_PATH}{urlencode('index.php?m=content&c=rss&rssid=')}{$r[catid]}" href="{APP_PATH}index.php?m=content&c=rss&rssid={$r[catid]}" class="xmlbut" target="_blank"">xml</a>
+			<div class="rss cu" onclick="RssTab('rss_{$n}')" id="rss_{$n}"><dl><dt>订阅到</dt></dl></div>
 			</span>{$r[catname]}</h5>
 			<ul class="content list f14 lh24">
 			{pc:content action="lists" catid="$r[catid]" num="5" order="id DESC" return="info"}
@@ -43,28 +43,25 @@
 </div>
 <script type="text/javascript">
 
-
 $(function() {
 var memu = $('.navlist .memu .content div');
-
 memu.toggle(
   function () {
-	$(this).addClass('on')
-    $(this).next().show()
+	$(this).addClass('on');
+    $(this).next().show();
   },
   function () {
-	$(this).removeClass('on')
-    $(this).next().hide()
+	$(this).removeClass('on');
+    $(this).next().hide();
   }
 );	
-
-var ppwin='<dl><dt>订阅到</dt><dd><a href="http://reader.youdao.com/b.do?keyfrom=163&url={feedurl}" title="有道"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/icon_subshot02_youdao.gif" width="50" height="14" alt="有道" /></a></dd><dd><a href="http://fusion.google.com/add?feedurl={feedurl}" title="google"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/icon_subshot02_google.gif" width="50" height="14" alt="google" /></a></dd><dd><a href="http://add.my.yahoo.com/rss?url={feedurl}" title="yahoo"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/icon_subshot02_yahoo.gif" width="50" height="14" alt="yahoo" /></a></dd><dd><a href="http://www.xianguo.com/subscribe.php?url={feedurl}" title="鲜果"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/icon_subshot02_xianguo.gif" width="50" height="14" alt="鲜果" /></a></dd><dd><a href="http://www.zhuaxia.com/add_channel.php?url={feedurl}" title="抓虾"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/icon_subshot02_zhuaxia.gif" width="50" height="14" alt="抓虾" /></a></dd><dd><a href="http://mail.qq.com/cgi-bin/feed?u={feedurl}" title="qq"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/icon_subshot02_qq.gif" width="50" height="14" alt="qq" /></a></dd><dd><a href="http://my.msn.com/addtomymsn.armx?id=rss&ut={feedurl}" title="msn"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/msn.jpg" width="44" height="14" alt="msn" /></a></dd></dl>';
-function RssTab(){
-	var RssObj=$('span.xml .rss');
+});
+var ppwin='<dl><dt>订阅到</dt><dd><a href="http://reader.youdao.com/b.do?keyfrom=163&url={feedurl}" title="有道" target="_blank"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/icon_subshot02_youdao.gif" width="50" height="14" alt="有道" /></a></dd><dd><a href="http://fusion.google.com/add?feedurl={feedurl}" title="google" target="_blank"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/icon_subshot02_google.gif" width="50" height="14" alt="google" /></a></dd><dd><a href="http://add.my.yahoo.com/rss?url={feedurl}" title="yahoo" target="_blank"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/icon_subshot02_yahoo.gif" width="50" height="14" alt="yahoo" /></a></dd><dd><a href="http://www.xianguo.com/subscribe.php?url={feedurl}" title="鲜果" target="_blank"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/icon_subshot02_xianguo.gif" width="50" height="14" alt="鲜果" /></a></dd><dd><a href="http://www.zhuaxia.com/add_channel.php?url={feedurl}" title="抓虾" target="_blank"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/icon_subshot02_zhuaxia.gif" width="50" height="14" alt="抓虾" /></a></dd><dd><a href="http://mail.qq.com/cgi-bin/feed?u={feedurl}" title="qq" target="_blank"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/icon_subshot02_qq.gif" width="50" height="14" alt="qq" /></a></dd><dd><a href="http://my.msn.com/addtomymsn.armx?id=rss&ut={feedurl}" title="msn" target="_blank"><img src="http://img1.cache.netease.com/cnews/css09/rss100121/msn.jpg" width="44" height="14" alt="msn" /></a></dd></dl>';
+function RssTab(id){
+	var RssObj=$('span.xml .rss[id='+id+']');
 	var RssObjdl=$('span.xml .rss dl');
-	var siteurl = '{SITE_PROTOCOL}{SITE_URL}';
 	for(var i=0,len=RssObj.length;i<len;i++){
-		var rp_ppwin=ppwin.replace(/{feedurl}/g,siteurl+RssObj.siblings().attr('href'));
+		var rp_ppwin=ppwin.replace(/{feedurl}/g,RssObj.siblings().attr('href'));
 		RssObjdl.replaceWith(rp_ppwin);
 		RssObj.hover(
 		  function () {
@@ -75,8 +72,8 @@ function RssTab(){
 		  }
 		);
 	}
+
 }
-RssTab();
-});
+
 </script>
 {template "content","footer"}

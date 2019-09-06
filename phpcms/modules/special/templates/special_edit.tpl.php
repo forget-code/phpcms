@@ -44,7 +44,7 @@ include $this->admin_tpl('header', 'admin');
 		        <td valign="top">
 		        <div id="option_list">
 		        <?php if(is_array($types)) { $k = 1; foreach($types as $t) {?>
-		        	<div class="mb6"><span><?php echo L('type_name')?>：<input type="hidden" name="type[<?php echo $k?>][typeid]" value="<?php echo $t['typeid']?>"><input type="text" name="type[<?php echo $k?>][name]" <?php if ($k==1) {?>id="type_name"<?php }?> value="<?php echo htmlspecialchars($t['name'])?>" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('type_path')?>：<input type="text" name="type[<?php echo $k?>][typedir]" <?php if ($k==1) {?>id="type_path"<?php }?> value="<?php echo $t['typedir']?>" class="input-text" size="15"></span>&nbsp;<?php if ($k!=1) {?><a href="javascript:;" onclick="descItem(this, <?php echo $k?>);"><?php echo L('remove')?></a><?php }?></div>
+		        	<div class="mb6"><span><?php echo L('type_id')?>：<?php echo $t['typeid']?>&nbsp;&nbsp;<?php echo L('type_name')?>：<input type="hidden" name="type[<?php echo $k?>][typeid]" value="<?php echo $t['typeid']?>"><input type="text" name="type[<?php echo $k?>][name]" <?php if ($k==1) {?>id="type_name"<?php }?> value="<?php echo htmlspecialchars($t['name'])?>" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('type_path')?>：<input type="text" name="type[<?php echo $k?>][typedir]" <?php if ($k==1) {?>id="type_path"<?php }?> value="<?php echo $t['typedir']?>" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('listorder')?>：<input type="text" name="type[<?php echo $k?>][listorder]" value="<?php echo $t['listorder']?>" size="6" class="input-text" ></span>&nbsp;<?php if ($k!=1) {?><a href="javascript:;" onclick="descItem(this, <?php echo $k?>);"><?php echo L('remove')?></a><?php }?></div>
 		        <?php $k++; } }?>
 		        </div>
 		        </td>
@@ -125,8 +125,8 @@ function load_file_list(id) {
 }
 
 function addItem() {
-	var n = $('#option_list').find('input[name]').length/2+1;
-	var newOption =  '<div class="mb6"><span><?php echo L('type_name')?>：<input type="text" name="type['+n+'][name]" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('type_path')?>：<input type="text" name="type['+n+'][typedir]" class="input-text" size="15"></span>&nbsp;<a href="javascript:;" onclick="descItem(this);"><?php echo L('remove')?></a></div>';
+	var n = $('#option_list').find('input[type="text"]').length/3+1;
+	var newOption =  '<div class="mb6"><span style="padding-left:76px"><?php echo L('type_name')?>：<input type="text" name="type['+n+'][name]" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('type_path')?>：<input type="text" name="type['+n+'][typedir]" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('listorder')?>：<input type="text" name="type['+n+'][listorder]" value="'+n+'" size="6" class="input-text" ></span>&nbsp;<a href="javascript:;" onclick="descItem(this);"><?php echo L('remove')?></a></div>';
 	$('#option_list').append(newOption);
 }
 

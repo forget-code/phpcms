@@ -22,6 +22,7 @@ $fields = array('text'=>'单行文本',
 				'linkage'=>'联动菜单',
 				'downfile'=>'镜像下载',
 				'downfiles'=>'多文件上传',
+				'map'=>'地图字段',
 				'omnipotent'=>'万能字段',
 				);
 //不允许删除的字段，这些字段讲不会在字段添加处显示

@@ -22,8 +22,6 @@ include $this->admin_tpl('header','admin');
 		<td>
 		<input name="info[type]" type="radio" value="1" checked="checked" style="border:0" onclick="$('#groupid').show();$('#roleid').hide()" class="radio_style">
 	<?php echo L('group')?>&nbsp;&nbsp;&nbsp;&nbsp;
-	<input type="radio" name="info[type]" value="0" style="border:0" onclick="$('#groupid').hide();$('#roleid').show()" class="radio_style">
-	<?php echo L('role')?>
 		</td>
 	</tr>
 	

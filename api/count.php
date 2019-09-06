@@ -14,11 +14,9 @@ if($_GET['modelid'] && $_GET['id']) {
 	if(!$r) exit;
     extract($r);
     hits($hitsid);
-    if($model_arr[$modelid]['tablename'] == 'download') {
-        echo "\$('#todaydowns').html('$dayviews');";
-        echo "\$('#weekdowns').html('$weekviews');";
-        echo "\$('#monthdowns').html('$monthviews');";
-    }
+    echo "\$('#todaydowns').html('$dayviews');";
+    echo "\$('#weekdowns').html('$weekviews');";
+    echo "\$('#monthdowns').html('$monthviews');";
 } elseif($_GET['module'] && $_GET['id']) {
 	$module = $_GET['module'];
 	if((preg_match('/([^a-z0-9_\-]+)/i',$module))) exit('1');

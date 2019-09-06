@@ -45,7 +45,7 @@
     	<?php if($allowupload && $this->admin_username && $_SESSION['userid']) {?>
         <div id="div_swf_3" class="contentList pad-10 hidden">
             <ul class="attachment-list">
-        	 <iframe name="album-list" src="#" frameborder="false" scrolling="no" style="overflow-x:hidden;border:none" width="100%" height="330" allowtransparency="true" id="album_list"></iframe>   
+        	 <iframe name="album-list" src="#" frameborder="false" scrolling="no" style="overflow-x:hidden;border:none" width="100%" height="345" allowtransparency="true" id="album_list"></iframe>   
         	</ul>
         </div>
         <div id="div_swf_4" class="contentList pad-10 hidden">
@@ -75,6 +75,13 @@
 </div>
 </body>
 <script type="text/javascript">
+if ($.browser.mozilla) {
+	window.onload=function(){
+	  if (location.href.indexOf("?rand=")<0) {
+			location.href=location.href+"?rand="+Math.random();
+		}
+	}
+}
 function imgWrap(obj){
 	$(obj).hasClass('on') ? $(obj).removeClass("on") : $(obj).addClass("on");
 }

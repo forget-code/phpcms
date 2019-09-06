@@ -10,12 +10,12 @@ class link extends admin {
 	}
 
 	public function init() {
-		if($_GET['typeid']){
+		if($_GET['typeid']!=''){
 			$where = array('typeid'=>$_GET['typeid'],'siteid'=>$this->get_siteid());
 		}else{
 			$where = array('siteid'=>$this->get_siteid());
 		}
-		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
+ 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		$infos = $this->db->listinfo($where,$order = 'listorder DESC,linkid DESC',$page, $pages = '9');
 		$pages = $this->db->pages;
 		$types = $this->db2->listinfo(array('module'=>ROUTE_M,'siteid'=>$this->get_siteid()),$order = 'typeid DESC');
@@ -90,6 +90,8 @@ class link extends admin {
 			pc_base::load_sys_class('form', '', 0);
  			$siteid = $this->get_siteid();
 			$types = $this->db2->get_types($siteid);
+			
+			//print_r($types);exit;
  			include $this->admin_tpl('link_add');
 		}
 
@@ -269,14 +271,25 @@ class link extends admin {
 	 * 投票模块配置
 	 */
 	public function setting() {
+		//读取配置文件
+		$data = array();
+ 		$siteid = $this->get_siteid();//当前站点 
+		//更新模型数据库,重设setting 数据. 
+		$m_db = pc_base::load_model('module_model');
+		$data = $m_db->select(array('module'=>'link'));
+		$setting = string2array($data[0]['setting']);
+		$now_seting = $setting[$siteid]; //当前站点配置
 		if(isset($_POST['dosubmit'])) {
-			setcache('link', $_POST['setting'], 'commons'); //设置缓存
-			$m_db = pc_base::load_model('module_model'); //调用模块数据模型
-			$setting = array2string($_POST['setting']);
-			$m_db->update(array('setting'=>$setting), array('module'=>ROUTE_M));
+			//多站点存储配置文件
+ 			$setting[$siteid] = $_POST['setting'];
+  			setcache('link', $setting, 'commons');  
+			//更新模型数据库,重设setting 数据. 
+  			$m_db = pc_base::load_model('module_model'); //调用模块数据模型
+			$set = array2string($setting);
+			$m_db->update(array('setting'=>$set), array('module'=>ROUTE_M));
 			showmessage(L('setting_updates_successful'), '?m=link&c=link&a=init');
 		} else {
-			@extract($this->M);
+			@extract($now_seting);
 			$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=link&c=link&a=add\', title:\''.L('link_add').'\', width:\'700\', height:\'450\'}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('link_add'));
  			include $this->admin_tpl('setting');
 		}

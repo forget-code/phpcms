@@ -25,9 +25,9 @@ if(is_array($list)):
 <td align="center"><?php echo $v['name']?></td>
 <td align="center"><?php echo $v['dirname']?></td>
 <td align="center"><?php echo $v['domain']?></td>
-<td align="center"><?php if ($v['siteid']!=1){?>/html/<?php echo $v['dirname'];} else{echo '/';}?></td>
-<td align="center"><a href="javascript:edit(<?php echo $v['siteid']?>, '<?php echo $v['name']?>')"><?php echo L('edit')?></a> | 
-<?php if($v['siteid']!=1) { ?><a href="?m=admin&c=site&a=del&siteid=<?php echo $v['siteid']?>" onclick="return confirm('<?php echo new_addslashes(L('confirm', array('message'=>$v['name'])))?>')"><?php echo L('delete')?></a><?php } else { ?><font color="#cccccc"><?php echo L('delete')?></font><?php } ?></td>
+<td align="center"><?php if ($v['siteid']!=1){?><?php echo pc_base::load_config('system', 'html_root')?>/<?php echo $v['dirname'];} else{echo '/';}?></td>
+<td align="center"><a href="javascript:edit(<?php echo $v['siteid']?>, '<?php echo  new_addslashes(htmlspecialchars($v['name']))?>')"><?php echo L('edit')?></a> | 
+<?php if($v['siteid']!=1) { ?><a href="?m=admin&c=site&a=del&siteid=<?php echo $v['siteid']?>" onclick="return confirm('<?php echo new_addslashes(htmlspecialchars(L('confirm', array('message'=>$v['name']))))?>')"><?php echo L('delete')?></a><?php } else { ?><font color="#cccccc"><?php echo L('delete')?></font><?php } ?></td>
 </tr>
 <?php 
 	endforeach;

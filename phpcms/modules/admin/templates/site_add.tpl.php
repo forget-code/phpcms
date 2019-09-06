@@ -120,7 +120,7 @@ function default_list() {
     <td class="y-bg"><input type="text" class="input-text" name="setting[upload_maxsize]" id="upload_maxsize" size="10" value="2000"/> KB </td>
   </tr>
   <tr>
-    <th width="130" valign="top"><?php echo L('site_att_upload_maxsize')?></th>
+    <th width="130" valign="top"><?php echo L('site_att_allow_ext')?></th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[upload_allowext]" id="upload_allowext" size="50" value="jpg|jpeg|gif|bmp|png|doc|docx|xls|xlsx|ppt|pptx|pdf|txt|rar|zip|swf"/></td>
   </tr>    
     <tr>

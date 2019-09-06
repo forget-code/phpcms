@@ -43,7 +43,7 @@ if(is_array($infos['data'])){
     </tbody>
     </table>
   
-    <div class="btn"><input type="submit" class="button" name="dosubmit" value="<?php echo L('listorder')?>" /></div>  </div>
+    <div class="btn"></div>  </div>
 
  <div id="pages"> <?php echo $pages?></div>
 </div>

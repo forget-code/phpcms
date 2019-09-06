@@ -43,3 +43,4 @@ $LANG['comments_on_points_awards'] = '评论积分奖励';
 $LANG['be_deleted_from_the_review_points'] = '评论被删除扣除积分';
 $LANG['to_operate'] = ' 分，0为不操作。';
 $LANG['canot_allow_comment'] = ' 该文不可评论。';
+$LANG['please_chose_comment'] = '请选择评论，再进行删除操作。';

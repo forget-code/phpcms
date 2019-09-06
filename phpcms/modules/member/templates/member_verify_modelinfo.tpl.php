@@ -7,8 +7,8 @@
 <table width="100%" cellspacing="0">
         <thead>
             <tr>
-			<th align="left" width="200px"><?php echo L('username')?></th>
-			<th align="left" ><?php echo L('email')?></th>
+			<th align="left" width="200px"><?php echo L('filedname')?></th>
+			<th align="left" ><?php echo L('value')?></th>
             </tr>
         </thead>
     <tbody>

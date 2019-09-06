@@ -27,12 +27,12 @@ include $this->admin_tpl('header');?>
 <!--
 function add(id, name,linkageid) {
 	window.top.art.dialog({id:'add'}).close();
-	window.top.art.dialog({title:name,id:'add',iframe:'?m=admin&c=linkage&a=public_sub_add&keyid='+id+'&linkageid='+linkageid,width:'500',height:'430'}, function(){var d = window.top.art.dialog({id:'add'}).data.iframe;d.document.getElementById('dosubmit').click();return false;}, function(){window.top.art.dialog({id:'add'}).close()});
+	window.top.art.dialog({title:name,id:'add',iframe:'?m=admin&c=linkage&a=public_sub_add&keyid='+id+'&linkageid='+linkageid,width:'500',height:'320'}, function(){var d = window.top.art.dialog({id:'add'}).data.iframe;d.document.getElementById('dosubmit').click();return false;}, function(){window.top.art.dialog({id:'add'}).close()});
 }
 
 function edit(id, name,parentid) {
 	window.top.art.dialog({id:'edit'}).close();
-	window.top.art.dialog({title:name,id:'edit',iframe:'?m=admin&c=linkage&a=edit&linkageid='+id+'&parentid='+parentid,width:'500',height:'430'}, function(){var d = window.top.art.dialog({id:'edit'}).data.iframe;d.document.getElementById('dosubmit').click();return false;}, function(){window.top.art.dialog({id:'edit'}).close()});
+	window.top.art.dialog({title:name,id:'edit',iframe:'?m=admin&c=linkage&a=edit&linkageid='+id+'&parentid='+parentid,width:'500',height:'200'}, function(){var d = window.top.art.dialog({id:'edit'}).data.iframe;d.document.getElementById('dosubmit').click();return false;}, function(){window.top.art.dialog({id:'edit'}).close()});
 }
 //-->
 </script>

@@ -16,7 +16,7 @@ include $this->admin_tpl('header', 'admin');
 	</tr>
 	<tr>
 		<th><?php echo L('enddate')?>：</th>
-		<td><?php echo form::date('announce[endtime]', $an_info['endtime'], 1);?></td>
+		<td><?php $an_info['endtime'] = $an_info['endtime']=='0000-00-00' ? '' : $an_info['endtime']; echo form::date('announce[endtime]', $an_info['endtime'], 1);?></td>
 	</tr>
 	<tr>
 		<th><?php echo L('announce_content')?></th>

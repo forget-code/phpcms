@@ -54,7 +54,11 @@ return array(
 'connect_enable' => '1',	//是否开启外部通行证
 'sina_akey' => '',	//sina AKEY
 'sina_skey' => '',	//sina SKEY
-'snda_enable' => 'blue',	//是否开启盛大通行证
+'snda_akey' => '',	//盛大通行证 akey
+'snda_skey' => '',	//盛大通行证 skey
 
+'qq_akey' => '',	//qq skey
+'qq_skey' => '',	//qq skey
+'plugin_debug' => '0',
 );
 ?>

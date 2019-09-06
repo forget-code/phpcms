@@ -18,25 +18,8 @@ include $this->admin_tpl('header','admin');
  			<?php echo $model_form?>&nbsp;&nbsp; 
 <span id="catids"></span>&nbsp;&nbsp; <span id="title" style="display:none;"><?php echo L('title')?>：<input type="text" name="title" size="20"></span>
 				<?php echo L('input_time')?>：
-				<link rel="stylesheet" type="text/css" href="statics/js/calendar/calendar-blue.css"/>
-			        <script type="text/javascript" src="statics/js/calendar/calendar.js"></script><input type="text" name="start_time" id="start_time" value="2010-06-21" size="10" class="date" readonly>&nbsp;<script language="javascript" type="text/javascript">
-					date = new Date();document.getElementById ("start_time").value="<?php echo $_GET['start_time'] ? $_GET['start_time'] : format::date(SYS_TIME-2592000);?>";
-					Calendar.setup({
-						inputField     :    "start_time",
-						ifFormat       :    "%Y-%m-%d",
-						showsTime      :    false,
-						timeFormat     :    "24"
-					});
-				 </script>-
-				<input type="text" name="end_time" id="end_time" value="2010-07-22" size="10" class="date" readonly>&nbsp;<script language="javascript" type="text/javascript">
-					date = new Date();document.getElementById ("end_time").value="<?php echo $_GET['end_time'] ? $_GET['end_time'] : format::date(SYS_TIME+86400);?>";
-					Calendar.setup({
-						inputField     :    "end_time",
-						ifFormat       :    "%Y-%m-%d",
-						showsTime      :    false,
-						timeFormat     :    "24"
-					});
-				 </script>
+				<?php $start_f = $_GET['start_time'] ? $_GET['start_time'] : format::date(SYS_TIME-2592000);$end_f = $_GET['end_time'] ? $_GET['end_time'] : format::date(SYS_TIME+86400);?>
+				<?php echo form::date('start_time', $start_f, 1)?> - <?php echo form::date('end_time', $end_f, 1)?>
 				 <input type="submit" name="search" class="button" value="<?php echo L('search')?>" />
 	</div>
 		</td>
@@ -75,7 +58,7 @@ include $this->admin_tpl('header','admin');
 
 	function select_categorys(modelid, id) {
 		if(modelid) {
-			$.get('', {m: 'special', c: 'special', a: 'ajax_categorys_list', modelid: modelid, catid: id, pc_hash: pc_hash }, function(data){
+			$.get('', {m: 'special', c: 'special', a: 'public_categorys_list', modelid: modelid, catid: id, pc_hash: pc_hash }, function(data){
 				if(data) {
 					$('#catids').html(data);
 					$('#title').show();

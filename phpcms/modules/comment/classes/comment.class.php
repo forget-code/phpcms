@@ -29,6 +29,7 @@ class comment {
 	 */
 	public function add($commentid, $siteid, $data, $id = '', $title = '', $url = '') {
 		//开始查询评论这条评论是否存在。
+		$title = new_addslashes($title);
 		if (!$comment = $this->comment_db->get_one(array('commentid'=>$commentid, 'siteid'=>$siteid), 'tableid, commentid')) { //评论不存在
 			//取得当前可以使用的内容数据表
 			$r = $this->comment_table_db->get_one('', 'tableid, total', 'tableid desc');
@@ -237,6 +238,30 @@ class comment {
 		$this->comment_check_db->delete(array('comment_data_id'=>$id));
 		
 		$this->msg_code = 0;
+		return true;
+	}
+	
+	/**
+	 * 
+	 * 删除评论
+	 * @param string $commentid 评论ID
+	 * @param intval $siteid 站点ID
+	 * @param intval $id 内容ID
+	 * @param intval $catid 栏目ID
+	 */
+	public function del($commentid, $siteid, $id, $catid) {
+		if ($commentid != id_encode('content_'.$catid, $id, $siteid)) return false;
+		//循环评论内容表删除commentid的评论内容
+		for ($i=1; ;$i++) {
+			$table = 'comment_data_'.$i; //构建评论内容存储表名
+			if ($this->comment_data_db->table_exists($table)) { //检查构建的表名是否存在，如果存在执行删除操作
+				$this->comment_data_db->table_name($i);
+				$this->comment_data_db->delete(array('commentid'=>$commentid));
+			} else { //不存在，则退出循环
+				break;
+			}
+		}
+		$this->comment_db->delete(array('commentid'=>$commentid)); //删除评论主表的内容
 		return true;
 	}
 	

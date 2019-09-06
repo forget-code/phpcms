@@ -16,7 +16,7 @@ class form {
 	public static function editor($textareaid = 'content', $toolbar = 'basic', $module = '', $catid = '', $color = '', $allowupload = 0, $allowbrowser = 1,$alowuploadexts = '',$height = 200,$disabled_page = 0, $allowuploadnum = '10') {
 		$str ='';
 		if(!defined('EDITOR_INIT')) {
-			$str = '<script type="text/javascript" src="statics/js/ckeditor/ckeditor.js"></script>';
+			$str = '<script type="text/javascript" src="'.JS_PATH.'ckeditor/ckeditor.js"></script>';
 			define('EDITOR_INIT', 1);
 		}
 		if($toolbar == 'basic') {
@@ -30,9 +30,10 @@ class form {
 			}
 			$toolbar .= "'-','Templates'],
 		    ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print'],
-		    ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],['ShowBlocks'],['Image','Flash'],['Maximize'],
+		    ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],['ShowBlocks'],['Image','Capture','Flash'],['Maximize'],
 		    '/',
 		    ['Bold','Italic','Underline','Strike','-'],
+		    ['Subscript','Superscript','-'],
 		    ['NumberedList','BulletedList','-','Outdent','Indent','Blockquote'],
 		    ['JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock'],
 		    ['Link','Unlink','Anchor'],
@@ -47,7 +48,6 @@ class form {
 			$toolbar = '';
 		}
 		$str .= "<script type=\"text/javascript\">\r\n";
-		$str .= "//<![CDATA[\r\n";
 		$str .= "CKEDITOR.replace( '$textareaid',{";
 		$str .= "height:{$height},";
 	
@@ -67,11 +67,10 @@ class form {
 		$str .= "]\r\n";
 		//$str .= "fullPage : true";
 		$str .= "});\r\n";
-		$str .= "//]]>\r\n";
 		$str .= '</script>';
 		$ext_str = "<div class='editor_bottom'>";
 		if(!defined('IMAGES_INIT')) {
-			$ext_str .= '<script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script>';
+			$ext_str .= '<script type="text/javascript" src="'.JS_PATH.'swfupload/swf2ckeditor.js"></script>';
 			define('IMAGES_INIT', 1);
 		}
 		$ext_str .= "<div id='page_title_div'>
@@ -80,6 +79,7 @@ class form {
 		<tr><td colspan='2'><input name='page_title_value' id='page_title_value' class='input-text' value='' size='30'>&nbsp;<input type='button' class='button' value='".L('submit')."' onclick=insert_page_title(\"$textareaid\",1)></td></tr>
 		</table></div>";
 		$ext_str .= "</div>";
+		if(is_ie()) $ext_str .= "<div style='display:none'><OBJECT id='PC_Capture' classid='clsid:021E8C6F-52D4-42F2-9B36-BCFBAD3A0DE4'><PARAM NAME='_Version' VALUE='0'><PARAM NAME='_ExtentX' VALUE='0'><PARAM NAME='_ExtentY' VALUE='0'><PARAM NAME='_StockProps' VALUE='0'></OBJECT></div>";
 		$str .= $ext_str;
 		return $str;
 	}
@@ -105,41 +105,82 @@ class form {
 		else $thumb_ext = ',';
 		if(!$alowexts) $alowexts = 'jpg|jpeg|gif|bmp|png';
 		if(!defined('IMAGES_INIT')) {
-			$str = '<script type="text/javascript" src="statics/js/swfupload/swf2ckeditor.js"></script>';
+			$str = '<script type="text/javascript" src="'.JS_PATH.'swfupload/swf2ckeditor.js"></script>';
 			define('IMAGES_INIT', 1);
 		}
 		$authkey = upload_key("1,$alowexts,1,$thumb_ext,$watermark_setting");
 		return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:flashupload('{$id}_images', '".L('attachmentupload')."','{$id}',submit_images,'1,{$alowexts},1,{$thumb_ext},{$watermark_setting}','{$moudle}','{$catid}','{$authkey}')\"/ value=\"".L('imagesupload')."\">";
 	}
+
+	/**
+	 * 
+	 * @param string $name 表单名称
+	 * @param int $id 表单id
+	 * @param string $value 表单默认值
+	 * @param string $moudle 模块名称
+	 * @param int $catid 栏目id
+	 * @param int $size 表单大小
+	 * @param string $class 表单风格
+	 * @param string $ext 表单扩展属性 如果 js事件等
+	 * @param string $alowexts 允许图片格式
+	 * @param array $file_setting 
+	 */
+	public static function upfiles($name, $id = '', $value = '', $moudle='', $catid='', $size = 50, $class = '', $ext = '', $alowexts = '',$file_setting = array() ) {
+		if(!$id) $id = $name;
+		if(!$size) $size= 50;
+		if(!empty($file_setting) && count($file_setting)) $file_ext = $file_setting[0].','.$file_setting[1];
+		else $file_ext = ',';
+		if(!$alowexts) $alowexts = 'rar|zip';
+		if(!defined('IMAGES_INIT')) {
+			$str = '<script type="text/javascript" src="'.JS_PATH.'swfupload/swf2ckeditor.js"></script>';
+			define('IMAGES_INIT', 1);
+		}
+		$authkey = upload_key("1,$alowexts,1,$file_ext");
+		return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:flashupload('{$id}_files', '".L('attachmentupload')."','{$id}',submit_attachment,'1,{$alowexts},1,{$file_ext}','{$moudle}','{$catid}','{$authkey}')\"/ value=\"".L('filesupload')."\">";
+	}
 	
-	public static function date($name, $value = '', $isdatetime = 0) {
+	/**
+	 * 日期时间控件
+	 * 
+	 * @param $name 控件name，id
+	 * @param $value 选中值
+	 * @param $isdatetime 是否显示时间
+	 * @param $loadjs 是否重复加载js，防止页面程序加载不规则导致的控件无法显示
+	 * @param $showweek 是否显示周，使用，true | false
+	 */
+	public static function date($name, $value = '', $isdatetime = 0, $loadjs = 0, $showweek = 'true') {
 		if($value == '0000-00-00 00:00:00') $value = '';
 		$id = preg_match("/\[(.*)\]/", $name, $m) ? $m[1] : $name;
 		if($isdatetime) {
 			$size = 21;
 			$format = '%Y-%m-%d %H:%M:%S';
-			$showsTime = 'true';
+			$showsTime = 12;
 		} else {
 			$size = 10;
 			$format = '%Y-%m-%d';
 			$showsTime = 'false';
 		}
 		$str = '';
-		if(!defined('CALENDAR_INIT')) {
+		if($loadjs || !defined('CALENDAR_INIT')) {
 			define('CALENDAR_INIT', 1);
-			$str .= '<link rel="stylesheet" type="text/css" href="statics/js/calendar/calendar-blue.css"/>
-			        <script type="text/javascript" src="statics/js/calendar/calendar.js"></script>';
+			$str .= '<link rel="stylesheet" type="text/css" href="'.JS_PATH.'calendar/jscal2.css"/>
+			<link rel="stylesheet" type="text/css" href="'.JS_PATH.'calendar/border-radius.css"/>
+			<link rel="stylesheet" type="text/css" href="'.JS_PATH.'calendar/win2k.css"/>
+			<script type="text/javascript" src="'.JS_PATH.'calendar/calendar.js"></script>
+			<script type="text/javascript" src="'.JS_PATH.'calendar/lang/en.js"></script>';
 		}
 		$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" class="date" readonly>&nbsp;';
-		$str .= '<script language="javascript" type="text/javascript">
-					date = new Date();document.getElementById ("'.$id.'").value="'.$value.'";
-					Calendar.setup({
-						inputField     :    "'.$id.'",
-						ifFormat       :    "'.$format.'",
-						showsTime      :    '.$showsTime.',
-						timeFormat     :    "24"
-					});
-				 </script>';
+		$str .= '<script type="text/javascript">
+			Calendar.setup({
+			weekNumbers: '.$showweek.',
+		    inputField : "'.$id.'",
+		    trigger    : "'.$id.'",
+		    dateFormat: "'.$format.'",
+		    showTime: '.$showsTime.',
+		    minuteStep: 1,
+		    onSelect   : function() {this.hide();}
+			});
+        </script>';
 		return $str;
 	}
 
@@ -157,24 +198,28 @@ class form {
 	public static function select_category($file = '',$catid = 0, $str = '', $default_option = '', $modelid = 0, $type = -1, $onlysub = 0,$siteid = 0) {
 		$tree = pc_base::load_sys_class('tree');
 		if(!$siteid) $siteid = param::get_cookie('siteid');
-		$file = 'category_content_'.$siteid;
+		if (!$file) {
+			$file = 'category_content_'.$siteid;
+		}
 		$result = getcache($file,'commons');
 		$string = '<select '.$str.'>';
 		if($default_option) $string .= "<option value='0'>$default_option</option>";
-		foreach($result as $r) {
-			if($siteid != $r['siteid'] || ($type >= 0 && $r['type'] != $type)) continue;
-			$r['selected'] = '';
-			if(is_array($catid)) {
-				$r['selected'] = in_array($r['catid'], $catid) ? 'selected' : '';
-			} elseif(is_numeric($catid)) {
-				$r['selected'] = $catid==$r['catid'] ? 'selected' : '';
+		if (is_array($result)) {
+			foreach($result as $r) {
+				if($siteid != $r['siteid'] || ($type >= 0 && $r['type'] != $type)) continue;
+				$r['selected'] = '';
+				if(is_array($catid)) {
+					$r['selected'] = in_array($r['catid'], $catid) ? 'selected' : '';
+				} elseif(is_numeric($catid)) {
+					$r['selected'] = $catid==$r['catid'] ? 'selected' : '';
+				}
+				$r['html_disabled'] = "0";
+				if (!empty($onlysub) && $r['child'] != 0) {
+					$r['html_disabled'] = "1";
+				}
+				$categorys[$r['catid']] = $r;
+				if($modelid && $r['modelid']!= $modelid ) unset($categorys[$r['catid']]);
 			}
-			$r['html_disabled'] = "0";
-			if (!empty($onlysub) && $r['child'] != 0) {
-				$r['html_disabled'] = "1";
-			}
-			$categorys[$r['catid']] = $r;
-			if($modelid && $r['modelid']!= $modelid ) unset($categorys[$r['catid']]);
 		}
 		$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>;";
 		$str2 = "<optgroup label='\$spacer \$catname'></optgroup>";
@@ -213,7 +258,7 @@ class form {
 		if($default_option) $string .= "<option value='' $default_selected>$default_option</option>";
 		if(!is_array($array) || count($array)== 0) return false;
 		$ids = array();
-		if($id) $ids = explode(',', $id);
+		if(isset($id)) $ids = explode(',', $id);
 		foreach($array as $key=>$value) {
 			$selected = in_array($key, $ids) ? 'selected' : '';
 			$string .= '<option value="'.$key.'" '.$selected.'>'.$value.'</option>';
@@ -280,6 +325,13 @@ class form {
 		$confing_path = PC_PATH.$tpl_root.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.'config.php';
 		$localdir = str_replace(array('/', '\\'), '', $tpl_root).'|'.$style.'|'.$module;
 		$templates = glob($templatedir.$pre.'*.html');
+		if(empty($templates)) {
+			$style = 'default';
+			$templatedir = PC_PATH.$tpl_root.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR;
+			$confing_path = PC_PATH.$tpl_root.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.'config.php';
+			$localdir = str_replace(array('/', '\\'), '', $tpl_root).'|'.$style.'|'.$module;
+			$templates = glob($templatedir.$pre.'*.html');
+		}
 		if(empty($templates)) return false;
 		$files = @array_map('basename', $templates);
 		$names = array();
@@ -309,7 +361,7 @@ class form {
 	 * @param string $background    背景使用什么颜色
 	 */
 	public static function checkcode($id = 'checkcode',$code_len = 4, $font_size = 20, $width = 130, $height = 50, $font = '', $font_color = '', $background = '') {
-		return "<img id='$id' onclick='this.src=this.src+\"&\"+Math.random()' src='".APP_PATH."api.php?op=checkcode&code_len=$code_len&font_size=$font_size&width=$width&height=$height&font_color=".urlencode($font_color)."&background=".urlencode($background)."'>";
+		return "<img id='$id' onclick='this.src=this.src+\"&\"+Math.random()' src='".SITE_PROTOCOL.SITE_URL.WEB_PATH."api.php?op=checkcode&code_len=$code_len&font_size=$font_size&width=$width&height=$height&font_color=".urlencode($font_color)."&background=".urlencode($background)."'>";
 	}
 	/**
 	 * url  规则调用

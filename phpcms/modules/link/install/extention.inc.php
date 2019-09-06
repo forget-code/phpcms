@@ -10,10 +10,6 @@ $menu_db->insert(array('name'=>'add_type', 'parentid'=>$parentid, 'm'=>'link', '
 $menu_db->insert(array('name'=>'list_type', 'parentid'=>$parentid, 'm'=>'link', 'c'=>'link', 'a'=>'list_type', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
 $menu_db->insert(array('name'=>'check_register', 'parentid'=>$parentid, 'm'=>'link', 'c'=>'link', 'a'=>'check_register', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
 
-$type_db = pc_base::load_model('type_model');
-$typeid = $type_db->insert(array('siteid'=>1,'module'=>'link','name'=>'默认分类','description'=>'默认分类'),true);
-if(!$typeid) return FALSE;
-
 $link_db = pc_base::load_model('link_model');
 $link_db->insert(array('siteid'=>1,'typeid'=>$typeid,'linktype'=>'1','name'=>'PHPCMS','url'=>'http://www.phpcms.cn','logo'=>'http://www.phpcms.cn/images/logo_88_31.gif','passed'=>1,'addtime'=>SYS_TIME)); 
 $link_db->insert(array('siteid'=>1,'typeid'=>$typeid,'linktype'=>'1','name'=>'盛大在线','url'=>'http://www.sdo.com','logo'=>'http://www.snda.com/cn/logo/comp_logo_sdo.gif','passed'=>1,'addtime'=>SYS_TIME));

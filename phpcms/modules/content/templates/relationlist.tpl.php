@@ -19,7 +19,7 @@ include $this->admin_tpl('header','admin');
 					<option value='description' <?php if($_GET['field']=='description') echo 'selected';?>><?php echo L('description');?></option>
 					<option value='id' <?php if($_GET['field']=='id') echo 'selected';?>>ID</option>
 				</select>
-				<?php echo form::select_category('category_content',$catid,'name="catid"',L('please_select_category'),$modelid,0,1);?>
+				<?php echo form::select_category('',$catid,'name="catid"',L('please_select_category'),$modelid,0,1);?>
 				<input name="keywords" type="text" value="<?php echo stripslashes($_GET['keywords'])?>" style="width:330px;" class="input-text" />
 				<input type="submit" name="dosubmit" class="button" value="<?php echo L('search');?>" />
 	</div>

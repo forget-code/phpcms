@@ -15,9 +15,16 @@ class link_tag {
  	  
  	public function get_type($data){
  		$typeid = intval($data['typeid']);
-		if (empty($typeid)) return false;
+ 		if($typeid=='0'){
+ 			$arr = array();
+ 			$arr['name'] = '默认分类';
+ 			return $arr;
+ 		}else {
 		$r = $this->type_db->get_one(array('typeid'=>$typeid));
-		return new_html_special_chars($r);
+  		return new_html_special_chars($r);	
+ 		}
+ 		
+		
  	}
  	
 	/**
@@ -25,19 +32,18 @@ class link_tag {
 	 * @param  $data 
 	 */
 	public function lists($data) {
-		$typeid = $data['typeid'];//分类ID
-		$linktype = $data['linktype']? $data['linktype'] : 0;
+		$typeid = intval($data['typeid']);//分类ID
+ 		$linktype = $data['linktype']? $data['linktype'] : 0;
 		$siteid = $data['siteid'];
 		if (empty($siteid)){ 
 			$siteid = get_siteid();
 		}
- 		if($typeid){
-				if(is_int($typeid)) return false;
-				$sql = array('typeid'=>$typeid,'linktype'=>$linktype,'siteid'=>$siteid,'passed'=>'1');
+  		if($typeid!='' || $typeid=='0'){
+ 				$sql = array('typeid'=>$typeid,'linktype'=>$linktype,'siteid'=>$siteid,'passed'=>'1');
 			}else {
 				$sql = array('linktype'=>$linktype,'siteid'=>$siteid,'passed'=>'1');
 		}
-		$r = $this->link_db->select($sql, '*', $data['limit'], 'listorder '.$data['order']);
+  		$r = $this->link_db->select($sql, '*', $data['limit'], 'listorder '.$data['order']);
 		return new_html_special_chars($r);
 	}
 	

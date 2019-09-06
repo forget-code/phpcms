@@ -1,3 +1,4 @@
+<?php defined('IN_PHPCMS') or exit('No permission resources.');?>
 <table cellpadding="2" cellspacing="1" width="98%">
 	<tr> 
       <td width="225">编辑器样式：</td>

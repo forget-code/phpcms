@@ -54,7 +54,10 @@ $(function(){
 <td  width="120"><?php echo L('trading').L('usernote')?></td> 
 <td><textarea name="usernote"  id="usernote" rows="5" cols="50"></textarea></td>
 </tr>
-
+<tr>
+<td  width="120"><?php echo L('op_notice')?></td> 
+<td><label><input type="checkbox" id="sendemail" name="sendemail" value="1" checked> <?php echo L('op_sendemail')?></label></td>
+</tr>
 </table>
 <div class="bk15"></div>
 <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="button" id="dosubmit">

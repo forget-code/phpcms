@@ -54,5 +54,5 @@ $LANG['application_or_not']				=	'是否允许申请';
 $LANG['code_or_not']					=	'是否开启验证码';
 $LANG['choose_true_type']				=	'请选择正确的分类！';
 $LANG['application_links']				=	'友情链接申请';
-$LANG['link_onerror']					=	'格式应该为http://www.phpcms.cn/，请以‘/’结束';
+$LANG['link_onerror']					=	'格式应该为http://www.phpcms.cn/';
 ?>

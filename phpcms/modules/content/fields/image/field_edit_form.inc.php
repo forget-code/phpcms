@@ -1,3 +1,4 @@
+<?php defined('IN_PHPCMS') or exit('No permission resources.');?>
 <table cellpadding="2" cellspacing="1" width="98%">
 	<tr> 
       <td width="100">文本框长度</td>
@@ -29,6 +30,6 @@
     </tr>
 	<tr> 
       <td>图像大小</td>
-      <td>宽 <input type="text" name="setting[images_width]" value="<?php echo $setting['images_width'];?>" size="3">px 高 <input type="text" name="setting[images_height]" value="<?php echo $setting['images_height'];?>" size="3">px</td>
+      <td>宽 <input type="text" name="setting[images_width]" value="<?php echo $setting['images_width'];?>" size="3" class="input-text">px 高 <input type="text" name="setting[images_height]" value="<?php echo $setting['images_height'];?>" size="3" class="input-text">px</td>
     </tr>
 </table>

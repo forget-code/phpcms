@@ -33,7 +33,7 @@ class index extends phpsso {
 	 * @param string $username 	用户名
 	 * @param string $password 	密码
 	 * @param string $email		email
-	 * @return int {-1:用户名已经存在 ;-2:email已存在;-4:用户名禁止注册;-5:邮箱禁止注册;int(uid):成功}
+	 * @return int {-1:用户名已经存在 ;-2:email已存在;-4:用户名禁止注册;-5:邮箱禁止注册;-6:uc注册失败;int(uid):成功}
 	 */
 	public function register() {
 		$this->random = isset($this->data['random']) && !empty($this->data['random']) ? $this->data['random'] : create_randomstr(6);
@@ -64,28 +64,32 @@ class index extends phpsso {
 			pc_base::load_config('uc_config');
 			require_once PHPCMS_PATH.'api/uc_client/client.php';
 			$uid= uc_user_register($this->username, $this->data['password'], $this->email, $this->random);
-			switch ($uid) {
-				case '-3':
-					exit('-1');
-					break;
-				case '-6':
-					exit('-2');
-					break;
-				case '-2':
-					exit('-4');
-					break;
-				case '-5':
-					exit('-5');
-					break;
-				case '-1':
-					exit('-4');
-					break;
-				case '-4':
-					exit('-5');
-					break;
-				default :
-					$ucuserid = $uid;
-					break;
+			if(is_numeric($uid)) {
+				switch ($uid) {
+					case '-3':
+						exit('-1');
+						break;
+					case '-6':
+						exit('-2');
+						break;
+					case '-2':
+						exit('-4');
+						break;
+					case '-5':
+						exit('-5');
+						break;
+					case '-1':
+						exit('-4');
+						break;
+					case '-4':
+						exit('-5');
+						break;
+					default :
+						$ucuserid = $uid;
+						break;
+				}
+			} else {
+				exit('-6');
 			}
 		}	
 		
@@ -338,11 +342,15 @@ class index extends phpsso {
 		$setting_sp4 = getcache('settings_sp4', 'admin');
 		if($setting_sp4['sp4use']) {
 			if(!empty($userinfo) && $userinfo['password'] == md5($setting_sp4['sp4_password_key'].$this->password)) {
+				//登录成功更新用户最近登录时间和ip
+				$this->db->update(array('lastdate'=>SYS_TIME, 'lastip'=>ip()), array('uid'=>$userinfo['uid']));
 				exit(serialize($userinfo));
 			}
 		}
 		
 		if(!empty($userinfo) && $userinfo['password'] == create_password($this->password, $userinfo['random'])) {
+			//登录成功更新用户最近登录时间和ip
+			$this->db->update(array('lastdate'=>SYS_TIME, 'lastip'=>ip()), array('uid'=>$userinfo['uid']));
 			exit(serialize($userinfo));
 		} else {
 			exit('-2');
@@ -612,6 +620,40 @@ class index extends phpsso {
 		$this->db->update(array('avatar'=>1), array('uid'=>$this->uid));
 		exit('1');
 	}
-	
+
+	/**
+	 *  删除用户头像
+	 *  @return {0:失败;1:成功}
+	 */
+	public function deleteavatar() {
+		//根据用户id创建文件夹
+		if(isset($this->data['uid'])) {
+			$this->uid = $this->data['uid'];
+		} else {
+			exit('0');
+		}
+		
+		$dir1 = ceil($this->uid / 10000);
+		$dir2 = ceil($this->uid % 10000 / 1000);
+		
+		//图片存储文件夹
+		$avatarfile = pc_base::load_config('system', 'upload_path').'avatar/';
+		$dir = $avatarfile.$dir1.'/'.$dir2.'/'.$this->uid.'/';
+		$this->db->update(array('avatar'=>0), array('uid'=>$this->uid));
+		if(!file_exists($dir)) {
+			exit('1');
+		} else {
+			if($handle = opendir($dir)) {
+			    while(false !== ($file = readdir($handle))) {
+					if($file !== '.' && $file !== '..') {
+						@unlink($dir.$file);
+					}
+			    }
+			    closedir($handle);
+			    @rmdir($dir);
+			    exit('1');
+			}
+		}
+	}
 }
 ?>

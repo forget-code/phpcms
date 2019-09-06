@@ -86,7 +86,7 @@ CREATE TABLE `ps_messagequeue` (
   `appstatus` mediumtext,
   PRIMARY KEY  (`id`),
   KEY `dateline` (`dateline`),
-  KEY `succeed` USING BTREE (`succeed`,`id`)
+  KEY `succeed` (`succeed`,`id`)
 ) TYPE=MyISAM;
 
 -- ----------------------------

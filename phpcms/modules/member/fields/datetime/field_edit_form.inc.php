@@ -1,3 +1,4 @@
+<?php defined('IN_PHPCMS') or exit('No permission resources.');?>
 <table cellpadding="2" cellspacing="1" bgcolor="#ffffff">
 	<tr> 
       <td><strong>时间格式：</strong></td>

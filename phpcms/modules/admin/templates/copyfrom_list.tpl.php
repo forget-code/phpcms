@@ -25,7 +25,7 @@ foreach($datas as $r) {
 <td align="center"><?php echo $r['sitename']?></td>
 <td align="center"><?php echo $r['siteurl']?></td>
 <td align="center"><?php if($r['thumb']) {?><img src="<?php echo $r['thumb']?>"><?php }?></td>
-<td align="center"><a href="javascript:edit('<?php echo $r['id']?>','<?php echo new_addslashes($r['sitename'])?>')"><?php echo L('edit');?></a> | <a href="javascript:;" onclick="data_delete(this,'<?php echo $r['id']?>','<?php echo new_addslashes($r['sitename']);?>')"><?php echo L('delete')?></a> </td>
+<td align="center"><a href="javascript:edit('<?php echo $r['id']?>','<?php echo new_addslashes($r['sitename'])?>')"><?php echo L('edit');?></a> | <a href="javascript:;" onclick="data_delete(this,'<?php echo $r['id']?>','<?php echo L('confirm',array('message'=>new_addslashes($r['sitename'])));?>')"><?php echo L('delete')?></a> </td>
 </tr>
 <?php } ?>
 </tbody>

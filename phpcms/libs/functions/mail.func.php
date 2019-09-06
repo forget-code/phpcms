@@ -25,7 +25,7 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 		$siteinfo = siteinfo($siteid);
 		$sitename = $siteinfo['site_title'];
 	}
-	$adminemail = 'phpcms.cn@foxmail.com';
+	$adminemail = 'service@phpcms.cn';
 	if($cfg && is_array($cfg)) {
 		$adminemail = $cfg['from'];
 		$mail = $cfg;
@@ -67,7 +67,7 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 	
 	$email_to = preg_match('/^(.+?) \<(.+?)\>$/',$toemail, $mats) ? ($mailusername ? '=?'.CHARSET.'?B?'.base64_encode($mats[1])."?= <$mats[2]>" : $mats[2]) : $toemail;;
 	
-	$email_subject = '=?'.CHARSET.'?B?'.base64_encode(preg_replace("/[\r|\n]/", '', '[PHPCMS] '.$subject)).'?=';
+	$email_subject = '=?'.CHARSET.'?B?'.base64_encode(preg_replace("/[\r|\n]/", '', '['.$sitename.'] '.$subject)).'?=';
 	$email_message = chunk_split(base64_encode(str_replace("\n", "\r\n", str_replace("\r", "\n", str_replace("\r\n", "\n", str_replace("\n\r", "\r", $message))))));
 	
 	$headers = "From: $email_from{$maildelimiter}X-Priority: 3{$maildelimiter}X-Mailer: PHPCMS-V9 {$maildelimiter}MIME-Version: 1.0{$maildelimiter}Content-type: text/html; charset=".CHARSET."{$maildelimiter}Content-Transfer-Encoding: base64{$maildelimiter}";

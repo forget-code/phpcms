@@ -29,7 +29,7 @@ class template extends admin {
 		}
 		extract($info);
 		$css = get_css($css_param);
-		$template = $info['template'] ? $info['template'] : 'index';
+		$template = $info['index_template'] ? $info['index_template'] : 'index';
 		pc_base::load_app_func('global', 'template');
 		ob_start();
 		include template('special', $template);
@@ -48,7 +48,7 @@ class template extends admin {
 		$info = $this->db->get_one(array('id'=>$_GET['specialid'], 'disabled'=>'0', 'siteid'=>$this->get_siteid()));
 		if (!$info['id']) showmessage(L('illegal_parameters'), HTTP_REFERER);
 		$css = get_css($_POST['info']);
-		$template = $info['template'] ? $info['template'] : 'index';
+		$template = $info['index_template'] ? $info['index_template'] : 'index';
 		include template('special', $template);
 	}
 	

@@ -32,6 +32,7 @@ class attachments extends admin  {
 		if($a){
 			$filepath = $attachment->uploadedfiles[0]['filepath'];
 			$fn = $attachment->uploadedfiles[0]['fn'];
+			$this->upload_json($a[0],$filepath,$attachment->uploadedfiles[0]['filename']);
 			$attachment->mkhtml($fn,$this->upload_url.$filepath,'');
 		}
 	}
@@ -47,7 +48,7 @@ class attachments extends admin  {
 			$attachment->set_userid($_POST['userid']);
 			$aids = $attachment->upload('Filedata',$_POST['filetype_post'],'','',array($_POST['thumb_width'],$_POST['thumb_height']),$_POST['watermark_enable']);
 			if($aids[0]) {
-				$filename= (strtolower(CHARSET) != 'utf-8') ? iconv('gbk', 'utf-8', $attachment->uploadedfiles[0]['filename']) : $filename ;
+				$filename= (strtolower(CHARSET) != 'utf-8') ? iconv('gbk', 'utf-8', $attachment->uploadedfiles[0]['filename']) : $attachment->uploadedfiles[0]['filename'];
 				if($attachment->uploadedfiles[0]['isimage']) {
 					echo $aids[0].','.$this->upload_url.$attachment->uploadedfiles[0]['filepath'].','.$attachment->uploadedfiles[0]['isimage'].','.$filename;
 				} else {
@@ -70,7 +71,7 @@ class attachments extends admin  {
 			if($this->isadmin==0 && !$grouplist[$this->groupid]['allowattachment']) showmessage(L('att_no_permission'));
 			$args = $_GET['args'];
 			$authkey = $_GET['authkey'];
-			if((upload_key($args)!=$authkey) && $this->isadmin!=1) showmessage(L('attachment_parameter_error'));
+			if(upload_key($args)!=$authkey) showmessage(L('attachment_parameter_error'));
 			extract(getswfinit($_GET['args']));
 			$siteid = $this->get_siteid();
 			$site_setting = get_site_setting($siteid);
@@ -84,7 +85,7 @@ class attachments extends admin  {
 		}
 	}
 	
-	public function crop_upload() {
+	public function crop_upload() {	
 		if (isset($GLOBALS["HTTP_RAW_POST_DATA"])) {
 			$pic = $GLOBALS["HTTP_RAW_POST_DATA"];
 			if (isset($_GET['width']) && !empty($_GET['width'])) {
@@ -94,6 +95,7 @@ class attachments extends admin  {
 				$height = intval($_GET['height']);
 			}
 			if (isset($_GET['file']) && !empty($_GET['file'])) {
+				if(is_image($_GET['file'])== false ) exit();
 				if (strpos($_GET['file'], pc_base::load_config('system', 'upload_url'))!==false) {
 					$file = $_GET['file'];
 					$basename = basename($file);
@@ -111,7 +113,7 @@ class attachments extends admin  {
 					$attachment = new attachment($module, $catid, $siteid);
 					$uploadedfile['filename'] = basename($_GET['file']); 
 					$uploadedfile['fileext'] = fileext($_GET['file']);
-					if (in_array($uploadfile['fileext'], array('jpg', 'gif', 'jpeg', 'png', 'bmp'))) {
+					if (in_array($uploadedfile['fileext'], array('jpg', 'gif', 'jpeg', 'png', 'bmp'))) {
 						$uploadedfile['isimage'] = 1;
 					}
 					$file_path = pc_base::load_config('system', 'upload_path').date('Y/md/');
@@ -138,7 +140,7 @@ class attachments extends admin  {
 		$attachment = pc_base::load_sys_class('attachment');
 		$att_del_arr = explode('|',$_GET['data']);
 		foreach($att_del_arr as $n=>$att){
-			if($att) $attachment->delete(array('aid'=>$att));
+			if($att) $attachment->delete(array('aid'=>$att,'userid'=>$this->userid,'uploadip'=>ip()));
 		}
 	}
 	
@@ -192,6 +194,25 @@ class attachments extends admin  {
 		$url = ($dir == '.' || $dir=='') ? $this->upload_url : $this->upload_url.str_replace('.', '', $dir).'/';
 		$show_header = true;
 		include $this->admin_tpl('album_dir');
+	}
+	
+	/**
+	 * 设置upload上传的json格式cookie
+	 */
+	private function upload_json($aid,$src,$filename) {
+		$arr['aid'] = intval($aid);
+		$arr['src'] = trim($src);
+		$arr['filename'] = urlencode($filename);
+		$json_str = json_encode($arr);
+		$att_arr_exist = param::get_cookie('att_json');
+		$att_arr_exist_tmp = explode('||', $att_arr_exist);
+		if(is_array($att_arr_exist_tmp) && in_array($json_str, $att_arr_exist_tmp)) {
+			return true;
+		} else {
+			$json_str = $att_arr_exist ? $att_arr_exist.'||'.$json_str : $json_str;
+			param::set_cookie('att_json',$json_str);
+			return true;			
+		}
 	}
 	
 	/**

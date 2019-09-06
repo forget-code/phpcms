@@ -3,7 +3,7 @@ body fieldset legend{padding:3px 8px;font-weight:700;border:1px solid #D8D8D8;ba
 body fieldset.blue{border:1px solid #dce3ed}
 body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; background:none; border:none}
 .picBut {background:url("../images/admin_img/picBnt.png") no-repeat 0 -28px;color:#FFF;float:left; text-align:center;font-weight:700;height:28px;line-height:26px;*line-height:30px;margin-right:10px;width:75px}
-.picBut a{color:#fff;text-decoration: none; width:75px}
+.picBut a{color:#fff;text-decoration: none; width:75px; height:28px;display:inline-block;zoom:1;*display:inline;}
 
 .table-list td,.table-list th{padding-left:12px}
 .table-list thead th{ height:30px; background:#eef3f7; border-bottom:1px solid #d5dfe8; font-weight:normal}
@@ -41,7 +41,7 @@ select{ vertical-align:middle;background:none repeat scroll 0 0 #F9F9F9;border-c
 .table_form td{padding-left:12px}
 .table_form th{font-weight:normal; text-align:right;padding-right:10px; color:#777}
 .table_form td label{ vertical-align:middle}
-.table_form td,.table_form th{padding:8px 0 8px 8px}
+.table_form td,.table_form th{padding:4px 0 4px 8px}
 .table_form tbody td,.table_form tbody th{border-bottom:1px solid #eee; }
 .colorpanel tbody td,.colorpanel tbody th{ padding:0;border-bottom: none;}
 /*select美化*/

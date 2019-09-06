@@ -145,6 +145,9 @@ class admin_announce extends admin {
 		if($data['title']=='') showmessage(L('title_cannot_empty'));
 		if($data['content']=='') showmessage(L('announcements_cannot_be_empty'));
 		$r = $this->db->get_one(array('title' => $data['title']));
+		if (strtotime($data['endtime'])<strtotime($data['starttime'])) {
+			$data['endtime'] = '';
+		}
 		if ($a=='add') {
 			if (is_array($r) && !empty($r)) {
 				showmessage(L('announce_exist'), HTTP_REFERER);

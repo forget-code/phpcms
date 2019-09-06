@@ -27,7 +27,7 @@ include $this->admin_tpl('header','admin');?>
 		</div>
 		<div id="frombox_2" style="display:none;">
 		<select name="fromid[]" id="fromid"  multiple  style="height:300px;width:350px;">
-		<option value='0' style="background:#F1F3F5;color:blue;"><?php echo L('move_to_categorys');?></option>
+		<option value='0' style="background:#F1F3F5;color:blue;"><?php echo L('from_category');?></option>
 		<?php echo $source_string;?>
 		</select>
 		<br>

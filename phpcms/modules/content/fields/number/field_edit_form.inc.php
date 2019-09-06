@@ -1,3 +1,4 @@
+<?php defined('IN_PHPCMS') or exit('No permission resources.');?>
 <table cellpadding="2" cellspacing="1" width="98%">
 	<tr> 
       <td width="100">取值范围</td>
@@ -25,4 +26,11 @@
       <td>默认值</td>
       <td><input type="text" name="setting[defaultvalue]" value="<?php echo $setting['defaultvalue'];?>" size="40" class="input-text"></td>
     </tr>
+	<tr> 
+	  <td>是否作为区间字段</td>
+	  <td>
+	  <input type="radio" name="setting[rangetype]" value="1" <?php if($setting['rangetype']) echo 'checked';?> /> 是 
+	  <input type="radio" name="setting[rangetype]" value="0" <?php if(!$setting['rangetype']) echo 'checked';?> /> 否 　　注：区间字段可以通过filters('字段名称','模型id','自定义数组')调用
+	  </td>
+	</tr>		
 </table>

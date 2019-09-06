@@ -17,7 +17,7 @@ class admin_manage extends admin {
 	public function init() {
 		$userid = $_SESSION['userid'];
 		$admin_username = param::get_cookie('admin_username');
-		$page = $_GET['page'] ? $_GET['page'] : '1';
+		$page = $_GET['page'] ? intval($_GET['page']) : '1';
 		$infos = $this->db->listinfo('', '', $page, 20);
 		$pages = $this->db->pages;
 		$roles = getcache('role','commons');
@@ -132,18 +132,27 @@ class admin_manage extends admin {
 	public function public_edit_info() {
 		$userid = $_SESSION['userid'];
 		if(isset($_POST['dosubmit'])) {
-			$admin_fields = array('email','realname');
+			$admin_fields = array('email','realname','lang');
+			$info = array();
 			$info = $_POST['info'];
+			if(trim($info['lang'])=='') $info['lang'] = 'zh-cn';
 			foreach ($info as $k=>$value) {
 				if (!in_array($k, $admin_fields)){
 					unset($info[$k]);
 				}
 			}
 			$this->db->update($info,array('userid'=>$userid));
+			param::set_cookie('sys_lang', $info['lang'],SYS_TIME+86400*30);
 			showmessage(L('operation_success'),HTTP_REFERER);			
 		} else {
 			$info = $this->db->get_one(array('userid'=>$userid));
-			extract($info);			
+			extract($info);
+			
+			$lang_dirs = glob(PC_PATH.'languages/*');
+			$dir_array = array();
+			foreach($lang_dirs as $dirs) {
+				$dir_array[] = str_replace(PC_PATH.'languages/','',$dirs);
+			}
 			include $this->admin_tpl('admin_edit_info');			
 		}	
 	
@@ -163,6 +172,7 @@ class admin_manage extends admin {
 	 */
 	function public_password_ajx() {
 		$userid = $_SESSION['userid'];
+		$r = array();
 		$r = $this->db->get_one(array('userid'=>$userid),'password,encrypt');
 		if ( password($_GET['old_password'],$r['encrypt']) == $r['password'] ) {
 			exit('1');
@@ -186,6 +196,7 @@ class admin_manage extends admin {
 			showmessage(L('your_website_opened_the_card_no_password'));
 		}
 		$userid = isset($_GET['userid']) && intval($_GET['userid']) ? intval($_GET['userid']) : showmessage(L('user_id_cannot_be_empty'));
+		$data = array();
 		if ($data = $this->db->get_one(array('userid'=>$userid), '`card`,`username`')) {
 			$pic_url = '';
 			if ($data['card']) {
@@ -205,6 +216,7 @@ class admin_manage extends admin {
 			showmessage(L('your_website_opened_the_card_no_password'));
 		}
 		$userid = isset($_GET['userid']) && intval($_GET['userid']) ? intval($_GET['userid']) : showmessage(L('user_id_cannot_be_empty'));
+		$data = $card = '';
 		if ($data = $this->db->get_one(array('userid'=>$userid), '`card`,`username`')) {
 			if (empty($data['card'])) {
 				pc_base::load_app_class('card', 'admin', 0);
@@ -228,6 +240,7 @@ class admin_manage extends admin {
 			showmessage(L('your_website_opened_the_card_no_password'));
 		}
 		$userid = isset($_GET['userid']) && intval($_GET['userid']) ? intval($_GET['userid']) : showmessage(L('user_id_cannot_be_empty'));
+		$data = $result = '';
 		if ($data = $this->db->get_one(array('userid'=>$userid), '`card`,`username`,`userid`')) {
 			pc_base::load_app_class('card', 'admin', 0);
 			if ($result = card::remove_card($data['card'])) {

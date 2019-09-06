@@ -52,7 +52,7 @@
 .progresshidden {
 	display:none;
 }
-.progressBarComplete
+.progressBarComplete,
 .progressBarInProgress,
 .progressBarComplete,
 .progressBarError {

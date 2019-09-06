@@ -3,7 +3,7 @@
  * 广告模板配置函数
  */
 function get_types() {
-	$poster_template = getcache('poster_template', 'commons');
+	$poster_template = getcache('poster_template_'.get_siteid(), 'commons');
 	$TYPES = array();
 	if (is_array($poster_template) && !empty($poster_template)){
 		foreach ($poster_template as $k => $template) {

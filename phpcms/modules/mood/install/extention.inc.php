@@ -5,7 +5,7 @@ $parentid = $menu_db->insert(array('name'=>'mood', 'parentid'=>'29', 'm'=>'mood'
 $menu_db->insert(array('name'=>'mood_setting', 'parentid'=>$parentid, 'm'=>'mood', 'c'=>'mood_admin', 'a'=>'setting', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
 
 $language = array('mood'=>'新闻心情', 'mood_setting'=>'心情配置');
-setcache('mood_program', array(
+setcache('mood_program', array('1'=>array(
   1 => 
   array (
     'use' => '1',
@@ -44,15 +44,15 @@ setcache('mood_program', array(
   ),
   7 => 
   array (
-    'use' => NULL,
-    'name' => '',
-    'pic' => '',
+    'use' => '1',
+    'name' => '支持',
+    'pic' => 'mood/a7.gif',
   ),
   8 => 
   array (
-    'use' => NULL,
-    'name' => '',
-    'pic' => '',
+    'use' => '1',
+    'name' => '超赞',
+    'pic' => 'mood/a8.gif',
   ),
   9 => 
   array (
@@ -66,5 +66,5 @@ setcache('mood_program', array(
     'name' => '',
     'pic' => '',
   ),
-), 'commons');
+)), 'commons');
 ?>

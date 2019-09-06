@@ -25,6 +25,7 @@ class dbsource_admin extends admin {
 			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : showmessage(L('username').L('empty'));
 			$password = isset($_POST['password']) && trim($_POST['password']) ? trim($_POST['password']) : showmessage(L('password').L('empty'));
 			$dbname = isset($_POST['dbname']) && trim($_POST['dbname']) ? trim($_POST['dbname']) : showmessage(L('database').L('empty'));
+			$dbtablepre = isset($_POST['dbtablepre']) && trim($_POST['dbtablepre']) ? trim($_POST['dbtablepre']) : '';
 			$charset = isset($_POST['charset']) && in_array(trim($_POST['charset']), array('gbk','utf8', 'gb2312', 'latin1')) ? trim($_POST['charset']) : showmessage(L('charset').L('illegal_parameters'));
 			$siteid = $this->get_siteid();
 			if (!preg_match('/^\\w+$/i', $name)) {
@@ -35,7 +36,7 @@ class dbsource_admin extends admin {
 				showmessage(L('dbsource_name').L('exists'));
 			}
 			
-			if ($this->db->insert(array('siteid'=>$siteid, 'name'=>$name,'host'=>$host,'port'=>$port,'username'=>$username,'password'=>$password,'dbname'=>$dbname,'charset'=>$charset))) {
+			if ($this->db->insert(array('siteid'=>$siteid, 'name'=>$name,'host'=>$host,'port'=>$port,'username'=>$username,'password'=>$password,'dbname'=>$dbname,'dbtablepre'=>$dbtablepre,'charset'=>$charset))) {
 				dbsource_cache();
 				showmessage('', '', '', 'add');
 			} else {
@@ -61,9 +62,10 @@ class dbsource_admin extends admin {
 			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : showmessage(L('username').L('empty'));
 			$password = isset($_POST['password']) && trim($_POST['password']) ? trim($_POST['password']) : showmessage(L('password').L('empty'));
 			$dbname = isset($_POST['dbname']) && trim($_POST['dbname']) ? trim($_POST['dbname']) : showmessage(L('database').L('empty'));
+			$dbtablepre = isset($_POST['dbtablepre']) && trim($_POST['dbtablepre']) ? trim($_POST['dbtablepre']) : '';
 			$charset = isset($_POST['charset']) && in_array(trim($_POST['charset']), array('gbk','utf8', 'gb2312', 'latin1')) ? trim($_POST['charset']) : showmessage(L('charset').L('illegal_parameters'));
 			$siteid = $this->get_siteid();
-			$sql = array('siteid'=>$siteid, 'host'=>$host,'port'=>$port,'username'=>$username,'password'=>$password,'dbname'=>$dbname, 'charset'=>$charset);
+			$sql = array('siteid'=>$siteid, 'host'=>$host,'port'=>$port,'username'=>$username,'password'=>$password,'dbname'=>$dbname, 'dbtablepre'=>$dbtablepre, 'charset'=>$charset);
 			
 			if ($this->db->update($sql, array('id'=>$id))) {
 				dbsource_cache();

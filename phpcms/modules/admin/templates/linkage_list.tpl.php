@@ -2,6 +2,10 @@
 defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header');?>
 <div class="pad_10">
+<div class="explain-col">
+<?php echo L('linkage_tips');?>
+</div>
+<div class="bk10"></div>
 <form name="myform" action="?m=admin&c=role&a=listorder" method="post">
 <div class="table-list">
     <table width="100%" cellspacing="0">

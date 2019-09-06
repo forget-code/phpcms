@@ -61,6 +61,7 @@ class index extends admin {
 					$times = $maxloginfailedtimes-intval($rtime['times']);
 					$this->times_db->update(array('ip'=>$ip,'isadmin'=>1,'times'=>'+=1'),array('username'=>$username));
 				} else {
+					$this->times_db->delete(array('username'=>$username,'isadmin'=>1));
 					$this->times_db->insert(array('username'=>$username,'ip'=>$ip,'isadmin'=>1,'logintime'=>SYS_TIME,'times'=>1));
 					$times = $maxloginfailedtimes;
 				}
@@ -87,10 +88,12 @@ class index extends admin {
 			$_SESSION['lock_screen'] = 0;
 			$default_siteid = self::return_siteid();
 			$cookie_time = SYS_TIME+86400*30;
+			if(!$r['lang']) $r['lang'] = 'zh-cn';
 			param::set_cookie('admin_username',$username,$cookie_time);
 			param::set_cookie('siteid', $default_siteid,$cookie_time);
 			param::set_cookie('userid', $r['userid'],$cookie_time);
 			param::set_cookie('admin_email', $r['email'],$cookie_time);
+			param::set_cookie('sys_lang', $r['lang'],$cookie_time);
 			showmessage(L('login_success'),'?m=admin&c=index');
 		} else {
 			pc_base::load_sys_class('form', '', 0);
@@ -168,7 +171,7 @@ class index extends admin {
 		$this->panel_db->insert($data, '', 1);
 		$panelarr = $this->panel_db->listinfo(array('userid'=>$_SESSION['userid']), "datetime");
 		foreach($panelarr as $v) {
-			echo "<span><a onclick='paneladdclass(this);' target='right' href='".$v['url'].'&menuid='.$v['menuid']."'>".L($v['name'])."</a>  <a class='panel-delete' href='javascript:delete_panel(".$v['menuid'].");'></a></span>";
+			echo "<span><a onclick='paneladdclass(this);' target='right' href='".$v['url'].'&menuid='.$v['menuid']."&pc_hash=".$_SESSION['pc_hash']."'>".L($v['name'])."</a>  <a class='panel-delete' href='javascript:delete_panel(".$v['menuid'].");'></a></span>";
 		}
 		exit;
 	}
@@ -179,7 +182,7 @@ class index extends admin {
 
 		$panelarr = $this->panel_db->listinfo(array('userid'=>$_SESSION['userid']), "datetime");
 		foreach($panelarr as $v) {
-			echo "<span><a onclick='paneladdclass(this);' target='right' href='".$v['url']."'>".L($v['name'])."</a> <a class='panel-delete' href='javascript:delete_panel(".$v['menuid'].");'></a></span>";
+			echo "<span><a onclick='paneladdclass(this);' target='right' href='".$v['url']."&pc_hash=".$_SESSION['pc_hash']."'>".L($v['name'])."</a> <a class='panel-delete' href='javascript:delete_panel(".$v['menuid'].");'></a></span>";
 		}
 		exit;
 	}
@@ -187,7 +190,8 @@ class index extends admin {
 		pc_base::load_app_func('global');
 		pc_base::load_app_func('admin');
 		define('PC_VERSION', pc_base::load_config('version','pc_version'));
-		define('PC_RELEASE', pc_base::load_config('version','pc_release'));		
+		define('PC_RELEASE', pc_base::load_config('version','pc_release'));	
+	
 		$admin_username = param::get_cookie('admin_username');
 		$roles = getcache('role','commons');
 		$userid = $_SESSION['userid'];
@@ -203,9 +207,9 @@ class index extends admin {
 		$common_cache = getcache('common','commons');
 		$logsize_warning = errorlog_size() > $common_cache['errorlog_size'] ? '1' : '0';
 		$adminpanel = $this->panel_db->select(array('userid'=>$userid), '*',20 , 'datetime');
-		$architecture = base64_decode('6ZmI5ZGo55Gc');
-		$products_council = base64_decode('6ZmI5ZGo55Gc44CB546L5Y+C5Yqg44CB546L6ZOB5oiQ');
-		$programmer = base64_decode('546L5Y+C5Yqg44CB546L6ZOB5oiQ44CB6ZmI5ZGo55Gc44CB6ZmI5a2m5pe644CB6ZmI6bmP44CB546L5a6Y5bqG');
+		$product_copyright = base64_decode('5LiK5rW355ub5aSn572R57uc5Y+R5bGV5pyJ6ZmQ5YWs5Y+4');
+		$architecture = base64_decode('546L5Y+C5Yqg');
+		$programmer = base64_decode('546L5Y+C5Yqg44CB546L6ZOB5oiQ44CB6ZmI5a2m5pe644CB6ZmI6bmP44CB546L5a6Y5bqG44CB5byg5bqG44CB54aK55Sf5Y2O44CB5ZCV5a2Y55m9');
 		$designer = base64_decode('6JGj6aOe6b6Z44CB5byg5LqM5by6');
 		ob_start();
 		include $this->admin_tpl('main');
@@ -269,5 +273,29 @@ class index extends admin {
 		 $show_header = true;
 		 include $this->admin_tpl('map');
 	}
+	
+	/**
+	 * 
+	 * 读取盛大接扣获取appid和secretkey
+	 */
+	public function public_snda_status() {
+		//引入盛大接口
+		if(!strstr(pc_base::load_config('snda','snda_status'), '|')) {
+			$this->site_db = pc_base::load_model('site_model');
+			$uuid_arr = $this->site_db->get_one(array('siteid'=>1), 'uuid');
+			$uuid = $uuid_arr['uuid'];
+			$snda_check_url = "http://open.sdo.com/phpcms?cmsid=".$uuid."&sitedomain=".$_SERVER['SERVER_NAME'];
+
+			$snda_res_json = @file_get_contents($snda_check_url);
+			$snda_res = json_decode($snda_res_json, 1);
+
+			if(!isset($snda_res[err]) && !empty($snda_res['appid'])) {
+				$appid = $snda_res['appid'];
+				$secretkey = $snda_res['secretkey'];
+				set_config(array('snda_status'=>$appid.'|'.$secretkey), 'snda');
+			}
+		}
+	}
+
 }
 ?>

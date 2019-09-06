@@ -19,14 +19,14 @@ class foreground {
 		$phpcms_auth = param::get_cookie('auth');
 		if(ROUTE_M =='member' && ROUTE_C =='index' && in_array(ROUTE_A, array('login', 'register', 'mini'))) {
 			if ($phpcms_auth && ROUTE_A != 'mini') {
-				showmessage(L('login_success', '', 'member'), '?m=member&c=index');
+				showmessage(L('login_success', '', 'member'), 'index.php?m=member&c=index');
 			} else {
 				return true;
 			}
 		} else {
 			//判断是否存在auth cookie
 			if ($phpcms_auth) {
-				$auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
+				$auth_key = md5(pc_base::load_config('system', 'auth_key').str_replace('7.0' ,'8.0',$_SERVER['HTTP_USER_AGENT']));
 				list($userid, $password) = explode("\t", sys_auth($phpcms_auth, 'DECODE', $auth_key));
 				//验证用户，获取用户信息
 				$this->memberinfo = $this->db->get_one(array('userid'=>$userid));
@@ -51,13 +51,13 @@ class foreground {
 						param::set_cookie('_userid', '');
 						param::set_cookie('_username', '');
 						param::set_cookie('_groupid', '');
-						showmessage(L('userid_banned_by_administrator', '', 'member'), '?m=member&c=index&a=login');
+						showmessage(L('userid_banned_by_administrator', '', 'member'), 'index.php?m=member&c=index&a=login');
 					} elseif($this->memberinfo['groupid'] == 7) {
 						param::set_cookie('auth', '');
 						param::set_cookie('_userid', '');
 						param::set_cookie('_groupid', '');
 						param::set_cookie('email', $this->memberinfo['email']);
-						showmessage(L('need_emial_authentication', '', 'member'), '?m=member&c=index&a=register&t=2');
+						showmessage(L('need_emial_authentication', '', 'member'), 'index.php?m=member&c=index&a=register&t=2');
 					}
 				} else {
 					param::set_cookie('auth', '');
@@ -68,7 +68,7 @@ class foreground {
 				unset($userid, $password, $phpcms_auth, $auth_key);
 			} else {
 				$forward= isset($_GET['forward']) ?  urlencode($_GET['forward']) : urlencode(get_url());
-				showmessage(L('please_login', '', 'member'), '?m=member&c=index&a=login&forward='.$forward);
+				showmessage(L('please_login', '', 'member'), 'index.php?m=member&c=index&a=login&forward='.$forward);
 			}
 		}
 	}

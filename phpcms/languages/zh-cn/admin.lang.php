@@ -18,7 +18,7 @@ $LANG['exit'] = '退出';
 $LANG['notice'] = '注意';
 $LANG['site_homepage'] = '站点首页';
 $LANG['member_center'] = '会员中心';
-$LANG['search'] = '全站搜索';
+$LANG['search'] = '搜索';
 $LANG['spread_or_closed'] = '展开与关闭';
 $LANG['expand'] = '展开';
 $LANG['update_backup'] = '更新缓存';
@@ -55,10 +55,10 @@ $LANG['main_os'] = '操作系统：';
 $LANG['main_web_server'] = '服务器软件：';
 $LANG['main_sql_version'] = 'MySQL 版本：';
 $LANG['main_upload_limit'] = '上传文件：';
+$LANG['main_copyright'] = '版权所有：';
 $LANG['main_product_team'] = 'PHPCMS开发团队';
-$LANG['main_product_planning'] = '策划/架构：';
-$LANG['main_product_comm'] = '产品委员会：';
-$LANG['main_product_dev'] = '程序开发：';
+$LANG['main_product_planning'] = '总 策 划：';
+$LANG['main_product_dev'] = '开发与支持团队：';
 $LANG['main_product_ui'] = 'UI 设计：';
 $LANG['main_product_site'] = '官方网站：';
 $LANG['main_product_bbs'] = '官方论坛：';
@@ -96,6 +96,7 @@ $LANG['downserver_url'] = '镜像站地址';
 $LANG['downserver_site'] = '所属站点';
 $LANG['downserver_del_success'] = '镜像站删除成功！';
 $LANG['downserver_not_empty'] = '不能为空';
+$LANG['downserver_error'] = '请填写服务器地址且不能以斜线结尾';
 
 //position.php
 
@@ -126,6 +127,8 @@ $LANG['posid_item_manage'] = '信息管理';
 $LANG['posid_all'] = '全部';
 $LANG['maxnum'] = '最大保存条数';
 $LANG['posid_num'] = '条';
+$LANG['extention_name'] = '扩展字段配置';
+$LANG['extention_name_tips'] = '<strong>关于扩展字段</strong>：填写模型字段名称后该字段将保存入推荐位扩展字段中,格式:{字段名称}或者functionA({city},argv1),非开发者慎用！';
 
 //role.php
 
@@ -297,7 +300,11 @@ $LANG['backup_file_number'] = '卷号';
 $LANG['backup_import'] = '数据恢复';
 $LANG['backup_down'] = '下载';
 $LANG['backup_del'] = '删除备份文件';
-$LANG['bakup_del_confirm'] = '确认删除备份文件？';
+$LANG['database_sorry'] = '对不起';
+$LANG['database_not_exist'] = '数据库文件不存在';
+$LANG['data_have_load_to_database'] = '中的数据已经成功导入到数据库！';
+$LANG['load_success'] = '上传成功！';
+
 // linkage.php
 
 $LANG['linkage_name'] = '菜单名称';
@@ -317,6 +324,7 @@ $LANG['linkage_menu_style'] = '菜单风格';
 $LANG['linkage_parent_menu'] = '上级菜单';
 $LANG['site_select'] = '站点选择';
 $LANG['linkage_not_empty'] = '不能为空';
+$LANG['linkage_tips'] = '温馨提示：添加联动菜单后，请点击联动菜单后“更新缓存”按钮';
 
 ////IP禁止
 $LANG['deblocking_time'] = '解封时间';
@@ -354,7 +362,7 @@ $LANG['badword_confom_del']		= '确认要删除 『 选中 』 吗？';
 $LANG['badword_require']		= '要求';
 $LANG['badword_import_infos']	= '1.文件要求每行一个敏感词条目；<br>
 2.请使用英文标点，参数之间用英文","隔开。<br>
-3.敏感级别由数字 1,2,3代替，1--一般；2--比较敏感；3--特别敏感。<br>';
+3.敏感级别由数字 1,2代替，1--一般；2--敏感；<br>';
 
 //新闻协议
 $LANG['google_info']			= '关于 Sitemaps/互联网新闻开放协议';
@@ -364,7 +372,7 @@ $LANG['google_sitemaps']		= '生成 Sitemaps';
 $LANG['google_baidunews']		= '生成 互联网新闻开放协议';
 $LANG['google_period']			= '更新周期';
 $LANG['google_startmake']		= '开始生成';
-$LANG['google_ismake']			= '是否生成';
+$LANG['google_ismake']			= '生成XML文件';
 $LANG['google_select_db']		= '选择数据来源';
 
 $LANG['google_update']			= '一直更新';
@@ -476,6 +484,7 @@ $LANG['input_linkurl'] = '请输入链接地址';
 $LANG['page_templates'] = '单网页模板';
 $LANG['edit_following_operation'] = '不要忘记进行栏目缓存更新哟';
 $LANG['ismenu'] = '是否在导航显示';
+$LANG['manage_sub_category'] = '管理子栏目';
 
 //model field
 $LANG['news'] = '新闻';
@@ -537,9 +546,9 @@ $LANG['site_att_watermark_pos_10'] = '随机位置';
 $LANG['site_att_watermark_pos_1'] = '顶部居左';
 $LANG['site_att_watermark_pos_2'] = '顶部居中';
 $LANG['site_att_watermark_pos_3'] = '顶部居右';
-$LANG['site_att_watermark_pos_4'] = '左部居中';
-$LANG['site_att_watermark_pos_5'] = '左部居左';
-$LANG['site_att_watermark_pos_6'] = '左部居右';
+$LANG['site_att_watermark_pos_4'] = '中部居中';
+$LANG['site_att_watermark_pos_5'] = '中部居左';
+$LANG['site_att_watermark_pos_6'] = '中部居右';
 $LANG['site_att_watermark_pos_7'] = '底部居左';
 $LANG['site_att_watermark_pos_8'] = '底部居中';
 $LANG['site_att_watermark_pos_9'] = '底部居右';
@@ -616,6 +625,8 @@ $LANG['keylink'] = '关联链接';
 $LANG['keylink_edit'] = '关联链接编辑';
 $LANG['keylink_confirm_del'] = '是否删除该关联词';
 $LANG['update_formguide_model'] = '更新表单向导模型';
+$LANG['update_vote_setting']	= '更新投票模块配置';
+$LANG['update_link_setting']	=	'更新友情链接模块配置';
 
 $LANG['linkage'] = '联动菜单';
 $LANG['module'] = '模块';
@@ -686,7 +697,8 @@ $LANG['connect_enable_notice'] = '如关闭，前台不显示所有connect登录
 $LANG['setting_connect'] = 'connect';
 $LANG['setting_connect_enable'] = '开启connect';
 $LANG['setting_connect_sina'] = '新浪微博';
-$LANG['setting_snda_enable'] = '盛大连接图标';
+$LANG['setting_connect_qq'] = '腾讯微博';
+$LANG['setting_snda_enable'] = '盛大连接';
 $LANG['snda_need_curl_init'] = '，但盛大通行证需服务器支持curl扩展';
 $LANG['red'] = '红';
 $LANG['green'] = '绿';
@@ -713,4 +725,7 @@ $LANG['add_category_types'] = '添加方式';
 $LANG['normal_add'] = '单条添加';
 $LANG['batch_add_tips'] = '例如：<br><font color="#959595">国内新闻|china<br>国际新闻|world<br></font>竖线以及后面的英文名可留空，默认会自动生成栏目的拼音';
 $LANG['not_display_in_menu'] = '不在导航显示';
+
+$LANG['apply_to_child'] = '应用到子栏目：';
+
 ?>

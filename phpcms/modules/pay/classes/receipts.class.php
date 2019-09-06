@@ -26,8 +26,8 @@ class receipts {
 	 * @param string $status 入账状态  （可选值  succ 默认，入账成功，error 入账失败）注当且仅当为‘succ’时更改member数据
 	 * @param string  $op_username 管理员信息
 	 */
-	public static function amount($value, $userid = '' , $username = '', $trade_sn = '', $pay_type = '', $payment = '', $op_username = '', $status = 'succ') {
-		return self::_add(array('username'=>$username, 'userid'=>$userid,'money'=>$value, 'trade_sn'=>$trade_sn, 'pay_type'=>$pay_type, 'payment'=>$payment, 'status'=>$status, 'type'=>1, 'adminnote'=>$op_username));
+	public static function amount($value, $userid = '' , $username = '', $trade_sn = '', $pay_type = '', $payment = '', $op_username = '', $status = 'succ', $note = '') {
+		return self::_add(array('username'=>$username, 'userid'=>$userid,'money'=>$value, 'trade_sn'=>$trade_sn, 'pay_type'=>$pay_type, 'payment'=>$payment, 'status'=>$status, 'type'=>1, 'adminnote'=>$op_username, 'usernote'=>$note));
 	}
 	
 	/**
@@ -42,8 +42,8 @@ class receipts {
 	 * @param string $status 入账状态  （可选值  succ 默认，入账成功，failed 入账失败）
 	 * @param string  $op_username 管理员信息
 	 */
-	public static function point($value, $userid = '' , $username = '', $trade_sn = '', $pay_type = '', $payment = '', $op_username = '', $status = 'succ') {
-		return self::_add(array('username'=>$username, 'userid'=>$userid,'money'=>$value, 'trade_sn'=>$trade_sn, 'pay_type'=>$pay_type, 'payment'=>$payment, 'status'=>$status, 'type'=>2, 'adminnote'=>$op_username));
+	public static function point($value, $userid = '' , $username = '', $trade_sn = '', $pay_type = '', $payment = '', $op_username = '', $status = 'succ', $note = '') {
+		return self::_add(array('username'=>$username, 'userid'=>$userid,'money'=>$value, 'trade_sn'=>$trade_sn, 'pay_type'=>$pay_type, 'payment'=>$payment, 'status'=>$status, 'type'=>2, 'adminnote'=>$op_username, 'usernote'=>$note));
 	}
 	
 	/**
@@ -58,6 +58,7 @@ class receipts {
 		$data['pay_type'] = isset($data['pay_type']) ? trim($data['pay_type']) : 'selfincome';
 		$data['payment'] = isset($data['payment']) ? trim($data['payment']) : '';
 		$data['adminnote'] = isset($data['op_username']) ? trim($data['op_username']) : '';
+		$data['usernote'] = isset($data['usernote']) ? trim($data['usernote']) : '';
 		$data['status'] = isset($data['status']) ? trim($data['status']) : 'succ';
 		$data['type'] = isset($data['type']) && intval($data['type']) ? intval($data['type']) : 0;
 		$data['addtime'] = SYS_TIME;

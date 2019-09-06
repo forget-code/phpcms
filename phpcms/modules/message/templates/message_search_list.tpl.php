@@ -8,7 +8,7 @@ include $this->admin_tpl('header','admin');
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col"><?php echo L('query_type')?>:<?php echo form::select($trade_status,$status,'name="search[status]"', L('all'))?>      <?php echo L('username')?>:  <input type="text" value="" class="input-text" name="search[username]">  <?php echo L('time')?>:  <?php echo form::date('search[start_time]','','')?> <?php echo L('to')?>   <?php echo form::date('search[end_time]','','')?>    <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
+		<td><div class="explain-col"><?php echo L('query_type')?>:<?php echo form::select($trade_status,$status,'name="search[status]"', L('all'))?>      <?php echo L('username')?>:  <input type="text" value="<?php echo $username;?>" class="input-text" name="search[username]">  <?php echo L('time')?>:  <?php echo form::date('search[start_time]',$start_time,'')?> <?php echo L('to')?>   <?php echo form::date('search[end_time]',$end_time,'')?>    <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
 		</div>
 		</td>
 		</tr>

@@ -209,7 +209,7 @@ class member extends admin {
 			$where .= "`siteid` = '$siteid'";
 		}
 		
-		$memberlist = $this->db->listinfo($where, 'userid DESC', $page, 15);
+		$memberlist_arr = $this->db->listinfo($where, 'userid DESC', $page, 15);
 		$pages = $this->db->pages;
 
 		//搜索框
@@ -227,7 +227,13 @@ class member extends admin {
 		foreach ($modellistarr as $k=>$v) {
 			$modellist[$k] = $v['name'];
 		}
-				
+		
+		//查询会员头像
+		foreach($memberlist_arr as $k=>$v) {
+			$memberlist[$k] = $v;
+			$memberlist[$k]['avatar'] = get_memberavatar($v['phpssouid']);
+		}
+
 		$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=member&c=member&a=add\', title:\''.L('member_add').'\', width:\'700\', height:\'500\', lock:true}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('member_add'));
 		include $this->admin_tpl('member_list');
 	}
@@ -274,7 +280,7 @@ class member extends admin {
 			}
 		} else {
 			$show_header = $show_scroll = true;
-			
+			$siteid = get_siteid();
 			//会员组缓存
 			$group_cache = getcache('grouplist', 'member');
 			foreach($group_cache as $_key=>$_value) {
@@ -283,7 +289,9 @@ class member extends admin {
 			//会员模型缓存
 			$member_model_cache = getcache('member_model', 'commons');
 			foreach($member_model_cache as $_key=>$_value) {
-				$modellist[$_key] = $_value['name'];
+				if($siteid == $_value['siteid']) {
+					$modellist[$_key] = $_value['name'];
+				}
 			}
 			
 			include $this->admin_tpl('member_add');
@@ -333,6 +341,11 @@ class member extends admin {
 				showmessage(L('user_not_exist').L('or').L('no_permission'), HTTP_REFERER);
 			}
 
+			//删除用户头像
+			if(!empty($_POST['delavatar'])) {
+				$this->client->ps_deleteavatar($userinfo['phpssouid']);
+			}
+
 			$status = $this->client->ps_member_edit($info['username'], $info['email'], '', $info['password'], $userinfo['phpssouid'], $userinfo['encrypt']);
 			if($status >= 0) {
 				unset($info['userid']);
@@ -368,6 +381,7 @@ class member extends admin {
 			}
 		} else {
 			$show_header = $show_scroll = true;
+			$siteid = get_siteid();
 			$userid = isset($_GET['userid']) ? $_GET['userid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
 			
 			//会员组缓存
@@ -375,17 +389,19 @@ class member extends admin {
 			foreach($group_cache as $_key=>$_value) {
 				$grouplist[$_key] = $_value['name'];
 			}
+
 			//会员模型缓存
 			$member_model_cache = getcache('member_model', 'commons');
 			foreach($member_model_cache as $_key=>$_value) {
-				$modellist[$_key] = $_value['name'];
+				if($siteid == $_value['siteid']) {
+					$modellist[$_key] = $_value['name'];
+				}
 			}
 			
 			//如果是超级管理员角色，显示所有用户，否则显示当前站点用户
 			if($_SESSION['roleid'] == 1) {
 				$where = array('userid'=>$userid);
 			} else {
-				$siteid = get_siteid();
 				$where = array('userid'=>$userid, 'siteid'=>$siteid);
 			}
 
@@ -394,6 +410,8 @@ class member extends admin {
 			if(empty($memberinfo)) {
 				showmessage(L('user_not_exist').L('or').L('no_permission'), HTTP_REFERER);
 			}
+			
+			$memberinfo['avatar'] = get_memberavatar($memberinfo['phpssouid'], '', 90);
 			
 			$modelid = isset($_GET['modelid']) ? $_GET['modelid'] : $memberinfo['modelid'];
 			
@@ -441,12 +459,28 @@ class member extends admin {
 				}
 			}
 		}
-		
+		//查询用户信息
+		$userinfo_arr = $this->db->select($where, "userid, modelid");
+		$userinfo = array();
+		if(is_array($userinfo_arr)) {
+			foreach($userinfo_arr as $v) {
+				$userinfo[$v['userid']] = $v['modelid'];
+			}
+		}
 		//delete phpsso member first
 		if(!empty($phpssouidarr)) {
 			$status = $this->client->ps_delete_member($phpssouidarr, 1);
 			if($status > 0) {
 				if ($this->db->delete($where)) {
+					
+					//删除用户模型用户资料
+					foreach($uidarr as $v) {
+						if(!empty($userinfo[$v])) {
+							$this->db->set_model($userinfo[$v]);
+							$this->db->delete(array('userid'=>$v));
+						}
+					}
+				
 					showmessage(L('operation_success'), HTTP_REFERER);
 				} else {
 					showmessage(L('operation_failure'), HTTP_REFERER);
@@ -539,6 +573,8 @@ class member extends admin {
 			showmessage(L('user').L('not_exists'), HTTP_REFERER);
 		}
 		
+		$memberinfo['avatar'] = get_memberavatar($memberinfo['phpssouid'], '', 90);
+
 		$grouplist = getcache('grouplist');
 		//会员模型缓存
 		$modellist = getcache('member_model', 'commons');

@@ -1,4 +1,3 @@
-<link href="{CSS_PATH}reset.css" rel="stylesheet" type="text/css" /> 
 <style type="text/css"> 
 #vote-show{ border:1px solid #e5e5e5; padding:0 1px; color:#535353}
 #vote-show h2{background:url("{IMG_PATH}vote/show_bg.png") repeat-x 0 0;height:26px; line-height:26px; padding-left:10px}
@@ -23,12 +22,12 @@
 {else}
 {php $per=intval($vote_data[$r['optionid']]/$vote_data['total']*100);}
 {/if}
-<h3><input type={if $ischeckbox=='0'}"radio"{else}"checkbox"{/if} name="radio[]" id="radio" value="{$r['optionid']}" /> <label for="option_0">{$i}.{$r['option']}</label></h3>
+<h3><input type={if $ischeckbox=='0'}"radio"{else}"checkbox"{/if} name="radio[]" id="radio" value="{$r['optionid']}" {$check_status} /> <label for="option_0">{$i}.{$r['option']}</label></h3>
 <div class="vote_bar"><span>{$per}%</span><div style="width: {$per}%;"></div></div>
 {/loop}
  
 <div class="bk10"></div>
-<div class="btn"><input type="submit" value="提交"></div>&nbsp;&nbsp;<span class="f12">共有<font color="#0066FF">{$vote_data['total']}</font>人参与投票 </span>
+<div class="btn" style="{$display}"><input type="submit" value="提交"></div>&nbsp;&nbsp;<span class="f12">共有<font color="#0066FF">{$vote_data['total']}</font>人参与投票 </span>
 </div>
 </form>
 

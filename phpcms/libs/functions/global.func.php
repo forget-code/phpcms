@@ -157,7 +157,7 @@ function str_cut($string, $length, $dot = '...') {
 			$n -= $tn;
 		}
 		$strcut = substr($string, 0, $n);
-		$strcut = str_replace(array('∵',' ', '&', '"', "'", '“', '”', '—', '<', '>', '·', '…'), array(' ','&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;'), $strcut);
+		$strcut = str_replace(array('∵', '&', '"', "'", '“', '”', '—', '<', '>', '·', '…'), array(' ', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;'), $strcut);
 	} else {
 		$dotlen = strlen($dot);
 		$maxi = $length - $dotlen - 1;
@@ -304,7 +304,12 @@ function sys_auth($txt, $operation = 'ENCODE', $key = '') {
 function L($language = 'no_language',$pars = array(), $modules = '') {
 	static $LANG = array();
 	static $LANG_MODULES = array();
-	$lang = pc_base::load_config('system','lang');
+	static $lang = '';
+	if(defined('IN_ADMIN')) {
+		$lang = SYS_STYLE ? SYS_STYLE : 'zh-cn';
+	} else {
+		$lang = pc_base::load_config('system','lang');
+	}
 	if(!$LANG) {
 		require_once PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.'system.lang.php';
 		if(defined('IN_ADMIN')) require_once PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.'system_menu.lang.php';
@@ -338,6 +343,12 @@ function L($language = 'no_language',$pars = array(), $modules = '') {
  * @return unknown_type
  */
 function template($module = 'content', $template = 'index', $style = '') {
+	
+	if(strpos($module, 'plugin/')!== false) {
+		$plugin = str_replace('plugin/', '', $module);
+		return p_template($plugin, $template,$style);
+	}
+	$module = str_replace('/', DIRECTORY_SEPARATOR, $module);
 	if(!empty($style) && preg_match('/([a-z0-9\-_]+)/is',$style)) {
 	} elseif (empty($style) && !defined('STYLE')) {
 		if(defined('SITEID')) {
@@ -345,6 +356,7 @@ function template($module = 'content', $template = 'index', $style = '') {
 		} else {
 			$siteid = param::get_cookie('siteid');
 		}
+		if (!$siteid) $siteid = 1;
 		$sitelist = getcache('sitelist','commons');
 		if(!empty($siteid)) {
 			$style = $sitelist[$siteid]['default_style'];
@@ -386,7 +398,7 @@ function my_error_handler($errno, $errstr, $errfile, $errline) {
 	if($errno==8) return '';
 	$errfile = str_replace(PHPCMS_PATH,'',$errfile);
 	if(pc_base::load_config('system','errorlog')) {
-		error_log(date('m-d H:i:s',SYS_TIME).' | '.$errno.' | '.str_pad($errstr,30).' | '.$errfile.' | '.$errline."\r\n", 3, CACHE_PATH.'error_log.php');
+		error_log('<?php exit;?>'.date('m-d H:i:s',SYS_TIME).' | '.$errno.' | '.str_pad($errstr,30).' | '.$errfile.' | '.$errline."\r\n", 3, CACHE_PATH.'error_log.php');
 	} else {
 		$str = '<div style="font-size:12px;text-align:left; border-bottom:1px solid #9cc9e0; border-right:1px solid #9cc9e0;padding:1px 4px;color:#000000;font-family:Arial, Helvetica,sans-serif;"><span>errorno:' . $errno . ',str:' . $errstr . ',file:<font color="blue">' . $errfile . '</font>,line' . $errline .'<br /><a href="http://faq.phpcms.cn/?type=file&errno='.$errno.'&errstr='.urlencode($errstr).'&errfile='.urlencode($errfile).'&errline='.$errline.'" target="_blank" style="color:red">Need Help?</a></span></div>';
 		echo $str;
@@ -454,7 +466,7 @@ function tpl_cache($name,$times = 0) {
  * @param $config 配置名称
  * @param $timeout 过期时间
  */
-function setcache($name, $data, $filepath='', $type='file', $config='', $timeout='') {
+function setcache($name, $data, $filepath='', $type='file', $config='', $timeout=0) {
 	pc_base::load_sys_class('cache_factory','',0);
 	if($config) {
 		$cacheconfig = pc_base::load_config('cache');
@@ -557,7 +569,7 @@ function to_sqls($data, $front = ' AND ', $in_column = false) {
  * @return 分页
  */
 function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),$setpages = 10) {
-	if(defined('URLRULE')) {
+	if(defined('URLRULE') && $urlrule == '') {
 		$urlrule = URLRULE;
 		$array = $GLOBALS['URL_ARRAY'];
 	} elseif($urlrule == '') {
@@ -758,7 +770,9 @@ function get_nickname($userid='', $field='') {
 			$return = isset($memberinfo['nickname']) && !empty($memberinfo['nickname']) ? $memberinfo['nickname'].'('.$memberinfo['username'].')' : $memberinfo['username'];
 		}
 	} else {
-		if ($return = param::get_cookie('_nickname')) {
+		if (param::get_cookie('_nickname')) {
+			$return .= '('.param::get_cookie('_nickname').')';
+		} else {
 			$return .= '('.param::get_cookie('_username').')';
 		}
 	}
@@ -774,12 +788,15 @@ function get_memberinfo($userid, $field='') {
 	if(!is_numeric($userid)) {
 		return false;
 	} else {
-		$member_db = pc_base::load_model('member_model');
-		$memberinfo = $member_db->get_one(array('userid'=>$userid));
-		if(!empty($field) && !empty($memberinfo[$field])) {
-			return $memberinfo[$field];
+		static $memberinfo;
+		if (!isset($memberinfo[$userid])) {
+			$member_db = pc_base::load_model('member_model');
+			$memberinfo[$userid] = $member_db->get_one(array('userid'=>$userid));
+		}
+		if(!empty($field) && !empty($memberinfo[$userid][$field])) {
+			return $memberinfo[$userid][$field];
 		} else {
-			return $memberinfo;
+			return $memberinfo[$userid];
 		}
 	}
 }
@@ -791,14 +808,17 @@ function get_memberinfo($userid, $field='') {
  * 传入field，取用户$field字段信息
  */
 function get_memberinfo_buyusername($username, $field='') {
-		if(empty($username)){return false;}
+	if(empty($username)){return false;}
+	static $memberinfo;
+	if (!isset($memberinfo[$username])) {
 		$member_db = pc_base::load_model('member_model');
-		$memberinfo = $member_db->get_one(array('username'=>$username));
-		if(!empty($field) && !empty($memberinfo[$field])) {
-			return $memberinfo[$field];
-		} else {
-			return $memberinfo;
-		}
+		$memberinfo[$username] = $member_db->get_one(array('username'=>$username));
+	}
+	if(!empty($field) && !empty($memberinfo[$username][$field])) {
+		return $memberinfo[$username][$field];
+	} else {
+		return $memberinfo[$username];
+	}
 }
 
 /**
@@ -855,9 +875,9 @@ function menu_linkage($linkageid = 0, $id = 'linkid', $defaultvalue = 0) {
 			define('LINKAGE_INIT_1', 1);
 			$string .= '<script type="text/javascript" src="'.JS_PATH.'linkage/js/pop.js"></script>';
 		}
-		$var_div = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info') ? menu_linkage_level($defaultvalue,$linkageid,$infos) : $datas['title'];
-		$var_input = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info') ? '<input type="hidden" name="info['.$id.']" value="'.$defaultvalue.'">' : '<input type="hidden" name="info['.$id.']" value="">';
-		$string .= '<div name="'.$id.'" value="" id="'.$id.'" class="ib">'.$var_div.'</div>'.$var_input.' <input type="button" name="btn_'.$id.'" class="button" value="选择" onclick="open_linkage(\''.$id.'\',\''.$title.'\','.$container.',\''.$linkageid.'\')">';				
+		$var_div = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish' || ROUTE_A=='orderinfo') ? menu_linkage_level($defaultvalue,$linkageid,$infos) : $datas['title'];
+		$var_input = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']" value="'.$defaultvalue.'">' : '<input type="hidden" name="info['.$id.']" value="">';
+		$string .= '<div name="'.$id.'" value="" id="'.$id.'" class="ib">'.$var_div.'</div>'.$var_input.' <input type="button" name="btn_'.$id.'" class="button" value="'.L('linkage_select').'" onclick="open_linkage(\''.$id.'\',\''.$title.'\','.$container.',\''.$linkageid.'\')">';				
 		$string .= '<script type="text/javascript">';
 		$string .= 'var returnid_'.$id.'= \''.$id.'\';';
 		$string .= 'var returnkeyid_'.$id.' = \''.$linkageid.'\';';
@@ -919,10 +939,29 @@ function menu_linkage_level($linkageid,$keyid,$infos,$result=array()) {
 	return implode(' > ',$result);
 }
 /**
+ * 通过catid获取显示菜单完整结构
+ * @param  $menuid 菜单ID
+ * @param  $cache_file 菜单缓存文件名称
+ * @param  $cache_path 缓存文件目录
+ * @param  $key 取得缓存值的键值名称
+ * @param  $parentkey 父级的ID
+ * @param  $linkstring 链接字符
+ */
+function menu_level($menuid, $cache_file, $cache_path = 'commons', $key = 'catname', $parentkey = 'parentid', $linkstring = ' > ', $result=array()) {
+	$menu_arr = getcache($cache_file, $cache_path);
+	if (array_key_exists($menuid, $menu_arr)) {
+		$result[] = $menu_arr[$menuid][$key];
+		return menu_level($menu_arr[$menuid][$parentkey], $cache_file, $cache_path, $key, $parentkey, $linkstring, $result);
+	}
+	krsort($result);
+	return implode($linkstring, $result);
+}
+/**
  * 通过id获取显示联动菜单
  * @param  $linkageid 联动菜单ID
  * @param  $keyid 菜单keyid
  * @param  $space 菜单间隔符
+ * @param  $tyoe 1 返回间隔符链接，完整路径名称 3 返回完整路径数组，2返回当前联动菜单名称，4 直接返回ID
  * @param  $result 递归使用字段1
  * @param  $infos 递归使用字段2
  */
@@ -932,17 +971,16 @@ function get_linkage($linkageid, $keyid, $space = '>', $type = 1, $result = arra
 		$datas = getcache($keyid,'linkage');
 		$infos = $datas['data'];
 	}
-	if($type == 1 ) {
+	if($type == 1 || $type == 3 || $type == 4) {
 		if(array_key_exists($linkageid,$infos)) {
-			$result[]=$infos[$linkageid]['name'];
+			$result[]= ($type == 1) ? $infos[$linkageid]['name'] : (($type == 4) ? $linkageid :$infos[$linkageid]);
 			return get_linkage($infos[$linkageid]['parentid'], $keyid, $space, $type, $result, $infos);
 		} else {
 			if(count($result)>0) {
 				krsort($result);
-				$result = implode($space,$result);
+				if($type == 1 || $type == 4) $result = implode($space,$result);
 				return $result;
-			}
-			else {
+			} else {
 				return $result;
 			}
 		}
@@ -1201,8 +1239,8 @@ function catpos($catid, $symbol=' > '){
  * @param intval $catid 栏目ID
  */
 
-function get_sql_catid($module = 'category_content_1', $catid = 0) {
-	$category = getcache($module,'commons');
+function get_sql_catid($file = 'category_content_1', $catid = 0, $module = 'commons') {
+	$category = getcache($file,$module);
 	$catid = intval($catid);
 	if(!isset($category[$catid])) return false;
 	return $category[$catid]['child'] ? " `catid` IN(".$category[$catid]['arrchildid'].") " : " `catid`=$catid ";
@@ -1379,5 +1417,125 @@ function upload_key($args, $operation = 'ENCODE') {
 	$pc_auth_key = md5(pc_base::load_config('system','auth_key').$_SERVER['HTTP_USER_AGENT']);
 	$authkey = sys_auth($args, $operation, $pc_auth_key);
 	return $authkey;
+}
+
+/**
+ * 文本转换为图片
+ * @param string $txt 图形化文本内容
+ * @param int $fonttype 无外部字体时生成文字大小，取值范围1-5
+ * @param int $fontsize 引入外部字体时，字体大小
+ * @param string $font 字体名称 字体请放于phpcms\libs\data\font下
+ * @param string $fontcolor 字体颜色 十六进制形式 如FFFFFF,FF0000
+ */
+function string2img($txt, $fonttype = 5, $fontsize = 16, $font = '', $fontcolor = 'FF0000',$transparent = '1') {
+	if(empty($txt)) return false;
+	if(function_exists("imagepng")) {
+		$txt = urlencode(sys_auth($txt));
+		$txt = '<img src="'.APP_PATH.'api.php?op=creatimg&txt='.$txt.'&fonttype='.$fonttype.'&fontsize='.$fontsize.'&font='.$font.'&fontcolor='.$fontcolor.'&transparent='.$transparent.'" align="absmiddle">';
+	}
+	return $txt;
+}
+
+/**
+ * 获取phpcms版本号
+ */
+function get_pc_version($type='') {
+	$version = pc_base::load_config('version');
+	if($type==1) {
+		return $version['pc_version'];
+	} elseif($type==2) {
+		return $version['pc_release'];
+	} else {
+		return $version['pc_version'].' '.$version['pc_release'];
+	}
+}
+/**
+ * 运行钩子（插件使用）
+ */
+function runhook($method) {
+	$time_start = getmicrotime();
+	$data  = '';
+	$getpclass = FALSE;
+	$hook_appid = getcache('hook','plugins');
+	if(!empty($hook_appid)) {
+		foreach($hook_appid as $appid => $p) {
+			$pluginfilepath = PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$p.DIRECTORY_SEPARATOR.'hook.class.php';
+			$getpclass = TRUE;		
+			include_once $pluginfilepath;
+		}
+		$hook_appid = array_flip($hook_appid);
+		if($getpclass) {
+			$pclass = new ReflectionClass('hook'); 
+			foreach($pclass->getMethods() as $r) {
+				$legalmethods[] = $r->getName(); 
+			}
+		}
+		if(in_array($method,$legalmethods)) {
+			foreach (get_declared_classes() as $class){
+			   $refclass = new ReflectionClass($class);
+			   if($refclass->isSubclassOf('hook')){
+				  if ($_method = $refclass->getMethod($method)) {
+						  $classname = $refclass->getName();
+						if ($_method->isPublic() && $_method->isFinal()) {			
+							plugin_stat($hook_appid[$classname]);
+							$data .= $_method->invoke(null);						
+						}
+					}
+			   }
+			}
+		}
+		return $data;
+	}
+}
+
+function getmicrotime() {
+	list($usec, $sec) = explode(" ",microtime()); 
+	return ((float)$usec + (float)$sec); 
+}
+ 
+/**
+ * 插件前台模板加载
+ * Enter description here ...
+ * @param unknown_type $module
+ * @param unknown_type $template
+ * @param unknown_type $style
+ */
+function p_template($plugin = 'content', $template = 'index',$style='default') {
+	if(!$style) $style = 'default';
+	$template_cache = pc_base::load_sys_class('template_cache');
+	$compiledtplfile = PHPCMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_template'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.$template.'.php';
+
+	if(!file_exists($compiledtplfile) || (file_exists(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html') && filemtime(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html') > filemtime($compiledtplfile))) {
+		$template_cache->template_compile('plugin/'.$plugin, $template, 'default');
+	} elseif (!file_exists(PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$template.'.html')) {
+		showmessage('Template does not exist.'.DIRECTORY_SEPARATOR.'plugin'.DIRECTORY_SEPARATOR.$plugin.DIRECTORY_SEPARATOR.$template.'.html');
+	}
+
+	return $compiledtplfile;
+}
+/**
+ * 读取缓存动态页面
+ */
+function cache_page_start() {
+	$relate_url = isset($_SERVER['REQUEST_URI']) ? safe_replace($_SERVER['REQUEST_URI']) : $php_self.(isset($_SERVER['QUERY_STRING']) ? '?'.safe_replace($_SERVER['QUERY_STRING']) : $path_info);
+	define('CACHE_PAGE_ID', md5($relate_url));
+	$contents = getcache(CACHE_PAGE_ID, 'page_tmp/'.substr(CACHE_PAGE_ID, 0, 2));
+	if($contents && intval(substr($contents, 15, 10)) > SYS_TIME) {
+		echo substr($contents, 29);
+		exit;
+	}
+	if (!defined('HTML')) define('HTML',true);
+	return true;
+}
+/**
+ * 写入缓存动态页面
+ */
+function cache_page($ttl = 360, $isjs = 0) {
+	if($ttl == 0 || !defined('CACHE_PAGE_ID')) return false;
+	$contents = ob_get_contents();
+	
+	if($isjs) $contents = format_js($contents);
+	$contents = "<!--expiretime:".(SYS_TIME + $ttl)."-->\n".$contents;
+	setcache(CACHE_PAGE_ID, $contents, 'page_tmp/'.substr(CACHE_PAGE_ID, 0, 2));
 }
 ?>

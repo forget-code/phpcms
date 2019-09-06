@@ -8,8 +8,5 @@ body,html{background:none; padding:0; margin:0}
 </style>
 <body style="background-color:transparent">
 <div class="log">{if $_username}{L('hellow')} {get_nickname()}, <a href="{APP_PATH}index.php?m=member&siteid={$siteid}" target="_blank">{L('member_center')}</a> <a href="{APP_PATH}index.php?m=member&c=index&a=logout&forward={urlencode($_GET['forward'])}&siteid={$siteid}" target="_top">{L('logout')}</a>{else}<a href="{APP_PATH}index.php?m=member&c=index&a=register&siteid={$siteid}" target="_blank">{L('register')}</a> <span>|</span> <a href="{APP_PATH}index.php?m=member&c=index&a=login&forward={urlencode($_GET['forward'])}&siteid={$siteid}" target="_top">{L('login')}</a>
-{if $snda_enable}
-<span>|</span> <a href="{APP_PATH}index.php?m=member&c=index&a=login&quan=1&forward={urlencode($_GET['forward'])}&siteid={$siteid}" target="_top"><img class="snda" src="{IMG_PATH}connect/snda_{$snda_enable}_75x18.gif" border=0 /></a>
-{/if}
 {/if}</div>
 </body>

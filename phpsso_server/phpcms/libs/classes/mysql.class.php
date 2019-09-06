@@ -84,7 +84,6 @@ final class mysql {
 		}
 		
 		$this->lastqueryid = mysql_query($sql, $this->link) or $this->halt(mysql_error());
-
 		$this->querycount++;
 		return $this->lastqueryid;
 	}

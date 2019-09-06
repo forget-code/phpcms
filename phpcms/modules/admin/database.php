@@ -71,10 +71,10 @@ class database extends admin {
 			$this->db = db_factory::get_instance($database)->get_database($this->pdo_name);
 			$this->import_database($pre);
 		} else {
+			$$pdos = $others = array();
 			foreach($database as $name=>$value) {
 				$pdos[$name] = $value['database'].'['.$value['hostname'].']';
-			}			
-			$others = array();
+			}
 			$pdoname = $_GET['pdoname'] ? $_GET['pdoname'] : key($pdos);
 			$sqlfiles = glob(CACHE_PATH.'bakup/'.$pdoname.'/*.sql');
 			if(is_array($sqlfiles)) {
@@ -267,6 +267,7 @@ class database extends admin {
 				$fields_name = $this->db->get_fields($tables[$i]);
 				$rows = $this->db->query($sql);
 				$name = array_keys($fields_name);
+				$r = array();
 				while ($row = $this->db->fetch_next()) {
 					$r[] = $row;
 					$comma = "";
@@ -315,11 +316,10 @@ class database extends admin {
 	private function import_database($filename) {
 		if($filename && fileext($filename)=='sql') {
 			$filepath = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.$this->pdo_name.DIRECTORY_SEPARATOR.$filename;
-			echo $filepath;exit;
-			if(!file_exists($filepath)) showmessage($this->lang['sorry']." $filepath ".$this->lang['not_exist']);
+			if(!file_exists($filepath)) showmessage(L('database_sorry')." $filepath ".L('database_not_exist'));
 			$sql = file_get_contents($filepath);
 			sql_execute($sql);
-			showmessage("$filename ".$this->lang['data_have_load_to_database']);
+			showmessage("$filename ".L('data_have_load_to_database'));
 		} else {
 			$fileid = $this->fileid ? $this->fileid : 1;
 			$pre = $filename;
@@ -329,7 +329,7 @@ class database extends admin {
 				$sql = file_get_contents($filepath);
 				$this->sql_execute($sql);
 				$fileid++;
-				showmessage(L('bakup_data_file')." $filename ".$this->lang['load_success'],"?m=admin&c=database&a=import&pdoname=".$this->pdo_name."&pre=".$pre."&fileid=".$fileid."&dosubmit=1");
+				showmessage(L('bakup_data_file')." $filename ".L('load_success'),"?m=admin&c=database&a=import&pdoname=".$this->pdo_name."&pre=".$pre."&fileid=".$fileid."&dosubmit=1");
 			} else {
 				showmessage(L('data_recover_succ'),'?m=admin&c=database&a=import');
 			}
@@ -357,9 +357,9 @@ class database extends admin {
 
  	private function sql_split($sql) {
 		if($this->db->version() > '4.1' && $this->db_charset) {
-			$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "TYPE=\\1 DEFAULT CHARSET=".DB_CHARSET,$sql);
+			$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=".$this->db_charset,$sql);
 		}
-		if($this->db_tablepre != "phpcms_") $sql = str_replace("phpcms_", $this->db_tablepre, $sql);
+		if($this->db_tablepre != "phpcms_") $sql = str_replace("`phpcms_", '`'.$this->db_tablepre, $sql);
 		$sql = str_replace("\r", "\n", $sql);
 		$ret = array();
 		$num = 0;

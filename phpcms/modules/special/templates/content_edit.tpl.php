@@ -12,9 +12,9 @@ html,body{background:#e2e9ea}
 	var uploadurl = '<?php echo pc_base::load_config('system','upload_url')?>';
 //-->
 </script>
-<script language="javascript" type="text/javascript" src="http://js.phpcms.cn/js/content_addtop.js"></script>
-<script language="javascript" type="text/javascript" src="http://js.phpcms.cn/js/colorpicker.js"></script>
- 
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>content_addtop.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>colorpicker.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>cookie.js"></script>
 <form name="myform" id="myform" action="?m=special&c=content&a=edit&specialid=<?php echo $_GET['specialid']?>&id=<?php echo $_GET['id']?>" method="post" enctype="multipart/form-data">
 <div class="addContent">
 <div class="crumbs"><?php echo L('edit_pos_info')?></div>
@@ -23,7 +23,7 @@ html,body{background:#e2e9ea}
         	<div class="content pad-6">
 	<h6> <?php echo L('content_thumb')?></h6>
 	 <div class="upload-pic img-wrap"><div class="bk10"></div><input type="hidden" name="info[thumb]" value="<?php echo $info['thumb']?>" id="thumb">
-						<a href="javascript:;" onclick="javascript:flashupload('thumb_images', '<?php echo L('file_upload')?>','thumb',thumb_images,'1,jpg|jpeg|gif|bmp|png,300,300','content','39')"><img src="<?php if($info['thumb']) { echo $info['thumb']; } else {?>statics/images/icon/upload-pic.png<?php }?>" id="thumb_preview" width="135" height="113" style="cursor:hand" /></a><input type="button" style="width: 66px;" class="button" onclick="crop_cut($('#thumb').val());return false;" value="<?php echo L('crop_thumb')?>"><script type="text/javascript">function crop_cut(id){
+						<a href="javascript:;" onclick="javascript:flashupload('thumb_images', '<?php echo L('file_upload')?>','thumb',thumb_images,'1,jpg|jpeg|gif|bmp|png,300,300','content','39','<?php echo upload_key('1,jpg|jpeg|gif|bmp|png,300,300')?>')"><img src="<?php if($info['thumb']) { echo $info['thumb']; } else {?>statics/images/icon/upload-pic.png<?php }?>" id="thumb_preview" width="135" height="113" style="cursor:hand" /></a><input type="button" style="width: 66px;" class="button" onclick="crop_cut($('#thumb').val());return false;" value="<?php echo L('crop_thumb')?>"><script type="text/javascript">function crop_cut(id){
 	if (id=='') { alert('<?php echo L('please_upload_thumb')?>');return false;}
 	window.top.art.dialog({title:'<?php echo L('crop_thumb')?>', id:'crop', iframe:'index.php?m=content&c=content&a=public_crop&module=phpcms&picurl='+encodeURIComponent(id)+'&input=thumb&preview=thumb_preview', width:'680px', height:'480px'}, 	function(){var d = window.top.art.dialog({id:'crop'}).data.iframe;
 	d.uploadfile();return false;}, function(){window.top.art.dialog({id:'crop'}).close()});
@@ -86,8 +86,8 @@ html,body{background:#e2e9ea}
 </div>
 <div class="fixed-bottom">
 	<div class="fixed-but text-c">
-    <div class="button"><input value="<?php echo L('save')?>" type="submit" class="cu" name="dosubmit"></div>
-    <div class="button"><input value="<?php echo L('close')?>" type="button" name="close" class="cu" onclick="close_window()"></div>
+    <div class="button"><input value="<?php echo L('save')?>" type="submit" class="cu" name="dosubmit" onclick="refersh_window();"></div>
+    <div class="button"><input value="<?php echo L('close')?>" type="button" name="close" class="cu" onclick="refersh_window();close_window()"></div>
       </div>
 </div>
 </form>
@@ -134,5 +134,8 @@ $(function(){
 });
 document.title='编辑：<?php echo $info['title']?>';
 self.moveTo(0, 0);
+function refersh_window() {
+	setcookie('refersh_time', 1);
+}
 //-->
 </script>

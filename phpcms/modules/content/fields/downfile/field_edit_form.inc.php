@@ -1,4 +1,5 @@
 <?php 
+defined('IN_PHPCMS') or exit('No permission resources.');
 $server_list = getcache('downservers','commons');
 foreach($server_list as $_r) if (in_array($_r['siteid'],array(0,$this->siteid))) $str .='<span class="ib" style="width:25%">'.$_r['sitename'].'</span>';
 ?>

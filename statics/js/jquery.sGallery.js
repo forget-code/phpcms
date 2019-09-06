@@ -18,7 +18,7 @@ $.fn.sGallery = function (o) {
 		botLast:null,//按钮上一个
 		botNext:null,//按钮下一个
 		thumbNowClass:'now',//预览对象当前的class,默认为now
-		slideTime:1000,//平滑过渡时间
+		slideTime:800,//平滑过渡时间
 		autoChange:true,//是否自动切换
 		changeTime:5000,//自动切换时间
 		delayTime:100//鼠标经过时反应的延迟时间
@@ -43,8 +43,8 @@ function fadeAB () {
 	if (nowIndex != index) {
 		if (set.thumbObj!=null) {
 		$(set.thumbObj).removeClass().eq(index).addClass(set.thumbNowClass);}
-		_self.eq(nowIndex).fadeOut(set.slideTime);
-		_self.eq(index).fadeIn(set.slideTime);
+		_self.eq(nowIndex).stop(false,true).fadeOut(set.slideTime);
+		_self.eq(index).stop(true,true).fadeIn(set.slideTime);
 		$(set.titleObj).eq(nowIndex).hide();//新增加title
 		$(set.titleObj).eq(index).show();//新增加title
 		nowIndex = index;
@@ -65,19 +65,13 @@ function runNext() {
 	thumb = $(set.thumbObj);
 //初始化
 	thumb.eq(0).addClass(set.thumbNowClass);
-
-		thumb.mousemove(function () {
+		thumb.bind("mousemove",function(event){
 			index = thumb.index($(this));
 			fadeAB();
-			return false;
-		});
-		thumb.mousemove(function () {
-			index = thumb.index($(this));
 			delayRun = setTimeout(fadeAB,set.delayTime);
-		});
-		thumb.mousemove(function () {
 			clearTimeout(delayRun);
-		});
+			event.stopPropagation();
+		})
 	}
 
 //点击上一个

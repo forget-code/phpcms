@@ -52,9 +52,9 @@ class ipbanned_model extends model {
 		} else {
 		return 1; 
 		}
-	} 
-
- 	/**
+	}
+	
+	/**
 	 * 
 	 * IP禁止判断接口,供外部调用 ...
 	 */
@@ -72,13 +72,13 @@ class ipbanned_model extends model {
 					$ip_min = $this->convert_ip("min",$data['ip']);
 					$ip_max = $this->convert_ip("max",$data['ip']);
 					$result = $this->ipforbidden($ip,$ip_min,$ip_max);
-					if($result==0){
+					if($result==0 && $data['expires']>SYS_TIME){
 						//被封
 						showmessage('你在IP禁止段内,所以禁止你访问');
 					}
 				} else {
 					//不是IP段,用绝对匹配
-					if($ip==$data['ip']){
+					if($ip==$data['ip']&& $data['expires']>SYS_TIME){
 						showmessage('IP地址绝对匹配,禁止你访问');
 					}
 				}

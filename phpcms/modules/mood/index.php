@@ -4,14 +4,20 @@ class index {
 	private $setting, $catid, $contentid, $siteid, $mood_id;
 	public function __construct() {
 		$this->setting = getcache('mood_program', 'commons');
-		foreach ($this->setting as $k=>$v) {
-			if (empty($v['use'])) unset($this->setting[$k]);
-		}
+		
+		
 		$this->mood_id = isset($_GET['id']) ? $_GET['id'] : '';
 		if (empty($this->mood_id)) {
 			showmessage(L('id_cannot_be_empty'));
 		}
 		list($this->catid, $this->contentid, $this->siteid) = id_decode($this->mood_id);
+		
+		$this->setting = isset($this->setting[$this->siteid]) ? $this->setting[$this->siteid] : array();
+		
+		foreach ($this->setting as $k=>$v) {
+			if (empty($v['use'])) unset($this->setting[$k]);
+		}
+		
 		define('SITEID', $this->siteid);
 	}
 	
@@ -78,10 +84,10 @@ class index {
 	}
 	
 	//显示AJAX结果
-	private function _show_result($status = 0, $msg = '') {
+	protected function _show_result($status = 0, $msg = '') {
 		if(CHARSET != 'utf-8') {
 			$msg = iconv(CHARSET, 'utf-8', $msg);
 		}
-		exit($_GET['callback'].'('.json_encode(array('status'=>$status, 'data'=>$msg)).')');
+		exit(trim_script($_GET['callback']).'('.json_encode(array('status'=>$status, 'data'=>$msg)).')');
 	}
 }

@@ -11,7 +11,7 @@ include $this->admin_tpl('header','admin');
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col"><?php echo L('module')?>: <?php echo form::select($module_arr,'','name="search[module]"',$default)?> 用户名:  <input type="text" value="phpcms" class="input-text" name="search[username]" size='10'>  时 间:  <?php echo form::date('search[start_time]','','')?> 至   <?php echo form::date('search[end_time]','','')?>    <input type="submit" value="确定搜索" class="button" name="dosubmit">
+		<td><div class="explain-col"><?php echo L('module')?>: <?php echo form::select($module_arr,'','name="search[module]"',$default)?> 用户名:  <input type="text" value=<?php echo $_GET['search']['username'];?> class="input-text" name="search[username]" size='10'>  时 间:  <?php echo form::date('search[start_time]',$_GET['search']['start_time'],'1')?> 至   <?php echo form::date('search[end_time]',$_GET['search']['end_time'],'1')?>    <input type="submit" value="确定搜索" class="button" name="dosubmit">
 		</div>
 		</td>
 		</tr>
@@ -51,10 +51,7 @@ if(is_array($infos)){
 }
 ?></tbody>
  </table>
- <div class="btn">
- <a href="#" onClick="javascript:$('input[type=checkbox]').attr('checked', true)"><?php echo L('selected_all')?></a>/<a href="#" onClick="javascript:$('input[type=checkbox]').attr('checked', false)"><?php echo L('cancel')?></a>
-
-<input type="submit" name="submit" class="button" value="<?php echo L('remove_all_selected')?>"  onClick="return confirm('<?php echo L('confirm', array('message' => L('selected')))?>')" />  
+ <div class="btn"> 
 </div> 
 <div id="pages"><?php echo $pages?></div>
 

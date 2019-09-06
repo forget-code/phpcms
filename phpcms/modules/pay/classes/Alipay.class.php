@@ -31,7 +31,7 @@ class Alipay extends paymentabstract{
 		elseif($this->config['service_type']==2) $this->config['service'] = 'create_direct_pay_by_user';
         else $this->config['service'] = 'create_partner_trade_by_buyer';	
         
-		$this->config['gateway_url'] = 'https://www.alipay.com/cooperate/gateway.do?';
+		$this->config['gateway_url'] = 'https://www.alipay.com/cooperate/gateway.do?_input_charset='.CHARSET;
 		$this->config['gateway_method'] = 'POST';
 		$this->config['notify_url'] = return_url('alipay',1);
 		$this->config['return_url'] = return_url('alipay');
@@ -43,7 +43,7 @@ class Alipay extends paymentabstract{
 		$prepare_data['payment_type'] = '1';
 		$prepare_data['seller_email'] = $this->config['alipay_account'];
 		$prepare_data['partner'] = $this->config['alipay_partner'];
-		$prepare_data['_input_charset'] = 'GBK';		
+		$prepare_data['_input_charset'] = CHARSET;		
 		$prepare_data['notify_url'] = $this->config['notify_url'];
 		$prepare_data['return_url'] = $this->config['return_url'];
 		
@@ -58,7 +58,7 @@ class Alipay extends paymentabstract{
 		$prepare_data['quantity'] = $this->order_info['quantity'];
 
 		// 物流信息
-		if($this->config['service'] == 'create_partner_trade_by_buyer') {
+		if($this->config['service'] == 'create_partner_trade_by_buyer' || $this->config['service'] == 'trade_create_by_buyer') {
 			$prepare_data['logistics_type'] = 'EXPRESS';
 			$prepare_data['logistics_fee'] = '0.00';
 			$prepare_data['logistics_payment'] = 'SELLER_PAY';

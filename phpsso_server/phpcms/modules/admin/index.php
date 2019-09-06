@@ -40,7 +40,7 @@ class index extends admin {
 
 		//应用个数
 		$applist = getcache('applist');
-		$appnum = count($applist);
+		$appnum = empty($applist) ? 0 : count($applist);
 		
 		include $this->admin_tpl('right');
 	}

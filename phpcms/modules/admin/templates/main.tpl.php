@@ -20,7 +20,7 @@ $(function(){if ($.browser.msie && parseInt($.browser.version) < 7) $('#browserV
 </div>
 <div class="col-2 col-auto">
 	<h6><?php echo L('main_safety_tips')?></h6>
-	<div class="content">
+	<div class="content" style="color:#ff0000;">
 <?php if($pc_writeable) {?>	
 <?php echo L('main_safety_permissions')?><br />
 <?php } ?>
@@ -42,6 +42,10 @@ $(function(){if ($.browser.msie && parseInt($.browser.version) < 7) $('#browserV
 </div>
 <div class="bk10"></div>
 <div class="col-2 lf mr10" style="width:48%">
+<?php
+$ccache = getcache('category_content_1','commons');
+
+if(module_exists('member') && is_array($ccache)) { ?>
 	<h6><?php echo L('main_shortcut')?></h6>
 	<div class="content" id="admin_panel">
 	<?php foreach($adminpanel as $v) {?>
@@ -50,6 +54,24 @@ $(function(){if ($.browser.msie && parseInt($.browser.version) < 7) $('#browserV
 		</span>
 	<?php }?>
 	</div>
+<?php } else { ?>
+	<h6>Update Caches</h6>
+	<div class="content" id="update_tips" style="height:90px; overflow:auto;"><ul id="file" class="sbul">
+<div class="pad-10">
+<form action="?m=admin&c=cache_all&a=init&pc_hash=<?php echo $_SESSION['pc_hash'];?>" target="cache_if" method="post" id="myform" name="myform">
+  <input type="hidden" name="dosubmit" value="1">
+</form>
+<iframe id="cache_if" name="cache_if" class="ifm" width="0" height="0"></iframe>
+</div>
+<script type="text/javascript">
+document.myform.submit();
+function addtext(data) {
+	$('#file').append(data);
+	document.getElementById('update_tips').scrollTop = document.getElementById('update_tips').scrollHeight;
+}
+</script>
+	</div>
+<?php }?>
 </div>
 <div class="col-2 col-auto">
 	<h6><?php echo L('main_sysinfo')?></h6>
@@ -65,8 +87,8 @@ $(function(){if ($.browser.msie && parseInt($.browser.version) < 7) $('#browserV
 <div class="col-2 lf mr10" style="width:48%">
 	<h6><?php echo L('main_product_team')?></h6>
 	<div class="content">
+	<?php echo L('main_copyright')?><?php echo $product_copyright?><br />
 	<?php echo L('main_product_planning')?><?php echo $architecture?><br />
-	<?php echo L('main_product_comm')?><?php echo $products_council?><br/>
 	<?php echo L('main_product_dev')?><?php echo $programmer;?><br />
 	<?php echo L('main_product_ui')?><?php echo $designer;?><br />
 	<?php echo L('main_product_site')?><a href="http://www.phpcms.cn/" target="_blank">http://www.phpcms.cn/</a> <br />

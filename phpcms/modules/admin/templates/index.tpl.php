@@ -2,26 +2,29 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" class="off">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8 echo CHARSET?>" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET?>" />
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <title><?php echo L('admin_site_title')?></title>
 <link href="<?php echo CSS_PATH?>reset.css" rel="stylesheet" type="text/css" />
-<link href="<?php echo CSS_PATH?>system.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo CSS_PATH.SYS_STYLE;?>-system.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo CSS_PATH?>dialog.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH?>style/styles1.css" title="styles1" media="screen" />
-<link rel="alternate stylesheet" type="text/css" href="<?php echo CSS_PATH?>style/styles2.css" title="styles2" media="screen" />
-<link rel="alternate stylesheet" type="text/css" href="<?php echo CSS_PATH?>style/styles3.css" title="styles3" media="screen" />
-<link rel="alternate stylesheet" type="text/css" href="<?php echo CSS_PATH?>style/styles4.css" title="styles4" media="screen" />
+<link rel="stylesheet" type="text/css" href="<?php echo CSS_PATH?>style/<?php echo SYS_STYLE;?>-styles1.css" title="styles1" media="screen" />
+<link rel="alternate stylesheet" type="text/css" href="<?php echo CSS_PATH?>style/<?php echo SYS_STYLE;?>-styles2.css" title="styles2" media="screen" />
+<link rel="alternate stylesheet" type="text/css" href="<?php echo CSS_PATH?>style/<?php echo SYS_STYLE;?>-styles3.css" title="styles3" media="screen" />
+<link rel="alternate stylesheet" type="text/css" href="<?php echo CSS_PATH?>style/<?php echo SYS_STYLE;?>-styles4.css" title="styles4" media="screen" />
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.min.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>styleswitch.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>dialog.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>hotkeys.js"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.sGallery.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH?>jquery.sgallery.js"></script>
 <script type="text/javascript">
 var pc_hash = '<?php echo $_SESSION['pc_hash']?>'
 </script>
+<style type="text/css">
+.objbody{overflow:hidden}
+</style>
 </head>
-<body scroll="no">
+<body scroll="no" class="objbody">
 <div id="dvLockScreen" class="ScreenLock" style="display:<?php if(isset($_SESSION['lock_screen']) && $_SESSION['lock_screen']==0) echo 'none';?>">
     <div id="dvLockScreenWin" class="inputpwd">
     <h5><b class="ico ico-info"></b><span id="lock_tips"><?php echo L('lockscreen_status');?></span></h5>
@@ -32,7 +35,7 @@ var pc_hash = '<?php echo $_SESSION['pc_hash']?>'
 </div>
 <div class="header">
 	<div class="logo lf"><a href="<?php echo $currentsite['domain']?>" target="_blank"><span class="invisible"><?php echo L('phpcms_title')?></span></a></div>
-    <div class="rt">
+    <div class="rt-col">
     	<div class="tab_style white cut_line text-r"><a href="javascript:;" onclick="lock_screen()"><img src="<?php echo IMG_PATH.'icon/lockscreen.png'?>"> <?php echo L('lockscreen')?></a><span>|</span><a href="http://www.phpcms.cn" target="_blank"><?php echo L('official_site')?></a><span>|</span><a href="http://www.phpcms.cn/license/license.php" target="_blank"><?php echo L('authorization')?></a><span>|</span><a href="http://bbs.phpcms.cn" target="_blank"><?php echo L('igenus_for_postfix')?></a><span>|</span><a href="http://v9.help.phpcms.cn" target="_blank"><?php echo L('help')?></a>
     <ul id="Skin">
 		<li class="s1 styleswitch" rel="styles1"></li>
@@ -41,9 +44,8 @@ var pc_hash = '<?php echo $_SESSION['pc_hash']?>'
         <li class="s4 styleswitch" rel="styles4"></li>
 	</ul>
         </div>
-        <div class="style_but"></div>
     </div>
-    <div class="col-auto" style="overflow: visible">
+    <div class="col-auto">
     	<div class="log white cut_line"><?php echo L('hello'),$admin_username?>  [<?php echo $rolename?>]<span>|</span><a href="?m=admin&c=index&a=public_logout">[<?php echo L('exit')?>]</a><span>|</span>
     		<a href="<?php echo $currentsite['domain']?>" target="_blank" id="site_homepage"><?php echo L('site_homepage')?></a><span>|</span>
     		<a href="?m=member" target="_blank"><?php echo L('member_center')?></a><span>|</span>
@@ -67,7 +69,7 @@ var pc_hash = '<?php echo $_SESSION['pc_hash']?>'
 </div>
 <div id="content">
 	<div class="col-left left_menu">
-    	<div id="leftMain"></div>
+    	<div id="Scroll"><div id="leftMain"></div></div>
         <a href="javascript:;" id="openClose" style="outline-style: none; outline-color: invert; outline-width: medium;" hideFocus="hidefocus" class="open" title="<?php echo L('spread_or_closed')?>"><span class="hidden"><?php echo L('expand')?></span></a>
     </div>
 	<div class="col-1 lf cat-menu" id="display_center_id" style="display:none" height="100%">
@@ -77,7 +79,7 @@ var pc_hash = '<?php echo $_SESSION['pc_hash']?>'
         </div>
     <div class="col-auto mr8">
     <div class="crumbs">
-    <div class="shortcut cu-span"><a href="?m=content&c=create_html&a=public_index&pc_hash=<?php echo $_SESSION['pc_hash'];?>" target="right"><span><?php echo L('create_index')?></span></a><a href="?m=admin&c=cache_all&a=init&pc_hash=<?php echo $_SESSION['pc_hash'];?>" target="right"><span><?php echo L('update_backup')?></span></a><a href="javascript:art.dialog({id:'map',iframe:'?m=admin&c=index&a=public_map', title:'<?php echo L('background_map')?>', width:'700', height:'500', lock:true});void(0);"><span><?php echo L('background_map')?></span></a></div>
+    <div class="shortcut cu-span"><a href="?m=content&c=create_html&a=public_index&pc_hash=<?php echo $_SESSION['pc_hash'];?>" target="right"><span><?php echo L('create_index')?></span></a><a href="?m=admin&c=cache_all&a=init&pc_hash=<?php echo $_SESSION['pc_hash'];?>" target="right"><span><?php echo L('update_backup')?></span></a><a href="javascript:art.dialog({id:'map',iframe:'?m=admin&c=index&a=public_map', title:'<?php echo L('background_map')?>', width:'700', height:'500', lock:true});void(0);"><span><?php echo L('background_map')?></span></a><?php echo runhook('admin_top_left_menu')?></div>
     <?php echo L('current_position')?><span id="current_pos"></span></div>
     	<div class="col-1">
         	<div class="content" style="position:relative; overflow:hidden">
@@ -104,35 +106,70 @@ var pc_hash = '<?php echo $_SESSION['pc_hash']?>'
 	<li style="margin:0"><a href="javascript:site_select(<?php echo $v['siteid']?>, '<?php echo new_addslashes($v['name'])?>', '<?php echo $v['domain']?>', '<?php echo $v['siteid']?>')"><?php echo $v['name']?></a></li>
 <?php endforeach;?>
 </ul>
+<div class="scroll"><a href="javascript:;" class="per" title="使用鼠标滚轴滚动侧栏" onclick="menuScroll(1);"></a><a href="javascript:;" class="next" title="使用鼠标滚轴滚动侧栏" onclick="menuScroll(2);"></a></div>
 <script type="text/javascript"> 
-//clientHeight-0; 空白值 iframe自适应高度
-function windowW(){
-	if($(window).width()<980){
-			$('.header').css('width',980+'px');
-			$('#content').css('width',980+'px');
-			$('body').attr('scroll','');
-			$('body').css('overflow','');
+if(!Array.prototype.map)
+Array.prototype.map = function(fn,scope) {
+  var result = [],ri = 0;
+  for (var i = 0,n = this.length; i < n; i++){
+	if(i in this){
+	  result[ri++]  = fn.call(scope ,this[i],i,this);
+	}
+  }
+return result;
+};
+
+var getWindowSize = function(){
+return ["Height","Width"].map(function(name){
+  return window["inner"+name] ||
+	document.compatMode === "CSS1Compat" && document.documentElement[ "client" + name ] || document.body[ "client" + name ]
+});
+}
+window.onload = function (){
+	if(!+"\v1" && !document.querySelector) { // for IE6 IE7
+	  document.body.onresize = resize;
+	} else { 
+	  window.onresize = resize;
+	}
+	function resize() {
+		wSize();
+		return false;
 	}
 }
-windowW();
-$(window).resize(function(){
-	if($(window).width()<980){
-		windowW();
+function wSize(){
+	//这是一字符串
+	var str=getWindowSize();
+	var strs= new Array(); //定义一数组
+	strs=str.toString().split(","); //字符分割
+	var heights = strs[0]-150,Body = $('body');$('#rightMain').height(heights);   
+	//iframe.height = strs[0]-46;
+	if(strs[1]<980){
+		$('.header').css('width',980+'px');
+		$('#content').css('width',980+'px');
+		Body.attr('scroll','');
+		Body.removeClass('objbody');
 	}else{
 		$('.header').css('width','auto');
 		$('#content').css('width','auto');
-		$('body').attr('scroll','no');
-		$('body').css('overflow','hidden');
-		
+		Body.attr('scroll','no');
+		Body.addClass('objbody');
 	}
-});
-window.onresize = function(){
-	var heights = document.documentElement.clientHeight-150;document.getElementById('rightMain').height = heights;
+	
 	var openClose = $("#rightMain").height()+39;
 	$('#center_frame').height(openClose+9);
 	$("#openClose").height(openClose+30);	
+	$("#Scroll").height(openClose-20);
+	windowW();
 }
-window.onresize();
+wSize();
+function windowW(){
+	if($('#Scroll').height()<$("#leftMain").height()){
+		$(".scroll").show();
+	}else{
+		$(".scroll").hide();
+	}
+}
+windowW();
 //站点下拉菜单
 $(function(){
 	var offset = $(".tab_web").offset();
@@ -183,11 +220,13 @@ $("#openClose").click(function(){
 		$(".left_menu").removeClass("left_menu_on");
 		$(this).removeClass("close");
 		$(this).data('clicknum', 0);
+		$(".scroll").show();
 	} else {
 		$(".left_menu").addClass("left_menu_on");
 		$(this).addClass("close");
 		$("html").addClass("on");
 		$(this).data('clicknum', 1);
+		$(".scroll").hide();
 	}
 	return false;
 });
@@ -197,11 +236,14 @@ function _M(menuid,targetUrl) {
 	$("#bigid").val(menuid);
 	$("#paneladd").html('<a class="panel-add" href="javascript:add_panel();"><em><?php echo L('add')?></em></a>');
 	if(menuid!=8) {
-		$("#leftMain").load("?m=admin&c=index&a=public_menu_left&menuid="+menuid);
+		$("#leftMain").load("?m=admin&c=index&a=public_menu_left&menuid="+menuid, {limit: 25}, function(){
+		   windowW();
+		 });
 	} else {
-		$("#leftMain").load("?m=admin&c=phpsso&a=public_menu_left&menuid="+menuid);
+		$("#leftMain").load("?m=admin&c=phpsso&a=public_menu_left&menuid="+menuid, {limit: 25}, function(){
+		   windowW();
+		 });
 	}
-	
 	//$("#rightMain").attr('src', targetUrl);
 	$('.top_menu').removeClass("on");
 	$('#_M'+menuid).addClass("on");
@@ -310,6 +352,51 @@ function check_screenlock() {
 	});
 }
 $(document).bind('keydown', 'return', function(evt){check_screenlock();return false;});
+
+(function(){
+    var addEvent = (function(){
+             if (window.addEventListener) {
+                return function(el, sType, fn, capture) {
+                    el.addEventListener(sType, fn, (capture));
+                };
+            } else if (window.attachEvent) {
+                return function(el, sType, fn, capture) {
+                    el.attachEvent("on" + sType, fn);
+                };
+            } else {
+                return function(){};
+            }
+        })(),
+    Scroll = document.getElementById('Scroll');
+    // IE6/IE7/IE8/Opera 10+/Safari5+
+    addEvent(Scroll, 'mousewheel', function(event){
+        event = window.event || event ;  
+		if(event.wheelDelta <= 0 || event.detail > 0) {
+				Scroll.scrollTop = Scroll.scrollTop + 29;
+			} else {
+				Scroll.scrollTop = Scroll.scrollTop - 29;
+		}
+    }, false);
+
+    // Firefox 3.5+
+    addEvent(Scroll, 'DOMMouseScroll',  function(event){
+        event = window.event || event ;
+		if(event.wheelDelta <= 0 || event.detail > 0) {
+				Scroll.scrollTop = Scroll.scrollTop + 29;
+			} else {
+				Scroll.scrollTop = Scroll.scrollTop - 29;
+		}
+    }, false);
+	
+})();
+function menuScroll(num){
+	var Scroll = document.getElementById('Scroll');
+	if(num==1){
+		Scroll.scrollTop = Scroll.scrollTop - 60;
+	}else{
+		Scroll.scrollTop = Scroll.scrollTop + 60;
+	}
+}
 </script>
 </body>
 </html>

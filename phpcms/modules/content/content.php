@@ -56,8 +56,8 @@ class content extends admin {
 			$steps = isset($_GET['steps']) ? intval($_GET['steps']) : 0;
 			//工作流权限判断
 			if($_SESSION['roleid']!=1 && $steps && !in_array($steps,$admin_privs)) showmessage(L('permission_to_operate'));
-
 			$this->db->set_model($modelid);
+			if($this->db->table_name==$this->db->db_tablepre) showmessage(L('model_table_not_exists'));;
 			$status = $steps ? $steps : 99;
 			if(isset($_GET['reject'])) $status = 0;
 			$where = 'catid='.$catid.' AND status='.$status;
@@ -201,7 +201,6 @@ class content extends admin {
 	public function edit() {
 			//设置cookie 在附件添加处调用
 			param::set_cookie('module', 'content');
-
 			if(isset($_POST['dosubmit']) || isset($_POST['dosubmit_continue'])) {
 				define('INDEX_HTML',true);
 				$id = intval($_POST['id']);
@@ -251,6 +250,7 @@ class content extends admin {
 			if(!$catid) showmessage(L('missing_part_parameters'));
 			$modelid = $this->categorys[$catid]['modelid'];
 			$sethtml = $this->categorys[$catid]['sethtml'];
+			$siteid = $this->categorys[$catid]['siteid'];
 			
 			$html_root = pc_base::load_config('system','html_root');
 			if($sethtml) $html_root = '';
@@ -270,6 +270,7 @@ class content extends admin {
 			$this->content_check_db = pc_base::load_model('content_check_model');
 			$this->position_data_db = pc_base::load_model('position_data_model');
 			$this->search_db = pc_base::load_model('search_model');
+			$this->comment = pc_base::load_app_class('comment', 'comment');
 			$search_model = getcache('search_model_'.$this->siteid,'search');
 			$typeid = $search_model[$modelid]['typeid'];
 			$this->url = pc_base::load_app_class('url', 'content');
@@ -312,6 +313,9 @@ class content extends admin {
 				$this->position_data_db->delete(array('id'=>$id,'catid'=>$catid,'module'=>'content'));
 				//删除全站搜索中数据
 				$this->search_db->delete_search($typeid,$id);
+				//删除相关的评论
+				$commentid = id_encode('content_'.$catid, $id, $siteid);
+				$this->comment->del($commentid, $siteid, $id, $catid);
 			}
 			//更新栏目统计
 			$this->db->cache_items();
@@ -364,6 +368,37 @@ class content extends admin {
 				
 				$modelid = $this->categorys[$catid]['modelid'];
 				$this->db->set_model($modelid);
+
+				//审核通过，检查投稿奖励或扣除积分
+				if ($status==99) {
+					$member_db = pc_base::load_model('member_model');
+					if (isset($_POST['ids']) && !empty($_POST['ids'])) {
+						foreach ($_POST['ids'] as $id) {
+							$content_info = $this->db->get_one(array('id'=>$id), 'username');
+							$memberinfo = $member_db->get_one(array('username'=>$content_info['username']), 'userid, username');
+							$flag = $catid.'_'.$id;
+							if($setting['presentpoint']>0) {
+								pc_base::load_app_class('receipts','pay',0);
+								receipts::point($setting['presentpoint'],$memberinfo['userid'], $memberinfo['username'], $flag,'selfincome',L('contribute_add_point'),$memberinfo['username']);
+							} else {
+								pc_base::load_app_class('spend','pay',0);
+								spend::point($setting['presentpoint'], L('contribute_del_point'), $memberinfo['userid'], $memberinfo['username'], '', '', $flag);
+							}
+						}
+					} else if (isset($_GET['id']) && $_GET['id']) {
+						$id = intval($_GET['id']);
+						$content_info = $this->db->get_one(array('id'=>$id), 'username');
+						$memberinfo = $member_db->get_one(array('username'=>$content_info['username']), 'userid, username');
+						$flag = $catid.'_'.$id;
+						if($setting['presentpoint']>0) {
+							pc_base::load_app_class('receipts','pay',0);
+							receipts::point($setting['presentpoint'],$memberinfo['userid'], $memberinfo['username'], $flag,'selfincome',L('contribute_add_point'),$memberinfo['username']);
+						} else {
+							pc_base::load_app_class('spend','pay',0);
+							spend::point($setting['presentpoint'], L('contribute_del_point'), $memberinfo['userid'], $memberinfo['username'], '', '', $flag);
+						}
+					}
+				}
 				if(isset($_GET['ajax_preview'])) {
 					$_POST['ids'] = $_GET['id'];
 				}
@@ -541,6 +576,7 @@ class content extends admin {
 			echo json_encode($infos);
 		}
 	}
+
 	//文章预览
 	public function public_preview() {
 		$catid = intval($_GET['catid']);
@@ -549,7 +585,7 @@ class content extends admin {
 		if(!$catid || !$id) showmessage(L('missing_part_parameters'),'blank');
 		$page = intval($_GET['page']);
 		$page = max($page,1);
-		$CATEGORYS = getcache('category_content_'.$this->siteid,'commons');
+		$CATEGORYS = getcache('category_content_'.$this->get_siteid(),'commons');
 		
 		if(!isset($CATEGORYS[$catid]) || $CATEGORYS[$catid]['type']!=0) showmessage(L('missing_part_parameters'),'blank');
 		define('HTML', true);
@@ -639,13 +675,12 @@ class content extends admin {
 		echo "
 		<link href=\"".CSS_PATH."dialog_simp.css\" rel=\"stylesheet\" type=\"text/css\" />
 		<script language=\"javascript\" type=\"text/javascript\" src=\"".JS_PATH."dialog.js\"></script>
-		<script type=\"text/javascript\">art.dialog({lock:false,title:'".L('operations_manage')."',mouse:true, id:'content_m', content:'<span id=cloading ><a href=\'javascript:ajax_manage(1)\'>".L('passed_checked')."</a> |　<a href=\'javascript:ajax_manage(3)\'>".L('delete')."</a></span><br><div id=\'reject_content\' ><table cellpadding=\'0\' cellspacing=\'1\' border=\'0\'><tr><tr><td colspan=\'2\'><textarea name=\'reject_c\' id=\'reject_c\' style=\'width:240px;height:46px;\'  onfocus=\"if(this.value == this.defaultValue) this.value = \'\'\" onblur=\"if(this.value.replace(\' \',\'\') == \'\') this.value = this.defaultValue;\">".L('reject_msg')."</textarea></td><td>&nbsp;<input type=\'button\' value=\'".L('reject')."\' class=\"button\" onclick=\"ajax_manage(2)\"></td></tr></table></div>',left:'right',width:'15em', top:'bottom', fixed:true});
+		<script type=\"text/javascript\">art.dialog({lock:false,title:'".L('operations_manage')."',mouse:true, id:'content_m', content:'<span id=cloading ><a href=\'javascript:ajax_manage(1)\'>".L('passed_checked')."</a> | <a href=\'javascript:ajax_manage(2)\'>".L('reject')."</a> |　<a href=\'javascript:ajax_manage(3)\'>".L('delete')."</a></span>',left:'right',width:'15em', top:'bottom', fixed:true});
 		function ajax_manage(type) {
 			if(type==1) {
 				$.get('?m=content&c=content&a=pass&ajax_preview=1&catid=".$catid."&steps=".$steps."&id=".$id."&pc_hash=".$pc_hash."');
 			} else if(type==2) {
-				var reject_c = $('#reject_c').val();
-				$.post('?m=content&c=content&a=pass&ajax_preview=1&reject=1&catid=".$catid."&steps=".$steps."&id=".$id."&pc_hash=".$pc_hash."&reject_c='+reject_c);
+				$.get('?m=content&c=content&a=pass&ajax_preview=1&reject=1&catid=".$catid."&steps=".$steps."&id=".$id."&pc_hash=".$pc_hash."');
 			} else if(type==3) {
 				$.get('?m=content&c=content&a=delete&ajax_preview=1&dosubmit=1&catid=".$catid."&steps=".$steps."&id=".$id."&pc_hash=".$pc_hash."');
 			}
@@ -658,6 +693,7 @@ class content extends admin {
 		}
 		</script>";
 	}
+
 	/**
 	 * 审核所有内容
 	 */

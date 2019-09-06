@@ -39,6 +39,7 @@ class googlesitemap extends admin {
     }
   
 	function google_sitemap_item($loc, $lastmod = '', $changefreq = '', $priority = '') {
+		$data = array();
 		$data['loc'] =  $loc;
 		$data['lastmod'] =  $lastmod;
 		$data['changefreq'] =  $changefreq;
@@ -60,6 +61,7 @@ class googlesitemap extends admin {
      * @param $pubDate
      */
 	function baidunews_item($title, $link = '', $description = '',$text = '',$image = '', $keywords = '',$category = '',$author = '',$source='',$pubDate='') {
+		$data = array();
 		$data['title'] =  $title;
 		$data['link'] =  $link;
 		$data['description'] =  $description;
@@ -149,11 +151,11 @@ class googlesitemap extends admin {
  						foreach ($result as $arr){
  							//把每一条数据都装入数组中
  							extract($arr);
- 	 						if(strpos($url,'http://') === false){
+ 	 						if(!preg_match('/^(http|https):\/\//', $url)){
  								$url = $this_domain.$url;
 							}
 							if($thumb != ""){
-								if(strpos($thumb, 'http://') === false){
+								if(!preg_match('/^(http|https):\/\//', $thumb)){
 									$thumb = $this_domain.$thumb;
 								}
 							}

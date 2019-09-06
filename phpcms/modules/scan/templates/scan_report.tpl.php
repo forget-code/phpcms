@@ -45,7 +45,7 @@
 	}
 }?></td>
 		<td align="left"><?php if(isset($v['zend'])){echo '<font color=\'red\'>Yes</font>';}else{echo 'No';}?></td>
-		<td align="left"><a href="javascript:void(0)" onclick="view('<?php echo urlencode($k)?>')"><?php echo L('view')?></a> <a href="<?php echo SITE_PROTOCOL,SITE_URL,'/',$k;?>" target="_blank"><?php echo L('access')?></a></td>
+		<td align="left"><a href="javascript:void(0)" onclick="view('<?php echo urlencode($k)?>')"><?php echo L('view')?></a> <a href="<?php echo APP_PATH,$k;?>" target="_blank"><?php echo L('access')?></a></td>
     </tr>
 <?php
 	}

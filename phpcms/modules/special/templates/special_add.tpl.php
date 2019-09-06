@@ -42,7 +42,7 @@ include $this->admin_tpl('header', 'admin');
 	    <tr>
 	    	<th><?php echo L('special_type')?>：<a href="javascript:addItem()" title="<?php echo L('add')?>"><span style="color:red;" >+</span></a></th>
 	        <td valign="top"><div id="option_list">
-	        	<div class="mb6"><span><?php echo L('type_name')?>：<input type="text" id="type_name" name="type[1][name]" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('type_path')?>：<input type="text" name="type[1][typedir]" id="type_path" class="input-text" size="15"></span>&nbsp;<span id="typeTip"></span></div>
+	        	<div class="mb6"><span><?php echo L('type_name')?>：<input type="text" id="type_name" name="type[1][name]" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('type_path')?>：<input type="text" name="type[1][typedir]" id="type_path" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('listorder')?>：<input type="text" name="type[<?php echo $k?>][listorder]" value="1" size="6" class="input-text" ></span>&nbsp;<span id="typeTip"></span></div>
 	        </div>
 	        </td>
 	    </tr>
@@ -132,8 +132,8 @@ function remove_relation(htmlID, valID) {
 }
 
 function addItem() {
-	var n = $('#option_list').find('input[name]').length/2+1;
-	var newOption =  '<div class="mb6"><span><?php echo L('type_name')?>：<input type="text" name="type['+n+'][name]" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('type_path')?>：<input type="text" name="type['+n+'][typedir]" class="input-text" size="15"></span>&nbsp;<a href="javascript:;" onclick="descItem(this, '+n+');"><?php echo L('remove')?></a></div>';
+	var n = $('#option_list').find('input[name]').length/3+1;
+	var newOption =  '<div class="mb6"><span><?php echo L('type_name')?>：<input type="text" name="type['+n+'][name]" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('type_path')?>：<input type="text" name="type['+n+'][typedir]" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('listorder')?>：<input type="text" name="type['+n+'][listorder]" value="'+n+'" size="6" class="input-text" ></span>&nbsp;<a href="javascript:;" onclick="descItem(this, '+n+');"><?php echo L('remove')?></a></div>';
 	$('#option_list').append(newOption);
 }
 

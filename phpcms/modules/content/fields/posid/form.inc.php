@@ -12,6 +12,8 @@
 			$this->position_data_db = pc_base::load_model('position_data_model');
 			$result = $this->position_data_db->select(array('id'=>$this->id,'modelid'=>$this->modelid),'*','','','','posid');
 			$posids = implode(',', array_keys($result));
+		} else {
+			$posids = $setting['defaultvalue'];
 		}
 		return "<input type='hidden' name='info[$field][]' value='-1'>".form::checkbox($array,$posids,"name='info[$field][]'",'',$setting['width']);
 	}

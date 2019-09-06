@@ -2,7 +2,7 @@
 	defined('IN_ADMIN') or exit('No permission resources.');
 	include $this->admin_tpl('header', 'admin');
 ?>
-<script type="text/javascript" src="<?php echo JS_PATH?>jquery.sGallery.js"></script>
+<script type="text/javascript" src="<?php echo JS_PATH?>jquery.sgallery.js"></script>
 <div class="pad-lr-10">
 <form name="searchform" action="" method="get" >
 <input type="hidden" value="attachment" name="m">

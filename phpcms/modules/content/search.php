@@ -16,7 +16,10 @@ class search {
 		$grouplist = getcache('grouplist','member');
 		$_groupid = param::get_cookie('_groupid');
 		if(!$_groupid) $_groupid = 8;
-		if(!$grouplist[$_groupid]['allowsearch']) showmessage(L('guest_not_allowsearch'));
+		if(!$grouplist[$_groupid]['allowsearch']) {
+			if ($_groupid==8) showmessage(L('guest_not_allowsearch')); 
+			else showmessage('');
+		}
 
 		if(!isset($_GET['catid'])) showmessage(L('missing_part_parameters'));
 		$catid = intval($_GET['catid']);
@@ -51,7 +54,7 @@ class search {
 		foreach ($fields as $field=>$r) {
 			if($r['issearch']) {
 				if($r['formtype']=='catid') {
-					$r['form'] = form::select_category('category_content',$_GET['info']['catid'],'name="info[catid]"',L('please_select_category'),$modelid,0,1);
+					$r['form'] = form::select_category('',$_GET['info']['catid'],'name="info[catid]"',L('please_select_category'),$modelid,0,1);
 				} elseif($r['formtype']=='number') {
 					$r['form'] = "<input type='text' name='{$field}_start' id='{$field}_start' value='' size=5 class='input-text'/> - <input type='text' name='{$field}_end' id='{$field}_start' value='' size=5 class='input-text'/>";
 				} elseif($r['formtype']=='datetime') {
@@ -107,7 +110,7 @@ class search {
 			$this->db->set_model($modelid);
 			$tablename = $this->db->table_name;
 			
-			$page = $_GET['page'];
+			$page = max(intval($_GET['page']), 1);
 			$sql  = "SELECT * FROM `{$tablename}` a,`{$tablename}_data` b WHERE a.id=b.id AND a.status=99";
 			$sql_count  = "SELECT COUNT(*) AS num FROM `{$tablename}` a,`{$tablename}_data` b WHERE a.id=b.id AND a.status=99";
 			//构造搜索SQL
@@ -177,7 +180,7 @@ class search {
 			//-----------
 			if($where=='') showmessage(L('please_enter_content_to_search'));
 			$pagesize = 20;
-			$offset = intval($pagesize*$page);
+			$offset = intval($pagesize*($page-1));
 			$sql_count .= $where;
 			$this->db->query($sql_count);
 			$total = $this->db->fetch_array();

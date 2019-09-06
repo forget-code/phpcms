@@ -7,7 +7,8 @@ class space extends admin {
 	private $M, $db;
 	function __construct() {
 		parent::__construct();
-		$this->M = new_html_special_chars(getcache('poster', 'commons'));
+		$setting = new_html_special_chars(getcache('poster', 'commons'));
+		$this->M = $setting[$this->get_siteid()];
 		$this->db = pc_base::load_model('poster_space_model');
 	}
 	
@@ -40,7 +41,7 @@ class space extends admin {
 			}
 		} else {
 			$TYPES = $this->template_type();
-			$poster_template = getcache('poster_template', 'commons');
+			$poster_template = getcache('poster_template_'.$this->get_siteid(), 'commons');
 			$show_header = $show_validator = true;
 			include $this->admin_tpl('space_add');
 		}
@@ -55,12 +56,22 @@ class space extends admin {
 		if (isset($_POST['dosubmit'])) {
 			$space = $this->check($_POST['space']);
 			$space['setting'] = array2string($_POST['setting']);
+			if ($space['type']=='code') {
+				$space['path'] = '{show_ad('.$this->get_siteid().', '.$_GET['spaceid'].')}';
+			} else {
+				$space['path'] = 'poster_js/'.$_GET['spaceid'].'.js';
+			}
+			if (isset($_POST['old_type']) && $_POST['old_type']!=$space['type']) {
+				$poster_db = pc_base::load_model('poster_model');
+				$poster_db->delete(array('spaceid'=>$_GET['spaceid']));
+				$space['items'] = 0;
+			}
 			if ($this->db->update($space, array('spaceid'=>$_GET['spaceid']))) showmessage(L('edited_successful'), '?m=poster&c=space', '', 'testIframe'.$_GET['spaceid']);
 		} else {
 			$info = $this->db->get_one(array('spaceid' => $_GET['spaceid']));
 			$setting = string2array($info['setting']);
 			$TYPES = $this->template_type();
-			$poster_template = getcache('poster_template', 'commons');
+			$poster_template = getcache('poster_template_'.$this->get_siteid(), 'commons');
 			$show_header = $show_validator = true;
 			include $this->admin_tpl('space_edit');
 		}
@@ -141,7 +152,9 @@ class space extends admin {
 	 */
 	public function setting() {
 		if (isset($_POST['dosubmit'])) {
-			setcache('poster', $_POST['setting'], 'commons'); //设置缓存
+			$setting = getcache('poster', 'commons');
+			$setting[$this->get_siteid()] = $_POST['setting'];
+			setcache('poster', $setting, 'commons'); //设置缓存
 			$m_db = pc_base::load_model('module_model'); //调用模块数据模型
 			$setting = array2string($_POST['setting']);  
 			
@@ -160,7 +173,7 @@ class space extends admin {
 	public function poster_template() {
 		$tpl_root = pc_base::load_config('system', 'tpl_root');
 		$templatedir = PC_PATH.$tpl_root.pc_base::load_config('system', 'tpl_name').DIRECTORY_SEPARATOR.'poster'.DIRECTORY_SEPARATOR;
-		$poster_template = getcache('poster_template', 'commons');
+		$poster_template = getcache('poster_template_'.get_siteid(), 'commons');
 		$templates = glob($templatedir.'*.html');
 		if (is_array($templates) && !empty($templates)) {
 			foreach ($templates as $k => $tem) {
@@ -176,11 +189,12 @@ class space extends admin {
 	 */
 	public function public_tempate_del() {
 		if (!isset($_GET['id'])) showmessage(L('illegal_parameters'), HTTP_REFERER);
-		$poster_template = getcache('poster_template', 'commons');
+		$siteid = $this->get_siteid();
+		$poster_template = getcache('poster_template_'.$siteid, 'commons');
 		if ($poster_template[$_GET['id']]) {
 			unset($poster_template[$_GET['id']]);
 		}
-		setcache('poster_template', $poster_template, 'commons');
+		setcache('poster_template_'.$siteid, $poster_template, 'commons');
 		showmessage(L('operation_success'), HTTP_REFERER);
 	}
 	
@@ -188,7 +202,8 @@ class space extends admin {
 	 * 配置模板
 	 */
 	public function public_tempate_setting() {
-		$poster_template = getcache('poster_template', 'commons');
+		$siteid = $this->get_siteid();
+		$poster_template = getcache('poster_template_'.$siteid, 'commons');
 		if (isset($_POST['dosubmit'])) {
 			if (is_array($_POST['info']['type']) && !empty($_POST['info']['type'])) {
 				$type2name = array('images'=>L('photo'), 'flash'=>L('flash'), 'text'=>L('title'));
@@ -204,7 +219,7 @@ class space extends admin {
 			unset($_POST['info']['type']);
 			$_POST['info']['type'] = $type;
 			$poster_template[$_POST['template']] = $_POST['info'];
-			setcache('poster_template', $poster_template, 'commons');
+			setcache('poster_template_'.$siteid, $poster_template, 'commons');
 			showmessage(L('setting_success'), '', '', 'testIframe');
 		} else {
 			if (!isset($_GET['template'])) {
@@ -229,7 +244,7 @@ class space extends admin {
 	 * 更新js
 	 */
 	public function create_js($page = 0) {
-		$page = max(intval($page), 1);
+		$page = max(intval($_GET['page']), 1);
 		if ($page==1) {
 			$result = $this->db->get_one(array('disabled'=>0, 'siteid'=>get_siteid()), 'COUNT(*) AS num');
 			if ($result['num']) {

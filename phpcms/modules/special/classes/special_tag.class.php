@@ -20,8 +20,8 @@ class special_tag {
 		$siteid = $data['siteid'] ? intval($data['siteid']) : get_siteid();
 		$where .= "`siteid`='".$siteid."'";
 		if ($data['elite']) $where .= " AND `elite`='1'";
-		if ($data['isthumb']) $where .= " AND `thumb`!=''"; 
-		$listorder = array('`id` ASC', '`id` DESC', '`listorder` ASC', '`listorder` DESC');
+		if ($data['thumb']) $where .= " AND `thumb`!=''"; 
+		$listorder = array('`id` ASC', '`id` DESC', '`listorder` ASC, `id` DESC', '`listorder` DESC, `id` DESC');
 		return $this->db->select($where, '*', $data['limit'], $listorder[$data['listorder']]);
 	}
 	
@@ -35,12 +35,12 @@ class special_tag {
 			$where = '1';
 			if ($data['siteid']) $where .= " AND `siteid`='".$data['siteid']."'";
 			if ($data['elite']) $where .= " AND `elite`='1'";
-			if ($data['isthumb']) $where .= " AND `thumb`!=''"; 
+			if ($data['thumb']) $where .= " AND `thumb`!=''"; 
 			$r = $this->db->get_one($where, 'COUNT(id) AS total');
 		} elseif ($data['action'] == 'content_list') {
 			if ($data['specialid']) $where .= " AND `specialid`='".$data['specialid']."'";
 			if ($data['typeid']) $where .= " AND `typeid`='".$data['typeid']."'";
-			if ($data['isthumb']) $where .= " AND `thumb`!=''";
+			if ($data['thumb']) $where .= " AND `thumb`!=''";
 			$r = $this->c->get_one($where, 'COUNT(id) AS total');
 		} elseif ($data['action'] == 'hits') {
 			$hitsid = 'special-c';
@@ -85,7 +85,7 @@ class special_tag {
 		$where = '1';
 		if ($data['specialid']) $where .= " AND `specialid`='".$data['specialid']."'";
 		if ($data['typeid']) $where .= " AND `typeid`='".$data['typeid']."'";
-		if ($data['isthumb']) $where .= " AND `thumb`!=''";
+		if ($data['thumb']) $where .= " AND `thumb`!=''";
 		$listorder = array('`id` ASC', '`id` DESC', '`listorder` ASC', '`listorder` DESC');
 		$result = $this->c->select($where, '*', $data['limit'], $listorder[$data['listorder']]);
 		if (is_array($result)) {
@@ -142,12 +142,12 @@ class special_tag {
 			'lists'=>array(
 				'siteid'=>array('name'=>L('site_id','','comment'), 'htmltype'=>'input_select', 'data'=>$sitelist),
 				'elite'=>array('name'=>L('iselite', '', 'special'), 'htmltype'=>'radio', 'defaultvalue'=>'0', 'data'=>array(L('no'), L('yes'))),
-				'isthumb'=>array('name'=>L('get_thumb', '', 'special'), 'htmltype'=>'radio','defaultvalue'=>'0','data'=>array(L('no'), L('yes'))),
+				'thumb'=>array('name'=>L('get_thumb', '', 'special'), 'htmltype'=>'radio','defaultvalue'=>'0','data'=>array(L('no'), L('yes'))),
 				'listorder'=>array('name'=>L('order_type', '', 'special'), 'htmltype'=>'select', 'defaultvalue'=>'3', 'data'=>array(L('id_asc', '', 'special'), L('id_desc', '','special'), L('order_asc','','special'), L('order_desc', '','special'))),
 			),
 			'content_list'=>array(
 				'specialid'=>array('name'=>L('special_id','','special'),'htmltype'=>'input_select', 'data'=>$specials, 'ajax'=>array('name'=>L('for_type','','special'), 'action'=>'get_type', 'id'=>'typeid')),
-				'isthumb'=>array('name'=>L('content_thumb','','special'),'htmltype'=>'radio','defaultvalue'=>'0','data'=>array(L('no'), L('yes'))),
+				'thumb'=>array('name'=>L('content_thumb','','special'),'htmltype'=>'radio','defaultvalue'=>'0','data'=>array(L('no'), L('yes'))),
 				'listorder'=>array('name'=>L('order_type', '', 'special'), 'htmltype'=>'select', 'defaultvalue'=>'3', 'data'=>array(L('id_asc', '', 'special'), L('id_desc', '','special'), L('order_asc','','special'), L('order_desc', '','special'))),
 			),
 			'hits' => array(
