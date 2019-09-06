@@ -69,6 +69,7 @@ switch($step)
 			$sso_url = $_POST[sso]['sso_url'];
 			$sso_info['username'] = $_POST[sso]['username'];
 			$sso_info['password'] = $_POST[sso]['password'];
+			mt_srand();
 			$sso_info['authkey'] = $phpsso_auth_key = random(32, '1294567890abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ');
 			$sso_info['name'] = 'phpcms v9';
 			$sso_info['url'] = urlencode($siteurl);
@@ -182,7 +183,9 @@ switch($step)
 		$rootpath = strlen($rootpath)>1 ? $rootpath : "/";	
 
 		if($module == 'admin') {
+			mt_srand();
 			$cookie_pre = random(5, 'abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ').'_';
+			mt_srand();
 			$auth_key = random(20, '1294567890abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ');		
 			$sys_config = array('cookie_pre'=>$cookie_pre,
 						'auth_key'=>$auth_key,
@@ -246,8 +249,11 @@ switch($step)
 			//安装phpsso
 			
 			$ssourl = $siteurl.'phpsso_server/';
+			mt_srand();
 			$cookie_pre = random(5, 'abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ').'_';
+			mt_srand();
 			$auth_key = random(20, '1294567890abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ');
+			mt_srand();
 			$phpsso_auth_key = random(32, '1294567890abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ');
 			$sso_tablepre = $tablepre.'sso_';
 			$sys_sso_config = array('phpsso'=>'1',

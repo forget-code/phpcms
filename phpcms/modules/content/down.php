@@ -106,7 +106,6 @@ class down {
 		$endtime = SYS_TIME - $starttime;
 		if($endtime > 3600) showmessage(L('url_invalid'));
 		if($m) $fileurl = trim($s).trim($fileurl);
-		if(preg_match('/(php|phtml|php3|php4|jsp|dll|asp|cer|asa|shtml|shtm|aspx|asax|cgi|fcgi|pl)(\.|$)/i',$fileurl) ) showmessage(L('url_error'));
 		//远程文件
 		if(strpos($fileurl, ':/') && (strpos($fileurl, pc_base::load_config('system','upload_url')) === false)) { 
 			header("Location: $fileurl");
@@ -124,6 +123,7 @@ class down {
 				$ext = fileext($filename);
 				$filename = date('Ymd_his').random(3).'.'.$ext;
 				$fileurl = str_replace(array('<','>'), '',$fileurl);
+				if(preg_match('/(php|phtml|php3|php4|jsp|dll|asp|cer|asa|shtml|shtm|aspx|asax|cgi|fcgi|pl)(\.|$)/i',$fileurl) || strpos($fileurl,'..')!==FALSE) showmessage(L('url_error'));
 				file_down($fileurl, $filename);
 			}
 		}
