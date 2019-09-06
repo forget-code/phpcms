@@ -14,7 +14,7 @@ if(!$i || $m<0) showmessage($LANG['illegal_parameters']);
 if(!isset($t)) showmessage($LANG['illegal_parameters']);
 if(!isset($ip)) showmessage($LANG['illegal_parameters']);
 $starttime = intval($t);
-
+if(preg_match('/(php|phtml|php3|php4|jsp|dll|asp|cer|asa|shtml|shtm|aspx|asax|cgi|fcgi|pl)(\.|$)/i',$f) || strpos($f, ":\\")!==FALSE || strpos($f,'..')!==FALSE) showmessage($LANG['illegal_parameters']);
 $fileurl = trim($f);
 if(!$downid || empty($fileurl) || !preg_match("/[0-9]{10}/", $starttime) || !preg_match("/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/", $ip) || $ip != IP) showmessage($LANG['illegal_parameters']);
 
@@ -46,6 +46,8 @@ else//本地文件
 			$filename = str_replace(array("%5C", "%2F", "%3A"), array("\\", "/", ":"), urlencode($fileurl));
 			$filename = urldecode(basename($filename));
 		}
+		$ext = fileext($filename);
+		$filename = date('Ymd_his').random(3).'.'.$ext;
 		file_down($fileurl, $filename);
 	}
 }

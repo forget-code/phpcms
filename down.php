@@ -14,7 +14,9 @@ if($s && !preg_match('/http:\/\//i',$s)) showmessage($LANG['illegal_parameters']
 if(preg_match('/\.php/i',$f) || strpos($f, ":\\")) showmessage('地址有误');
 if(!$i || $m<0) showmessage($LANG['illegal_parameters']);
 $allow_readpoint = 1;
-
+if (preg_match('/([^a-z_]+)/i',$mod)) {
+	showmessage($LANG['illegal_parameters']);
+}
 if($mod == 'phpcms')
 {
 	include 'admin/content.class.php';
@@ -55,7 +57,8 @@ if($mod == 'phpcms')
 		}
 	}
 }
-//echo "i=$i&f=$f&d=$d&s=$s&t=".TIME."&ip=".IP."&m=".$m;exit;
+if(preg_match('/(php|phtml|php3|php4|jsp|dll|asp|cer|asa|shtml|shtm|aspx|asax|cgi|fcgi|pl)(\.|$)/i',$f) || strpos($f, ":\\")!==FALSE || strpos($f,'..')!==FALSE) showmessage($LANG['illegal_parameters']);
+
 if(strpos($f, 'http://') !== FALSE || strpos($f, 'ftp://') !== FALSE || strpos($f, '://') === FALSE)
 {
 	$phpcms_auth_key = md5(AUTH_KEY.$_SERVER['HTTP_USER_AGENT']);

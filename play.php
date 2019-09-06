@@ -10,10 +10,13 @@ if(isset($i)) $i = intval($i);
 if(!isset($m)) showmessage($LANG['illegal_parameters']);
 
 if(empty($f)) showmessage('地址失效');
-if(preg_match('/\.php$/',$f) || strpos($f, ":\\")) showmessage('地址有误');
+if(preg_match('/(php|phtml|php3|php4|jsp|exe|dll|asp|cer|asa|shtml|shtm|aspx|asax|cgi|fcgi|pl)(\.|$)/i',$f) || strpos($f, ":\\")!==FALSE || strpos($f,'..')!==FALSE) showmessage('地址有误');
 if(!$i || $m<0) showmessage($LANG['illegal_parameters']);
 $allow_readpoint = 1;
 
+if (preg_match('/([^a-z_]+)/i',$mod)) {
+	showmessage($LANG['illegal_parameters']);
+}
 if($mod == 'phpcms')
 {
 	$contentid = $i;
