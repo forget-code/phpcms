@@ -500,6 +500,6 @@ function delete_install($dir) {
 	foreach($list as $v) {
 		is_dir($v) ? delete_install($v) : @unlink($v);
 	}
-    return rmdir($dir);
+    return @rmdir($dir);
 }
 ?>

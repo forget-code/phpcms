@@ -167,6 +167,7 @@ $LANG['setting_img_path'] = '图片路径';
 $LANG['setting_upload_url'] = '附件URL访问路径';
 $LANG['setting_attachment_stat'] = '开启附件状态统计';
 $LANG['setting_attachment_stat_desc'] = '<font color="gray">记录附件使用状态 ，删除文章时同步删除附件。注意: 本功能会加重服务器负担</font>';
+$LANG['setting_category_ajax_desc'] = '<font color="gray">默认为0,即直接显示栏目列表。当栏目层级较多时，可设置首次加载层级，其余使用异步加载，一般设置为2-3</font>';
 
 $LANG['setting_admin_log'] = '启用后台管理操作日志';
 $LANG['setting_error_log'] = '保存错误日志';
@@ -183,7 +184,7 @@ $LANG['setting_phpsso_auth_key'] = '加密密钥';
 $LANG['setting_phpsso_version'] = '版本号';
 $LANG['must_be_number'] = '必须为数字';
 $LANG['must_be_32_w'] = '为phpsso中该设置的密钥';
-
+$LANG['setting_category_ajax'] = '异步显示栏目层级';
 
 $LANG['setting_succ'] = '配置修改成功';
 $LANG['test_email_succ'] = '测试邮件已经成功发送到：';
@@ -727,5 +728,6 @@ $LANG['batch_add_tips'] = '例如：<br><font color="#959595">国内新闻|china
 $LANG['not_display_in_menu'] = '不在导航显示';
 
 $LANG['apply_to_child'] = '应用到子栏目：';
+
 
 ?>

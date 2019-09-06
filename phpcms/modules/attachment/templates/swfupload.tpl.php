@@ -77,8 +77,8 @@
 <script type="text/javascript">
 if ($.browser.mozilla) {
 	window.onload=function(){
-	  if (location.href.indexOf("?rand=")<0) {
-			location.href=location.href+"?rand="+Math.random();
+	  if (location.href.indexOf("&rand=")<0) {
+			location.href=location.href+"&rand="+Math.random();
 		}
 	}
 }

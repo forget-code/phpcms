@@ -58,6 +58,7 @@ function safe_replace($string) {
 	$string = str_replace('>','&gt;',$string);
 	$string = str_replace("{",'',$string);
 	$string = str_replace('}','',$string);
+	$string = str_replace('\\','',$string);
 	return $string;
 }
 
@@ -89,9 +90,8 @@ function trim_textarea($string) {
  * @param intval $isjs 是否执行字符串格式化，默认为执行
  * @return string 处理后的字符串
  */
-function format_js($string, $isjs = 1)
-{
-	$string = addslashes(str_replace(array("\r", "\n"), array('', ''), $string));
+function format_js($string, $isjs = 1) {
+	$string = addslashes(str_replace(array("\r", "\n", "\t"), array('', '', ''), $string));
 	return $isjs ? 'document.write("'.$string.'");' : $string;
 }
 
@@ -278,21 +278,33 @@ function sizecount($filesize) {
 * @param	string	$txt		字符串
 * @param	string	$operation	ENCODE为加密，DECODE为解密，可选参数，默认为ENCODE，
 * @param	string	$key		密钥：数字、字母、下划线
+* @param	string	$expiry		过期时间
 * @return	string
 */
-function sys_auth($txt, $operation = 'ENCODE', $key = '') {
-	$key	= $key ? $key : pc_base::load_config('system', 'auth_key');
-	$txt	= $operation == 'ENCODE' ? (string)$txt : base64_decode($txt);
-	$len	= strlen($key);
-	$code	= '';
-	for($i=0; $i<strlen($txt); $i++){
-		$k		= $i % $len;
-		$code  .= $txt[$i] ^ $key[$k];
+function sys_auth($string, $operation = 'ENCODE', $key = '', $expiry = 0) {
+	$key_length = 4;
+	$key = md5($key != '' ? $key : pc_base::load_config('system', 'auth_key'));
+	$fixedkey = md5($key);
+	$egiskeys = md5(substr($fixedkey, 16, 16));
+	$runtokey = $key_length ? ($operation == 'ENCODE' ? substr(md5(microtime(true)), -$key_length) : substr($string, 0, $key_length)) : ''; 
+	$keys = md5(substr($runtokey, 0, 16) . substr($fixedkey, 0, 16) . substr($runtokey, 16) . substr($fixedkey, 16));
+	$string = $operation == 'ENCODE' ? sprintf('%010d', $expiry ? $expiry + time() : 0).substr(md5($string.$egiskeys), 0, 16) . $string : base64_decode(substr($string, $key_length));
+	
+	$i = 0; $result = '';
+	$string_length = strlen($string);
+	for ($i = 0; $i < $string_length; $i++){
+		$result .= chr(ord($string{$i}) ^ ord($keys{$i % 32}));
 	}
-	$code = $operation == 'DECODE' ? $code : base64_encode($code);
-	return $code;
+	if($operation == 'ENCODE') {
+		return $runtokey . str_replace('=', '', base64_encode($result));
+	} else {
+		if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$egiskeys), 0, 16)) {
+			return substr($result, 26);
+		} else {
+			return '';
+		}
+	}
 }
-
 /**
 * 语言文件处理
 *
@@ -322,7 +334,7 @@ function L($language = 'no_language',$pars = array(), $modules = '') {
 		}
 	}
 	if(!array_key_exists($language,$LANG)) {
-		return $LANG['no_language'].'['.$language.']';
+		return $language;
 	} else {
 		$language = $LANG[$language];
 		if($pars) {
@@ -745,6 +757,7 @@ function get_siteid() {
 		}
 	} else {
 		$data = getcache('sitelist', 'commons');
+		if(!is_array($data)) return '1';
 		$site_url = SITE_PROTOCOL.SITE_URL;
 		foreach ($data as $v) {
 			if ($v['url'] == $site_url.'/') $siteid = $v['siteid'];
@@ -1118,9 +1131,9 @@ function is_badword($string) {
  */
 function is_username($username) {
 	$strlen = strlen($username);
-	if(is_badword($username) || !preg_match("/^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+$/", $username)){
+	if(is_badword($username) || !preg_match("/^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+$/", $username)){		
 		return false;
-	} elseif ( 20 <= $strlen || $strlen < 2 ) {
+	} elseif ( 20 < $strlen || $strlen < 2 ) {
 		return false;
 	}
 	return true;
@@ -1413,9 +1426,9 @@ function siteurl($siteid) {
  * @param $operation   操作类型(加密解密)
  */
 
-function upload_key($args, $operation = 'ENCODE') {
+function upload_key($args) {
 	$pc_auth_key = md5(pc_base::load_config('system','auth_key').$_SERVER['HTTP_USER_AGENT']);
-	$authkey = sys_auth($args, $operation, $pc_auth_key);
+	$authkey = md5($args.$pc_auth_key);
 	return $authkey;
 }
 
@@ -1537,5 +1550,16 @@ function cache_page($ttl = 360, $isjs = 0) {
 	if($isjs) $contents = format_js($contents);
 	$contents = "<!--expiretime:".(SYS_TIME + $ttl)."-->\n".$contents;
 	setcache(CACHE_PAGE_ID, $contents, 'page_tmp/'.substr(CACHE_PAGE_ID, 0, 2));
+}
+
+/**
+ * 
+ * 获取远程内容
+ * @param $url 接口url地址
+ * @param $timeout 超时时间
+ */
+function pc_file_get_contents($url, $timeout=30) {
+	$stream = stream_context_create(array('http' => array('timeout' => $timeout)));
+	return @file_get_contents($url, 0, $stream);
 }
 ?>

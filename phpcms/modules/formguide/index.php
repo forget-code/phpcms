@@ -9,6 +9,7 @@ class index {
 		$this->m_db = pc_base::load_model('sitemodel_field_model');
 		$this->M = new_html_special_chars(getcache('formguide', 'commons'));
 		$this->siteid = get_siteid();
+		$this->M = $this->M[$this->siteid];
 	}
 	
 	/**
@@ -32,8 +33,9 @@ class index {
 		if (!isset($_GET['formid']) || empty($_GET['formid'])) {
 			$_GET['action'] ? exit : showmessage(L('form_no_exist'), HTTP_REFERER);
 		}
+		$siteid = $_GET['siteid'] ? intval($_GET['siteid']) : 1;
 		$formid = intval($_GET['formid']);
-		$r = $this->db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid, 'disabled'=>0), 'tablename, setting');
+		$r = $this->db->get_one(array('modelid'=>$formid, 'siteid'=>$siteid, 'disabled'=>0), 'tablename, setting');
 		if (!$r) {
 			$_GET['action'] ? exit : showmessage(L('form_no_exist'), HTTP_REFERER);
 		}

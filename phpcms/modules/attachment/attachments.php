@@ -99,7 +99,6 @@ class attachments extends admin  {
 				if (strpos($_GET['file'], pc_base::load_config('system', 'upload_url'))!==false) {
 					$file = $_GET['file'];
 					$basename = basename($file);
-					$filepath = str_replace(APP_PATH, '', dirname($file)).'/';
 					if (strpos($basename, 'thumb_')!==false) {
 						$file_arr = explode('_', $basename);
 						$basename = array_pop($file_arr);
@@ -116,19 +115,19 @@ class attachments extends admin  {
 					if (in_array($uploadedfile['fileext'], array('jpg', 'gif', 'jpeg', 'png', 'bmp'))) {
 						$uploadedfile['isimage'] = 1;
 					}
-					$file_path = pc_base::load_config('system', 'upload_path').date('Y/md/');
+					$file_path = $this->upload_path.date('Y/md/');
 					pc_base::load_sys_func('dir');
 					dir_create($file_path);
 					$new_file = date('Ymdhis').rand(100, 999).'.'.$uploadedfile['fileext'];
 					$uploadedfile['filepath'] = date('Y/md/').$new_file;
 					$aid = $attachment->add($uploadedfile);
-					$filepath = str_replace(APP_PATH, '', pc_base::load_config('system', 'upload_url')).date('Y/md/');
 				}
-				file_put_contents(PHPCMS_PATH.$filepath.$new_file, $pic);
+				$filepath = date('Y/md/');
+				file_put_contents($this->upload_path.$filepath.$new_file, $pic);
 			} else {
 				return false;
 			}
-			echo APP_PATH.$filepath.$new_file;
+			echo pc_base::load_config('system', 'upload_url').$filepath.$new_file;
 			exit;
 		}
 	}

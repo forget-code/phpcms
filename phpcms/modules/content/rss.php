@@ -48,8 +48,8 @@ class rss {
 		        $sql .= "`catid` = '$this->rssid' AND `status` = '99'";
 		    } else {
 		        $sql .= get_sql_catid('category_content_'.$siteid,$this->rssid)." AND `status` = '99'";
-		    }	
-
+		    }
+			if(empty($MODEL[$modelid]['tablename'])) showmessage(L('missing_part_parameters'),'blank');
 		    $this->db->table_name = $this->db->db_tablepre.$MODEL[$modelid]['tablename'];
 			$info = $this->db->select($sql,'`title`, `description`, `url`, `inputtime`, `thumb`, `keywords`','0,20','id DESC');
 		

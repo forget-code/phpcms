@@ -46,11 +46,14 @@ class index {
  			}
  			$link_db = pc_base::load_model(link_model);
  			$_POST['logo'] =new_html_special_chars($_POST['logo']);
- 			
+
+			$logo = safe_replace($_POST['logo']);
+			$name = safe_replace($_POST['name']);
+			$url = safe_replace($_POST['url']); 
  			if($_POST['linktype']=='0'){
- 				$sql = array('siteid'=>$siteid,'typeid'=>$_POST['typeid'],'linktype'=>$_POST['linktype'],'name'=>$_POST['name'],'url'=>$_POST['url']);
+ 				$sql = array('siteid'=>$siteid,'typeid'=>intval($_POST['typeid']),'linktype'=>intval($_POST['linktype']),'name'=>$name,'url'=>$url);
  			}else{
- 				$sql = array('siteid'=>$siteid,'typeid'=>$_POST['typeid'],'linktype'=>$_POST['linktype'],'name'=>$_POST['name'],'url'=>$_POST['url'],'logo'=>$_POST['logo']);
+ 				$sql = array('siteid'=>$siteid,'typeid'=>intval($_POST['typeid']),'linktype'=>intval($_POST['linktype']),'name'=>$name,'url'=>$url,'logo'=>$logo);
  			}
  			$link_db->insert($sql);
  			showmessage(L('add_success'), "?m=link&c=index&siteid=$siteid");

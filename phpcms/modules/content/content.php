@@ -428,6 +428,8 @@ class content extends admin {
 	 */
 	public function public_categorys() {
 		$show_header = '';
+		$cfg = getcache('common','commons');
+		$ajax_show = intval($cfg['category_ajax']);
 		$from = isset($_GET['from']) && in_array($_GET['from'],array('block')) ? $_GET['from'] : 'content';
 		$tree = pc_base::load_sys_class('tree');
 		if($from=='content' && $_SESSION['roleid'] != 1) {	
@@ -478,7 +480,7 @@ class content extends admin {
 						$strs2 = "<span class='folder'>\$catname</span>";
 						break;
 				}
-			$categorys = $tree->get_treeview(0,'category_tree',$strs,$strs2);
+			$categorys = $tree->get_treeview(0,'category_tree',$strs,$strs2,$ajax_show);
 		} else {
 			$categorys = L('please_add_category');
 		}
@@ -717,9 +719,9 @@ class content extends admin {
 		$this->priv_db = pc_base::load_model('category_priv_model');;
 		$admin_username = param::get_cookie('admin_username');
 		if($status==-1) {
-			$sql = "`status` NOT IN (99,0,-2)";
+			$sql = "`status` NOT IN (99,0,-2) AND `siteid`=$this->siteid";
 		} else {
-			$sql = "`status` = '$status' ";
+			$sql = "`status` = '$status' AND `siteid`=$this->siteid";
 		}
 		if($status!=0 && !$super_admin) {
 			//以栏目进行循环
@@ -760,6 +762,7 @@ class content extends admin {
 	 */
 	public function remove() {
 		if(isset($_POST['dosubmit'])) {
+			$this->content_check_db = pc_base::load_model('content_check_model');
 			if($_POST['fromtype']==0) {
 				if($_POST['ids']=='') showmessage(L('please_input_move_source'));
 				if(!$_POST['tocatid']) showmessage(L('please_select_target_category'));
@@ -767,6 +770,10 @@ class content extends admin {
 				$modelid = $this->categorys[$tocatid]['modelid'];
 				if(!$modelid) showmessage(L('illegal_operation'));
 				$ids = array_filter(explode(',', $_POST['ids']),"intval");
+				foreach ($ids as $id) {
+					$checkid = 'c-'.$id.'-'.$this->siteid;
+					$this->content_check_db->update(array('catid'=>$tocatid), array('checkid'=>$checkid));
+				}
 				$ids = implode(',', $ids);
 				$this->db->set_model($modelid);
 				$this->db->update(array('catid'=>$tocatid),"id IN($ids)");
@@ -863,6 +870,54 @@ class content extends admin {
 		$tree->init($categorys);
 		$categorys = $tree->get_tree(0, $str);
 		echo $categorys;
+	}
+	
+	public function public_sub_categorys() {
+		$cfg = getcache('common','commons');
+		$ajax_show = intval(abs($cfg['category_ajax']));	
+		$catid = intval($_POST['root']);
+		$modelid = intval($_POST['modelid']);
+		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
+		$tree = pc_base::load_sys_class('tree');
+		if(!empty($this->categorys)) {
+			foreach($this->categorys as $r) {
+				if($r['siteid']!=$this->siteid ||  ($r['type']==2 && $r['child']==0)) continue;
+				if($from=='content' && $_SESSION['roleid'] != 1 && !in_array($r['catid'],$priv_catids)) {
+					$arrchildid = explode(',',$r['arrchildid']);
+					$array_intersect = array_intersect($priv_catids,$arrchildid);
+					if(empty($array_intersect)) continue;
+				}
+				if($r['type']==1 || $from=='block') {
+					if($r['type']==0) {
+						$r['vs_show'] = "<a href='?m=block&c=block_admin&a=public_visualization&menuid=".$_GET['menuid']."&catid=".$r['catid']."&type=show' target='right'>[".L('content_page')."]</a>";
+					} else {
+						$r['vs_show'] ='';
+					}
+					$r['icon_type'] = 'file';
+					$r['add_icon'] = '';
+					$r['type'] = 'add';
+				} else {
+					$r['icon_type'] = $r['vs_show'] = '';
+					$r['type'] = 'init';
+					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".$_GET['menuid']."&catid=".$r['catid']."' onclick=javascript:openwinx('?m=content&c=content&a=add&menuid=".$_GET['menuid']."&catid=".$r['catid']."&hash_page=".$_SESSION['hash_page']."','')><img src='".IMG_PATH."add_content.gif' alt='".L('add')."'></a> ";
+				}
+				$categorys[$r['catid']] = $r;
+			}
+		}
+		if(!empty($categorys)) {
+			$tree->init($categorys);
+				switch($from) {
+					case 'block':
+						$strs = "<span class='\$icon_type'>\$add_icon<a href='?m=block&c=block_admin&a=public_visualization&menuid=".$_GET['menuid']."&catid=\$catid&type=list&pc_hash=".$_SESSION['pc_hash']."' target='right'>\$catname</a> \$vs_show</span>";
+					break;
+
+					default:
+						$strs = "<span class='\$icon_type'>\$add_icon<a href='?m=content&c=content&a=\$type&menuid=".$_GET['menuid']."&catid=\$catid&pc_hash=".$_SESSION['pc_hash']."' target='right' onclick='open_list(this)'>\$catname</a></span>";
+						break;
+				}
+			$data = $tree->creat_sub_json($catid,$strs);
+		}		
+		echo $data;
 	}
 }
 ?>

@@ -1,4 +1,6 @@
 <?php
+defined('IN_PHPCMS') or exit('No permission resources.'); 
+
 $session_storage = 'session_'.pc_base::load_config('system','session_storage');
 pc_base::load_sys_class($session_storage);
 session_start();

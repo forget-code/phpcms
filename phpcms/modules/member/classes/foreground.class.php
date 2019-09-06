@@ -5,6 +5,7 @@ class foreground {
 	private $_member_modelinfo;
 	
 	public function __construct() {
+		self::check_ip();
 		$this->db = pc_base::load_model('member_model');
 		//ajax验证信息不需要登录
 		if(substr(ROUTE_A, 0, 7) != 'public_') {
@@ -26,7 +27,7 @@ class foreground {
 		} else {
 			//判断是否存在auth cookie
 			if ($phpcms_auth) {
-				$auth_key = md5(pc_base::load_config('system', 'auth_key').str_replace('7.0' ,'8.0',$_SERVER['HTTP_USER_AGENT']));
+				$auth_key = $auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
 				list($userid, $password) = explode("\t", sys_auth($phpcms_auth, 'DECODE', $auth_key));
 				//验证用户，获取用户信息
 				$this->memberinfo = $this->db->get_one(array('userid'=>$userid));
@@ -72,5 +73,13 @@ class foreground {
 			}
 		}
 	}
+	/**
+	 * 
+	 * IP禁止判断 ...
+	 */
+	final private function check_ip(){
+		$this->ipbanned = pc_base::load_model('ipbanned_model');
+		$this->ipbanned->check_ip();
+ 	}
 	
 }

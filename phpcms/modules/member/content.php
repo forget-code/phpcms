@@ -180,7 +180,7 @@ class content extends foreground {
 			$_v['flag'] = $workflows[$workflowid]['flag'];
 			$datas[] = $_v;
 		}
-		$pages = $this->content_check_db->pages;
+ 		$pages = $this->content_check_db->pages;
 		include template('member', 'content_published');	
 	}
 	/**
@@ -262,6 +262,41 @@ class content extends foreground {
 			}
 			header("Cache-control: private");
 			
+		}
+	}
+	
+	/**
+	 * 
+	 * 会员删除投稿 ...
+	 */
+	public function delete(){
+		$id = intval($_GET['id']);
+ 		if(!$id){
+			return false;
+		}
+ 		//判断该文章是否待审，并且属于该会员
+		$username = param::get_cookie('_username');
+		$userid = param::get_cookie('_userid');
+		$siteid = get_siteid();
+		$checkid = 'c-'.$id.'-'.$siteid;
+ 		$where = " checkid='$checkid' and username='$username' and status!=99 ";
+		$check_pushed_db = pc_base::load_model('content_check_model');
+ 		$array = $check_pushed_db->get_one($where);
+		if(!$array){
+ 			showmessage(L('operation_failure'), HTTP_REFERER); 
+		}else{
+			//获取模型ID
+			$CATEGORY = getcache('category_content_'.$siteid,'commons');
+			if(!$CATEGORY[$array['catid']]){
+				showmessage(L('operation_failure'), HTTP_REFERER); 
+ 			}
+			$modelid = $CATEGORY[$array['catid']]['modelid']; 
+			$content_db = pc_base::load_model('content_model');
+			$content_db->set_model($modelid);
+			$table_name = $content_db->table_name;
+ 			$content_db->delete_content($id); //删除文章
+ 			$check_pushed_db->delete(array('checkid'=>$checkid));//删除对应投稿表
+			showmessage(L('operation_success'), HTTP_REFERER); 
 		}
 	}
 	

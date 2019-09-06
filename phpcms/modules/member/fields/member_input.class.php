@@ -18,14 +18,13 @@ class member_input {
     }
 
 	function get($data) {
-		$this->data = $data;
-
+		$this->data = $data = trim_script($data);
 		$model_cache = getcache('member_model', 'commons');
 		$this->db->table_name = $this->db_pre.$model_cache[$this->modelid]['tablename'];
 
 		$info = array();
 		$debar_filed = array('catid','title','style','thumb','status','islink','description');
-		if(!is_array($data)) {
+		if(is_array($data)) {
 			foreach($data as $field=>$value) {
 				if($data['islink']==1 && !in_array($field,$debar_filed)) continue;
 				$name = $this->fields[$field]['name'];

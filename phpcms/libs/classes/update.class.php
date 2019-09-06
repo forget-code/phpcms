@@ -42,16 +42,29 @@ class update {
 			'uuid'=>urlencode($this->uuid),
 			);
 		$data = http_build_query($pars);
-		$verify = md5($this->uuid);
-		return $this->update_url.'?'.$data.'&verify='.$verify;
+		$verify = md5($this->uuid);		
+		if($s = $this->module()) {
+			$p = '&p='.$s;
+		}
+		return $this->update_url.'?'.$data.'&verify='.$verify.$p;
 	}
 
 	function notice() {
 		return $this->url('notice');
 	}
 
-	function download() {
-		//TODO
+	function module($type = '') {
+		$string = '';
+		$db = pc_base::load_model('pay_payment_model');
+		$result = $db->select('','pay_code');
+		if(is_array($result) && count($result) > 0) {
+			foreach($result as $v=>$r) {
+				$string .= strtolower($r['pay_code']).'|';
+			}
+			return base64_encode($string);
+		} else {
+			return $string;
+		}		
 	}
 	
 	function check_uuid(){

@@ -28,7 +28,7 @@ class category extends admin {
 		//读取缓存
 		$result = getcache('category_content_'.$this->siteid,'commons');
 		$show_detail = count($result) < 500 ? 1 : 0;
-		$parentid = $_GET['parentid'] ? $_GET['parentid'] : 0;
+		$parentid = $_GET['parentid'] ? intval($_GET['parentid']) : 0;
 		$html_root = pc_base::load_config('system','html_root');
 		$types = array(0 => L('category_type_system'),1 => L('category_type_page'),2 => L('category_type_link'));
 		if(!empty($result)) {
@@ -42,7 +42,7 @@ class category extends admin {
 				}
 				$r['str_manage'] .= '<a href="?m=admin&c=category&a=add&parentid='.$r['catid'].'&menuid='.$_GET['menuid'].'&s='.$r['type'].'&pc_hash='.$_SESSION['pc_hash'].'">'.L('add_sub_category').'</a> | ';
 				
-				$r['str_manage'] .= '<a href="?m=admin&c=category&a=edit&catid='.$r['catid'].'&menuid='.$_GET['menuid'].'&type='.$r['type'].'&pc_hash='.$_SESSION['pc_hash'].'">'.L('edit').'</a> | <a href="javascript:confirmurl(\'?m=admin&c=category&a=delete&catid='.$r['catid'].'&menuid='.$_GET['menuid'].'\',\''.L('confirm',array('message'=>addslashes($r['catname']))).'\')">'.L('delete').'</a> ';
+				$r['str_manage'] .= '<a href="?m=admin&c=category&a=edit&catid='.$r['catid'].'&menuid='.$_GET['menuid'].'&type='.$r['type'].'&pc_hash='.$_SESSION['pc_hash'].'">'.L('edit').'</a> | <a href="javascript:confirmurl(\'?m=admin&c=category&a=delete&catid='.$r['catid'].'&menuid='.$_GET['menuid'].'\',\''.L('confirm',array('message'=>addslashes($r['catname']))).'\')">'.L('delete').'</a> | <a href="?m=admin&c=category&a=remove&catid='.$r['catid'].'&pc_hash='.$_SESSION['pc_hash'].'">'.L('remove','','content').'</a>';
 				$r['typename'] = $types[$r['type']];
 				$r['display_icon'] = $r['ismenu'] ? '' : ' <img src ="'.IMG_PATH.'icon/gear_disable.png" title="'.L('not_display_in_menu').'">';
 				if($r['type'] || $r['child']) {
@@ -134,14 +134,14 @@ class category extends admin {
 				$catid = $this->db->insert($_POST['info'], true);
 				$this->update_priv($catid, $_POST['priv_roleid']);
 				$this->update_priv($catid, $_POST['priv_groupid'],0);
-			} else {
+			} else {//批量添加
 				$end_str = '';
 				$batch_adds = explode("\n", $_POST['batch_add']);
 				foreach ($batch_adds as $_v) {
 					if(trim($_v)=='') continue;
 					$names = explode('|', $_v);
 					$catname = $names[0];
-					$_POST['info']['catname'] = $names[0];
+					$_POST['info']['catname'] = trim($names[0]);
 					$letters = gbk_to_pinyin($catname);
 					$_POST['info']['letter'] = strtolower(implode('', $letters));
 					$_POST['info']['catdir'] = trim($names[1]) ? trim($names[1]) : trim($_POST['info']['letter']);
@@ -824,6 +824,52 @@ class category extends admin {
 				include $this->admin_tpl('category_batch_select');
 			}
 		}	
+	} 
+	/**
+	 * 批量移动文章
+	 */
+	public function remove() {
+		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
+		$this->content_db = pc_base::load_model('content_model');
+		if(isset($_POST['dosubmit'])) {
+			$this->content_check_db = pc_base::load_model('content_check_model'); 
+			if(!$_POST['fromid']) showmessage(L('please_input_move_source','','content'));
+			if(!$_POST['tocatid']) showmessage(L('please_select_target_category','','content'));
+			$tocatid = intval($_POST['tocatid']);
+			$modelid = $this->categorys[$tocatid]['modelid'];
+			if(!$modelid) showmessage(L('illegal_operation','','content'));
+			$fromid = array_filter($_POST['fromid'],"intval");
+			$fromid = implode(',', $fromid);
+			$this->content_db->set_model($modelid);
+			$this->content_db->update(array('catid'=>$tocatid),"catid IN($fromid)");
+ 			showmessage(L('operation_success'),HTTP_REFERER);
+ 		} else {
+			$show_header = '';
+			$catid = intval($_GET['catid']);
+			$categorys = array();
+ 			
+  			$modelid = $this->categorys[$catid]['modelid'];
+  			$tree = pc_base::load_sys_class('tree');
+			$tree->icon = array('&nbsp;&nbsp;│ ','&nbsp;&nbsp;├─ ','&nbsp;&nbsp;└─ ');
+			$tree->nbsp = '&nbsp;&nbsp;';
+ 			foreach($this->categorys as $cid=>$r) {
+				if($this->siteid != $r['siteid'] || $r['type']) continue;
+				if($modelid && $modelid != $r['modelid']) continue;
+				$r['disabled'] = $r['child'] ? 'disabled' : '';
+				$r['selected'] = $cid == $catid ? 'selected' : '';
+				$categorys[$cid] = $r;
+			}
+			$str  = "<option value='\$catid' \$disabled>\$spacer \$catname</option>";
+ 			$tree->init($categorys);
+			$string .= $tree->get_tree(0, $str);
+			
+			
+			$str  = "<option value='\$catid' \$selected>\$spacer \$catname</option>";
+			$source_string = '';
+			$tree->init($categorys);
+			$source_string .= $tree->get_tree(0, $str);
+			include $this->admin_tpl('category_remove');
+ 		}
 	}
 }
 ?>

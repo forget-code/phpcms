@@ -71,6 +71,7 @@ $LANG['fields']						=	'字段';
 $LANG['picutre_list']				=	'图片列表';
 $LANG['max_upload_num']				=	'您最多可以同时上传';
 $LANG['zhang']						=	'张';
+$LANG['image_upload']				=	'图片上传';
 $LANG['attachment_upload']			=	'附件上传';
 $LANG['select_picture']				=	'选择图片';
 

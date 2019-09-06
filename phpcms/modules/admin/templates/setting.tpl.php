@@ -39,8 +39,10 @@ include $this->admin_tpl('header');?>
     <th width="120"><?php echo L('setting_admin_email')?></th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[admin_email]" id="admin_email" size="30" value="<?php echo $admin_email?>"/></td>
   </tr>
-</table>
-<table width="100%"  class="table_form">
+  <tr>
+    <th width="120"><?php echo L('setting_category_ajax')?></th>
+    <td class="y-bg"><input type="text" class="input-text" name="setting[category_ajax]" id="category_ajax" size="5" value="<?php echo $category_ajax?>"/>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo L('setting_category_ajax_desc')?></td>
+  </tr>
   <tr>
     <th width="120"><?php echo L('setting_gzip')?></th>
     <td class="y-bg">

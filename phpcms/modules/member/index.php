@@ -14,7 +14,7 @@ class index extends foreground {
 	
 	function __construct() {
 		parent::__construct();
-		$this->http_user_agent = str_replace('7.0' ,'8.0',$_SERVER['HTTP_USER_AGENT']);
+		$this->http_user_agent = $_SERVER['HTTP_USER_AGENT'];
 	}
 
 	public function init() {
@@ -80,6 +80,16 @@ class index extends foreground {
 				$this->verify_db->insert($userinfo);
 				showmessage(L('operation_success'), 'index.php?m=member&c=index&a=register&t=3');
 			} else {
+				//查看当前模型是否开启了短信验证功能
+				$model_field_cache = getcache('model_field_'.$userinfo['modelid'],'model');
+				if(isset($model_field_cache['mobile']) && $model_field_cache['mobile']['disabled']==0) {
+					if(!preg_match('/^1([0-9]{9})/',$mobile)) showmessage(L('input_right_mobile'));
+					$sms_report_db = pc_base::load_model('sms_report_model');
+					$posttime = SYS_TIME-300;
+					$where = "`mobile`='$mobile' AND `posttime`>'$posttime'";
+					$r = $sms_report_db->get_one($where);
+					if(!$r || $r['id_code']!=$_POST['mobile_verify']) showmessage(L('error_sms_code'));
+				}
 				$userinfo['groupid'] = $this->_get_usergroup_bypoint($userinfo['point']);
 			}
 			
@@ -179,7 +189,7 @@ class index extends foreground {
 				//是否开启选择会员模型选项
 				if($member_setting['choosemodel']) {
 					$first_model = array_pop(array_reverse($modellist));
-					$modelid = isset($_GET['modelid']) ? intval($_GET['modelid']) : $first_model['modelid'];
+					$modelid = isset($_GET['modelid']) && in_array($_GET['modelid'], array_keys($modellist)) ? intval($_GET['modelid']) : $first_model['modelid'];
 
 					if(array_key_exists($modelid, $modellist)) {
 						//获取会员模型表单
@@ -208,6 +218,7 @@ class index extends foreground {
 					}
 				}
 				$description = $modellist[$modelid]['description'];
+				
 				include template('member', 'register');
 			}
 		}
@@ -560,12 +571,15 @@ class index extends foreground {
 				$updatearr['vip'] = 0;
 			}		
 
-			//检查用户积分，更新新用户组，除去邮箱认证、禁止访问、游客组用户、vip用户
+			//检查用户积分，更新新用户组，除去邮箱认证、禁止访问、游客组用户、vip用户，如果该用户组不允许自助升级则不进行该操作		
 			if($r['point'] >= 0 && !in_array($r['groupid'], array('1', '7', '8')) && empty($r[vip])) {
-				$check_groupid = $this->_get_usergroup_bypoint($r['point']);
-
-				if($check_groupid != $r['groupid']) {
-					$updatearr['groupid'] = $groupid = $check_groupid;
+				$grouplist = getcache('grouplist');
+				if(!empty($grouplist[$memberinfo['groupid']]['allowupgrade'])) {	
+					$check_groupid = $this->_get_usergroup_bypoint($r['point']);
+	
+					if($check_groupid != $r['groupid']) {
+						$updatearr['groupid'] = $groupid = $check_groupid;
+					}
 				}
 			}
 
@@ -601,35 +615,11 @@ class index extends foreground {
 			$setting = pc_base::load_config('system');
 			$forward = isset($_GET['forward']) && trim($_GET['forward']) ? urlencode($_GET['forward']) : '';
 			
-			if(!empty($setting['connect_enable'])) {
-				$snda_res = $this->_snda_get_appid();
-				$appid = $snda_res['appid'];
-				$secretkey = $snda_res['secretkey'];
-				$sid = md5("appArea=0appId=".$appid."service=".urlencode(APP_PATH.'index.php?m=member&c=index&a=public_snda_login&forward='.$forward).$secretkey);
-				$sndaurl = "https://cas.sdo.com/cas/login?gateway=true&service=".urlencode(APP_PATH.'index.php?m=member&c=index&a=public_snda_login&forward='.$forward)."&appId=".$appid."&appArea=0&sid=".$sid;
-			}
 			$siteid = isset($_REQUEST['siteid']) && trim($_REQUEST['siteid']) ? intval($_REQUEST['siteid']) : 1;
 			$siteinfo = siteinfo($siteid);
 
 			include template('member', 'login');
 		}
-	}
-	
-	/**
-	 * 
-	 * 获取已申请的appid和secretkey,默认appid为200037400
-	 */
-	private function _snda_get_appid() {
-		$snda_res = pc_base::load_config('snda', 'snda_status');
-		if(strstr($snda_res, '|')) {
-			$snda_res_arr = explode('|', $snda_res);
-			$appid = isset($snda_res_arr[0]) ? $snda_res_arr[0] : '';
-			$secretkey = isset($snda_res_arr[1]) ? $snda_res_arr[1] : '';
-		} else {
-			$appid = 200037400;
-			$secretkey = '';
-		}
-		return array('appid'=>$appid, 'secretkey'=>$secretkey);	
 	}
 	
 	public function logout() {
@@ -904,8 +894,13 @@ class index extends foreground {
 		if($this->verify_db->get_one(array('nickname'=>$nickname))) {
 			exit('0');
 		}
-		
-		$res = $this->db->get_one(array('nickname'=>$nickname));
+		if(isset($_GET['userid'])) {
+			$userid = intval($_GET['userid']);
+			$where = "`nickname`= '$nickname' and `userid` != '$userid'";
+		} else {
+			$where = array('nickname'=>$nickname);
+		}
+		$res = $this->db->get_one($where);
 		if($res) {
 			exit('0');
 		} else {
@@ -999,6 +994,7 @@ class index extends foreground {
 					
 				} else {				
 					//弹出绑定注册页面
+					$_SESSION = array();
 					$_SESSION['connectid'] = $me['id'];
 					$_SESSION['from'] = 'sina';
 					$connect_username = $me['name'];
@@ -1073,6 +1069,7 @@ class index extends foreground {
 					showmessage(L('login_success').$synloginstr, $forward);
 				} else {				
 					//弹出绑定注册页面
+					$_SESSION = array();
 					$_SESSION['connectid'] = $userid;
 					$_SESSION['from'] = 'snda';
 					$connect_username = $userid;
@@ -1135,6 +1132,7 @@ class index extends foreground {
 					showmessage(L('login_success').$synloginstr, $forward);
 				} else {				
 					//弹出绑定注册页面
+					$_SESSION = array();
 					$_SESSION['connectid'] = $_SESSION['last_key']['name'];
 					$_SESSION['from'] = 'qq';
 					$connect_username = $_SESSION['last_key']['name'];
