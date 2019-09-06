@@ -8,7 +8,7 @@ class index {
 		$this->db = pc_base::load_model('sitemodel_model');
 		$this->m_db = pc_base::load_model('sitemodel_field_model');
 		$this->M = new_html_special_chars(getcache('formguide', 'commons'));
-		$this->siteid = get_siteid();
+		$this->siteid = intval($_GET[siteid]);
 		$this->M = $this->M[$this->siteid];
 	}
 	

@@ -399,4 +399,5 @@ $LANG['sms_have_reached_the_limit'] = '你今天获取验证码次数已达到�
 $LANG['sms_send_fail'] = '短信发送失败';
 $LANG['wait_second_repeat_sms_code'] = '秒后重获验证码';
 $LANG['error_sms_code'] = '短信验证码错误，请重新输入';
+$LANG['register_func_tips'] = '可用变量：用户名 - {username} ，密码 - {password} ，Email - {email} ，点击认证地址 - {click} ，链接地址：{url}';
 ?>

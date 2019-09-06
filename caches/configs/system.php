@@ -60,7 +60,7 @@ return array(
 
 'qq_akey' => '',	//qq skey
 'qq_skey' => '',	//qq skey
-'plugin_debug' => '0',
-
+'plugin_debug' => '0',	//插件测试
+'admin_url' => '',	//允许访问后台的域名
 );
 ?>

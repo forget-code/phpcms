@@ -1,7 +1,13 @@
 <?php 
 defined('IN_PHPCMS') or exit('No permission resources.'); 
-pc_base::load_app_class('admin','admin',0);
-class attachments extends admin  {
+$session_storage = 'session_'.pc_base::load_config('system','session_storage');
+pc_base::load_sys_class($session_storage);
+if(param::get_cookie('sys_lang')) {
+	define('SYS_STYLE',param::get_cookie('sys_lang'));
+} else {
+	define('SYS_STYLE','zh-cn');
+}
+class attachments {
 	private $att_db;
 	function __construct() {
 		pc_base::load_app_func('global');
@@ -71,7 +77,7 @@ class attachments extends admin  {
 			if($this->isadmin==0 && !$grouplist[$this->groupid]['allowattachment']) showmessage(L('att_no_permission'));
 			$args = $_GET['args'];
 			$authkey = $_GET['authkey'];
-			if(upload_key($args)!=$authkey) showmessage(L('attachment_parameter_error'));
+			if(upload_key($args) != $authkey) showmessage(L('attachment_parameter_error'));
 			extract(getswfinit($_GET['args']));
 			$siteid = $this->get_siteid();
 			$site_setting = get_site_setting($siteid);
@@ -271,5 +277,14 @@ class attachments extends admin  {
 		}
 		return $att;
 	}
+	
+	final public static function admin_tpl($file, $m = '') {
+		$m = empty($m) ? ROUTE_M : $m;
+		if(empty($m)) return false;
+		return PC_PATH.'modules'.DIRECTORY_SEPARATOR.$m.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$file.'.tpl.php';
+	}
+	final public static function get_siteid() {
+		return get_siteid();
+	}	
 }
 ?>

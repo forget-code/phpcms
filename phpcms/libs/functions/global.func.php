@@ -101,11 +101,17 @@ function format_js($string, $isjs = 1) {
  * @param $str
  * @return mixed
  */
-function trim_script($str) {
-	$str = preg_replace ( '/\<([\/]?)script([^\>]*?)\>/si', '&lt;\\1script\\2&gt;', $str );
-	$str = preg_replace ( '/\<([\/]?)iframe([^\>]*?)\>/si', '&lt;\\1iframe\\2&gt;', $str );
-	$str = preg_replace ( '/\<([\/]?)frame([^\>]*?)\>/si', '&lt;\\1frame\\2&gt;', $str );
-	$str = preg_replace ( '/]]\>/si', ']] >', $str );
+ function trim_script($str) {
+	if(is_array($str)){
+		foreach ($str as $key => $val){
+			$str[$key] = trim_script($val);
+		}
+ 	}else{
+ 		$str = preg_replace ( '/\<([\/]?)script([^\>]*?)\>/si', '&lt;\\1script\\2&gt;', $str );
+		$str = preg_replace ( '/\<([\/]?)iframe([^\>]*?)\>/si', '&lt;\\1iframe\\2&gt;', $str );
+		$str = preg_replace ( '/\<([\/]?)frame([^\>]*?)\>/si', '&lt;\\1frame\\2&gt;', $str );
+		$str = preg_replace ( '/]]\>/si', ']] >', $str );
+ 	}
 	return $str;
 }
 /**
@@ -906,6 +912,40 @@ function menu_linkage($linkageid = 0, $id = 'linkid', $defaultvalue = 0) {
 		$string .=$s;
 		$string .= ')';
 		$string .= '</script>';
+		
+	} elseif($datas['style']=='2') {
+		if(!defined('LINKAGE_INIT_1')) {
+			define('LINKAGE_INIT_1', 1);
+			$string .= '<script type="text/javascript" src="'.JS_PATH.'linkage/js/jquery.ld.js"></script>';
+		}
+		$default_txt = '';
+		if($defaultvalue) {
+				$default_txt = menu_linkage_level($defaultvalue,$linkageid,$infos);
+				$default_txt = '["'.str_replace(' > ','","',$default_txt).'"]';
+		}
+		$string .= $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']"  id="'.$id.'" value="'.$defaultvalue.'">' : '<input type="hidden" name="info['.$id.']"  id="'.$id.'" value="">';
+
+		for($i=1;$i<=$datas['setting']['level'];$i++) {
+			$string .='<select class="pc-select-'.$id.'" name="'.$id.'-'.$i.'" id="'.$id.'-'.$i.'" width="100"><option value="">请选择菜单</option></select> ';
+		}
+
+		$string .= '<script type="text/javascript">
+					$(function(){
+						var $ld5 = $(".pc-select-'.$id.'");					  
+						$ld5.ld({ajaxOptions : {"url" : "'.APP_PATH.'api.php?op=get_linkage&act=ajax_select&keyid='.$linkageid.'"},defaultParentId : 0,style : {"width" : 120}})	 
+						var ld5_api = $ld5.ld("api");
+						ld5_api.selected('.$default_txt.');
+						$ld5.bind("change",onchange);
+						function onchange(e){
+							var $target = $(e.target);
+							var index = $ld5.index($target);
+							$("#'.$id.'-'.$i.'").remove();
+							$("#'.$id.'").val($ld5.eq(index).show().val());
+							index ++;
+							$ld5.eq(index).show();								}
+					})
+		</script>';
+			
 	} else {
 		$title = $defaultvalue ? $infos[$defaultvalue]['name'] : $datas['title'];	
 		$colObj = random(3).date('is');

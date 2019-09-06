@@ -47,6 +47,7 @@ $LANG['main_safety_debug'] = '※ 强烈建议您网站上线后，建议关闭 
 $LANG['main_safety_errlog'] = '※ 强烈建议您网站开启错误日志(errorlog) ';
 $LANG['main_safety_sql'] = '※ 强烈建议您关闭 execution_sql （执行SQL）';
 $LANG['main_safety_log'] = '※ 您的错误日志记录超过警戒设置（{size}），为避免影响性能，建议您及时清理';
+$LANG['main_safety_tpledit'] = '※ 您的模版允许后台在线编辑，为避免安全问题，建议您设为不允许在线修改';
 $LANG['main_shortcut'] = '快捷方式';
 $LANG['main_sysinfo'] = '系统信息';
 $LANG['main_version'] = 'PHPCMS程序版本：';
@@ -320,6 +321,10 @@ $LANG['linkage_name_desc'] = '批量添加以换行分隔';
 
 $LANG['linkage_option_style'] = '下拉风格';
 $LANG['linkage_pop_style'] = '弹出风格';
+$LANG['linkage_select_style'] = 'SELECT联动';
+$LANG['linkage_select_show'] = '显示';
+$LANG['linkage_select_level'] = '级';
+$LANG['linkage_select'] = '=请选择菜单';
 $LANG['all_site'] = '所有站点';
 $LANG['linkage_menu_style'] = '菜单风格';
 $LANG['linkage_parent_menu'] = '上级菜单';
@@ -728,6 +733,6 @@ $LANG['batch_add_tips'] = '例如：<br><font color="#959595">国内新闻|china
 $LANG['not_display_in_menu'] = '不在导航显示';
 
 $LANG['apply_to_child'] = '应用到子栏目：';
-
-
+$LANG['admin_url'] = '后台访问域名';
+$LANG['admin_url_tips'] = '例如：admin.domain.com，绑定后，只能通过该域名登陆，配置保存在 /caches/configs/system.php中，修改参数admin_url可手动取消绑定';
 ?>

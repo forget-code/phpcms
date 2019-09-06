@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2009 Comsenz Inc.
+	[UCenter] (C)2001-2099 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: user.php 968 2009-10-29 02:06:45Z zhaoxiongfei $
+	$Id: user.php 1078 2011-03-30 02:00:29Z monkey $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -40,12 +40,30 @@ class usermodel {
 
 	function check_username($username) {
 		$guestexp = '\xA1\xA1|\xAC\xA3|^Guest|^\xD3\xCE\xBF\xCD|\xB9\x43\xAB\xC8';
-		$len = strlen($username);
+		$len = $this->dstrlen($username);
 		if($len > 15 || $len < 3 || preg_match("/\s+|^c:\\con\\con|[%,\*\"\s\<\>\&]|$guestexp/is", $username)) {
 			return FALSE;
 		} else {
 			return TRUE;
 		}
+	}
+
+	function dstrlen($str) {
+		if(strtolower(UC_CHARSET) != 'utf-8') {
+			return strlen($str);
+		}
+		$count = 0;
+		for($i = 0; $i < strlen($str); $i++){
+			$value = ord($str[$i]);
+			if($value > 127) {
+				$count++;
+				if($value >= 192 && $value <= 223) $i++;
+				elseif($value >= 224 && $value <= 239) $i = $i + 2;
+				elseif($value >= 240 && $value <= 247) $i = $i + 3;
+		    	}
+	    		$count++;
+		}
+		return $count;
 	}
 
 	function check_mergeuser($username) {
@@ -108,8 +126,9 @@ class usermodel {
 		return $user['uid'];
 	}
 
-	function add_user($username, $password, $email, $salt, $uid = 0, $questionid = '', $answer = '', $regip = '') {
+	function add_user($username, $password, $email, $uid = 0, $questionid = '', $answer = '', $regip = '') {
 		$regip = empty($regip) ? $this->base->onlineip : $regip;
+		$salt = substr(uniqid(rand()), -6);
 		$password = md5(md5($password).$salt);
 		$sqladd = $uid ? "uid='".intval($uid)."'," : '';
 		$sqladd .= $questionid > 0 ? " secques='".$this->quescrypt($questionid, $answer)."'," : " secques='',";
@@ -119,8 +138,8 @@ class usermodel {
 		return $uid;
 	}
 
-	function edit_user($username, $oldpw, $newpw,  $email, $salt = '', $ignoreoldpw = 0, $questionid = '', $answer = '') {
-		$data = $this->db->fetch_first("SELECT username, uid, password FROM ".UC_DBTABLEPRE."members WHERE username='$username'");
+	function edit_user($username, $oldpw, $newpw, $email, $ignoreoldpw = 0, $questionid = '', $answer = '') {
+		$data = $this->db->fetch_first("SELECT username, uid, password, salt FROM ".UC_DBTABLEPRE."members WHERE username='$username'");
 
 		if($ignoreoldpw) {
 			$isprotected = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."protectedmembers WHERE uid = '$data[uid]'");
@@ -129,11 +148,11 @@ class usermodel {
 			}
 		}
 
-		if(!$ignoreoldpw && $data['password'] != md5(md5($oldpw).$salt)) {
+		if(!$ignoreoldpw && $data['password'] != md5(md5($oldpw).$data['salt'])) {
 			return -1;
 		}
 
-		$sqladd = $newpw ? "password='".md5(md5($newpw).$salt)."', `salt`='$salt'" : '';
+		$sqladd = $newpw ? "password='".md5(md5($newpw).$data['salt'])."'" : '';
 		$sqladd .= $email ? ($sqladd ? ',' : '')." email='$email'" : '';
 		if($questionid !== '') {
 			if($questionid > 0) {
@@ -192,6 +211,15 @@ class usermodel {
 		$arr = array();
 		while($user = $this->db->fetch_array($query)) {
 			$arr[] = $user['uid'];
+		}
+		return $arr;
+	}
+
+	function id2name($uidarr) {
+		$arr = array();
+		$query = $this->db->query("SELECT uid, username FROM ".UC_DBTABLEPRE."members WHERE uid IN (".$this->base->implode($uidarr).")");
+		while($user = $this->db->fetch_array($query)) {
+			$arr[$user['uid']] = $user['username'];
 		}
 		return $arr;
 	}

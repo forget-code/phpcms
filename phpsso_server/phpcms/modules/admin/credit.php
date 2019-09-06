@@ -76,7 +76,6 @@ class credit extends admin {
 			showmessage(L('operation_success'), HTTP_REFERER);
 		}
 		$applist = getcache('applist');
-	
 		include $this->admin_tpl('credit_add');
 	}
 	
@@ -90,7 +89,7 @@ class credit extends admin {
 
 		$data['action'] = 'credit_list';
 		
-		$res = ps_send($url.'?appid='.$appid, $data, $applist[$appid]['authkey']);
+		$res = ps_send($url.'&appid='.$appid, $data, $applist[$appid]['authkey']);
 		if(!empty($res)) {		
 			$creditlist = string2array($res);
 			$str = '';

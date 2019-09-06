@@ -8,7 +8,7 @@
         <div id="Article">
         	<h1>{$name}</h1>
 			<div class="content">
-				<form method="post" action="?m=formguide&c=index&a=show&formid={$formid}" name="myform" id="myform">
+				<form method="post" action="?m=formguide&c=index&a=show&formid={$formid}&siteid={php echo $this->siteid}" name="myform" id="myform">
 <table class="table_form" width="100%" cellspacing="0">
 <tbody>
  {loop $forminfos_data $field $info}

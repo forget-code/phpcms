@@ -12,7 +12,7 @@ body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; backgro
 #header{ position:relative;}
 #header,
 	#memberArea,
-	#footer{ width:940px;  margin:auto}
+	#footer{ width:1000px;  margin:auto}
 	#header{ margin-bottom:10px}
 	#memberArea:after{content:".";display:block;height:0;clear:both;visibility:hidden;}#memberArea{display:inline-block;}/* Hides from IE-mac \*/* html #memberArea{height:1%;}#memberArea{display:block;}
 #header .logo{background: url(../images/member/logo.png) no-repeat right center; height:70px; float:left; padding-right:120px}
@@ -46,7 +46,7 @@ body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; backgro
 .col-1 h6.title{margin-bottom:8px; font-size:14px}
 .col-1 div.content{padding:0px 10px 10px}
 
-.left-memu{ width:200px; margin-right:8px; background:none}
+.left-memu{ width:150px; margin-right:8px; background:none}
 .left-memu .title{background: url(../images/member/member_left_menu.png) no-repeat; height:22px; font-size:12px}
 .left-memu h5.title{background-position: left -1px; margin-bottom:0}
 .left-memu h6.title{margin-bottom:0}

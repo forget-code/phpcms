@@ -1,6 +1,6 @@
 <?php 
 	defined('IN_ADMIN') or exit('No permission resources.');
-	include $this->admin_tpl('header', 'admin');
+	include $this->admin_tpl('header', 'attachment');
 ?>
 <div class="pad-lr-10">
 <div class="explain-col">

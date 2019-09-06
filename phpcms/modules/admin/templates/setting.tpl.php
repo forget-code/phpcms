@@ -102,6 +102,15 @@ include $this->admin_tpl('header');?>
   <tr>
     <th><?php echo L('setting_minrefreshtime')?></th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[minrefreshtime]" id="minrefreshtime" size="10" value="<?php echo $minrefreshtime?>"/> <?php echo L('miao')?></td>
+  </tr>
+  <tr>
+    <th><?php echo L('admin_url')?></th>
+    <td class="y-bg"><TABLE>
+    <TR>
+		<TD width="270"><?php echo SITE_PROTOCOL;?><input type="text" class="input-text" name="setconfig[admin_url]" id="admin_url" size="30" value="<?php echo $admin_url?>"/> </TD>
+		<TD><?php echo L('admin_url_tips')?></TD>
+    </TR>
+    </TABLE> </td>
   </tr> 
 </table>
 </div>

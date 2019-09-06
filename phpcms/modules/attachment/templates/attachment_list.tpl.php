@@ -11,7 +11,7 @@
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col"><?php echo L('name')?>  <input type="text" value="<?php echo $filename?>" class="input-text" name="info[filename]">  <?php echo L('uploadtime')?>  <?php echo form::date('info[start_uploadtime]',$start_uploadtime)?><?php echo L('to')?>   <?php echo form::date('info[end_uploadtime]',$end_uploadtime)?>  <?php echo L('filetype')?>  <input type="text" value="<?php echo $fileext?>" class="input-text" name="info[fileext]">  <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit"> <a href="?m=attachment&c=manage&a=dir&menuid=<?php echo $_GET['menuid']?>"><?php echo L('dir_schema')?></a>
+		<td><div class="explain-col"><?php echo L('name')?>  <input type="text" value="<?php echo $filename?>" class="input-text" name="info[filename]">  <?php echo L('uploadtime')?>  <?php echo form::date('info[start_uploadtime]',$start_uploadtime,'1','0','true','1')?><?php echo L('to')?>   <?php echo form::date('info[end_uploadtime]',$end_uploadtime)?>  <?php echo L('filetype')?>  <input type="text" value="<?php echo $fileext?>" class="input-text" name="info[fileext]">  <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit"> <a href="?m=attachment&c=manage&a=dir&menuid=<?php echo $_GET['menuid']?>"><?php echo L('dir_schema')?></a>
 		</div>
 		</td>
 		</tr>

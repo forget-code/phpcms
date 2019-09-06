@@ -799,6 +799,7 @@ function is_utf8($string) {
  */
 function get_uc_database() {
 	$config = pc_base::load_config('system');
+	$config['uc_dbtablepre'] = str_replace('`'.$config['uc_dbname'].'`.','',$config['uc_dbtablepre']);
 	return  array (
 		'hostname' => $config['uc_dbhost'],
 		'database' => $config['uc_dbname'],

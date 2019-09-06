@@ -335,6 +335,7 @@ class content extends admin {
 		$category = $this->categorys[$catid];
 		$setting = string2array($category['setting']);
 		$workflowid = $setting['workflowid'];
+		
 		//只有存在工作流才需要审核
 		if($workflowid) {
 			$steps = intval($_GET['steps']);
@@ -371,10 +372,12 @@ class content extends admin {
 
 				//审核通过，检查投稿奖励或扣除积分
 				if ($status==99) {
+					$html = pc_base::load_app_class('html', 'content');
+					$this->url = pc_base::load_app_class('url', 'content');
 					$member_db = pc_base::load_model('member_model');
 					if (isset($_POST['ids']) && !empty($_POST['ids'])) {
 						foreach ($_POST['ids'] as $id) {
-							$content_info = $this->db->get_one(array('id'=>$id), 'username');
+							$content_info = $this->db->get_content($catid,$id);
 							$memberinfo = $member_db->get_one(array('username'=>$content_info['username']), 'userid, username');
 							$flag = $catid.'_'.$id;
 							if($setting['presentpoint']>0) {
@@ -384,10 +387,14 @@ class content extends admin {
 								pc_base::load_app_class('spend','pay',0);
 								spend::point($setting['presentpoint'], L('contribute_del_point'), $memberinfo['userid'], $memberinfo['username'], '', '', $flag);
 							}
+							if($setting['content_ishtml'] == '1'){//栏目有静态配置
+  								$urls = $this->url->show($id, 0, $content_info['catid'], $content_info['inputtime'], '',$content_info,'add');
+   								$html->show($urls[1],$urls['data'],0);
+ 							}
 						}
 					} else if (isset($_GET['id']) && $_GET['id']) {
 						$id = intval($_GET['id']);
-						$content_info = $this->db->get_one(array('id'=>$id), 'username');
+						$content_info = $this->db->get_content($catid,$id);
 						$memberinfo = $member_db->get_one(array('username'=>$content_info['username']), 'userid, username');
 						$flag = $catid.'_'.$id;
 						if($setting['presentpoint']>0) {
@@ -397,6 +404,10 @@ class content extends admin {
 							pc_base::load_app_class('spend','pay',0);
 							spend::point($setting['presentpoint'], L('contribute_del_point'), $memberinfo['userid'], $memberinfo['username'], '', '', $flag);
 						}
+						if($setting['content_ishtml'] == '1'){//栏目有静态配置
+  							$urls = $this->url->show($id, 0, $content_info['catid'], $content_info['inputtime'], '',$content_info,'add');
+   							$html->show($urls[1],$urls['data'],0);
+ 						}
 					}
 				}
 				if(isset($_GET['ajax_preview'])) {

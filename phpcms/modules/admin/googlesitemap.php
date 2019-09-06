@@ -223,7 +223,10 @@ class googlesitemap extends admin {
 				$tree->nbsp = '&nbsp;&nbsp;&nbsp;';
 				$categorys = array();
 				foreach($this->categorys as $catid=>$r) {
-					if($this->siteid != $r['siteid'] || $r['type']) continue;
+					if($this->siteid != $r['siteid']) continue;
+					if($r['type'] && $r['child']=='0'){//如果是单网页并且，没有子类了
+						continue;
+ 					}
 					if($modelid && $modelid != $r['modelid']) continue;
 					$r['disabled'] = $r['child'] ? 'disabled' : '';
 					$categorys[$catid] = $r;

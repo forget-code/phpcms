@@ -135,12 +135,17 @@ class comment_admin extends admin {
 			if (is_array($ids)) {
 				foreach ($ids as $id) {
 					$comment_info = $this->comment_data_db->get_one(array('id'=>$id), 'commentid, userid, username');
+					//判断总数是否为0 
+ 					$comment_allinfo = $this->comment_db->get_one(array('commentid'=>$comment_info['commentid']),'*');
+					if($comment_allinfo['total']<=0){
+						showmessage('评论统计不正常，请返回检查！', HTTP_REFERER);
+					}
 					$this->comment_db->update(array('total'=>'-=1'), array('commentid'=>$comment_info['commentid']));
 					$this->comment_data_db->delete(array('id'=>$id));
 
 					//当评论ID不为空，站点配置了删除的点数，支付模块存在的时候，删除用户的点数。
 					if (!empty($comment_info['userid']) && !empty($site['del_point']) && module_exists('pay')) {
-						pc_base::load_app_class('receipts', 'pay', 0);
+						pc_base::load_app_class('spend', 'pay', 0);
 						$op_userid = param::get_cookie('userid');
 						$op_username = param::get_cookie('admin_username');
 						spend::point($site['del_point'], L('comment_point_del', '', 'comment'), $comment_info['userid'], $comment_info['username'], $op_userid, $op_username);
@@ -150,6 +155,11 @@ class comment_admin extends admin {
 			} elseif (is_numeric($ids)) {
 				$id = intval($ids);
 				$comment_info = $this->comment_data_db->get_one(array('id'=>$id), 'commentid, userid, username');
+				//判断总数是否为0 
+				$comment_allinfo = $this->comment_db->get_one(array('commentid'=>$comment_info['commentid']),'*');
+				if($comment_allinfo['total']<=0){
+					showmessage('评论统计不正常，请返回检查！', HTTP_REFERER);
+				}
 				$this->comment_db->update(array('total'=>'-=1'), array('commentid'=>$comment_info['commentid']));
 				$this->comment_data_db->delete(array('id'=>$id));
 

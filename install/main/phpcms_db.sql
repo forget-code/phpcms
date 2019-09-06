@@ -435,6 +435,7 @@ CREATE TABLE `phpcms_linkage` (
   `keyid` smallint(5) unsigned NOT NULL default '0',
   `listorder` smallint(5) unsigned NOT NULL default '0',
   `description` varchar(255) default NULL,
+  `setting` varchar(255) default NULL,
   `siteid` smallint(5) NOT NULL default '0',
   PRIMARY KEY  (`linkageid`,`keyid`),
   KEY `parentid` (`parentid`,`listorder`)
@@ -506,6 +507,7 @@ DROP TABLE IF EXISTS `phpcms_member_detail`;
 CREATE TABLE `phpcms_member_detail` (
   `userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `birthday` date DEFAULT NULL,
+  `mobile` varchar(11) NOT NULL,
   UNIQUE KEY `userid` (`userid`)
 ) TYPE=MyISAM;
 
@@ -5105,7 +5107,7 @@ INSERT INTO `phpcms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name
 INSERT INTO `phpcms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(74, 2, 1, 'islink', '转向链接', '', '', 0, 0, '', '', 'islink', '', '', '', '', 0, 1, 0, 0, 0, 1, 0, 0, 30, 0, 0);
 INSERT INTO `phpcms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(75, 3, 1, 'islink', '转向链接', '', '', 0, 0, '', '', 'islink', '', '', '', '', 0, 1, 0, 0, 0, 1, 0, 0, 30, 0, 0);
 INSERT INTO `phpcms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(83, 10, 1, 'birthday', '生日', '', '', 0, 0, '', '生日格式错误', 'datetime', 'array (\n  ''fieldtype'' => ''date'',\n  ''format'' => ''Y-m-d'',\n  ''defaulttype'' => ''0'',\n)', '', '', '', 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0);
-
+INSERT INTO `phpcms_model_field` (`fieldid`, `modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES(84, 10, 1, 'mobile', '短信验证', '', '', 11, 11, '', '', 'checkmobile', '', '', '', '', 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0);
 --
 -- 会员字段
 --

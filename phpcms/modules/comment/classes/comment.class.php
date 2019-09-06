@@ -222,7 +222,7 @@ class comment {
 			
 			//删除存储表的数据
 			$this->comment_data_db->delete(array('id'=>$id, 'commentid'=>$commentid));
-			//删除存储表总数记录
+			//删除存储表总数记录,判断总数是否为0，否则不能再删除了。
 			$this->comment_table_db->edit_total($comment['tableid'], '-=1');
 			
 			//当评论ID不为空，站点配置了删除的点数，支付模块存在的时候，删除用户的点数。

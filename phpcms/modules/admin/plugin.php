@@ -217,7 +217,39 @@ class plugin extends admin {
 			showmessage(L('operation_failure'),'?m=admin&c=plugin');
 		}
 	}
+	
+
+	public function design() {
 		
+	    if(isset($_POST['dosubmit'])) {
+			$data['identification'] = $_POST['info']['identification'];
+			$data['realease'] = date('YMd',SYS_TIME);
+			$data['dir'] = $_POST['info']['identification'];
+			$data['appid'] = '';
+			$data['plugin'] = array(
+							'version' => '0.0.2',
+							'name' => $_POST['info']['name'],
+							'copyright' => $_POST['info']['copyright'],
+							'description' => "",
+							'installfile' => 'install.php',
+							'uninstallfile' => 'uninstall.php',
+						);
+
+			
+			$filepath = PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$data['identification'].DIRECTORY_SEPARATOR.'plugin_'.$data['identification'].'.cfg.php';
+			pc_base::load_sys_func('dir');
+			dir_create(dirname($filepath));	
+		    $data = "<?php\nreturn ".var_export($data, true).";\n?>";			
+			if(pc_base::load_config('system', 'lock_ex')) {
+				$file_size = file_put_contents($filepath, $data, LOCK_EX);
+			} else {
+				$file_size = file_put_contents($filepath, $data);
+			}
+			echo 'success';
+		} else {
+			include $this->admin_tpl('plugin_design');
+		}
+	}
 	/**
 	 * 应用中心
 	 * Enter description here ...

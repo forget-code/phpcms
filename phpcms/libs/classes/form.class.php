@@ -148,13 +148,18 @@ class form {
 	 * @param $loadjs 是否重复加载js，防止页面程序加载不规则导致的控件无法显示
 	 * @param $showweek 是否显示周，使用，true | false
 	 */
-	public static function date($name, $value = '', $isdatetime = 0, $loadjs = 0, $showweek = 'true') {
+	public static function date($name, $value = '', $isdatetime = 0, $loadjs = 0, $showweek = 'true', $timesystem = 1) {
 		if($value == '0000-00-00 00:00:00') $value = '';
 		$id = preg_match("/\[(.*)\]/", $name, $m) ? $m[1] : $name;
 		if($isdatetime) {
 			$size = 21;
 			$format = '%Y-%m-%d %H:%M:%S';
-			$showsTime = 12;
+			if($timesystem){
+				$showsTime = 'true';
+			} else {
+				$showsTime = '12';
+			}
+			
 		} else {
 			$size = 10;
 			$format = '%Y-%m-%d';

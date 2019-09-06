@@ -303,7 +303,7 @@ switch($step)
 			file_put_contents(PHPCMS_PATH.'phpsso_server/caches/caches_admin/caches_data/applist.cache.php', $applist);
 		} else {
 			//安装可选模块
-			if(in_array($module,array('announce','comment','link','vote','message','mood','poster','formguide','wap','upgrade','tag'))) {
+			if(in_array($module,array('announce','comment','link','vote','message','mood','poster','formguide','wap','upgrade','tag','sms'))) {
 				$install_module = pc_base::load_app_class('module_api','admin');
 				$install_module->install($module);
 			}

@@ -27,7 +27,7 @@ class index {
 				header('Location: '.APP_PATH.'index.php?m=search');exit;
 			}
 			$typeid = empty($_GET['typeid']) ? 48 : intval($_GET['typeid']);
-			$time = empty($_GET['time']) ? 'all' : trim($_GET['time']);
+			$time = empty($_GET['time']) || !in_array($_GET['time'],array('all','day','month','year')) ? 'all' : trim($_GET['time']);
 			$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 			$pagesize = 10;
 			$q = safe_replace(trim($_GET['q']));
