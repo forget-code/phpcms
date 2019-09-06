@@ -178,6 +178,15 @@ include $this->admin_tpl('header');?>
         <td  id="show_template">
 		</td>
       </tr>
+	  
+	  <!--模版应用到子栏目配置-->
+	  <tr>
+        <th width="200"><?php echo '模板应用到子栏目';?></th>
+        <td><input type='radio' name='template_child' value='1'> <?php echo L('yes');?>&nbsp;&nbsp;&nbsp;&nbsp;
+          <input type='radio' name='template_child' value='0' checked> <?php echo L('no');?></td></td>
+      </tr>
+	  <!--end 模版应用到子栏目配置-->
+	  
 </table>
 </div>
 <div id="div_setting_4" class="contentList pad-10 hidden">

@@ -203,7 +203,9 @@ class push_api {
 			$positions = getcache('position', 'commons');
 			if(!empty($positions)) {
 				foreach ($positions as $pid => $p) {
-					if ($p['catid']) $catids = array_keys((array)subcat($p['catid'], 0, 1));
+					//if ($p['catid']) $catids = array_keys((array)subcat($p['catid'], 0, 1));
+					//获取栏目下所有子栏目
+					if ($p['catid']) $catids = explode(',',$category[$p['catid']]['arrchildid']);
 					if (($p['siteid']==0 || $p['siteid']==$siteid) && ($p['modelid']==0 || $p['modelid']==$param['modelid']) && ($p['catid']==0 || in_array($param['catid'], $catids))) {
 						$info[$pid] = $p['name'];
 					}

@@ -179,8 +179,8 @@ class index {
 				} else {
 					//读取专辑搜索接口
 					$special_api = pc_base::load_app_class('search_api', 'special');
-
-					$data = $special_api->get_search_data($sids);
+ 					$data = $special_api->get_search_data($sids);
+					$totalnums = count($data);
 				}
 			}
 			$execute_time = execute_time();

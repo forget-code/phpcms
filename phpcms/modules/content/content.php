@@ -313,10 +313,14 @@ class content extends admin {
 				$this->position_data_db->delete(array('id'=>$id,'catid'=>$catid,'module'=>'content'));
 				//删除全站搜索中数据
 				$this->search_db->delete_search($typeid,$id);
-				//删除相关的评论
-				$commentid = id_encode('content_'.$catid, $id, $siteid);
-				$this->comment->del($commentid, $siteid, $id, $catid);
-			}
+				
+				//删除相关的评论,删除前应该判断是否还存在此模块
+				if(module_exists('comment')){
+					$commentid = id_encode('content_'.$catid, $id, $siteid);
+					$this->comment->del($commentid, $siteid, $id, $catid);
+				}
+				
+ 			}
 			//更新栏目统计
 			$this->db->cache_items();
 			showmessage(L('operation_success'),HTTP_REFERER);
@@ -335,7 +339,6 @@ class content extends admin {
 		$category = $this->categorys[$catid];
 		$setting = string2array($category['setting']);
 		$workflowid = $setting['workflowid'];
-		
 		//只有存在工作流才需要审核
 		if($workflowid) {
 			$steps = intval($_GET['steps']);
@@ -394,7 +397,7 @@ class content extends admin {
 						}
 					} else if (isset($_GET['id']) && $_GET['id']) {
 						$id = intval($_GET['id']);
-						$content_info = $this->db->get_content($catid,$id);
+						$content_info = $this->db->get_one(array('id'=>$id), 'username');
 						$memberinfo = $member_db->get_one(array('username'=>$content_info['username']), 'userid, username');
 						$flag = $catid.'_'.$id;
 						if($setting['presentpoint']>0) {
@@ -404,10 +407,6 @@ class content extends admin {
 							pc_base::load_app_class('spend','pay',0);
 							spend::point($setting['presentpoint'], L('contribute_del_point'), $memberinfo['userid'], $memberinfo['username'], '', '', $flag);
 						}
-						if($setting['content_ishtml'] == '1'){//栏目有静态配置
-  							$urls = $this->url->show($id, 0, $content_info['catid'], $content_info['inputtime'], '',$content_info,'add');
-   							$html->show($urls[1],$urls['data'],0);
- 						}
 					}
 				}
 				if(isset($_GET['ajax_preview'])) {
@@ -688,7 +687,7 @@ class content extends admin {
 		echo "
 		<link href=\"".CSS_PATH."dialog_simp.css\" rel=\"stylesheet\" type=\"text/css\" />
 		<script language=\"javascript\" type=\"text/javascript\" src=\"".JS_PATH."dialog.js\"></script>
-		<script type=\"text/javascript\">art.dialog({lock:false,title:'".L('operations_manage')."',mouse:true, id:'content_m', content:'<span id=cloading ><a href=\'javascript:ajax_manage(1)\'>".L('passed_checked')."</a> | <a href=\'javascript:ajax_manage(2)\'>".L('reject')."</a> |　<a href=\'javascript:ajax_manage(3)\'>".L('delete')."</a></span>',left:'right',width:'15em', top:'bottom', fixed:true});
+		<script type=\"text/javascript\">art.dialog({lock:false,title:'".L('operations_manage')."',mouse:true, id:'content_m', content:'<span id=cloading ><a href=\'javascript:ajax_manage(1)\'>".L('passed_checked')."</a> | <a href=\'javascript:ajax_manage(2)\'>".L('reject')."</a> |　<a href=\'javascript:ajax_manage(3)\'>".L('delete')."</a></span>',left:'100%',top:'100%',width:200,height:50,drag:true, fixed:true});
 		function ajax_manage(type) {
 			if(type==1) {
 				$.get('?m=content&c=content&a=pass&ajax_preview=1&catid=".$catid."&steps=".$steps."&id=".$id."&pc_hash=".$pc_hash."');
@@ -820,7 +819,7 @@ class content extends admin {
 
 			$tree->init($categorys);
 			$string .= $tree->get_tree(0, $str);
-			
+			print_r($string);exit;
 			$str  = "<option value='\$catid'>\$spacer \$catname</option>";
 			$source_string = '';
 			$tree->init($categorys);

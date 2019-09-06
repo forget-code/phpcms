@@ -72,9 +72,10 @@ class html {
 		$this->db = pc_base::load_model('content_model');
 		$this->db->set_model($modelid);
 		//上一页
-		$previous_page = $this->db->get_one("id<'$id' AND status=99",'*','id DESC');
+		$previous_page = $this->db->get_one("`catid` = '$catid' AND `id`<'$id' AND `status`=99",'*','id DESC');
 		//下一页
-		$next_page = $this->db->get_one("id>'$id' AND status=99");
+		$next_page = $this->db->get_one("`catid`= '$catid' AND `id`>'$id' AND `status`=99");
+		
 		if(empty($previous_page)) {
 			$previous_page = array('title'=>L('first_page','','content'), 'thumb'=>IMG_PATH.'nopic_small.gif', 'url'=>'javascript:alert(\''.L('first_page','','content').'\');');
 		}

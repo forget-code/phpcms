@@ -74,8 +74,18 @@ class member_menu extends admin {
 	}
 	function delete() {
 		$_GET['id'] = intval($_GET['id']);
+		$menu = $this->db->get_one(array("id"=>$_GET['id']));
+		if(!$menu)showmessage('菜单不存在！请返回！',HTTP_REFERER);
 		$this->db->delete(array('id'=>$_GET['id']));
-		showmessage(L('operation_success'));
+		//删除member_menu语言包
+		$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR.'member_menu.lang.php';
+		require $file;
+		$content = file_get_contents($file);
+ 		$str = "\$LANG['".$menu['name']."'] = '".$LANG[$menu['name']]."';\r\n";
+ 		$content = str_replace($str,'',$content);
+		file_put_contents($file,$content);
+		
+ 		showmessage(L('operation_success'));
 	}
 	
 	function edit() {
@@ -83,7 +93,7 @@ class member_menu extends admin {
 			$id = intval($_POST['id']);
 			$this->db->update($_POST['info'],array('id'=>$id));
 			//修改语言文件
-			$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR.'system_menu.lang.php';
+			$file = PC_PATH.'languages'.DIRECTORY_SEPARATOR.'zh-cn'.DIRECTORY_SEPARATOR.'member_menu.lang.php';
 			require $file;
 			$key = $_POST['info']['name'];
 			if(!isset($LANG[$key])) {

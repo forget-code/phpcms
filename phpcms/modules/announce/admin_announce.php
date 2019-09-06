@@ -18,7 +18,7 @@ class admin_announce extends admin {
 		$_GET['status'] = $_GET['status'] ? intval($_GET['status']) : 1;
 		$sql = '`siteid`=\''.$this->get_siteid().'\'';
 		switch($_GET['s']) {
-			case '1': $sql .= ' AND `passed`=\'1\' AND (`endtime` > \''.date('Y-m-d').'\' or `endtime`=\'0000-00-00\')'; break;
+			case '1': $sql .= ' AND `passed`=\'1\' AND (`endtime` >= \''.date('Y-m-d').'\' or `endtime`=\'0000-00-00\')'; break;
 			case '2': $sql .= ' AND `passed`=\'0\''; break;
 			case '3': $sql .= ' AND `passed`=\'1\' AND `endtime`!=\'0000-00-00\' AND `endtime` <\''.date('Y-m-d').'\' '; break;
 		}

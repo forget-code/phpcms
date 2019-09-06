@@ -34,7 +34,7 @@ $(function(){
 		onwait : "{L('connecting_please_wait')}"
 	});
 	$("#password").formValidator({onshow:"{L('input').L('password')}",onfocus:"{L('password').L('between_6_to_20')}"}).inputValidator({min:6,max:20,onerror:"{L('password').L('between_6_to_20')}"});
-	$("#pwdconfirm").formValidator({onshow:"{L('input').L('cofirmpwd')}",onfocus:"{L('input').L('passwords_not_match')}",oncorrect:"{L('passwords_match')}"}).compareValidator({desid:"password",operateor:"=",onerror:"{L('input').L('passwords_not_match')}"});
+	$("#pwdconfirm").formValidator({onshow:"{L('input').L('cofirmpwd')}",onfocus:"{L('passwords_not_match')}",oncorrect:"{L('passwords_match')}"}).compareValidator({desid:"password",operateor:"=",onerror:"{L('passwords_not_match')}"});
 	$("#email").formValidator({onshow:"{L('input').L('email')}",onfocus:"{L('email').L('format_incorrect')}",oncorrect:"{L('email').L('format_right')}"}).inputValidator({min:2,max:32,onerror:"{L('email').L('between_2_to_32')}"}).regexValidator({regexp:"email",datatype:"enum",onerror:"{L('email').L('format_incorrect')}"}).ajaxValidator({
 	    type : "get",
 		url : "",
@@ -264,7 +264,7 @@ function send_newmail() {
 	//var mail_type = $('input[checkbox=mail_type][checked]').val();
 	var newemail = $('#newemail').val();
  $.post('?m=member&c=index&a=send_newmail&newemail='+newemail,{},function(data){
- 	if(data=='1'){alert('发送成功，请查看验证！');}else{alert('发送错误，请联系管理员！');}
+ 	if(data=='1'){alert('发送成功，请查看验证！');}else if(data=='-1'){alert('邮箱已被占用！');}else{alert('发送错误，请联系管理员！');}
 	});
 } 
 </script>
@@ -279,13 +279,6 @@ function send_newmail() {
 <!--
 	redirect("{APP_PATH}index.php?m=member&c=index&a=login");
 //-->
-function send_newmail() {
-	//var mail_type = $('input[checkbox=mail_type][checked]').val();
-$.post('?m=member&c=index&a=send_newmail&newmail='+$('#newemail').val(),{}, function(data){
-	if(data=='1'){alert('发送成功，请查看验证！');}else{alert('发送错误，请联系管理员！');}
-	});
-} 
-
 </script>
 {/if}
 

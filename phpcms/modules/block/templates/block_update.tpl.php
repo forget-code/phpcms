@@ -22,7 +22,7 @@ a.close{background: url(<?php echo IMG_PATH?>cross.png) no-repeat left -46px; di
 <?php if ($data['type'] == 1) :?>
   <tr>
     <td class="y-bg"><textarea cols="80" id="data" name="data" rows="10"><?php echo htmlspecialchars($data['data'])?></textarea>
-<?php echo form::editor('data','full','#E0EAFC','','',1)?></td>
+<?php echo form::editor('data','full','','','',1)?></td>
   </tr>
 <?php else:?>
 <?php if(is_array($data['data'])) foreach($data['data'] as $key=>$val):?>

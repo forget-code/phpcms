@@ -17,7 +17,6 @@ class update {
 	}
 
 	function url($action = 'check') {
-		$_username = param::get_cookie('_username');
         $modules = '';
         $site = getcache('sitelist','commons');
         $sitename = $site['1']['name'];

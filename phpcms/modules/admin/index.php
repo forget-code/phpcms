@@ -61,6 +61,7 @@ class index extends admin {
 					$times = $maxloginfailedtimes-intval($rtime['times']);
 					$this->times_db->update(array('ip'=>$ip,'isadmin'=>1,'times'=>'+=1'),array('username'=>$username));
 				} else {
+					$this->times_db->delete(array('username'=>$username,'isadmin'=>1));
 					$this->times_db->insert(array('username'=>$username,'ip'=>$ip,'isadmin'=>1,'logintime'=>SYS_TIME,'times'=>1));
 					$times = $maxloginfailedtimes;
 				}

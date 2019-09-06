@@ -75,7 +75,7 @@ class smsapi {
 	 * @param array $mobile 手机号码
 	 * @param string $content 短信内容
 	 * @param datetime $send_time 发送时间
-	 * @param string $charset 短信字符类型
+	 * @param string $charset 短信字符类型 gbk / utf-8
 	 * @param string $id_code 唯一值 、可用于验证码
 	 */
 	public function send_sms($mobile='', $content='', $send_time='', $charset='gbk',$id_code = '') {
@@ -85,10 +85,11 @@ class smsapi {
 			$mobile = implode(",", $mobile);
 		}
 		$content = safe_replace($content);
-		$send_time = strtotime($send_time);
 		if(strtolower($charset)=='utf-8') {
 			$content = iconv('utf-8','gbk',$content);
-		}	
+		}
+		$send_time = strtotime($send_time);
+	
 		$data = array(
 						'sms_pid' => $this->productid,
 						'sms_passwd' => $this->sms_key,

@@ -64,6 +64,7 @@
 	</thead>
 <tbody>
 <?php
+	if(is_array($memberlist)){
 	foreach($memberlist as $k=>$v) {
 ?>
     <tr>
@@ -84,7 +85,7 @@
     </tr>
 <?php
 	}
-
+}
 ?>
 </tbody>
 </table>

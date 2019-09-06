@@ -156,7 +156,7 @@ class member extends admin {
 				pc_base::load_config('uc_config');
 				include PHPCMS_PATH.'api/uc_client/client.php';
 				$userinfo = $this->db->get_one(array('uid'=>$uid));
-				$r = uc_user_edit($userinfo['username'], '', (!empty($password) ? $password : ''), $updateinfo['email'], $updateinfo['random'], 1);
+				$r = uc_user_edit($userinfo['username'], '', (!empty($password) ? $password : ''), $updateinfo['email'],1);
 				if ($r < 0) {
 				 //{-1:用户不存在;-2:旧密码错误;-3:email已经存在 ;1:成功;0:未作修改}
 					showmessage(L('ucenter_error_code', array('code'=>$r)), HTTP_REFERER);

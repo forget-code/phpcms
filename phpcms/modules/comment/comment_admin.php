@@ -80,7 +80,8 @@ class comment_admin extends admin {
 			switch ($searchtype) {
 				case '0':
 					$sql = "SELECT `commentid` FROM `phpcms_comment` WHERE `siteid` = '$this->siteid' AND `title` LIKE '%$keywords%' AND `tableid` = '$tableid' ";
-					$this->comment_db->query($sql);
+				
+					$this->comment_db->query($sql);	
 					$data = $this->comment_db->fetch_array();
 					if (!empty($data)) {
 						foreach ($data as $d) {
@@ -96,25 +97,37 @@ class comment_admin extends admin {
 					$sql = "SELECT `commentid` FROM `phpcms_comment` WHERE `commentid` LIKE 'content_%-$keywords-%' ";
 					$this->comment_db->query($sql);
 					$data = $this->comment_db->fetch_array();
-					foreach ($data as $d) {
-						$comment_id .= $t.'\''.$d['commentid'].'\'';
-						$t = ',';
+					if (!empty($data)) {
+						foreach ($data as $d) {
+							$comment_id .= $t.'\''.$d['commentid'].'\'';
+							$t = ',';
+						}
+						$where = "`commentid` IN ($comment_id)";
 					}
-					$where = "`commentid` IN ($comment_id)";
-				break;
+ 				break;
 
 				case '2':
 					$where = "`username` = '$keywords'";
 				break;
 			}
 		}
-		//exit($where);
-		$data = array();
-		if (!isset($where)) {
-			$where = 'siteid='.$this->siteid;
-		} else {
-			$where .= ' AND siteid='.$this->siteid;
-		}
+ 		$data = array();
+		
+		
+		
+		if (isset($_GET['search'])) {
+			if(!empty($where)){
+				$where .= ' AND siteid='.$this->siteid;
+			}else{
+				pc_base::load_sys_class('format','', 0);
+				$data= '';
+				include $this->admin_tpl('comment_listinfo');
+				exit;
+			}
+		}else{
+			$where = 'siteid='.$this->siteid; 
+ 		}
+ 		
 		$order = '`id` DESC';
 		pc_base::load_sys_class('format','', 0);
 		$this->comment_data_db->table_name($tableid);

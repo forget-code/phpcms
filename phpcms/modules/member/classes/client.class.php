@@ -312,7 +312,7 @@ EOF;
 	 * @param $data 数据
 	 */
 	private function _ps_send($action, $data = null) {
-
+//echo $this->ps_api_url."/index.php?m=phpsso&c=index&a=".$action;exit;
 		return $this->_ps_post($this->ps_api_url."/index.php?m=phpsso&c=index&a=".$action, 500000, $this->auth_data($data));
 	}
 	

@@ -30,7 +30,7 @@ function new_stripslashes($string) {
 }
 
 /**
- * 返回经addslashe处理过的字符串或数组
+ * 返回经htmlspecialchars处理过的字符串或数组
  * @param $obj 需要处理的字符串或数组
  * @return mixed
  */
@@ -221,7 +221,7 @@ function execute_time() {
 /**
 * 产生随机字符串
 *
-* @param    int        $length  输出长度 
+* @param    int        $length  输出长度
 * @param    string     $chars   可选的 ，默认为 0123456789
 * @return   string     字符串
 */
@@ -242,7 +242,7 @@ function random($length, $chars = '0123456789') {
 */
 function string2array($data) {
 	if($data == '') return array();
-	eval("\$array = $data;");
+	@eval("\$array = $data;");
 	return $array;
 }
 /**
@@ -292,10 +292,10 @@ function sys_auth($string, $operation = 'ENCODE', $key = '', $expiry = 0) {
 	$key = md5($key != '' ? $key : pc_base::load_config('system', 'auth_key'));
 	$fixedkey = md5($key);
 	$egiskeys = md5(substr($fixedkey, 16, 16));
-	$runtokey = $key_length ? ($operation == 'ENCODE' ? substr(md5(microtime(true)), -$key_length) : substr($string, 0, $key_length)) : ''; 
+	$runtokey = $key_length ? ($operation == 'ENCODE' ? substr(md5(microtime(true)), -$key_length) : substr($string, 0, $key_length)) : '';
 	$keys = md5(substr($runtokey, 0, 16) . substr($fixedkey, 0, 16) . substr($runtokey, 16) . substr($fixedkey, 16));
 	$string = $operation == 'ENCODE' ? sprintf('%010d', $expiry ? $expiry + time() : 0).substr(md5($string.$egiskeys), 0, 16) . $string : base64_decode(substr($string, $key_length));
-	
+
 	$i = 0; $result = '';
 	$string_length = strlen($string);
 	for ($i = 0; $i < $string_length; $i++){
@@ -354,14 +354,14 @@ function L($language = 'no_language',$pars = array(), $modules = '') {
 
 /**
  * 模板调用
- * 
+ *
  * @param $module
  * @param $template
  * @param $istag
  * @return unknown_type
  */
 function template($module = 'content', $template = 'index', $style = '') {
-	
+
 	if(strpos($module, 'plugin/')!== false) {
 		$plugin = str_replace('plugin/', '', $module);
 		return p_template($plugin, $template,$style);
@@ -388,7 +388,7 @@ function template($module = 'content', $template = 'index', $style = '') {
 	$template_cache = pc_base::load_sys_class('template_cache');
 	$compiledtplfile = PHPCMS_PATH.'caches'.DIRECTORY_SEPARATOR.'caches_template'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.php';
 	if(file_exists(PC_PATH.'templates'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html')) {
-		if(!file_exists($compiledtplfile) || (@filemtime(PC_PATH.'templates'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html') > @filemtime($compiledtplfile))) {	
+		if(!file_exists($compiledtplfile) || (@filemtime(PC_PATH.'templates'.DIRECTORY_SEPARATOR.$style.DIRECTORY_SEPARATOR.$module.DIRECTORY_SEPARATOR.$template.'.html') > @filemtime($compiledtplfile))) {
 			$template_cache->template_compile($module, $template, $style);
 		}
 	} else {
@@ -404,7 +404,7 @@ function template($module = 'content', $template = 'index', $style = '') {
 
 /**
  * 输出自定义错误
- * 
+ *
  * @param $errno 错误号
  * @param $errstr 错误描述
  * @param $errfile 报错文件地址
@@ -440,7 +440,7 @@ function showmessage($msg, $url_forward = 'goback', $ms = 1250, $dialog = '', $r
 }
 /**
  * 查询字符是否存在于某字符串
- * 
+ *
  * @param $haystack 字符串
  * @param $needle 要查找的字符
  * @return bool
@@ -452,7 +452,7 @@ function str_exists($haystack, $needle)
 
 /**
  * 取得文件扩展
- * 
+ *
  * @param $filename 文件名
  * @return 扩展名
  */
@@ -567,7 +567,7 @@ function to_sqls($data, $front = ' AND ', $in_column = false) {
 		if(is_array($data) && count($data) > 0) {
 			$sql = '';
 			foreach ($data as $key => $val) {
-				$sql .= $sql ? " $front `$key` = '$val' " : " `$key` = '$val' ";	
+				$sql .= $sql ? " $front `$key` = '$val' " : " `$key` = '$val' ";
 			}
 			return $sql;
 		} else {
@@ -578,7 +578,7 @@ function to_sqls($data, $front = ' AND ', $in_column = false) {
 
 /**
  * 分页函数
- * 
+ *
  * @param $num 信息总数
  * @param $curr_page 当前分页
  * @param $perpage 每页显示数
@@ -609,12 +609,12 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 			if($from <= 1) {
 				$to = $page-1;
 				$from = 2;
-			}  elseif($to >= $pages) { 
-				$from = $pages-($page-2);  
-				$to = $pages-1;  
+			}  elseif($to >= $pages) {
+				$from = $pages-($page-2);
+				$to = $pages-1;
 			}
 			$more = 1;
-		} 
+		}
 		$multipage .= '<a class="a1">'.$num.L('page_item').'</a>';
 		if($curr_page>0) {
 			$multipage .= ' <a href="'.pageurl($urlrule, $curr_page-1, $array).'" class="a1">'.L('previous').'</a>';
@@ -626,13 +626,13 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 				$multipage .= ' <a href="'.pageurl($urlrule, 1, $array).'">1</a>';
 			}
 		}
-		for($i = $from; $i <= $to; $i++) { 
-			if($i != $curr_page) { 
-				$multipage .= ' <a href="'.pageurl($urlrule, $i, $array).'">'.$i.'</a>'; 
-			} else { 
-				$multipage .= ' <span>'.$i.'</span>'; 
-			} 
-		} 
+		for($i = $from; $i <= $to; $i++) {
+			if($i != $curr_page) {
+				$multipage .= ' <a href="'.pageurl($urlrule, $i, $array).'">'.$i.'</a>';
+			} else {
+				$multipage .= ' <span>'.$i.'</span>';
+			}
+		}
 		if($curr_page<$pages) {
 			if($curr_page<$pages-5 && $more) {
 				$multipage .= ' ..<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'" class="a1">'.L('next').'</a>';
@@ -649,7 +649,7 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 }
 /**
  * 返回分页路径
- * 
+ *
  * @param $urlrule 分页规则
  * @param $page 当前页
  * @param $array 需要传递的数组，用于增加额外的方法
@@ -688,7 +688,7 @@ function url_par($par, $url = '') {
 		parse_str($querystring, $pars);
 		$query_array = array();
 		foreach($pars as $k=>$v) {
-			$query_array[$k] = $v;
+			if($k != 'page') $query_array[$k] = $v;
 		}
 		$querystring = http_build_query($query_array).'&'.$par;
 		$url = substr($url, 0, $pos).'?'.$querystring;
@@ -842,7 +842,7 @@ function get_memberinfo_buyusername($username, $field='') {
 
 /**
  * 获取用户头像，建议传入phpssouid
- * @param $uid 默认为phpssouid 
+ * @param $uid 默认为phpssouid
  * @param $is_userid $uid是否为v9 userid，如果为真，执行sql查询此用户的phpssouid
  * @param $size 头像大小 有四种[30x30 45x45 90x90 180x180] 默认30
  */
@@ -856,7 +856,7 @@ function get_memberavatar($uid, $is_userid='', $size='30') {
 			return false;
 		}
 	}
-	
+
 	pc_base::load_app_class('client', 'member', 0);
 	define('APPID', pc_base::load_config('system', 'phpsso_appid'));
 	$phpsso_api_url = pc_base::load_config('system', 'phpsso_api_url');
@@ -881,9 +881,9 @@ function menu_linkage($linkageid = 0, $id = 'linkid', $defaultvalue = 0) {
 	$datas = array();
 	$datas = getcache($linkageid,'linkage');
 	$infos = $datas['data'];
-	
+
 	if($datas['style']=='1') {
-		$title = $datas['title'];	
+		$title = $datas['title'];
 		$container = 'content'.random(3).date('is');
 		if(!defined('DIALOG_INIT_1')) {
 			define('DIALOG_INIT_1', 1);
@@ -896,7 +896,7 @@ function menu_linkage($linkageid = 0, $id = 'linkid', $defaultvalue = 0) {
 		}
 		$var_div = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish' || ROUTE_A=='orderinfo') ? menu_linkage_level($defaultvalue,$linkageid,$infos) : $datas['title'];
 		$var_input = $defaultvalue && (ROUTE_A=='edit' || ROUTE_A=='account_manage_info'  || ROUTE_A=='info_publish') ? '<input type="hidden" name="info['.$id.']" value="'.$defaultvalue.'">' : '<input type="hidden" name="info['.$id.']" value="">';
-		$string .= '<div name="'.$id.'" value="" id="'.$id.'" class="ib">'.$var_div.'</div>'.$var_input.' <input type="button" name="btn_'.$id.'" class="button" value="'.L('linkage_select').'" onclick="open_linkage(\''.$id.'\',\''.$title.'\','.$container.',\''.$linkageid.'\')">';				
+		$string .= '<div name="'.$id.'" value="" id="'.$id.'" class="ib">'.$var_div.'</div>'.$var_input.' <input type="button" name="btn_'.$id.'" class="button" value="'.L('linkage_select').'" onclick="open_linkage(\''.$id.'\',\''.$title.'\','.$container.',\''.$linkageid.'\')">';
 		$string .= '<script type="text/javascript">';
 		$string .= 'var returnid_'.$id.'= \''.$id.'\';';
 		$string .= 'var returnkeyid_'.$id.' = \''.$linkageid.'\';';
@@ -947,7 +947,7 @@ function menu_linkage($linkageid = 0, $id = 'linkid', $defaultvalue = 0) {
 		</script>';
 			
 	} else {
-		$title = $defaultvalue ? $infos[$defaultvalue]['name'] : $datas['title'];	
+		$title = $defaultvalue ? $infos[$defaultvalue]['name'] : $datas['title'];
 		$colObj = random(3).date('is');
 		$string = '';
 		if(!defined('LINKAGE_INIT')) {
@@ -962,11 +962,11 @@ function menu_linkage($linkageid = 0, $id = 'linkid', $defaultvalue = 0) {
 		$string .= '<input type="hidden" name="info['.$id.']" value="1"><div id="'.$id.'"></div>';
 		$string .= '<script type="text/javascript">';
 		$string .= 'var colObj'.$colObj.' = {"Items":[';
-		
+
 		foreach($infos AS $k=>$v) {
 			$s .= '{"name":"'.$v['name'].'","topid":"'.$v['parentid'].'","colid":"'.$k.'","value":"'.$k.'","fun":function(){}},';
 		}
-	
+
 		$string .= substr($s, 0, -1);
 		$string .= ']};';
 		$string .= '$("#'.$id.'").mlnColsel(colObj'.$colObj.',{';
@@ -1039,7 +1039,7 @@ function get_linkage($linkageid, $keyid, $space = '>', $type = 1, $result = arra
 		}
 	} else {
 		return $infos[$linkageid]['name'];
-	}			
+	}
 }
 /**
  * IE浏览器判断
@@ -1122,7 +1122,7 @@ function id_decode($id) {
  */
 function password($password, $encrypt='') {
 	$pwd = array();
-	$pwd['encrypt'] =  $encrypt ? $encrypt : create_randomstr();	
+	$pwd['encrypt'] =  $encrypt ? $encrypt : create_randomstr();
 	$pwd['password'] = md5(md5(trim($password)).$pwd['encrypt']);
 	return $encrypt ? $pwd['password'] : $pwd;
 }
@@ -1171,7 +1171,7 @@ function is_badword($string) {
  */
 function is_username($username) {
 	$strlen = strlen($username);
-	if(is_badword($username) || !preg_match("/^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+$/", $username)){		
+	if(is_badword($username) || !preg_match("/^[a-zA-Z0-9_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]+$/", $username)){
 		return false;
 	} elseif ( 20 < $strlen || $strlen < 2 ) {
 		return false;
@@ -1181,7 +1181,7 @@ function is_username($username) {
 
 /**
  * 检查id是否存在于数组中
- * 
+ *
  * @param $id
  * @param $ids
  * @param $s
@@ -1224,19 +1224,19 @@ function array_iconv($data, $input = 'gbk', $output = 'utf-8') {
 function thumb($imgurl, $width = 100, $height = 100 ,$autocut = 1, $smallpic = 'nopic.gif') {
 	global $image;
 	$upload_url = pc_base::load_config('system','upload_url');
-	$upload_path = pc_base::load_config('system','upload_path');		
+	$upload_path = pc_base::load_config('system','upload_path');
 	if(empty($imgurl)) return IMG_PATH.$smallpic;
-	$imgurl_replace= str_replace($upload_url, '', $imgurl);		
+	$imgurl_replace= str_replace($upload_url, '', $imgurl);
 	if(!extension_loaded('gd') || strpos($imgurl_replace, '://')) return $imgurl;
 	if(!file_exists($upload_path.$imgurl_replace)) return IMG_PATH.$smallpic;
-	
+
 	list($width_t, $height_t, $type, $attr) = getimagesize($upload_path.$imgurl_replace);
 	if($width>=$width_t || $height>=$height_t) return $imgurl;
-	
+
 	$newimgurl = dirname($imgurl_replace).'/thumb_'.$width.'_'.$height.'_'.basename($imgurl_replace);
-	
+
 	if(file_exists($upload_path.$newimgurl)) return $upload_url.$newimgurl;
-	
+
 	if(!is_object($image)) {
 		pc_base::load_sys_class('image','','0');
 		$image = new image(1,0);
@@ -1264,7 +1264,7 @@ function watermark($source, $target = '',$siteid) {
 }
 
 /**
- * 当前路径 
+ * 当前路径
  * 返回指定栏目路径层级
  * @param $catid 栏目id
  * @param $symbol 栏目间隔符
@@ -1301,7 +1301,7 @@ function get_sql_catid($file = 'category_content_1', $catid = 0, $module = 'comm
 
 /**
  * 获取子栏目
- * @param $parentid 父级id 
+ * @param $parentid 父级id
  * @param $type 栏目类型
  * @param $self 是否包含本身 0为不包含
  * @param $siteid 站点id
@@ -1346,7 +1346,7 @@ function go($catid,$id, $allurl = 0) {
 			}
 		}
 	}
-	
+
 	return $r['url'];
 }
 
@@ -1513,14 +1513,14 @@ function runhook($method) {
 	if(!empty($hook_appid)) {
 		foreach($hook_appid as $appid => $p) {
 			$pluginfilepath = PC_PATH.'plugin'.DIRECTORY_SEPARATOR.$p.DIRECTORY_SEPARATOR.'hook.class.php';
-			$getpclass = TRUE;		
+			$getpclass = TRUE;
 			include_once $pluginfilepath;
 		}
 		$hook_appid = array_flip($hook_appid);
 		if($getpclass) {
-			$pclass = new ReflectionClass('hook'); 
+			$pclass = new ReflectionClass('hook');
 			foreach($pclass->getMethods() as $r) {
-				$legalmethods[] = $r->getName(); 
+				$legalmethods[] = $r->getName();
 			}
 		}
 		if(in_array($method,$legalmethods)) {
@@ -1529,9 +1529,9 @@ function runhook($method) {
 			   if($refclass->isSubclassOf('hook')){
 				  if ($_method = $refclass->getMethod($method)) {
 						  $classname = $refclass->getName();
-						if ($_method->isPublic() && $_method->isFinal()) {			
+						if ($_method->isPublic() && $_method->isFinal()) {
 							plugin_stat($hook_appid[$classname]);
-							$data .= $_method->invoke(null);						
+							$data .= $_method->invoke(null);
 						}
 					}
 			   }
@@ -1542,10 +1542,10 @@ function runhook($method) {
 }
 
 function getmicrotime() {
-	list($usec, $sec) = explode(" ",microtime()); 
-	return ((float)$usec + (float)$sec); 
+	list($usec, $sec) = explode(" ",microtime());
+	return ((float)$usec + (float)$sec);
 }
- 
+
 /**
  * 插件前台模板加载
  * Enter description here ...
@@ -1586,14 +1586,14 @@ function cache_page_start() {
 function cache_page($ttl = 360, $isjs = 0) {
 	if($ttl == 0 || !defined('CACHE_PAGE_ID')) return false;
 	$contents = ob_get_contents();
-	
+
 	if($isjs) $contents = format_js($contents);
 	$contents = "<!--expiretime:".(SYS_TIME + $ttl)."-->\n".$contents;
 	setcache(CACHE_PAGE_ID, $contents, 'page_tmp/'.substr(CACHE_PAGE_ID, 0, 2));
 }
 
 /**
- * 
+ *
  * 获取远程内容
  * @param $url 接口url地址
  * @param $timeout 超时时间

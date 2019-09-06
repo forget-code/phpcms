@@ -41,9 +41,13 @@ switch($step)
 		if(extension_loaded('json')) {
 			if(function_exists('json_decode') && function_exists('json_encode')) $PHP_JSON = '1';
 		}
+		//新加fsockopen 函数判断,此函数影响安装后会员注册及登录操作。
+		if(function_exists('fsockopen')) {
+			$PHP_FSOCKOPEN = '1';
+		}
         $PHP_DNS = preg_match("/^[0-9.]{7,15}$/", @gethostbyname('www.phpcms.cn')) ? 1 : 0;
 		//是否满足phpcms安装需求
-		$is_right = (phpversion() >= '5.2.0' && extension_loaded('mysql') && $PHP_JSON && $PHP_GD) ? 1 : 0;		
+		$is_right = (phpversion() >= '5.2.0' && extension_loaded('mysql') && $PHP_JSON && $PHP_GD && $PHP_FSOCKOPEN) ? 1 : 0;		
 		include PHPCMS_PATH."install/step/step".$step.".tpl.php";
 		break;
 	
@@ -104,19 +108,25 @@ switch($step)
 			if(is_dir(PHPCMS_PATH.$file)) {
 				$is_dir = '1';
 				$cname = '目录';
+				//继续检查子目录权限，新加函数
+				$write_able = writable_check(PHPCMS_PATH.$file);
 			} else {
 				$is_dir = '0';
 				$cname = '文件';
 			}
-			
+			//新的判断
 			if($is_dir =='0' && is_writable(PHPCMS_PATH.$file)) {
-					$is_writable = 1;
+				$is_writable = 1;
 			} elseif($is_dir =='1' && dir_writeable(PHPCMS_PATH.$file)){
-					$is_writable = 1;
-			} else {
-					$is_writable = 0;
+				$is_writable = $write_able;
+				if($is_writable=='0'){
 					$no_writablefile = 1;
-			}				
+				}
+			}else{
+				$is_writable = 0;
+ 				$no_writablefile = 1;
+  			}
+							
 			$filesmod[$_k]['file'] = $file;
 			$filesmod[$_k]['is_dir'] = $is_dir;
 			$filesmod[$_k]['cname'] = $cname;			
@@ -452,6 +462,31 @@ function dir_writeable($dir) {
         } 
 	}
 	return $writeable;
+}
+
+function writable_check($path){
+	$dir = '';
+	$is_writable = '1';
+	if(!is_dir($path)){return '0';}
+	$dir = opendir($path);
+ 	while (($file = readdir($dir)) !== false){
+		if($file!='.' && $file!='..'){
+			if(is_file($path.'/'.$file)){
+				//是文件判断是否可写，不可写直接返回0，不向下继续
+				if(!is_writable($path.'/'.$file)){
+ 					return '0';
+				}
+			}else{
+				//目录，循环此函数,先判断此目录是否可写，不可写直接返回0 ，可写再判断子目录是否可写 
+				$dir_wrt = dir_writeable($path.'/'.$file);
+				if($dir_wrt=='0'){
+					return '0';
+				}
+   				$is_writable = writable_check($path.'/'.$file);
+ 			}
+		}
+ 	}
+	return $is_writable;
 }
 
 function set_config($config,$cfgfile) {

@@ -148,6 +148,7 @@ class index extends foreground {
 						//设置当前注册账号COOKIE，为第二步重发邮件所用
 						param::set_cookie('_regusername', $userinfo['username'], $cookietime);
 						param::set_cookie('_reguserid', $userid, $cookietime);
+						param::set_cookie('_reguseruid', $userinfo['phpssouid'], $cookietime);
 						showmessage(L('operation_success'), 'index.php?m=member&c=index&a=register&t=2');
 					} else {
 						//如果不需要邮箱认证、直接登录其他应用
@@ -232,9 +233,27 @@ class index extends foreground {
 	public function send_newmail() {
 		$_username = param::get_cookie('_regusername');
 		$_userid = param::get_cookie('_reguserid');
+		$_ssouid = param::get_cookie('_reguseruid');
 		$newemail = $_GET['newemail'];
+
 		if($newemail==''){//邮箱为空，直接返回错误
 			return '2';
+		}
+		$this->_init_phpsso();
+		$status = $this->client->ps_checkemail($newemail);
+		if($status=='-5'){//邮箱被占用
+			exit('-1');
+		}
+		if ($status==-1) {
+			$status = $this->client->ps_get_member_info($newemail, 3);
+			if($status) {
+				$status = unserialize($status);	//接口返回序列化，进行判断
+				if (!isset($status['uid']) || $status['uid'] != intval($_ssouid)) {
+					exit('-1');
+				}
+			} else {
+				exit('-1');
+			}
 		}
 		//验证邮箱格式
 		pc_base::load_sys_func('mail');
@@ -250,6 +269,7 @@ class index extends foreground {
  		if(sendmail($newemail, L('reg_verify_email'), $message)){
 			//更新新的邮箱，用来验证
  			$this->db->update(array('email'=>$newemail), array('userid'=>$_userid));
+			$this->client->ps_member_edit($_username, $newemail, '', '', $_ssouid);
 			$return = '1';
 		}else{
 			$return = '2';
@@ -921,8 +941,7 @@ class index extends foreground {
 		if(CHARSET != 'utf-8') {
 			$nickname = iconv('utf-8', CHARSET, $nickname);
 			$nickname = addslashes($nickname);
-		}
-
+		} 
 		//首先判断会员审核表
 		$this->verify_db = pc_base::load_model('member_verify_model');
 		if($this->verify_db->get_one(array('nickname'=>$nickname))) {
@@ -930,16 +949,28 @@ class index extends foreground {
 		}
 		if(isset($_GET['userid'])) {
 			$userid = intval($_GET['userid']);
-			$where = "`nickname`= '$nickname' and `userid` != '$userid'";
-		} else {
+			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
+			$info = get_memberinfo($userid);
+			if($info['nickname'] == $nickname){//未改变
+				exit('1');
+			}else{//已改变，判断是否已有此名
+				$where = array('nickname'=>$nickname);
+				$res = $this->db->get_one($where);
+				if($res) {
+					exit('0');
+				} else {
+					exit('1');
+				}
+			}
+ 		} else {
 			$where = array('nickname'=>$nickname);
-		}
-		$res = $this->db->get_one($where);
-		if($res) {
-			exit('0');
-		} else {
-			exit('1');
-		}
+			$res = $this->db->get_one($where);
+			if($res) {
+				exit('0');
+			} else {
+				exit('1');
+			}
+		} 
 	}
 	
 	/**

@@ -21,7 +21,7 @@ class form {
 		}
 		if($toolbar == 'basic') {
 			$toolbar = defined('IN_ADMIN') ? "['Source']," : '';
-			$toolbar .= "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],\r\n";
+			$toolbar .= "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],['Maximize'],\r\n";
 		} elseif($toolbar == 'full') {
 			if(defined('IN_ADMIN')) {
 				$toolbar = "['Source',";
@@ -43,7 +43,7 @@ class form {
 		    ['TextColor','BGColor'],
 		    ['attachment'],\r\n";
 		} elseif($toolbar == 'desc') {
-			$toolbar = "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Image', '-','Source'],\r\n";
+			$toolbar = "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Image', '-','Source'],['Maximize'],\r\n";
 		} else {
 			$toolbar = '';
 		}

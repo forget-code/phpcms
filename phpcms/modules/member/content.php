@@ -131,7 +131,7 @@ class content extends foreground {
 			$content_form = new content_form($modelid, $catid, $CATEGORYS);
 			$forminfos_data = $content_form->get();
 			$forminfos = array();
-			foreach($forminfos_data as $_fk=>$_fv) {
+ 			foreach($forminfos_data as $_fk=>$_fv) {
 				if($_fv['isomnipotent']) continue;
 				if($_fv['formtype']=='omnipotent') {
 					foreach($forminfos_data as $_fm=>$_fm_value) {

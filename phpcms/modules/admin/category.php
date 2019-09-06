@@ -241,6 +241,26 @@ class category extends admin {
 				
 			}
 			
+			//应用模板到所有子栏目
+			if($_POST['template_child']){
+                                $this->categorys = $categorys = $this->db->select(array('siteid'=>$this->siteid,'module'=>'content'), '*', '', 'listorder ASC, catid ASC', '', 'catid');
+                                $idstr = $this->get_arrchildid($catid);
+                                 if(!empty($idstr)){
+                                        $sql = "select catid,setting from phpcms_category where catid in($idstr)";
+                                        $this->db->query($sql);
+                                        $arr = $this->db->fetch_array();
+                                         if(!empty($arr)){
+                                                foreach ($arr as $v){
+                                                        $new_setting = array2string(
+														array_merge(string2array($v['setting']), array('category_template' => $_POST['setting']['category_template'],'list_template' =>  $_POST['setting']['list_template'],'show_template' =>  $_POST['setting']['show_template'])
+                                                                                )
+                                                        );
+                                                        $this->db->update(array('setting'=>$new_setting), 'catid='.$v['catid']);
+                                                }
+                                        }                                
+                                }
+			}
+			
 			$this->db->update($_POST['info'],array('catid'=>$catid,'siteid'=>$this->siteid));
 			$this->update_priv($catid, $_POST['priv_roleid']);
 			$this->update_priv($catid, $_POST['priv_groupid'],0);
