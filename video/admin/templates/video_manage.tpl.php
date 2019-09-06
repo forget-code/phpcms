@@ -100,7 +100,7 @@ if($status==90) {
 
 		<?php if($specialid) {?><input type="button" name="move" value=" 加入到专辑→<?=$specialname?> " onclick='insert_special()'><?php }?>
 		<input type="button" name="listorder" value=" 排序 " onclick="myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=listorder&catid=<?=$catid?>&processid=<?=$processid?>&forward=<?=urlencode(URL)?>';myform.submit();"> 
-		<input type="button" name="delete" value=" 删除 " onclick="myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=cancel&catid=<?=$catid?>&processid=<?=$processid?>&forward=<?=urlencode(URL)?>';myform.submit();"> 
+		<input type="button" name="delete" value=" 删除 " onclick="myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=delete&catid=<?=$catid?>&processid=<?=$processid?>&forward=<?=urlencode(URL)?>';myform.submit();"> 
 		<?php if(array_key_exists('posids', $model_field->fields) && !check_in($_roleid, $model_field->fields['posids']['unsetroleids'])) {?> <?=form::select($POS, 'posid', 'posid', '', '', '', "onchange=\"myform.action='?mod={$mod}&file={$file}&action=posid&catid={$catid}&processid={$processid}';myform.submit();\"")?> <?php } ?>
 	
 </div>

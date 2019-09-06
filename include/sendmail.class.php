@@ -69,7 +69,7 @@ class sendmail
 			$this->errorlog('SMTP', "$this->server:$this->port CONNECT - $lastmessage", 0);
 			return false;
 		}
-		fputs($fp, "EHLO Phpcms\r\n");
+		fputs($fp, ($this->auth ? 'EHLO' : 'HELO')." Phpcms\r\n");
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != 220 && substr($lastmessage, 0, 3) != 250)
 		{
@@ -148,6 +148,7 @@ class sendmail
 		fputs($fp, $headers."\r\n");
 		fputs($fp, "\r\n\r\n");
 		fputs($fp, "$email_message\r\n.\r\n");
+		$lastmessage = fgets($fp, 512);
 		fputs($fp, "QUIT\r\n");
 		return true;
 	}

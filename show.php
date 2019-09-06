@@ -72,7 +72,8 @@ elseif($paginationtype==0)
 		$content = str_replace('[page]', '', $content);
 	}
 }
-if(strpos($content, '[page]') !== false)
+$CONTENT_POS = strpos($content, '[page]');
+if($CONTENT_POS !== false)
 {
 	require_once 'url.class.php';
     $curl = new url();
@@ -94,7 +95,14 @@ if(strpos($content, '[page]') !== false)
 		}
 	}
 	$pages = $curl->show_pages($page, $pagenumber, $pageurls);
-	$content = $contents[$page-1];
+	if($CONTENT_POS==0)//判断[page]出现的位置是否在第一位
+	{
+		$content = $contents[$page];
+	}
+	else
+	{
+		$content = $contents[$page-1];
+	}
 	if($titles)
 	{
 		list($title, $content) = explode('[/page]', $content);

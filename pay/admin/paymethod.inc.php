@@ -81,14 +81,17 @@ switch ($action)
 			$data = $config = array();
 			$info = $payment->get_payment($pay_code);
 			$config = $info['config'];
+
 			foreach ($config_name as $key => $value)
 			{
 				$config[$value]['value'] = $config_value[$key];
 			}
+			
 			$data['pay_name'] = $pay_name;
 			$data['pay_desc'] = $pay_desc;
 			$data['pay_fee'] = $pay_fee;
             $data['pay_order'] = $pay_order;
+			
             $data['config'] = array2string($config, 0);
 			if ($payment->update($data,"pay_id = '$id'"))
 			{
@@ -104,7 +107,6 @@ switch ($action)
 	case 'install':
 		if ($dosubmit)
 		{
-        echo "ssssssss";
 			$data = $config = array();
 			$info = $payment->get_payment($pay_code);
 			$config = $info['config'];

@@ -20,7 +20,7 @@ switch($action)
 		}
 		elseif($field=='companyname')
 		{
-			$r = $db->get_one("SELECT `userid` FROM ".DB_PRE."member_companyname WHERE `companyname`='$q'");
+			$r = $db->get_one("SELECT `userid` FROM ".DB_PRE."member_company WHERE `companyname`='$q'");
 			$where .= " AND `userid` ='$r[userid]'";
 		}
 		if($inputdate_start)

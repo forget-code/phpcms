@@ -65,18 +65,28 @@ class chinabank
         $data_vamount       = $order['order_amount'];
         $data_vmoneytype    = 'CNY';
         $data_vpaykey       = trim($payment['chinabank_key']);
-        $data_vreturnurl    = return_url(basename(__FILE__, '.php'));
+        $data_vreturnurl    = return_url('chinabank');
+		
+		$v_ordername   = trim($order['contactname']);	// 订货人姓名
+		$v_ordertel    = trim($order['telephone']);	// 订货人电话
+		$v_orderemail  = trim($order['email']);	// 订货人邮件
+		$remark1  = htmlspecialchars($order['remark1']);	// 备注
+
 
         $MD5KEY =$data_vamount.$data_vmoneytype.$data_orderid.$data_vid.$data_vreturnurl.$data_vpaykey;
         $MD5KEY = strtoupper(md5($MD5KEY));
 
         $def_url  = '<form style="text-align:left;" method=post action="https://pay3.chinabank.com.cn/PayGate" target="_blank">';
-        $def_url .= "<input type=HIDDEN name='v_mid' value='".$data_vid."'>";
-        $def_url .= "<input type=HIDDEN name='v_oid' value='".$data_orderid."'>";
-        $def_url .= "<input type=HIDDEN name='v_amount' value='".$data_vamount."'>";
-        $def_url .= "<input type=HIDDEN name='v_moneytype'  value='".$data_vmoneytype."'>";
-        $def_url .= "<input type=HIDDEN name='v_url'  value='".$data_vreturnurl."'>";
-        $def_url .= "<input type=HIDDEN name='v_md5info' value='".$MD5KEY."'>";
+        $def_url .= "<input type='hidden' name='v_mid' value='".$data_vid."'>";
+        $def_url .= "<input type='hidden' name='v_oid' value='".$data_orderid."'>";
+        $def_url .= "<input type='hidden' name='v_amount' value='".$data_vamount."'>";
+        $def_url .= "<input type='hidden' name='v_moneytype'  value='".$data_vmoneytype."'>";
+        $def_url .= "<input type='hidden' name='v_url'  value='".$data_vreturnurl."'>";
+        $def_url .= "<input type='hidden' name='v_ordername'  value='".$v_ordername."'>";
+        $def_url .= "<input type='hidden' name='v_ordertel'  value='".$v_ordertel."'>";
+        $def_url .= "<input type='hidden' name='v_orderemail'  value='".$v_orderemail."'>";
+        $def_url .= "<input type='hidden' name='remark1'  value='".$remark1."'>";
+        $def_url .= "<input type='hidden' name='v_md5info' value='".$MD5KEY."'>";
         $def_url .= "<input type=submit value='立即使用网银在线支付'>";
         $def_url .= "</form>";
 
@@ -89,7 +99,7 @@ class chinabank
     function respond()
     {
         $payment        = get_payment(basename(__FILE__, '.php'));
-		$v_oid          = trim($_POST['v_oid']);
+		echo $v_oid          = trim($_POST['v_oid']);
         $v_pmode        = trim($_POST['v_pmode']);
         $v_pstatus      = trim($_POST['v_pstatus']);
         $v_pstring      = trim($_POST['v_pstring']);

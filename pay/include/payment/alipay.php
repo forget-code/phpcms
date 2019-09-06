@@ -42,10 +42,7 @@ if (isset($set_modules) && $set_modules == TRUE)
         array('name' => 'alipay_account',           'type' => 'text',   'value' => ''),
         array('name' => 'alipay_key',               'type' => 'text',   'value' => ''),
         array('name' => 'alipay_partner',           'type' => 'text',   'value' => ''),
-        //array('name' => 'server_type',				'type' => 'select', 'value' => '0'),
-		array('name' => 'alipay_real_method',       'type' => 'select', 'value' => '0'),
-        array('name' => 'alipay_virtual_method',    'type' => 'select', 'value' => '0'),
-        array('name' => 'is_instant',               'type' => 'select', 'value' => '0')
+        array('name' => 'service_type',				'type' => 'select', 'value' => '0'),
     );
 
     return;
@@ -82,24 +79,29 @@ class alipay
      */
     function get_code($order, $payment)
     {
-        if (empty($payment['is_instant']))
+/*
+	0 => '纯担保交易接口 create_partner_trade_by_buyer',
+    1 => '标准实物双接口 trade_create_by_buyer',
+    2 => '即时到账接口	 create_direct_pay_by_user',
+*/
+        if ($payment['service_type']==1)
         {
-            /* 未开通即时到帐 */
             $service = 'trade_create_by_buyer';
         }
+		elseif($payment['service_type']==2)
+		{
+			$service = 'create_direct_pay_by_user';
+		}
         else
         {
-            if (!empty($order['order_sn']))
-            {
-                $service = (!empty($payment['alipay_virtual_method']) && $payment['alipay_virtual_method'] == 1) ?
-                    'create_direct_pay_by_user' : 'create_digital_goods_trade_p';
-            }
+            $service = 'create_partner_trade_by_buyer';
         }
         $parameter = array(
             'service'           => $service,
             'partner'           => $payment['alipay_partner'],
             '_input_charset'    => 'utf-8',
-            'return_url'        => return_url(basename(__FILE__, '.php')),
+            'return_url'        => return_url('alipay'),
+            'notify_url'        => return_url('alipay',1),
             /* 业务参数 */
             'subject'           => 'Order SN:'.$order['order_sn'],
             'out_trade_no'      => $order['order_sn'], //
@@ -159,10 +161,16 @@ class alipay
 			$this->err = '校验失败，若您的确已经在网关处被扣了款项，请及时联系店主，并且请不要再次点击支付按钮(原因：错误的签名)';
             return false;
         }
-		/*成功支付*/
-		if ( $_GET['trade_status'] == "TRADE_FINISHED" )
-        {//order_sn
-
+		/*
+		WAIT_BUYER_PAY 交易创建
+		WAIT_SELLER_SEND_GOODS 买家付款成功
+		WAIT_BUYER_CONFIRM_GOODS 卖家发货成功
+		TRADE_FINISHED 交易成功结束
+		TRADE_CLOSED 交易关闭
+		modify.tradeBase.totalFee 修改交易价格
+		*/
+        if ( $_GET['trade_status'] == "WAIT_SELLER_SEND_GOODS" )
+        {
             $orderid = $_GET['out_trade_no'];
             $orderid = trim($orderid);
             if(changeorder($orderid))

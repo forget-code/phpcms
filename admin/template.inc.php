@@ -111,13 +111,20 @@ switch($action)
 
 	case 'tag':
 		$mod = $module;
-		if($mod == 'yp') require_once PHPCMS_ROOT."yp/include/output.func.php";
+		if($mod == 'yp')
+		{
+			$where = '1';
+			$prowhere = '1';
+			$news_where = '1';
+			require_once PHPCMS_ROOT."yp/include/output.func.php";
+		}
 		include admin_template($module, $template);
 		$data = ob_get_contents();
 		if(strpos($data, 'jquery') === false)
 	    {
 			echo '<script type="text/javascript" src="images/js/jquery.min.js"></script>';
 		}
+		
         include admin_tpl('block_ajax', 'phpcms');
 		break;
 

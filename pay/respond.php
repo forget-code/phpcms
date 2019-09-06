@@ -1,5 +1,10 @@
 <?php
-require './include/common.inc.php';
+define('MOD_ROOT', dirname(__FILE__));
+$mod = 'pay';
+require substr(MOD_ROOT, 0, -strlen($mod)).'/include/common.inc.php';
+require_once MOD_ROOT.'/include/pay.func.php';
+require_once PHPCMS_ROOT.'/include/form.class.php';
+
 $pay_code = trim($code);
 if(empty($pay_code) || !in_array($pay_code,array('alipay','bank','chinabank','post','tenpay')))
 {
@@ -15,8 +20,7 @@ else
 		$result = $payment->respond();
 		if ($result)
 		{
-            $forward = get_cookie('orderid')?get_cookie('orderid'):'pay/online.php';
-            showmessage('支付成功',$forward);
+            showmessage('支付成功',$PHPCMS['siteurl'].'pay/online.php');
 		}
 		else if($payment->err)
 		{

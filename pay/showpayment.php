@@ -38,6 +38,7 @@ switch ($action)
 	break;
 	case 'online':
 		if(!is_email($email) || $email == '')  $email = '';
+		$order['email'] = $email;
         checkcode($checkcode,$M['ischeckcode']);
 		if(empty($amount))
         {
@@ -57,17 +58,14 @@ switch ($action)
         }
         set_cookie('orderid', $forward);
 		session_start();
-		$contactname	= new_htmlspecialchars($contactname);
-		$telephone		= is_numeric($telephone);
-		if(isset($_SESSION['order_sn']) && ( TIME< ($_SESSION['order_sn_time']+60)))
-		{
-			$order['order_sn'] = $_SESSION['order_sn'];
-		}
-		else
-		{
-			$_SESSION['order_sn'] = $order['order_sn']	= create_sn();
-			$_SESSION['order_sn_time'] = TIME;
-		}
+		$order['contactname'] = $contactname	= new_htmlspecialchars($contactname);
+		$order['remark1'] = htmlspecialchars($usernote);//备注
+		
+		$order['telephone'] = $telephone		= safe_replace($telephone);
+		//产生订单号
+		$_SESSION['order_sn'] = $order['order_sn']	= create_sn();
+		$_SESSION['order_sn_time'] = TIME;
+
 		$payment = $payinfo->get_payment($paymentid);
 		if(!$payment) showmessage('支付方式错误');
 		$payment['config']		= $payinfo->unserialize_config($payment['config']);

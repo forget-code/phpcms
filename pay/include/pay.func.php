@@ -6,10 +6,17 @@ defined('IN_PHPCMS') or exit('Access Denied');
  * 取得返回信息地址
  * @param   string  $code   支付方式代码
  */
-function return_url($code)
+function return_url($code, $is_api = 0)
 {
-	global $MODULE;
-    return url($MODULE['pay']['url'].'respond.php?code='.$code, 1);
+	global $PHPCMS;
+	if($is_api)
+	{
+		return $PHPCMS['siteurl'].'pay/api/AutoReceive.'.$code.'.php';
+	}
+	else
+	{
+		return $PHPCMS['siteurl'].'pay/respond.php?code='.$code;
+	}
 }
 
 function changeorder($sn)
@@ -23,6 +30,7 @@ function changeorder($sn)
 	    if( $db->query($sql) )
         {
             $info = get_order($sn);
+			//print_r($sn);
             $pay = load('pay_api.class.php', 'pay', 'api');
             $note = '用户网上充值';
             if($pay->update_exchange('pay', 'amount', $info['quantity'], $note, $info['userid']))
@@ -119,6 +127,6 @@ function get_user($userid , $username='')
 function create_sn()
 {
 	mt_srand( ( double )microtime( ) * 1000000 );
-	return date( "Ymd" ).str_pad( mt_rand( 1, 99999 ), 5, "0", STR_PAD_LEFT );
+	return date( "YmdHis" ).str_pad( mt_rand( 1, 99999 ), 5, "0", STR_PAD_LEFT );
 }
 ?>

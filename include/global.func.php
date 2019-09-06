@@ -971,7 +971,6 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 				$more = 1;
 			}
 			if($urlrule == '') $urlrule = url_par('page={$page}');
-			if(is_object($url)) $url = load('url.class.php');
 
 			$multipage .= '总数：<b>'.$num.'</b>&nbsp;&nbsp;';
 
@@ -1177,7 +1176,11 @@ function load($file, $module = 'phpcms', $dir = '', $isinit = 1)
 	if($isinit && strpos($file, '.class.php') !== false)
 	{
 		$classname = substr($file, 0, -10);
-		return new $classname();
+		if(is_object($classname)) {
+			return true;
+		} else {
+			return new $classname();
+		}
 	}
 	return true;
 }

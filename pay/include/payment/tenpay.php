@@ -79,7 +79,7 @@ class tenpay
 
 
         /* 返回的路径 */
-        $return_url  = return_url(basename(__FILE__, '.php'));
+        $return_url  = return_url('tenpay');
 
         /* 总金额 */
         $total_fee = floatval($order['order_amount']) * 100;

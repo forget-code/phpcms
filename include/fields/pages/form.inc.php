@@ -1,10 +1,11 @@
+	
 	function pages($field, $value, $fieldinfo)
 	{
 		extract($fieldinfo);
 		if($value)
 		{
 			$v = explode('|', $value);
-			$data = '<select name="info[paginationtype]" id="paginationtype" onchange="if(this.value==1)paginationtype1.style.display=\'\'; else paginationtype1.style.display=\'none\';">';
+			$data = "<select name=\"info[paginationtype]\" id=\"paginationtype\" onchange=\"if(this.value==1)\$('#paginationtype1').css('display','');else\$('#paginationtype1').css('display','none');\">";
 			$type = array('不分页', '自动分页', '手动分页');
 			if($v[0]==1) $con = 'style="display:"';
 			else $con = 'style="display:none"';
@@ -19,7 +20,7 @@
 		}
 		else
 		{
-			return "<select name=\"info[paginationtype]\" id=\"paginationtype\" onchange=\"if(this.value==1)paginationtype1.style.display=''; else paginationtype1.style.display='none';\">
+			return "<select name=\"info[paginationtype]\" id=\"paginationtype\" onchange=\"if(this.value==1)\$('#paginationtype1').css('display','');else \$('#paginationtype1').css('display','none');\">
                 <option value=\"0\">不分页</option>
                 <option value=\"1\">自动分页</option>
                 <option value=\"2\">手动分页</option>
