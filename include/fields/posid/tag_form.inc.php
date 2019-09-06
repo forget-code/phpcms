@@ -2,6 +2,7 @@
 	{
 	    $POS = cache_read('position.php');
 		extract($fieldinfo);
-		array_unshift($POS, '请选择');
+		$POS[0] = '请选择';
+		ksort($POS);
 		return form::select($POS, 'info['.$field.']', $field, $value);
 	}

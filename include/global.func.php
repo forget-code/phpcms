@@ -824,7 +824,7 @@ function get($sql, $rows = 0, $page = 0, $dbname = '', $dbsource = '')
 	}
 	$data = $rows == -1 ? $db->get_one($sql) : $db->select($sql.$limit);
 	if($dbname) $db->select_db(DB_NAME);
-	if(isset($s['dbcharset']) && $s['dbcharset'] != DB_CHARSET) $data = str_charset($s['dbcharset'], DB_CHARSET, $data);
+	if(isset($s['dbcharset']) && $s['dbcharset'] != DB_CHARSET) $data = str_charset($s['dbcharset'], CHARSET, $data);
 	if($page)
 	{
 		$count = count($data);

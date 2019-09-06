@@ -395,6 +395,7 @@ class category
 		{
 			$url = $data['url'];
 		}
+
 		$url = preg_replace('/index\.[a-z]{3,5}$/', '', $url);
 		if($is_update)
 		{
@@ -406,17 +407,10 @@ class category
 				$length = strlen($this->category[$catid]['catdir']);
 				foreach($arrchild AS $k)
 				{
-					if($k == $catid) continue;
-					$parentdir = substr($this->category[$k]['parentdir'],$length);
-  					if(preg_match('/^\//',$parentdir) && preg_match('/\/$/',$url))
-					{
-						$url = substr($url,0,-1);
-						$caturl = $url.$parentdir.$this->category[$k]['catdir'].'/';
-					}
-					else
-					{
-						$caturl = $url.$parentdir.$this->category[$k]['catdir'].'/';
-					}
+					if($k == $catid || !$this->u->CATEGORY[$k]['ishtml']) continue;
+					$parentdir = substr($this->category[$k]['parentdir'],$length);					
+					if(substr($url, -1) == '/' && strpos($parentdir, '/') === 0) $url = substr($url, 0, -1);
+					$caturl = $url.$parentdir.$this->category[$k]['catdir'].'/';
 					$this->db->query("UPDATE `$this->table` SET url='$caturl' WHERE catid=$k");
 				}
 			}

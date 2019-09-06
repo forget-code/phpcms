@@ -50,6 +50,7 @@ elseif ($action == 'login')
     $username = trim($username);
     $password = trim($password);
 	list($uid, $username, $uc_password, $email) =  uc_call("uc_user_login", array($username, $password));
+
 	if( $uid == -1 )
 	{
 		showmessage('用户不存在,或者被删除');
@@ -69,7 +70,6 @@ elseif ($action == 'login')
 		$arr_member['lastlogintime'] = TIME;
 		$arr_member['username'] = $username;
 		$arr_member['password'] = $password;
-        $arr_member['groupid'] = 4;
 		$arr_member['email'] = $email;
 		$arr_member['modelid'] = 10;
 		$member_api->add($arr_member);
