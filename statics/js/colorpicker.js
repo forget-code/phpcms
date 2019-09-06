@@ -49,6 +49,6 @@ function closeBox(){
 	$(".colorpanel").html(' ');
 }
 function clear_title() {
-	$('#title').css('color','');
+	set_title_color('');
 	$('#title_colorpanel').html(' ');
 }

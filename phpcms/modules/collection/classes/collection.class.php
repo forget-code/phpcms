@@ -67,7 +67,7 @@ class collection {
 				$page_html = self::cut_html($html, $config['content_page_start'], $config['content_page_end']);
 				//上下页模式
 				if ($config['content_page_rule'] == 2 && in_array($page, array(0,2)) && $page_html) {
-					preg_match_all('/<a[^>]*href=[\'"]?([^>\'" ]*)[\'"]?[^>]*>([^<\/]*)<\/a>/i', $page_html, $out);
+					preg_match_all('/<a [^>]*href=[\'"]?([^>\'" ]*)[\'"]?[^>]*>([^<\/]*)<\/a>/i', $page_html, $out);
 					if (!empty($out[1]) && !empty($out[2])) {
 						foreach ($out[2] as $k=>$v) {
 							if (strpos($v, $config['content_nextpage']) === false) continue;
@@ -83,7 +83,7 @@ class collection {
 				
 				//全部罗列模式
 				if ($config['content_page_rule'] == 1 && $page == 0 && $page_html) {
-					preg_match_all('/<a[^>]*href=[\'"]?([^>\'" ]*)[\'"]?/i', $page_html, $out);
+					preg_match_all('/<a [^>]*href=[\'"]?([^>\'" ]*)[\'"]?/i', $page_html, $out);
 					if (is_array($out[1]) && !empty($out[1])) {
 						
 						$out = array_unique($out[1]);
@@ -91,7 +91,7 @@ class collection {
 							if ($out[1][$k] == '#') continue;
 							$v = self::url_check($v, $url, $config);
 							$results = self::get_content($v, $config, 1);
-							if (!in_array($results['content'], $tmp)) $tmp[] = $results['content'];
+							if (!in_array($results['content'], $tmp) && $results['content']!="") $tmp[] = $results['content'];
 						}
 					}
 					
@@ -102,8 +102,7 @@ class collection {
 			if ($page == 0) {
 				self::$url = $url;
 				self::$config = $config;
-				$data['content'] = preg_replace('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/ie', "self::download_img('$0', '$1')", $data['content']);
-					
+				$data['content'] = preg_replace_callback('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', array('collection','download_img_callback'), $data['content']);
 				//下载内容中的图片到本地
 				if (empty($page) && !empty($data['content']) && $config['down_attachment'] == 1) {
 					
@@ -120,6 +119,9 @@ class collection {
 	 * 转换图片地址为绝对路径，为下载做准备。
 	 * @param array $out 图片地址
 	 */
+	protected static function download_img_callback($matches) {
+		return self::download_img($matches[0], $matches[1]);
+	}
 	protected static function download_img($old, $out) {
 		if (!empty($old) && !empty($out) && strpos($out, '://') === false) {
 			return str_replace($out, self::url_check($out, self::$url, self::$config), $old);
@@ -138,6 +140,7 @@ class collection {
 		switch ($config['sourcetype']) {
 			case '1'://序列化
 				$num = empty($num) ? $config['pagesize_end'] : $num;
+				if($num<$config['pagesize_start']) $num=$config['pagesize_start'];
 				for ($i = $config['pagesize_start']; $i <= $num; $i = $i + $config['par_num']) {
 					$url[$i] = str_replace('(*)', $i, $config['urlpage']);
 				}
@@ -175,9 +178,9 @@ class collection {
 				$html = self::cut_html($html, $config['url_start'], $config['url_end']);
 				$html = str_replace(array("\r", "\n"), '', $html);
 				$html = str_replace(array("</a>", "</A>"), "</a>\n", $html);
-				preg_match_all('/<a([^>]*)>([^\/a>].*)<\/a>/i', $html, $out);
-				$out[1] = array_unique($out[1]);
-				$out[2] = array_unique($out[2]);
+				preg_match_all('/<a ([^>]*)>([^\/a>].*)<\/a>/i', $html, $out);
+				//$out[1] = array_unique($out[1]);
+				//$out[2] = array_unique($out[2]);
 				$data = array();
 				foreach ($out[1] as $k=>$v) {
 					if (preg_match('/href=[\'"]?([^\'" ]*)[\'"]?/i', $v, $match_out)) {
@@ -217,7 +220,7 @@ class collection {
 	protected static function get_html($url, &$config) {
 		if (!empty($url) && $html = @file_get_contents($url)) {
 			if ($syscharset != $config['sourcecharset'] && $config['sourcetype'] != 4) {
-				$html = iconv($config['sourcecharset'], CHARSET.'//TRANSLIT', $html);
+				$html = iconv($config['sourcecharset'], CHARSET.'//TRANSLIT//IGNORE', $html);
 			}
 			return $html;
 		} else {
@@ -239,7 +242,7 @@ class collection {
 		$end = str_replace(array("\r", "\n"), "", $end);
 		$html = explode(trim($start), $html);
 		if(is_array($html)) $html = explode(trim($end), $html[1]);
-		return $html[0];
+		return trim($html[0]);
 	}
 	
 	/**

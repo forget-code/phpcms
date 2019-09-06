@@ -132,8 +132,8 @@ function wml_strip($string) {
  * 内容中图片替换
  */
 function content_strip($content,$ishow=1) {
-    
-   $content = preg_replace('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/ie', "wap_img('$1',$ishow)", $content);
+    if($ishow!=1) $ishow=0;
+   $content = preg_replace_callback('/<img[^>]*src=[\'"]?([^>\'"\s]*)[\'"]?[^>]*>/i', "wap_img_$ishow", $content);
       
    //匹配替换过的图片
       
@@ -144,6 +144,12 @@ function content_strip($content,$ishow=1) {
 /**
  * 图片过滤替换
  */
+function wap_img_1($matches) {
+	return wap_img($matches[1],1);
+}
+function wap_img_0($matches) {
+	return wap_img($matches[1],0);
+}
 function wap_img($url,$ishow) {
 	$wap_site = getcache('wap_site','wap');
 	$wap_setting = string2array($wap_site[$GLOBALS['siteid']]['setting']);

@@ -3,12 +3,13 @@
 return array (
 	'default' => array (
 		'hostname' => 'localhost',
+		'port' => 3306,
 		'database' => 'phpsso',
-		'username' => 'admin',
-		'password' => 'admin',
+		'username' => '',
+		'password' => '',
 		'tablepre' => 'ps_',
 		'charset' => 'utf8',
-		'type' => 'mysql',
+		'type' => 'mysqli',
 		'debug' => true,
 		'pconnect' => 0,
 		'autoconnect' => 0

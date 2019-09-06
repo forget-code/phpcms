@@ -184,6 +184,10 @@ class member extends admin {
 
 		$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 		$memberlist = $this->db->listinfo($where, 'userid DESC', $page, 15);
+		//查询会员头像
+		foreach($memberlist as $k=>$v) {
+			$memberlist[$k]['avatar'] = get_memberavatar($v['phpssouid']);
+		}
 		$pages = $this->db->pages;
 		$big_menu = array('?m=member&c=member&a=manage&menuid=72', L('member_research'));
 		include $this->admin_tpl('member_list');

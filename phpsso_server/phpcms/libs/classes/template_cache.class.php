@@ -13,7 +13,7 @@ final class template_cache {
 	 * @return unknown
 	 */
 	
-public function template_compile($module, $template, $style = 'default') {
+	public function template_compile($module, $template, $style = 'default') {
 
 		$tplfile = $_tpl = PC_PATH.'templates/'.$style.'/'.$module.'/'.$template.'.html';
 		if ($style != 'default' && ! file_exists ( $tplfile )) {
@@ -37,7 +37,7 @@ public function template_compile($module, $template, $style = 'default') {
 
 		return $strlen;
 	}
-public function template_compile_admin($module, $template) {
+	public function template_compile_admin($module, $template) {
 
 		$tplfile = $_tpl = PC_PATH.'templates/admin/'.$module.'/'.$template.'.html';
 		$content = @file_get_contents ( $tplfile );
@@ -58,7 +58,7 @@ public function template_compile_admin($module, $template) {
 	 * @param $compiledtplfile	编译完成后，写入文件名
 	 * @return $strlen 长度
 	 */
-public function template_refresh($tplfile, $compiledtplfile) {
+	public function template_refresh($tplfile, $compiledtplfile) {
 		$str = @file_get_contents ($tplfile);
 		$str = $this->template_parse ($str);
 		$strlen = file_put_contents ($compiledtplfile, $str );
@@ -71,7 +71,7 @@ public function template_refresh($tplfile, $compiledtplfile) {
 	 * @param $module	模块名称
 	 * @return ture
 	 */
-public function template_module($module) {
+	public function template_module($module) {
 		$files = glob ( TPL_ROOT . TPL_NAME . '/' . $module . '/*.html' );
 		if (is_array ( $files )) {
 			foreach ( $files as $tpl ) {
@@ -86,7 +86,7 @@ public function template_module($module) {
 	 *
 	 * @return ture
 	 */
-public function template_cache() {
+	public function template_cache() {
 		global $MODULE;
 		if(!is_array($MODULE)) return FALSE;
 		foreach ( $MODULE as $module => $m ) {
@@ -102,7 +102,7 @@ public function template_cache() {
 	 * @param $istag	是否为标签模板
 	 * @return ture
 	 */
-public function template_parse($str, $istag = 0) {
+	public function template_parse($str, $istag = 0) {
 		$str = preg_replace ( "/([\n\r]+)\t+/s", "\\1", $str );
 		$str = preg_replace ( "/\<\!\-\-\{(.+?)\}\-\-\>/s", "{\\1}", $str );
 		$str = preg_replace ( "/\{template\s+(.+)\}/", "<?php include template(\\1); ?>", $str );
@@ -126,7 +126,7 @@ public function template_parse($str, $istag = 0) {
 		$str = preg_replace ( "/\{([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff:]*\(([^{}]*)\))\}/", "<?php echo \\1;?>", $str );
 		$str = preg_replace ( "/\{\\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff:]*\(([^{}]*)\))\}/", "<?php echo \\1;?>", $str );
 		$str = preg_replace ( "/\{(\\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/", "<?php echo \\1;?>", $str );
-		$str = preg_replace("/\{(\\$[a-zA-Z0-9_\[\]\'\"\$\x7f-\xff]+)\}/es", "\$this->addquote('<?php echo \\1;?>')",$str);
+		$str = preg_replace_callback("/\{(\\$[a-zA-Z0-9_\[\]\'\"\$\x7f-\xff]+)\}/s",  array($this, 'addquote'),$str);
 		$str = preg_replace ( "/\{([A-Z_\x7f-\xff][A-Z0-9_\x7f-\xff]*)\}/s", "<?php echo \\1;?>", $str );
 		if (! $istag)
 			$str = "<?php defined('IN_PHPCMS') or exit('No permission resources.'); ?>" . $str;
@@ -139,7 +139,8 @@ public function template_parse($str, $istag = 0) {
 	 * @param $var	转义的字符
 	 * @return 转义后的字符
 	 */
-public function addquote($var) {
+	public function addquote($matches) {
+		$var = '<?php echo '.$matches[1].';?>';
 		return str_replace ( "\\\"", "\"", preg_replace ( "/\[([a-zA-Z0-9_\-\.\x7f-\xff]+)\]/s", "['\\1']", $var ) );
 	}
 }

@@ -4,6 +4,7 @@ pc_base::load_app_class('admin','admin',0);
 pc_base::load_sys_class('form', '', 0);
 $session_storage = 'session_'.pc_base::load_config('system','session_storage');
 pc_base::load_sys_class($session_storage);
+pc_base::load_app_func('global', 'phpsso');
 class login extends admin {
 	
 	/**
@@ -24,7 +25,9 @@ class login extends admin {
 		if ($_SESSION['code'] != strtolower($code)) {
 			showmessage(L('code_error'), HTTP_REFERER);
 		}
-		
+		if(!is_username($username)){
+			showmessage(L('username_illegal'), HTTP_REFERER);
+		}
 		if ($this->login($username,$password)) {
 			$forward = isset($_POST['forward']) ? urldecode($_POST['forward']) : '';
 			showmessage(L('login_succeeded'), '?m=admin&c=index&a=init&forward='.$forward);

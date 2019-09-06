@@ -3,7 +3,7 @@ defined('IN_PHPCMS') or exit('No permission resources.');
 
 $session_storage = 'session_'.pc_base::load_config('system','session_storage');
 pc_base::load_sys_class($session_storage);
-
+pc_base::load_sys_func('iconv');
 /**
  * 
  * ------------------------------------------
@@ -56,7 +56,7 @@ class video_for_ck {
 	public function search() {
 		$title = safe_replace($_GET['title']);
 		if (CHARSET=='gbk') {
-			$title = iconv('utf-8', 'gbk', $title);
+			$title = utf8_to_gbk($title);
 		}
 		$where = '`status`=21';
 		if ($title) {
@@ -80,7 +80,7 @@ class video_for_ck {
 		$data['pages'] = $pages;
 		$data['html'] = $html;
 		if (CHARSET=='gbk') {
-			$data = array_iconv($data, 'gbk', 'utf-8');
+			$data = gbk_to_utf8($data);
 		}
 		exit(json_encode($data));
 	}
@@ -110,7 +110,7 @@ class video_for_ck {
 		$data['vid'] = $get_data['vid'];
 		$data['addtime'] = SYS_TIME;
 		if (strtolower(CHARSET)=='gbk') {
-			$data = array_iconv($data, 'utf-8', 'gbk');
+			$data = array_utf8_to_gbk($data);
 		}
 		$data['userupload'] = intval($_GET['userupload']);
 		$videoid = $this->v->add($data);

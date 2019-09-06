@@ -36,6 +36,10 @@
 			</td>
 			</tr>
 			<tr>
+			<th align="right">数据库端口：</th>
+			<td><input name="dbport" type="text" id="dbport" value="<?php echo $port?>" class="input-text" /></td>
+			</tr>
+			<tr>
 			<th align="right">数据库帐号：</th>
 			<td><input name="dbuser" type="text" id="dbuser" value="<?php echo $username?>" class="input-text" /></td>
 			</tr>
@@ -124,7 +128,7 @@ errmsg[6] = '数据库版本低于Mysql 4.0，无法安装Phpcms，请升级数�
 
 function checkdb() 
 {
-	var url = '?step=dbtest&dbhost='+$('#dbhost').val()+'&dbuser='+$('#dbuser').val()+'&dbpw='+$('#dbpw').val()+'&dbname='+$('#dbname').val()+'&tablepre='+$('#tablepre').val()+'&sid='+Math.random()*5;
+	var url = '?step=dbtest&dbhost='+$('#dbhost').val()+'&dbport='+$('#dbport').val()+'&dbuser='+$('#dbuser').val()+'&dbpw='+$('#dbpw').val()+'&dbname='+$('#dbname').val()+'&tablepre='+$('#tablepre').val()+'&sid='+Math.random()*5;
     $.get(url, function(data){
 		if(data > 1) {
 			alert(errmsg[data]);

@@ -280,7 +280,7 @@ class database extends admin {
 					$comma = "";
 					$tabledump .= "INSERT INTO `$tables[$i]` VALUES(";
 					for($j = 0; $j < $numfields; $j++) {
-						$tabledump .= $comma."'".mysql_escape_string($row[$name[$j]])."'";
+						$tabledump .= $comma."'".$this->db->escape($row[$name[$j]])."'";
 						$comma = ",";
 					}
 					$tabledump .= ");\n";

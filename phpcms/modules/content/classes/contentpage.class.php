@@ -69,7 +69,11 @@ class contentpage {
 						$str = '<'.$c;
 						$this->separate_content($str, $maxwords, '', $t); //加入返回字符串中
 					} else {
-						$tag = '<'.$c;
+						if($t==0){
+							$tag = $c;//第一个不可能有<
+						}else{
+							$tag = '<'.$c;
+						}
 						if ($this->surplus >= 0) {
 							$this->surplus = $this->surplus-strlen(strip_tags($tag));
 							if ($this->surplus<0) {
@@ -85,11 +89,30 @@ class contentpage {
 				}
 			}
 		} else {
-			$this->content .= $this->separate_content($content, $maxwords); //纯文字时
+			$this->content .= $this->separate_text($content, $maxwords); //纯文字时
 		}
 		return implode('[page]', $this->data);
 	}
-	
+	/**
+	 * 处理纯文本数据
+	 * @param string $str 每条数据
+	 * @param intval $max 每页的最大字符
+	 */	
+	private function separate_text($str = '', $max){
+		$str = strip_tags($str);
+		$total = ceil(strlen($str)/$max);
+		$encoding = 'utf-8';
+		if(strtolower(CHARSET)=='gbk') $encoding = 'gbk';
+
+		if(function_exists("mb_strcut")){
+			for ( $i=0; $i < $total; $i++ )
+			{ 
+				$this->data[] =mb_strcut($str,$i*$max,$max,$encoding);
+			}			
+		}
+
+		return true;
+	}		
 	/**
 	 * 处理每条数据
 	 * @param string $str 每条数据
@@ -150,6 +173,10 @@ class contentpage {
 					$this->surplus = $max;
 					$this->content .= $this->additem();
 				}
+			}
+			if (intval($t+1) == $this->total) { //判断是否还有剩余字符
+					$this->content .= $this->bottonitem();
+					$this->data[] = $this->content;
 			}
 		}
 		if ($t==($this->total-1)) {

@@ -83,7 +83,8 @@ final class mysql {
 			$this->connect();
 		}
 		
-		$this->lastqueryid = mysql_query($sql, $this->link) or $this->halt(mysql_error());
+		$this->lastqueryid = mysql_query($sql, $this->link) or $this->halt(mysql_error(), $sql);
+
 		$this->querycount++;
 		return $this->lastqueryid;
 	}
@@ -365,7 +366,7 @@ final class mysql {
 	 */
 	public function field_exists($table, $field) {
 		$fields = $this->get_fields($table);
-		return in_array($field, $fields);
+		return array_key_exists($field, $fields);
 	}
 
 	public function num_rows($sql) {
@@ -403,12 +404,23 @@ final class mysql {
 			@mysql_close($this->link);
 		}
 	}
+
+	public function escape($str){
+		if(!is_resource($this->link)) {
+			$this->connect();
+		}
+		return mysql_real_escape_string($str,$this->link);
+	}
 	
 	public function halt($message = '', $sql = '') {
-		$this->errormsg = "<b>MySQL Query : </b>$sql <br /><b> MySQL Error : </b>".$this->error()." <br /> <b>MySQL Errno : </b>".$this->errno()." <br /><b> Message : </b> $message";
-		$msg = $this->errormsg;
+		if($this->config['debug']) {
+			$this->errormsg = "<b>MySQL Query : </b> $sql <br /><b> MySQL Error : </b>".$this->error()." <br /> <b>MySQL Errno : </b>".$this->errno()." <br /><b> Message : </b> $message <br /><a href='http://faq.phpcms.cn/?errno=".$this->errno()."&msg=".urlencode($this->error())."' target='_blank' style='color:red'>Need Help?</a>";
+			$msg = $this->errormsg;
 			echo '<div style="font-size:12px;text-align:left; border:1px solid #9cc9e0; padding:1px 4px;color:#000000;font-family:Arial, Helvetica,sans-serif;"><span>'.$msg.'</span></div>';
 			exit;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -420,6 +432,9 @@ final class mysql {
 			//不处理包含* 或者 使用了sql方法。
 		} else {
 			$value = '`'.trim($value).'`';
+		}
+		if (preg_match("/\b(select|insert|update|delete)\b/i", $value)) {
+			$value = preg_replace("/\b(select|insert|update|delete)\b/i", '', $value);
 		}
 		return $value;
 	}

@@ -40,7 +40,7 @@ class push extends admin {
 				}
 			}
 			$_GET['add_action'] = $_GET['add_action'] ? $_GET['add_action'] : $_GET['action']; 
-			$this->push->$_GET['add_action']($info, $_POST);
+			$this->push->{$_GET['add_action']}($info, $_POST);
 			showmessage(L('success'), '', '', 'push');
 		} else {
 			pc_base::load_app_func('global', 'template');

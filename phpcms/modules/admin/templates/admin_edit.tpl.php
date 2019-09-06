@@ -60,6 +60,7 @@ foreach($roles as $role)
 </table>
 
     <div class="bk15"></div>
+    <input type="hidden" name="info[admin_manage_code]" value="<?php echo $admin_manage_code?>" id="admin_manage_code"></input>
     <input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="dialog" id="dosubmit">
 </form>
 </div>

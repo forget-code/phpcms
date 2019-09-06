@@ -65,7 +65,7 @@ class content_model extends model {
 		} else {
 			$systeminfo['updatetime'] = $data['updatetime'];
 		}
-		$systeminfo['username'] = $data['username'] ? $data['username'] : param::get_cookie('admin_username');
+		$inputinfo['system']['username'] = $systeminfo['username'] = $data['username'] ? $data['username'] : param::get_cookie('admin_username');
 		$systeminfo['sysadd'] = defined('IN_ADMIN') ? 1 : 0;
 		
 		//自动提取摘要

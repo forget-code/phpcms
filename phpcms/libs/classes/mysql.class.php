@@ -404,6 +404,13 @@ final class mysql {
 			@mysql_close($this->link);
 		}
 	}
+
+	public function escape($str){
+		if(!is_resource($this->link)) {
+			$this->connect();
+		}
+		return mysql_real_escape_string($str,$this->link);
+	}
 	
 	public function halt($message = '', $sql = '') {
 		if($this->config['debug']) {

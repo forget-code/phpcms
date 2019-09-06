@@ -33,7 +33,7 @@ $(function(){
 		onerror : "{L('deny_register').L('or').L('user_already_exist')}",
 		onwait : "{L('connecting_please_wait')}"
 	});
-	$("#password").formValidator({onshow:"{L('input').L('password')}",onfocus:"{L('password').L('between_6_to_20')}"}).inputValidator({min:6,max:20,onerror:"{L('password').L('between_6_to_20')}"});
+	$("#password").formValidator({onshow:"{L('input').L('password')}",onfocus:"{L('password').L('between_6_to_20')}"}).inputValidator({min:6,max:20,onerror:"{L('password').L('between_6_to_20')}"}).regexValidator({regexp:"password",datatype:"enum",onerror:"密码只能是数字,字母 和 -_()等字符"});
 	$("#pwdconfirm").formValidator({onshow:"{L('input').L('cofirmpwd')}",onfocus:"{L('passwords_not_match')}",oncorrect:"{L('passwords_match')}"}).compareValidator({desid:"password",operateor:"=",onerror:"{L('passwords_not_match')}"});
 	$("#email").formValidator({onshow:"{L('input').L('email')}",onfocus:"{L('email').L('format_incorrect')}",oncorrect:"{L('email').L('format_right')}"}).inputValidator({min:7,max:32,onerror:"{L('email').L('between_7_to_32')}"}).regexValidator({regexp:"email",datatype:"enum",onerror:"{L('email').L('format_incorrect')}"}).ajaxValidator({
 	    type : "get",

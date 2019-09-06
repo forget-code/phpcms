@@ -118,10 +118,18 @@ class dbsource_admin extends admin {
 		$password = isset($_GET['password']) && trim($_GET['password']) ? trim($_GET['password']) : exit('0');
 		$port = isset($_GET['port']) && intval($_GET['port']) ? intval($_GET['port']) : exit('0');
 		$username = isset($_GET['username']) && trim($_GET['username']) ? trim($_GET['username']) : exit('0');
-		if (@mysql_connect($host.':'.$port, $username, $password)) {
-			exit('1');
-		} else {
-			exit('0');
+		if(function_exists('mysql_connect')){
+			if (@mysql_connect($host.':'.$port, $username, $password)) {
+				exit('1');
+			} else {
+				exit('0');
+			}
+		}else{
+			if (@mysqli_connect($host, $username, $password, null, $port)){
+				exit('1');
+			} else {
+				exit('0');
+			}
 		}
 	}
 }

@@ -44,8 +44,10 @@ class poster extends admin {
 			if ($id) {
 				$this->s_db->update(array('items'=>'+=1'), array('spaceid'=>$poster['spaceid'], 'siteid'=>$this->get_siteid()));
 				$this->create_js($poster['spaceid']);
-				foreach ($setting['images'] as $im) {
-				$imgs[] = $im['imageurl'];
+				if(is_array($setting['images'])) {
+					foreach ($setting['images'] as $im) {
+						$imgs[] = $im['imageurl'];
+					}
 				}
 				if (pc_base::load_config('system','attachment_stat')) {
 					$this->attachment_db = pc_base::load_model('attachment_model');

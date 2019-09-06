@@ -150,6 +150,7 @@ class index {
  		
    		$data_arr = array();
   		foreach($_POST['radio'] as $radio){
+	  		$radio = intval($radio);
   			$data_arr[$radio]='1';
   		}
   		$new_data = array2string($data_arr);//转成字符串存入数据库中  

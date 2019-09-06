@@ -40,6 +40,9 @@ class index extends foreground {
 			$tousername = safe_replace($_POST['info']['send_to_id']);
 			$r = $this->db->get_one(array('username'=>$tousername));
 			if(!$r) showmessage(L('user_not_exist','','member'));
+			if($tousername==$username){
+				showmessage(L('not_myself','','message'));
+			}
 			$subject = new_html_special_chars($_POST['info']['subject']);
 			$content = new_html_special_chars($_POST['info']['content']);
 			$this->message_db->add_message($tousername,$username,$subject,$content,true);

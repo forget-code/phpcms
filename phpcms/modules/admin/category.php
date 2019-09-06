@@ -885,7 +885,7 @@ class category extends admin {
 			$tocatid = intval($_POST['tocatid']);
 			$modelid = $this->categorys[$tocatid]['modelid'];
 			if(!$modelid) showmessage(L('illegal_operation','','content'));
-			$fromid = array_filter($_POST['fromid'],"intval");
+			$fromid = array_filter($_POST['fromid'],"is_numeric");
 			$fromid = implode(',', $fromid);
 			$this->content_db->set_model($modelid);
 			$this->content_db->update(array('catid'=>$tocatid),"catid IN($fromid)");

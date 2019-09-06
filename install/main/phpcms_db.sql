@@ -4744,7 +4744,8 @@ INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `lis
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(31, 'menu_manage', 977, 'admin', 'menu', 'init', '', 8, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(32, 'posid_manage', 975, 'admin', 'position', 'init', '', 7, '1');
 
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(29, 'module_manage', 2, 'admin', 'module', '', '', 0, '1');
+INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(29, 'module_list', 2, 'admin', 'module', '', '', 0, '1');
+INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(82, 'module_manage', 2, 'admin', 'module', '', '', 0, '1');
 
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`, `project1`) VALUES(10, 'panel', 0, 'admin', 'index', 'public_main', '', 0, '1', '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(35, 'menu_add', 31, 'admin', 'menu', 'add', '', 0, '1');
@@ -4919,7 +4920,7 @@ INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `lis
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(977, 'extend_all', 7, 'admin', 'extend_all', 'init', '', 0, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(980, 'sso_config', 30, 'admin', 'setting', 'init', '&tab=3', 12, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(981, 'email_config', 30, 'admin', 'setting', 'init', '&tab=4', 13, '1');
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(982, 'module_manage', 29, 'admin', 'module', 'init', '', 0, '1');
+INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(982, 'module_manage', 82, 'admin', 'module', 'init', '', 0, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(983, 'ipbanned', 977, 'admin', 'ipbanned', 'init', '', 0, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(984, 'add_ipbanned', 983, 'admin', 'ipbanned', 'add', '', 0, '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(993, 'collection_content_import', 957, 'collection', 'node', 'import', '', 0, '0');

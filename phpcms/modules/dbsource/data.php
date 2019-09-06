@@ -71,7 +71,8 @@ class data extends admin {
 				//当为JS时，输出模板文件
 				if ($dis_type == 3) {
 					$tpl = pc_base::load_sys_class('template_cache');
-					$str = $tpl->template_parse($sql['template']);
+					$str = $this->db->get_one(array('id'=>$id), 'template');
+					$str = $tpl->template_parse($str['template']);
 					$filepath = CACHE_PATH.'caches_template'.DIRECTORY_SEPARATOR.'dbsource'.DIRECTORY_SEPARATOR;
 					if(!is_dir($filepath)) {
 						mkdir($filepath, 0777, true);
@@ -157,7 +158,8 @@ class data extends admin {
 				//当为JS时，输出模板文件
 				if ($dis_type == 3) {
 					$tpl = pc_base::load_sys_class('template_cache');
-					$str = $tpl->template_parse($sql['template']);
+					$str = $this->db->get_one(array('id'=>$id), 'template');
+					$str = $tpl->template_parse($str['template']);
 					$filepath = CACHE_PATH.'caches_template'.DIRECTORY_SEPARATOR.'dbsource'.DIRECTORY_SEPARATOR;
 					if(!is_dir($filepath)) {
 						mkdir($filepath, 0777, true);

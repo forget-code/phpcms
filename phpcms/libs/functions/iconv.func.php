@@ -226,4 +226,40 @@ function gbk_to_pinyin($txt) {
 	}
 	return $py;
 }
+/**
+ * 数组 utf8转gbk
+ * @param $utfstr
+ */
+function array_utf8_to_gbk($data) {
+	if (!is_array($data)) {
+		return utf8_to_gbk($data);
+	} else {
+		foreach ($data as $key=>$val) {
+			if(is_array($val)) {
+				$data[$key] = array_utf8_to_gbk($val);
+			} else {
+				$data[$key] = utf8_to_gbk($val);
+			}
+		}
+		return $data;
+	}
+}
+/**
+ * 数组 gbk转utf8
+ * @param $utfstr
+ */
+function array_gbk_to_utf8($data) {
+	if (!is_array($data)) {
+		return gbk_to_utf8($data);
+	} else {
+		foreach ($data as $key=>$val) {
+			if(is_array($val)) {
+				$data[$key] = array_gbk_to_utf8($val);
+			} else {
+				$data[$key] = gbk_to_utf8($val);
+			}
+		}
+		return $data;
+	}
+}
 ?>

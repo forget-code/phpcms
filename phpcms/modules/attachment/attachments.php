@@ -204,7 +204,7 @@ class attachments {
 	public function album_dir() {
 		if(!$this->admin_username) return false;
 		if($_GET['args']) extract(getswfinit($_GET['args']));
-		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\','..'), '', trim($_GET['dir'])) : '';
+		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\','..','.*'), '', trim($_GET['dir'])) : '';
 		$filepath = $this->upload_path.$dir;
 		$list = glob($filepath.'/'.'*');
 		if(!empty($list)) rsort($list);

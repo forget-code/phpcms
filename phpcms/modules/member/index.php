@@ -97,7 +97,7 @@ class index extends foreground {
 				$userinfo['mobile'] = isset($_POST['mobile']) ? $_POST['mobile'] : '';
 			} 
 			if($userinfo['mobile']!=""){
-				if(!preg_match('/^1([0-9]{9})/',$userinfo['mobile'])) {
+				if(!preg_match('/^1([0-9]{10})$/',$userinfo['mobile'])) {
 					showmessage('请提供正确的手机号码！', HTTP_REFERER);
 				}
 			} 
@@ -117,7 +117,7 @@ class index extends foreground {
 				$model_field_cache = getcache('model_field_'.$userinfo['modelid'],'model');
 				if(isset($model_field_cache['mobile']) && $model_field_cache['mobile']['disabled']==0) {
 					$mobile = $_POST['info']['mobile'];
-					if(!preg_match('/^1([0-9]{10})/',$mobile)) showmessage(L('input_right_mobile'));
+					if(!preg_match('/^1([0-9]{10})$/',$mobile)) showmessage(L('input_right_mobile'));
 					$sms_report_db = pc_base::load_model('sms_report_model');
 					$posttime = SYS_TIME-300;
 					$where = "`mobile`='$mobile' AND `posttime`>'$posttime'";
@@ -126,7 +126,14 @@ class index extends foreground {
 				}
 				$userinfo['groupid'] = $this->_get_usergroup_bypoint($userinfo['point']);
 			}
-			
+			//附表信息验证 通过模型获取会员信息
+			if($member_setting['choosemodel']) {
+				require_once CACHE_MODEL_PATH.'member_input.class.php';
+		        require_once CACHE_MODEL_PATH.'member_update.class.php';
+				$member_input = new member_input($userinfo['modelid']);		
+				$_POST['info'] = array_map('new_html_special_chars',$_POST['info']);
+				$user_model_info = $member_input->get($_POST['info']);				        				
+			}
 			if(pc_base::load_config('system', 'phpsso')) {
 				$this->_init_phpsso();
 				$status = $this->client->ps_member_register($userinfo['username'], $userinfo['password'], $userinfo['email'], $userinfo['regip'], $userinfo['encrypt']);
@@ -137,15 +144,7 @@ class index extends foreground {
 					$userinfo['password'] = password($userinfo['password'], $userinfo['encrypt']);
 					$userid = $this->db->insert($userinfo, 1);
 					if($member_setting['choosemodel']) {	//如果开启选择模型
-						//通过模型获取会员信息					
-						require_once CACHE_MODEL_PATH.'member_input.class.php';
-				        require_once CACHE_MODEL_PATH.'member_update.class.php';
-						$member_input = new member_input($userinfo['modelid']);
-						
-						$_POST['info'] = array_map('new_html_special_chars',$_POST['info']);
-						$user_model_info = $member_input->get($_POST['info']);
 						$user_model_info['userid'] = $userid;
-	
 						//插入会员模型数据
 						$this->db->set_model($userinfo['modelid']);
 						$this->db->insert($user_model_info);
@@ -271,9 +270,15 @@ class index extends foreground {
 		$_ssouid = param::get_cookie('_reguseruid');
 		$newemail = $_GET['newemail'];
 
-		if($newemail==''){//邮箱为空，直接返回错误
+		if($newemail=='' || !is_email($newemail)){//邮箱为空，直接返回错误
 			return '2';
 		}
+		//验证userid和username是否匹配
+		$r = $this->db->get_one(array('userid'=>intval($_userid)));
+		if($r[username]!=$_username){
+			return '2';
+		}
+		
 		$this->_init_phpsso();
 		$status = $this->client->ps_checkemail($newemail);
 		if($status=='-5'){//邮箱被占用
@@ -469,6 +474,9 @@ class index extends foreground {
 			} else {
 				$email = '';
 			}
+			if(!is_password($_POST['info']['newpassword']) || is_badword($_POST['info']['newpassword'])) {
+				showmessage(L('password_format_incorrect'), HTTP_REFERER);
+			}
 			$newpassword = password($_POST['info']['newpassword'], $this->memberinfo['encrypt']);
 			$updateinfo['password'] = $newpassword;
 			
@@ -606,6 +614,7 @@ class index extends foreground {
 			
 			$username = isset($_POST['username']) && is_username($_POST['username']) ? trim($_POST['username']) : showmessage(L('username_empty'), HTTP_REFERER);
 			$password = isset($_POST['password']) && trim($_POST['password']) ? trim($_POST['password']) : showmessage(L('password_empty'), HTTP_REFERER);
+			is_password($_POST['password']) && is_badword($_POST['password'])==false ? trim($_POST['password']) : showmessage(L('password_format_incorrect'), HTTP_REFERER);
 			$cookietime = intval($_POST['cookietime']);
 			$synloginstr = ''; //同步登陆js代码
 			
@@ -987,7 +996,7 @@ class index extends foreground {
 	 * @return $status {-4：用户名禁止注册;-1:用户名已经存在 ;1:成功}
 	 */
 	public function public_checkname_ajax() {
-		$username = isset($_GET['username']) && trim($_GET['username']) ? trim($_GET['username']) : exit(0);
+		$username = isset($_GET['username']) && trim($_GET['username']) && is_username(trim($_GET['username'])) ? trim($_GET['username']) : exit(0);
 		if(CHARSET != 'utf-8') {
 			$username = iconv('utf-8', CHARSET, $username);
 			$username = addslashes($username);
@@ -1015,7 +1024,7 @@ class index extends foreground {
 	 * @return $status {0:已存在;1:成功}
 	 */
 	public function public_checknickname_ajax() {
-		$nickname = isset($_GET['nickname']) && trim($_GET['nickname']) ? trim($_GET['nickname']) : exit('0');
+		$nickname = isset($_GET['nickname']) && trim($_GET['nickname']) && is_username(trim($_GET['nickname'])) ? trim($_GET['nickname']) : exit('0');
 		if(CHARSET != 'utf-8') {
 			$nickname = iconv('utf-8', CHARSET, $nickname);
 			$nickname = addslashes($nickname);
@@ -1058,7 +1067,7 @@ class index extends foreground {
 	 */
 	public function public_checkemail_ajax() {
 		$this->_init_phpsso();
-		$email = isset($_GET['email']) && trim($_GET['email']) ? trim($_GET['email']) : exit(0);
+		$email = isset($_GET['email']) && trim($_GET['email']) && is_email(trim($_GET['email']))  ? trim($_GET['email']) : exit(0);
 		
 		$status = $this->client->ps_checkemail($email);
 		if($status == -5) {	//禁止注册
@@ -1483,7 +1492,10 @@ class index extends foreground {
 			if ($_SESSION['code'] != strtolower($_POST['code'])) {
 				showmessage(L('code_error'), HTTP_REFERER);
 			}
-			
+			//邮箱验证
+			if(!is_email($_POST['email'])){
+				showmessage(L('email_error'), HTTP_REFERER);
+			}
 			$memberinfo = $this->db->get_one(array('email'=>$_POST['email']));
 			if(!empty($memberinfo['email'])) {
 				$email = $memberinfo['email'];
@@ -1568,7 +1580,7 @@ class index extends foreground {
 		if(empty($phone) || empty($msg) || empty($sms_key) || empty($sms_pid)){
 			return false;
 		}
-		if(!preg_match('/^1([0-9]{9})/',$phone)) {
+		if(!preg_match('/^1([0-9]{10})$/',$phone)) {
 			return false;
 		}
 		//判断是否PHPCMS请求的接口
@@ -1623,6 +1635,10 @@ class index extends foreground {
 		//处理提交申请，以手机号为准
 			if ($_SESSION['code'] != strtolower($_POST['code'])) {
 				showmessage(L('code_error'), HTTP_REFERER);
+			}
+			//验证
+			if(!is_username($_POST['username'])){
+				showmessage(L('username_format_incorrect'), HTTP_REFERER);
 			}
 			$username = safe_replace($_POST['username']);
 
@@ -1691,17 +1707,23 @@ class index extends foreground {
 			if ($_SESSION['code'] != strtolower($_POST['code'])) {
 				showmessage(L('code_error'), HTTP_REFERER);
 			}
+			//验证
+			if(!is_username($_POST['username'])){
+				showmessage(L('username_format_incorrect'), HTTP_REFERER);
+			}
 			$username = safe_replace($_POST['username']);
 
 			$r = $this->db->get_one(array('username'=>$username),'userid,email');
 			if($r['email']=='') {
 				$_SESSION['userid'] = '';
 				$_SESSION['code'] = '';
-				showmessage("该账号没有绑定手机号码，请选择其他方式找回！");
+				showmessage("该账号没有绑定邮箱，请选择其他方式找回！");
 			} else {
 				$_SESSION['userid'] = $r['userid'];
 				$_SESSION['email'] = $r['email'];
 			}
+			$_SESSION['emc'] = "";
+			$_SESSION['emc_times']=0;
 			$email_arr = explode('@',$r['email']);
 			include template('member', 'forget_password_username');
 		} elseif(isset($_POST['dosubmit']) && $step==3) {

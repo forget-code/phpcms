@@ -205,6 +205,7 @@ class content_tag {
 		$categorys = getcache('category_content_'.$siteid,'commons');
 		$site = siteinfo($siteid);
 		$i = 1;
+		is_array($categorys)?null:$categorys= array();
 		foreach ($categorys as $catid=>$cat) {
 			if($i>$data['limit']) break;
 			if((!$cat['ismenu']) || $siteid && $cat['siteid']!=$siteid) continue;

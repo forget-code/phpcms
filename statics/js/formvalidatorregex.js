@@ -32,7 +32,8 @@ var regexEnum =
 	letter_u:"^[A-Z]+$",					//大写字母
 	letter_l:"^[a-z]+$",					//小写字母
 	idcard:"^[1-9]([0-9]{14}|[0-9]{17})$",	//身份证
-	ps_username:"^[\\u4E00-\\u9FA5\\uF900-\\uFA2D_\\w]+$" //中文、字母、数字 _
+	ps_username:"^[\\u4E00-\\u9FA5\\uF900-\\uFA2D_\\w]+$", //中文、字母、数字 _
+	password:"^[A-Za-z0-9-_()]+$"//密码
 }
 
 function isCardID(sId){ 

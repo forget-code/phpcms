@@ -34,8 +34,14 @@
 	 * 添加用户
 	 */
 	if ($action == 'member_add') {
+		//验证
+		if(isset($arr['password']) && !preg_match("/^[a-zA-Z0-9]{32}/", $arr['password'])) exit('0');
+		if(isset($arr['random']) && !preg_match("/^[a-zA-Z0-9]{6}/", $arr['random'])) exit('0');
+		if(isset($arr['username']) && !is_username($arr['username'])) exit('0');
+		if(isset($arr['email']) && !is_email($arr['email'])) exit('0');
+		if(isset($arr['regip']) && !preg_match("/^[\d\.]{7,15}/", $arr['regip'])) exit('0');
 		$userinfo = array();
-		$userinfo['phpssouid'] = isset($arr['uid']) ? $arr['uid'] : exit('0');
+		$userinfo['phpssouid'] = isset($arr['uid']) ? intval($arr['uid']) : exit('0');
 		$userinfo['encrypt'] = isset($arr['random']) ? $arr['random'] : exit('0');
 		$userinfo['username'] = isset($arr['username']) ? $arr['username'] : exit('0');
 		$userinfo['password'] = isset($arr['password']) ? $arr['password'] : exit('0');
@@ -58,8 +64,9 @@
 	 */
 	if ($action == 'member_delete') {
 		$uidarr = $arr['uids'];
+		$uidarr = array_map("intval",$uidarr);
 		$where = to_sqls($uidarr, '', 'phpssouid');
-		
+
 		$status = $db->delete($where);
 		if($status) {
 			exit('1');
@@ -74,12 +81,16 @@
 	 */
 	if ($action == 'member_edit') {
 		if(!isset($arr['uid'])) exit('0');
+		$arr['uid'] = intval($arr['uid']);
 		$userinfo = array();
 		if(isset($arr['password'])) {
+			if(!preg_match("/^[a-zA-Z0-9]{32}$/", $arr['password'])) exit('0');
+			if(!preg_match("/^[a-zA-Z0-9]{6}$/", $arr['random'])) exit('0');
 			$userinfo['password'] = $arr['password'];
 			$userinfo['encrypt'] = $arr['random'];
 		}
 		if(isset($arr['email']) && !empty($arr['email'])) {
+			if(!is_email($arr['email'])) exit('0');
 			$userinfo['email'] = $arr['email'];
 		}
 		if(empty($userinfo)) exit('1');
@@ -114,7 +125,7 @@
 	if ($action == 'synlogin') {
 		
 		if(!isset($arr['uid'])) exit('0');
-					
+		$arr['uid'] = intval($arr['uid']);
 		$phpssouid = $arr['uid'];
 		$userinfo = $db->get_one(array('phpssouid'=>$phpssouid));
 				

@@ -225,11 +225,19 @@ function random($length, $chars = '0123456789') {
 * @return	array	返回数组格式，如果，data为空，则返回空数组
 */
 function string2array($data) {
+	$data = trim($data);
 	if($data == '') return array();
-	eval("\$array = $data;");
+	if(strpos($data, 'array')===0){
+		@eval("\$array = $data;");
+	}else{
+		if(strpos($data, '{\\')===0) $data = stripslashes($data);
+		$array=json_decode($data,true);
+		if(strtolower(CHARSET)=='gbk'){
+			$array = mult_iconv("UTF-8", "GBK//IGNORE", $array);
+		}
+	}
 	return $array;
 }
-
 /**
 * 将数组转换为字符串
 *
@@ -238,9 +246,49 @@ function string2array($data) {
 * @return	string	返回字符串，如果，data为空，则返回空
 */
 function array2string($data, $isformdata = 1) {
-	if($data == '') return '';
+	if($data == '' || empty($data)) return '';
+	
 	if($isformdata) $data = new_stripslashes($data);
-	return addslashes(var_export($data, TRUE));
+	if(strtolower(CHARSET)=='gbk'){
+		$data = mult_iconv("GBK", "UTF-8", $data);
+	}
+	if (version_compare(PHP_VERSION,'5.3.0','<')){
+		return addslashes(json_encode($data));
+	}else{
+		return addslashes(json_encode($data,JSON_FORCE_OBJECT));
+	}
+}
+/**
+* 数组转码
+*
+*/
+function mult_iconv($in_charset,$out_charset,$data){
+    if(substr($out_charset,-8)=='//IGNORE'){
+        $out_charset=substr($out_charset,0,-8);
+    }
+    if(is_array($data)){
+        foreach($data as $key => $value){
+            if(is_array($value)){
+                $key=iconv($in_charset,$out_charset.'//IGNORE',$key);
+                $rtn[$key]=mult_iconv($in_charset,$out_charset,$value);
+            }elseif(is_string($key) || is_string($value)){
+                if(is_string($key)){
+                    $key=iconv($in_charset,$out_charset.'//IGNORE',$key);
+                }
+                if(is_string($value)){
+                    $value=iconv($in_charset,$out_charset.'//IGNORE',$value);
+                }
+                $rtn[$key]=$value;
+            }else{
+                $rtn[$key]=$value;
+            }
+        }
+    }elseif(is_string($data)){
+        $rtn=iconv($in_charset,$out_charset.'//IGNORE',$data);
+    }else{
+        $rtn=$data;
+    }
+    return $rtn;
 }
 
 /**
@@ -468,6 +516,8 @@ function tpl_cache($name,$times = 0) {
  * @param $timeout 过期时间
  */
 function setcache($name, $data, $filepath='', $type='file', $config='', $timeout='') {
+	if(!preg_match("/^[a-zA-Z0-9_-]+$/", $name)) return false;
+	if($filepath!="" && !preg_match("/^[a-zA-Z0-9_-]+$/", $filepath)) return false;
 	pc_base::load_sys_class('cache_factory','',0);
 	if($config) {
 		$cacheconfig = pc_base::load_config('cache');
@@ -486,6 +536,8 @@ function setcache($name, $data, $filepath='', $type='file', $config='', $timeout
  * @param string $config 配置名称
  */
 function getcache($name, $filepath='', $type='file', $config='') {
+	if(!preg_match("/^[a-zA-Z0-9_-]+$/", $name)) return false;
+	if($filepath!="" && !preg_match("/^[a-zA-Z0-9_-]+$/", $filepath)) return false;
 	pc_base::load_sys_class('cache_factory','',0);
 	if($config) {
 		$cacheconfig = pc_base::load_config('cache');
@@ -504,6 +556,8 @@ function getcache($name, $filepath='', $type='file', $config='') {
  * @param $config 配置名称
  */
 function delcache($name, $filepath='', $type='file', $config='') {
+	if(!preg_match("/^[a-zA-Z0-9_-]+$/", $name)) return false;
+	if($filepath!="" && !preg_match("/^[a-zA-Z0-9_-]+$/", $filepath)) return false;
 	pc_base::load_sys_class('cache_factory','',0);
 	if($config) {
 		$cacheconfig = pc_base::load_config('cache');
@@ -521,6 +575,8 @@ function delcache($name, $filepath='', $type='file', $config='') {
  * @param string $config 配置名称
  */
 function getcacheinfo($name, $filepath='', $type='file', $config='') {
+	if(!preg_match("/^[a-zA-Z0-9_-]+$/", $name)) return false;
+	if($filepath!="" && !preg_match("/^[a-zA-Z0-9_-]+$/", $filepath)) return false;
 	pc_base::load_sys_class('cache_factory');
 	if($config) {
 		$cacheconfig = pc_base::load_config('cache');

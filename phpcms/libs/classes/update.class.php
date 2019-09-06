@@ -5,6 +5,7 @@ class update {
 	var $http;
 
 	function __construct() {
+		$this->db = pc_base::load_model('admin_model');
 		$this->update_url = 'http://update.v9.phpcms.cn/index.php';
 		$this->http = pc_base::load_sys_class('http','',1);
 		$this->uuid = $this->check_uuid();
@@ -32,7 +33,7 @@ class update {
 			'release'=>PC_RELEASE,
 			'os'=>PHP_OS,
 			'php'=>phpversion(),
-			'mysql'=>mysql_get_server_info(),
+			'mysql'=>$this->db->version(),
 			'browser'=>urlencode($_SERVER['HTTP_USER_AGENT']),
 			'username'=>urlencode(param::get_cookie('admin_username')),
 			'email'=> urlencode(param::get_cookie('admin_email')),

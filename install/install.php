@@ -48,7 +48,7 @@ switch($step)
 		}
         $PHP_DNS = preg_match("/^[0-9.]{7,15}$/", @gethostbyname('www.phpcms.cn')) ? 1 : 0;
 		//是否满足phpcms安装需求
-		$is_right = (phpversion() >= '5.2.0' && extension_loaded('mysql') && $PHP_JSON && $PHP_GD && $PHP_FSOCKOPEN) ? 1 : 0;		
+		$is_right = (phpversion() >= '5.2.0' && extension_loaded('mysqli') && $PHP_JSON && $PHP_GD && $PHP_FSOCKOPEN) ? 1 : 0;		
 		include PHPCMS_PATH."install/step/step".$step.".tpl.php";
 		break;
 	
@@ -195,6 +195,7 @@ switch($step)
 						'app_path'=>$siteurl,
 						);
 			$db_config = array('hostname'=>$dbhost,
+						'port'=>$dbport,
 						'username'=>$dbuser,
 						'password'=>$dbpw,
 						'database'=>$dbname,
@@ -205,38 +206,38 @@ switch($step)
 			set_config($sys_config,'system');			
 			set_config($db_config,'database');
 			
-			$lnk = mysql_connect($dbhost, $dbuser, $dbpw) or die ('Not connected : ' . mysql_error());
-			$version = mysql_get_server_info();
+			$link = mysqli_connect($dbhost, $dbuser, $dbpw, null, $dbport) or die ('Not connected : ' . mysqli_connect_error());
+			$version = mysqli_get_server_info($link);
 
 			if($version > '4.1' && $dbcharset) {
-				mysql_query("SET NAMES '$dbcharset'");
+				mysqli_query($link, "SET NAMES '$dbcharset'");
 			}
 			
 			if($version > '5.0') {
-				mysql_query("SET sql_mode=''");
+				mysqli_query($link, "SET sql_mode=''");
 			}
 												
-			if(!@mysql_select_db($dbname)){
-				@mysql_query("CREATE DATABASE $dbname");
-				if(@mysql_error()) {
+			if(!@mysqli_select_db($link, $dbname)){
+				@mysqli_query($link, "CREATE DATABASE $dbname");
+				if(@mysqli_error($link)) {
 					echo 1;exit;
 				} else {
-					mysql_select_db($dbname);
+					mysqli_select_db($link, $dbname);
 				}
 			}
 			$dbfile =  'phpcms_db.sql';	
 			if(file_exists(PHPCMS_PATH."install/main/".$dbfile)) {
 				$sql = file_get_contents(PHPCMS_PATH."install/main/".$dbfile);
-				_sql_execute($sql);
+				_sql_execute($link,$sql);
 				//创建网站创始人
 				if(CHARSET=='gbk') $username = iconv('UTF-8','GBK',$username);
 				$password_arr = password($password);
 				$password = $password_arr['password'];
 				$encrypt = $password_arr['encrypt'];
 				$email = trim($email);
-				_sql_execute("INSERT INTO ".$tablepre."admin (`userid`,`username`,`password`,`roleid`,`encrypt`,`lastloginip`,`lastlogintime`,`email`,`realname`,`card`) VALUES ('1','$username','$password',1,'$encrypt','','','$email','','')");
+				_sql_execute($link,"INSERT INTO ".$tablepre."admin (`userid`,`username`,`password`,`roleid`,`encrypt`,`lastloginip`,`lastlogintime`,`email`,`realname`,`card`) VALUES ('1','$username','$password',1,'$encrypt','','','$email','','')");
 				//设置默认站点1域名
-				_sql_execute("update ".$tablepre."site set `domain`='$siteurl' where `siteid`='1'");
+				_sql_execute($link,"update ".$tablepre."site set `domain`='$siteurl' where `siteid`='1'");
 				
 			} else {
 				echo '2';//数据库文件不存在
@@ -264,6 +265,7 @@ switch($step)
 						'img_path'=>$ssourl.'statics/images/',			
 						);	
 			$sso_db_config = array('hostname'=>$dbhost,
+						'port'=>$dbport,
 						'username'=>$dbuser,
 						'password'=>$dbpw,
 						'database'=>$dbname,
@@ -275,19 +277,19 @@ switch($step)
 			set_sso_config($sso_config,'system');   //写入sso中配置信息
 			set_sso_config($sso_db_config,'database'); //写入sso数据库配置信息
 			
-			$lnk = mysql_connect($dbhost, $dbuser, $dbpw) or die ('Not connected : ' . mysql_error());
-			$version = mysql_get_server_info();			
+			$link = mysqli_connect($dbhost, $dbuser, $dbpw) or die ('Not connected : ' . mysqli_connect_error());
+			$version = mysqli_get_server_info($link);			
 			if($version > '4.1' && $dbcharset) {
-				mysql_query("SET NAMES '$dbcharset'");
+				mysqli_query($link, "SET NAMES '$dbcharset'");
 			}			
 			if($version > '5.0') {
-				mysql_query("SET sql_mode=''");
+				mysqli_query($link, "SET sql_mode=''");
 			}												
-			mysql_select_db($dbname);			
+			mysqli_select_db($link,$dbname);			
 			$dbfile =  'phpsso_db.sql';	
 			if(file_exists(PHPCMS_PATH."install/main/".$dbfile)) {
 				$sql = file_get_contents(PHPCMS_PATH."install/main/".$dbfile);
-				_sql_execute($sql,$sso_tablepre,'ps_');				
+				_sql_execute($link,$sql,$sso_tablepre,'ps_');				
 			}
 			//创建sso管理员信息
 			$username = iconv('UTF-8','GBK',$username);
@@ -295,9 +297,9 @@ switch($step)
 			$password = $password_arr['password'];
 			$encrypt = $password_arr['encrypt'];
 			
-			_sql_execute("INSERT INTO ".$sso_tablepre."admin (`id`,`username`,`password`,`encrypt`,`issuper`,`lastlogin`,`ip`) VALUES ('1','$username','$password','$encrypt','1','','')");
+			_sql_execute($link,"INSERT INTO ".$sso_tablepre."admin (`id`,`username`,`password`,`encrypt`,`issuper`,`lastlogin`,`ip`) VALUES ('1','$username','$password','$encrypt','1','','')");
 			//设置phpcms v9应用
-			_sql_execute("INSERT INTO ".$sso_tablepre."applications (`appid`,`type`,`name`,`url`,`authkey`,`ip`,`apifilename`,`charset`,`synlogin`) VALUES ('1','phpcms_v9','phpcms v9','$siteurl','$phpsso_auth_key','','api.php?op=phpsso','".CHARSET."','1')", $sso_tablepre, 'ps_');				
+			_sql_execute($link,"INSERT INTO ".$sso_tablepre."applications (`appid`,`type`,`name`,`url`,`authkey`,`ip`,`apifilename`,`charset`,`synlogin`) VALUES ('1','phpcms_v9','phpcms v9','$siteurl','$phpsso_auth_key','','api.php?op=phpsso','".CHARSET."','1')", $sso_tablepre, 'ps_');				
 			
 			$applist = array('1'
 						=>array (
@@ -329,37 +331,38 @@ switch($step)
 		$default_db = pc_base::load_config('database','default');
 		$dbcharset = $default_db['charset'];
 		$tablepre = $default_db['tablepre'];
-		$lnk = mysql_connect($default_db['dbhost'], $default_db['username'], $default_db['password']) or die ('Not connected : ' . mysql_error());
-		$version = mysql_get_server_info();			
+		$link = mysqli_connect($default_db['dbhost'], $default_db['username'], $default_db['password'], null, $default_db['dbport']) or die ('Not connected : ' . mysqli_connect_error());
+		$version = mysqli_get_server_info($link);		
 		if($version > '4.1' && $dbcharset) {
-			mysql_query("SET NAMES '$dbcharset'");
+			mysqli_query($link, "SET NAMES '$dbcharset'");
 		}			
 		if($version > '5.0') {
-			mysql_query("SET sql_mode=''");
+			mysqli_query($link, "SET sql_mode=''");
 		}			
-		mysql_select_db($default_db['database']);
+		mysqli_select_db($link, $default_db['database']);
 		if(file_exists(PHPCMS_PATH."install/main/testsql.sql"))
 		{
 			$sql = file_get_contents(PHPCMS_PATH."install/main/testsql.sql");
-			_sql_execute($sql);
+			_sql_execute($link,$sql);
 		}
 		break;	
 		
 	//数据库测试
 	case 'dbtest':
 		extract($_GET);
-		if(!@mysql_connect($dbhost, $dbuser, $dbpw)) {
+		$link = @mysqli_connect($dbhost, $dbuser, $dbpw,null,$dbport);
+		if(!$link) {
 			exit('2');
 		}
-		$server_info = mysql_get_server_info();
+		$server_info = mysqli_get_server_info($link);
 		if($server_info < '4.0') exit('6');
-		if(!mysql_select_db($dbname)) {
-			if(!@mysql_query("CREATE DATABASE `$dbname`")) exit('3');
-			mysql_select_db($dbname);
+		if(!mysqli_select_db($link,$dbname)) {
+			if(!@mysqli_query($link,"CREATE DATABASE `$dbname`")) exit('3');
+			mysqli_select_db($link,$dbname);
 		}
 		$tables = array();
-		$query = mysql_query("SHOW TABLES FROM `$dbname`");
-		while($r = mysql_fetch_row($query)) {
+		$query = mysqli_query($link,"SHOW TABLES FROM `$dbname`");
+		while($r = mysqli_fetch_row($query)) {
 			$tables[] = $r[0];
 		}
 		if($tables && in_array($tablepre.'module', $tables)) {
@@ -407,29 +410,29 @@ function format_textarea($string) {
 	return nl2br(str_replace(' ', '&nbsp;', htmlspecialchars($string,ENT_COMPAT,$chars)));
 }
 
-function _sql_execute($sql,$r_tablepre = '',$s_tablepre = 'phpcms_') {
-    $sqls = _sql_split($sql,$r_tablepre,$s_tablepre);
+function _sql_execute($link,$sql,$r_tablepre = '',$s_tablepre = 'phpcms_') {
+    $sqls = _sql_split($link,$sql,$r_tablepre,$s_tablepre);
 	if(is_array($sqls))
     {
 		foreach($sqls as $sql)
 		{
 			if(trim($sql) != '')
 			{
-				mysql_query($sql);
+				mysqli_query($link,$sql);
 			}
 		}
 	}
 	else
 	{
-		mysql_query($sqls);
+		mysqli_query($link,$sqls);
 	}
 	return true;
 }
 
-function _sql_split($sql,$r_tablepre = '',$s_tablepre='phpcms_') {
+function _sql_split($link,$sql,$r_tablepre = '',$s_tablepre='phpcms_') {
 	global $dbcharset,$tablepre;
 	$r_tablepre = $r_tablepre ? $r_tablepre : $tablepre;
-	if(mysql_get_server_info > '4.1' && $dbcharset)
+	if(mysqli_get_server_info($link) > '4.1' && $dbcharset)
 	{
 		$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=".$dbcharset,$sql);
 	}

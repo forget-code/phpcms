@@ -36,12 +36,11 @@
                     <td><?php if(phpversion() >= '5.2.0'){ ?><span><img src="images/correct.gif" /></span><?php }else{ ?><font class="red"><img src="images/error.gif" />&nbsp;无法安装</font><?php }?></font></td>
                   </tr>
                   <tr>
-                    <td>MYSQL 扩展</td>
-                    <td><?php if(extension_loaded('mysql')){ ?>√<?php }else{ ?>×<?php }?></td>
+                    <td>MYSQLI 扩展</td>
+                    <td><?php if(extension_loaded('mysqli')){ ?>√<?php }else{ ?>×<?php }?></td>
                     <td>必须开启</td>
-                    <td><?php if(extension_loaded('mysql')){ ?><span><img src="images/correct.gif" /></span><?php }else{ ?><font class="red"><img src="images/error.gif" />&nbsp;无法安装</font><?php }?></td>
-                  </tr>
-                  
+                    <td><?php if(extension_loaded('mysqli')){ ?><span><img src="images/correct.gif" /></span><?php }else{ ?><font class="red"><img src="images/error.gif" />&nbsp;无法安装</font><?php }?></td>
+                  </tr>               
                   <tr>
                     <td>ICONV/MB_STRING 扩展</td>
                     <td><?php if(extension_loaded('iconv') || extension_loaded('mbstring')){ ?>√<?php }else{ ?>×<?php }?></td>

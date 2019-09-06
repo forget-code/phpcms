@@ -145,7 +145,7 @@ class file extends admin {
 	
 	public function public_ajax_get() {
 		$op_tag = pc_base::load_app_class($_GET['op']."_tag", $_GET['op']);
-		$html = $op_tag->$_GET['action']($_GET['html'], $_GET['value'], $_GET['id']);
+		$html = $op_tag->{$_GET['action']}($_GET['html'], $_GET['value'], $_GET['id']);
 		echo $html;
 	}
 	

@@ -3,6 +3,7 @@
       <td>地图接口选择</td>
       <td>
 	  <input type="radio" name="setting[maptype]" value="2"> 百度地图
+	  <input type="radio" name="setting[maptype]" value="1" disabled> MAPABC
 	  </td>
     </tr>
 	<tr> 

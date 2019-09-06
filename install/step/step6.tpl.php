@@ -51,6 +51,7 @@ setting['sms'] = '短信模块安装成功......';
 setting['video'] = '视频模块安装成功......';
 
 var dbhost = '<?php echo $dbhost?>';
+var dbport = '<?php echo $dbport?>';
 var dbuser = '<?php echo $dbuser?>';
 var dbpw = '<?php echo $dbpw?>';
 var dbname = '<?php echo $dbname?>';
@@ -68,7 +69,7 @@ function reloads() {
 	$.ajax({
 		   type: "POST",
 		   url: 'install.php',
-		   data: "step=installmodule&module="+m_d[n]+"&dbhost="+dbhost+"&dbuser="+dbuser+"&dbpw="+dbpw+"&dbname="+dbname+"&tablepre="+tablepre+"&dbcharset="+dbcharset+"&pconnect="+pconnect+"&username="+username+"&password="+password+"&email="+email+"&ftp_user="+ftp_user+"&password_key="+password_key+"&sid="+Math.random()*5,
+		   data: "step=installmodule&module="+m_d[n]+"&dbhost="+dbhost+"&dbport="+dbport+"&dbuser="+dbuser+"&dbpw="+dbpw+"&dbname="+dbname+"&tablepre="+tablepre+"&dbcharset="+dbcharset+"&pconnect="+pconnect+"&username="+username+"&password="+password+"&email="+email+"&ftp_user="+ftp_user+"&password_key="+password_key+"&sid="+Math.random()*5,
 		   success: function(msg){
 			   if(msg==1) {
 				   alert('指定的数据库不存在，系统也无法创建，请先通过其他方式建立好数据库！');

@@ -204,6 +204,7 @@ $LANG['email_config'] = '邮箱配置';
 $LANG['urlrule_manage'] = 'URL规则管理';
 $LANG['ipbanned'] = 'IP禁止';
 $LANG['module_manage'] = '模块管理';
+$LANG['module_list'] = '模块列表';
 $LANG['add_ipbanned'] = '添加IP禁止';
 $LANG['downsites'] = '下载镜像管理';
 $LANG['col_url_list'] = '采集网址';

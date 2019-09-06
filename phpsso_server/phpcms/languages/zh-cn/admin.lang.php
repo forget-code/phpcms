@@ -4,6 +4,7 @@ $LANG['checkcode'] = '验证码';
 $LANG['click_change_validate'] = '单击更换验证码';
 $LANG['code_error'] = '验证码错误';
 $LANG['input_code'] = '请输入验证码';
+$LANG['username_illegal'] = '用户名不合法';
 
 $LANG['jump_message'] = '如果您的浏览器没有自动跳转，请点击这里';
 $LANG['alert_message'] = '提示信息';

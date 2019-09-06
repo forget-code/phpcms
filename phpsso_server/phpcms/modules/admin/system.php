@@ -73,10 +73,20 @@ class system extends admin {
 		$host = isset($_GET['host']) && trim($_GET['host']) ? trim($_GET['host']) : exit('0');
 		$password = isset($_GET['password']) && trim($_GET['password']) ? trim($_GET['password']) : exit('0');
 		$username = isset($_GET['username']) && trim($_GET['username']) ? trim($_GET['username']) : exit('0');
-		if (@mysql_connect($host, $username, $password)) {
-			exit('1');
-		} else {
-			exit('0');
+		if(function_exists('mysql_connect')){
+			if (@mysql_connect($host, $username, $password)) {
+				exit('1');
+			} else {
+				exit('0');
+			}
+		}else{
+			$hostdb = explode(":",$host);
+			$port = isset($hostdb[1]) ? $hostdb[1] : 3306;
+			if (@mysqli_connect($hostdb[0], $username, $password, null, $port)){
+				exit('1');
+			} else {
+				exit('0');
+			}
 		}
 	}
 

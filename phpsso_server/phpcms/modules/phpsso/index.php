@@ -192,10 +192,10 @@ class index extends phpsso {
 			$noticedata = $data;
 			$noticedata['uid'] = $userinfo['uid'];
 			messagequeue::add('member_edit', $noticedata);
-			if($this->username) {
-				$res = $this->db->update($data, array('username'=>$this->username));
-			} else {
+			if($this->uid > 0) {
 				$res = $this->db->update($data, array('uid'=>$this->uid));
+			} else if($this->username) {
+				$res = $this->db->update($data, array('username'=>$this->username));
 			}
 			exit("$res");
 		} else {

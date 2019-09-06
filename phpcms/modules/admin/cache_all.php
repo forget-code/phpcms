@@ -48,7 +48,7 @@ class cache_all extends admin {
 				$M = getcache('modules', 'commons');
 				if (in_array($m['mod'], array_keys($M))) {
 					$cache = pc_base::load_app_class($m['file'], $m['mod']);
-					$cache->$m['function']();
+					$cache->{$m['function']}();
 				}
 			} else if($m['target']=='iframe') {
 				echo '<script type="text/javascript">window.parent.frames["hidden"].location="index.php?'.$m['link'].'";</script>';

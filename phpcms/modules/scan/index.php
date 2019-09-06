@@ -137,7 +137,7 @@ class index extends admin {
 		$html = file_get_contents(PHPCMS_PATH.$url);
 		//判断文件名，如果是database.php 对里面的关键字符进行替换
 		$basename = basename($url);
-		if($basename == "database.php"){
+		if($basename == "database.php" || $basename == "system.php"){
 			//$html = str_replace();
 			showmessage(L('重要文件，不允许在线查看！'));
 		}

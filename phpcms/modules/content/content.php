@@ -484,6 +484,7 @@ class content extends admin {
 			}
 			if(empty($priv_catids)) return '';
 		}
+		$_GET['menuid'] = intval($_GET['menuid']);
 		$categorys = array();
 		if(!empty($this->categorys)) {
 			foreach($this->categorys as $r) {
@@ -850,7 +851,7 @@ class content extends admin {
 				$tocatid = intval($_POST['tocatid']);
 				$modelid = $this->categorys[$tocatid]['modelid'];
 				if(!$modelid) showmessage(L('illegal_operation'));
-				$ids = array_filter(explode(',', $_POST['ids']),"intval");
+				$ids = array_filter(explode(',', $_POST['ids']),"is_numeric");
 				foreach ($ids as $id) {
 					$checkid = 'c-'.$id.'-'.$this->siteid;
 					$this->content_check_db->update(array('catid'=>$tocatid), array('checkid'=>$checkid));
@@ -866,7 +867,7 @@ class content extends admin {
 				$tocatid = intval($_POST['tocatid']);
 				$modelid = $this->categorys[$tocatid]['modelid'];
 				if(!$modelid) showmessage(L('illegal_operation'));
-				$fromid = array_filter($_POST['fromid'],"intval");
+				$fromid = array_filter($_POST['fromid'],"is_numeric");
 				$fromid = implode(',', $fromid);
 				$this->db->set_model($modelid);
 				$this->db->update(array('catid'=>$tocatid),"catid IN($fromid)");
@@ -962,6 +963,7 @@ class content extends admin {
 		$modelid = intval($_POST['modelid']);
 		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
 		$tree = pc_base::load_sys_class('tree');
+		$_GET['menuid'] = intval($_GET['menuid']);
 		if(!empty($this->categorys)) {
 			foreach($this->categorys as $r) {
 				if($r['siteid']!=$this->siteid ||  ($r['type']==2 && $r['child']==0)) continue;

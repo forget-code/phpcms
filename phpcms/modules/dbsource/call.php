@@ -28,7 +28,7 @@ class call  {
 						$sql['action'] = $data['action'];
 						$sql['limit'] = $data['num'];
 						unset($data['num']);
-						$str  = $pc_tag->$data['action']($sql);
+						$str  = $pc_tag->{$data['action']}($sql);
 						
 					} else {
 						exit();

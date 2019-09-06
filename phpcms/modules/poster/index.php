@@ -101,7 +101,7 @@ class index {
 	 */
 	protected function show_stat($siteid = 0, $spaceid = 0, $id = 0) {
 		$M = new_html_special_chars(getcache('poster', 'commons'));
-		if($M['enablehits']==0) return true; 
+		if(isset($M[$siteid]['enablehits']) && $M[$siteid]['enablehits']==0) return true; 
 		//$siteid = intval($siteid);
 		$spaceid = intval($spaceid);
 		$id = intval($id);

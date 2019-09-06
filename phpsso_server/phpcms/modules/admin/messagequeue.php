@@ -39,6 +39,7 @@ class messagequeue extends admin {
 	 */
 	public function delete() {
 		$idarr = isset($_POST['id']) ? $_POST['id'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$idarr = array_map("intval",$idarr);
 		$where = to_sqls($idarr, '', 'id');
 		if ($this->db->delete($where)) {
 			showmessage(L('operation_success'), HTTP_REFERER);
@@ -51,7 +52,7 @@ class messagequeue extends admin {
 	 * 重新通知
 	 */
 	public function renotice() {
-		$noticeid = isset($_POST['noticeid']) ? $_POST['noticeid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$noticeid = isset($_POST['noticeid']) ? intval($_POST['noticeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
 		$appid = isset($_POST['appid']) ? $_POST['appid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
 		if ($noticeinfo = $this->db->get_one(array('id'=>$noticeid))) {
 			//通知app noticedata 返回通知成功的appid 1

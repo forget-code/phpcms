@@ -10,11 +10,11 @@ $video_setting = getcache('video','video');
 $pc_hash = htmlspecialchars($_GET['pc_hash']);
 if(!empty($_GET['do_complete']) && !empty($_GET['uid']) && !empty($_GET['snid'])){
 	//验证sndaid
-	$sndaid = intval($_GET['snid']);
+	$sndaid = floor(floatval($_GET['snid']));
 	if(empty($sndaid)){
 		showmessage("请通正常路径访问网站！",APP_PATH);
 	}
-	showmessage("请完善注册信息资料！",APP_PATH.'index.php?m=video&c=video&a=complete_info&uid='.intval($_GET['uid']).'&snid='.$sndaid.'&pc_hash='.$pc_hash);
+	showmessage("请完善注册信息资料！",APP_PATH.'index.php?m=video&c=video&a=complete_info&uid='.floor(floatval($_GET['uid'])).'&snid='.$sndaid.'&pc_hash='.$pc_hash);
 }
 
 if(!empty($_GET['skey']) && !empty($_GET['sn'])){

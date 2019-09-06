@@ -42,7 +42,9 @@ class index extends admin {
 				}
 				$username = $_SESSION['card_username'] ? $_SESSION['card_username'] :  showmessage(L('nameerror'),HTTP_REFERER);
 			}
-			
+			if(!is_username($username)){
+				showmessage(L('username_illegal'), HTTP_REFERER);
+			}
 			//密码错误剩余重试次数
 			$this->times_db = pc_base::load_model('times_model');
 			$rtime = $this->times_db->get_one(array('username'=>$username,'isadmin'=>1));
@@ -209,7 +211,7 @@ class index extends admin {
 		$logintime = $r['lastlogintime'];
 		$loginip = $r['lastloginip'];
 		$sysinfo = get_sysinfo();
-		$sysinfo['mysqlv'] = mysql_get_server_info();
+		$sysinfo['mysqlv'] = $this->db->version();
 		$show_header = $show_pc_hash = 1;
 		/*检测框架目录可写性*/
 		$pc_writeable = is_writable(PC_PATH.'base.php');

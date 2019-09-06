@@ -58,6 +58,7 @@
 			mapObj.enableDragging();
 			mapObj.enableScrollWheelZoom();
 			mapObj.enableDoubleClickZoom();
+			mapObj.enableKeyboard();//启用键盘上下左右键移动地图
 			mapObj.centerAndZoom(new BMap.Point(lngX,latY),zoom);
 			drawPoints();
 			';

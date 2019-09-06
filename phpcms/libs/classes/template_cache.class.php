@@ -88,10 +88,10 @@ final class template_cache {
 		$str = preg_replace ( "/\{([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff:]*\(([^{}]*)\))\}/", "<?php echo \\1;?>", $str );
 		$str = preg_replace ( "/\{\\$([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff:]*\(([^{}]*)\))\}/", "<?php echo \\1;?>", $str );
 		$str = preg_replace ( "/\{(\\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/", "<?php echo \\1;?>", $str );
-		$str = preg_replace("/\{(\\$[a-zA-Z0-9_\[\]\'\"\$\x7f-\xff]+)\}/es", "\$this->addquote('<?php echo \\1;?>')",$str);
+		$str = preg_replace_callback("/\{(\\$[a-zA-Z0-9_\[\]\'\"\$\x7f-\xff]+)\}/s",  array($this, 'addquote'),$str);
 		$str = preg_replace ( "/\{([A-Z_\x7f-\xff][A-Z0-9_\x7f-\xff]*)\}/s", "<?php echo \\1;?>", $str );
-		$str = preg_replace("/\{pc:(\w+)\s+([^}]+)\}/ie", "self::pc_tag('$1','$2', '$0')", $str);
-		$str = preg_replace("/\{\/pc\}/ie", "self::end_pc_tag()", $str);
+		$str = preg_replace_callback("/\{pc:(\w+)\s+([^}]+)\}/i", array($this, 'pc_tag_callback'), $str);
+		$str = preg_replace_callback("/\{\/pc\}/i", array($this, 'end_pc_tag'), $str);
 		$str = "<?php defined('IN_PHPCMS') or exit('No permission resources.'); ?>" . $str;
 		return $str;
 	}
@@ -102,10 +102,13 @@ final class template_cache {
 	 * @param $var	转义的字符
 	 * @return 转义后的字符
 	 */
-	public function addquote($var) {
+	public function addquote($matches) {
+		$var = '<?php echo '.$matches[1].';?>';
 		return str_replace ( "\\\"", "\"", preg_replace ( "/\[([a-zA-Z0-9_\-\.\x7f-\xff]+)\]/s", "['\\1']", $var ) );
 	}
-	
+	public static function pc_tag_callback($matches) {
+		return self::pc_tag($matches[1],$matches[2], $matches[0]);;
+	}	
 	/**
 	 * 解析PC标签
 	 * @param string $op 操作方式
@@ -123,7 +126,7 @@ final class template_cache {
 		foreach ($matches as $v) {
 			$str_datas .= $str_datas ? "&$v[1]=".($op == 'block' && strpos($v[2], '$') === 0 ? $v[2] : urlencode($v[2])) : "$v[1]=".(strpos($v[2], '$') === 0 ? $v[2] : urlencode($v[2]));
 			if(in_array($v[1], $arr)) {
-				$$v[1] = $v[2];
+				${$v[1]} = $v[2];
 				continue;
 			}
 			$datas[$v[1]] = $v[2];
