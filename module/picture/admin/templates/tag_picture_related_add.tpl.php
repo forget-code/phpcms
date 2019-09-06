@@ -35,19 +35,20 @@ function doCheck(){
    <input name="mod" type="hidden" value="<?=$mod?>">
    <input name="file" type="hidden" value="<?=$file?>">
    <input name="channelid" type="hidden" value="<?=$channelid?>">
-   <input name="action" type="hidden" value="<?=$action?>" id="action">
+   <input name="action" type="hidden" value="<?=$action?>">
+   <input name="job" type="hidden" value="<?=$job?>">
    <input name="function" type="hidden" value="<?=$function?>">
    <input name="referer" type="hidden" value="<?=$PHP_REFERER?>">
    <input type="hidden" name="tag_config[func]" value="<?=$function?>">
     <tr> 
       <td class="tablerow" width="40%"><b>标签名称</b><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</td>
       <td  class="tablerow">
-	  <input name="tagname" id="tagname" type="text" size="20"> <input type="button" value=" 检查是否已经存在 " onclick="Dialog('?mod=<?=$mod?>&file=<?=$file?>&action=checkname&channelid=<?=$channelid?>&tagname='+$('tagname').value+'','','300','40','no')"> <br/>
+	  <input name="tagname" id="tagname" type="text" size="20" value="<?=$tagname?>"> <input type="button" value=" 检查是否已经存在 " onclick="Dialog('?mod=<?=$mod?>&file=<?=$file?>&action=checkname&channelid=<?=$channelid?>&tagname='+$('tagname').value+'','','300','40','no')"> <br/>
 	  </td>
     </tr>
     <tr> 
       <td class="tablerow"><b>标签说明</b><br/>例如：首页最新推荐图片，10篇</td>
-      <td  class="tablerow"><input name="tag_config[introduce]" id="introduce" type="text" size="60" /></td>
+      <td  class="tablerow"><input name="tag_config[introduce]" id="introduce" type="text" size="50" /></td>
     </tr>
     <tr> 
       <td class="tablerowhighlight" colspan=2 align="center"><b>标签参数设置</b></td>

@@ -13,22 +13,13 @@ $(c_Str+"_img").src='<?=PHPCMS_PATH?>admin/skin/images/off.gif';
 }
 }
 </script>
-<meta http-equiv="Page-Enter" content="revealTrans(Duration=0.5,Transition=23)">
 <body>
-
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="500" id="loading">
-  <tr>
-    <td align="center" valign="center"><img src="<?=PHPCMS_PATH?>admin/skin/images/loading.gif" /><br /><br />正在装载...</td>
-  </tr>
-</table>
-
 
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
   <tr>
     <td></td>
   </tr>
 </table>
-<div id="load" style="display:none;">
 <table width="100%"  border="0" cellpadding="4" cellspacing="1" bgcolor="#183789" >
   <tr>
     <td class="tablerow">
@@ -96,6 +87,9 @@ $(c_Str+"_img").src='<?=PHPCMS_PATH?>admin/skin/images/off.gif';
                   </tr>
                   <tr>
                     <td height="22" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#F8F8F8'" onMouseOut="this.style.backgroundColor='#FFFFFF'"><a href="?mod=phpcms&file=setting&tab=7" target="right">通行证</a></td>
+                  </tr>
+                  <tr>
+                    <td height="22" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#F8F8F8'" onMouseOut="this.style.backgroundColor='#FFFFFF'"><a href="?mod=phpcms&file=setting&tab=8" target="right">扩展设置</a></td>
                   </tr>
                 </tbody>
               </table>
@@ -265,9 +259,8 @@ $(c_Str+"_img").src='<?=PHPCMS_PATH?>admin/skin/images/off.gif';
 	</td>
   </tr>
 </table>
-</div>
+
 <script type="text/javascript">
-setTimeout("$('loading').style.display='none';$('load').style.display='block';", 500);
 parent.frames['right'].location = '?file=index&action=main';
 </script>
 </body>

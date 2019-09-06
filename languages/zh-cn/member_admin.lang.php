@@ -39,6 +39,7 @@ $LANG['input_password_clue_answer'] = '请输入密码提示问题答案！';
 $LANG['approval_new_member'] = '审核新会员';
 $LANG['member_list'] = '会员列表';
 $LANG['add_member'] = '添加会员';
+$LANG['search_member'] = '搜索会员';
 $LANG['member_manage'] = '会员管理';
 $LANG['input_valid_msn'] = '请输入有效的MSN地址！';
 $LANG['input_correct_qq'] = '请输入正确的QQ号！';
@@ -49,6 +50,7 @@ $LANG['have_used_change_one_email'] = '已经被别人使用了，请更换一�
 $LANG['member_add_success'] = '会员添加成功！';
 $LANG['register_fail'] = '注册失败！';
 $LANG['account_not_exist_or_delete'] = '帐号不存在或者已被删除';
-$LANG['select_account'] = '请选择帐号！';
+$LANG['select_account'] = '请选择用户名！';
+$LANG['select_group'] = '请选择会员组！';
 
 ?>

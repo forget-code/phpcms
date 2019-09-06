@@ -65,10 +65,15 @@ function Insert(str)
 	editor.document.body.innerHTML = editor.document.body.innerHTML.replace(s, str);
 }
 
+function cc_Insert(str)
+{
+	Insert(str);
+}
+
 function Preview()
 {
 	if ($('Mode_Img').src.indexOf('code.gif') == -1) setMode();
-	var code = '<html><meta http-equiv="Content-Type" content="text/html; charset='+editorCharset+'"><link rel="stylesheet" type="text/css" href="'+editorCss+'"><link rel="stylesheet" type="text/css" href="'+PHPCMS_PATH+'editor/css/editor.css"><body>'+editor.document.body.innerHTML+'</body></html>';
+	var code = '<html><meta http-equiv="Content-Type" content="text/html; charset=utf-8'+editorCharset+'"><link rel="stylesheet" type="text/css" href="'+editorCss+'"><link rel="stylesheet" type="text/css" href="'+PHPCMS_PATH+'editor/css/editor.css"><body>'+editor.document.body.innerHTML+'</body></html>';
 	var newwin = window.open('','','');
 	newwin.opener = null;
 	newwin.document.write(code);
@@ -240,11 +245,11 @@ function pic()//img 在html4不可以用xhtml可用
 		b=ss[1];
 		c=ss[2];
 		d=ss[3];
-		var str = '<img src="'+a+'"';
+		var str = '<a href="'+a+'" target="_blank"><img src="'+a+'"';
 		if(b) str += ' width="'+b+'"';
 		if(c) str += ' height="'+c+'"';
 		if(d) str += ' alt="'+d+'"';
-		str += ' />';
+		str += ' /></a>';
 		Insert(str);
 	}
 	else

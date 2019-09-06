@@ -1,7 +1,6 @@
 <?php defined('IN_PHPCMS') or exit('Access Denied');
 include admintpl('header');
 ?>
-
 <body onload="ShowTabs(<?=$tab?>);">
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
   <tr>
@@ -19,6 +18,7 @@ include admintpl('header');
 <td id='TabTitle5' class='title1' onclick='ShowTabs(5)'>邮件设置</td>
 <td id='TabTitle6' class='title1' onclick='ShowTabs(6)'>FTP设置</td>
 <td id='TabTitle7' class='title1' onclick='ShowTabs(7)'>通行证</td>
+<td id='TabTitle8' class='title1' onclick='ShowTabs(8)'>扩展设置</td>
 <td>&nbsp;</td>
 </tr>
 </table>
@@ -48,7 +48,7 @@ include admintpl('header');
     </tr>
         <tr>
       <td width='43%' class='tablerow'><strong>备案证书 bazs.cert文件</strong><br></td>
-      <td colspan="2" class='tablerow'><input name='setting[bazscert]' type='text' id='bazscert' value='<?=$bazscert?>' size='40' maxlength='255'> <input type="button" value=" 上传 " onClick="javascript:openwinx('?mod=phpcms&file=upload&type=overwrite&uploadtext=bazscert','upload','350','200')"></td>
+      <td colspan="2" class='tablerow'><input name='setting[bazscert]' type='text' id='bazscert' value='<?=$bazscert?>' size='40' maxlength='255'> </td>
     </tr>
     <tr>
       <td width='43%' class='tablerow'><strong>Title（网站标题）</strong><br>针对搜索引擎设置的网页标题</td>
@@ -134,6 +134,15 @@ include admintpl('header');
 	  <input type='text' name='setconfig[phpcacheexpires]' value='<?=$phpcacheexpires?>' size='5'> 秒
 	  </td>
     </tr>
+<?php if($LICENSE['type'] != 'free'){ ?>
+	<tr>
+      <td width='43%' class='tablerow'><strong>是否启用自动提取关键词功能</strong></td>
+      <td colspan="2" class='tablerow'>
+	  <input type='radio' name='setting[enablegetkeywords]' value='1'  <?php if($enablegetkeywords){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
+	  <input type='radio' name='setting[enablegetkeywords]' value='0'  <?php if(!$enablegetkeywords){ ?>checked <?php } ?>> 否
+	  </td>
+    </tr>
+<?php } ?>
 	<tr>
       <td width='43%' class='tablerow'><strong>网站默认地区</strong></td>
       <td colspan="2" class='tablerow'>
@@ -191,6 +200,10 @@ var selectedarea = '<?=$area?>';
       <td width='43%' class='tablerow'><strong>信息列表每页默认信息条数</strong><br></td>
       <td colspan="2" class='tablerow'><input name='setting[pagesize]' type='text' id='pagesize' value='<?=$pagesize?>' size='5' maxlength='255'> 条</td>
     </tr>
+    <tr>
+      <td width='43%' class='tablerow'><strong>发布信息时栏目列表自动更新页数</strong><br></td>
+      <td colspan="2" class='tablerow'><input name='setting[autoupdatepagenum]' type='text' id='autoupdatepagenum' value='<?=$autoupdatepagenum?>' size='5' maxlength='1'> 页 （建议不要超过 5 页）</td>
+    </tr>
   </tbody>
 
   <tbody id='Tabs2' style='display:none'>
@@ -224,13 +237,6 @@ var selectedarea = '<?=$area?>';
       <td width='43%' class='tablerow'><strong>网站安全密钥</strong></td>
       <td colspan="2" class='tablerow'>
 	  <input name='setting[authkey]' type='text' id='authkey' value='<?=$authkey?>' size='30' maxlength='20'>
-	  </td>
-    </tr>
-	<tr>
-      <td width='43%' class='tablerow'><strong>是否启用 PHP 错误日志</strong></td>
-      <td colspan="2" class='tablerow'>
-	  <input type='radio' name='setconfig[enablephplog]' value='1'  <?php if($enablephplog){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
-	  <input type='radio' name='setconfig[enablephplog]' value='0'  <?php if(!$enablephplog){ ?>checked <?php } ?>> 否
 	  </td>
     </tr>
 	<tr>
@@ -281,7 +287,7 @@ var selectedarea = '<?=$area?>';
 	 <tr>
       <td width='43%' class='tablerow'><strong>PHP图形处理（GD库）功能检测</strong></td>
       <td colspan="2" class='tablerow'>
-	  <?=$gd?>
+	  <font color="red"><?=$gd?></font>
      </td>
     </tr>
 	 <tr>
@@ -319,7 +325,7 @@ var selectedarea = '<?=$area?>';
     </tr>
     <tr>
       <td width='43%' class='tablerow'><strong>文字字体</strong></td>
-      <td colspan="2" class='tablerow'><input name='setting[water_font]' type='text' id='water_font' value='<?=$water_font?>' size='30' maxlength='100'> <?php if(!file_exists(PHPCMS_ROOT.'/'.$water_font)){ ?>字体不存在，上传后才能使用文字水印功能。<?php } ?></td>
+      <td colspan="2" class='tablerow'><input name='setting[water_font]' type='text' id='water_font' value='<?=$water_font?>' size='30' maxlength='100'> <?php if(!file_exists(PHPCMS_ROOT.'/'.$water_font)){ ?><font color="red">字体不存在，上传后才能使用文字水印功能。</font><?php } ?></td>
     </tr>
 	    <tr>
       <td width='43%' class='tablerow'><strong>文字大小</strong><br> 若使用文字水印，请将字体上传到对应位置</td>
@@ -332,9 +338,26 @@ var selectedarea = '<?=$area?>';
 	<tr>
       <td width='43%' class='tablerow'><strong>水印图片</strong></td>
       <td colspan="2" class='tablerow'><input name='setting[water_image]' type='text' id='water_image' value='<?=$water_image?>' size='40' maxlength='50'>
-	  <input type="button" value="上传图片" onClick="javascript:openwinx('?mod=phpcms&file=uppic&type=overwrite&uploadtext=water_image','upload','350','350')">
+	  
 	  </td>
     </tr>
+	<tr>
+      <td class='tablerow'><strong>水印透明度</strong><br/>范围为 1~100 的整数，数值越小水印图片越透明</td>
+      <td colspan="2" class='tablerow'><input name='setting[water_transition]' type='text' id='water_image' value='<?=$water_transition?>' size='40' maxlength='50'>
+	  </td>
+    </tr>
+	<tr>
+      <td class='tablerow'><strong>JPEG 水印质量</strong><br/>范围为 0~100 的整数，数值越大结果图片效果越好，但尺寸也越大</td>
+      <td colspan="2" class='tablerow'><input name='setting[water_jpeg_quality]' type='text' id='water_image' value='<?=$water_jpeg_quality?>' size='40' maxlength='50'>
+	  </td>
+    </tr>
+
+	<tr>
+      <td class='tablerow'><strong>图片处理条件</strong><br/>图片处理的最小宽度或长度，宽度或者高度小于此值将不做处理</td>
+      <td colspan="2" class='tablerow'><input name='setting[water_min_wh]' type='text' id='water_image' value='<?=$water_min_wh?>' size='40' maxlength='50'>
+	  </td>
+    </tr>
+
 	    <tr>
       <td width='43%' class='tablerow'><strong>水印位置</strong><br>
 	  您可以设置自动为用户上传的 JPG/PNG/GIF 图片附件添加水印，请在此选择水印添加的位置(3x3 共 9 个位置可选)。本功能需要 GD 库支持才能使用，暂不支持动画 GIF 格式。附加的水印图片位于 ./images/watermark.gif，您可替换此文件以实现不同的水印效果
@@ -436,15 +459,60 @@ var selectedarea = '<?=$area?>';
   </tbody>
 
   <tbody id='Tabs7' style='display:none'>
-    <th colspan=3>通行证</th>
+    <th colspan=3>通行证设置</th>
     <tr> 
-      <td class="tablerow" width="43%"><b>是否启用通行证</b><br>请先安装好论坛，整合后phpcms将与论坛统一注册和登录</td>
+      <td colspan="3" class="tablerowhighlight" align="center">正向通行证设置</td>
+    </tr>
+    <tr> 
+      <td class="tablerow" width="35%"><b>是否启用正向通行证</b><br>以PHPCMS作为整合的服务器端</td>
       <td colspan="2"  class="tablerow"><input type="radio" name="setting[enablepassport]" value="1" <?php if($enablepassport){?>checked<?php }?>>是&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="setting[enablepassport]" value="0" <?php if(!$enablepassport){?>checked<?php }?>>否</td>
     </tr>
 	<tr> 
-      <td class="tablerow"><b>整合文件</b></td>
-      <td colspan="2"  class="tablerow">
-	  <select name="setting[passport_file]">
+      <td class="tablerow"><b>整合程序</b></td>
+      <td colspan="2" class="tablerow">
+	  <script type="text/javascript">
+	  function set_passport(str)
+	  {
+		  if(str == 'discuz') $('passport_url').value='http://www.***.com/bbs/api/passport.php';
+		  else if(str == 'phpwind') $('passport_url').value='http://www.***.com/bbs/';
+	  }
+	  function fill_passport(str)
+	  {
+		  if(str == 'phpwind')
+		  {
+			  $('passport_serverurl').value='http://www.***.com/bbs/';
+			  $('passport_registerurl').value='register.php';
+			  $('passport_loginurl').value='login.php';
+			  $('passport_logouturl').value='login.php?action=quit';
+			  $('passport_getpasswordurl').value='sendpwd.php';
+		  }
+		  else if(str == 'lxblog')
+		  {
+			  $('passport_serverurl').value='http://www.***.com/blog/';
+			  $('passport_registerurl').value='register.php';
+			  $('passport_loginurl').value='login.php';
+			  $('passport_logouturl').value='login.php?action=quit';
+			  $('passport_getpasswordurl').value='sendpwd.php';
+		  }
+		  else if(str == 'lxshop')
+		  {
+			  $('passport_serverurl').value='http://www.***.com/shop/';
+			  $('passport_registerurl').value='register.php';
+			  $('passport_loginurl').value='login.php';
+			  $('passport_logouturl').value='login.php?action=quit';
+			  $('passport_getpasswordurl').value='sendpwd.php';
+		  }
+		  else if(str == 'shopex')
+		  {
+			  $('passport_serverurl').value='http://www.***.com/shop/';
+			  $('passport_registerurl').value='index.php?gOo=register.dwt';
+			  $('passport_loginurl').value='index.php?gOo=login.dwt';
+			  $('passport_logouturl').value='index.php?gOo=logout_act.do';
+			  $('passport_getpasswordurl').value='index.php?gOo=forget.dwt';
+		  }
+	  }
+	  </script>
+	  <select name="setting[passport_file]" onchange="set_passport(this.value);">
 	  <?php 
 	  $passports = glob(PHPCMS_ROOT.'/member/passport/*.php');
 	  foreach($passports as $passport)
@@ -457,15 +525,134 @@ var selectedarea = '<?=$area?>';
 	  </td>
     </tr>
 	<tr> 
-      <td class="tablerow"><b>接口地址</b><br>请填写接口访问的网址</td>
-      <td colspan="2"  class="tablerow"><input name="setting[passport_url]" type="text" size="50" value="<?=$passport_url?>"></td>
+      <td class="tablerow"><b>整合程序字符集</b></td>
+      <td colspan="2" class="tablerow">
+	  <select name="setting[passport_charset]">
+	  <option value="gbk" <?=($passport_charset == 'gbk' ? 'selected' : '')?>>GBK/GB2312</option>
+	  <option value="utf-8" <?=($passport_charset == 'utf-8' ? 'selected' : '')?>>UTF-8</option>
+	  <option value="big5" <?=($passport_charset == 'big5' ? 'selected' : '')?>>BIG5</option>
+	  </select>
+	  </td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>通行证接口地址</b><br>多个接口地址请用逗号“,”分隔</td>
+      <td colspan="2"  class="tablerow"><input name="setting[passport_url]" type="text" size="75" value="<?=$passport_url?>" id="passport_url"></td>
     </tr>
     <tr> 
-      <td class="tablerow"><b>认证密钥</b><br>请填写验证的密钥</td>
+      <td class="tablerow"><b>通行证私有密钥</b><br>请填写通行证私有密钥</td>
       <td colspan="2"  class="tablerow"><input name="setting[passport_key]" type="text" size="30" value="<?=$passport_key?>"></td>
+    </tr>
+    <tr> 
+      <td colspan="3" class="tablerowhighlight" align="center">反向通行证设置</td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><b>是否启用反向通行证</b><br>以PHPCMS作为整合的客户端</td>
+      <td colspan="2" class="tablerow"><input type="radio" name="setting[enableserverpassport]" value="1" <?php if($enableserverpassport){?>checked<?php }?>>是&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="setting[enableserverpassport]" value="0" <?php if(!$enableserverpassport){?>checked<?php }?>>否&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="blue">整合程序：</font><a href="###" onclick="javascript:fill_passport('phpwind')">Phpwind</a>/<a href="###" onclick="javascript:fill_passport('lxblog')">Lxblog</a>/<a href="###" onclick="javascript:fill_passport('lxshop')">Lxshop</a>/<a href="###" onclick="javascript:fill_passport('shopex')">Shopex</a></td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>通行证接口地址</b></td>
+      <td colspan="2"  class="tablerow"><input name="setting[passport_serverurl]" id="passport_serverurl" type="text" size="50" value="<?=$passport_serverurl?>"></td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>通行证会员注册地址</b></td>
+      <td colspan="2"  class="tablerow"><input name="setting[passport_registerurl]" id="passport_registerurl" type="text" size="50" value="<?=$passport_registerurl?>"></td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>通行证会员登录地址</b></td>
+      <td colspan="2"  class="tablerow"><input name="setting[passport_loginurl]" id="passport_loginurl" type="text" size="50" value="<?=$passport_loginurl?>"></td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>通行证会员退出地址</b></td>
+      <td colspan="2"  class="tablerow"><input name="setting[passport_logouturl]" id="passport_logouturl" type="text" size="50" value="<?=$passport_logouturl?>"></td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>通行证会员找回密码地址</b></td>
+      <td colspan="2"  class="tablerow"><input name="setting[passport_getpasswordurl]" id="passport_getpasswordurl" type="text" size="50" value="<?=$passport_getpasswordurl?>"></td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><b>通行证私有密钥</b></td>
+      <td colspan="2"  class="tablerow"><input name="setting[passport_serverkey]" type="text" size="30" value="<?=$passport_serverkey?>"></td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><b>验证字串有效期(秒):</b><br>设置应用程序发送过来的用户验证字串的有效期，超过此有效期验证字串将失效。建议设置为 3600，既可保证安全又可避免因不同服务器间时间差而产生无法登录的问题</td>
+      <td colspan="2"  class="tablerow"><input name="setting[passport_expire]" type="text" size="30" value="<?=$passport_expire?>"></td>
+    </tr>
+  </tbody>
+
+  <tbody id='Tabs8' style='display:none'>
+    <th colspan=3>在线客服</th>
+    <tr> 
+      <td colspan="3" class="tablerowhighlight" align="center">即时通讯软件</td>
+    </tr>
+    <tr> 
+      <td class="tablerow" width="25%"><b>是否启用</b></td>
+      <td colspan="2"  class="tablerow"><input type="radio" name="setting[enabletm]" value="1" <?php if($enabletm){?>checked<?php }?>>是&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="setting[enabletm]" value="0" <?php if(!$enabletm){?>checked<?php }?>>否&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="red">注意：多个帐号之间请用逗号“,”分隔</font></td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>QQ</b></td>
+      <td colspan="2"  class="tablerow"><input name="setting[qq]" type="text" size="75" value="<?=$qq?>">&nbsp;&nbsp;<a href="http://im.qq.com/" target="_blank">免费申请</a></td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>MSN</b></td>
+      <td colspan="2" class="tablerow"><input name="setting[msn]" type="text" size="75" value="<?=$msn?>">&nbsp;&nbsp;<a href="http://messenger.live.cn/" target="_blank">免费申请</a></td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>SKYPE</b></td>
+      <td colspan="2" class="tablerow"><input name="setting[skype]" type="text" size="75" value="<?=$skype?>">&nbsp;&nbsp;<a href="http://www.skype.com/" target="_blank">免费申请</a></td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>阿里旺旺（淘宝版）</b></td>
+      <td colspan="2" class="tablerow"><input name="setting[taobao]" type="text" size="75" value="<?=$taobao?>">&nbsp;&nbsp;<a href="http://www.taobao.com/wangwang/" target="_blank">免费申请</a></td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>阿里旺旺（贸易通版）</b></td>
+      <td colspan="2" class="tablerow"><input name="setting[alibaba]" type="text" size="75" value="<?=$alibaba?>">&nbsp;&nbsp;<a href="http://alitalk.alibaba.com.cn/" target="_blank">免费申请</a></td>
+    </tr>
+    <tr> 
+      <td colspan="3" class="tablerowhighlight" align="center">53KF 网上客服</td>
+    </tr>
+    <tr> 
+      <td colspan="3" class="tablerow">
+	  网上客服（53KF）是完全基于WEB实现的一款免费网页对话系统，简洁明快，无需安装任何插件。在提升服务质量的同时，也为使用者带来了新的客户来源和订单。 
+免费申请：<a href="http://www.53kf.com/index.htm?from=phpcms" target="_blank">http://www.53kf.com/</a>
+	  </td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><b>是否启用</b></td>
+      <td colspan="2"  class="tablerow"><input type="radio" name="setting[enable53kf]" value="1" <?php if($enable53kf){?>checked<?php }?>>是&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" name="setting[enable53kf]" value="0" <?php if(!$enable53kf){?>checked<?php }?>>否</td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>53KF帐号</b></td>
+      <td colspan="2"  class="tablerow"><input name="setting[kf_arg]" type="text" size="50" value="<?=$kf_arg?>"></td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>风格号</b></td>
+      <td colspan="2"  class="tablerow"><input name="setting[kf_style]" type="text" size="50" value="<?=$kf_style?>"></td>
+    </tr>
+	<td colspan=3 class="tablerowhighlight" align="center">CC视频联盟</td>
+	<tr> 
+      <td class="tablerow"><b>您在CC联盟的数字ID</b></td>
+      <td colspan="2"  class="tablerow"><input name="setting[cc_uid]" type="text" size="5" value="<?=$cc_uid?>" id="cc_uid"> <a href="http://union.bokecc.com/signup.bo" target="_blank">如果你还没有注册CC联盟，请点这里注册</a></td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>发视频按钮样式</b></td>
+      <td colspan="2"  class="tablerow"><input name="setting[cc_style]" type="text" size="5" value="<?=$cc_style?>" id="cc_style" onkeyup="cc_preview(this.value);"> 请填写1-16的数字</td>
+    </tr>
+	<tr> 
+      <td class="tablerow"><b>按钮样式预览</b>
+	  </td>
+      <td colspan="2" class="tablerow" id="cc_preview"> </td>
     </tr>
   </tbody>
 </table>
+	  <script type="text/javascript">
+	  function cc_preview(style)
+	  {
+		  var str = (style>16 || style<1) ? '<font color="red">参数错误</font>' : '按钮样式 <object width="86" height="22"><param name="wmode" value="transparent" /><param name="allowScriptAccess" value="always" /><param name="movie" value="http://union.bokecc.com/flash/plugin_'+style+'.swf?userID='+$('cc_uid').value+'&type=Phpcms" /><embed src="http://union.bokecc.com/flash/plugin_'+style+'.swf?userID='+$('cc_uid').value+'&type=Phpcms" type="application/x-shockwave-flash" width="86" height="22" allowScriptAccess="always"></embed></object>';
+		  $('cc_preview').innerHTML = str;
+	  }
+	  cc_preview($('cc_style').value);
+	  </script>
 <table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">
   <tr>
      <td width='40%'><input name='setting[version]' type='hidden' id='version' value='<?=PHPCMS_VERSION?>'></td>

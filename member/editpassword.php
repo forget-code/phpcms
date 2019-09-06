@@ -1,15 +1,13 @@
 <?php
 require './include/common.inc.php';
 
-if(!$_userid) showmessage($LANG['please_login'], $MOD['linkurl'].'member/login.php?forward='.urlencode($PHP_URL));
+if(!$_userid) showmessage($LANG['please_login'], $MOD['linkurl'].'login.php?forward='.urlencode($PHP_URL));
 
 if($dosubmit)
 {
 	$result = $member->editpassword($oldpassword, $password);
 	if(!$result) showmessage($LANG['original_password_not_correct'], $PHP_REFERER);
-
     $member->login($password);
-
 	showmessage($LANG['operation_success'], $PHP_REFERER);
 }
 else

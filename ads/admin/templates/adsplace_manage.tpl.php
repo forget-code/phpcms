@@ -38,12 +38,12 @@ function checkhased(form) {
 <tr align="center">
 <td width="5%" class="tablerowhighlight">选中</td>
 <td width="*" class="tablerowhighlight">广告位名称</td>
-<td width="8%" class="tablerowhighlight">所属频道</td>
+<td width="10%" class="tablerowhighlight">投放范围</td>
 <td width="10%" class="tablerowhighlight">尺寸</td>
 <td width="5%" class="tablerowhighlight">状态</td>
 <td width="8%" class="tablerowhighlight">广告数</td>
 <td width="8%" class="tablerowhighlight">价格</td>
-<td width="35%" class="tablerowhighlight">管理操作</td>
+<td width="32%" class="tablerowhighlight">管理操作</td>
 </tr>
 <?php 
 if(is_array($places)){
@@ -59,7 +59,7 @@ if(is_array($places)){
 <td><?=$place['price']?>元</td>
 <td>
 <A HREF="?mod=ads&file=ads&action=add&placeid=<?=$place['placeid']?>&referer=<?=$referer?>">添加广告</A> | 
-<A HREF="?mod=ads&file=adssign&action=manage&adsplaceid=<?=$place['placeid']?>">广告客户列表</A> | 
+<A HREF="?mod=ads&file=ads&action=manage&adsplaceid=<?=$place['placeid']?>">广告列表</A> | 
 <A HREF="?mod=ads&file=<?=$file?>&action=edit&placeid=<?=$place['placeid']?>">编辑</A> | 
 <A HREF="?mod=ads&file=<?=$file?>&action=loadjs&placeid=<?=$place['placeid']?>">调用代码</A>
 </td>

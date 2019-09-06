@@ -1,5 +1,6 @@
 <?php
-function guestbook_list($templateid = '',$keyid = 'phpcms',$guestbooknum = 10,$subjectlen = 30,$datetype = 0,$showusername = 0,$target = 0,$cols = 1){
+function guestbook_list($templateid = '',$keyid = 'phpcms',$guestbooknum = 10,$subjectlen = 30,$datetype = 0,$showusername = 0,$target = 0,$cols = 1)
+{
 	global $db,$PHP_TIME,$MOD,$LANG;
 	$guestbooknum = intval($guestbooknum);
 	$subjectlen = intval($subjectlen);
@@ -9,30 +10,9 @@ function guestbook_list($templateid = '',$keyid = 'phpcms',$guestbooknum = 10,$s
 	$target = intval($target);
 	$datetypes = array('', 'Y-m-d', 'm-d', 'Y/m/d', 'Y.m.d', 'Y-m-d H:i:s', 'Y-m-d H:i');
 	$sql = '';
-	if($keyid != 'phpcms' && $keyid)
-	{
-		if(strpos($keyid, ","))
-		{
-			$keyid = explode(",", $keyid);
-			$sm = '';
-			foreach($keyid as $k=>$v)
-			{
-				if($k) $sm = "OR";
-				$sql .= " $sm keyid='$v' ";
-			}
-		}
-		else
-		{
-			$sql = " keyid='$keyid' ";
-		}
-	}
-	else
-	{
-		$sql = 1;
-	}
-	$query = "SELECT * FROM ".TABLE_GUESTBOOK." WHERE $sql AND passed=1 AND hidden=0 ";
-	$result = $db->query($query);
+	if($keyid != 'phpcms' && $keyid) $sql = " AND keyid='$keyid' ";
 	$guestbooks = array();
+	$result = $db->query("SELECT * FROM ".TABLE_GUESTBOOK." WHERE passed=1 AND hidden=0 $sql ORDER BY gid DESC");
 	while($r = $db->fetch_array($result))
 	{
 		$r['addtime'] = $datetype ? date($datetypes[$datetype],$r['addtime']) : '';
@@ -41,7 +21,7 @@ function guestbook_list($templateid = '',$keyid = 'phpcms',$guestbooknum = 10,$s
 		$guestbooks[] = $r;
 	}
 	$target = $target ? 'target="_blank"' : '';
-	$templateid = $templateid ? $templateid : "tag_guestbook_list";
+	if(!$templateid) $templateid = 'tag_guestbook_list';
 	include template('guestbook',$templateid);
 }
 ?>

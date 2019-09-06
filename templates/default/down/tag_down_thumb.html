@@ -1,9 +1,9 @@
-<table width="100%"  cellpadding="0" cellspacing="0">
+<table width="100%"  cellpadding="2" cellspacing="0">
 {loop $downs $i $down}
 {if $i%$cols==0}<tr>{/if}
-<td width="{$width}">
+<td width="{$width}" valign="top">
 
-	<table width="100%" border="0" align="center" cellpadding="1" cellspacing="1">
+	<table width="100%" cellpadding="5" cellspacing="0">
 	<tr>
 	<td align="center"><a href="{$down['linkurl']}" {$target}><img src="{$down[thumb]}" width="{$imgwidth}" height="{$imgheight}" alt="{$down[alt]}" /></a></td>
 	</tr>
@@ -11,9 +11,12 @@
 	<td align="center">
 	{$down[type]} <a href="{$down['linkurl']}" title="{$down['title']}" {$target} class="tag_title_link">{$down[stitle]}</a>
 	{if $datetype}[<span class="datetime">{$down[adddate]}</span>]{/if}
-	{if $introducelen}<br/><span class="tag_description">&nbsp;&nbsp;&nbsp;&nbsp;{$down[introduce]}</span>{/if}
-	</td>
 	</tr>
+	{if $introducelen}
+	<tr>
+	<td><span class="tag_description">&nbsp;&nbsp;&nbsp;&nbsp;{$down[introduce]}</span></td>
+	</tr>
+	{/if}
 	</table>
 
 </td>

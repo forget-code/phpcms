@@ -39,14 +39,14 @@ function CheckForm()
       </tr>
       <tr>
         <td class="td_right">Email地址：</td>
-        <td class="td_left"> <input name="email" type="text" id="email" size="30" maxlength="50" value="{$email}"> <input type="checkbox" name="showemail" id="showemail" value="1" {if $showemail}checked{/if} class="radio"> <span class="color_1">是否公开</span> </td>
+        <td class="td_left"> <input name="email" type="text" id="email" size="30" value="{$email}"> <input type="checkbox" name="showemail" id="showemail" value="1" {if $showemail}checked{/if} class="radio"> <span class="color_1">是否公开</span> </td>
       </tr>
 </table>
 <h1>详细资料</h1>
 <table cellpadding="0" cellspacing="0" class="righttable">
   <tr>
     <td width="16%" class="td_right">真实姓名：</td>
-    <td class="td_left"><input name="truename" type="text" id="truename" size="20" maxlength="50" 
+    <td class="td_left"><input name="truename" type="text" id="truename" size="20" 
 
 value="{$truename}" /></td>
   </tr>
@@ -211,7 +211,7 @@ value="{$telephone}" /></td>
   </tr>
   <tr>
     <td class="td_right">MSN帐号：</td>
-    <td class="td_left"><input name="msn" type="text" id="msn" size="20" maxlength="50" value="{$msn}" /></td>
+    <td class="td_left"><input name="msn" type="text" id="msn" size="20" value="{$msn}" /></td>
   </tr>
   <tr>
     <td class="td_right">ICQ号码：</td>
@@ -219,27 +219,27 @@ value="{$telephone}" /></td>
   </tr>
   <tr>
     <td class="td_right">Skype帐号：</td>
-    <td class="td_left"><input name="skype" type="text" id="skype" size="20" maxlength="50" value="{$skype}" /></td>
+    <td class="td_left"><input name="skype" type="text" id="skype" size="20" value="{$skype}" /></td>
   </tr>
   <tr>
     <td class="td_right">支付宝帐号：</td>
-    <td class="td_left"><input name="alipay" type="text" id="alipay" size="20" maxlength="50" value="{$alipay}" /></td>
+    <td class="td_left"><input name="alipay" type="text" id="alipay" size="20" value="{$alipay}" /></td>
   </tr>
   <tr>
     <td class="td_right">贝宝帐号：</td>
-    <td class="td_left"><input name="paypal" type="text" id="paypal" size="20" maxlength="50" value="{$paypal}" /></td>
+    <td class="td_left"><input name="paypal" type="text" id="paypal" size="20" value="{$paypal}" /></td>
   </tr>
   <tr>
     <td class="td_right">头像地址：</td>
-    <td class="td_left"><input name="userface" type="text" id="userface" size="50" maxlength="50" value="{$userface}" /></td>
+    <td class="td_left"><input name="userface" type="text" id="userface" size="50" value="{$userface}" /> <input type="button" value="上传" onClick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid=member&type=thumb&uploadtext=userface','upload','350','200')"></td>
   </tr>
   <tr>
     <td class="td_right">头像大小：</td>
     <td class="td_left"><span class="color_2"> 宽度：</span>
-        <input name="facewidth" type="text" id="facewidth" size="4" maxlength="50" value="{$facewidth}" />px
+        <input name="facewidth" type="text" id="facewidth" size="4" value="{$facewidth}" />px
       　
       <span class="color_2"> 高度：</span>
-        <input name="faceheight" type="text" id="faceheight" size="4" maxlength="50" value="{$faceheight}" /><span class="color_2"> px</span></td>
+        <input name="faceheight" type="text" id="faceheight" size="4" value="{$faceheight}" /><span class="color_2"> px</span></td>
   </tr>
   <tr>
     <td class="td_right">签名信息：</td>

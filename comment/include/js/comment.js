@@ -41,10 +41,9 @@ function AddOnPos(obj, charvalue)
 }
 function docheck()
 {
-   // myform.itemurl.value = window.location;
-    if(myform.commentcontent.value=="") {
+    if(commentform.commentcontent.value=="") {
        alert("请输入评论内容!");
-       myform.commentcontent.focus();
+       commentform.commentcontent.focus();
        return false;
     }
     return true;

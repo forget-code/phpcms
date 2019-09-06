@@ -11,19 +11,22 @@ function articlepage($catid, $ishtml, $urlruleid, $htmldir = '', $prefix = '', $
 	return "<a href=\"".$prepageurl."\"><img src=\"".PHPCMS_PATH."images/page_pre.gif\" align=\"absmiddle\" border=\"0\" /></a> ".$pages." <a href=\"".$nextpageurl."\"><img src=\"".PHPCMS_PATH."images/page_next.gif\" align=\"absmiddle\" border=\"0\" /></a>";
 }
 
-function get_substr($string,$start=0,$length='')
+function get_substr($string, $start=0, $length='')
 {
+	global $CONFIG;
+	if(!$string) return false;
 	$start = (int)$start;
 	$length = (int)$length;
 	$i = 0;
-	if(!$string) return false;
+	$step = strtolower($CONFIG['dbcharset']) == 'utf8' ? 3 : 2;
+	$strlen = strlen($string);
 	if($start>=0)
 	{
 		while($i<$start)
 		{
 			if(ord($string[$i])>127)
 			{
-				$i = $i+2;
+				$i = $i+$step;
 			}
 			else
 			{
@@ -38,11 +41,11 @@ function get_substr($string,$start=0,$length='')
 		elseif($length>0)
 		{
 			$end = $start+$length;
-			while($i<$end && $i<strlen($string))
+			while($i<$end && $i<$strlen)
 			{
 				if(ord($string[$i])>127)
 				{
-					$i = $i+2;
+					$i = $i+$step;
 				}
 				else
 				{
@@ -62,17 +65,17 @@ function get_substr($string,$start=0,$length='')
 		}
 		elseif($length==0)
 		{
-			return;
+			return '';
 		}
 		else
 		{
-			$length = strlen($string)-abs($length)-$start;
+			$length = $strlen-abs($length)-$start;
 			return get_substr($string,$start,$length);
 		}
 	}
 	else
 	{
-		$start = strlen($string)-abs($start);
+		$start = $strlen-abs($start);
 		return get_substr($string,$start,$length);
 	}        
 }
@@ -84,10 +87,31 @@ function update_article_url($articleid)
 	$channelid = intval($channelid);
 	if(!$articleid || !$channelid) return FALSE;
 	$article = $db->get_one("select * from ".channel_table('article', $channelid)." where articleid=$articleid ");
-	if(empty($article))  return FALSE;
+	if(!$article || $article['islink'])  return FALSE;
 	$linkurl = item_url('url', $article['catid'], $article['ishtml'], $article['urlruleid'], $article['htmldir'], $article['prefix'], $articleid, $article['addtime'], 0);
 	$db->query("update ".channel_table('article', $channelid)." set linkurl='$linkurl' where articleid=$articleid ");
-	return TRUE;
 }
-
+function txt_update($channelid, $articleid, $content)
+{
+	global $MOD;
+	if(!$MOD['storage_dir']) return;
+	$dir = PHPCMS_ROOT.'/data/'.$MOD['storage_dir'].'/'.$channelid.'/'.ceil($articleid/1000).'/';
+	if(!is_dir($dir))
+	{
+		dir_create($dir);
+		file_put_contents($dir.'index.html', ' ');
+	}
+	file_put_contents($dir.$articleid.'.php', '<?php exit; ?>'.stripslashes($content));
+}
+function txt_delete($channelid, $articleid)
+{
+	global $MOD;
+	if(!$MOD['storage_dir']) return;	@unlink(PHPCMS_ROOT.'/data/'.$MOD['storage_dir'].'/'.$channelid.'/'.ceil($articleid/1000).'/'.$articleid.'.php');
+}
+function txt_read($channelid, $articleid)
+{
+	global $MOD;
+	if(!$MOD['storage_dir']) return '';
+	return substr(file_get_contents(PHPCMS_ROOT.'/data/'.$MOD['storage_dir'].'/'.$channelid.'/'.ceil($articleid/1000).'/'.$articleid.'.php'), 14);
+}
 ?>

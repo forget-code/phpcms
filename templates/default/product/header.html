@@ -1,0 +1,83 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$head[title]}-{$PHPCMS[sitename]}</title>
+<meta name="keywords" content="{$head[keywords]}">
+<meta name="description" content="{$head[description]}">
+<meta name="generator" content="Phpcms {$PHPCMS[version]}">
+<link href="{PHPCMS_PATH}favicon.ico" rel="shortcut icon">
+<link href="{$skindir}/style.css" rel="stylesheet" type="text/css">
+<link href="{$skindir}/product.css" rel="stylesheet" type="text/css">
+<script language="javascript" src="{PHPCMS_PATH}data/js/config.js"></script>
+<script language="javascript" src="{PHPCMS_PATH}include/js/common.js"></script>
+<script language="javascript" src="{PHPCMS_PATH}include/js/prototype.js"></script>
+</head>
+
+<body>
+<div class="header">
+<table width="980" cellpadding="0" cellspacing="0" class="bg_login">
+    <tr>
+	 <td width="200" align="center"><!--时间--><script language="JavaScript" src="{PHPCMS_PATH}include/js/time.js"></script>
+     </td>
+    <td width="38" align="right">
+<!--{if $MOD['enable_rss']}-->
+	<a href="{$MOD[linkurl]}rss.php?catid={if isset($catid)}{$catid}{else}0{/if}"><img src="{PHPCMS_PATH}images/rss.gif" border="0"/></a>
+<!--{/if}-->
+	</td>
+    <td width="*" align="right">
+	<!--会员登录-->
+    <script language="javascript" src="{$MODULE[member][linkurl]}login.php?action=js"></script>
+  </tr>
+</table>
+<table width="980" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+<!--logo位置-->
+    <td width="260" height="90" align="center"><a href="{PHPCMS_PATH}"><img src="{$imgurl($PHPCMS['logo'])}"></a></td>
+<!--banner位置-->
+    <td width="620" align="center">
+<SCRIPT LANGUAGE="JavaScript" src="{$MODULE[ads][linkurl]}ad.php?id=1"></SCRIPT>
+	</td>
+    <td width="100">
+     <table width="100%"  cellspacing="0" cellpadding="0">
+      <tr>
+        <td>【<a id="StranLink">繁体中文</a>】</td>
+      </tr>
+      <tr>
+        <td>【<a href="#" onClick="this.style.behavior='url(#default#homepage)';this.setHomePage ('{$PHPCMS['siteurl']}');">设为首页</a>】</td>
+      </tr>
+      <tr>
+      <td>【<a href="#" onClick="window.external.addFavorite('{$PHPCMS['siteurl']}','{$PHPCMS['sitename']}')">加入收藏</a>】</td>
+      </tr>
+     </table></td>
+    </tr>
+	</table>
+
+<!--频道列表-->
+<div id="Whatever" align="center">
+    <ul class="TabBarLevel1" id="TabPage1">
+        <li><a href="{PHPCMS_PATH}">首页</a></li>
+      <!--{loop $CHANNEL $channel}-->
+        <li {if strpos($channel['linkurl'], 'product')}id="Tabi" class="Selected"{/if}><a href="{$channel[linkurl]}" class="white">{$channel[channelname]}</a></li>
+	  <!--{/loop}-->
+    </ul>
+</div>
+
+<!--下属栏目列表-->
+      <table width="100%" cellpadding="0"  cellspacing="0">
+       <tr>
+        <td class="submenu">
+		<a href="{$MOD[linkurl]}" class="white"> 商城首页</a>
+        {tag_模块一级栏目}
+		| <a href="{$MODULE[guestbook][linkurl]}index.php?keyid=product" class="white">留言本</a> 
+		| <a href="{$MOD[linkurl]}search.php" class="white">搜索</a>
+		</td>
+       </tr>
+       </table>
+</div>
+
+<div class="main"> 
+<table width="980" cellpadding="0" cellspacing="0">
+	  <tr>
+	    <td height="10"></td>
+	  </tr>
+</table>

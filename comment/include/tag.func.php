@@ -1,9 +1,9 @@
 <?php 
-function comment_list($templateid, $keyid, $itemid, $page = 0, $commentnum = 10, $ordertype = 1,$title='', $info = 0)
+function comment_list($templateid, $keyid, $itemid, $page = 0, $commentnum = 10, $ordertype = 1,$title='')
 {
 	global $db,$SMILIES,$MOD,$_userid;
 	$itemid = intval($itemid);
-	$page = is_numeric($page) ? intval($page) : 1;
+	$page = isset($page) ? intval($page) : 1;
 	$offset = $page ? ($page-1)*$commentnum : 0;
 	$limit = $commentnum ? " LIMIT $offset,$commentnum " : '';
 	if($page && $commentnum)
@@ -23,8 +23,8 @@ function comment_list($templateid, $keyid, $itemid, $page = 0, $commentnum = 10,
 		$r['content'] = preg_replace_callback("/\[smile_[0-9]{1,3}\]/",'smilecallback',$r['content']);
 		$r['content'] = str_replace('[quote]','<div class="comment_quote">',$r['content']);
 		$r['content'] = str_replace('[/quote]','</div>',$r['content']);
-		$r['content'] = str_replace('[blue]','<span style="color:blue">',$r['content']);
-		$r['content'] = str_replace('[/blue]','<span><br />',$r['content']);
+		$r['content'] = str_replace('[blue]','<span class="comment_reply">',$r['content']);
+		$r['content'] = str_replace('[/blue]','</span><br />',$r['content']);
 		
 		if(!$MOD['enablekillurl'] && $MOD['enableparseurl']) $r['content'] = preg_replace("/(http:\/\/)?(([A-Za-z0-9_-])+[.]){1,}(net|com|cn|org|cc|tv|[0-9]{1,3})/i",'<a href="\0" target="_blank" >\0</a>',$r['content']);
 		if($MOD['enablekillurl']) $r['content'] = preg_replace("/(www\.)([A-Za-z0-9_-]+[.]){1,}(net|com|cn|org|cc|tv|[0-9]{1,3})/i",'\1***.\3',$r['content']);

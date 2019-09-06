@@ -1,4 +1,4 @@
-INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('短消息', 'message', 'message', '', 0, 0, 0, '1.0.0', 'phpcms团队（汪伟）', 'http://www.phpcms.cn', 'phpcms@163.com', '注册会员间互相发送短消息', '', '', '', 0, '0000-00-00', '0000-00-00', '0000-00-00');
+INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('短消息', 'message', 'message', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn', 'phpcms@163.com', '注册会员间互相发送短消息', '', '', '', 0, '0000-00-00', '0000-00-00', '0000-00-00');
 
 DROP TABLE IF EXISTS `phpcms_message_inbox`;
 CREATE TABLE `phpcms_message_inbox` (

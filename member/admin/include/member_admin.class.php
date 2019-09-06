@@ -25,7 +25,9 @@ class member_admin extends member
 
 	function view($condition)
 	{
-        return $this->db->get_one("SELECT * FROM ".TABLE_MEMBER." m,".TABLE_MEMBER_INFO." i,".TABLE_MEMBER_GROUP." g WHERE m.userid=i.userid AND m.groupid=g.groupid and $condition limit 0,1");
+        $memberinfo = $this->db->get_one("SELECT * FROM ".TABLE_MEMBER." m,".TABLE_MEMBER_INFO." i WHERE m.userid=i.userid AND $condition LIMIT 0,1");
+		$groupinfo = cache_read('member_group_'.$memberinfo['groupid'].'.php');
+		return array_merge($groupinfo, $memberinfo);
 	}
 
 	function delete($userid)

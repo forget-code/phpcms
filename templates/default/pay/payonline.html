@@ -1,0 +1,91 @@
+{template "phpcms","header"}
+<script language="javascript">
+<!--
+function CheckForm() {
+if ($F('amount') == "")
+	{
+	    alert("请输入支付金额！")
+		Field.clear('amount')
+		Field.focus('amount');
+	    return false
+	 }
+if ($F('contactname') == "")
+	{
+	    alert("请输入联系人姓名！")
+		Field.clear('contactname')
+		Field.focus('contactname');
+	    return false
+	 }
+if ($F('telephone') == "")
+	{
+	    alert("请输入联系电话！")
+		Field.clear('telephone')
+		Field.focus('telephone');
+	    return false
+	 }
+if ($F('email') == "")
+	{
+	    alert("请输入E-mail！")
+		Field.clear('email')
+		Field.focus('email');
+	    return false
+	 }
+    document.myform.submit.disabled = true;
+}
+//-->
+</script>
+
+<table cellspacing="0" cellpadding="0" width="980">
+<tr>
+<td valign="top" class="left">
+{template "member","left"}
+</td>
+<td width="10" valign="top">
+</td>
+<td class="right" valign="top">
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>在线支付</h1>
+<form name="myform" method="post" action="{$MOD[linkurl]}payonline_confirm.php"  onSubmit="return CheckForm();">
+  <table cellpadding="2" cellspacing="1" class="righttable">
+    <tr>
+      <td width="120" class="td_right">支付金额：</td>
+      <td class="td_left"><input name="amount" type="text" size="10" value="{$amount}"> 元</td>
+    </tr>
+    <tr >
+      <td class="td_right">支付平台：</td>
+      <td class="td_left">
+<select name="paycenter">
+{loop $payonline_setting $paycenter $pay}
+<option value="{$pay[paycenter]}" {$selected[$paycenter]}>{$pay[name]}</option>
+{/loop}
+</select>
+</td>
+    </tr>
+    <tr>
+      <td class="td_right">联系人：</td>
+      <td class="td_left"><input name="contactname" type="text" size="30"  value="{$contactname}"></td>
+    </tr>
+    <tr>
+      <td class="td_right">联系电话：</td>
+      <td class="td_left"><input name="telephone" type="text" size="30" value="{$telephone}"></td>
+    </tr>
+    <tr>
+      <td class="td_right">E-mail：</td>
+      <td class="td_left"><input name="email" type="text" size="30" value="{$email}"></td>
+    </tr>
+    <tr >
+      <td class="td_right">
+      </td>
+      <td height="40" class="td_left">
+        <input name="forward" type="hidden" value="{$forward}">
+        <input name="dosubmit" type="submit" value=" 下一步 ">
+      </td>
+    </tr>
+  </table>
+</form>
+</div></div>
+</td>
+</tr>
+</table>
+{template "phpcms","footer"}

@@ -1,6 +1,8 @@
-<html>
-  
-<body onload=submit()>
+<?php 
+defined('IN_PHPCMS') or exit('Access Denied');
+include admintpl('header');
+?>
+<body onload="submit()">
 <table style="display:none;"><tr><td>
 <form action="http://www.phpcms.cn/spider/sharejob.php" method="post" name="formimport">
       <textarea name="jobrulecontent"><?=$jobrulecontent?></textarea>
@@ -12,10 +14,10 @@
 </td>
 </tr>
 </table>
- <script   language="JavaScript">   
-  function   submit()
+ <script language="JavaScript">   
+  function submit()
   {   
-  formimport.submit();   
+     formimport.submit();   
   }   
   </script> 
 </body>

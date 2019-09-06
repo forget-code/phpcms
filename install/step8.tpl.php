@@ -1,4 +1,4 @@
-<?php include "./install/header.tpl.php";?>
+<?php include PHPCMS_ROOT."/install/header.tpl.php";?>
 <script type="text/javascript">
 function checkform()
 {
@@ -108,4 +108,4 @@ function checkform()
 </td>
   </tr>
 </table>
-<?php include "./install/footer.tpl.php";?>
+<?php include PHPCMS_ROOT."/install/footer.tpl.php";?>

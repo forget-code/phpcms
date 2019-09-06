@@ -51,7 +51,13 @@ function SelectKeywords(){
   }
   $('keywords').select();
 }
+function doKeywords(ID)
+{
+	$(ID).value = $F(ID).replace(new RegExp('，',"gm"),',');
+	$(ID).value = $F(ID).replace(new RegExp(' ',"gm"),',');
+}
 </script>
+<?=segment_word()?>
 <table width="100%" height="25" border="0" cellpadding="3" cellspacing="0" class="tableborder">
   <tr>
     <td class="tablerow"> <img src="<?=PHPCMS_PATH?>admin/skin/images/pos.gif" align="absmiddle" alt="当前位置" > 当前位置：<a href="?mod=<?=$mod?>&file=<?=$file?>&action=main&channelid=<?=$channelid?>">下载首页</a> &gt;&gt; <a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&downid=<?=$downid?>&catid=<?=$catid?>&channelid=<?=$channelid?>">编辑下载</a> &gt;&gt; <?=$title?></td>
@@ -84,7 +90,6 @@ function SelectKeywords(){
 <input type="hidden" name="referer" value="<?=$referer?>" />
 <input type="hidden" name="down[catid]" value="<?=$catid?>" />
 <input type="hidden" name="down[mode]" value="<?=$mode?>" />
-<input type="hidden" name="down[username]" value="<?=$_username?>" />
 <input type="hidden" name="ishtmled" value="<?=$ishtml?>" />
 <input type="hidden" name="old_arrposid"value="<?=$arrposid?>">
 <table cellpadding="2" cellspacing="1" class="tableborder">
@@ -99,13 +104,13 @@ function SelectKeywords(){
 
     <tr> 
       <td class="tablerow">标题</td>
-      <td class="tablerow"><?=$type_select?> <input name="down[title]" type="text" id="title" size="44" maxlength="100" class="inputtitle" value="<?=$title?>"> <font color="#FF0000">*</font> <?=$style_edit?> <input type="button" value="检查同名标题" onclick="Dialog('?mod=<?=$mod?>&file=<?=$file?>&action=checktitle&channelid=<?=$channelid?>&title='+$('title').value+'','','300','40','no')" style="width:90px;"></td>
+      <td class="tablerow"><?=$type_select?> <input name="down[title]" type="text" id="title" size="44" maxlength="100" class="inputtitle" value="<?=$title?>" onBlur="segment_word(this);"> <font color="#FF0000">*</font> <?=$style_edit?> <input type="button" value="检查同名标题" onclick="Dialog('?mod=<?=$mod?>&file=<?=$file?>&action=checktitle&channelid=<?=$channelid?>&title='+$('title').value+'','','300','40','no')" style="width:90px;"></td>
     </tr>
 
 
     <tr <?php if(!$MOD['keywords_show']){ ?>style="display:none"<?php } ?>> 
       <td class="tablerow">关键字</td>
-      <td class="tablerow"><input name="down[keywords]" value="<?=$keywords?>" type="text" id="keywords" size="40" title="提示;多个关键字请用半角逗号“,”隔开">
+      <td class="tablerow"><input name="down[keywords]" value="<?=$keywords?>" type="text" id="keywords" size="40" title="提示:多个关键字请用半角逗号“,”或空格隔开" onblur="doKeywords(this);">
 		<?=$keywords_select?>
 		<input type="checkbox" name="addkeywords" value="1" <?php if($MOD['keywords_add']){ ?>checked<?php } ?>> 添加至关键字列表中 =&gt;<a href="###" onclick="SelectKeywords();">更多关键字</a></td>
     </tr>
@@ -190,6 +195,11 @@ function SelectKeywords(){
 	<?=$position?>
       </td>
 	  </tr>
+
+    <tr> 
+      <td class="tablerow">添加到自由调用</td>
+      <td class="tablerow"><?=freelink_select('freelink', '请选择调用类型')?></td>
+	</tr>
 
 	    	<tr>
 	  <td class="tablerow">评分等级</td>

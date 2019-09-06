@@ -1,0 +1,107 @@
+<html>
+<head>
+<title>在线上传</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="{$skindir}/style.css" rel="stylesheet" type="text/css">
+<script language="javascript" src="{PHPCMS_PATH}data/js/config.js"></script>
+<script language="javascript" src="{PHPCMS_PATH}include/js/common.js"></script>
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" border="0" width="100%" height="5">
+  <tr>
+    <td ></td>
+  </tr>
+</table>
+<script type="text/javascript">
+function doCheck() {
+	if(upload.uploadfile.value == '') {
+		alert('请选择文件!');
+		return false;
+	}
+	return true;
+}
+</script>
+<table cellpadding="5" cellspacing="3" style="border:#EEEEEE 1px solid;background:#ffffff;">
+  <tr>
+    <th style="text-align:center;background:#EEEEEE;">在线上传</th>
+  </tr>
+	<form name="upload" method="post" action="{PHPCMS_PATH}upload.php?keyid={$keyid}&uploadtext={$uploadtext}&type={$type}&width={$width}&height={$height}&upload_dir={$upload_dir}" enctype="multipart/form-data" onsubmit="return doCheck();">
+  <tr>
+     <td class="tablerow" height="30">
+	     <input type="hidden" name="save" value="1">
+             <input name="uploadfile" type="file" size="15"  {if $type}onchange="upload.previewpic.src=upload.uploadfile.value"{/if}>
+             <input type="hidden" name="oldname">
+             <input type="hidden" name="MAX_FILE_SIZE" value="{$maxfilesize}"> 
+             <input type="submit" name="submit" value=" 上传 ">
+			  {if $type}<input type="button" name="submit" value=" 预览 " onclick="if(upload.uploadfile.value!='') upload.previewpic.src=upload.uploadfile.value">{/if}
+			 </td>
+   </tr>
+  {if $type=="thumb"}
+  <tr>
+     <td class="tablerow" height="30">
+			 缩略图宽度：<input name="width" type="text" size="5" value="{$width}"> px 
+             高度：<input name="height" type="text" size="5" value="{$height}"> px 
+			 </td>
+   </tr>
+  <tr>
+     <td class="tablerow">
+			 说明：系统将按照指定的高度和宽度生成缩略图 
+			 </td>
+   </tr>
+   {elseif $type=="water"}
+
+	   {if $PHPCMS['water_type']==1} 
+	  <tr>
+		 <td class="tablerow">
+				 水印文字：<input name="water_text" type="text" size="34" value="{$PHPCMS['water_text']}"> <br>
+				 文字颜色：<input name="water_fontcolor" type="text" size="7" value="{$PHPCMS['water_fontcolor']}">
+				 {$color_select("fontcolor","颜色",$PHPCMS['water_fontcolor'],0," onchange='upload.water_fontcolor.value=this.value'")}
+				 文字大小：<input name="water_fontsize" type="text" size="5" value="{$PHPCMS['water_fontsize']}"> <br> 
+				 水印位置：<select name="water_pos">
+						{loop $poss $id $pos}
+						 <option value="{$id}" {if $PHPCMS['water_pos']==$id}selected{/if}>{$pos}</option>
+					{/loop}
+					   </select>
+				 </td>
+	   </tr>
+	   {elseif $PHPCMS['water_type']==2}
+		<tr>
+		 <td class="tablerow">水印图片：<input name="water_image" type="text" size="5" value="{$PHPCMS['water_image']}"> px</td>
+	   </tr>
+	   {/if}
+  <tr>
+     <td class="tablerow">说明：系统将按照指定的条件给图片加水印</td>
+   </tr>
+   {else}
+
+   {/if}
+
+ {if $type}
+ <tr>
+ <td class="tablerow">
+<img id="previewpic" onload="setpicWH(this,300,300)">
+<script>
+if(window.opener.myform.{$uploadtext}.value!="")
+{
+    upload.oldname.value = window.opener.myform.{$uploadtext}.value;
+    upload.previewpic.src = '{PHPCMS_PATH}'+window.opener.myform.{$uploadtext}.value;
+}
+else
+{
+    upload.previewpic.src = "{PHPCMS_PATH}images/nopic.gif";
+}
+</script>
+	</td>
+   </tr>
+{else}
+<script>
+if(window.opener.myform.{$uploadtext}.value!="")
+{
+    upload.oldname.value = window.opener.myform.{$uploadtext}.value;
+}
+</script>
+{/if}
+	</form>
+</table>
+</body>
+</html>

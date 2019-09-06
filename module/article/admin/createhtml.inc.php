@@ -58,7 +58,7 @@ case 'list'://栏目
 	}
 	elseif(is_numeric($catids))
 	{
-		$catid = $catids;//
+		$catid = $catids;
 		createhtml('list');
 		showmessage($LANG['category'].' ['.$CATEGORY[$catids]['catname'].'] '.$LANG['update_success'], $referer);
 	}
@@ -83,10 +83,12 @@ case 'per_list'://分段更新栏目
 	{
 		$CAT = cache_read('category_'.$catid.'.php');
 		$tid = ceil($CAT['items']/$CAT['maxperpage']);
+		
 	}
 	$pernum = isset($pernum) ? $pernum : 50;
 	$fid = isset($fid) ? $fid+$pernum : 1;
-	if($fid<$tid || ($fid-$pernum) < $tid)
+
+	if($fid < $tid)
 	{
 		createhtml('list');
 		$referer='?mod='.$mod.'&file='.$file.'&action='.$action.'&catid='.$catid.'&fid='.$fid.'&tid='.$tid.'&pernum='.$pernum.'&channelid='.$channelid;
@@ -403,12 +405,12 @@ default:
 		$categorys = array();
 		foreach($list as $catid => $category)
 		{
-			//if(!$category['ishtml']) continue;
+			if($category['islink']) continue;
 			$module = $CHA['module'];
 			$linkurl = $category['linkurl'];
 			$catdir = $category['islink'] ? "<a href='$linkurl' title='{$LANG['click_here']}' target='_blank'>".str_cut($linkurl,20)."</a>" : "<a href='$linkurl' title='{$LANG['click_here']}' target='_blank'>".$category['catdir']."</a>";
 			$name = style($category['catname'], $category['style']);
-			if(!$category['ishtml'] || $category['islink'] || is_dir(dirname(PHPCMS_ROOT.'/'.cat_url('url', $category['catid']))))
+			if(!$category['ishtml'] || is_dir(dirname(PHPCMS_ROOT.'/'.cat_url('path', $category['catid']))))
 			{
 				$is_dir = $LANG['yes'];
 			}

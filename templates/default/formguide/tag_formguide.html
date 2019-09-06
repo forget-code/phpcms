@@ -1,0 +1,32 @@
+<table border=0 align=center cellpadding=4 cellspacing=1 width=80%>
+<form action="{$MODULE[formguide][linkurl]}receive.php" method="post" enctype="multipart/form-data" name="formguideform">
+<input type="hidden" name="itemstr" value="{$itemstr}">
+<input type="hidden" name="formid" value="{$formid}">
+<input type="hidden" name="dopost" value="1">
+<tbody>
+<tr>
+	<td colspan=2 align=center>请完成填写以下表单:<font color="red"><strong>[{$formname}]</strong></font></td>
+</tr>
+<!--循环生成表单向导创建的表单项开始-->
+<!--{loop $keyinput $input}-->
+<tr><td width=20%>{$input[key]}</td><td>{$input[input]}</td></tr>
+<!--{/loop}-->
+<!--循环生成结束-->
+
+<!--是否开启提交时验证码验证-->
+<!--{if $MOD['enablecheckcode']}-->
+<tr><td width=20%>验证码</td><td><input name="checkcodestr" type="text" id="checkcodestr" size="6" value="">
+<img src="{PHPCMS_PATH}checkcode.php"  onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" />
+<font color="red">*</font></td></tr>
+<!--{/if}-->
+
+<tr>
+<td colspan="2" align="center">
+<input type="submit" name="dosubmit" value="确定">
+<input type=reset value="重置">
+</td>
+</tr>
+
+</tbody>
+</form>
+</table>

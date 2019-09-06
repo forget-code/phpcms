@@ -10,7 +10,7 @@ $head['title'] = $CHA['channelname'];
 $head['keywords'] = $CHA['seo_keywords'];
 $head['description'] = $CHA['seo_description'];
 
-$childcats = subcat($channelid);
+$childcats = subcat($channelid, 0, 'list');
 
 $templateid = $CHA['templateid'] ? $CHA['templateid'] : 'index';
 include template($mod, $templateid);

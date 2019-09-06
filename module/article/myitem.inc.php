@@ -1,14 +1,15 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
-
 require PHPCMS_ROOT.'/module/'.$mod.'/include/common.inc.php';
-
+if($CHA['channeldomain'] && strpos($PHP_URL, $CHA['channeldomain'])!==false)
+{
+   header('Location:'.$PHPCMS['siteurl'].$CHA['channeldir'].'/myitem.php?'.$PHP_QUERYSTRING);
+   exit;
+}
 $CHA['enablecontribute'] or showmessage($LANG['not_allowed_to_add_an_article'], 'goback');
-$_userid  or showmessage($LANG['please_login'], 'goback');
-
-require PHPCMS_ROOT.'/admin/include/field.class.php';
+$_userid or showmessage($LANG['not_login'], 'goback');
+require PHPCMS_ROOT.'/include/field.class.php';
 $field = new field(channel_table('article', $channelid));
-
 require_once PHPCMS_ROOT.'/include/post.func.php';
 require_once PHPCMS_ROOT.'/include/formselect.func.php';
 require PHPCMS_ROOT.'/include/tree.class.php';
@@ -48,6 +49,7 @@ case 'add':
 		if(empty($title)) showmessage($LANG['short_title_can_not_be_blank'], 'goback');
 		if(empty($content))	showmessage($LANG['content_can_not_be_blank'], 'goback');
 		if($CAT['child'] && !$CAT['enableadd']) showmessage($LANG['not_allowed_to_add_an_article'], 'goback');
+		if($CAT['arrgroupid_add'] && strpos($CAT['arrgroupid_add'], "$_groupid") === false) showmessage($LANG['not_allowed_to_add_by_your_group'], 'goback');
 
 		$inputstring=new_htmlspecialchars(array('title'=>$title,'keywords'=>$keywords,'author'=>$author,'copyfrom'=>$copyfrom,'introduce'=>$introduce,'thumb'=>$thumb));
 		extract($inputstring,EXTR_OVERWRITE);
@@ -66,27 +68,39 @@ case 'add':
 
 		$urlruleid = $CAT['ishtml'] ? $CAT['item_html_urlruleid'] : $CAT['item_php_urlruleid'];
 
+	    $field->check_form();
+
 		$query = "INSERT INTO ".channel_table('article',$channelid)."(catid,typeid,title,keywords,introduce,author,copyfrom,thumb,status,username,addtime,editor,edittime,ishtml,urlruleid,htmldir,prefix) VALUES('$catid','$typeid','$title','$keywords','$introduce','$author','$copyfrom','$thumb','$status','$_username','$addtime','$_username','$addtime','$CAT[ishtml]', '$urlruleid','$CAT[item_htmldir]','$CAT[item_prefix]')";
 		$db->query($query);
 		$articleid = $db->insert_id();
+		require PHPCMS_ROOT.'/include/attachment.class.php';
+		$att = new attachment;
+		$att->attachment($articleid, $channelid, $catid);
+		$att->add($content);
 		$field->update("articleid=$articleid");
 		$linkurl = item_url('url', $catid, $CAT['ishtml'], $CAT['item_html_urlruleid'], $CAT['item_htmldir'], $CAT['item_prefix'], $articleid, $addtime);
 		$db->query("UPDATE ".channel_table('article', $channelid)." SET linkurl='$linkurl' WHERE articleid=$articleid ");
-		$db->query("INSERT INTO ".channel_table('article_data', $channelid)." (articleid,content) values('$articleid', '$content') ");
-		if($CAT['ishtml'] && $status == 3)
+
+		if($MOD['storage_mode'] < 3) $db->query("INSERT INTO ".channel_table('article_data', $channelid)." (articleid,content) values('$articleid', '$content') ");
+		if($MOD['storage_mode'] > 1) txt_update($channelid, $articleid, $content);
+		if($MOD['storage_mode'] == 3) $db->query("INSERT INTO ".channel_table('article_data', $channelid)." (articleid,content) values('$articleid', '') ");
+
+		if($status == 3)
 		{
-			createhtml('show');
-		}
-		if($MOD['add_point'] && $status == 3)
-		{
-			$db->query("update ".TABLE_MEMBER." set point=point+$MOD[add_point] where userid=$_userid");
+			if(isset($MODULE['pay']) && ($CAT['creditget'] || $MOD['add_point']))
+			{
+				require_once PHPCMS_ROOT.'/pay/include/pay.func.php';
+				$point = $CAT['creditget'] ? $CAT['creditget'] : $MOD['add_point'];
+				point_add($_username, $point, $title.'(channelid='.$channelid.',articleid='.$articleid.')');
+			}
+			require PHPCMS_ROOT.'/include/create_related_html.inc.php';
 		}
 		showmessage($LANG['add_article_success'], $referer);
 	}
 	else
 	{
 		$type_select = type_select('typeid', $LANG['type']);
-		$fields = $field->get_form('<tr><td class="td_right"><strong>$title</strong></td><td class="td_left">$input $note</td></tr>');
+		$fields = $field->get_form('<tr><td class="td_right"><strong>$title</strong></td><td class="td_left">$input $tool $note</td></tr>');
 		$disabled = $CHA['enablecheck'] && !$enableaddalways;
 		$status = $disabled ? 1 : 3;
 	}
@@ -94,6 +108,7 @@ break;
 
 case 'edit':
 
+    $articleid = intval($articleid);
 	$articleid or showmessage($LANG['empty_article_id'], 'goback');
     if($dosubmit)
 	{
@@ -102,9 +117,10 @@ case 'edit':
 		if(empty($title)) showmessage($LANG['short_title_can_not_be_blank'], 'goback');
 		if(empty($content))	showmessage($LANG['content_can_not_be_blank'], 'goback');
 		if($CAT['child'] && !$CAT['enableadd']) showmessage($LANG['not_allowed_to_add_an_article'], 'goback');
+		if($CAT['arrgroupid_add'] && strpos($CAT['arrgroupid_add'], "$_groupid") === false) showmessage($LANG['not_allowed_to_add_by_your_group'], 'goback');
 
-		$inputstring=new_htmlspecialchars(array('title'=>$title,'keywords'=>$keywords,'author'=>$author,'copyfrom'=>$copyfrom,'introduce'=>$introduce,'thumb'=>$thumb));
-		extract($inputstring,EXTR_OVERWRITE);
+		$inputstring = new_htmlspecialchars(array('title'=>$title,'keywords'=>$keywords,'author'=>$author,'copyfrom'=>$copyfrom,'introduce'=>$introduce,'thumb'=>$thumb));
+		extract($inputstring, EXTR_OVERWRITE);
 		$content = str_safe($content);
 		$addtime = $PHP_TIME;
 		if($CHA['enablecheck'])
@@ -115,10 +131,16 @@ case 'edit':
 		{
 			$status = $status == 2 ? 0 : $status;
 		}
-		$db->query("UPDATE ".channel_table('article_data', $channelid)." SET content='$content'");
-		$query = "UPDATE ".channel_table('article', $channelid)." SET catid='$catid',typeid='$typeid',title='$title',introduce='$introduce',keywords='$keywords',author='$author',copyfrom='$copyfrom',thumb='$thumb',status='$status',editor='$_username',edittime='$PHP_TIME' WHERE articleid=$articleid  AND username='$_username' AND status!=3 ";
-		$db->query($query);
-		$field->update("articleid=$articleid");
+
+	    $field->check_form();
+
+		$db->query("UPDATE ".channel_table('article', $channelid)." SET catid='$catid',typeid='$typeid',title='$title',introduce='$introduce',keywords='$keywords',author='$author',copyfrom='$copyfrom',thumb='$thumb',status='$status',editor='$_username',edittime='$PHP_TIME' WHERE articleid=$articleid AND username='$_username' AND status!=3 ");
+		if($db->affected_rows() == 1)
+		{
+			if($MOD['storage_mode'] < 3) $db->query("UPDATE ".channel_table('article_data', $channelid)." SET content='$content' WHERE articleid=$articleid ");
+			if($MOD['storage_mode'] > 1) txt_update($channelid, $articleid, $content);
+			$field->update("articleid=$articleid");
+		}
 		showmessage($LANG['modify_article_success'], $referer);
 	}
 	else
@@ -129,7 +151,7 @@ case 'edit':
 		@extract($db->get_one("SELECT content FROM ".channel_table('article_data', $channelid)." WHERE articleid=$articleid "));
 		$type_select = type_select('typeid', $LANG['type'], $typeid);
 		$category_select = category_select('catid', $LANG['please_select'], $catid, 'id="catid"');
-		$fields = $field->get_form('<tr><td class="td_right"><strong>$title</strong></td><td class="td_left">$input $note</td></tr>');
+		$fields = $field->get_form('<tr><td class="td_right"><strong>$title</strong></td><td class="td_left">$input $tool $note</td></tr>');
 		$disabled = $CHA['enablecheck'];
 	}
 break;
@@ -140,7 +162,14 @@ case 'preview':
 	$r = $db->get_one("SELECT * FROM ".channel_table('article', $channelid)." WHERE articleid=$articleid AND username='$_username' ");
 	$r['articleid'] or showmessage($LANG['article_can_not_preview'], 'goback');
 	@extract($r);
-	@extract($db->get_one("SELECT content FROM ".channel_table('article_data', $channelid)." WHERE articleid=$articleid "));
+	if($MOD['storage_mode'] > 1)
+	{
+		$content = txt_read($channelid, $articleid);
+	}
+	else
+	{
+		@extract($db->get_one("SELECT content FROM ".channel_table('article_data', $channelid)." WHERE articleid=$articleid "));
+	}
 	$adddate=date('Y-m-d', $addtime);
 	$thumb = imgurl($thumb);
 	$CAT = cache_read('category_'.$catid.'.php');
@@ -160,8 +189,10 @@ break;
 
 case 'delete':
 
+    $articleid = intval($articleid);
 	$articleid or showmessage($LANG['empty_article_id'], ' goback'); 
 	$db->query("DELETE FROM ".channel_table('article', $channelid)." WHERE articleid=$articleid AND username='$_username' AND status!=3 ");
+	if($MOD['storage_mode'] > 1) txt_delete($channelid, $articleid);
 	if($db->affected_rows()>0)
 	{
 		showmessage($LANG['delete_article_success'],$referer);

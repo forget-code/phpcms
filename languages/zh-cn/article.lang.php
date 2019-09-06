@@ -10,10 +10,11 @@ $LANG['please_choose_categories']= '没有选择栏目分类，请返回！';
 $LANG['short_title_can_not_be_blank']='对不起！短标题不能为空，请返回！';
 $LANG['content_can_not_be_blank']	='对不起！文章内容不能为空，请返回！';
 $LANG['not_allowed_to_add_an_message']='该栏目不允许发布信息，请返回！';
-$LANG['not_allowed_to_add_an_artcile']='指定栏目不允许添加文章！请返回！';
+$LANG['not_allowed_to_add_an_article']='指定栏目不允许添加文章！请返回！';
 $LANG['add_article_success']='文章添加成功！';
 $LANG['please_select']='请选择栏目';
 $LANG['add_article']='投稿';
+$LANG['not_allowed_to_add_by_your_group']='您的当前用户组无在此栏目添加信息的权限';
 //add.inc.php end
 
 //admin.inc.php begin
@@ -30,7 +31,7 @@ $LANG['category_for_hidden']='此栏目被隐藏或没有浏览权限';
 //list.inc.php end
 
 //myitem.inc.php begin
-$LANG['please_login']='没有登陆，请返回！';
+$LANG['not_login']='请先登录！';
 $LANG['empty_article_id']='文章 id 不能为空.';
 $LANG['modify_article_success']='编辑文章成功!';
 $LANG['article_not_exists_orother']='文章不存在或者没有编辑权限';

@@ -1,0 +1,16 @@
+<div id="slidepic">
+<a href="javascript:jump2url()" onmouseover="displayStatusMsg();return document.returnValue"><img style="filter: revealTrans(duration=1,transition={$effectid})" src="{$products[0][thumb]}" width="{$imgwidth}" height="{$imgheight}"  border="0" name="picrotator" class="slidepic" /></a>
+</div>
+<div id="picarticletitle" class="slidepic_title">{$products[0][pdt_name]}</div>
+<script type="text/javascript" src="{PHPCMS_PATH}include/js/picrotator.js"></script>
+<script type="text/javascript">
+var transition={$effectid}; //设定变换效果
+var timeout={$timeout}; //设定时间
+var istitle={$titlelen};
+{loop $products $i $product}
+linkpic[{$i}]="{$product[pdt_img]}";
+linkurl[{$i}]="{$product[url]}";
+linktitle[{$i}]="{$product[pdt_name]}";
+{/loop}
+nextpic();
+</script>

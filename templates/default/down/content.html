@@ -51,7 +51,7 @@
   </tr>
   <tr>
     <td class="td_right">　发布人：&nbsp;</td>
-	<td class="td_left"><a href="{PHPCMS_PATH}member/member.php?username={$username}" class="member_url">{$username}</a>&nbsp;</td>
+	<td class="td_left"><a href="{$MODULE[member][linkurl]}member.php?username={$username}" class="member_url">{$username}</a>&nbsp;</td>
     <td class="td_right">下载次数：&nbsp;</td>
 	<td class="td_left"><span id="totaldowns">{$totaldowns}</span>（今日：<span id="todaydowns">{$todaydowns}</span>，本周：<span id="weekdowns">{$weekdowns}</span>，本月：<span id="monthdowns">{$monthdowns}</span>）&nbsp;</td>
   </tr>
@@ -67,37 +67,65 @@
 	<table width="740" cellpadding="0" cellspacing="5" class="downaddress">
       <tr>
         <td width="14%" align="center"><img src="{$skindir}/images/down.gif" width="82" height="20"></td>
-        <td width="86%">{$purview_message}{loop $downurls $downurl} <a href="{$channelurl}down.php?downid={$downid}&id={$downurl['id']}" title="{$downurl['name']}" target="_blank">{$downurl['name']}</a> 
+        <td width="86%">
+本地下载：
+{loop $downurls $downurl}
+ <a href="{$channelurl}down.php?downid={$downid}&id={$downurl['id']}" title="{$downurl['name']}" target="_blank">{$downurl['name']}</a> 
 {/loop}
+
+{if !$arrgroupidview && !$readpoint}
+	{if $MOD['enable_xunlei']}
+		<br />
+		<script src="http://pstatic.xunlei.com/js/webThunderDetect.js"></script>
+		迅雷下载：
+		{loop $downurls $downurl}
+		<a href="#" thunderHref="{$ThunderEncode($downurl['url'])}" thunderPid="{$MOD[xunleipid]}" thunderType="" thunderResTitle="{$title}{$downurl[name]}" onClick="return OnDownloadClick_Simple(this,2)" oncontextmenu="ThunderNetwork_SetHref(this)" >{$downurl[name]}</a>
+		{/loop}
+	{/if}
+	{if $MOD['enable_flashget']}
+		<br />
+		<script src="http://ufile.kuaiche.com/Flashget_union.php?fg_uid={$MOD[flashgetpid]}"></script>
+		<script>
+			function ConvertURL2FG(url,fUrl,uid)
+			{	
+				try{
+					FlashgetDown(url,uid);
+				}catch(e){location.href = fUrl;}
+			}
+			function Flashget_SetHref(obj,uid){obj.href = obj.fg;}
+		</script>
+		快车下载：
+		{loop $downurls $downurl}
+		{php $flashgeturl = FlashgetEncode($downurl['url'], $MOD['flashgetpid']);}
+		<a href="#" onClick="ConvertURL2FG('{$flashgeturl}', '{$downurl[url]}', {$MOD[flashgetpid]})" oncontextmenu="Flashget_SetHref(this)" fg="{$flashgeturl}">{$downurl[name]}</a>
+		{/loop}
+	{/if}
+{/if}
       </td>
       </tr>
     </table>
-<!--下载站广告横幅-->
-<SCRIPT LANGUAGE="JavaScript" src="{$MODULE['ads']['linkurl']}ads.php?id=4"></SCRIPT>
 	<table width="100%" align="center" cellpadding="0" cellspacing="0">
       <tr>
         <td height="10"></td>
       </tr>
     </table>
-<!--软件介绍-->
   <div class="cat_title">
     <div class="cat_name">软件介绍</div>
     <div class="cat_url"><a href="#" class="more"></a></div></div>
 	{$introduce}</div>
-<!--相关下载-->
   <div class="cat_title">
     <div class="cat_name">相关下载</div>
-	<div class="cat_url"><a href="#" class="more"></a></div></div>
-{tag_相关下载}</div>
+	<div class="cat_url"><a href="#" class="more"></a></div>
+  </div>
+{tag_相关下载}
+  </div>
 <!--评论部分-->
-<!--发表评论--><script type="text/javascript" src="{$MODULE['comment']['linkurl']}list_js.php?keyid={$channelid}&itemid={$downid}&commentnum=10&ordertype=1&title={$urlencode($title)}"></script>
-
+<script type="text/javascript" src="{$MODULE['comment']['linkurl']}list_js.php?keyid={$channelid}&itemid={$downid}&commentnum=10&ordertype=1&title={$urlencode($title)}"></script>
 </td>
     <td width="10">&nbsp;</td>
 	<td width="210" valign="top" class="right_bg">
 	<div class="rightcats"><h1>最新下载</h1></div>
-<!--最新下载js调用-->
-{tag_侧栏最新下载}
+        {tag_侧栏最新下载}
 	<div class="rightcats"><h1>推荐下载</h1></div>
         {tag_推荐下载}
 	<div class="rightcats"><h1>下载排行</h1></div>
@@ -105,18 +133,5 @@
 	</td>
   </tr>
 </table>
-
 <script type="text/javascript" src="{$channelurl}show_js.php?itemid={$itemid}"></script>
-<script type="text/javascript">
-function docheck()
-{
-    myform.itemurl.value = window.location;
-    if(myform.content.value=="") {
-       alert("请输入评论内容!");
-       myform.content.focus();
-       return false;
-    }
-    return true;
-}
-</script>
 {template 'phpcms','footer'}

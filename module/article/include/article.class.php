@@ -30,6 +30,7 @@ class article
 	}
 	function add($article)
 	{
+		global $MOD;
 		$content=$article['content'];
 		unset($article['content']);
 		$sql1 = $sql2 = $s = "";
@@ -47,12 +48,15 @@ class article
 			$linkurl = item_url('url', $article['catid'], $article['ishtml'], $article['urlruleid'], $article['htmldir'], $article['prefix'], $articleid, $article['addtime'], 0);
 			$this->db->query("UPDATE ".$this->table_article." SET linkurl='$linkurl' WHERE articleid=$articleid ");
 		}
-		$this->db->query("INSERT INTO ".$this->table_article_data." (articleid,content) VALUES ('$articleid','$content') ");
+		if($MOD['storage_mode'] < 3) $this->db->query("INSERT INTO ".$this->table_article_data." (articleid,content) VALUES ('$articleid','$content') ");
+		if($MOD['storage_mode'] > 1) txt_update($this->channelid, $articleid, $content);
+		if($MOD['storage_mode'] == 3) $this->db->query("INSERT INTO ".$this->table_article_data." (articleid) VALUES ('$articleid') ");
 		return $articleid;
 	}
 
 	function edit($article)
 	{
+		global $MOD;
 		$content=$article['content'];
 		unset($article['content']);
 		$articleid = $this->articleid;
@@ -67,21 +71,22 @@ class article
 			$s = ",";
 		}
 		$this->db->query("UPDATE ".$this->table_article." SET $sql WHERE articleid=$articleid ");
-		$this->db->query("UPDATE ".$this->table_article_data." SET content='$content' WHERE articleid=$articleid ");
+		if($MOD['storage_mode'] < 3) $this->db->query("UPDATE ".$this->table_article_data." SET content='$content' WHERE articleid=$articleid ");
+		if($MOD['storage_mode'] > 1) txt_update($this->channelid, $this->articleid, $content);
 		return TRUE;
 	}
 
-	function delete($articleids, $file = 0, $pic = 1)//File为1时仅删除文件 文章编辑时有用 $pic=1时删除内容图片和缩略图 频道移动时有用
+	function delete($articleids, $file = 0, $pic = 1)
 	{
 		global $CHA, $pos, $MOD;
 		$articleids = is_array($articleids) ? implode(',',$articleids) : $articleids;
-		$sql = $articleids ? "articleid IN($articleids)" : "status=-1";//当articleids为空时，表示清空回收站
+		$sql = $articleids ? "articleid IN($articleids)" : "status=-1";
 		$result = $this->db->query("SELECT articleid,linkurl,thumb,username,paginationtype,maxcharperpage,catid,arrposid,ishtml,islink,urlruleid,htmldir,prefix,addtime FROM ".$this->table_article." WHERE $sql ");
+		if(!$file && $pic) require PHPCMS_ROOT.'/include/attachment.class.php';
 		while($r = $this->db->fetch_array($result))
 		{
-			if($MOD['add_point'] && $r['username']) $this->db->query("update ".TABLE_MEMBER." set point=point-$MOD[add_point] where username='$r[username]'");
 			if(!$file && $r['arrposid']) $pos->delete($r['articleid'], $r['arrposid']);
-			if($r['islink'])
+			if(!$file && $r['islink'])
 			{
 				$this->db->query("DELETE FROM ".$this->table_article_data." WHERE articleid=$r[articleid] ");
 				continue;
@@ -90,11 +95,8 @@ class article
 			$content = $this->db->get_one("SELECT content FROM ".$this->table_article_data." WHERE articleid=$r[articleid] ");
 			if(!$file && $pic)
 			{
-				preg_match_all("/<img[^>]*src=\"([^\"]+)\"/", $content['content'], $m);//删除文章中的图片
-				foreach($m[1] as $v)
-				{
-					if(!strpos($v, "://")) @unlink(PHPCMS_ROOT.$v); //文章中的图片已经带/
-				}
+				$att = new attachment($r['articleid'], $this->channelid, $r['catid']);
+				$att->delete();
 			}
 			if($r['ishtml'])
 			{
@@ -111,10 +113,9 @@ class article
 					}
 					if($pagenumber > 1)
 					{
-						for($i = 0; $i < $pagenumber; $i++)
+						for($i = 0; $i <= $pagenumber; $i++)
 						{
-							$page = $i+1;
-							$linkurl = item_url('path', $r['catid'], $r['ishtml'], $r['urlruleid'], $r['htmldir'], $r['prefix'], $r['articleid'], $r['addtime'], $page);
+							$linkurl = item_url('path', $r['catid'], $r['ishtml'], $r['urlruleid'], $r['htmldir'], $r['prefix'], $r['articleid'], $r['addtime'], $i);
 							@unlink(PHPCMS_ROOT.'/'.$linkurl);
 						}
 					}
@@ -125,11 +126,14 @@ class article
 					@unlink(PHPCMS_ROOT.'/'.$linkurl);
 				}
 			}
-			if(!$file) $this->db->query("DELETE FROM ".$this->table_article_data." WHERE articleid=$r[articleid] ");
+			if(!$file)
+			{
+				$this->db->query("DELETE FROM ".$this->table_article_data." WHERE articleid=$r[articleid] ");
+				if($MOD['storage_mode'] > 1) txt_delete($this->channelid, $this->articleid);
+			}
 		}
 		if(!$file) $this->db->query("DELETE FROM ".$this->table_article." WHERE $sql ");
 		return TRUE;
-		
 	}
 	
 	function get_list($sql = 'status=3 ', $order = 'listorder DESC')
@@ -159,30 +163,46 @@ class article
 
 	function get_one()
 	{
-		$r = $this->db->get_one("SELECT * FROM ".$this->table_article." a, ".$this->table_article_data." d WHERE a.articleid=$this->articleid AND a.articleid=d.articleid ");
+		global $MOD;
+		if($MOD['storage_mode'] > 1)
+		{
+			$r = $this->db->get_one("SELECT * FROM ".$this->table_article." WHERE articleid=$this->articleid ");
+			$r['content'] = txt_read($this->channelid, $this->articleid);
+		}
+		else
+		{
+			$r = $this->db->get_one("SELECT * FROM ".$this->table_article." a, ".$this->table_article_data." d WHERE a.articleid=$this->articleid AND a.articleid=d.articleid ");
+		}
 		return $r;
 	}
 
 	function action($job = 'status', $value = 3, $articleids)
 	{
 		if(empty($articleids)) return FALSE;
-		$articleids = is_array($articleids) ? implode(',',$articleids) : $articleids;
+		if(is_array($articleids))
+		{
+			$html_articleids = $articleids;
+			$articleids = implode(',', $articleids);
+		}
+		else
+		{
+			$html_articleids = array($articleids);
+		}
 		$this->db->query("UPDATE ".$this->table_article." SET $job=$value WHERE articleid IN ($articleids) ");
 		if($job == 'status' && $value == 3)
 		{
-			global $_username,$PHP_TIME,$MOD;
-			$this->db->query("UPDATE ".$this->table_article." SET checker='$_username', checktime=$PHP_TIME WHERE  articleid IN ($articleids) ");
-			foreach($articleids as $articleid)
+			global $_username,$PHP_TIME,$MOD,$MODULE;
+			$this->db->query("UPDATE ".$this->table_article." SET checker='$_username', checktime=$PHP_TIME WHERE articleid IN ($articleids) ");
+			if(isset($MODULE['pay']))
 			{
-				createhtml('show');
-			}
-			if($MOD['add_point'])
-			{
-				$result = $this->db->query("select username from ".$this->table_article." WHERE articleid IN ($articleids) ");
+				require_once PHPCMS_ROOT.'/pay/include/pay.func.php';
+				$result = $this->db->query("select articleid,title,username,catid from ".$this->table_article." WHERE articleid IN ($articleids) ");
 				while($r = $this->db->fetch_array($result))
 				{
 					if(!$r['username']) continue;
-					$this->db->query("update ".TABLE_MEMBER." set point=point+$MOD[add_point] where username='$r[username]'");
+					$CAT = cache_read('category_'.$r['catid'].'.php');
+					$point = $CAT['creditget'] ? $CAT['creditget'] : $MOD['add_point'];
+					if($point) 	point_add($r['username'], $point, $r['title'].'(channelid='.$this->channelid.',articleid='.$r['articleid'].')');
 				}
 			}
 		}

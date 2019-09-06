@@ -3,6 +3,15 @@ require './include/common.inc.php';
 
 if($_userid) showmessage($LANG['you_have_logined']);
 
+if($PHPCMS['enableserverpassport'])
+{
+	$getpasswordurl = $PHPCMS['passport_serverurl'].$PHPCMS['passport_getpasswordurl'];
+	$addstr = $PHP_QUERYSTRING ? $PHP_QUERYSTRING : 'forward='.$PHP_REFERER;
+	$getpasswordurl .= (strpos($getpasswordurl, '?') ? '&' : '?').$addstr;
+	header('location:'.$getpasswordurl);
+	exit;
+}
+
 $seo_title = $LANG['get_password_back'];
 
 $step = isset($step) ? intval($step) : 1;

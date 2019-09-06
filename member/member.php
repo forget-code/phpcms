@@ -5,7 +5,7 @@ $m = $db->get_one("SELECT * FROM ".TABLE_MEMBER." m , ".TABLE_MEMBER_INFO." i WH
 if(!$m) showmessage($LANG['username_not_exist']);
 @extract($m);
 
-$userface = $userface ? $userface : PHPCMS_PATH."member/images/defaultface.gif";
+$userface = $userface ? imgurl($userface) : PHPCMS_PATH."member/images/defaultface.gif";
 $facewidth = $facewidth ? $facewidth : 150;
 $faceheight = $faceheight ? $faceheight : 172;
 $gender = $gender ? $LANG['male'] : $LANG['female'];

@@ -1,6 +1,5 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
-//
 if($dosubmit)
 {
 	if($totype == 1)
@@ -64,7 +63,11 @@ if($dosubmit)
 				{
 					$r = $db->get_one("select content from ".channel_table('article_data', $channelid)." where articleid=$articleid_tmp ");
 					$r = new_addslashes($r);
-					$db->query("insert into ".channel_table('article_data', $tochannelid)." (articleid,content) values ('$articleid','$r[content]') ");
+
+					if($MOD['storage_mode'] < 3) $db->query("insert into ".channel_table('article_data', $tochannelid)." (articleid,content) values ('$articleid','$r[content]') ");
+					if($MOD['storage_mode'] > 1) txt_update($tochannelid, $articleid, $r['content']);
+					if($MOD['storage_mode'] == 3) $db->query("insert into ".channel_table('article_data', $tochannelid)." (articleid,content) values ('$articleid','$r[content]') ");
+
 					if(!isset($save_original)) $art->delete($articleid_tmp, 0, 0);//保留了原始图片
 				}
 			}
@@ -116,7 +119,9 @@ if($dosubmit)
 				{
 					$r = $db->get_one("select content from ".channel_table('article_data', $channelid)." where articleid=$articleid_tmp ");
 					$r = new_addslashes($r);
-					$db->query("insert into ".channel_table('article_data', $tochannelid)." (articleid,content) values ('$articleid','$r[content]') ");
+					if($MOD['storage_mode'] < 3) $db->query("insert into ".channel_table('article_data', $tochannelid)." (articleid,content) values ('$articleid','$r[content]') ");
+					if($MOD['storage_mode'] > 1) txt_update($tochannelid, $articleid, $r['content']);
+					if($MOD['storage_mode'] == 3) $db->query("insert into ".channel_table('article_data', $tochannelid)." (articleid,content) values ('$articleid','$r[content]') ");
 					if(!isset($save_original)) $art->delete($articleid_tmp, 0, 0);//保留了原始图片
 				}
 			}

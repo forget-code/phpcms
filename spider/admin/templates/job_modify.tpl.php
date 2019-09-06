@@ -413,7 +413,7 @@ function AddOnPos(obj, charvalue)
 到
 <input name='StarNumEnd' type='text' id='StarNumEnd' size='4' value="<? if(isset($sn[1])) echo $sn[1]; else echo "";?>">
 &nbsp;&nbsp;&nbsp;&nbsp;步长倍数:
-<input name='StarNumTime' type='text' id='StarNumTime' value="1" size='4' value="<? if(isset($sn[2])) echo $sn[2]; else echo "";?>">
+<input name='StarNumTime' type='text' id='StarNumTime' size='4' value="<? if(isset($sn[2])) echo $sn[2]; else echo "";?>">
 &nbsp;&nbsp;&nbsp;
 <input type="checkbox" name="ckBackSort" <? if(isset($sn[3])) if($sn[3]=="true") echo "checked";?>>
 倒序生成</td>

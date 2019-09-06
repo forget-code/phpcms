@@ -4,33 +4,59 @@ include admintpl('header');
 ?>
 
 <script language="JavaScript">
-  <!--
-  //检验文本框中内容是否超长
-    function checktextarealength(val, max_length) {
-        var str_area=document.forms[0].elements[val].value;
-        if (str_area!=null&&str_area.length > max_length && document.myform.fieldtype.value!=2){
-            alert("文本文字超长，最多可输入" + max_length +"个字符，请重新输入！");
-            document.forms[0].elements[val].focus();
-            return false;
-        }
-        return true;
-    }
-    function fieldcheckform(FieldTypeValue){
-        if(FieldTypeValue=='3'){
-            trOptions.style.display='';
-            document.myform.defaultvalue.rows=1;
-        }else if(FieldTypeValue=='2'){
-            trOptions.style.display='none';
-            document.myform.defaultvalue.rows=10;
-        }else{
-            trOptions.style.display='none';
-            document.myform.defaultvalue.rows=1;
-        }
-    }
-    -->
-  </script>
+<!--
+function typechange(val) {
+    if(val == 'varchar') {
+        document.myform.size.value = '250';
+	}
+	else if(val == 'int') {
+        document.myform.size.value = '10';
+	}
+	else if(val == 'date') {
+        document.myform.size.value = '';
+	}
+	else if(val == 'text') {
+        document.myform.size.value = '10000';
+	}
+	else if(val == 'mediumtext') {
+        document.myform.size.value = '100000';
+	}
+	else if(val == 'longtext') {
+        document.myform.size.value = '1000000';
+	}
+}
+function checktextarealength(val, max_length) {
+	var str_area=document.forms[0].elements[val].value;
+	if (str_area!=null && str_area.length > max_length && document.myform.type.value!='text' && document.myform.type.value!='mediumtext' && document.myform.type.value!='longtext'){
+		alert("文本文字超长，最多可输入" + max_length +"个字符，请重新输入！");
+		document.forms[0].elements[val].focus();
+		return false;
+	}
+	return true;
+}
+function formtypechange(val){
+	if(val=='select'){
+		trOptions.style.display='';
+		document.myform.defaultvalue.rows=1;
+	}else if(val=='text'){
+		trOptions.style.display='none';
+		document.myform.defaultvalue.rows=1;
+	}else if(val=='textarea'){
+		trOptions.style.display='none';
+		document.myform.defaultvalue.rows=10;
+	}else if(val=='radio'){
+		trOptions.style.display='';
+	}else if(val=='checkbox'){
+		trOptions.style.display='';
+	}else{
+		trOptions.style.display='none';
+		document.myform.defaultvalue.rows=1;
+	}
+}
+-->
+</script>
 
-<body onload="fieldcheckform(myform.fieldtype.value)">
+<body onload="formtypechange(myform.formtype.value)">
 <?=$menu?>
 <table cellpadding="2" cellspacing="1" class="tableborder">
   <tr>
@@ -58,37 +84,92 @@ include admintpl('header');
     <tr> 
       <td class="tablerow"><strong>字段类型</strong></td>
       <td class="tablerow">
-<select name='fieldtype' disabled>
-<option value='1' <?php if($type=='input'){ ?>selected <?php } ?>>单行文本</option>
-<option value='2' <?php if($type=='text'){ ?>selected <?php } ?>>多行文本</option>
-<option value='3' <?php if($type=='select'){ ?>selected <?php } ?>>下拉列表</option>
-<option value='4' <?php if($type=='int'){ ?>selected <?php } ?>>数字</option>
-<option value='5' <?php if($type=='date'){ ?>selected <?php } ?>>日期</option>
+<select name="type" onchange="javascript:typechange(this.value)">
+<option value='varchar' <?php if($type == 'varchar') echo 'selected';?>>字符串(Varchar)</option>
+<option value='int' <?php if($type == 'int') echo 'selected';?>>整数(Int)</option>
+<option value='date' <?php if($type == 'date') echo 'selected';?>>日期(Date)</option>
+<option value='text' <?php if($type == 'text') echo 'selected';?>>一般文本(Text)</option>
+<option value='mediumtext' <?php if($type == 'mediumtext') echo 'selected';?>>中型文本(Mediumtext)</option>
+<option value='longtext' <?php if($type == 'longtext') echo 'selected';?>>大型文本(Longtext)</option>
+</select>
+	 </td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><strong>字段长度</strong></td>
+      <td class="tablerow">
+	  <input name="size" type="text" size="12" value="<?=$size?>"> 字节
+    </td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><strong>表单类型</strong></td>
+      <td class="tablerow">
+<select name="formtype" onchange="javascript:formtypechange(this.value)">
+<option value='text' <?php if($formtype == 'text') echo 'selected';?>>单行文本(text)</option>
+<option value='textarea' <?php if($formtype == 'textarea') echo 'selected';?>>多行文本(textarea)</option>
+<option value='select' <?php if($formtype == 'select') echo 'selected';?>>下拉框(select)</option>
+<option value='radio' <?php if($formtype == 'radio') echo 'selected';?>>单选框(radio)</option>
+<option value='checkbox' <?php if($formtype == 'checkbox') echo 'selected';?>>多选框(checkbox)</option>
+<option value='password' <?php if($formtype == 'password') echo 'selected';?>>密码框(password)</option>
+<option value='hidden' <?php if($formtype == 'hidden') echo 'selected';?>>隐藏域(hidden)</option>
 </select>
 	 </td>
     </tr>
     <tr>
-      <td  class='tablerow'><strong>默认值</strong></td>
+      <td class='tablerow'><strong>默认值</strong></td>
       <td class='tablerow'>
-<textarea name='defaultvalue' rows='1' cols='50' onkeypress="javascript:checktextarealength('defaultvalue',30);"><?=$defaultvalue?></textarea>
+          <textarea name='defaultvalue' rows='1' cols='50' onkeypress="javascript:checktextarealength('defaultvalue',30);"><?=$defaultvalue?></textarea>
 	  </td>
     </tr>
-    <tr id='trOptions' style='display:none'>
-      <td  class='tablerow'><strong>列表项目：</strong><br>每一行为一个列表项目</td>
-      <td class='tablerow'><textarea name='options' cols='40' rows='3' id='options'><?=$options?></textarea></td>
+    <tr id='trOptions' style='display:<?=(in_array($formtype, array('select','radio','checkbox')) ? 'block' : 'none')?>'>
+      <td  class='tablerow'><strong>表单选项：</strong><br>每行一个</td>
+      <td class='tablerow'><textarea name='options' cols='40' rows='5' id='options'><?=$options?></textarea></td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><strong>表单输入辅助工具</strong></td>
+      <td class="tablerow">
+<select name="inputtool">
+<option value=''>无</option>
+<option value='dateselect' <?php if($inputtool == 'dateselect') echo 'selected';?>>日期选择</option>
+<option value='fileupload' <?php if($inputtool == 'fileupload') echo 'selected';?>>文件上传</option>
+<option value='imageupload' <?php if($inputtool == 'imageupload') echo 'selected';?>>图片上传</option>
+<option value='editor' <?php if($inputtool == 'editor') echo 'selected';?>>可视化编辑器</option>
+</select>
+	 </td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><strong>表单输入限制</strong></td>
+      <td class="tablerow">
+<select name="inputlimit">
+<option value='' <?php if($inputlimit == '') echo 'selected';?>>无限制</option>
+<option value='notnull' <?php if($inputlimit == 'notnull') echo 'selected';?>>不能为空</option>
+<option value='numeric' <?php if($inputlimit == 'numeric') echo 'selected';?>>限数字</option>
+<option value='letter' <?php if($inputlimit == 'letter') echo 'selected';?>>限字母</option>
+<option value='numeric_letter' <?php if($inputlimit == 'numeric_letter') echo 'selected';?>>限数字或字母</option>
+<option value='email' <?php if($inputlimit == 'email') echo 'selected';?>>限E-mail地址</option>
+<option value='date' <?php if($inputlimit == 'date') echo 'selected';?>>限日期格式</option>
+<option value='unique' <?php if($inputlimit == 'unique') echo 'selected';?>>值唯一</option>
+</select>
+	 </td>
     </tr>
     <tr>
-      <td  class='tablerow'><strong>是否必填</strong></td>
+      <td  class='tablerow'><strong>允许输入html代码</strong></td>
       <td class='tablerow'>
-		 <input type='radio' name='enablenull' value='0' <?php if($enablenull==0){ ?>checked<?php } ?>> 是 
-		 <input type='radio' name='enablenull' value='1' <?php if($enablenull==1){ ?>checked<?php } ?>> 否
+		 <input type='radio' name='enablehtml' value='1' <?php if($enablehtml) echo 'checked';?>> 是
+		 <input type='radio' name='enablehtml' value='0' <?php if(!$enablehtml) echo 'checked';?>> 否
+	  </td>
+    </tr>
+    <tr>
+      <td  class='tablerow'><strong>在列表页显示</strong></td>
+      <td class='tablerow'>
+		 <input type='radio' name='enablelist' value='1' <?php if($enablelist) echo 'checked';?>> 是
+		 <input type='radio' name='enablelist' value='0' <?php if(!$enablelist) echo 'checked';?>> 否
 	  </td>
     </tr>
     <tr> 
-      <td class="tablerow"><strong>是否作为搜索条件</strong></td>
+      <td class="tablerow"><strong>作为搜索条件</strong></td>
       <td class="tablerow">
-		 <input type='radio' name='enablesearch' value='1' <?php if($enablesearch==1){ ?>checked<?php } ?>> 是 
-		 <input type='radio' name='enablesearch' value='0' <?php if($enablesearch==0){ ?>checked<?php } ?>> 否
+		 <input type='radio' name='enablesearch' value='1' <?php if($enablesearch){ ?>checked<?php } ?>> 是 
+		 <input type='radio' name='enablesearch' value='0' <?php if(!$enablesearch){ ?>checked<?php } ?>> 否
     </td>
     </tr>
     <tr> 

@@ -256,12 +256,6 @@ function AddSeperate(objstart,objend,charvalue)
 }
 -->
 </style>
-
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
-  <tr>
-    <td ></td>
-  </tr>
-</table>
 <?=$menu?>
 <form name="myform" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&id=<?=$id?>" >
 <table width='100%' border='0' cellpadding='0' cellspacing='0' >

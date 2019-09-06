@@ -70,5 +70,19 @@ $tags_config = array (
     'editor' => 'phpcms',
     'longtag' => 'vote_list(\'tag_vote_list\',$channelid,0,1,50,1)',
   ),
+  '影片频道首页投票' => 
+  array (
+    'func' => 'vote_list',
+    'introduce' => '',
+    'page' => '0',
+    'keyid' => '$channelid',
+    'votenum' => '1',
+    'subjectlen' => '50',
+    'cols' => '1',
+    'templateid' => 'tag_vote_list',
+    'edittime' => '2007-07-30 04:11:16',
+    'editor' => 'phpcms',
+    'longtag' => 'vote_list(\'tag_vote_list\',$channelid,0,1,50,1)',
+  ),
 );
 ?>

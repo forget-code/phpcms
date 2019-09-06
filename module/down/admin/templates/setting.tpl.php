@@ -36,6 +36,15 @@ include admintpl("header");
 	 </td>
     </tr>
 
+	<tr>
+      <td class="tablerow"><strong>是否整合VirtualWall防盗链软件</strong></td>
+	  <td class="tablerow">
+	  <input type="radio" name="setting[enable_virtualwall]" value="1"  <?php if($enable_virtualwall){ ?>checked <?php } ?> onclick="$('showurl').style.display='none'"> 是
+	  &nbsp;&nbsp;
+	  <input type="radio" name="setting[enable_virtualwall]" value="0"  <?php if(!$enable_virtualwall){ ?>checked <?php } ?>  onclick="$('showurl').style.display='block'"> 否 &nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.fangdaolian.com/" target="_blank"><font color="red">点击了解VirtualWall防盗链软件</font></a>
+	 </td>
+    </tr>
+<tbody id="showurl" style="display:<?=$enable_virtualwall ? 'none' : 'block'?>">
     <tr>
       <td class="tablerow"><strong>本地文件下载模式</strong></td>
       <td class="tablerow">
@@ -51,7 +60,7 @@ include admintpl("header");
 	  <input type="radio" name="setting[remote_showurl]" value="1"  <?php if($remote_showurl){ ?>checked <?php } ?>> 用浏览器跳转至文件真实地址。<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="blue">Tips:</font>远程文件包括http,ftp等格式开头的文件地址，但此设置对镜像下载模式无效。
 	 </td>
     </tr> 
-
+</tbody>
 
     <tr>
       <td class="tablerow"><strong>默认缩略图设置</strong></td>
@@ -161,6 +170,15 @@ include admintpl("header");
 	 </td>
     </tr>
 
+	<tr>
+      <td class="tablerow"><strong>是否允许前台投稿上传文件</strong></td>
+      <td class="tablerow">
+	  <input type="radio" name="setting[enable_upload]" value="1"  <?php if($enable_upload){ ?>checked <?php } ?>> 是
+	  &nbsp;&nbsp;
+	  <input type="radio" name="setting[enable_upload]" value="0"  <?php if(!$enable_upload){ ?>checked <?php } ?>> 否
+	 </td>
+   </tr>
+
   <tr>
       <td class="tablerowhighlight" align="center" colspan="2">RSS设置</td>
 	</tr>
@@ -187,6 +205,43 @@ include admintpl("header");
 	 </td>
    </tr>
 
+    <tr>
+      <td class="tablerowhighlight" align="center" colspan="2">迅雷联盟设置</td>
+	</tr>
+	<tr>
+      <td class="tablerow"><strong>是否启用</strong></td>
+      <td class="tablerow">
+	  <input type="radio" name="setting[enable_xunlei]" value="1"  <?php if($enable_xunlei){ ?>checked <?php } ?>> 是
+	  &nbsp;&nbsp;
+	  <input type="radio" name="setting[enable_xunlei]" value="0"  <?php if(!$enable_xunlei){ ?>checked <?php } ?>> 否
+	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://union.xunlei.com/" target="_blank">了解迅雷联盟：http://union.xunlei.com/</a>
+	 </td>
+   </tr>
+    <tr>
+      <td class="tablerow"><strong>迅雷联盟合作ID</strong></td>
+      <td class="tablerow">
+	  <input type="text" name="setting[xunleipid]" value="<?=$xunleipid?>" size="5">
+	 </td>
+   </tr>
+
+    <tr>
+      <td class="tablerowhighlight" align="center" colspan="2">快车联盟设置</td>
+	</tr>
+	<tr>
+      <td class="tablerow"><strong>是否启用</strong></td>
+      <td class="tablerow">
+	  <input type="radio" name="setting[enable_flashget]" value="1"  <?php if($enable_flashget){ ?>checked <?php } ?>> 是
+	  &nbsp;&nbsp;
+	  <input type="radio" name="setting[enable_flashget]" value="0"  <?php if(!$enable_flashget){ ?>checked <?php } ?>> 否
+	  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://union.flashget.com/" target="_blank">了解快车联盟：http://union.flashget.com/</a>
+	 </td>
+   </tr>
+    <tr>
+      <td class="tablerow"><strong>快车联盟合作ID</strong></td>
+      <td class="tablerow">
+	  <input type="text" name="setting[flashgetpid]" value="<?=$flashgetpid?>" size="5">
+	 </td>
+   </tr>
 </table>
 
 <table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">

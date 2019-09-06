@@ -1,6 +1,6 @@
 <?php
 $settings['Discuz'] = array (
-  'importtime' => '1171012197',
+  'importtime' => '',
   'name' => 'Discuz',
   'note' => '论坛精华主题(4.x,5.x)',
   'dbfrom' => '1',
@@ -12,7 +12,7 @@ $settings['Discuz'] = array (
   'table' => 'cdb_threads t,cdb_posts p',
   'selectfield' => '*',
   'condition' => 't.tid=p.tid and t.dateline=p.dateline and t.digest>0',
-  'maxid' => '4',
+  'maxid' => '0',
   'isuseoldid' => '0',
   'articleid' => 
   array (
@@ -140,7 +140,7 @@ $settings['Discuz'] = array (
     'value' => '',
     'func' => '',
   ),
-  'edittime' => 1175506116,
+  'edittime' => '',
   'checker' => 
   array (
     'field' => '',
@@ -204,13 +204,13 @@ $settings['Discuz'] = array (
   'htmldir' => 
   array (
     'field' => '',
-    'value' => 'html',
+    'value' => 'article',
     'func' => '',
   ),
   'prefix' => 
   array (
     'field' => '',
-    'value' => '',
+    'value' => 'article_',
     'func' => '',
   ),
   'urlruleid' => 
@@ -234,8 +234,8 @@ $settings['Discuz'] = array (
   'defaultcatid' => '3',
   'catids' => 
   array (
-    2 => '',
     3 => '',
+    4 => '',
   ),
   'articlecheck' => '1',
   'timelimit' => '90',

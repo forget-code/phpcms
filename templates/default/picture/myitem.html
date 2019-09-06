@@ -44,7 +44,7 @@ if(obj.value.indexOf("\r") == -1){
 var p = obj.value.substring(obj.value.lastIndexOf("|", i)+1, i)+obj.value.substring(i, obj.value.indexOf(str, i));
 var l = obj.value.substring(i, obj.value.length);
 if(l.indexOf("\n")==-1) p = obj.value.substring(obj.value.lastIndexOf("|", i)+1, i)+l;
-var u = <?php echo "'";echo imgurl($CHA['channeldir'].'/'.$MOD['upload_dir'].'/');echo "'"; ?>;
+var u = <?php echo "'";echo imgurl($PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$MOD['upload_dir'].'/');echo "'"; ?>;
 if(p.indexOf("://") != -1) u = '';
 var m = p.match(/^[^\r\n\|]+\.(jpg|gif|png|bmp)$/);
 if(m != null)
@@ -63,9 +63,9 @@ if(m != null)
 <td valign="top" class="right">
 <div class="membercatslist">
 <ul>
-<li><a href="{$channelurl}myitem.php?action=add"><span>发表图片</span></a></li>
-<li><a href="{$channelurl}myitem.php?action=manage&status=3"><span>已通过</span></a></li>
-<li><a href="{$channelurl}myitem.php?action=manage&status=1"><span>待审核</span></a></li>
+<li><a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=add"><span>发表图片</span></a></li>
+<li><a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=manage&status=3"><span>已通过</span></a></li>
+<li><a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=manage&status=1"><span>待审核</span></a></li>
 </ul>
 </div>
 <div class="clearboth"></div>
@@ -78,7 +78,7 @@ if(m != null)
 <div class="memberborder_2">
 {if $action=='add'}
 <h1>发布图片</h1>
-<form action="{$channelurl}myitem.php?action=add" method="post" name="myform" onsubmit="return doCheck();">
+<form action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=add" method="post" name="myform" onsubmit="return doCheck();">
 <table cellpadding="2" cellspacing="1" class="righttable">
 <tbody>
     <tr>
@@ -92,7 +92,7 @@ if(m != null)
 <tr> 
 <td class="td_right"><strong>标题图片</strong> </td>
 <td class="td_left">
-<input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=thumb&type=thumb&width=150&height=150','upload','360','300')"></td>
+<input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=thumb&type=thumb&width=150&height=150','upload','360','300')"></td>
 </tr>
 <tr>
 <td class="td_right"><font color="red">*</font> <strong>内容</strong></td>
@@ -115,7 +115,7 @@ if(m != null)
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果您使用的是IE6+浏览器，在图片名上双击鼠标可在新窗口中弹出图片
 		</td>
 		<td valign="top" style="light-height:22px;">
-		<input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=temp&type=both&width=150&height=150&upload_dir={$MOD[upload_dir]}','upload','360','300')">
+		<input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=temp&type=both&width=150&height=150&upload_dir={$MOD[upload_dir]}','upload','360','300')">
 		<input type="hidden" name="temp" id="temp" value="" onpropertychange="Picurls();">
 		</td>
 		</tr>
@@ -142,7 +142,7 @@ if(m != null)
 <!--//--->
 {elseif $action=='edit'}
 <h1>编辑图片</h1>
-<form action="{$channelurl}myitem.php?action=edit&pictureid={$pictureid}" method="post" name="myform" onsubmit="return doCheck();">
+<form action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=edit&pictureid={$pictureid}" method="post" name="myform" onsubmit="return doCheck();">
 <table cellpadding="2" cellspacing="1" class="righttable">
 </tbody>
   <tr>
@@ -156,7 +156,7 @@ if(m != null)
 <tr> 
 <td class="td_right"><strong>标题图片</strong> </td>
 <td class="td_left">
-<input name="thumb" type="text" id="thumb" size="50"  value="{$thumb}"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=thumb&type=thumb&width=150&height=150','upload','360','300')">          </td>
+<input name="thumb" type="text" id="thumb" size="50"  value="{$thumb}"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=thumb&type=thumb&width=150&height=150','upload','360','300')">          </td>
 </tr>
 <tr>
 <td class="td_right"><font color="red">*</font> <strong>内容</strong></td>
@@ -179,7 +179,7 @@ if(m != null)
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果您使用的是IE6+浏览器，在图片名上双击鼠标可在新窗口中弹出图片
 		</td>
 		<td valign="top" style="light-height:22px;">
-		<input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=temp&type=both&width=150&height=150&upload_dir={$MOD[upload_dir]}','upload','360','300')">
+		<input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=temp&type=both&width=150&height=150&upload_dir={$MOD[upload_dir]}','upload','360','300')">
 		<input type="hidden" name="temp" id="temp" value="" onpropertychange="Picurls();">
 		</td>
 		</tr>
@@ -243,8 +243,8 @@ if(m != null)
    <td class="td_right"> </td>
     <td class="td_left"  align="right">
 	<a href="#" onclick="javascript:history.go(-1);">返回</a>
-	<a href="{$channelurl}myitem.php?action=edit&pictureid={$pictureid}">编辑</a>
-	<a href="{$channelurl}myitem.php?action=delete&pictureid={$pictureid}">删除</a>	
+	<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=edit&pictureid={$pictureid}">编辑</a>
+	<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=delete&pictureid={$pictureid}">删除</a>	
 	</td>
   </tr>
 </tbody>
@@ -331,12 +331,12 @@ function hideTooltip(object) {
 {loop $pictures  $picture}
 <tr align="center" onmouseout="this.style.backgroundColor='#ffffff'" onmouseover="this.style.backgroundColor='#EBF6FB'" bgColor="#ffffff">
 <td class="td_center">{$picture[pictureid]}</td>
-<td class="td_left">&nbsp;{if $picture[type]}{$picture[type]} {/if}{if $picture['status']==3}<a href="{$picture['linkurl']}" target="_blank">{else}<a href="{$channelurl}myitem.php?action=preview&pictureid={$picture[pictureid]}">{/if}{$picture['title']}</a>
+<td class="td_left">&nbsp;{if $picture[type]}{$picture[type]} {/if}{if $picture['status']==3}<a href="{$picture['linkurl']}" target="_blank">{else}<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=preview&pictureid={$picture[pictureid]}">{/if}{$picture['title']}</a>
 </td>
 <td class="td_center"><a href="{$picture['catlinkurl']}" target="_blank">{$picture['catname']}</a></td>
 <td class="td_center">{$picture['adddate']}</td>
 <td class="td_center">{$picture['hits']}</td>
-<td class="td_center">{if $picture['status']<3}<a href="{$channelurl}myitem.php?action=edit&pictureid={$picture[pictureid]}">编辑</a> | <a href="{$channelurl}myitem.php?action=delete&pictureid={$picture[pictureid]}">删除</a>{else}<span style="color:#C0C0C0">编辑 | 删除</span>{/if}</td>
+<td class="td_center">{if $picture['status']<3}<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=edit&pictureid={$picture[pictureid]}">编辑</a> | <a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=delete&pictureid={$picture[pictureid]}">删除</a>{else}<span style="color:#C0C0C0">编辑 | 删除</span>{/if}</td>
 </tr>
 {/loop}
 </tbody>
@@ -347,7 +347,7 @@ function hideTooltip(object) {
   </tr>
 </table>
 <table width="100%" cellpadding="0" cellspacing="0" class="righttable">
-<form name="search" action="{$channelurl}myitem.php">
+<form name="search" action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php">
   <tr>
     <td class="td_center">
     <input name="status" type="hidden" value="{$status}">
@@ -378,8 +378,8 @@ function hideTooltip(object) {
 function Picurls() {
 	if($('temp').value != '') {
 	var ss = $("pictureurls").value == '' ? '' : "\n";
-	$('pictureurls').value += ss+'图片说明|'+$('temp').value.replace(/<?=$CHA['channeldir']?>\/<?=$MOD['upload_dir']?>\//g, '');
-	$('allpictureurls').value += ss+$('temp').value.replace(/<?=$CHA['channeldir']?>\/<?=$MOD['upload_dir']?>\//g, '');
+	$('pictureurls').value += ss+'图片说明|'+$('temp').value.replace(/<?=$PHPCMS['uploaddir']?>\/<?=$CHA['channeldir']?>\/<?=$MOD['upload_dir']?>\//g, '');
+	$('allpictureurls').value += ss+$('temp').value.replace(/<?=$PHPCMS['uploaddir']?>\/<?=$CHA['channeldir']?>\/<?=$MOD['upload_dir']?>\//g, '');
 	$('temp').value = '';
 	}
 }

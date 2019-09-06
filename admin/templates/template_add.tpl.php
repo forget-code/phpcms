@@ -2,9 +2,67 @@
 defined('IN_PHPCMS') or exit('Access Denied');
 include admintpl('header');
 ?>
-<body>
+<script type="text/javascript">
+function insertText(text)
+{
+	myform.content.focus();
+    var str = document.selection.createRange();
+	str.text = text;
+}
+
+function tag_pop(mod, action, func)
+{
+	var tagname = document.selection.createRange().text;
+	if(func == '')
+	{
+		url = '?mod='+mod+'&file=tag&action=quickoperate&operate='+action+'&job=edittemplate&tagname='+tagname;
+	}
+	else
+	{
+		url = '?mod='+mod+'&file=tag&action='+action+'&function='+func+'&job=edittemplate&tagname='+tagname;
+	}
+	window.open(url,'tag','height=500,width=700,,top=0,left=0,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no');
+}
+
+function docheck()
+{
+	if(myform.template.value == '')
+	{
+		alert("请填写模板文件名！\n命名规则：模板类型-特征名，同类型模板特征名不同");
+		myform.template.focus();
+		return false;
+	}
+	if(myform.template.value == '<?=$templatetype?>-')
+	{
+		alert("请把模板文件名填写完整！\n命名规则：模板类型-特征名，同类型模板特征名不同");
+		myform.template.focus();
+		return false;
+	}
+	if(myform.templatename.value == '')
+	{
+		alert('请填写模板中文名！');
+		myform.templatename.focus();
+		return false;
+	}
+	if(myform.createtype[0].checked && myform.content.value == '')
+	{
+		alert('请填写模板内容！');
+		myform.content.focus();
+		return false;
+	}
+	if(myform.createtype[1].checked && myform.uploadfile.value == '')
+	{
+		alert('请选择要上传的模板文件！');
+		myform.uploadfile.focus();
+		return false;
+	}
+	return true;
+}
+</script>
+
+<body onload="myform.content.focus();">
 <?=$menu?>
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="30">
+<table cellpadding="0" cellspacing="0" border="0" width="100%" height="20">
   <tr>
     <td>当前位置：<a href="?mod=phpcms&file=templateproject&action=manage">模板方案管理</a> > <a href="?mod=phpcms&file=template&action=manage&project=<?=$project?>&module=<?=$module?>"><?=$projectname?> - <?=$MODULE[$module]['name']?> 模板管理</a> > 添加模板</td>
   </tr>
@@ -13,37 +71,330 @@ include admintpl('header');
   <tr>
     <th colspan=2>添加模板</th>
   </tr>
-<form method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>" enctype="multipart/form-data">
+<form name="myform" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>" enctype="multipart/form-data" onsubmit="return docheck()">
 <tr>
-<td class="tablerow" width="15%">所属方案</td>
+<td class="tablerow" width="8%">所属方案</td>
 <td class="tablerow">
 <input type="hidden" name="project" value="<?=$project?>">
 <?=$projectname?>
 </td>
 </tr>
 <tr>
-<td class="tablerow" width="15%">所属模块</td>
+<td class="tablerow">所属模块</td>
 <td class="tablerow">
 <input type="hidden" name="module" value="<?=$module?>">
 <?=$MODULE[$module]['name']?>
 </td>
 </tr>
+<?php if($templatetype){ ?>
+<tr>
+<td class="tablerow">模板类型</td>
+<td class="tablerow"><?=$templatename?>(<?=$templatetype?>)</td>
+</tr>
+<?php } ?>
 <tr>
 <td class="tablerow">模板名称</td>
 <td class="tablerow"><input type="text" name="templatename" size=25> 可以是中文</td>
 </tr>
 <tr>
-<td class="tablerow">模板保存路径</td>
-<td class="tablerow"><font color="blue">./templates/<?=$project?>/<?=$module?>/<input size=20 name="template" type="text"> .html</font><font color="red">*</font></td>
+<td class="tablerow">模板路径</td>
+<td class="tablerow"><font color="blue">./templates/<?=$project?>/<?=$module?>/<input type="text" name="template" <?php if($templatetype){ ?>value="<?=$templatetype?>-"<?php } ?> size="25"> .html</font><font color="red">*</font>&nbsp;&nbsp;(命名规则：<font color="blue">模板类型-</font><font color="red">特征名</font>，同类型模板特征名不同)</td>
 </tr>
+<tr>
+<td class="tablerow">模板语法</td>
+<td class="tablerow">
+<input type="button" value="{template 'phpcms','header'}" style="width:190px" onclick="javascript:if(this.value != '') insertText('\n{template \'phpcms\',\'header\'}')">
+<input type="button" value="{include '*.php'}" style="width:115px" onclick="javascript:if(this.value != '') insertText('\n{include PHPCMS_ROOT.\'/*.php\'}')">
+<input type="button" value="{loop $a $k $v}*{/loop}" style="width:160px" onclick="javascript:if(this.value != '') insertText('\n<!--{loop $array $key $val}-->\n{$key}:{$val}\n<!--{/loop}-->')">
+<input type="button" value="{if *}*{/if}" style="width:100px" onclick="javascript:if(this.value != '') insertText('\n<!--{if $var1 == $var2}-->\n\n<!--{/if}-->')">
+<input type="button" value="{else}" style="width:50px" onclick="javascript:if(this.value != '') insertText('\n<!--{else}-->')">
+<input type="button" value="{elseif *}" style="width:70px" onclick="javascript:if(this.value != '') insertText('\n<!--{elseif $a = $b}-->')">
+</td>
+</tr>
+<?php if(strpos($filename, 'tag_') === FALSE && strpos($filename, 'admin_') === FALSE){ ?>
+<tr>
+<td class="tablerow">新建标签</td>
+<td class="tablerow">
+<select name="phpcms_tag_list" style="font-family:arial;width:100" onchange="javascript:if(this.value != '') tag_pop('phpcms', 'add', this.value)">
+<option value="">栏目/类别/专题</option>
+<option value="phpcms_cat">栏目标签</option>
+<option value="phpcms_type">类别标签</option>
+<option value="phpcms_special_list">专题列表</option>
+<option value="phpcms_special_slide">专题幻灯片</option>
+</select>
+ &nbsp; 
+<select name="other_tag_list" style="font-family:arial;width:100" onchange="javascript:if(this.value != ''){s = this.value.split('_'); tag_pop(s[0], 'add', this.value);}">
+<option value="">公告/投票/链接</option>
+<option value="announce_list">公告标签</option>
+<option value="vote_list">投票标签</option>
+<option value="link_list">链接标签</option>
+</select>
+ &nbsp; 
+<?php foreach($MODULE as $m){
+	if(!$m['iscopy']) continue;
+	?>
+<select name="<?=$m['module']?>_tag_list" style="font-family:arial;width:100" onchange="javascript:if(this.value != '') tag_pop('<?=$m['module']?>', 'add', this.value)">
+<option value=""><?=$m['name']?>标签</option>
+<option value="<?=$m['module']?>_list"><?=$m['name']?>标题列表</option>
+<option value="<?=$m['module']?>_thumb"><?=$m['name']?>图片列表</option>
+<option value="<?=$m['module']?>_slide"><?=$m['name']?>幻灯片</option>
+<option value="<?=$m['module']?>_related">相关<?=$m['name']?></option>
+</select>
+ &nbsp; 
+<?php } ?>
+</tr>
+<tr>
+<td class="tablerow">插入标签</td>
+<td class="tablerow" style="LINE-HEIGHT:200%;">
+<div style="height:25px">
+<select name="phpcms_tag_list" style="font-family:arial;width:140"  onchange="javascript:if(this.value != '') insertText(this.value)">
+<option value="">栏目/类别/专题/自定义</option>
+<?php foreach($taglist['phpcms'] as $tagname) {?>
+<option value="{tag_<?=$tagname?>}"><?=$tagname?></option>
+<?php } ?>
+</select>
+ &nbsp; 
+<?php 
+    foreach($taglist1 as $tagmod => $tag){
+	?>
+<select name="<?=$tagmod?>_tag_list" style="font-family:arial;width:100" onchange="javascript:if(this.value != '') insertText(this.value)">
+<option value=""><?=$MODULE[$tagmod]['name']?>公共标签</option>
+<?php foreach($tag as $tagname) {?>
+<option value="{tag_<?=$tagname?>}"><?=$tagname?></option>
+<?php } ?>
+</select>
+ &nbsp; 
+<?php } ?>
+</div>
+<div style="height:25px">
+<?php 
+    $i = 0;
+	$num = count($channels);
+    foreach($channels as $channelid => $c){
+    $i++;
+	$end = $i < $num ? 0 : 1;
+	?>
+<select name="<?=$c['module']?>_<?=$c['channelid']?>_tag_list" style="font-family:arial;width:100" onchange="javascript:if(this.value != '') insertText(this.value)">
+<option value=""><?=$c['channelname']?>频道标签</option>
+<?php foreach($taglist2[$channelid] as $tagname) {?>
+<option value="{tag_<?=$tagname?>}"><?=$tagname?></option>
+<?php } ?>
+</select>
+ &nbsp; 
+<?php 
+if(!$end && $i%6==0) echo '</div><div style="height:25px">';
+}
+?>
+</div>
+<div style="height:25px">
+<?php 
+    $i = 0;
+	$num = count($taglist3);
+    foreach($taglist3 as $tagmod => $tag){
+    $i++;
+	$end = $i < $num ? 0 : 1;
+	?>
+<select name="<?=$tagmod?>_tag_list" style="font-family:arial;width:100"  onchange="javascript:if(this.value != '') insertText(this.value)">
+<option value=""><?=$MODULE[$tagmod]['name']?>标签</option>
+<?php foreach($tag as $tagname) {?>
+<option value="{tag_<?=$tagname?>}"><?=$tagname?></option>
+<?php } ?>
+</select>
+ &nbsp; 
+<?php 
+if(!$end && $i%6==0) echo '</div><div style="height:25px">';
+}
+?>
+</div>
+</td>
+</tr>
+<tr>
+<td class="tablerow">插入变量</td>
+<td class="tablerow">
+<select name="CHA_list" style="font-family:arial;width:90"  onchange="javascript:if(this.value != '') insertText(this.value)">
+<option value="">用户变量</option>
+<option value="{$_userid}">$_userid</option>
+<option value="{$_username}">$_username</option>
+<option value="{$_groupid}">$_groupid</option>
+<option value="{$_arrgroupid}">$_arrgroupid</option>
+<option value="{$_email}">$_email</option>
+<option value="{$_chargetype}">$_chargetype</option>
+<option value="{$_money}">$_money</option>
+<option value="{$_point}">$_point</option>
+<option value="{$_credit}">$_credit</option>
+<option value="{$_begindate}">$_begindate</option>
+<option value="{$_enddate}">$_enddate</option>
+<option value="{$_newmessages}">$_newmessages</option>
+</select>
+&nbsp;
+<select name="PHPCMS_list" style="font-family:arial;width:110" onchange="javascript:if(this.value != '') insertText(this.value)">
+<option value="">$PHPCMS</option>
+<?php foreach($PHPCMS as $k=>$v){ ?>
+<option value="{$PHPCMS[<?=$k?>]}"><?=$k?></option>
+<?php } ?>
+</select>
+&nbsp;
+<select name="CHANNEL_list" style="font-family:arial;width:110" onchange="javascript:if(this.value != '') insertText(this.value)">
+<option value="">$CHANNEL</option>
+<?php foreach($CHANNEL[1] as $k=>$v){ ?>
+<option value="{$CHANNEL[$channelid][<?=$k?>]}"><?=$k?></option>
+<?php } ?>
+</select>
+&nbsp;
+<select name="CHA_list" style="font-family:arial;width:110" onchange="javascript:if(this.value != '') insertText(this.value)">
+<option value="">$CHA</option>
+<option value="{$CHA[channelid]}">channelid</option>
+<option value="{$CHA[module]}">module</option>
+<option value="{$CHA[channelname]}">channelname</option>
+<option value="{$CHA[style]}">style</option>
+<option value="{$CHA[channelpic]}">channelpic</option>
+<option value="{$CHA[introduce]}">introduce</option>
+<option value="{$CHA[seo_title]}">seo_title</option>
+<option value="{$CHA[seo_keywords]}">seo_keywords</option>
+<option value="{$CHA[seo_description]}">seo_description</option>
+<option value="{$CHA[listorder]}">listorder</option>
+<option value="{$CHA[islink]}">islink</option>
+<option value="{$CHA[channeldir]}">channeldir</option>
+<option value="{$CHA[channeldomain]}">channeldomain</option>
+<option value="{$CHA[disabled]}">disabled</option>
+<option value="{$CHA[templateid]}">templateid</option>
+<option value="{$CHA[skinid]}">skinid</option>
+<option value="{$CHA[items]}">items</option>
+<option value="{$CHA[comments]}">comments</option>
+<option value="{$CHA[categorys]}">categorys</option>
+<option value="{$CHA[specials]}">specials</option>
+<option value="{$CHA[hits]}">hits</option>
+<option value="{$CHA[enablepurview]}">enablepurview</option>
+<option value="{$CHA[arrgroupid_browse]}">arrgroupid_browse</option>
+<option value="{$CHA[purview_message]}">purview_message</option>
+<option value="{$CHA[point_message]}">point_message</option>
+<option value="{$CHA[enablecontribute]}">enablecontribute</option>
+<option value="{$CHA[enablecheck]}">enablecheck</option>
+<option value="{$CHA[emailofreject]}">emailofreject</option>
+<option value="{$CHA[emailofpassed]}">emailofpassed</option>
+<option value="{$CHA[enableupload]}">enableupload</option>
+<option value="{$CHA[uploaddir]}">uploaddir</option>
+<option value="{$CHA[maxfilesize]}">maxfilesize</option>
+<option value="{$CHA[uploadfiletype]}">uploadfiletype</option>
+<option value="{$CHA[linkurl]}">linkurl</option>
+<option value="{$CHA[setting]}">setting</option>
+<option value="{$CHA[ishtml]}">ishtml</option>
+<option value="{$CHA[cat_html_urlruleid]}">cat_html_urlruleid</option>
+<option value="{$CHA[item_html_urlruleid]}">item_html_urlruleid</option>
+<option value="{$CHA[special_html_urlruleid]}">special_html_urlruleid</option>
+<option value="{$CHA[cat_php_urlruleid]}">cat_php_urlruleid</option>
+<option value="{$CHA[item_php_urlruleid]}">item_php_urlruleid</option>
+<option value="{$CHA[special_php_urlruleid]}">special_php_urlruleid</option>
+</select>
+&nbsp;
+<select name="CATEGORY_list" style="font-family:arial;width:110" onchange="javascript:if(this.value != '') insertText(this.value)">
+<option value="">$CATEGORY</option>
+<option value="{$CATEGORY[$catid][module]}">module</option>
+<option value="{$CATEGORY[$catid][channelid]}">channelid</option>
+<option value="{$CATEGORY[$catid][catid]}">catid</option>
+<option value="{$CATEGORY[$catid][catname]}">catname</option>
+<option value="{$CATEGORY[$catid][style]}">style</option>
+<option value="{$CATEGORY[$catid][introduce]}">introduce</option>
+<option value="{$CATEGORY[$catid][catpic]}">catpic</option>
+<option value="{$CATEGORY[$catid][islink]}">islink</option>
+<option value="{$CATEGORY[$catid][catdir]}">catdir</option>
+<option value="{$CATEGORY[$catid][linkurl]}">linkurl</option>
+<option value="{$CATEGORY[$catid][parentid]}">parentid</option>
+<option value="{$CATEGORY[$catid][arrparentid]}">arrparentid</option>
+<option value="{$CATEGORY[$catid][parentdir]}">parentdir</option>
+<option value="{$CATEGORY[$catid][child]}">child</option>
+<option value="{$CATEGORY[$catid][arrchildid]}">arrchildid</option>
+<option value="{$CATEGORY[$catid][itemordertype]}">itemordertype</option>
+<option value="{$CATEGORY[$catid][itemtarget]}">itemtarget</option>
+<option value="{$CATEGORY[$catid][ismenu]}">ismenu</option>
+<option value="{$CATEGORY[$catid][islist]}">islist</option>
+<option value="{$CATEGORY[$catid][ishtml]}">ishtml</option>
+<option value="{$CATEGORY[$catid][htmldir]}">htmldir</option>
+<option value="{$CATEGORY[$catid][prefix]}">prefix</option>
+<option value="{$CATEGORY[$catid][urlruleid]}">urlruleid</option>
+<option value="{$CATEGORY[$catid][item_prefix]}">item_prefix</option>
+<option value="{$CATEGORY[$catid][item_html_urlruleid]}">item_html_urlruleid</option>
+<option value="{$CATEGORY[$catid][item_php_urlruleid]}">item_php_urlruleid</option>
+</select>
+&nbsp;
+<select name="CAT_list" style="font-family:arial;width:110" onchange="javascript:if(this.value != '') insertText(this.value)">
+<option value="">$CAT</option>
+<option value="{$CAT[catid]}">catid</option>
+<option value="{$CAT[module]}">module</option>
+<option value="{$CAT[channelid]}">channelid</option>
+<option value="{$CAT[catname]}">catname</option>
+<option value="{$CAT[catpic]}">catpic</option>
+<option value="{$CAT[style]}">style</option>
+<option value="{$CAT[introduce]}">introduce</option>
+<option value="{$CAT[islink]}">islink</option>
+<option value="{$CAT[catdir]}">catdir</option>
+<option value="{$CAT[parentid]}">parentid</option>
+<option value="{$CAT[arrparentid]}">arrparentid</option>
+<option value="{$CAT[parentdir]}">parentdir</option>
+<option value="{$CAT[child]}">child</option>
+<option value="{$CAT[arrchildid]}">arrchildid</option>
+<option value="{$CAT[itemtarget]}">itemtarget</option>
+<option value="{$CAT[itemordertype]}">itemordertype</option>
+<option value="{$CAT[listorder]}">listorder</option>
+<option value="{$CAT[ismenu]}">ismenu</option>
+<option value="{$CAT[islist]}">islist</option>
+<option value="{$CAT[ishtml]}">ishtml</option>
+<option value="{$CAT[htmldir]}">htmldir</option>
+<option value="{$CAT[prefix]}">prefix</option>
+<option value="{$CAT[urlruleid]}">urlruleid</option>
+<option value="{$CAT[item_htmldir]}">item_htmldir</option>
+<option value="{$CAT[item_prefix]}">item_prefix</option>
+<option value="{$CAT[item_html_urlruleid]}">item_html_urlruleid</option>
+<option value="{$CAT[item_php_urlruleid]}">item_php_urlruleid</option>
+<option value="{$CAT[linkurl]}">linkurl</option>
+<option value="{$CAT[items]}">items</option>
+<option value="{$CAT[hits]}">hits</option>
+<option value="{$CAT[disabled]}">disabled</option>
+<option value="{$CAT[seo_title]}">seo_title</option>
+<option value="{$CAT[seo_keywords]}">seo_keywords</option>
+<option value="{$CAT[seo_description]}">seo_description</option>
+<option value="{$CAT[skinid]}">skinid</option>
+<option value="{$CAT[templateid]}">templateid</option>
+<option value="{$CAT[listtemplateid]}">listtemplateid</option>
+<option value="{$CAT[defaultitemskin]}">defaultitemskin</option>
+<option value="{$CAT[defaultitemtemplate]}">defaultitemtemplate</option>
+<option value="{$CAT[enableadd]}">enableadd</option>
+<option value="{$CAT[enableprotect]}">enableprotect</option>
+<option value="{$CAT[showchilditems]}">showchilditems</option>
+<option value="{$CAT[maxperpage]}">maxperpage</option>
+<option value="{$CAT[enablepurview]}">enablepurview</option>
+<option value="{$CAT[creditget]}">creditget</option>
+<option value="{$CAT[defaultpoint]}">defaultpoint</option>
+<option value="{$CAT[chargedays]}">chargedays</option>
+<option value="{$CAT[arrgroupid_browse]}">arrgroupid_browse</option>
+<option value="{$CAT[arrgroupid_view]}">arrgroupid_view</option>
+<option value="{$CAT[arrgroupid_add]}">arrgroupid_add</option>
+</select>
+</td>
+</tr>
+<tr>
+<td class="tablerow">标签操作</td>
+<td class="tablerow">
+<input type="text" name="tagname" value="请输入标签名" size="15" onclick="if(this.value == '请输入标签名') this.value=''"> <input name="dosubmit" type="button" value="编辑标签" onclick="window.open('?mod=phpcms&file=tag&action=quickoperate&operate=edit&job=edittemplate&tagname='+myform.tagname.value,'tag','height=500,width=700,,top=0,left=0,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no')">
+&nbsp;&nbsp;
+<input type="button" name="tagpreview" value="预览被选中的标签" style="background:blue;color:#ffffff;width:120px" onclick="javascript:if(document.selection.createRange().text != '') tag_pop('phpcms','preview','')">
+&nbsp;&nbsp;
+<input type="button" name="tagedit" value="编辑被选中的标签" style="background:blue;color:#ffffff;width:120px" onclick="javascript:if(document.selection.createRange().text != '') tag_pop('phpcms','edit','')">
+&nbsp;&nbsp;
+<input type="button" name="tagcopy" value="复制被选中的标签" style="background:blue;color:#ffffff;width:120px" onclick="javascript:if(document.selection.createRange().text != '') tag_pop('phpcms','copy','')">
+&nbsp;&nbsp;
+<input type="button" name="listtag" value="列出模板中的标签" style="background:blue;color:#ffffff;width:120px" onclick="window.open('?mod=phpcms&file=tag&action=listtag&job=edittemplate&module='+myform.module.value+'&templatename='+myform.templatename.value+'&template='+myform.template.value,'tag','height=500,width=700,,top=0,left=0,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no')">
+</td>
+</tr>
+<?php } ?>
 <tr>
 <td class="tablerow">创建方式</td>
 <td class="tablerow"><input type="radio" name="createtype" value="0" checked onclick="createtype0.style.display='';createtype1.style.display='none'"> 在线创建 <input type="radio" name="createtype" value="1"  onclick="createtype0.style.display='none';createtype1.style.display=''"> 本地上传 </td>
 </tr>
 <tbody id='createtype0' style="display:">
 <tr>
-<td class="tablerow" colspan=2 align="center">
-<textarea id='txt_ln' rows='30' cols='4' align=right style='overflow:hidden;border-right:0px;padding-right:0px;text-align:right;scrolling:no;height:450px;font-family:Fixedsys,verdana,宋体;font-size:12px;background-color:#eeeeee;color:#0000FF;' readonly>
+<td class="tablerow" colspan=2 align="left">
+<textarea id='txt_ln' rows='30' cols='4' align='left' style='overflow:hidden;border-right:0px;padding-right:0px;text-align:right;scrolling:no;height:320px;font-family:Fixedsys,verdana,宋体;font-size:12px;background-color:#eeeeee;color:#0000FF;' readonly>
 1
 2
 3
@@ -1738,7 +2089,7 @@ include admintpl('header');
 1692
 1693
 </textarea>
-<textarea id='txt_main' name='content'  onscroll='show_ln()' wrap='off' style='width:720px;height:450px;overflow:auto;scrolling:yes;border-left:0px;font-family:Fixedsys,verdana,宋体;font-size:12px;'>
+<textarea id='txt_main' name='content'  onscroll='show_ln()' wrap='off' style='width:720px;height:320px;overflow:auto;scrolling:yes;border-left:0px;font-family:Fixedsys,verdana,宋体;font-size:12px;'>
 </textarea> <font color="red">*</font>
 <script>
 var i=1694;
@@ -1760,15 +2111,18 @@ function show_ln()
 </tbody>
 <tbody id='createtype1' style="display:none">
 <tr>
-<td class="tablerow">上传模板文件</td>
+<td class="tablerow">模板文件</td>
 <td class="tablerow"><input type="file" name="uploadfile" size="20"> <font color="red">*</font></td>
 </tr>
 </tbody>
 </table>
 <table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">
   <tr>
-    <td align="center"><input type="hidden" name="forward" value="<?=$forward?>">
-	<input type="submit" name="dosubmit" value=" 添加模板 "> <input type="reset" name="submit" value=" 重置 "></td>
+    <td align="center">
+ <input type="submit" name="dosubmit" value=" 保存 ">&nbsp;&nbsp;&nbsp;&nbsp;
+ <input type="reset" name="submit" value=" 重置 ">&nbsp;&nbsp;&nbsp;&nbsp;
+ <input type="button" name="bt" value=" 预览 " style="background:blue;color:#ffffff;" onclick="window.open('?mod=phpcms&file=template&action=preview')">
+</td>
   </tr>
 </table>
 </form>

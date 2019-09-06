@@ -2,7 +2,7 @@
 defined('IN_PHPCMS') or exit('Access Denied');
 
 $action = $action ? $action : 'manage';
-$actions = array('add','edit','delete','manage','save', 'preview', 'checkname');
+$actions = array('add','edit','copy','delete','manage','save', 'preview', 'checkname');
 if(!in_array($action, $actions)) showmessage($LANG['access_denied'],'goback');
 
 $function = isset($function) ? $function : 'article_list';
@@ -39,6 +39,6 @@ $tag = new tag($mod);
 
 if(!$tag->writeable()) showmessage($LANG['to_user_editer_chomd_templates'],'goback');
 
-$filename = ($action == 'add' || $action == 'edit') ? MOD_ROOT.'/admin/'.$file.'_'.$action.'.inc.php' : PHPCMS_ROOT.'/admin/tag.inc.php';
+$filename = ($action == 'add' || $action == 'edit' || $action == 'copy') ? MOD_ROOT.'/admin/'.$file.'_'.$action.'.inc.php' : PHPCMS_ROOT.'/admin/tag.inc.php';
 include $filename;
 ?>

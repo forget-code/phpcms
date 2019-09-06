@@ -126,5 +126,33 @@ $tags_config = array (
     'editor' => 'phpcms',
     'longtag' => 'link_list(0,0,0,20,2,1)',
   ),
+  '影片频道首页logo链接' => 
+  array (
+    'func' => 'link_list',
+    'introduce' => '',
+    'linktype' => '1',
+    'typeid' => '0',
+    'showhits' => '1',
+    'linknum' => '10',
+    'cols' => '2',
+    'templateid' => '0',
+    'edittime' => '2007-07-30 04:12:39',
+    'editor' => 'phpcms',
+    'longtag' => 'link_list(0,0,1,10,2,1)',
+  ),
+  '影片频道首页文字链接' => 
+  array (
+    'func' => 'link_list',
+    'introduce' => '',
+    'linktype' => '0',
+    'typeid' => '0',
+    'showhits' => '1',
+    'linknum' => '20',
+    'cols' => '2',
+    'templateid' => '0',
+    'edittime' => '2007-07-30 04:12:53',
+    'editor' => 'phpcms',
+    'longtag' => 'link_list(0,0,0,20,2,1)',
+  ),
 );
 ?>

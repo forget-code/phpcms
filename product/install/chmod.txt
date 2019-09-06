@@ -1,0 +1,2 @@
+product/
+product/pdt_upload/

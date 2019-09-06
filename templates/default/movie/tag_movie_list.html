@@ -1,0 +1,20 @@
+<table width="96%" border="0" align="center" cellpadding="1" cellspacing="1">
+{loop $movies $i $movie}
+{if $i%$cols==0}
+  <tr>
+{/if}
+    <td height="24" width="{$width}">{if $datetype}<span class="datetime f_r">{$movie[adddate]}</span>{/if}·{if $showcatname}<a href="{$movie[catlinkurl]}"{$target}>[{$movie[catname]}]</a>{/if} 
+{$movie[type]} <a href="{$movie[linkurl]}" title="{$movie[title]}" {$target}>{$movie[stitle]}</a>
+{if $showmovies}({$movie[totalmovies]}){/if}
+{if $showauthor}[作者:{$movie[author]}]{/if}
+{if $introducelen}<br/>{$movie[introduce]}{/if}
+    </td>
+{if $i%$cols==($cols-1)}
+  </tr>
+{/if}
+{/loop}
+</table>
+
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

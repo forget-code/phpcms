@@ -1,4 +1,4 @@
-<?php include "./install/header.tpl.php";?>
+<?php include PHPCMS_ROOT."/install/header.tpl.php";?>
 <table  border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
   <tr>
     <td>
@@ -74,7 +74,6 @@
                     <td align="left" class="tablerow">
                     <input name="dbcharset" type="radio" id="dbcharset" value="" <?php if(strtolower($CONFIG['dbcharset'])=='') echo ' checked '?>/>默认
                     <input name="dbcharset" type="radio" id="dbcharset" value="gbk" <?php if(strtolower($CONFIG['dbcharset'])=='gbk') echo ' checked '?>/>GBK
-					<input name="dbcharset" type="radio" id="dbcharset" value="big5" <?php if(strtolower($CONFIG['dbcharset'])=='big5') echo ' checked '?>/>big5 
 					<input name="dbcharset" type="radio" id="dbcharset" value="utf8" <?php if(strtolower($CONFIG['dbcharset'])=='utf8') echo ' checked '?>/>utf8 
 					<input name="dbcharset" type="radio" id="dbcharset" value="latin1" <?php if(strtolower($CONFIG['dbcharset'])=='latin1') echo ' checked '?>/>latin1 
 <img src="images/help.gif" style="cursor:pointer;" alt="查看帮助" align="absmiddle" onclick="help('helpdbcharset','<br />如果Mysql版本为4.0.x，则请选择默认；<br />如果Mysql版本为4.1.x或以上，则请选择其他字符集（一般选GBK）。');" />
@@ -136,4 +135,4 @@
 </td>
   </tr>
 </table>
-<?php include "./install/footer.tpl.php";?>
+<?php include PHPCMS_ROOT."/install/footer.tpl.php";?>

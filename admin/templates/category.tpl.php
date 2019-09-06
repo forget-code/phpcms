@@ -14,10 +14,10 @@ include admintpl('header');
 <td width="5%" class="tablerowhighlight">ID</td>
 <td width="15%" class="tablerowhighlight">栏目名称</td>
 <td width="8%" class="tablerowhighlight">栏目类型</td>
-<td width="17%" class="tablerowhighlight">目录/链接</td>
+<td width="15%" class="tablerowhighlight">目录/链接</td>
 <td width="8%" class="tablerowhighlight">栏目权限</td>
-<td width="12%" class="tablerowhighlight">管理员</td>
-<td width="30%" class="tablerowhighlight">管理操作</td>
+<td width="*" class="tablerowhighlight">管理员</td>
+<td width="25%" class="tablerowhighlight">管理操作</td>
 </tr>
 <?=$categorys?>
 </table>

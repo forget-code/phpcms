@@ -12,20 +12,21 @@ if($enablepurview)
 	if(!check_purview($arrgroupid_browse)) showmessage($LANG['category_for_hidden']);
 }
 
-$head['title'] = $catname.'-'.$CHA['channelname'].'-'.$CHA['seo_title'];
+$head['title'] = $seo_title ? $catname.'-'.$seo_title : $catname.'-'.$CHA['channelname'].'-'.$CHA['seo_title'];
 $head['keywords'] = $seo_keywords.','.$CHA['seo_keywords'];
 $head['description'] = $seo_description.'-'.$CHA['seo_description'];
 
 $position = catpos($catid);
 
 $skindir = $skinid ? PHPCMS_PATH.'templates/'.$CONFIG['defaulttemplate'].'/skins/'.$skinid : $skindir;
-if($child==1)
+if($child==1 && !isset($page))
 {
-	$arrchildid = subcat($channelid,$catid);
+	$linkurl =  linkurl(cat_url('url', $catid, 1));
+	$arrchildid = subcat($channelid, $catid, 'list');
 	$templateid = $templateid ? $templateid : 'category' ;
 }
 else
-{	
+{
 	$page = isset($page) ? intval($page) : 1;
 	$templateid = $listtemplateid ? $listtemplateid : 'category_list';
 }

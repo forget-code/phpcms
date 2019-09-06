@@ -27,14 +27,16 @@ include admintpl('header');
    <input name="mod" type="hidden" value="<?=$mod?>">
    <input name="file" type="hidden" value="<?=$file?>">
    <input name="action" type="hidden" value="<?=$action?>">
+   <input name="job" type="hidden" value="<?=$job?>">
    <input name="keyid" type="hidden" value="<?=$keyid?>">
    <input name="function" type="hidden" value="<?=$function?>">
    <input name="tag_config[func]" type="hidden" value="<?=$function?>">
    <input name="forward" type="hidden" value="<?=$forward?>">
-   <tr> 
+   <input name="tagname" type="hidden" value="<?=$tagname?>">
+    <tr> 
       <td class="tablerow" width="40%"><b>标签名称</b><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</td>
       <td  class="tablerow">
-	  <input name="tagname" id="tagname" type="text" size="20" value="<?=$tagname?>"> <input type="button" name="submit" value=" 检查是否已经存在 " onclick="javascript:openwinx('?mod=<?=$mod?>&file=<?=$file?>&action=tag_exists&tagname='+myform.tagname.value,'tag_exists','450','160')"> <br/>
+	  <input type="text" size="20" value="<?=$tagname?>" disabled title="标签名称不可再修改" />
 	  </td>
     </tr>
     <tr> 

@@ -242,18 +242,18 @@ function HideTabTitle(displayValue,tempType)
   <tbody id='Tabs3' style='display:none'>
       <th colspan=2>收费设置</th>
     <tr>
-      <td class='tablerow' width='30%'><strong>积分奖励</strong><br>会员在此栏目发表信息时可以得到的积分</td>
-      <td class='tablerow'>会员在此栏目每发表一条信息，可以得到 <input name='setting[creditget]' type='text' value='1' size='4' maxlength='4' style='text-align:center'> 分积分</td>
+      <td class='tablerow' width='30%'><strong>投稿奖励</strong><br>会员在此栏目发表信息时可以得到的点数</td>
+      <td class='tablerow'>会员在此栏目每发表一条信息，可以得到 <input name='setting[creditget]' type='text' value='1' size='4' maxlength='4' style='text-align:center'> 点</td>
     </tr>
     <tr>
       <td class='tablerow'><strong>默认收费点数</strong><br>会员在此栏目下查看信息时，该信息默认的收费点券数</td>
       <td class='tablerow'><input name='setting[defaultpoint]' type='text' value='0' size='4' maxlength='4' style='text-align:center'> 点</td>
     </tr>
     <tr>
-      <td class='tablerow'><strong>默认重复收费</strong><br>会员在此栏目下查看信息时，该信息默认的重复收费方式</td>
+      <td class='tablerow'><strong>重复收费设置</strong></td>
       <td class='tablerow'>
-        <input name='setting[defaultchargetype]' type='radio' value='0' checked>不重复收费<br>
-        <input name='setting[defaultchargetype]' type='radio' value='1'>每阅读一次就重复收费一次（建议不要使用）</td>
+	    <input name='setting[chargedays]' type='text' value='1' size='4' maxlength='4' style='text-align:center'> 天内不重复收费&nbsp;&nbsp;
+        <font color="red">0 表示每阅读一次就重复收费一次（建议不要使用）</font></td>
     </tr>
   </tbody>
     <tbody id='Tabs4' style='display:none'>

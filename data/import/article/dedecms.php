@@ -1,6 +1,6 @@
 <?php
 $settings['dedecms'] = array (
-  'importtime' => '1171020671',
+  'importtime' => '',
   'name' => 'dedecms',
   'note' => 'dedecms3x',
   'dbfrom' => '1',
@@ -12,7 +12,7 @@ $settings['dedecms'] = array (
   'table' => 'dede_archives a,dede_addonarticle b',
   'selectfield' => '*',
   'condition' => 'a.ID=b.aid AND a.ID>$maxid',
-  'maxid' => '2',
+  'maxid' => '0',
   'isuseoldid' => '0',
   'articleid' => 
   array (
@@ -140,7 +140,7 @@ $settings['dedecms'] = array (
     'value' => '',
     'func' => '',
   ),
-  'edittime' => 1175506170,
+  'edittime' => '',
   'checker' => 
   array (
     'field' => '',
@@ -204,13 +204,13 @@ $settings['dedecms'] = array (
   'htmldir' => 
   array (
     'field' => '',
-    'value' => 'html',
+    'value' => 'article',
     'func' => '',
   ),
   'prefix' => 
   array (
     'field' => '',
-    'value' => '',
+    'value' => 'article_',
     'func' => '',
   ),
   'urlruleid' => 
@@ -234,8 +234,8 @@ $settings['dedecms'] = array (
   'defaultcatid' => '3',
   'catids' => 
   array (
-    2 => '',
     3 => '',
+    4 => '',
   ),
   'articlecheck' => '1',
   'timelimit' => '90',

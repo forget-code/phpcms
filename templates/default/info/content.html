@@ -1,0 +1,113 @@
+{template 'phpcms','header'}
+
+<table width="980" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="720" valign="top" class="content">
+      <div class="position_1">当前位置：{$position} {$title}</div>                <h1>{$title}</h1>
+      <div id="property">ID号：{$infoid}&nbsp;&nbsp;发布日期： {$adddate} &nbsp;&nbsp; 截止日期： {$enddate}&nbsp;&nbsp;地区：<a href="{$AREA[$areaid]['linkurl']}">{$AREA[$areaid]['areaname']}</a>
+	  浏览次数：<span id="hits">{$hits}</span>
+	  </div>
+	  			<!--自定义字段//-->
+
+			<table width="100%" align="center" cellspacing="0" cellpadding="0">
+             {loop $fields $v}
+              <tr>
+                <td>{$v[title]}：{$v[value]}</td>
+              </tr>
+             {/loop}
+			 </table>
+			 <!--自定义字段\\-->
+       <table width="100%" align="center" cellspacing="8" cellpadding="0">
+        <tr>
+          <td valign="top"><div class="pic mar_10" style="height:126px; width:186px;" ><img src="{$thumb}" width="180" height="120"></div></td>
+		  <td width="512" valign="middle" class="content_text">{$content}</td>
+        </tr>
+      </table>
+
+      <div class="float_right"><a href="javascript:window.external.addFavorite(window.location,'{$title}')"><img src="{$skindir}/images/fav_info.gif"></a></div>
+	  <div class="clearboth"></div>
+	  <table width="100%"  cellspacing="0" cellpadding="0" class="mar_10">
+        <tr>
+		  <td width="300" valign="top">
+			<div class="messagebar">联系方式</div>
+			<table width="100%"  cellspacing="10" cellpadding="0" class="side_lrb">
+			{if $point_message}
+                  <tr>
+                    <td>{$point_message}</td>
+                  </tr>
+			{else}
+                  <tr>
+                    <td>联系人：<a href="{PHPCMS_PATH}member/member.php?username={$username}" class="member_url">{$author}</a></td>
+                  </tr>
+                  <tr>
+                    <td>电　话：<script type="text/javascript" src="{PHPCMS_PATH}toimg.php?auth={$urlencode(phpcms_auth($telephone, 'ENCODE', $PHPCMS['authkey']))}"></script> </td>
+                  </tr>
+                  <tr>
+                    <td>地　址：{$address}</td>
+                  </tr>
+                  <tr>
+                    <td>E-mail：<script type="text/javascript" src="{PHPCMS_PATH}toimg.php?auth={$urlencode(phpcms_auth($email, 'ENCODE', $PHPCMS['authkey']))}"></script></td>
+                  </tr>
+                  <tr>
+                    <td>Q Q：<a href="http://wpa.qq.com/msgrd?V=1&Uin={$qq}&Site={$PHP_DOMAIN}&Menu=yes" title="点击QQ交谈" target="_blank">{$qq}</a></td>
+                  </tr>
+				  {/if}
+                </table>
+				
+				
+				</td>
+			<td width="10"></td>
+            <td width="410" valign="top">
+				<table width="100%"  cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td class="messagebar">发布人信息</td>
+                  </tr>
+			  </table>
+
+			  <table width="96%" align="center" cellpadding="0"  cellspacing="0" class="side_lrb">
+              <tr>
+                <td height="22">发布人：<a href="{PHPCMS_PATH}member/member.php?username={$username}" class="member_url">{$username}</a> </td>
+              </tr>
+              <tr>
+                <td height="22">目前身份：<span id="span_group"></span></td>
+              </tr>
+              <tr>
+                <td height="22">最后登录：<span id="span_lastlogintime"></span></td>
+              </tr>
+              <tr>
+                <td height="22">E-mail：<span id="span_email"></span></td>
+              </tr>
+              <tr>
+                <td height="22"><a href="{PHPCMS_PATH}member/member.php?username={$username}&channelid={$channelid}" target="_blank">查看用户发布的所有信息 >></a></td>
+              </tr>
+            </table>
+
+		  </td>
+        </tr>
+      </table>
+<!--留言-->
+<div class="clearboth"></div>
+
+<script type="text/javascript" src="{$MODULE['comment']['linkurl']}list_js.php?keyid={$channelid}&itemid={$infoid}&commentnum=10&ordertype=1&title={$urlencode($title)}">
+</script>
+
+    </td>
+          <td width="10"> </td>
+          <td width="250" valign="top" class="right_bg">
+
+		<div class="rightcats"><h1>本类最新信息</h1></div>
+		{tag_本类最新信息}
+                <table width="94%" align="center" cellpadding="0"  cellspacing="0">
+                  <tr>
+                    <td class="lefttitle"></td>
+                  </tr>
+              </table>
+			<div class="rightcats"><h1>本类推荐信息</h1></div>
+              {tag_本类推荐信息}
+			<div class="rightcats"><h1>相关信息</h1></div>
+              {tag_相关信息}
+			</td>
+        </tr>
+      </table>
+<script type="text/javascript" src="{$channelurl}show_js.php?itemid={$itemid}"></script>
+{template 'phpcms','footer'}

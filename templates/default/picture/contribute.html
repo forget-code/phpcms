@@ -44,7 +44,7 @@ if(obj.value.indexOf("\r") == -1){
 var p = obj.value.substring(obj.value.lastIndexOf("|", i)+1, i)+obj.value.substring(i, obj.value.indexOf(str, i));
 var l = obj.value.substring(i, obj.value.length);
 if(l.indexOf("\n")==-1) p = obj.value.substring(obj.value.lastIndexOf("|", i)+1, i)+l;
-var u = <?php echo "'";echo imgurl($CHA['channeldir'].'/'.$MOD['upload_dir'].'/');echo "'"; ?>;
+var u = <?php echo "'";echo imgurl($PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$MOD['upload_dir'].'/');echo "'"; ?>;
 if(p.indexOf("://") != -1) u = '';
 var m = p.match(/^[^\r\n\|]+\.(jpg|gif|png|bmp)$/);
 if(m != null)
@@ -52,14 +52,13 @@ if(m != null)
 	window.open(u+p);
 }
 }
-
 </script>
 
 
 <div class="memberborder_1">
 <div class="memberborder_2">
 <h1>发布图片</h1>
-<form action="{$CHA[linkurl]}/contribute.php" method="post" name="myform" onsubmit="return doCheck();">
+<form action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/contribute.php" method="post" name="myform" onsubmit="return doCheck();">
 <table cellpadding="2" cellspacing="1" class="righttable">
 <tbody>
     <tr>
@@ -73,7 +72,7 @@ if(m != null)
 <tr> 
 <td class="td_right"><strong>标题图片</strong> </td>
 <td class="td_left">
-<input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=thumb&type=thumb&width=150&height=150','upload','360','300')"></td>
+<input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=thumb&type=thumb&width=150&height=150','upload','360','300')"></td>
 </tr>
 <tr>
 <td class="td_right"><font color="red">*</font> <strong>内容</strong></td>
@@ -96,7 +95,7 @@ if(m != null)
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果您使用的是IE6+浏览器，在图片名上双击鼠标可在新窗口中弹出图片
 		</td>
 		<td valign="top" style="light-height:22px;">
-		<input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=temp&type=both&width=150&height=150&upload_dir={$MOD[upload_dir]}','upload','360','300')">
+		<input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=temp&type=both&width=150&height=150&upload_dir={$MOD[upload_dir]}','upload','360','300')">
 		<input type="hidden" name="temp" id="temp" value="" onpropertychange="Picurls();">
 		</td>
 		</tr>
@@ -126,8 +125,8 @@ if(m != null)
 function Picurls() {
 	if($('temp').value != '') {
 	var ss = $("pictureurls").value == '' ? '' : "\n";
-	$('pictureurls').value += ss+'图片说明|'+$('temp').value.replace(/<?=$CHA['channeldir']?>\/<?=$MOD['upload_dir']?>\//g, '');
-	$('allpictureurls').value += ss+$('temp').value.replace(/<?=$CHA['channeldir']?>\/<?=$MOD['upload_dir']?>\//g, '');
+	$('pictureurls').value += ss+'图片说明|'+$('temp').value.replace(/<?=$PHPCMS['uploaddir']?>\/<?=$CHA['channeldir']?>\/<?=$MOD['upload_dir']?>\//g, '');
+	$('allpictureurls').value += ss+$('temp').value.replace(/<?=$PHPCMS['uploaddir']?>\/<?=$CHA['channeldir']?>\/<?=$MOD['upload_dir']?>\//g, '');
 	$('temp').value = '';
 	}
 }

@@ -24,7 +24,7 @@ include admintpl('header');
 	foreach($types as $id=>$type)
 	{ 
 ?>
-<tr align="left" onmouseout="this.style.backgroundColor='#F1F3F5'" onmouseover="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5'  <?if($type['disabled']) echo " style='color:#888888;'";?>> 
+<tr align="left" onmouseout="this.style.backgroundColor='#F1F3F5'" onmouseover="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5'> 
 <td align="center"><input type="checkbox" name="type[<?=$id?>][delete]" value="1" /></td>
 <td align="center"><input type="hidden" name="type[<?=$id?>][name]" value="<?=$type['name']?>"><a href="?mod=<?=$mod?>&file=<?=$file?>&action=manage&type=<?=urlencode($type['name'])?>" title="点击管理该分类的链接"><?=$type['name']?></a></td>
 <td align="center"><input type="text" name="type[<?=$id?>][number]" value="<?=$type['number']?>" size="3"></td>
@@ -68,7 +68,7 @@ $n = $id+1;
 	<input name='chkall' title="全部选中" type='checkbox' id='chkall' onclick='checkall(this.form)' value='checkbox' /> 全选/不选
 	</td>
 	<td>
-	<input type="submit" name="dosubmit" value=" 更新分类 " />
+	<input type="submit" name="dosubmit" value=" 更新分类 " /> &nbsp;<font color="red">注意:选中分类表示删除该分类</font>
 	</td>
   </tr>
 </table>

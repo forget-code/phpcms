@@ -284,7 +284,7 @@ foreach($groups as $id=>$group)
 	echo "<option value=\"{$group['groupid']}\" $selected>{$group['groupname']}</option>";
 }
 ?>
-</select>
+</select> &nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="ischargebynewgroup" value="1"> <font color="blue">把会员组计费方式、有效期、点数默认值应用到用户吗？</font>
 	</td>
  </tr>
   <tr>

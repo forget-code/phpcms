@@ -50,7 +50,7 @@
 <td><?=$article['adddate']?></td>
 <td><?=$article['hits']?></td>
 <td>
-<a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&channelid=<?=$channelid?>&articleid=<?=$article['articleid']?>&catid=<?=$article['catid']?>&referer=<?=$forward?>" title="编辑文章">编辑</a> |
+<a href="?mod=<?=$mod?>&file=article&action=edit&channelid=<?=$channelid?>&articleid=<?=$article['articleid']?>&catid=<?=$article['catid']?>&referer=<?=$forward?>" title="编辑文章">编辑</a> |
 <a href="?mod=comment&file=comment&action=manage&item=articleid&itemid=<?=$article['articleid']?>&channelid=<?=$channelid?>&articleid=<?=$article['articleid']?>" title="管理评论">评论</a>
 </td>
 </tr>
@@ -67,13 +67,6 @@
     <td><input name='chkall' type='checkbox' id='chkall' onclick='checkall(this.form)' value='check'>全选/反选</td>
 	<td>
 		<input type='submit' value='移出专题' style="color:red;" onClick="document.myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=delete_itemids&channelid=<?=$channelid?>&specialid=<?=$specialid?>&referer=<?=$forward?>'" >&nbsp;
-		<input type='submit' value='更新排序' onClick="document.myform.action='?mod=<?=$mod?>&file=article&action=listorder&channelid=<?=$channelid?>&referer=<?=$forward?>'" >&nbsp;
-		<input type='submit' value='更新排序' onClick="document.myform.action='?mod=<?=$mod?>&file=article&action=listorder&channelid=<?=$channelid?>&referer=<?=$forward?>'" >&nbsp;
-		<input type='submit' value='生成文章' onClick="document.myform.action='?mod=<?=$mod?>&file=createhtml&action=create_show&channelid=<?=$channelid?>&referer=<?=$forward?>'" >&nbsp;		
-		<input type='submit' value='更新地址' onClick="document.myform.action='?mod=<?=$mod?>&file=createhtml&action=update_url&channelid=<?=$channelid?>&referer=<?=$forward?>'" >&nbsp;
-		<input type='submit' value='删除文章'		onClick="document.myform.action='?mod=<?=$mod?>&file=article&action=action&job=status&value=-1&channelid=<?=$channelid?>&referer=<?=$forward?>'">&nbsp;
-        <input type='submit' value='移动文章' onClick="document.myform.action='?mod=<?=$mod?>&file=article&action=move&movetype=1&channelid=<?=$channelid?>'">
-        <input type='submit' value='加入专题' onClick="document.myform.action='?mod=phpcms&file=special&action=add_itemids&channelid=<?=$channelid?>'">
 	</td>
   </tr>
 </table>

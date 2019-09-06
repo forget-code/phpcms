@@ -1,13 +1,4 @@
 <?php
-/*
-*######################################
-* PHPCMS v3.00 - Advanced Content Manage System.
-* Copyright (c) 2004-2005 phpcms.cn
-*
-* For further information go to http://www.phpcms.cn/
-* This copyright notice MUST stay intact for use.
-*######################################
-*/
 defined('IN_PHPCMS') or exit('Access Denied');
 $channelid = intval($channelid);
 $channelid or showmessage($LANG['invalid_parameters'],$referer);

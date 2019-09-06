@@ -1,0 +1,144 @@
+<?php
+
+/*Language Format:
+Add a new file(.lang.php) with your module name at /phpcms/languages/
+translation save at the array:$LANG
+*/
+
+$LANG['illegal_parameters']      = '非法参数！请返回！';
+$LANG['channel_update_success']  = '频道首页更新成功！';
+$LANG['updating_category']       = '正在开始更新栏目...';
+$LANG['category']                = '栏目 [';
+$LANG['update_success']          = '] 更新成功！';
+$LANG['successfull']             = '更新成功!';
+$LANG['choose_category']         = '请选择栏目！';
+$LANG['category_update_success'] = '] 更新成功...';
+$LANG['from']                    = '从 ';
+$LANG['go']                      = ' 到 ';
+$LANG['page_update_success']     = ' 页更新成功！';
+
+$LANG['add_movie'] = '添加影片';
+$LANG['type_select'] = '选择地区';
+$LANG['manage_movie'] = '管理影片';
+$LANG['check_movie'] = '审核影片';
+$LANG['add_player'] = '添加播放器';
+$LANG['manage_player'] = '管理播放器';
+$LANG['manage_server'] = '影片服务器管理';
+$LANG['add_server'] = '添加影片服务器';
+$LANG['choose_category_add_movie'] = '请选择栏目添加影片';
+$LANG['url_no_permit_blank'] = '影片地址不能为空';
+$LANG['editor_success']          = '影片编辑成功！';
+$LANG['editor_failure']          = '影片编辑失败！';
+
+$LANG['movie_update_success']     = '影片更新成功！';
+$LANG['id']                      = 'ID从 ';
+$LANG['movie_success']       = ' 的影片更新成功！';
+$LANG['choices_movie']        = '请选择影片！请返回！';
+$LANG['movie_category_success']     = '栏目影片更新成功！';
+$LANG['movie_update_success']= '影片更新成功！';
+$LANG['url_movie_success']   = '影片地址成功！';
+$LANG['url_movie_update_success']   = ' 的影片地址更新成功！';
+$LANG['category_create_success'] = '目录创建成功！';
+$LANG['category_remove_success'] = '目录删除成功！';
+$LANG['movie_home']           = '影片首页';
+$LANG['update_channels']         = '更新频道';
+$LANG['quick_update']            = '快捷更新';
+$LANG['suggest']                 = '提示:点击将依次更新 频道首页->栏目列表';
+$LANG['channel_home_updating']   = '更新频道首页';
+$LANG['update_category']         = '更新栏目';
+$LANG['movie_updated']       = '更新影片';
+$LANG['title']                   = '点击查看';
+$LANG['yes']                     = '是';
+$LANG['no']                      = '否';
+$LANG['generate_list_category']  = '生成栏目列表';
+$LANG['generate_movie']      = '生成影片';
+$LANG['generate_category']       = '生成栏目目录'; 
+$LANG['home']                    = '首页';
+$LANG['manage_movie']        = '影片管理';
+$LANG['success_operation']       = '操作成功';
+$LANG['operation_failure']       = '操作失败';
+$LANG['id_category_not_empty']   = '栏目ID不能为空！请返回！';
+$LANG['disallow_add_movie']   = '指定栏目不允许添加影片！请返回！';
+$LANG['short_heading_no_space']  = '对不起，简短标题不能为空！请返回！';
+$LANG['movie_url_no_air']    = '对不起，影片地址不能为空！请返回！';
+$LANG['unknown']                 = '未知';
+$LANG['add_movie_success'] = '影片添加成功！';
+$LANG['add_movie_failure'] = '影片添加失败！';
+$LANG['class']                   = '类别';
+$LANG['to_other_category']       = '切换到其他栏目添加影片';
+$LANG['category_not_exist']      = '目录不存在，请检查！';
+$LANG['file_not_find']           = '指定目录未找到任何文件，请检查！';
+$LANG['batch_added_success']     = '批量添加成功！';
+$LANG['ftp_setting_wrong']       = 'FTP 设置错误！';
+$LANG['check_same_name']         = '检查是否有同名标题';
+$LANG['input_title_movielaods']   = '请输入影片标题！';
+$LANG['title_not_exist']         = '标题不存在，您可以使用！';
+$LANG['heading_already_exist']   = '标题已经存在，详情请在管理影片搜索！';
+$LANG['delete_success']          = '影片删除成功';
+$LANG['failure_to_delete']       = '影片删除失败';
+$LANG['id_movie_not_air']     = '影片ID不能为空！请返回！';
+$LANG['title_no_air']            = '对不起，标题不能为空！请返回！';
+$LANG['moved_no_air']       = '对不起，影片地址不能为空！请返回！';
+
+$LANG['sorting_success']         = '影片排序更新成功';
+$LANG['sorting_failure']         = '影片排序更新失败';
+$LANG['logn_add_page']           = "您还没有添加栏目，只有先添加栏目才能添加和管理影片。<br><br>现在进入栏目添加页面？";
+$LANG['generat_information_list']= '生成栏目信息列表';
+$LANG['generat_list']            = '生成列表';
+$LANG['generat_movie_category']   = '生成栏目影片';
+$LANG['movie_generat']        = '生成影片';
+
+$LANG['my_add']                  = '我添加的影片';
+$LANG['moves_batch_movie']   = '批量移动影片';
+$LANG['recycle_bin']             = '回收站';
+$LANG['recycle_bin_management']  = '回收站管理';
+$LANG['mold_installs']           = '模块配置';
+$LANG['label_to_use']            = '标签调用';
+$LANG['statistics_statement']    = '统计报表';
+$LANG['issued_homepage']         = '发布网页(html)';
+$LANG['illegal_action']          = '非法动作，请返回！';
+$LANG['choose_category_manage']  = '请选择栏目进行管理';
+$LANG['recommend_position']      = '推荐位置';
+$LANG['class_subsidiary']        = '附属分类';
+$LANG['target_category_no_air']  = '目标栏目不能为空！请返回！';
+$LANG['target_disallow_movie']= '目标栏目不允许添加影片！请返回！';
+$LANG['id_channel_space']        = '目标频道ID或栏目ID不能为空！';
+$LANG['source_category_empty']   = '源栏目不能为空！请返回！';
+$LANG['mobile_operated_success'] = '移动成功操作成功！';
+$LANG['choose_target_category']  = '选择目标栏目';
+$LANG['image_server_not_empty']  = '镜像服务器地址不能为空';
+$LANG['show_name']               = '显示名称时，镜像服务器名称为空';
+$LANG['show_logo']               = '显示LOGO时，镜像服务器LOGO不能为空';
+$LANG['image_server_add_success']= '镜像服务器添加成功';
+$LANG['operation_success']       = '操作成功！';
+$LANG['setting_save_success']    = '配置保存成功！';
+$LANG['home_management']         = '管理首页';
+$LANG['add_feature']             = '添加专题';
+$LANG['manage_feature_movie'] = '专题影片管理';
+$LANG['add_movie_to_channel_success']  = '影片加入专题成功';
+$LANG['remove_movie_from_channel_success']   = '影片移出专题成功';
+$LANG['feature_no_air']          = '专题不能为空！';
+$LANG['movie_list']           = '影片列表';
+$LANG['image_movie']          = '图片影片';
+$LANG['slides_movie']         = '幻灯片影片';
+$LANG['related_movie']        = '相关影片';
+$LANG['not_exist']               = '不存在';
+$LANG['function_labels']         = '函数标签！';
+$LANG['labels']                  = '标签';
+$LANG['label_list_of_topics']    = '专题列表标签';
+$LANG['category_labels']         = '栏目标签';
+$LANG['class_labels']            = '分类标签';
+$LANG['movie_label_manage']   = '影片标签管理';
+$LANG['action']                  = '要使用在线模板编辑和标签管理功能必须先把 ./templates/ 目录和子目录以及文件设置为 777！';
+$LANG['funtion_name_no_air']     = '函数名不能为空！';
+$LANG['labels_name_no_air']      = '标签名不能为空！';
+$LANG['renamed']                 = '已经存在！请改名！';
+$LANG['no_authority']            = '您没有操作权限！';
+$LANG['no_this_authority']       = '您没有此栏目的操作权限！';
+$LANG['only_in_child_special']   = '影片只能加入到专题子分类中！';
+$LANG['choose_player']   = '选择播放器';
+$LANG['choose_server']   = '选择服务器';
+$LANG['del']   = '删除';
+$LANG['not_authorized']='您没有操作权限';
+ 
+?>

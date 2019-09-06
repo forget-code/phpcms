@@ -1,6 +1,6 @@
 <?php
 $settings['DiscuzMember'] = array (
-  'importtime' => 1171006750,
+  'importtime' => '',
   'name' => 'DiscuzMember',
   'note' => 'Discuz论坛用户数据导入配置',
   'dbfrom' => '1',
@@ -186,6 +186,6 @@ $settings['DiscuzMember'] = array (
   'membercheck' => '1',
   'timelimit' => '90',
   'number' => '100',
-  'edittime' => 1171006746,
+  'edittime' => '',
 );
 ?>

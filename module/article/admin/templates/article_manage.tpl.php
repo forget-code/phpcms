@@ -1,4 +1,7 @@
-<?php include admintpl('header');?>
+<?php 
+defined('IN_PHPCMS') or exit('Access Denied');
+include admintpl('header');
+?>
 <?=$menu?>
 <table width="100%" height="25" border="0" cellpadding="3" cellspacing="0" class="tableborder">
   <tr>
@@ -39,12 +42,16 @@
 
 <td><input name='listorders[<?=$article['articleid']?>]' type='input' value='<?=$article['listorder']?>' size="3" /></td>
 
-<td align="left"><? if(!$catid) { ?>[<a href="<?=$CATEGORY[$article['catid']]['linkurl']?>" target="_blank"><?=$CATEGORY[$article['catid']]['catname']?></a>] <? } ?><?php if($article['typeid']) { ?> <a href="?mod=<?=$mod?>&file=<?=$file?>&action=manage&channelid=<?=$channelid?>&typeid=<?=$article['typeid']?>"><?=$article['typename']?></a> <?php } ?><a href="<?=$article['linkurl']?>" target="_blank"><?=$article['title']?></a>
-<?php if($article['showcommentlink']) { ?><a href="?mod=comment&file=comment&itemid=<?=$article['articleid']?>&keyid=<?=$channelid?>" title="管理评论"><font color="red">评</font></a><?php } ?>
+<td align="left"><? if(!$catid) { ?>[<a href="<?=$CATEGORY[$article['catid']]['linkurl']?>" target="_blank"><?=$CATEGORY[$article['catid']]['catname']?></a>] <? } ?><?php if($article['typeid']) { ?> <a href="?mod=<?=$mod?>&file=<?=$file?>&action=manage&channelid=<?=$channelid?>&typeid=<?=$article['typeid']?>"><font color="green"><?=$article['typename']?></font></a> <?php } ?><a href="<?=$article['linkurl']?>" target="_blank"><?=$article['title']?></a>
+<?php if($article['thumb']) { ?> <font color="blue">图</font><?php } ?>
+<?php if($article['arrposid']) { ?> <font color="green">荐</font><?php } ?>
+<?php if($article['arrgroupidview']) { ?> <font color="red">权</font><?php } ?>
+<?php if($article['readpoint']) { ?> <font color="blue">点</font><?php } ?>
+<?php if($article['showcommentlink']) { ?> <a href="?mod=comment&file=comment&itemid=<?=$article['articleid']?>&keyid=<?=$channelid?>" title="管理评论"><font color="red">评</font></a><?php } ?>
 </td>
 
 
-<td title="编辑:<?=$article['checker']?>"><a href="<?=PHPCMS_PATH?>member/member.php?username=<?=urlencode($article['username'])?>" target="_blank"><?=$article['username']?></a></td>
+<td title="编辑:<?=$article['checker']?>"><a href="<?=$MODULE['member']['linkurl']?>member.php?username=<?=urlencode($article['username'])?>" target="_blank"><?=$article['username']?></a></td>
 <td><?=$article['adddate']?></td>
 <td><?=$article['hits']?></td>
 <td>
@@ -69,7 +76,10 @@
 		<input type='submit' value='更新地址' onClick="document.myform.action='?mod=<?=$mod?>&file=createhtml&action=update_url&channelid=<?=$channelid?>&referer=<?=$referer?>'" >&nbsp;
 		<input type='submit' value='删除文章' onClick="document.myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=action&job=status&value=-1&channelid=<?=$channelid?>&referer=<?=$referer?>'">&nbsp;
         <input type='submit' value='移动文章' onClick="document.myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=move&movetype=1&channelid=<?=$channelid?>&referer=<?=$referer?>'">
-        <input type='submit' value='加入专题' onClick="document.myform.action='?mod=<?=$mod?>&file=special&action=add_itemids&channelid=<?=$channelid?>&forward=<?=$referer?>'"></td>
+        <input type='submit' value='加入专题' onClick="document.myform.action='?mod=<?=$mod?>&file=special&action=add_itemids&channelid=<?=$channelid?>&forward=<?=$referer?>'">
+        <input type='submit' value='加入分类=>' onClick="document.myform.action='?mod=<?=$mod?>&file=addtotype&channelid=<?=$channelid?>&forward=<?=$referer?>'">
+		<?=type_select('typeid', $LANG['type'])?>
+		</td>
   </tr>
 </table>
 <table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">

@@ -1,0 +1,23 @@
+{template 'phpcms','header'}
+<table width="980" cellpadding="0"  cellspacing="0">
+  <tr>
+<td width="760" valign="top">
+	<!--位置导航-->
+	<div class="position">当前位置：<a href="{$channelurl}">频道首页</a> >> <a href="{$channelurl}special/">专题首页</a> >> 专题列表</div>
+    <!--搜索框-->
+    <script language="text/javascript" src="{PHPCMS_PATH}data/js/search.js"></script>
+	<div class="cat_title">
+	<div class="cat_name">本站专题</div>
+	<div class="cat_url"><a href="#" class="more"></a></div></div>
+    <!--专题列表-->
+    {tag_文章频道专题列表}
+</td>
+<td width="10"></td>
+    <td width="210" valign="top" class="right_bg">
+	  <div class="rightcats"><h1>推荐专题</h1><h2></h2></div>
+<!--推荐专题-->
+      <div class="slidepic_1">{tag_文章频道推荐专题}</div>
+   </td>
+  </tr>
+</table>
+{template 'phpcms','footer'}

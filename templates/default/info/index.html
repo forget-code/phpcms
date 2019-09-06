@@ -1,0 +1,75 @@
+{template 'phpcms','header'}
+
+ <!--频道列表-->
+<table width="980" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="250" valign="top" class="gray">
+	  <div class="info_cat">
+        <li class="info_cat_left">信息分类</li>
+        <li class="info_cat_right"><a href="{$channelurl}contribute.php" class="white">发布信息</a></li>
+      </div>
+
+	  <div class="info_cat_list">
+
+{loop $childcats $i $cat}
+<h3><a href="{$cat['linkurl']}"><strong>{$cat[catname]}</strong></a></h3>
+<ul>
+{loop $subcats[$i] $k $c}
+<li><a href="{$c['linkurl']}">{$c[catname]}</a>({$c[items]})</li>
+{/loop}
+</ul>
+<div style="clear:both; "></div> 
+{/loop}
+	</div>
+	</td>
+    <td width="10"><img src="{$skindir}/images/space.gif" height="1" width="10" alt=""/></td>
+    <td valign="top" width="720">
+    <table width="100%" cellpadding="0"  cellspacing="0" class="mar_5">
+     <tr>
+       <td width="436" height="200" valign="top" >
+	   <div class="cat_box_1">          
+            <div class="cat_title"><strong>推荐信息</strong></div>
+            {tag_信息频道首页推荐}
+           </div>
+      </td>
+      <td width="10"></td>
+<!--城市切换--><td width="274" valign="top">
+<div class="cat_box_1">          
+            <div class="cat_title"><strong>按地区浏览</strong></div>
+<table width="100%"  cellspacing="5" cellpadding="0">
+    <tr>
+      <td class="province" style="padding:5px" valign="top">
+	  {loop $mainareas $i $v}
+		<a href="{$v['linkurl']}" target="_blank">{$v['areaname']}</a>&nbsp;
+	  {/loop}
+	  </td>
+    </tr>
+  </table>
+  </div>
+  </td>
+        </tr>
+      </table>
+<script language="JavaScript" src="{PHPCMS_PATH}data/js/search.js"></script>
+<table height="5" cellpadding="0" cellspacing="0">
+  <tr>
+    <td></td>
+  </tr>
+</table>
+	  <table width="100%" cellpadding="0" cellspacing="0" class="mar_10">
+	  <tbody>
+	  {loop $childcats $i $cat}
+       {if $i%3==0}<tr>{/if}
+          <td width="230" valign="top" style="padding:0 5px">
+            <div class="cat_title">
+			  <div class="cat_name">{$cat[catname]}</div>
+			  <div class="cat_url"><a href="{$cat[linkurl]}" target="{$cat[target]}" class="more">更多</a></div>
+			</div>
+		  {tag_信息频道首页栏目最新}</div></td>
+       {if $i%3==2}</tr>{/if}
+	   {/loop}
+	   </tbody>
+      </table>
+    </td>
+  </tr>
+</table>
+{template 'phpcms','footer'}

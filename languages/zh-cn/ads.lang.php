@@ -28,4 +28,6 @@ $LANG['add_advertisement']='添加广告位';
 $LANG['manage_advertisement']='广告位管理';
 $LANG['manage_the_order_of_advertisement']='广告定单管理';
 $LANG['advertising_management']='广告管理'; 
+$LANG['yes_sign'] = '√';
+$LANG['no_sign'] = '×';
 ?>

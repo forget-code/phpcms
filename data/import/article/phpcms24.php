@@ -140,7 +140,7 @@ $settings['phpcms24'] = array (
     'value' => '',
     'func' => '',
   ),
-  'edittime' => 1175506183,
+  'edittime' => '',
   'checker' => 
   array (
     'field' => 'checker',
@@ -204,13 +204,13 @@ $settings['phpcms24'] = array (
   'htmldir' => 
   array (
     'field' => '',
-    'value' => 'html',
+    'value' => 'article',
     'func' => '',
   ),
   'prefix' => 
   array (
     'field' => '',
-    'value' => '',
+    'value' => 'article_',
     'func' => '',
   ),
   'urlruleid' => 
@@ -234,11 +234,11 @@ $settings['phpcms24'] = array (
   'defaultcatid' => '0',
   'catids' => 
   array (
-    2 => '',
     3 => '',
+    4 => '',
   ),
   'articlecheck' => '1',
-  'timelimit' => '60',
-  'number' => '2',
+  'timelimit' => '90',
+  'number' => '100',
 );
 ?>

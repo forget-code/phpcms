@@ -18,7 +18,7 @@ include admintpl('header');
 <? if(is_array($mypages)) foreach($mypages AS $page) { ?>
 <tr align="center" onmouseout="this.style.backgroundColor='#F1F3F5'" onmouseover="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5'>
 <td><input type="checkbox" name="mypageid[]" value="<?=$page['mypageid']?>"></td>
-<td align="left"><a href="<?=$page['url']?>" target="_blank"><?=$page['meta_title']?></a></td>
+<td align="left"><a href="<?=$page['url']?>" target="_blank"><?=$page['seo_title']?></a></td>
 <td align="left"><a href="<?=$page['url']?>" target="_blank"><?=$page['url']?></a></td>
 <td><a href='?mod=<?=$mod?>&file=mypage&action=edit&mypageid=<?=$page['mypageid']?>'>修改</a> | <a href='?mod=<?=$mod?>&file=mypage&action=delete&mypageid=<?=$page['mypageid']?>'>删除</a></td>
 </tr>

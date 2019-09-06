@@ -142,11 +142,6 @@ function transact(action,objBtn) {
 				alert("请输入会员用户名!");
 				objTxt.focus();
 				return false;
-			} else if (/^\w+$/i.test(objTxt.value) == false) {
-				alert("输入的用户名无效，请重新输入!");
-				objTxt.value = "";
-				objTxt.focus();
-				return false;
 			} else {
 				strUser = objTxt.value;
 			}

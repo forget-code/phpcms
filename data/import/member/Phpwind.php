@@ -186,6 +186,6 @@ $settings['Phpwind'] = array (
   'membercheck' => '1',
   'timelimit' => '90',
   'number' => '100',
-  'edittime' => 1171023373,
+  'edittime' => '',
 );
 ?>

@@ -28,7 +28,7 @@ else
 extract($special);
 
 $specialpic = imgurl($specialpic);
-$specialbanner = imgurl($specialbanner);
+if($specialbanner) $specialbanner = imgurl($specialbanner);
 
 $head['title'] = $seo_title ? $seo_title : $specialname;
 $head['keywords'] = $seo_keywords;

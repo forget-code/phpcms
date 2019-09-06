@@ -1,0 +1,179 @@
+{template 'movie','header'}
+<script type="text/javascript">
+// 表单提交检测
+function doCheck(){
+
+	// 检测表单的有效性
+	// 如：标题不能为空，内容不能为空，等等....
+	if ($('catid').value=='0'){
+		alert('指定的栏目不允许添加影片！只允许在其子栏目中添加影片。');
+		$('catid').focus();
+		return false;
+	}
+	if ($('title').value=='') {
+		alert('对不起，标题不能为空！');
+        $('title').focus();
+		return false;
+	}
+
+	{if $MOD['check_code']}
+	if ($('checkcodestr').value=='') {
+		alert("请输入验证码!");
+		$('checkcodestr').focus();
+		return false;
+	}
+	{/if}
+
+}
+</script>
+<script type="text/javascript">
+function setid()
+{
+	str='';
+	if(!$F('num'))
+	$F('num')=1;
+	for(i=$F('num');i<=$F('endnum');i++)
+	{
+	if($F('endnum')<10)
+	{
+	str+='<input type="text" name="url[]" size=50 value="'+$F('pc_movieieurl')+''+i+''+$F('pc_vodie')+'" class="Input">&nbsp;前台显示<input name="txt[]" type="text" value="'+i+'" size="4" class="Input"/><br>';
+	}
+	else if($F('endnum')<100)
+	{
+	if(i<10)
+	{
+	str+='<input type="text" name="url[]" size=50 value="'+$F('pc_movieieurl')+''+'0'+i+''+$F('pc_vodie')+'" class="Input">&nbsp;前台显示<input name="txt[]" type="text" value="'+i+'" size="4" class="Input"/><BR>';
+	}
+	else
+	{
+	str+='<input type="text" name="url[]" size=50 value="'+$F('pc_movieieurl')+''+i+''+$F('pc_vodie')+'" class="Input">&nbsp;前台显示<input name="txt[]" type="text" value="'+i+'" size="4" class="Input"/><BR>';
+	}
+	} 
+	else if($F('endnum')<1000)
+	{
+	if(i<10)
+	{
+	str+='<input type="text" name="url[]" size=50 value="'+$F('pc_movieieurl')+''+'00'+i+''+$F('pc_vodie')+'" class="Input">&nbsp;前台显示<input name="txt[]" type="text" value="'+i+'" size="4" class="Input"/><BR>';
+	} 
+	else if(i<100)
+	{
+	str+='<input type="text" name="url[]" size=50 value="'+$F('pc_movieieurl')+''+'0'+i+''+$F('pc_vodie')+'" class="Input">&nbsp;前台显示<input name="txt[]" type="text" value="'+i+'" size="4" class="Input"/><BR>';
+	}
+	else
+	{
+	str+='<input type="text" name="url[]" size=50 value="'+$F('pc_movieieurl')+''+i+''+$F('pc_vodie')+'" class="Input">&nbsp;前台显示<input name="txt[]" type="text" value="'+i+'" size="4" class="Input"/><BR>';
+	}
+	}
+	}
+	$('upid').innerHTML=str+'<br>';
+	$('showupid').style.display='block';
+} 
+</script>
+<CENTER>
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>发布影片</h1>
+<form action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/contribute.php" method="post" name="myform" onsubmit="return doCheck();">
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tbody>
+    <tr> 
+      <td class="td_right" width="15%"> <strong><font color='#FF0000'>*</font> 所属栏目</strong></td>
+      <td class="td_left" width="85%">{$category_select}</td>
+    </tr>
+  <tr> 
+      <td class="td_right" width="15%"> <strong><font color='#FF0000'>*</font> 选择播放器</strong></td>
+      <td class="td_left" width="85%">{$player_select} 不选择将按照默认播放器</td>
+    </tr>
+
+    <tr> 
+      <td class="td_right"><strong><font color="#FF0000">*</font> 标题</strong></td>
+      <td class="td_left">{$type_select} <input name="title" type="text" id="title" size="50"></td>
+    </tr>
+	<tr> 
+	<td class="td_right"><strong>开头字母</strong></td>
+	<td class="td_left"><input name="letter" type="text" id="letter" size="5" value="{$letter}"> 程序会自动添加标题的第一个字符</td>
+	</tr>
+    <tr> 
+      <td class="td_right"><strong>关键词</strong></td>
+      <td class="td_left"><input name="keywords" type="text" id="keywords" size="50"> 多个关键词之间请用半角逗号“,”隔开</td>
+    </tr>
+	<tr> 
+	<td class="td_right"><strong>观看方式</strong></td>
+	<td class="td_left">
+	<input type="checkbox" name="onlineview" value="1" {if $MOD['onlineview']} checked {/if}> 在线播放
+	<input type="checkbox" name="allowdown" value="1" {if $MOD['allowdown']} checked {/if}> 允许下载
+
+	</td>
+	</tr>
+	<tr> 
+	<td class="td_right"><strong>连载状态</strong></td>
+	<td class="td_left">
+	<input name="serialization" type="radio"  value="0" {if !$MOD['serialization']} checked{/if}/> 连载中
+	<input name="serialization" type="radio"  value="1" {if $MOD['serialization']} checked{/if}/> 连载完成
+	</td>
+	</tr>
+	 <tr> 
+      <td class="td_right"><strong>大缩略图</strong></td>
+      <td class="td_left">
+         <input name="bigthumb" type="text" id="bigthumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=bigthumb&type=thumb&width={$MOD[bigthumb_width]}&height={$MOD[bigthumb_height]}','upload','360','300')">
+		</td>
+    </tr>
+	 <tr> 
+      <td class="td_right"><strong>小缩略图</strong></td>
+      <td class="td_left">
+         <input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=thumb&type=thumb&width={$MOD[thumb_width]}&height={$MOD[thumb_height]}','upload','360','300')">
+		</td>
+    </tr>
+  <tr> 
+      <td class="td_right" width="15%"> <strong><font color='#FF0000'>*</font> 影片服务器</strong></td>
+      <td class="td_left" width="85%">{$server_select} </td>
+    </tr>
+	<tr> 
+		<td class="td_right"><strong>播放地址</strong></td>
+		<td class="td_left">
+		<input name="pc_movieieurl" type="text" class="Input" id="pc_movieieurl" size="35" />
+		开始集数：
+		<input name="num" type="text" class="Input" id="num" value="1" size="4" />
+		结束
+		<label>
+		<input name="enum" type="text" class="Input" id="endnum" value="1" size="4">
+		</label>
+		节目格式：
+		<input name="pc_vodie" type="text" class="Input" id="pc_vodie" value=".{$MOD['extension']}" size="6" />
+		<input name="Submit2" type="button" class="Button" onClick="setid();" value="设定" />
+		</td>
+	</tr>
+	<tr id="showupid" style="display:none"> 
+		<td class="td_right">&nbsp;</td>
+		<td class="td_left" id="upid"></td>
+	</tr>
+    <tr> 
+      <td class="td_right"><strong>简介</strong></td>
+      <td class="td_left">
+		<textarea name="introduce" id="introduce" cols="100" rows="25"></textarea>
+		{$editor("introduce",$MOD['editor_mode'],$MOD['editor_width'],$MOD['editor_height'])}
+   </td>
+    {$fields}
+{if $MOD['check_code']}
+    <tr> 
+      <td class="td_right"><strong>验证码</strong></td>
+      <td class="td_left"><input name="checkcodestr" type="text" size="15" id="checkcodestr"><img src="<?=PHPCMS_PATH?>checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/></td>
+    </tr>
+{/if}
+    <tr> 
+      <td class="td_center" colspan="2"><input type="submit" name="dosubmit" value=" 发表 "> &nbsp; <input type="reset" name="reset" value=" 重置 "></td>
+    </tr>
+	<tr> 
+      <td class="td_right"><strong>影片状态</strong></td>
+      <td class="td_left">
+		<input name="status" type="radio" value="3" {if $status==3}checked{/if} {if $disabled}disabled{/if}> 已通过
+		<input name="status" type="radio" value="1" {if !isset($status) || $status==1}checked{/if} > 待审核
+		<input name="status" type="radio" value="0" {if isset($status) && $status==0}checked{/if}>草稿
+	</td>
+    </tr>
+</tbody>
+</table>
+</form>
+</div></div></CENTER>
+
+{template 'phpcms','footer'}

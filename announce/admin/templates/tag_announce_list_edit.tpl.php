@@ -26,19 +26,21 @@ include admintpl('header');
    <input name="mod" type="hidden" value="<?=$mod?>">
    <input name="file" type="hidden" value="<?=$file?>">
    <input name="action" type="hidden" value="<?=$action?>">
+   <input name="job" type="hidden" value="<?=$job?>">
    <input name="keyid" type="hidden" value="<?=$keyid?>">
    <input name="function" type="hidden" value="<?=$function?>">
    <input name="tag_config[func]" type="hidden" value="<?=$function?>">
    <input name="forward" type="hidden" value="<?=$forward?>">
+   <input name="tagname" type="hidden" value="<?=$tagname?>">
     <tr>
       <td class="tablerow" width="40%"><b>标签名称</b><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</td>
       <td  class="tablerow">
-	  <input name="tagname" id="tagname" type="text" size="20" value="<?=$tagname?>"> <input type="button" name="submit" value=" 检查是否已经存在 " onclick="Dialog('?mod=<?=$mod?>&file=<?=$file?>&action=checkname&tagname='+$('tagname').value+'','','300','40','no')"> <br>
+	  <input type="text" size="20" value="<?=$tagname?>" disabled title="标签名称不可再修改" />
 	  </td>
     </tr>
     <tr>
       <td class="tablerow" width="40%"><b>标签说明</b><br/>例如：首页显示公告，10条</td>
-      <td  class="tablerow"><input name="tag_config[introduce]" id="introduce" type="text" size="60"  value="<?=$tag_config['introduce']?>"></td>
+      <td  class="tablerow"><input name="tag_config[introduce]" id="introduce" type="text" size="50"  value="<?=$tag_config['introduce']?>"></td>
     </tr>
     <tr>
       <td class="tablerowhighlight" colspan=2 align="center"><b>标签参数设置</b></td>
@@ -51,8 +53,8 @@ include admintpl('header');
     </tr>
 
     <tr>
-      <td class="tablerow" width="40%"><b>所属模块或频道id</b></td>
-      <td  class="tablerow"><input name="tag_config[keyid]" type="text" size="35" value="<?=$tag_config['keyid']?>" id="keytype"> <?=keyid_select('qw','','','onchange="document.myform.keytype.value=this.value"')?>【 0 则调用所有】</td>
+      <td class="tablerow" width="40%"><b>所属模块或频道ID</b></td>
+      <td  class="tablerow"><input name="tag_config[keyid]" type="text" size="10" value="<?=$tag_config['keyid']?>" id="keytype"> <?=keyid_select('qw','','','onchange="document.myform.keytype.value=this.value"')?>【 0 则调用所有】</td>
 	</tr>
 
 	<tr>

@@ -1,0 +1,38 @@
+{template "phpcms","header"}
+<table cellspacing="0" cellpadding="0" width="980">
+<tr>
+<td valign="top" class="left">
+{template "member","left"}
+</td>
+<td width="10" valign="top">
+</td>
+<td class="right" valign="top">
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>交易记录</h1>
+  <table cellpadding="2" cellspacing="1" class="righttable">
+    <tr>
+      <td width="20%" class="td_center">交易类型</td>
+      <td width="15%" class="td_center">交易额度</td>
+      <td width="25%" class="td_center">交易时间</td>
+      <td width="40%" class="td_center">说明</td>
+    </tr>
+{loop $exchanges $exchange}
+    <tr>
+      <td class="td_center">{$exchange[type]}</td>
+      <td class="td_center">{$exchange[value]}{$exchange[unit]}</td>
+      <td class="td_center">{$exchange[addtime]}</td>
+      <td class="td_center">&nbsp;{$exchange[note]}</td>
+    </tr>
+{/loop}
+  </table>
+<table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="center">{$pages}</td>
+  </tr>
+</table>
+</div></div>
+</td>
+</tr>
+</table>
+{template "phpcms","footer"}

@@ -1,4 +1,7 @@
-<?php include admintpl('header');?>
+<?php 
+defined('IN_PHPCMS') or exit('Access Denied');
+include admintpl('header');
+?>
 <style>
 body{margin:0;}
 </style>
@@ -25,7 +28,6 @@ function Tabs(ID){
 <?=menu('phpcms','admin_top')?>
 </tr>
 </table>
-
 </td>
 </tr>
 </table>

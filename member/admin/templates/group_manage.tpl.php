@@ -34,7 +34,9 @@ if(is_array($groups))
 <td><?=$group['enableaddalways']?></td>
 <td><?=$group['type']?></td>
 <td>
-<?php if($group['grouptype']=="special"){ ?>
+<?php if($group['groupid']==6){ ?>
+<a href='?mod=<?=$mod?>&file=<?=$file?>&action=edit&groupid=<?=$group['groupid']?>'>修改</a> | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<?php }elseif($group['grouptype']=="special"){ ?>
 <a href='?mod=<?=$mod?>&file=<?=$file?>&action=edit&groupid=<?=$group['groupid']?>'>修改</a> | 
 <a href='?mod=<?=$mod?>&file=<?=$file?>&action=delete&groupid=<?=$group['groupid']?>'>删除</a>
 <?php } ?>

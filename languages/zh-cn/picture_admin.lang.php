@@ -66,5 +66,7 @@ $LANG['specail_list_label'] = '专题列表标签';
 $LANG['category_label'] = '栏目标签';
 $LANG['type_label'] = '分类标签';
 $LANG['picture_label_manage'] = '图片标签管理';
-$LANG['only_in_child_special']   = '图片只能加入到专题子分类中！'
+$LANG['only_in_child_special']   = '图片只能加入到专题子分类中！';
+$LANG['index'] = '首页';
+$LANG['module_setting'] = '模块配置';
 ?>

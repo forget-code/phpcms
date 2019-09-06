@@ -1,5 +1,4 @@
-<script type="text/javascript">var phpcms_path = '{PHPCMS_PATH}'; </script>
-<script type="text/javascript" src="{PHPCMS_PATH}comment/include/js/comment.js"></script>
+<script type="text/javascript" src="{$MODULE['comment']['linkurl']}include/js/comment.js"></script>
 <div class="comment_header">
   <h1></h1>
   <h2> <a href="{$MODULE['comment']['linkurl']}index.php?keyid={$keyid}&itemid={$itemid}&title={$urlencode($title)}" class="commenturl">共<span id="commentnumber">0</span>条评论 &nbsp;发表/查看更多评论</a></h2>
@@ -11,7 +10,7 @@
 	<td bgcolor="#F5F5F5" height="23"><b>发表评论</b> </td>
 	<td align="right" bgcolor="#F5F5F5"><a name="comment">　【<a href="#top">顶部</a>】【<a href="javascript:window.close();">关闭</a>】&nbsp;</td>
 	</tr>
-	<form name="commentform" method="post" action="{PHPCMS_PATH}comment/post.php"  onSubmit="return docheck();">
+	<form name="commentform" method="post" action="{$MODULE['comment']['linkurl']}post.php"  onSubmit="return docheck();">
 	<input name="keyid" type="hidden" value="{$keyid}">
 	<input name="itemid" type="hidden" value="{$itemid}">
 	<input name="replycid" type="hidden" value="">
@@ -52,7 +51,7 @@ $i++;
 }
 ?>
 <tr>
-<td colspan="4" align="right">{if !$info}<a href="###" onclick="SelectSmilies('{PHPCMS_PATH}'); return false">
+<td colspan="4" align="right">{if !$info}<a href="javascript:SelectSmilies('{PHPCMS_PATH}');">
 <span align="right" class="bold">更多表情&rsaquo;&rsaquo;</span></a>{/if}</td>
 </tr>
 </table>

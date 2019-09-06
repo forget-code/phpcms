@@ -30,7 +30,7 @@ function doCheck(){
 <div class="memberborder_1">
 <div class="memberborder_2">
 <h1>欢迎投稿</h1>
-<form name="myform" id="myform" method="post" action="{$CHA[linkurl]}contribute.php" onsubmit="return doCheck();">
+<form name="myform" id="myform" method="post" action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/contribute.php" onsubmit="return doCheck();">
 <table cellpadding="2" cellspacing="1" class="righttable">
 <tbody>
     <tr> 
@@ -68,7 +68,7 @@ function doCheck(){
     </tr>
     <tr> 
       <td class="td_right"><strong>标题图片</strong> </td>
-      <td class="td_left"><input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=thumb&type=thumb&width={$MOD[thumb_width]}&height={$MOD[thumb_height]}','upload','360','300')"></td>
+      <td class="td_left"><input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=thumb&type=thumb&width={$MOD[thumb_width]}&height={$MOD[thumb_height]}','upload','360','300')"></td>
     </tr>
     {$fields}
 {if $MOD['check_code']}

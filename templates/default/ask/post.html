@@ -1,0 +1,60 @@
+{template 'phpcms','header'}
+<table cellspacing="0" cellpadding="0" border="0" width="980">
+<tr>
+<td valign="top" class="left">
+{template "member","left"}</td>
+<td width="10" valign="top">
+</td>
+<td valign="top" class="right">
+
+当前位置：<a href="{$MODULE[ask][linkurl]}">咨询首页</a> &gt;&gt; <a href="{$MOD[linkurl]}list.php?departmentid={$departmentid}">{$department}</a> &gt;&gt; 我要咨询
+<br />
+<br />
+{template 'ask','menu'}
+
+<div class="clearboth"></div>
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>我要咨询</h1>
+
+<table cellpadding="2" cellspacing="1" class="righttable">
+<form name="myform" method="post" action="{$MOD[linkurl]}post.php?departmentid={$departmentid}" onSubmit="return docheck();">
+<tbody>
+    <tr> 
+      <td class="td_right" width="15%"> <strong>咨询主题</strong> </td>
+      <td class="td_left" width="85%">
+<input name="subject" type="text" value="" size="50">
+	  </td>
+    </tr>
+    <tr> 
+      <td class="td_right" width="15%"> <strong>咨询内容</strong> </td>
+      <td class="td_left" width="85%">
+<textarea name="content"></textarea>{$editor('content','introduce',550,300)}
+	  </td>
+    </tr>
+    <tr> 
+      <td class="td_right" width="15%"> <strong>验证码</strong> </td>
+      <td class="td_left" width="85%">
+<input name="checkcode" type="text" id="checkcode" size="5"> 
+<img src="{PHPCMS_PATH}checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/>
+	  </td>
+    </tr>
+    <tr> 
+      <td class="td_right" width="15%"></td>
+      <td class="td_left" width="85%">
+<input type="submit" name="dosubmit" value=" 提交 ">&nbsp;&nbsp;
+<input type="reset" name="reset" value=" 重置 ">
+	  </td>
+    </tr>
+  </tbody>
+</table>
+
+</div>
+</div>
+
+</td>
+</tr>
+ </tbody>
+</form>
+</table>
+{template 'phpcms','footer'}

@@ -1,4 +1,4 @@
 <?php
 $mod = 'picture';
-$channelid = 3;
+$channelid = 2;
 ?>

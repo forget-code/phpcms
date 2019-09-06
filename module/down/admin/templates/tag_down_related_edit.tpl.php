@@ -27,12 +27,12 @@ include admintpl('header');
    <input name="mod" type="hidden" value="<?=$mod?>">
    <input name="file" type="hidden" value="<?=$file?>">
    <input name="channelid" type="hidden" value="<?=$channelid?>">
-   <input name="action" type="hidden" value="<?=$action?>" id="action">
+   <input name="job" type="hidden" value="<?=$job?>">
    <input name="function" type="hidden" value="<?=$function?>">
-   <input name="tagname" type="hidden" value="<?=$tagname?>">
    <input name="referer" type="hidden" value="<?=$PHP_REFERER?>">
    <input type="hidden" name="tag_config[func]" value="<?=$function?>">
-   
+   <input name="tagname" type="hidden" value="<?=$tagname?>">
+   <input name="action" type="hidden" value="edit">
     <tr> 
       <td class="tablerow" width="40%"><b>标签名称</b><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</td>
       <td  class="tablerow">
@@ -41,7 +41,7 @@ include admintpl('header');
     </tr>
     <tr> 
       <td class="tablerow" width="40%"><b>标签说明</b><br/>例如：首页最新推荐下载，10篇</td>
-      <td  class="tablerow"><input name="tag_config[introduce]" id="introduce" type="text" size="60" value="<?=$tag_config['introduce']?>" /></td>
+      <td  class="tablerow"><input name="tag_config[introduce]" id="introduce" type="text" size="50" value="<?=$tag_config['introduce']?>" /></td>
     </tr>
     <tr> 
       <td class="tablerowhighlight" colspan="2" align="center"><b>标签参数设置</b></td>

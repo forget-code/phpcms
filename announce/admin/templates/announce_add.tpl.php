@@ -32,6 +32,11 @@ function doCheck() {
 			elements['todate'].value = "";
 			elements['todate'].focus();
 			return false;
+		} else if(elements['todate'].value != "" && elements['todate'].value < elements['fromdate'].value) {
+			alert("截止日期必须大于起始日期！");
+			elements['todate'].value = "";
+			elements['todate'].focus();
+			return false;
 		} else {
 			return true;
 		}

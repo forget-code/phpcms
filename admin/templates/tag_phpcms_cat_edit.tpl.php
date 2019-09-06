@@ -47,17 +47,20 @@ function showcat(keyid,catid)
   <tr>
     <th colspan=2>修改<?=$functions[$function]?>标签</th>
   </tr>
-  <form name="myform" method="get" action="?" onsubmit="javascript:return doCheck();">
+  <form name="myform" method="get" action="?">
    <input name="mod" type="hidden" value="<?=$mod?>">
    <input name="file" type="hidden" value="<?=$file?>">
-   <input name="action" type="hidden" value="<?=$action?>" id="action">
+   <input name="channelid" type="hidden" value="<?=$channelid?>">
+   <input name="job" type="hidden" value="<?=$job?>">
    <input name="function" type="hidden" value="<?=$function?>">
    <input name="referer" type="hidden" value="<?=$PHP_REFERER?>">
-   <input name="tag_config[func]" type="hidden" value="<?=$function?>">
+   <input type="hidden" name="tag_config[func]" value="<?=$function?>">
+   <input name="tagname" type="hidden" value="<?=$tagname?>">
+   <input name="action" type="hidden" value="edit">
     <tr> 
       <td class="tablerow" width="40%"><b>标签名称</b><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</td>
       <td  class="tablerow">
-	  <input name="tagname" id="tagname" type="text" size="20" value="<?=$tagname?>" readonly> <input type="button" value="(标签名称不可再编辑) " > <br/>
+	  <input type="text" size="20" value="<?=$tagname?>" disabled title="标题不可再修改" />
 	  </td>
     </tr>
     <tr> 

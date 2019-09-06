@@ -1,6 +1,6 @@
 <?php
 $settings['Phpwind5'] = array (
-  'importtime' => '1171005699',
+  'importtime' => '',
   'name' => 'Phpwind5',
   'note' => 'Phpwind5会员数据导入',
   'dbfrom' => '1',
@@ -186,6 +186,6 @@ $settings['Phpwind5'] = array (
   'membercheck' => '1',
   'timelimit' => '90',
   'number' => '100',
-  'edittime' => 1171007274,
+  'edittime' => '',
 );
 ?>

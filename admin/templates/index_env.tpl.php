@@ -1,5 +1,7 @@
-<?php include admintpl('header');?>
-
+<?php 
+defined('IN_PHPCMS') or exit('Access Denied');
+include admintpl('header');
+?>
 <body>
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
   <tr>

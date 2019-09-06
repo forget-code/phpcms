@@ -1,11 +1,14 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
-
+set_time_limit(0);
 $articleid = intval($articleid);
 $articleid or showmessage($LANG['empty_article_id'], $referer);
-require PHPCMS_ROOT.'/admin/include/field.class.php';
+
+require PHPCMS_ROOT.'/include/field.class.php';
 $field = new field(channel_table('article', $channelid));
+
 require PHPCMS_ROOT.'/include/attachment.class.php';
+$att = new attachment;
 
 require PHPCMS_ROOT.'/admin/include/position.class.php';
 $pos = new position($channelid);
@@ -61,6 +64,7 @@ if($dosubmit)
 		}
 	}
 
+    $article['showcommentlink'] = isset($article['showcommentlink']) ? $article['showcommentlink'] : 0;
 	$article['islink'] = isset($article['islink']) ? 1 : 0;
 	$article['arrgroupidview'] = empty($article['arrgroupidview']) ? '' : implode(',',$article['arrgroupidview']);
 	$article['catid'] = $catid;
@@ -79,10 +83,23 @@ if($dosubmit)
 		$article['arrposid'] = '';
 	}
 
+	$field->check_form();
+
 	if($art->edit($article))
 	{
-		$att = new attachment($articleid, $channelid, $catid);
+		if($freelink)
+		{
+			$r = $db->get_one("select title,thumb,linkurl,style from ".channel_table('article', $channelid)." where articleid='$articleid' ");
+			$f = array();
+			$f['title'] = $r['title'];
+			$f['url'] = linkurl($r['linkurl']);
+			$f['image'] = imgurl($r['thumb']);
+			$f['style'] = $r['style'];
+			add_freelink(trim($freelink), $f);
+		}
+		$att->attachment($articleid, $channelid, $catid);
 		$att->add($article['content']);
+
 		$field->update("articleid=$articleid");
 
 		if($arrposid || $old_arrposid)
@@ -91,25 +108,9 @@ if($dosubmit)
 			$pos->edit($articleid, $old_posid_arr, $arrposid);
 		}
 
-		if($article['status'] == 3 && !$article['islink'])
+		if($article['status'] == 3)
 		{
-			$cid = $catid;
-			createhtml('show');
-			createhtml('index');
-			createhtml('index', PHPCMS_ROOT);
-			if($CAT['arrparentid'])
-			{
-				$catids = explode(',', $CAT['arrparentid']);
-				foreach($catids as $catid)
-				{
-					if(!$catid) continue;
-					createhtml('list');
-				}
-			}
-			$catid = $cid;
-			$fid = 1;
-			$pernum = 5;
-			createhtml('list');
+			require PHPCMS_ROOT.'/include/create_related_html.inc.php';
 		}
 		showmessage($LANG['modify_article_success'], $referer);
 	}
@@ -134,7 +135,7 @@ else
 	$showtpl = showtpl($mod,'content', 'article[templateid]', $templateid);
 	$html_urlrule = urlrule_select('html_urlrule', 'html', 'item', $urlruleid);
 	$php_urlrule = urlrule_select('php_urlrule', 'php', 'item', $urlruleid);
-	$fields = $field->get_form('<tr><td class="tablerow"><strong>$title</strong></td><td class="tablerow">$input $note</td></tr>');
+	$fields = $field->get_form('<tr><td class="tablerow"><strong>$title</strong></td><td class="tablerow">$input $tool $note</td></tr>');
 	$position = $pos->checkbox('article[arrposid][]', $arrposid);
 	
 	include admintpl($mod.'_edit');

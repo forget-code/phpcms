@@ -4,7 +4,16 @@ include admintpl('header');
 ?>
 <body>
 <script type="text/javascript" src="<?=PHPCMS_PATH?>include/js/tag.js"></script>
-
+<script type="text/javascript">
+function doCheck(){
+	if($F('tagname')==''){
+		alert('标签名称不能为空');
+		$('tagname').focus();
+		return false;
+	}
+	return true;
+}
+</script>
 <?=$menu?>
 <table cellpadding="2" cellspacing="1" border="0" align=center class="tableBorder" >
   <tr>
@@ -23,11 +32,12 @@ include admintpl('header');
   <tr>
     <th colspan=2>添加<?=$functions[$function]?>标签</th>
   </tr>
-  <form name="myform" method="get" action="?" >
+  <form name="myform" method="get" action="?" onsubmit="return doCheck();">
    <input name="mod" type="hidden" value="<?=$mod?>">
    <input name="file" type="hidden" value="<?=$file?>">
    <input name="action" type="hidden" value="<?=$action?>">
    <input name="keyid" type="hidden" value="<?=$keyid?>">
+   <input name="job" type="hidden" value="<?=$job?>">
    <input name="function" type="hidden" value="<?=$function?>">
    <input name="tag_config[func]" type="hidden" value="<?=$function?>">
    <input name="forward" type="hidden" value="<?=$forward?>">
@@ -35,12 +45,12 @@ include admintpl('header');
     <tr> 
       <td class="tablerow" width="40%"><b>标签名称</b><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</td>
       <td  class="tablerow">
-	  <input name="tagname" id="tagname" type="text" size="20" > <input type="button" name="submit" value=" 检查是否已经存在 " onclick="Dialog('?mod=<?=$mod?>&file=<?=$file?>&action=checkname&tagname='+$('tagname').value+'','','300','40','no')"> <br/>
+	  <input name="tagname" id="tagname" type="text" size="20" value="<?=$tagname?>"> <input type="button" name="submit" value=" 检查是否已经存在 " onclick="Dialog('?mod=<?=$mod?>&file=<?=$file?>&action=checkname&tagname='+$('tagname').value+'','','300','40','no')"> <br/>
 	  </td>
     </tr>
     <tr> 
       <td class="tablerow" width="40%"><b>标签说明</b><br/>例如：首页推荐链接，10条</td>
-      <td  class="tablerow"><input name="tag_config[introduce]" id="introduce" type="text" size="60" ></td>
+      <td  class="tablerow"><input name="tag_config[introduce]" id="introduce" type="text" size="50" ></td>
     </tr>
     <tr> 
       <td class="tablerowhighlight" colspan=2 align="center"><b>标签参数设置</b></td>

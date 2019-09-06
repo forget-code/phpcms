@@ -140,7 +140,7 @@ $settings['phpcms3'] = array (
     'value' => '',
     'func' => '',
   ),
-  'edittime' => 1175506227,
+  'edittime' => '',
   'checker' => 
   array (
     'field' => 'checker',
@@ -174,7 +174,7 @@ $settings['phpcms3'] = array (
   'status' => 
   array (
     'field' => '',
-    'value' => '',
+    'value' => '3',
     'func' => '',
   ),
   'listorder' => 
@@ -198,19 +198,19 @@ $settings['phpcms3'] = array (
   'ishtml' => 
   array (
     'field' => '',
-    'value' => '',
+    'value' => '1',
     'func' => '',
   ),
   'htmldir' => 
   array (
     'field' => '',
-    'value' => '',
+    'value' => 'article',
     'func' => '',
   ),
   'prefix' => 
   array (
     'field' => '',
-    'value' => '',
+    'value' => 'article_',
     'func' => '',
   ),
   'urlruleid' => 
@@ -234,11 +234,11 @@ $settings['phpcms3'] = array (
   'defaultcatid' => '0',
   'catids' => 
   array (
-    2 => '',
     3 => '',
+    4 => '',
   ),
   'articlecheck' => '1',
-  'timelimit' => '60',
-  'number' => '2',
+  'timelimit' => '90',
+  'number' => '100',
 );
 ?>

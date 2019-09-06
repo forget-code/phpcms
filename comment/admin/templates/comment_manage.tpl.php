@@ -61,9 +61,8 @@ include admintpl('header');
 <td class="tablerowhighlight">内容</td>
 <td width="50" class="tablerowhighlight">鲜花数</td>
 <td width="50" class="tablerowhighlight">鸡蛋数</td>
-<td width="80" class="tablerowhighlight">文章发表时间</td>
-<td width="80" class="tablerowhighlight">评论时间</td>
-<td width="130" class="tablerowhighlight">管理操作</td>
+<td width="90" class="tablerowhighlight">评论时间</td>
+<td width="150" class="tablerowhighlight">管理操作</td>
 </tr>
 <?php
 foreach($comments AS $comment)
@@ -76,7 +75,6 @@ foreach($comments AS $comment)
 <td ><?=$comment['support']?></td>
 <td ><?=$comment['against']?></td>
 <td title="<?=$comment['addtime']?>"><?=$comment['adddate']?></td>
-<td title="<?=$comment['addtime']?>"><?=$comment['adddate']?></td>
 <td><a href='?mod=comment&file=comment&ip=<?=$comment['ip']?>&keyid=<?=$keyid?>' title="IP：<?=$comment['ip']?> - <?=$comment['gip']['country']?> 
 点击查看来自该ip的所有评论"> IP </a> | <a href='<?=$comment['url']?>' target='_blank' title="该评论所属文章">原文</a> | <a href='?mod=comment&file=comment&itemid=<?=$comment['itemid']?>&keyid=<?=$keyid?>' title="与该评论所属文章相同的评论">相关评论</a></td>
 </tr>
@@ -88,9 +86,10 @@ foreach($comments AS $comment)
   <tr>
     <td width="10%"><input name='chkall' type='checkbox' id='chkall' onclick='checkall(this.form)' value='checkbox'>全部选中</td>
     <td  align="center">
+        <?php if($passed == 0){ ?><input name='submit2' type='submit' value='批准选定的评论' onClick="document.myform.action='?mod=comment&file=comment&action=pass&passed=1&keyid=<?=$keyid?>&referer=<?=$referer?>'">&nbsp;&nbsp;
+        <?php }else{ ?><input name='submit3' type='submit' value='取消批准选定的评论' onClick="document.myform.action='?mod=comment&file=comment&action=pass&passed=0&keyid=<?=$keyid?>&referer=<?=$referer?>'">&nbsp;&nbsp;
+		<?php } ?>
 		<input name="submit1" type="submit"  value="删除选定的评论" onClick="document.myform.action='?mod=comment&file=comment&action=delete&keyid=<?=$keyid?>&referer=<?=$referer?>'">&nbsp;&nbsp;
-        <input name='submit2' type='submit' value='批准选定的评论' onClick="document.myform.action='?mod=comment&file=comment&action=pass&passed=1&keyid=<?=$keyid?>&referer=<?=$referer?>'">&nbsp;&nbsp;
-        <input name='submit3' type='submit' value='取消批准选定的评论' onClick="document.myform.action='?mod=comment&file=comment&action=pass&passed=0&keyid=<?=$keyid?>&referer=<?=$referer?>'">&nbsp;&nbsp;
 </td>
   </tr>
 </table>

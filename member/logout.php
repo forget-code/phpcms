@@ -1,6 +1,15 @@
 <?php
 require './include/common.inc.php';
 
+if($PHPCMS['enableserverpassport'])
+{
+	$logouturl = $PHPCMS['passport_serverurl'].$PHPCMS['passport_logouturl'];
+	$addstr = $PHP_QUERYSTRING ? $PHP_QUERYSTRING : 'forward='.$PHP_REFERER;
+	$logouturl .= (strpos($logouturl, '?') ? '&' : '?').$addstr;
+	header('location:'.$logouturl);
+	exit;
+}
+
 if(!isset($action)) $action = '';
 
 if($action == 'ajax_message')

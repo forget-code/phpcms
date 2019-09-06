@@ -1,4 +1,4 @@
-<?php include "./install/header.tpl.php";?>
+<?php include PHPCMS_ROOT."/install/header.tpl.php";?>
 <table  border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
   <tr>
     <td>	
@@ -44,7 +44,7 @@
               <td><textarea name="textfield" cols="48" rows="10" wrap="VIRTUAL" class="textarea" readonly><?php echo $license?></textarea></td>
               </tr>
             <tr>
-              <td height="34">如果您接受协议重的条款，单击 [我同意(I)] 继续安装。如果您选定 [取消(C)] ，安装程序将会关闭。安装<?php echo $PHPCMS_VERSION_NAME;?>必须接收该协议。 </td>
+              <td height="34">如果您接受协议重的条款，单击 [接受(I)] 继续安装。如果您选定 [取消(C)] ，安装程序将会关闭。安装<?php echo $PHPCMS_VERSION_NAME;?>必须接收该协议。 </td>
               </tr>
           </table>          </td>
         </tr>
@@ -62,4 +62,4 @@
 </table></td>
   </tr>
 </table>
-<?php include "./install/footer.tpl.php";?>
+<?php include PHPCMS_ROOT."/install/footer.tpl.php";?>

@@ -1,4 +1,4 @@
 <?php
 $mod = 'down';
-$channelid = 2;
+$channelid = 3;
 ?>

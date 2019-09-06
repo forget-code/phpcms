@@ -28,32 +28,26 @@ include admintpl('header');
   <tr align="center">
     <td class="tablerowhighlight">选中</td>
     <td class="tablerowhighlight">排序</td>
-    <td class="tablerowhighlight">所属分类</td>
-    <td class="tablerowhighlight">链接类型</td>
     <td class="tablerowhighlight">网站名称</td>
     <td class="tablerowhighlight">网站Logo</td>
-    <td class="tablerowhighlight">网站概况</td>
+    <td class="tablerowhighlight">所属分类</td>
+    <td class="tablerowhighlight">链接类型</td>
+    <td class="tablerowhighlight">点击次数</td>
     <td class="tablerowhighlight">操作</td>
   </tr>
   <form name="myform" method="post" action="?mod=link&file=link&action=updatelistorderid">
 <? if(is_array($links)) foreach($links AS $link) { ?>
   <tr align="center" >
     <td class="tablerow"><input name='linkid[]' type='checkbox' id='linkid[]' value='<?=$link['linkid']?>'></td>
-    <td class="tablerow"><input size="2" name="listorder[<?=$link['linkid']?>]" type="text" value="<?=$link['listorder']?>"></td>
-
-	<td class="tablerow"><a href="?mod=link&file=link&action=manage&typeid=<?=$link['typeid']?>" title="点击显示该类别链接"><?=$TYPE[$link['typeid']]['name']?></a></td>
-
-    <td class="tablerow"><? if($link['linktype']) { ?>Logo<? } else { ?>文字<? } ?></td>
+    <td class="tablerow"><input size="3" name="listorder[<?=$link['linkid']?>]" type="text" value="<?=$link['listorder']?>"></td>
     <td align="center" class="tablerow" onmouseout="this.style.backgroundColor='#F1F3F5'"  onmouseover="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5' title='<?php echo "网站地址：".$link['url']."&#10;点击次数：".$link['hits']."次";?>'><a href='<?=$link['url']?>' target='_blank' ><span style="<?=$link['style']?>"><?=$link['name']?></span></a><? if($link['elite']) { ?> <font color='red'>荐</font><?}?></td>
     <td class="tablerow"><? if($link['linktype']) { ?><a href='<?=$link['url']?>' target="_blank" title='<?=$link['logo']?>'><img src='<?=$link['logo']?>' width='88' height='31' border='0'></a><? } ?></td>
-    <td class="tablerow">
-	<textarea name="introduce" cols="35" rows="2" id="introduce">简介:<?=$link['introduce']?><?=chr(13)?>站长:<?=$link['username']?>
-    </textarea></td>
+	<td class="tablerow"><a href="?mod=link&file=link&action=manage&typeid=<?=$link['typeid']?>" title="点击显示该类别链接"><?=$TYPE[$link['typeid']]['name']?></a></td>
+    <td class="tablerow"><? if($link['linktype']) { ?>Logo<? } else { ?>文字<? } ?></td>
+    <td class="tablerow"><?=$link['hits']?></td>
     <td class="tablerow"><a href="?mod=link&file=link&action=edit&linkid=<?=$link['linkid']?>">修改</a> </td>
   </tr>
-
-<? } ?>
-
+<?php } ?>
 </table>
 
 <table width="100%" height="30" border="0" cellpadding="0" cellspacing="0">
@@ -77,23 +71,20 @@ include admintpl('header');
   </tr>
 </table>
 </form>
-
-
-
-
-
-
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
   <tr>
     <td></td>
   </tr>
 </table>
 
-<table cellpadding="2" cellspacing="1" border="0" align=center class="tableBorder" >
+<table cellpadding="2" cellspacing="1" border="0" class="tableBorder" >
   <tr>
     <th align="center"> 链接搜索 </th>
   </tr>
-<form method="post" name="search">
+<form method="get" name="search">
+<input name='mod' type='hidden' value='<?=$mod?>'>
+<input name='file' type='hidden' value='<?=$file?>'>
+<input name='action' type='hidden' value='<?=$action?>'>
   <tr>
     <td class="tablerow">&nbsp;
 	<b>显示选项：</b> <input name='passed' type='radio' value='1' onclick="location='?mod=link&file=link&action=manage&passed=1&keyword=<?=$keyword?>&typeid=<?=$typeid?>'" <? if($passed==1) { ?>checked<? } ?>><a href='?mod=link&file=link&action=manage&passed=1&keyword=<?=$keyword?>&typeid=<?=$typeid?>'>已审核的链接</a>&nbsp;<input name='passed' type='radio' value='0' onclick="location='?mod=link&file=link&action=manage&passed=0&keyword=<?=$keyword?>&typeid=<?=$typeid?>'" <? if(!$passed) { ?>checked<? } ?>><a href='?mod=link&file=link&action=manage&passed=0&keyword=<?=$keyword?>&typeid=<?=$typeid?>'>未审核的链接</a>&nbsp;

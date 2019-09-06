@@ -11,11 +11,7 @@ $article or showmessage($LANG['article_not_exists']);
 extract($article);
 unset($article);
 
-$CAT = cache_read('category_'.$catid.'.php');
-
-point_diff($readpoint, $title.'(articleid='.$articleid.')');
-$readtime = $CAT['defaultchargetype'] ? 0 : $PHP_TIME+3600*24*365;
-mkcookie('article_'.$articleid, 1, $readtime);
-
+if(!$_userid) showmessage($LANG['please_login'], $MODULE['member']['linkurl'].'login.php?forward='.urlencode($PHP_URL));
+point_diff($_username, $readpoint, $title.'(channelid='.$channelid.',articleid='.$articleid.')', $_userid.'-'.$channelid.'-'.$articleid);
 header('location:'.linkurl($linkurl));
 ?>

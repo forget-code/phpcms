@@ -59,7 +59,7 @@ function SelectFile(){
   if(arr!=null){
     var s=arr.split('|');
 	var ss = $("pictureurls").value == '' ? '' : "\n";
-	$('pictureurls').value += ss+'图片说明|'+s[0].replace(/<?=$CHA['channeldir']?>\/<?=$MOD['upload_dir']?>\//g, '');
+	$('pictureurls').value += ss+'图片说明|'+s[0].replace(/<?=$PHPCMS['uploaddir']?>\/<?=$CHA['channeldir']?>\/<?=$MOD['upload_dir']?>\//g, '');
   }
 }
 function ShowPreview(){
@@ -81,7 +81,7 @@ function ShowPreview(){
 	var p = obj.value.substring(obj.value.lastIndexOf("|", i)+1, i)+obj.value.substring(i, obj.value.indexOf(str, i));
 	var l = obj.value.substring(i, obj.value.length);
 	if(l.indexOf("\n")==-1) p = obj.value.substring(obj.value.lastIndexOf("|", i)+1, i)+l;
-	var u = <?php echo "'";echo imgurl($CHA['channeldir'].'/'.$MOD['upload_dir'].'/');echo "'"; ?>;
+	var u = <?php echo "'";echo imgurl($PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$MOD['upload_dir'].'/');echo "'"; ?>;
 	if(p.indexOf("://") != -1) u = '';
 	var m = p.match(/^[^\r\n\|]+\.(jpg|gif|png|bmp)$/);
 	if(m != null)
@@ -89,7 +89,13 @@ function ShowPreview(){
 		window.open(u+p);
 	}
 }
+function doKeywords(ID)
+{
+	$(ID).value = $F(ID).replace(new RegExp('，',"gm"),',');
+	$(ID).value = $F(ID).replace(new RegExp(' ',"gm"),',');
+}
 </script>
+<?=segment_word()?>
 
 <table width="100%" height="25" border="0" cellpadding="3" cellspacing="0" class="tableborder">
   <tr>
@@ -126,16 +132,13 @@ function ShowPreview(){
       <td width="15%" class="tablerow">所属栏目</td>
       <td class="tablerow"><font color="#FF0000"><?=$CAT['catname']?></font></td>
     </tr>
-
-	
-
     <tr> 
       <td class="tablerow">标题 <font color="#FF0000">*</font></td>
-      <td class="tablerow"><?=$type_select?> <input name="picture[title]" type="text" id="title" size="44" maxlength="100" class="inputtitle"> <?=$style_edit?> <input type="button" value="检查同名标题" onclick="Dialog('?mod=<?=$mod?>&file=<?=$file?>&action=checktitle&channelid=<?=$channelid?>&title='+$('title').value+'','','300','40','no')" style="width:90px;"></td>
+      <td class="tablerow"><?=$type_select?> <input name="picture[title]" type="text" id="title" size="44" maxlength="100" class="inputtitle" onBlur="segment_word(this);"> <?=$style_edit?> <input type="button" value="检查同名标题" onclick="Dialog('?mod=<?=$mod?>&file=<?=$file?>&action=checktitle&channelid=<?=$channelid?>&title='+$('title').value+'','','300','40','no')" style="width:90px;"></td>
     </tr>
       <tr <?php if(!$MOD['keywords_show']){ ?>style="display:none"<?php } ?>> 
       <td class="tablerow">关键字</td>
-      <td class="tablerow"><input name="picture[keywords]" type="text" id="keywords" size="40" title="提示;多个关键字请用半角逗号“,”隔开">
+      <td class="tablerow"><input name="picture[keywords]" type="text" id="keywords" size="40" title="提示:多个关键字请用半角逗号“,”或空格隔开" onblur="doKeywords(this);">
 		<?=$keywords_select?>
 		<input type="checkbox" name="addkeywords" value="1" <?php if($MOD['keywords_add']){ ?>checked<?php } ?>> 添加至关键字列表中 =&gt;<a href="###" onclick="SelectKeywords();">更多关键字</a></td>
     </tr>
@@ -212,7 +215,10 @@ function ShowPreview(){
 <?=$position?>
       </td>
 	  </tr>
-
+    <tr> 
+      <td class="tablerow">添加到自由调用</td>
+      <td class="tablerow"><?=freelink_select('freelink', '请选择调用类型')?></td>
+	</tr>
 	
     <tr> 
       <td class="tablerow">图片状态</td>
@@ -285,7 +291,7 @@ function ShowPreview(){
     </tr>
     <tr>
       <td class="tablerow" >阅读所需点数</td>
-      <td class="tablerow">&nbsp;<input size="5" name="picture[readpoint]" type="input" /> 点</td>
+      <td class="tablerow">&nbsp;<input size="5" name="picture[readpoint]" type="input" value="<?=$CAT['defaultpoint']?>" /> 点</td>
     </tr>
 
 </tbody>

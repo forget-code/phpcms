@@ -1,19 +1,21 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
-
+set_time_limit(0);
 $catid or showmessage($LANG['empty_category_id'],$referer);
 if($CAT['child'] && !$CAT['enableadd'])
 {
 	showmessage($LANG['not_allowed_to_add_an_artcile'],'goback');
 }
 
-require PHPCMS_ROOT.'/admin/include/field.class.php';
+require PHPCMS_ROOT.'/include/field.class.php';
 $field = new field(channel_table('article', $channelid));
 
 require PHPCMS_ROOT.'/admin/include/position.class.php';
 $pos = new position($channelid);
 
 require PHPCMS_ROOT.'/include/attachment.class.php';
+$att = new attachment;
+
 if($dosubmit)
 {
 	if(empty($article['title'])) showmessage($LANG['short_title_can_not_be_blank']);
@@ -22,10 +24,10 @@ if($dosubmit)
 	if(isset($addauthor) && $article['author']) update_author($article['author'], $channelid);
 	if(isset($addcopyfrom) && $article['copyfrom']) update_copyfrom($article['copyfrom'], $channelid);
 
-	if(isset($save_remotepic)) 
+	if(isset($save_remotepic))
 	{
 		require PHPCMS_ROOT.'/include/get_remotefiles.func.php';
-		$article['content'] = get_remotepics($article['content'], $CHA['channeldir'].'/'.$CHA['uploaddir']);
+		$article['content'] = get_remotepics($article['content'], $PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$CHA['uploaddir']);
 	}
 
 	$introcude_length = isset($introcude_length) ? intval($introcude_length) : 0;
@@ -69,40 +71,34 @@ if($dosubmit)
 		$arrposid = $article['arrposid'];
 		$article['arrposid'] = ','.implode(',', $arrposid).',';
 	}
+
+	$field->check_form();
+
 	$articleid = $art->add($article);
 
-	
-
-    $att = new attachment($articleid, $channelid, $catid);
-	$att->add($article['content']);
-
-	$chid = $channelid;
-	$cid = $catid;
 	if($articleid)
 	{
+		if($freelink)
+		{
+			$r = $db->get_one("select title,thumb,linkurl,style from ".channel_table('article', $channelid)." where articleid='$articleid' ");
+			$f = array();
+			$f['title'] = $r['title'];
+			$f['url'] = linkurl($r['linkurl']);
+			$f['image'] = imgurl($r['thumb']);
+			$f['style'] = $r['style'];
+			add_freelink(trim($freelink), $f);
+		}
+		$att->attachment($articleid, $channelid, $catid);
+		$att->add($article['content']);
 		if(isset($arrposid) && $arrposid) $pos->add($articleid, $arrposid);
 
 		$field->update("articleid=$articleid");
-		if($article['ishtml']  && $article['status'] == 3 && !$article['islink'])
+		$forward = "?mod=$mod&file=$file&action=add&channelid=$channelid&catid=$catid";
+		if($article['status'] == 3)
 		{
-			createhtml('show');
-			createhtml('index');
-			createhtml('index', PHPCMS_ROOT);
-			if($CAT['arrparentid'])
-			{
-				$catids = explode(',', $CAT['arrparentid']);
-				foreach($catids as $catid)
-				{
-					if(!$catid) continue;
-					createhtml('list');
-				}
-			}
-			$catid = $cid;
-			$fid = 1;
-			$pernum = 5;
-			createhtml('list');
+			require PHPCMS_ROOT.'/include/create_related_html.inc.php';
 		}
-		showmessage($LANG['add_article_success'],"?mod=$mod&file=$file&action=add&channelid=$chid&catid=$cid");
+		showmessage($LANG['add_article_success'], $forward);
 	}
 	else
 	{
@@ -123,7 +119,7 @@ else
 	$showtpl = showtpl($mod,'content','article[templateid]');
 	$html_urlrule = urlrule_select('html_urlrule','html','item',$CAT['item_html_urlruleid']);
 	$php_urlrule = urlrule_select('php_urlrule','php','item',$CAT['item_php_urlruleid']);
-	$fields = $field->get_form('<tr><td class="tablerow"><strong>$title</strong></td><td class="tablerow">$input $note</td></tr>');
+	$fields = $field->get_form('<tr><td class="tablerow"><strong>$title</strong></td><td class="tablerow">$input $tool $note</td></tr>');
 	$position = $pos->checkbox('article[arrposid][]');
 	include admintpl($mod.'_add');
 }

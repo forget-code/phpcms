@@ -139,7 +139,7 @@ foreach ($dirs as $dirrow)
 	<td><?=$dirrow['size']?></td>
 	<td><?=$dirrow['createtime']?></td>
 	<td><?=$dirrow['modifytime']?></td>
-	<td><a href="?mod=<?=$mod?>&file=<?=$file?>&action=chmod&fname=<?=urlencode($currentdir)?>/&isdir=1&dir=<?=$dir?>" title="点击更改目录属性"><?=$dirrow['dirperm']?></a></td>
+	<td><a href="?mod=<?=$mod?>&file=<?=$file?>&action=chmod&fname=<?=urlencode($currentdir)?>/<?=$dirrow['name']?>&isdir=1&dir=<?=$dir?>" title="点击更改目录属性"><?=$dirrow['dirperm']?></a></td>
 	<td>
 	<?php if(isset($zip)){?><a href="javascript:if(confirm('确认压缩该文件夹吗？')) location='?mod=<?=$mod?>&file=<?=$file?>&action=zipdir&fname=<?=urlencode($currentdir)?>/<?=$dirrow['name']?>/&isdir=1&dir=<?=$dir?>'">压缩</a> <?php } ?>
 	<a href="javascript:if(confirm('确认要删除目录：<?=$dirrow['name']?> 吗？删除此目录后其子目录及文件均会删除，请确认')) location='?mod=<?=$mod?>&file=<?=$file?>&action=delete&fname=<?=urlencode($currentdir)?>/<?=$dirrow['name']?>/&isdir=1&dir=<?=$dir?>'">删除</a>

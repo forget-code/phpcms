@@ -20,8 +20,8 @@ include admintpl('header');
 <tr align="center" onmouseout="this.style.backgroundColor='#F1F3F5'" onmouseover="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5' height="23">
 <td><a href='?mod=<?=$mod?>&file=<?=$file?>&action=setting&name=<?=$setting['name']?>&channelid=<?=$channelid?>'><?=$setting['name']?></a></td>
 <td align="left"><?=$setting['note']?></td>
-<td><?=date('Y-m-d h:i:s', $setting['edittime'])?></td>
-<td><?=$setting['importtime'] ? date('Y-m-d h:i:s', $setting['importtime']) : ''?></td>
+<td><?=date('Y-m-d H:i:s', $setting['edittime'])?></td>
+<td><?=$setting['importtime'] ? date('Y-m-d H:i:s', $setting['importtime']) : ''?></td>
 <td align="left"><?=$setting['maxid']?></td>
 <td><a href="#" onclick="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=import&name=<?=$setting['name']?>&channelid=<?=$channelid?>','确认开始导入数据吗？')">导入数据</a> | <a href='?mod=<?=$mod?>&file=<?=$file?>&action=setting&name=<?=$setting['name']?>&channelid=<?=$channelid?>'>修改</a> | <a href="#" onclick="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=delete&name=<?=$setting['name']?>&channelid=<?=$channelid?>','确认删除此配置文件吗？本操作不可恢复')">删除</a> | <a href='?mod=<?=$mod?>&file=<?=$file?>&action=down&name=<?=$setting['name']?>&channelid=<?=$channelid?>'>下载配置</a> </td>
 </tr>

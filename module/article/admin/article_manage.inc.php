@@ -33,6 +33,6 @@ $orders = array('listorder DESC, articleid DESC', 'edittime DESC', 'edittime ASC
 $articles = $art->get_list($sql, $orders[$ordertype]);
 $r = $db->get_one("SELECT COUNT(*) AS number FROM ".channel_table('article', $channelid)." WHERE $sql");
 $pages = phppages($r['number'], $page, $pagesize);
-$referer = urlencode("?mod=$mod&file=$file&action=$action&job=$job&channelid=$channelid&catid=$catid&srchtype=$srchtype&keywords=$keywords&ordertype=$ordertype&pagesize=$pagesize");
+$referer = urlencode("?mod=$mod&file=$file&action=$action&job=$job&channelid=$channelid&catid=$catid&srchtype=$srchtype&keywords=$keywords&ordertype=$ordertype&page=$page&pagesize=$pagesize");
 include admintpl($mod.'_'.$job);
 ?>

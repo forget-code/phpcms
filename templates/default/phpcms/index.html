@@ -1,149 +1,161 @@
 {template 'phpcms','header'}
 <table cellspacing="0" cellpadding="0" width="980" align="center">
-    <tbody>
-        <tr>
-            <td valign="top" width="710">
-            <table cellspacing="0" cellpadding="0" width="100%">
-                <tbody>
-                    <tr>
-                        <td align="center" width="270"><!--幻灯片-->
-                        <div class="slidepic">{tag_首页幻灯片}</div>
-                        </td>
-                        <td width="10"></td>
-                        <td valign="top">
-                        <div class="div_box_1">
-                        <div class="cat_title">
-                        <div class="cat_name">推荐信息</div>
-                        </div>
-                        {tag_首页推荐信息} </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <script language="JavaScript" src="{PHPCMS_PATH}data/js/search.js"></script></td>
-            <td width="15"></td>
-            <td class="right_bg" valign="top" width="255" align="left">
-            <div class="rightcats">
-            <h1>网站公告</h1>
-            <h2><a class="more" href="{$MODULE[announce][linkurl]}">更多 &gt;&gt;</a></h2>
-            </div>
-            <table cellspacing="0" cellpadding="0" width="100%">
-                    <tr>
-                        <td>{tag_网站首页最新公告}
-                    </td>
-                    </tr>
-            </table>
-            <div class="rightcats">
-            <h1>推荐专题</h1>
-            </div>
-{tag_网站首页推荐专题} 
-
-            </td>
-        </tr>
-    </tbody>
-</table>
-<table cellspacing="0" cellpadding="0" width="980" align="center" class="mar_10">
-    <tbody>
-        <tr>
-            <td valign="top" width="710">
-            <table height="80" cellspacing="0" cellpadding="0" width="100%">
-                    <tr>
-                        <td align="center"><SCRIPT LANGUAGE="JavaScript" src="{$MODULE[ads][linkurl]}ad.php?id=2"></SCRIPT></td>
-                    </tr>
-            </table>
-            <!--{loop $channels['article'] $channelid $cha}-->
-            <div class="cat_box_1">
-            <div class="cat_title">
-            <div class="cat_name">{$cha[channelname]}</div>
-            <div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
-            </div>
-            <table cellspacing="0" cellpadding="0" width="100%">
-                <tbody>
-                    <tr>
-                    <td valign="top" width="50%">{tag_网站首页最新文章}</td>
+	<tr>
+		<td valign="top" width="710">
+			<table cellspacing="0" cellpadding="0" width="100%">
+				<tr>
+					<td align="center" width="270">
+					<div class="slidepic">{tag_首页幻灯片}</div>
+					</td>
 					<td width="10"></td>
-                    <td valign="top"  width="50%">{tag_网站首页推荐图片文章}</td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-            <!--{/loop}-->
-	    <!--{loop $channels['picture'] $channelid $cha}-->
-            <div class="cat_box_1">
-            <div class="cat_title">
-            <div class="cat_name">{$cha[channelname]}</div>
-            <div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
-            </div>
-            <table cellspacing="0" cellpadding="0" width="100%" class="mar_10">
-                <tbody>
-                    <tr>
-                        <td valign="top" >{tag_网站首页最新图片}</td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-            <!--{/loop}-->
-	    <!--{loop $channels['down'] $channelid $cha}-->
-            <div class="cat_box_1">
-            <div class="cat_title">
-            <div class="cat_name">{$cha[channelname]}</div>
-            <div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
-            </div>
-            <table cellspacing="0" cellpadding="0" width="100%" class="mar_10">
-                <tbody>
-                    <tr>
-                        <td valign="top"  width="50%">{tag_网站首页推荐下载} </td>
-                        <td width="10"></td>
-                        <td valign="top"  width="50%">{tag_网站首页最新下载} </td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-            <!--{/loop}-->
-	    <!--{loop $channels['info'] $channelid $cha}-->
-            <div class="cat_box_1">
-            <div class="cat_title">
-            <div class="cat_name">{$cha[channelname]}</div>
-            <div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
-            </div>
-            <table cellspacing="0" cellpadding="0" width="100%" class="mar_10">
-                <tbody>
-                    <tr>
-                        <td valign="top" width="50%">{tag_网站首页推荐信息}</td>
-                        <td width="10"></td>
-                        <td valign="top" width="50%">{tag_网站首页最新信息} </td>
-                    </tr>
-                </tbody>
-            </table>
-            </div>
-            <!--{/loop}-->
-			</td>
-            <td width="15"></td>
-            <td class="right_bg" valign="top" width="255">
-            <div class="rightcats">
-            <h1>投票调查</h1>
-            <h2><a class="more" href="{$MODULE[vote][linkurl]}">更多 &gt;&gt;</a></h2>
-            </div>
-            <table height="100" cellspacing="5" cellpadding="0" width="100%">
-                <tbody>
-                    <tr>
-                        <td>{tag_网站首页投票调查}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="rightcats">
-            <h1>友情链接</h1>
-            <h2><a class="more" href="{$MODULE[link][linkurl]}">更多 &gt;&gt;</a></h2>
-            </div>
-            <table height="100" cellspacing="5" cellpadding="0" width="100%">
-                <tbody>
-                    <tr>
-                        <td>{tag_网站首页图片链接} {tag_网站首页文字链接} </td>
-                    </tr>
-                </tbody>
-            </table>
-            </td>
-        </tr>
-    </tbody>
+					<td valign="top">
+						<div class="div_box_1">
+						<div class="cat_title">
+						<div class="cat_name">推荐信息</div>
+						</div>
+						{tag_首页推荐信息}
+						</div>
+					</td>
+				</tr>
+			</table>
+			<table cellspacing="0" cellpadding="0" width="100%">
+			<tr><td height="5"> </td></tr>
+			<tr><td><script language="javascript" src="{PHPCMS_PATH}data/js/search.js"></script></td></tr>
+			</table>
+		</td>
+		<td width="15"></td>
+		<td class="right_bg" valign="top" width="255" align="left">
+
+		<div class="rightcats">
+		<h1>网站公告</h1>
+		<h2><a class="more" href="{$MODULE[announce][linkurl]}">更多 &gt;&gt;</a></h2>
+		</div>
+		<table cellspacing="0" cellpadding="0" width="100%">
+			<tr>
+				<td>{tag_网站首页最新公告}</td>
+			</tr>
+		</table>
+
+		<div class="rightcats"><h1>推荐专题</h1></div>
+		{tag_网站首页推荐专题} 
+
+		</td>
+	</tr>
+</table>
+
+<table cellspacing="0" cellpadding="0" width="980" align="center" class="mar_10">
+   <tr>
+	  <td valign="top" width="710">
+		<table height="80" cellspacing="0" cellpadding="0" width="100%">
+			<tr>
+				<td align="center"><script language="javascript" src="{$MODULE[ads][linkurl]}ad.php?id=2"></script></td>
+			</tr>
+			<tr><td height="5"> </td></tr>
+
+		</table>
+	<!--{loop $channels['article'] $channelid $cha}-->
+		<div class="cat_box_1">
+		<div class="cat_title">
+		<div class="cat_name">{$cha[channelname]}</div>
+		<div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
+		</div>
+		<table cellspacing="0" cellpadding="0" width="100%">
+		  <tr>
+			<td valign="top" width="50%">{tag_网站首页最新文章}</td>
+			<td width="10"></td>
+			<td valign="top"  width="50%">{tag_网站首页推荐图片文章}</td>
+		  </tr>
+		</table>
+		</div>
+		<!--{/loop}-->
+	<!--{loop $channels['picture'] $channelid $cha}-->
+		<div class="cat_box_1">
+		<div class="cat_title">
+		<div class="cat_name">{$cha[channelname]}</div>
+		<div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
+		</div>
+		<table cellspacing="0" cellpadding="0" width="100%" class="mar_10">
+			<tr>
+				<td valign="top" >{tag_网站首页最新图片}</td>
+			</tr>
+		</table>
+		</div>
+		<!--{/loop}-->
+	<!--{loop $channels['down'] $channelid $cha}-->
+		<div class="cat_box_1">
+		<div class="cat_title">
+		<div class="cat_name">{$cha[channelname]}</div>
+		<div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
+		</div>
+		<table cellspacing="0" cellpadding="0" width="100%" class="mar_10">
+			<tr>
+				<td valign="top"  width="50%">{tag_网站首页推荐下载} </td>
+				<td width="10"></td>
+				<td valign="top"  width="50%">{tag_网站首页最新下载} </td>
+			</tr>
+		</table>
+		</div>
+		<!--{/loop}-->
+	<!--{loop $channels['info'] $channelid $cha}-->
+		<div class="cat_box_1">
+		<div class="cat_title">
+		<div class="cat_name">{$cha[channelname]}</div>
+		<div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
+		</div>
+		<table cellspacing="0" cellpadding="0" width="100%" class="mar_10">
+			<tr>
+				<td valign="top" width="50%">{tag_网站首页推荐信息}</td>
+				<td width="10"></td>
+				<td valign="top" width="50%">{tag_网站首页最新信息} </td>
+			</tr>
+		</table>
+		</div>
+		<!--{/loop}-->
+	<!--{loop $channels['movie'] $channelid $cha}-->
+		<div class="cat_box_1">
+		<div class="cat_title">
+		<div class="cat_name">{$cha[channelname]}</div>
+		<div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
+		</div>
+		<table cellspacing="0" cellpadding="0" width="100%" class="mar_10">
+			<tr>
+				<td valign="top">{tag_网站首页最新影视}</td>
+			</tr>
+		</table>
+		</div>
+		<!--{/loop}-->
+
+		</td>
+		<td width="15"></td>
+		<td class="right_bg" valign="top" width="255">
+
+		<div class="rightcats">
+		<h1>最新商品</h1>
+		<h2><a class="more" href="{$MODULE[product][linkurl]}">更多 &gt;&gt;</a></h2>
+		</div>
+		{tag_网站首页最新商品}
+
+		<div class="rightcats">
+		<h1>投票调查</h1>
+		<h2><a class="more" href="{$MODULE[vote][linkurl]}">更多 &gt;&gt;</a></h2>
+		</div>
+		<table height="100" cellspacing="5" cellpadding="0" width="100%">
+			<tr>
+				<td>{tag_网站首页投票调查}</td>
+			</tr>
+		</table>
+
+		<div class="rightcats">
+		<h1>友情链接</h1>
+		<h2><a class="more" href="{$MODULE[link][linkurl]}">更多 &gt;&gt;</a></h2>
+		</div>
+		<table height="100" cellspacing="5" cellpadding="0" width="100%">
+			<tr>
+				<td>{tag_网站首页图片链接} {tag_网站首页文字链接} </td>
+			</tr>
+		</table>
+
+		</td>
+	</tr>
 </table>
 {template 'phpcms','footer'}

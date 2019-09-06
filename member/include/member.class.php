@@ -74,12 +74,12 @@ class member
 			$this->errormsg = 'user_is_locked';
 			return FALSE;
 		}
-		elseif($groupid == 3)
+		elseif($groupid == 4)
 		{
 			$this->errormsg = 'user_is_verify';
 			return FALSE;
 		}
-		elseif($groupid == 4)
+		elseif($groupid == 5)
 		{
 			$this->errormsg = 'user_is_checking';
 			return FALSE;
@@ -89,7 +89,7 @@ class member
 		$cookietime = $_cookietime ? $PHP_TIME + $_cookietime : 0;
 		$phpcms_auth_key = md5($PHPCMS['authkey'].$_SERVER['HTTP_USER_AGENT']);
 		$phpcms_auth = phpcms_auth($userid."\t".$password."\t".$answer, 'ENCODE', $phpcms_auth_key);
-		mkcookie('phpcms_auth', $phpcms_auth, $cookietime);
+		mkcookie('auth', $phpcms_auth, $cookietime);
 		mkcookie('cookietime', $_cookietime, $cookietime);
 		
 		$this->db->query("UPDATE ".TABLE_MEMBER." SET lastloginip='$PHP_IP',lastlogintime=$PHP_TIME,logintimes=logintimes+1 WHERE username='$this->username'");
@@ -101,8 +101,8 @@ class member
 	function logout($forward = '')
 	{
 		global $LANG;
-		mkcookie('phpcms_auth', '');
-		unset($_SESSION['grade'], $_SESSION['modules'], $_SESSION['channelids'], $_SESSION['purviewids'], $_SESSION['catids'], $_SESSION['specialids']);
+		mkcookie('auth', '');
+		unset($_SESSION['admin_grade'], $_SESSION['admin_modules'], $_SESSION['admin_channelids'], $_SESSION['admin_purviewids'], $_SESSION['admin_catids'], $_SESSION['admin_specialids']);
 		if($forward) showmessage($LANG['logout_success'], $forward);
 		return TRUE;
 	}

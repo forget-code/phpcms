@@ -1,6 +1,6 @@
 <?php
 $settings['phpwind'] = array (
-  'importtime' => '1171012174',
+  'importtime' => '',
   'name' => 'phpwind',
   'note' => '(支持3.x,4.x,5.x)精华主题',
   'dbfrom' => '1',
@@ -12,7 +12,7 @@ $settings['phpwind'] = array (
   'table' => 'pw_threads a,pw_tmsgs b',
   'selectfield' => '*',
   'condition' => 'a.tid=b.tid',
-  'maxid' => '1',
+  'maxid' => '0',
   'isuseoldid' => '0',
   'articleid' => 
   array (
@@ -140,7 +140,7 @@ $settings['phpwind'] = array (
     'value' => '',
     'func' => '',
   ),
-  'edittime' => 1175506318,
+  'edittime' => '',
   'checker' => 
   array (
     'field' => '',
@@ -204,13 +204,13 @@ $settings['phpwind'] = array (
   'htmldir' => 
   array (
     'field' => '',
-    'value' => 'html',
+    'value' => 'article',
     'func' => '',
   ),
   'prefix' => 
   array (
     'field' => '',
-    'value' => '',
+    'value' => 'article_',
     'func' => '',
   ),
   'urlruleid' => 
@@ -234,8 +234,8 @@ $settings['phpwind'] = array (
   'defaultcatid' => '3',
   'catids' => 
   array (
-    2 => '',
     3 => '',
+    4 => '',
   ),
   'articlecheck' => '1',
   'timelimit' => '90',

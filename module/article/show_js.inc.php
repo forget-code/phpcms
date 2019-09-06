@@ -21,12 +21,12 @@ if($MOD['show_pre_and_next'])
 		$r = $db->get_one("select catid from ".channel_table('article', $channelid)." where articleid=$articleid ", "CACHE");
 	}
 
-	$p = $db->get_one("select articleid,title,linkurl,style from ".channel_table('article', $channelid)." where status=3 and catid='$r[catid]' and articleid<$articleid limit 0,1", "CACHE");
+	$p = $db->get_one("select articleid,title,linkurl,style from ".channel_table('article', $channelid)." where status=3 and catid='$r[catid]' and articleid<$articleid order by articleid desc limit 0,1", "CACHE");
 	if($p['articleid'])
 	{
 		$p['stitle'] = style($p['title'], $p['style']);
 		$p['linkurl'] = linkurl($p['linkurl']);
-		$pre = '<li>'.$LANG['prepage'].'<a href="'.$p['linkurl'].'">'.$p['title'].'</a></li>';
+		$pre = '<li>'.$LANG['prepage'].'<a href="'.$p['linkurl'].'">'.addslashes($p['title']).'</a></li>';
 	}
 	else
 	{
@@ -38,7 +38,7 @@ if($MOD['show_pre_and_next'])
 	{
 		$n['stitle'] = style($n['title'], $n['style']);
 		$n['linkurl'] = linkurl($n['linkurl']);
-		$next = '<li>'.$LANG['nextpage'].'<a href="'.$n['linkurl'].'">'.$n['title'].'</a></li>';
+		$next = '<li>'.$LANG['nextpage'].'<a href="'.$n['linkurl'].'">'.addslashes($n['title']).'</a></li>';
 	}
 	else
 	{

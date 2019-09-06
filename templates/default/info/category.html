@@ -1,0 +1,68 @@
+{template 'phpcms','header'}
+<!--频道下属栏目列表-->
+<table width="980" cellpadding="0" cellspacing="0">
+  <tr>
+  <td width="250" valign="top" class="right_bg">
+		<div class="rightcats"><h1>本类推荐信息</h1></div>
+		{tag_本类推荐信息}
+<div class="rightcats"><h1>本类热点信息</h1></div>
+		{tag_本类热点信息}
+</td>
+  <td width="10"></td>
+    <td width="720" valign="top">
+<!--位置导航-->
+    <table width="100%"  cellspacing="0" cellpadding="0" class="position">
+      <tr>
+        <td style="padding-left:20px;">当前位置：<a href="{$channelurl}">{$channelname}首页</a> &gt;&gt; {$position}</td>
+      </tr>
+    </table>
+<table width="100%"cellpadding="0" cellspacing="0">
+<tr>
+<td height="5"></td>
+</tr>
+</table>
+<!--本类信息分类列表-->
+    <div class="subnav">{tag_频道子栏目列表}</div>
+
+<!--{if $enableadd}-->
+<div class="cat_box_1">
+<div class="cat_title">
+<div class="cat_name">{$catname}</div>
+<div class="cat_url"><a class="more" href="{$linkurl}">更多 &gt;&gt;</a></div>
+</div>
+<table cellspacing="0" cellpadding="0" width="100%">
+	<tbody>
+		<tr>
+		<td valign="top" width="50%">{tag_一级栏目信息列表}</td>
+		<td width="10"></td>
+		<td valign="top"  width="50%">{tag_栏目页图片信息列表}</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+<!--{/if}-->
+
+<!--自定义栏目开始-->
+   <table width="100%"  cellspacing="3" cellpadding="3" class="mar_10">
+{loop $arrchildid $i $childcat}
+      {if $i%2==0}<tr>{/if}
+        <td width="50%" valign="top" class="cat_box">
+	     <div class="cat_title">
+		   <div class="cat_name">{$childcat[catname]}</div>
+		   <div class="cat_url"><a href="{$childcat[linkurl]}" target="{$childcat[target]}" class="more">更多</a></div></div>
+<!--自定义栏目信息列表-->
+{tag_子栏目最新信息}
+	</td>
+     {if $i%2==1}</tr>{/if}
+{/loop}
+    </table>
+<!--自定义栏目结束-->
+
+<table width="100%"cellpadding="0" cellspacing="0"><tr><td height="10"></td></tr></table>
+<!--搜索框-->	<script language="Javascript" src="{PHPCMS_PATH}data/js/search.js"></script>
+</td>
+  </tr>
+</table>
+
+{template 'phpcms','footer'}
+

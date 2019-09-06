@@ -15,19 +15,11 @@ $(c_Str+"_img").src='<?=PHPCMS_PATH?>admin/skin/images/off.gif';
 }
 </script>
 <body>
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="500" id="loading">
-  <tr>
-    <td align="center" valign="center"><img src="<?=PHPCMS_PATH?>admin/skin/images/loading.gif" /><br /><br />正在装载...</td>
-  </tr>
-</table>
-
-
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
   <tr>
     <td></td>
   </tr>
 </table>
-<div id="load" style="display:none;">
 <table width="100%"  border="0" cellpadding="4" cellspacing="1" bgcolor="#183789">
   <tr>
     <td class="tablerow">
@@ -167,6 +159,9 @@ $(c_Str+"_img").src='<?=PHPCMS_PATH?>admin/skin/images/off.gif';
                   </tr>
 
                  <TBODY style="display:" id="advance">
+				<tr>
+                    <td height="22" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#F8F8F8'" onMouseOut="this.style.backgroundColor='#FFFFFF'"><a href="?mod=phpcms&file=attachment&keyid=<?=$channelid?>" target="right">附件管理</a></td>
+                  </tr>
 				  <tr>
                     <td height="22" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#F8F8F8'" onMouseOut="this.style.backgroundColor='#FFFFFF'"><a href="?mod=<?=$mod?>&file=tag&action=manage&channelid=<?=$channelid?>" target="right"><font color=blue>标签调用管理</font></a></td>
                   </tr>
@@ -189,9 +184,7 @@ $(c_Str+"_img").src='<?=PHPCMS_PATH?>admin/skin/images/off.gif';
     </table></td>
   </tr>
 </table>
-</div>
 <script type="text/javascript">
-setTimeout("$('loading').style.display='none';$('load').style.display='block';", 500);
 parent.frames['right'].location = '?mod=down&file=down&action=main&channelid=<?=$channelid?>';
 </script>
 </body>

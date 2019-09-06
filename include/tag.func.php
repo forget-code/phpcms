@@ -39,7 +39,7 @@ function cattree($keyid, $catid = 0, $open = 1, $pat = '')
 		$image = $open ? 'open' : 'close';
 		$onclick = $cat['child'] ? 'onclick="javascript:show(\'a'.$catid.'\',\'b'.$catid.'\',\''.$catid.'\')"' : '';
 		$addpat = $cat['child'] ? '<td width=18 '.$onclick.'><img src="'.PHPCMS_PATH.'images/icon/'.$image.'.gif" id="a'.$catid.'"></td><td width=18 '.$onclick.'><img src="'.PHPCMS_PATH.'images/icon/f'.$image.'.gif" id="b'.$catid.'"></td>' : ($endi==$i ? '<td width=18><img src="'.PHPCMS_PATH.'images/icon/nodeend.gif"></td><td width=18><img src="'.PHPCMS_PATH.'images/icon/doc.gif"></td>' : '<td width=18><img src="'.PHPCMS_PATH.'images/icon/node.gif"></td><td width=18><img src="'.PHPCMS_PATH.'images/icon/doc.gif"></td>') ;
-		$cats .= '<table border="0" cellspacing="0" cellpadding="0" style="font-size:9pt"><tr height=18 align="left">'.$pat.$addpat.'</td><td><a href="'.$cat['linkurl'].'" target="_blank">'.$cat['catname'].'</a></td></tr></table>';
+		$cats .= '<table border="0" cellspacing="0" cellpadding="0" style="font-size:9pt"><tr height=18 align="left">'.$pat.$addpat.'</td><td><a href="'.$cat['linkurl'].'" style="'.$cat['style'].'" target="_blank">'.$cat['catname'].'</a></td></tr></table>';
 		if($cat['child']) $cats .= '<div id="'.$catid.'" style="display=\''.($open ? '\'\'' : 'none').'\'">'.cattree($keyid, $catid, $open, $pat.'<td width=18><img src="'.PHPCMS_PATH.'images/icon/vertline.gif"></td>').'</div>';
 	}
 	return $cats;
@@ -69,14 +69,9 @@ function phpcms_special_list($templateid, $keyid = 0, $page = 0, $specialnum = 5
 		$r['linkurl'] = linkurl($r['linkurl'], 1);
 		$r['alt'] = $r['specialname'];
 		$r['specialname'] = $specialnamelen ? str_cut($r['specialname'], $specialnamelen, '...') : '';
-		$r['introduce'] = $descriptionlen ? str_cut($r['introduce'], $descriptionlen, '...') : '';
+		$r['introduce'] = $descriptionlen ? str_cut(strip_tags($r['introduce']), $descriptionlen, '...') : '';
 		$r['specialpic'] = imgurl($r['specialpic']);		
 		$r['specialbanner'] = imgurl($r['specialbanner']);
-		if(defined('DOMAIN'))//For info
-		{
-			$r['specialpic'] = DOMAIN.$r['specialpic'];
-			$r['specialbanner'] = DOMAIN.$r['specialbanner'];
-		}
 		$specials[] = $r;
 	}
 	$db->free_result($result);
@@ -140,5 +135,18 @@ function phpcms_type($templateid = 0, $keyid = 1)
 function phpcms_freelink($type)
 {
 	@include PHPCMS_ROOT.'/data/freelink/'.urlencode($type).'.html';
+}
+
+function phpcms_tm($templateid = 0)
+{
+	global $PHPCMS,$PHP_DOMAIN;
+	$qqs = $msns = $skypes = $taobaos = $alibabas = array();
+    if($PHPCMS['qq']) $qqs = explode(',', $PHPCMS['qq']);
+    if($PHPCMS['msn']) $msns = explode(',', $PHPCMS['msn']);
+    if($PHPCMS['skype']) $skypes = explode(',', $PHPCMS['skype']);
+    if($PHPCMS['taobao']) $taobaos = explode(',', $PHPCMS['taobao']);
+    if($PHPCMS['alibaba']) $alibabas = explode(',', $PHPCMS['alibaba']);
+	if(!$templateid) $templateid = 'tag_phpcms_tm';
+	include template('phpcms', $templateid);
 }
 ?>

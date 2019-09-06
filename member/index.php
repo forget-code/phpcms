@@ -36,7 +36,7 @@ else
 	$status = $GROUP['groupname'];
 }
 
-require_once PHPCMS_ROOT.'/admin/include/field.class.php';
+require_once PHPCMS_ROOT.'/include/field.class.php';
 $field = new field($CONFIG['tablepre'].'member_info');
 $fields = $field->show_list('<tr>
 <td width="15%"  class="td_right">$title:&nbsp;</td>

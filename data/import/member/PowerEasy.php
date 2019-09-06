@@ -186,6 +186,6 @@ $settings['PowerEasy'] = array (
   'membercheck' => '1',
   'timelimit' => '90',
   'number' => '100',
-  'edittime' => 1171023405,
+  'edittime' => '',
 );
 ?>

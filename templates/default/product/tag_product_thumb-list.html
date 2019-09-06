@@ -1,0 +1,28 @@
+<!--{loop $products $k $v}-->
+<table cellspacing="0" class="cat_div_2">
+         <tr>
+           <td width="18%"><a href="{$v[linkurl]}" title="{$v[pdt_name]}" {$target} ondblclick="addtocompare({$v[productid]},'{$v[pdt_name]}');" title="双击添加到商品对比栏">
+		   <img src="{$v[pdt_img]}" width="{$imgwidth}" height="{$imgheight}" border="0"  class="picture_border" {if $showalt} alt="{$v[alt]}" {/if} hspace="10" /></a></td>
+           <td width="82%">
+		     <div class="product_3">
+		    <!--{if $showtitle}--><h1><a href="{$v[linkurl]}" title="{$v[pdt_name]}" {$target} class="tag_title_link">{$v[cut_pdt_name]}</a></h1><!--{/if}-->
+  <!--{if $showmarketprice}--><li>市场价格：<s>{$v[marketprice]}</s></li><!--{/if}-->
+  <!--{if $showprice}--><li>会员价：<span class="font_orange">￥{$v[price]}</span></li><!--{/if}-->
+  <!--{if $descriptionlen}--><li class="font_blue_1">{$v[pdt_description]}</li><!--{/if}-->
+  <div class="float_right  mar_5">
+  <a href="{$v[linkurl]}"><img src="{$skindir}/images/look.gif" alt="查看商品" width="80" height="18" border="0" /></a>&nbsp;
+  <a href="{$MODULE[product][linkurl]}cart.php?productid={$v[productid]}&action=add"><img src="{$skindir}/images/buy.gif" alt="购买商品" width="63" height="18" border="0" />
+  </a>
+  </div>
+		   </td>
+         </tr>
+      </table>
+<!--{/loop}-->
+
+<div class="clearboth"></div>
+<!--分页-->
+<table width="100%" cellspacing="0" cellpadding="0" class="pages">
+  <tr>
+    <td>{$pages}</td>
+  </tr>
+</table>

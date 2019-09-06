@@ -27,7 +27,8 @@ include admintpl('header');
    <input name="mod" type="hidden" value="<?=$mod?>">
    <input name="file" type="hidden" value="<?=$file?>">
    <input name="channelid" type="hidden" value="<?=$channelid?>">
-   <input name="action" type="hidden" value="<?=$action?>" id="action">
+   <input name="action" type="hidden" value="<?=$action?>">
+   <input name="job" type="hidden" value="<?=$job?>">
    <input name="function" type="hidden" value="<?=$function?>">
    <input name="tagname" type="hidden" value="<?=$tagname?>">
    <input name="referer" type="hidden" value="<?=$PHP_REFERER?>">

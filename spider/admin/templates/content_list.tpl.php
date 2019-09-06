@@ -3,12 +3,6 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admintpl('header');
 ?>
 <body>
-
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="5">
-  <tr>
-    <td></td>
-  </tr>
-</table>
 <?=$menu?>
 <form method="post" name="myform">
 <table cellpadding="0" cellspacing="1" border="0" width="100%" height="30" class="tableborder">

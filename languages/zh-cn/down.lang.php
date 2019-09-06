@@ -10,6 +10,7 @@ $LANG['short_heading_no_space']      = '对不起，简短标题不能为空！�
 $LANG['download_url_no_air']         = '对不起，下载地址不能为空！请返回！';
 $LANG['disallowed_add_information']  = '指定栏目不允许添加信息！请返回！';
 $LANG['disallowed_add_downloaded']   = '指定栏目不允许添加下载！请返回！';
+$LANG['not_allowed_to_add_by_your_group']='您的当前用户组无在此栏目添加信息的权限';
 $LANG['download_submitted_success']  = '下载提交成功！';
 $LANG['choose_category']             = '请选择栏目';
 $LANG['contribute']                  = '投稿';

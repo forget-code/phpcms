@@ -13,19 +13,12 @@ $(c_Str+"_img").src='<?=PHPCMS_PATH?>admin/skin/images/off.gif';
 }
 }
 </script>
-<meta http-equiv="Page-Enter" content="revealTrans(Duration=0.5,Transition=23)">
 <body>
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="500" id="loading">
-  <tr>
-    <td align="center" valign="center"><img src="<?=PHPCMS_PATH?>admin/skin/images/loading.gif" /><br /><br />正在装载...</td>
-  </tr>
-</table>
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
   <tr>
     <td></td>
   </tr>
 </table>
-<div id="load" style="display:none;">
 <table width="100%"  border="0" cellpadding="4" cellspacing="1" bgcolor="#183789">
   <tr>
     <td class="tablerow"><table width="100%"  border="0" cellspacing="0" cellpadding="0">
@@ -75,9 +68,7 @@ if(is_array($menu[$mod])){
     </table></td>
   </tr>
 </table>
-</div>
 <script type="text/javascript">
-setTimeout("$('loading').style.display='none';$('load').style.display='block';", 500);
 parent.frames['right'].location = '?mod=phpcms&file=module&action=manage';
 </script>
 </body>

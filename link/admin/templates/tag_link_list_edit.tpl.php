@@ -5,7 +5,7 @@ include admintpl('header');
 <body>
 <script type="text/javascript" src="<?=PHPCMS_PATH?>include/js/tag.js"></script>
 <?=$menu?>
-<table cellpadding="2" cellspacing="1" border="0" align=center class="tableBorder" >
+<table cellpadding="2" cellspacing="1" border="0" class="tableBorder" >
   <tr>
     <td class="submenu" align="center"><?=$functions[$function]?>标签管理</td>
   </tr>
@@ -20,23 +20,26 @@ include admintpl('header');
 </table>
 <table cellpadding="2" cellspacing="1" class="tableborder">
   <tr>
-    <th colspan=2>添加<?=$functions[$function]?>标签</th>
+    <th colspan=2>修改<?=$functions[$function]?>标签</th>
   </tr>
-  <form name="myform" method="get" action="?" onsubmit="javascript:return doCheck();">
+  <form name="myform" method="get" action="?">
    <input name="mod" type="hidden" value="<?=$mod?>">
    <input name="file" type="hidden" value="<?=$file?>">
    <input name="action" type="hidden" value="<?=$action?>">
+   <input name="job" type="hidden" value="<?=$job?>">
    <input name="function" type="hidden" value="<?=$function?>">
    <input name="tag_config[func]" type="hidden" value="<?=$function?>">
-   <input name="forward" type="hidden" value="<?=$forward?>">    <tr> 
+   <input name="forward" type="hidden" value="<?=$forward?>"> 
+   <input name="tagname" type="hidden" value="<?=$tagname?>">
+   <tr> 
       <td class="tablerow" width="40%"><b>标签名称</b><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</td>
       <td  class="tablerow">
-	  <input name="tagname" id="tagname" type="text" size="20" value="<?=$tagname?>"> <input type="button" name="submit" value=" 检查是否已经存在 " onclick="javascript:openwinx('?mod=<?=$mod?>&file=<?=$file?>&action=tag_exists&tagname='+myform.tagname.value,'tag_exists','450','160')"> <br/>
+	  <input type="text" size="20" value="<?=$tagname?>" disabled title="标签名称不可再修改" />
 	  </td>
     </tr>
     <tr> 
       <td class="tablerow" width="40%"><b>标签说明</b><br/>例如：首页推荐链接，10条</td>
-      <td  class="tablerow"><input name="tag_config[introduce]" id="introduce" type="text" size="60" value="<?=$tag_config['introduce']?>" /></td>
+      <td  class="tablerow"><input name="tag_config[introduce]" id="introduce" type="text" size="50" value="<?=$tag_config['introduce']?>" /></td>
     </tr>
     <tr> 
       <td class="tablerowhighlight" colspan=2 align="center"><b>标签参数设置</b></td>
@@ -80,6 +83,16 @@ include admintpl('header');
 <option value='8' <?php if($tag_config['cols']==8) { ?>selected<? } ?>>8列</option>
 <option value='9' <?php if($tag_config['cols']==9) { ?>selected<? } ?>>9列</option>
 <option value='10' <?php if($tag_config['cols']==10) { ?>selected<? } ?>>10列</option>
+<option value='1' <?php if($tag_config['cols']==11) { ?>selected<? } ?>>11列</option>
+<option value='2' <?php if($tag_config['cols']==12) { ?>selected<? } ?>>12列</option>
+<option value='3' <?php if($tag_config['cols']==13) { ?>selected<? } ?>>13列</option>
+<option value='4' <?php if($tag_config['cols']==14) { ?>selected<? } ?>>14列</option>
+<option value='5' <?php if($tag_config['cols']==15) { ?>selected<? } ?>>15列</option>
+<option value='6' <?php if($tag_config['cols']==16) { ?>selected<? } ?>>16列</option>
+<option value='7' <?php if($tag_config['cols']==17) { ?>selected<? } ?>>17列</option>
+<option value='8' <?php if($tag_config['cols']==18) { ?>selected<? } ?>>18列</option>
+<option value='9' <?php if($tag_config['cols']==19) { ?>selected<? } ?>>19列</option>
+<option value='10' <?php if($tag_config['cols']==20) { ?>selected<? } ?>>20列</option>
 </select>
       </td>
     </tr>

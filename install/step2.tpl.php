@@ -1,4 +1,4 @@
-<?php include "./install/header.tpl.php";?>
+<?php include PHPCMS_ROOT."/install/header.tpl.php";?>
 <body class="body">
 <table  border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
   <tr>
@@ -56,4 +56,4 @@
 </table></td>
   </tr>
 </table>
-<?php include "./install/footer.tpl.php";?>
+<?php include PHPCMS_ROOT."/install/footer.tpl.php";?>

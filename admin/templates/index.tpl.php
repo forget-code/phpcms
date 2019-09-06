@@ -1,4 +1,7 @@
-<?php include admintpl('header');?>
+<?php 
+defined('IN_PHPCMS') or exit('Access Denied');
+include admintpl('header');
+?>
 <frameset name="main" rows="48,*" frameborder="no" border="0" framespacing="0" cols="*"> 
 	<frame name="top" noresize scrolling="no" src="?mod=phpcms&file=index&action=top">
 	<frameset cols="170,*" frameborder="no" border="0" framespacing="0" rows="*"> 

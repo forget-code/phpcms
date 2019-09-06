@@ -12,18 +12,12 @@ document.all(c_Str).style.display='none'
 }
 </script>
 <body>
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="500" id="loading">
-  <tr>
-    <td align="center" valign="center"><img src="<?=PHPCMS_PATH?>admin/skin/images/loading.gif" /><br /><br />正在装载...</td>
-  </tr>
-</table>
-
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
   <tr>
     <td ></td>
   </tr>
 </table>
-<div id="load" style="display:none;">
+
 <table width="100%"  border="0" cellpadding="4" cellspacing="1" bgcolor="#183789" >
   <tr>
     <td class="tablerow">
@@ -43,9 +37,15 @@ document.all(c_Str).style.display='none'
                   <tr>
                     <th class="white" onclick="javascript:show('setting')"><img src="<?=PHPCMS_PATH?>admin/skin/images/on.gif" width="20" height="9" id="setting_img"><a href="###">控制面板</a></th>
                   </tr>
-                 <TBODY style="display:''" id="setting">
+                 <TBODY style="display:none" id="setting">
+                  <tr>
+                    <td height="22" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#F8F8F8'" onMouseOut="this.style.backgroundColor='#FFFFFF'"><a href="?file=index&action=main" target="right">系统首页</a></td>
+                  </tr>
                   <tr>
                     <td height="22" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#F8F8F8'" onMouseOut="this.style.backgroundColor='#FFFFFF'"><a href="?mod=phpcms&file=admin&action=view" target="right">查看权限</a></td>
+                  </tr>
+                  <tr>
+                    <td height="22" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#F8F8F8'" onMouseOut="this.style.backgroundColor='#FFFFFF'"><a href="member/member.php?username=<?=$_username?>" target="_blank">我的文集</a></td>
                   </tr>
                   <tr>
                     <td height="22" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#F8F8F8'" onMouseOut="this.style.backgroundColor='#FFFFFF'"><a href="<?=$MODULE['message']['linkurl']?>" target="_blank">短消息</a></td>
@@ -55,9 +55,6 @@ document.all(c_Str).style.display='none'
                   </tr>
                   <tr>
                     <td height="22" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#F8F8F8'" onMouseOut="this.style.backgroundColor='#FFFFFF'"><a href="<?=$MODULE['member']['linkurl']?>editpassword.php" target="_blank">修改密码</a></td>
-                  </tr>
-                  <tr>
-                    <td height="22" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#F8F8F8'" onMouseOut="this.style.backgroundColor='#FFFFFF'"><a href="?mod=phpcms&file=menu&action=my" target="right">定义常用操作</a></td>
                   </tr>
                 </tbody>
               </table>
@@ -71,7 +68,10 @@ document.all(c_Str).style.display='none'
                     <th class="white" onclick="javascript:show('ext')"><img src="<?=PHPCMS_PATH?>admin/skin/images/on.gif" width="20" height="9" id="ext_img"><a href="###">常用操作</a></td>
                   </tr>
                  <TBODY style="display:''" id="ext">
-                 <?=menu($mod, 'admin_mymenu')?>
+                  <tr>
+                    <td height="22" bgcolor="#FFFFFF" onMouseOver="this.style.backgroundColor='#F8F8F8'" onMouseOut="this.style.backgroundColor='#FFFFFF'"><a href="?mod=phpcms&file=menu&action=my" target="right"><font color="blue">定义常用操作</font></a></td>
+                  </tr>
+                 <?=menu($mod, 'admin_mymenu', $_username)?>
                 </tbody>
               </table>
               </td>
@@ -139,9 +139,7 @@ if(is_array($menu[$mod])){
 	</td>
   </tr>
 </table>
-</div>
 <script type="text/javascript">
-setTimeout("$('loading').style.display='none';$('load').style.display='block';", 500);
 parent.frames['right'].location = '?file=index&action=main';
 </script>
 </body>

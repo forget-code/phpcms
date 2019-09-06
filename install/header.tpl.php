@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>PHPCMS 程序安装向导</title>
-<meta http-equiv="Content-Type" content="text/html; charset=<?=$CONFIG['charset']?>">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8'charset']?>">
 <link rel="shortcut icon" href="favicon.ico" >
 <script language="javascript" src="include/js/prototype.js"></script>
 <script type="text/javascript">

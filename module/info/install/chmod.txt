@@ -1,0 +1,5 @@
+info/
+info/uploadfile/
+info/pos/
+info/special/
+info/config.inc.php

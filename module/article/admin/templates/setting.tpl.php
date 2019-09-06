@@ -12,7 +12,7 @@ include admintpl("header");
 
   <th colspan="2"><?=$MODULE[$mod]['name']?>模块配置</th>
     <tr>
-      <td class="tablerow"><strong>默认缩略图设置</strong></td>
+      <td class="tablerow" width="30%"><strong>默认缩略图设置</strong></td>
       <td class="tablerow">
 	  宽度:<input type="text" name="setting[thumb_width]" value="<?=$thumb_width?>" size="4"> px
 	  高度:<input type="text" name="setting[thumb_height]" value="<?=$thumb_height?>" size="4"> px
@@ -178,6 +178,31 @@ include admintpl("header");
       <td class="tablerow"><strong>内容摘要截取长度</strong></td>
       <td class="tablerow">
 	  <input type="text" name="setting[introcude_length]" value="<?=$introcude_length?>" size="5"> 留空表示不截取
+	 </td>
+   </tr>
+
+
+	<tr>
+      <td class="tablerow"><strong>内容存储方式</strong><br/>
+	  <font color="red">注意，一旦改变此设置，请务必进入各文章频道->高级管理->文本数据管理做相关转换，否则系统将无法正确获取数据</font></td>
+      <td class="tablerow">
+	  <input type="radio" name="setting[storage_mode]" value="1" <?php if($storage_mode == 1){ ?>checked <?php } ?>> 数据库存储 (在数据量不大情况下推荐使用)<br/> 
+	  <input type="radio" name="setting[storage_mode]" value="2"  <?php if($storage_mode == 2){ ?>checked <?php } ?>> 数据库+文本存储 (如果数据量比较大,生成缓慢,可用此项)<br/>
+	  <input type="radio" name="setting[storage_mode]" value="3" <?php if($storage_mode == 3){ ?>checked <?php } ?>> 文本存储 (内容完全采用文本存储,不存数据库)
+	 </td>
+   </tr>
+
+	<tr>
+      <td class="tablerow"><strong>文本存储目录设置</strong></td>
+      <td class="tablerow">
+	  <?=PHPCMS_PATH?>data/<input type="input" name="setting[storage_dir]" value="<?=$storage_dir?>" size="12" style="text-align:center;">/ 只能为数字、英文字母,可定期修改
+	  <input type="hidden" name="old_dir" value="<?=$storage_dir?>">
+	 </td>
+   </tr>
+
+	<tr>
+      <td class="tablerow"> </td>
+      <td class="tablerow"><a href="?mod=<?=$mod?>&file=txtdata&channelid=<?=$channelid?>"><font color="blue">点这里进入本频道文本数据管理>></font></a>
 	 </td>
    </tr>
 

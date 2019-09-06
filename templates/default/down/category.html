@@ -7,20 +7,25 @@
     </div>
 <!--子栏目名称列表-->
     <div class="subnav">{tag_频道子栏目列表}</div>
-{if $enableadd}
-<div class="cat_box">
-    <div class="cat_title">
-	  <div class="cat_name">{$catname}</div>
-	  <div class="cat_url"><a href="{$linkurl}" class="more">更多</a></div></div>
-<!--下载列表图片形式显示-->{tag_栏目页图片下载列表}
-<!--下载列表文章形式显示-->{tag_一级栏目下载列表}
-    </div>
-   <table width="100%" align="center" cellpadding="0" cellspacing="0" class="gray">
-      <tr>
-        <td height="10"></td>
-      </tr>
-    </table>
-{/if}
+
+<!--{if $enableadd}-->
+<div class="cat_box_1">
+<div class="cat_title">
+<div class="cat_name">{$catname}</div>
+<div class="cat_url"><a class="more" href="{$linkurl}">更多 &gt;&gt;</a></div>
+</div>
+<table cellspacing="0" cellpadding="0" width="100%">
+	<tbody>
+		<tr>
+		<td valign="top" width="50%">{tag_一级栏目下载列表}</td>
+		<td width="10"></td>
+		<td valign="top"  width="50%">{tag_栏目页图片下载列表}</td>
+		</tr>
+	</tbody>
+</table>
+</div>
+<!--{/if}-->
+
 <!--自定义栏目开始-->
 {loop $arrchildid $i $childcat}
 <div class="cat_box">

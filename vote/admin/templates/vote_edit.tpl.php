@@ -12,12 +12,12 @@ include admintpl('header');
 			alert("选项不得超过50个！");
 			return;
 		}
-        document.all.voteitem.innerHTML+="<table cellpadding='0' cellspacing='0' border='0' width='100%'><tr><td class='tablerow' align='left' width='20%'>选项"+j+"</td><td class='tablerow' width='80%'><input name='voteoption[]' type='text' size='50' maxlength='100'></td></tr></table>";
+        $('voteitem').innerHTML+="<table cellpadding='0' cellspacing='0' border='0' width='100%'><tr><td class='tablerow' align='left' width='20%'>选项"+j+"</td><td class='tablerow' width='80%'><input name='voteoption[]' type='text' size='50' maxlength='100'></td></tr></table>";
      }
 	function ResetItem()
     { 
         j = <?=$number?>;
-		document.all.voteitem.innerHTML="";
+		$('voteitem').innerHTML="";
     }
 </script>
 <?=$menu?>

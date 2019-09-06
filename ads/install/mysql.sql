@@ -1,4 +1,4 @@
-INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('广告', 'ads', 'ads', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn/', 'phpcms@163.com', '功能说明', '许可协议', '使用帮助', '', 0, '0000-00-00', '0000-00-00', '0000-00-00');
+INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('广告', 'ads', 'ads', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn/', 'phpcms@163.com', '功能说明', '许可协议', '使用帮助', 'a:2:{s:14:"enableadsclick";s:1:"0";s:7:"htmldir";s:2:"js";}', 0, '0000-00-00', '0000-00-00', '0000-00-00');
 
 DROP TABLE IF EXISTS `phpcms_ads`;
 CREATE TABLE IF NOT EXISTS `phpcms_ads` (
@@ -25,8 +25,9 @@ CREATE TABLE IF NOT EXISTS `phpcms_ads` (
   PRIMARY KEY  (`adsid`)
 ) TYPE=MyISAM;
 
-INSERT INTO `phpcms_ads` (`adsid`, `adsname`, `introduce`, `placeid`, `type`, `linkurl`, `imageurl`, `alt`, `flashurl`, `wmode`, `text`, `code`, `fromdate`, `todate`, `username`, `addtime`, `views`, `hits`, `checked`, `passed`) VALUES (1, 'phpcms 2007 广告', 'phpcms 2007 广告', 1, 'image', 'http://www.phpcms.cn/', 'ads/uploadfile/200701/banner.gif', '欢迎体验phpcms 2007 测试版', '', '', '', '<TABLE>\r\n<TR>\r\n	<TD>e</TD>\r\n	<TD>wwwwwwwwwwwwwww</TD>\r\n	<TD>aaaaaw</TD>\r\n</TR>\r\n<TR>\r\n	<TD>ssssaaaaaaaa</TD>\r\n	<TD></TD>\r\n	<TD>ssssssss</TD>\r\n</TR>', 1168790400, 1200326400, 'phpcms', 1168837934, 9601, 12, 1, 1);
-INSERT INTO `phpcms_ads` (`adsid`, `adsname`, `introduce`, `placeid`, `type`, `linkurl`, `imageurl`, `alt`, `flashurl`, `wmode`, `text`, `code`, `fromdate`, `todate`, `username`, `addtime`, `views`, `hits`, `checked`, `passed`) VALUES (2, 'phpcms 2007 优惠订购广告', 'ssssssss', 2, 'image', 'http://www.phpcms.cn/', 'ads/uploadfile/200701/bigbanner.gif', 'phpcms 2007 7折优惠订购', '', '', '', '<TABLE>\r\n<TR>\r\n	<TD>e</TD>\r\n	<TD>wwwwwwwwwwwwwww</TD>\r\n	<TD>aaaaaw</TD>\r\n</TR>\r\n<TR>\r\n	<TD>ssssaaaaaaaa</TD>\r\n	<TD></TD>\r\n	<TD>ssssssss</TD>\r\n</TR>', 1168790400, 1179158400, 'phpcms', 1168838524, 1289, 3, 1, 1);
+INSERT INTO `phpcms_ads` (`adsid`, `adsname`, `introduce`, `placeid`, `type`, `linkurl`, `imageurl`, `alt`, `flashurl`, `wmode`, `text`, `code`, `fromdate`, `todate`, `username`, `addtime`, `views`, `hits`, `checked`, `passed`) VALUES (1, 'phpcms 2007 旗帜广告', 'phpcms 2007 广告', 1, 'image', 'http://www.phpcms.cn/', 'ads/uploadfile/200701/banner.gif', '欢迎体验 phpcms 2007 ！', '', '', '', '', 1168790400, 1230652800, 'phpcms', 1168837934, 9614, 12, 1, 1);
+INSERT INTO `phpcms_ads` (`adsid`, `adsname`, `introduce`, `placeid`, `type`, `linkurl`, `imageurl`, `alt`, `flashurl`, `wmode`, `text`, `code`, `fromdate`, `todate`, `username`, `addtime`, `views`, `hits`, `checked`, `passed`) VALUES (2, 'phpcms 2007 横幅广告', '', 2, 'image', 'http://www.phpcms.cn/', 'ads/uploadfile/200701/bigbanner.gif', '', '', '', '', '', 1168790400, 1230652800, 'phpcms', 1168838524, 1294, 3, 1, 1);
+
 
 DROP TABLE IF EXISTS `phpcms_ads_place`;
 CREATE TABLE IF NOT EXISTS `phpcms_ads_place` (

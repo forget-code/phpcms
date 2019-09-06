@@ -20,12 +20,11 @@ if(is_array($list))
 		$module = $CHA['module'];
 		$linkurl = $category['linkurl'];
 		$catdir = $category['islink'] ? "<a href='$linkurl' title={$LANG['click_here']} target='_blank'>".str_cut($linkurl,20)."</a>" : "<a href='$linkurl' title={$LANG['click_here']} target='_blank'>".$category['catdir']."</a>";
-		//if($CHA['ishtml'])
 	
 		$createlist = ' | <a href="?mod='.$module.'&file=createhtml&action=per_list&catid='.$category['catid'].'&channelid='.$channelid.'" title="'.$LANG['list_updated'].'">'.$LANG['list_updated'].'</a>';
 		$createshow =  ' | <a href="?mod='.$module.'&file=createhtml&action=per_show&catid='.$category['catid'].'&channelid='.$channelid.'" title="'.$LANG['update_arcticle'].'">'.$LANG['update_arcticle'].'</a>';
 
-		if($category['child'] && !$category['enableadd'])
+		if($category['islink'] || ($category['child'] && !$category['enableadd']))
 		{
 			$addarticle = "<font color=\"#CCCCCC\">".$LANG['add_article']."</font>";
 		}

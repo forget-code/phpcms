@@ -1,4 +1,7 @@
-<?php include admintpl('header');?>
+<?php 
+defined('IN_PHPCMS') or exit('Access Denied');
+include admintpl('header');
+?>
 <?=$menu?>
 <table width="100%" height="25" border="0" cellpadding="3" cellspacing="0" class="tableborder">
   <tr>
@@ -39,11 +42,13 @@
 
 <td><input name='listorders[<?=$down['downid']?>]' type='input' value='<?=$down['listorder']?>' size="3" /></td>
 
-<td align="left"><? if(!$catid) { ?>[<a href="<?=$CATEGORY[$down['catid']]['linkurl']?>" target="_blank"><?=$CATEGORY[$down['catid']]['catname']?></a>] <? } ?><?php if($down['typeid']) { ?> <a href="?mod=<?=$mod?>&file=<?=$file?>&action=manage&channelid=<?=$channelid?>&typeid=<?=$down['typeid']?>"><?=$down['typename']?></a> <?php } ?><a href="<?=$down['linkurl']?>" target="_blank"><?=$down['title']?></a>
+<td align="left"><? if(!$catid) { ?>[<a href="<?=$CATEGORY[$down['catid']]['linkurl']?>" target="_blank"><?=$CATEGORY[$down['catid']]['catname']?></a>] <? } ?><?php if($down['typeid']) { ?> <a href="?mod=<?=$mod?>&file=<?=$file?>&action=manage&channelid=<?=$channelid?>&typeid=<?=$down['typeid']?>"><font color="green"><?=$down['typename']?></font></a> <?php } ?><a href="<?=$down['linkurl']?>" target="_blank"><?=$down['title']?></a>
+<?php if($down['thumb']) { ?> <font color="blue">图</font><?php } ?>
+<?php if($down['arrposid']) { ?> <font color="green">荐</font><?php } ?>
+<?php if($down['arrgroupidview']) { ?> <font color="red">权</font><?php } ?>
+<?php if($down['readpoint']) { ?> <font color="blue">点</font><?php } ?>
 </td>
-
-
-<td title="编辑:<?=$down['checker']?>"><a href="<?=PHPCMS_PATH?>member/member.php?username=<?=urlencode($down['username'])?>" target="_blank"><?=$down['username']?></a></td>
+<td title="编辑:<?=$down['checker']?>"><a href="<?=$MODULE['member']['linkurl']?>member.php?username=<?=urlencode($down['username'])?>" target="_blank"><?=$down['username']?></a></td>
 <td><?=$down['adddate']?></td>
 <td><?=$down['hits']?></td>
 <td>
@@ -69,6 +74,8 @@
 	<input type='submit' value='删除下载'		onClick="document.myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=action&job=status&value=-1&channelid=<?=$channelid?>&referer=<?=$referer?>'">&nbsp;
     <input type='submit' value='移动下载' onClick="document.myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=move&movetype=1&channelid=<?=$channelid?>'">
     <input type='submit' value='加入专题' onClick="document.myform.action='?mod=<?=$mod?>&file=special&action=add_itemids&channelid=<?=$channelid?>&forward=<?=$referer?>'">
+    <input type='submit' value='加入分类=>' onClick="document.myform.action='?mod=<?=$mod?>&file=addtotype&channelid=<?=$channelid?>&forward=<?=$referer?>'">
+	<?=type_select('typeid', $LANG['type'])?>
 	</td>
   </tr>
 </table>

@@ -8,11 +8,11 @@ translation save at the array:$LANG
 $LANG['illegal_parameters']      = '非法参数！请返回！';
 $LANG['channel_update_success']  = '频道首页更新成功！';
 $LANG['updating_category']       = '正在开始更新栏目...';
-$LANG['category']                = '栏目 [';
+$LANG['category']                = '栏目';
 $LANG['update_success']          = '] 更新成功！';
 $LANG['successfull']             = '更新成功!';
 $LANG['choose_category']         = '请选择栏目！';
-$LANG['category_update_success'] = '] 更新成功...';
+$LANG['category_update_success'] = '更新成功...';
 $LANG['from']                    = '从 ';
 $LANG['go']                      = ' 到 ';
 $LANG['page_update_success']     = ' 页更新成功！';
@@ -125,6 +125,7 @@ $LANG['labels_name_no_air']      = '标签名不能为空！';
 $LANG['renamed']                 = '已经存在！请改名！';
 $LANG['no_authority']            = '您没有操作权限！';
 $LANG['no_this_authority']       = '您没有此栏目的操作权限！';
-$LANG['only_in_child_special']   = '下载只能加入到专题子分类中！'
- 
+$LANG['only_in_child_special']   = '下载只能加入到专题子分类中！';
+$LANG['filled_star']			 = '★';
+$LANG['dew_star']				 = '☆';
 ?>

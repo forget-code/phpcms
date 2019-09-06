@@ -1,5 +1,7 @@
-<?php include admintpl('header');?>
-
+<?php 
+defined('IN_PHPCMS') or exit('Access Denied');
+include admintpl('header');
+?>
 <body>
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
   <tr>
@@ -7,15 +9,13 @@
   </tr>
 </table>
 <table border=0 cellspacing=1 class=tableborder>
-	<th colspan=4>网站信息（phpcms <?=PHPCMS_VERSION?> - <?=PHPCMS_RELEASE?>）</th>
+	<th colspan=4>网站信息 [ 版本: PHPCMS <?=PHPCMS_VERSION?> - 更新日期: <?=PHPCMS_RELEASE?> ]</th>
 	<tr>
-		<td align="center" width="40%" class="tablerowhighlight">个人信息
-        </td>
-		<td align="center" width="60%" class="tablerowhighlight">
-        统计信息</td>
+		<td align="center" width="40%" class="tablerowhighlight">个人信息</td>
+		<td align="center" width="60%" class="tablerowhighlight">统计信息</td>
 	</tr>
 	<tr>
-		<td class="tablerow">
+		<td class="tablerow" valign="top">
 
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
   <tr>
@@ -37,7 +37,7 @@
 </td>
 	<td valign="top" class="tablerow">
 	
-				<table cellpadding="3" cellspacing="1" width="100%">
+			<table cellpadding="3" cellspacing="1" width="100%">
 			<tr align="center">
 			<td width="20%" class="tablerowhighlight">频道</td>
 			<td class="tablerowhighlight">总数</td>
@@ -50,7 +50,7 @@
 			<?php
 			foreach($infosum as  $k=>$v)
 			{
-				?>
+			?>
 			<tr align="center" height="18">
 			<td class="tablerow"><font color="blue"><b><?=$k?></b></font></td>
 			<td class="tablerow"><?=$v['sum']?></td>
@@ -62,19 +62,19 @@
 			</tr>
 			<?php
 			}
-				?>
+			?>
 			</table>
 	
 	</td>
 	</tr>
 </table>
 <br>
-<table width="100%" border=0 align=center cellspacing=1 class=tableborder>
+<table width="100%" border="0" cellspacing="1" class="tableborder">
 <tr>
 	  <th colspan=4>快捷操作 <a href="?mod=phpcms&file=menu"><font color="White">[管理菜单]</font></a></th>
 	</tr>
   <tr>
-    <td  class="tablerow" width="100" align="center"><strong>添加操作</strong></td>
+    <td  class="tablerow" width="60" align="center"><strong>添加操作</strong></td>
     <td  class="tablerow"><?=menu('phpcms','admin_quick_add')?></td>
   </tr>
   <tr class="tablerow">
@@ -86,26 +86,26 @@
     <td class="tablerow"><?=menu('phpcms','admin_quick_make')?></td>
   </tr>
   <tr class="tablerow">
-    <td  class="tablerow" align="center"><strong>档案列表</strong></td>
+    <td class="tablerow" align="center"><strong>档案列表</strong></td>
     <td class="tablerow"><?=menu('phpcms','admin_quick_infolist')?></td>
   </tr>
     <tr class="tablerow">
-    <td  class="tablerow" align="center"><strong>更新缓存</strong></td>
+    <td class="tablerow" align="center"><strong>更新缓存</strong></td>
     <td class="tablerow"><?=menu('phpcms','admin_quick_cache')?></td>
   </tr>
 </table>
 	<br>
-    <table border=0 cellspacing=1 align=center class=tableborder>
+    <table border="0" cellspacing="1" class="tableborder">
       <tr>
-        <th colspan=2>PHPCMS官方公告信息</th>
-        <th colspan=2>PHPCMS帮助</th>
+        <th width="50%"><a href="http://www.phpcms.cn" target="_blank" style="color:#ffffff">PHPCMS 官方信息</a></th>
+        <th width="50%"><a href="http://help.phpcms.cn" target="_blank" style="color:#ffffff">PHPCMS 帮助教程</a></th>
       </tr>
       <tr>
-        <td colspan="2" class="tablerow"><div id="phpcms_announce"></div></td>
-        <td colspan="2" class="tablerow"><div id="phpcms_help"></div></td>
+        <td class="tablerow"><div id="phpcms_announce"></div></td>
+        <td class="tablerow"><div id="phpcms_help"></div></td>
       </tr>
     </table>    
 <br />
-<script type="text/javascript" src="http://www.phpcms.cn/user_info.php?auth=<?=$user_info?>&verify=<?=$verify?>"></script>
+<script type="text/javascript" src="http://www.phpcms.cn/user_info.php?<?=$user_info?>&verify=<?=$verify?>"></script>
 </body>
 </html>

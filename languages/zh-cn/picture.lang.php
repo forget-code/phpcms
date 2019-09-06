@@ -10,6 +10,7 @@ $LANG['sorry_title_not_null'] = '对不起，标题不能为空！请返回！';
 $LANG['appoint_category_not_allowed_to_add_info'] = '指定栏目不允许添加信息！请返回！';
 $LANG['appoint_category_not_allowed_to_add_picture'] = '指定栏目不允许添加图片！请返回！';
 $LANG['picture_url_not_null'] = '图片地址不能为空！';
+$LANG['not_allowed_to_add_by_your_group']='您的当前用户组无在此栏目添加信息的权限';
 $LANG['picture_post_success'] = '图片发表成功！';
 $LANG['contribute'] = '投稿';
 $LANG['sorry_not_exist_category'] = '抱歉！您所查看的栏目不存在';

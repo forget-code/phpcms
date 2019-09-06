@@ -63,6 +63,7 @@ $LANG['order_the_article_list_failure']='文章排序更新失败';
 $LANG['have_no_category_yet']="您还没有添加栏目，只有先添加栏目才能添加和管理文章。<br><br>现在进入栏目添加页面？";
 $LANG['please_select']='请选择栏目';
 $LANG['please_choose_category_add_article']='请选择栏目添加文章';
+$LNAG['change_category_add_article'] = '改变栏目添加文章';
 $LANG['click_here']='点击查看';
 $LANG['list_updated']='生成列表';
 $LANG['update_arcticle']='生成文章';
@@ -164,6 +165,10 @@ $LANG['empty_tag_name']='标签名不能为空';
 $LANG['not_authorized']='您没有操作权限';
 //tag.inc.php end
 
-$LANG['only_in_child_special']='文章只能加入到专题子分类中！'
+$LANG['only_in_child_special']='文章只能加入到专题子分类中！';
+
+//txtdata.inc.php
+$LANG['filemanager'] = '文件管理器';
+$LANG['convert_success'] = '转换成功';
 
 ?>

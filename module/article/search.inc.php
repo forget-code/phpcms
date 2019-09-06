@@ -1,8 +1,11 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
+
 require PHPCMS_ROOT."/module/".$mod."/include/common.inc.php";
 require PHPCMS_ROOT."/include/formselect.func.php";
 require_once PHPCMS_ROOT."/include/tree.class.php";
+require PHPCMS_ROOT.'/include/field.class.php';
+
 $tree = new tree();
 $head['title'] = $LANG['site'].$channelname.$LANG['search'];
 $head['keywords'] = $channelname.",".$PHPCMS['seo_keywords'];
@@ -32,11 +35,15 @@ $totime = $todate ? strtotime($todate.' 23:59:59') : 0;
 
 $ordertype = isset($ordertype) ? intval($ordertype) : 0;
 $searchtype = isset($searchtype) ? trim($searchtype) : 'title';
+if($MOD['storage_mode'] == 3 && $searchtype == 'content') $searchtype = 'introduce';
 $page = isset($page) ? intval($page) : 1;
 $category_select = category_select('catid', $LANG['please_select'], $catid);
 $special_select = '';
 $keyword = '';
 $pages = '';
+$tablename = channel_table('article', $channelid);
+$tablename_data = channel_table('article_data', $channelid);
+$field = new field($tablename);
 
 if($search)
 {
@@ -73,17 +80,18 @@ if($search)
 	if($typeid) $sql .= " and typeid=$typeid ";
 	if($fromtime) $sql .= " and addtime>$fromtime ";
 	if($totime) $sql .= " and addtime<$totime ";
+	$sql .= $field->get_searchsql();
 	if($searchtype == 'content')
 	{
 		$sql = str_replace('and ', 'and a.', $sql);
 		$sql = str_replace('a.content', 'd.content', $sql);
-		$query = "select count(*) as number from ".channel_table('article', $channelid)." a, ".channel_table('article_data', $channelid)." d where a.articleid=d.articleid and a.status=3 $sql";
+		$query = "select count(*) as number from ".$tablename." a, $tablename_data d where a.articleid=d.articleid and a.status=3 $sql";
 		$result = $db->query($query);
 		$r = $db->fetch_array($result);
 	}
 	else
 	{
-		$query = "select count(*) as number from ".channel_table('article', $channelid)." where status=3 $sql";
+		$query = "select count(*) as number from $tablename where status=3 $sql";
 		$r = $db->get_one($query);
 	}
 	$number = $r['number'];
@@ -94,11 +102,11 @@ if($search)
 		if($searchtype == 'content')
 		{
 			$ordertypes = array('a.listorder DESC, a.articleid DESC', 'a.articleid DESC', 'a.articleid ASC', 'a.hits DESC', 'a.hits ASC');
-			$query = "select a.articleid,a.title,a.addtime,a.introduce,a.linkurl,a.typeid,d.content from ".channel_table('article', $channelid)." a, ".channel_table('article_data', $channelid)." d where a.articleid=d.articleid and a.status=3 $sql order by $ordertypes[$ordertype] limit $offset,$pagesize";
+			$query = "select a.articleid,a.title,a.addtime,a.introduce,a.linkurl,a.typeid,d.content from $tablename a, $tablename_data d where a.articleid=d.articleid and a.status=3 $sql order by $ordertypes[$ordertype] limit $offset,$pagesize";
 		}
 		else
 		{
-			$query = "select articleid,title,addtime,introduce,linkurl,typeid from ".channel_table('article', $channelid)." where status=3 $sql order by $ordertypes[$ordertype] limit $offset,$pagesize";
+			$query = "select articleid,title,addtime,introduce,linkurl,typeid from $tablename where status=3 $sql order by $ordertypes[$ordertype] limit $offset,$pagesize";
 		}
 		$result = $db->query($query);
 		while($r = $db->fetch_array($result))
@@ -116,5 +124,6 @@ if($search)
 		}
 	}
 }
+$searchform = $field->get_searchform('<tr><td class="search_l">$title</td><td class="search_r">$input</td></tr>');
 include template($mod, 'search');
 ?>

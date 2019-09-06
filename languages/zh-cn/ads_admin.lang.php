@@ -18,7 +18,7 @@ $LANG['opration_failure_or_advertisement _not_exists']='操作失败！意外错
 $LANG['add_advertisement']='添加广告位';
 $LANG['all_advertisement']='全部广告位';
 $LANG['manage_advertisement']='广告位管理';
-$LANG['manage_the_order_of_advertisement']='广告定单管理';
+$LANG['manage_the_order_of_advertisement']='广告订单管理';
 $LANG['advertising_management']='广告管理'; 
 $LANG['advertising_template']='广告模板'; 
 $LANG['illegal_move_parameters']='非法动作参数！请返回！'; 
@@ -42,6 +42,8 @@ $LANG['locked'] = '锁定';
 $LANG['timeout'] = '过期';
 $LANG['passed'] = '通过';
 $LANG['checking'] = '待审';
-
+$LANG['update_html_and_js'] = '更新html和js';
+$LANG['update_html_successed'] = 'html更新成功';
+$LANG['update_js_successed'] = 'JS更新成功';
 $LANG['phpcms_workgrop']='phpcms团队';
 ?>

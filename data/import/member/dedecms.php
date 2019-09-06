@@ -1,6 +1,6 @@
 <?php
 $settings['dedecms'] = array (
-  'importtime' => 1171019526,
+  'importtime' => '',
   'name' => 'dedecms',
   'note' => 'dedecms3.x会员数据导入配置',
   'dbfrom' => '1',
@@ -186,6 +186,6 @@ $settings['dedecms'] = array (
   'membercheck' => '1',
   'timelimit' => '600',
   'number' => '1000',
-  'edittime' => 1171018393,
+  'edittime' => '',
 );
 ?>

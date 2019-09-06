@@ -12,7 +12,7 @@ include admintpl('header');
   <tr>
     <th>文件上传</th>
   </tr>
-	<form name="upload" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&channelid=<?=$channelid?>&uploadtext=<?=$uploadtext?>&action=<?=$action?>" enctype="multipart/form-data">
+	<form name="upload" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&keyid=<?=$keyid?>&uploadtext=<?=$uploadtext?>&action=<?=$action?>" enctype="multipart/form-data">
   <tr>
      <td class="tablerow" height="30">
 	         <input type="hidden" name="save" value="1">

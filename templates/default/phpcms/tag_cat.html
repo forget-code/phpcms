@@ -6,7 +6,7 @@
     <td><a href="{$cat[linkurl]}"><b>{$cat[catname]}</b></a>
 	{if $child && $cat['child']==1}
 		{loop $childcat[$cat['catid']] $c}
-		&nbsp;&nbsp;<a href="{$c[linkurl]}">{$c[catname]}</a>
+		&nbsp;&nbsp;<a href="{$c[linkurl]}" style="{$cat[style]}">{$c[catname]}</a>
 		{/loop}
 	{/if}
 	</td>
@@ -22,7 +22,7 @@
     <td><a href="{$cat[caturl]}"><b>{$cat[catname]}</b></a>&nbsp;&nbsp;<br />
 	{if $child && $cat['child']==1}
 		{loop $childcat[$cat['catid']] $c}
-		<a href="{$c[linkurl]}">{$c[catname]}</a><br />
+		<a href="{$c[linkurl]}" style="{$cat[style]}">{$c[catname]}</a><br />
 		{/loop}
     {/if}
     </td>

@@ -140,7 +140,7 @@ $settings['PowerEasy'] = array (
     'value' => '',
     'func' => '',
   ),
-  'edittime' => 1175506126,
+  'edittime' => '',
   'checker' => 
   array (
     'field' => '',
@@ -204,13 +204,13 @@ $settings['PowerEasy'] = array (
   'htmldir' => 
   array (
     'field' => '',
-    'value' => 'html',
+    'value' => 'article',
     'func' => '',
   ),
   'prefix' => 
   array (
     'field' => '',
-    'value' => '',
+    'value' => 'article_',
     'func' => '',
   ),
   'urlruleid' => 
@@ -234,8 +234,8 @@ $settings['PowerEasy'] = array (
   'defaultcatid' => '3',
   'catids' => 
   array (
-    2 => '',
     3 => '',
+    4 => '',
   ),
   'articlecheck' => '1',
   'timelimit' => '90',

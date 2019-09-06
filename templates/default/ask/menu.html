@@ -1,0 +1,7 @@
+<div>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<b>部门：</b><a href="{$MOD[linkurl]}index.php">首页</a>
+{loop $departments $d}
+| <a href="{$MOD[linkurl]}list.php?departmentid={$d[departmentid]}">{$d[department]}</a>
+{/loop}
+</div>

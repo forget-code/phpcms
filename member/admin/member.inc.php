@@ -7,7 +7,7 @@ require_once MOD_ROOT.'/admin/include/member_admin.class.php';
 if(!isset($username)) $username = '';
 $member = new member_admin($username);
 
-require_once PHPCMS_ROOT.'/admin/include/field.class.php';
+require_once PHPCMS_ROOT.'/include/field.class.php';
 $field = new field($CONFIG['tablepre'].'member_info');
 
 $GROUP = cache_read('member_group.php');
@@ -15,7 +15,8 @@ $GROUP = cache_read('member_group.php');
 $submenu = array
 (
 	array($LANG['approval_new_member'], '?mod='.$mod.'&file='.$file.'&action=check'),
-	array($LANG['member_list'], '?mod='.$mod.'&file='.$file.'&action=manage'),
+	array($LANG['member_manage'], '?mod='.$mod.'&file='.$file.'&action=manage'),
+	array($LANG['search_member'], '?mod='.$mod.'&file='.$file.'&action=search'),
 	array($LANG['add_member'], '?mod='.$mod.'&file='.$file.'&action=add'),
 );
 
@@ -58,6 +59,8 @@ switch($action)
 			$date->dayadd($defaultvalidday);
 			$enddate = $defaultvalidday == -1 ? '0000-00-00' : $date->get_date();
 
+	        $field->check_form();
+
 			$memberinfo = array('username'=>$username, 'password'=>$password, 'question'=>$question, 'answer'=>$answer,'email'=>$email,'showemail'=>$showemail,'groupid'=>$groupid,'arrgroupid'=>$arrgroupid,'chargetype'=>$chargetype,'point'=>$defaultpoint,'begindate'=>$begindate,'enddate'=>$enddate,
 								'truename'=>$truename,'gender'=>$gender,'birthday'=>$birthday,'idtype'=>$idtype,'idcard'=>$idcard,'province'=>$province,'city'=>$city,'area'=>$area,'industry'=>$industry,'edulevel'=>$edulevel,'occupation'=>$occupation,'income'=>$income,'telephone'=>$telephone,'mobile'=>$mobile,'address'=>$address,'postid'=>$postid,'homepage'=>$homepage,'qq'=>$qq,'msn'=>$msn,'icq'=>$icq,'skype'=>$skype,'alipay'=>$alipay,'paypal'=>$paypal,'userface'=>$userface,'facewidth'=>$facewidth,'faceheight'=>$faceheight,'sign'=>$sign);
 
@@ -84,7 +87,7 @@ switch($action)
 					$arrgroups[] = $g;
 				}
             }
-	        $fields = $field->get_form('<tr><td class="tablerow">$title:</td><td class="tablerow">$input $note</td></tr>');
+	        $fields = $field->get_form('<tr><td class="tablerow">$title:</td><td class="tablerow">$input $tool $note</td></tr>');
 
 			include admintpl('member_add');
 		}
@@ -110,13 +113,25 @@ switch($action)
 			if(strlen($truename)>50 || strlen($telephone)>50 || strlen($address)>255 || strlen($homepage)>100) showmessage($LANG['truename_telephoe_etc_not_too_long'],"goback");
 
             $arrgroupid = isset($arrgroupid) ? ','.implode(',', $arrgroupid).',' : '';
+            
+			if($ischargebynewgroup)
+			{
+				@extract($member->group($groupid));
+				$begindate = date('Y-m-d');
+				$date->dayadd($defaultvalidday);
+				$enddate = $defaultvalidday == -1 ? '0000-00-00' : $date->get_date();
+				$point = $defaultpoint;
+			}
 
 			$sql = $password ? "password='".md5($password)."'," : "";
 			$sql .= $answer ? "answer='".md5($answer)."'," : "";
-				
+
+	        $field->check_form();
+
 			$db->query("UPDATE ".TABLE_MEMBER." SET $sql email='$email',showemail='$showemail',groupid='$groupid',arrgroupid='$arrgroupid',question='$question',point='$point',chargetype='$chargetype',begindate='$begindate',enddate='$enddate' WHERE userid='$userid'");
 			$db->query("UPDATE ".TABLE_MEMBER_INFO." SET truename='$truename',gender='$gender',birthday='$birthday',idtype='$idtype',idcard='$idcard',province='$province',city='$city',area='$area',industry='$industry',edulevel='$edulevel',occupation='$occupation',income='$income',telephone='$telephone',mobile='$mobile',address='$address',postid='$postid',homepage='$homepage',qq='$qq',msn='$msn',icq='$icq',skype='$skype',alipay='$alipay',paypal='$paypal',userface='$userface',facewidth='$facewidth',faceheight='$faceheight',sign='$sign' WHERE userid=$userid");
-		    $field->update("userid=$userid");
+		    
+			$field->update("userid=$userid");
 
 			showmessage($LANG['operation_success'], $forward);
 		}
@@ -145,7 +160,7 @@ switch($action)
 
 			$arrgroupid = $arrgroupid ? array_filter(explode(',', $arrgroupid)) : array();
 
-	        $fields = $field->get_form('<tr><td class="tablerow">$title:</td><td class="tablerow">$input $note</td></tr>');
+	        $fields = $field->get_form('<tr><td class="tablerow">$title:</td><td class="tablerow">$input $tool $note</td></tr>');
 
 			include admintpl('member_edit');
 		}
@@ -298,7 +313,7 @@ switch($action)
 			$pagesize = $PHPCMS['pagesize'] ? $PHPCMS['pagesize'] : 30;
 			$offset = ($page-1)*$pagesize;
 
-			$condition = " AND m.groupid=4";
+			$condition = " AND m.groupid=5";
 
 			$r = $db->get_one("SELECT count(*) as num FROM ".TABLE_MEMBER." m,".TABLE_MEMBER_INFO." i WHERE m.userid=i.userid $condition");
 			$pages = phppages($r['num'], $page, $pagesize);
@@ -334,6 +349,12 @@ switch($action)
 	break;
 
 	case 'checkuser':
+		if(strtolower($CONFIG['charset']) != 'utf-8' && preg_match("/^([\s\S]*?)([\x81-\xfe][\x40-\xfe])([\s\S]*?)/", $username))
+		{
+			include PHPCMS_ROOT.'/include/charset.func.php';
+			$username = convert_encoding('utf-8', $CONFIG['charset'], $username);
+			$member->set_username($username);
+		}
 		if(strlen($username) < 2 || strlen($username) > 20)
 		{
 			echo 1;
@@ -354,6 +375,45 @@ switch($action)
 		{
 			echo 0;
 		}
+	break;
+	case 'search':
+        include admintpl('member_search');
+		break;
+
+	case 'move':
+		$userids = is_array($userid) ? implode(',', $userid) : $userid;
+	    if(!$userids) showmessage($LANG['select_account'], $PHP_REFERER);
+
+		if($dosubmit)
+	    {
+			$groupid = intval($groupid);
+	        if(!$groupid) showmessage($LANG['select_group'], $PHP_REFERER);
+
+		    $sql = '';
+		    if($ischargebynewgroup)
+			{
+				@extract($member->group($groupid));
+				$begindate = date('Y-m-d');
+				$date->dayadd($defaultvalidday);
+				$enddate = $defaultvalidday == -1 ? '0000-00-00' : $date->get_date();
+				$point = $defaultpoint;
+				$sql = ",point='$point',chargetype='$chargetype',begindate='$begindate',enddate='$enddate'";
+			}
+            $db->query("UPDATE ".TABLE_MEMBER." SET groupid=$groupid $sql WHERE userid IN($userids)");
+			showmessage($LANG['operation_success'], $forward);
+		}
+		else
+	    {
+			$member = array();
+			$result = $db->query("SELECT userid,username FROM ".TABLE_MEMBER." WHERE userid IN($userids)");
+			while($r = $db->fetch_array($result))
+			{
+				$member[$r['userid']] = $r['username'];
+			}
+			$groupids = showgroup('select', 'groupid', $groupid);
+			include admintpl('member_move');
+		}
+		break;
 
     default :
 }

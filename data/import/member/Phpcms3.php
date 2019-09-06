@@ -186,6 +186,6 @@ $settings['Phpcms3'] = array (
   'membercheck' => '1',
   'timelimit' => '90',
   'number' => '100',
-  'edittime' => 1170985563,
+  'edittime' => '',
 );
 ?>

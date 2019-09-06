@@ -1,0 +1,16 @@
+{loop $infos $i $info}
+<table cellpadding="0" cellspacing="0" width="100%" class="border_5">
+  <tr>
+    <td height="25">
+		  ·{$info[type]} <a href="{$info[linkurl]}" title="{$info[title]}" {$target} class="tit">{$info[stitle]}</a> {if $info[areaid]}<a href="{$AREA[$info[areaid]]['linkurl']}" target="_blank">{$AREA[$info[areaid]]['areaname']}</a>{/if}
+	</td>
+  </tr>
+  <tr>
+    <td valign="top" style="color:#666666;border:#C0C0C0 1px dotted;padding:5px;">{$info[introduce]}</td>
+  </tr>
+</table>
+{/loop}
+
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

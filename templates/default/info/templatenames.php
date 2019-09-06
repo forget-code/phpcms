@@ -1,0 +1,26 @@
+<?php
+$templatenames = array (
+  'area.html' => '地区首页',
+  'area_list.html' => '地区列表',
+  'category.html' => '栏目首页',
+  'category_list.html' => '栏目列表页',
+  'content.html' => '信息页',
+  'contribute.html' => '游客投稿',
+  'footer.html' => '页尾',
+  'header.html' => '页头',
+  'index.html' => '频道首页',
+  'myitem.html' => '我的信息',
+  'search.html' => '搜索页',
+  'special_index.html' => '专题首页',
+  'special_list.html' => '专题列表',
+  'special_show.html' => '专题页',
+  'tag_info_list.html' => '[标签]信息标题列表',
+  'tag_info_list-cat.html' => '[标签]终极栏目信息标题列表',
+  'tag_info_related.html' => '[标签]相关信息',
+  'tag_info_slide.html' => '[标签]信息幻灯片(flash)',
+  'tag_info_slide-js.html' => '[标签]信息幻灯片(js)',
+  'tag_info_thumb.html' => '[标签]图片信息列表',
+  'type.html' => '分类首页',
+  'type_list.html' => '分类文章列表',
+);
+?>

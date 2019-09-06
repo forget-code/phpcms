@@ -15,12 +15,6 @@ function checkform()
 	return true;
 }
 </script>
-
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="5">
-  <tr>
-    <td></td>
-  </tr>
-</table>
 <?=$menu?>
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="5">
   <tr>
@@ -28,7 +22,6 @@ function checkform()
   </tr>
 </table>
 <table cellpadding="2" cellspacing="1" class="tableborder">
-
 <form action="?mod=<?=$mod?>&file=sitemgr&action=sitein" method="post" enctype="multipart/form-data" name="formimport" id="formimport" >
   <table width="100%" border="0" align="center" cellpadding="2" cellspacing="1" class="tableborder">
     <tr>

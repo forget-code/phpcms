@@ -1,23 +1,5 @@
 {template 'phpcms','header'}
-<script type="text/javaScript">
-function docheck(){
-if (myform.content.value=="") {
-alert("请输入评论内容!");
-myform.content.focus();
-return false;
-}
-{if $MOD['enablecheckcode']}
-if (myform.checkcodestr.value=="") {
-alert("请输入验证码!");
-myform.checkcodestr.focus();
-return false;
-}
-{/if}
-return true;
-}
-</script>
-<script type="text/javascript">var phpcms_path = '{PHPCMS_PATH}'; </script>
-<script type="text/javascript" src="{PHPCMS_PATH}comment/include/js/comment.js"></script>
+<script type="text/javascript" src="{$MODULE['comment']['linkurl']}include/js/comment.js"></script>
 <table width="980" align="center" cellpadding="0" cellspacing="0">
 <tr>
 <td width="760" align="center">
@@ -32,14 +14,14 @@ return true;
   </tr>
  </tbody>
 </table>
-{comment_list(0, $keyid, $itemid, $page,15, 1)}
+{comment_list(0, $keyid, $itemid, $page, 15, 1)}
 	<table cellpadding="2" cellspacing="0" width="100%" class="mar_10">
       <tr>
 	    <td bgcolor="#F5F5F5" width="10"></td> 
         <td class="comment_icon gray"><strong>发表评论</strong> </td>
         <td align="right"><a name="comment"></a>　【<a href="#top">返回顶部</a>】【<a href="javascript:window.close();">关闭窗口</a>】&nbsp;</td>
       </tr>
-      <form name="myform" method="post" action="{PHPCMS_PATH}comment/post.php"  onSubmit="return docheck();">
+      <form name="commentform" method="post" action="{$MODULE['comment']['linkurl']}post.php"  onSubmit="return docheck();">
         <input name="keyid" type="hidden" value="{$keyid}">
         <input name="itemid" type="hidden" value="{$itemid}">
         <input name="title" type="hidden" value="{$title}">
@@ -82,7 +64,7 @@ $fname = substr($fname,0,strrpos($fname,'.'));
 if($i>15) break;
 if($i%4==0) echo "<tr align=\"center\">";
 ?>
-          <td height="26"><img src="{$smile}" id="{$fname}" alt="{$fname}" border="0" onClick="AddOnPos(document.myform.commentcontent,'[{$fname}]');" onMouseover="this.style.cursor = 'pointer';" /></td>
+          <td height="26"><img src="{$smile}" id="{$fname}" alt="{$fname}" border="0" onClick="AddOnPos(document.commentform.commentcontent,'[{$fname}]');" onMouseover="this.style.cursor = 'pointer';" /></td>
               <?php
 if($i%4==3) echo "</tr>";
 $i++;

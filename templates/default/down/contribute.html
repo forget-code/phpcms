@@ -38,7 +38,7 @@ function doCheck(){
 <div class="memberborder_1">
 <div class="memberborder_2">
 <h1>发布下载</h1>
-<form action="{$CHA[linkurl]}/contribute.php" method="post" name="myform" onsubmit="return doCheck();">
+<form action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/contribute.php" method="post" name="myform" onsubmit="return doCheck();">
 <table cellpadding="2" cellspacing="1" class="righttable">
 <tbody>
     <tr> 
@@ -73,7 +73,7 @@ function doCheck(){
  <tr> 
       <td class="td_right"><strong>缩略图</strong></td>
       <td class="td_left">
-         <input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=thumb&type=thumb&width={$MOD[thumb_width]}&height={$MOD[thumb_height]}','upload','360','300')">
+         <input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=thumb&type=thumb&width={$MOD[thumb_width]}&height={$MOD[thumb_height]}','up','360','300')">
 		</td>
     </tr>
 <tr>

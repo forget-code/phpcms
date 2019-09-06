@@ -1,0 +1,98 @@
+{template 'phpcms','header'}
+<table cellspacing="0" cellpadding="0" border="0" width="980">
+<tr>
+<td valign="top" class="left">
+{template "member","left"}</td>
+<td width="10" valign="top">
+</td>
+<td valign="top" class="right">
+当前位置：<a href="{$MODULE[ask][linkurl]}">咨询首页</a> &gt;&gt; <a href="{$MOD[linkurl]}list.php?departmentid={$departmentid}">{$department}</a> &gt;&gt; 查看咨询
+<br />
+<br />
+{template 'ask','menu'}
+
+<div class="clearboth"></div>
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>{$department} —— <a href="{$MOD[linkurl]}post.php?departmentid={$departmentid}">我要提问</a>{if $point} [需扣 {$point} 点]{/if}</h1>
+{if $note}
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tr>
+<td class="td_left">{$note}</td>
+</tr>
+</table>
+{/if}
+</div>
+</div>
+<br />
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>咨询主题：[{$STATUS[$subject[status]]}] {$subject[subject]}</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tr>
+<td class="td_center" width="30%">
+	<table cellpadding="2" cellspacing="1"  width="96%">
+	<tr>
+	<td><a href="{$MODULE[member][linkurl]}member.php?username={urlencode($subject[username])}" target="_blank"><font color="blue"><strong>{$subject[username]}</strong></font></a></td>
+	</tr>
+	<tr>
+	<td>{$subject[groupname]}{$subject[arrgroupname]}</td>
+	</tr>
+	<tr>
+	<td>发表时间：{$subject[addtime]}</td>
+	</tr>
+	<tr>
+	<td align="center">{if $subject['userface']}<img src="{$subject[userface]}">{/if}</td>
+	</tr>
+	</table>
+</td>
+<td valign="top">{$subject[content]}</td>
+</tr>
+{loop $replys $reply}
+<tr>
+<td class="td_center" width="30%">
+	<table cellpadding="2" cellspacing="1"  width="96%">
+	<tr>
+	<td><a href="{$MODULE[member][linkurl]}member.php?username={urlencode($reply[username])}" target="_blank"><font color="blue"><strong>{$reply[username]}</strong></font></a></td>
+	</tr>
+	<tr>
+	<td>{$reply[groupname]}{$reply[arrgroupname]}</td>
+	</tr>
+	<tr>
+	<td>回复时间：{$reply[addtime]}</td>
+	</tr>
+	<tr>
+	<td align="center">{if $reply['userface']}<img src="{$reply[userface]}">{/if}</td>
+	</tr>
+	</table>
+</td>
+<td valign="top">{$reply[reply]}</td>
+</tr>
+{/loop}
+</table>
+</div>
+</div>
+
+<br />
+
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>我要回复</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
+<form name="myform" method="post" action="{$MOD[linkurl]}reply.php?askid={$askid}">
+	<tr>
+	<td class="td_center"><textarea name="reply"></textarea>{$editor('reply','introduce',550,200)}</td>
+	</tr>
+    <tr> 
+      <td class="td_center">
+		<input type="submit" name="dosubmit" value=" 我要回复 ">&nbsp;&nbsp;
+	  </td>
+    </tr>
+</form>
+</table>
+</div>
+</div>
+</td>
+</tr>
+</table>
+{template 'phpcms','footer'}

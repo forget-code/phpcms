@@ -1,0 +1,139 @@
+{template 'product','header'}
+<style>
+.drag{position:absolute;width:130px; background-color:green;height:80px;z-index:99;}
+.da{width:100%;height:20px;background:#0099cc;color:white;cursor:move;text-align:center;}
+.x{float:right;color:red;cursor:pointer;}
+.tablerow {
+background: #EEEEEE;
+text-align:center;
+height: 28px;
+}
+.btn {
+border:#dddddd 1px solid;
+background:#efefef;
+height:24px;
+width:120px;
+cursor:pointer;
+}
+</style>
+<!--{if $MOD['showcompare']}-->
+<div  style="FILTER: alpha(opacity=60); WIDTH: 130px; POSITION: absolute; TOP: 130px;" align="center" rel="drag" id="drag1" class="drag" onmousedown="dargit(this,event);">
+<div class="da" ><span class="x" title="关闭">×</span>商品对比</div>
+<table height="100%" width="100%" bgcolor="#CCCCCC" cellspacing="1" id="comparetable"><form method="post" action="{$MOD['linkurl']}compare.php" id="compareform" name="compareform" target="_blank">
+<tr ><td class="tablerow"><input type="button" class="button" value="开始对比" name="submits" onclick="check();" style="border:1px solid;border-color:#333333 ;background-color:#7CC2E9;height:24;width:120;cursor:hand;color:black;"></td></tr>
+<tr id="trobj"><td class="tablerow">&nbsp;<input type="button" name="clearbtn" value='清 空' onclick='cleartbl();'  class="btn"> </td></tr></form>
+</table>
+</div>
+<script type="text/javascript" src="{$MOD[linkurl]}include/js/float.js"></script>
+<!--{/if}-->
+<table width="980" align="center" cellpadding="0" cellspacing="0" class="mar_10">
+<tr>
+    <td width="220" valign="top">
+<!--查看购物车-->
+<table width="210"  cellspacing="0" cellpadding="0">
+      <tr>
+        <td   height="62"><a href="{$MOD[linkurl]}cart.php" target="_blank"><img src="{$skindir}/images/cart.gif" alt="查看购物车" border="0"/></a></td>
+      </tr>
+    </table>
+<!--商品分类-->
+	<table width="210" cellspacing="0" cellpadding="0" class="shopleft_box">
+
+      <tr>
+        <td class="box_header_2">&nbsp;</td>
+      </tr>
+      <tr>
+        <td valign="top" class="box_border_2">
+<!--商品分类列表-->
+
+<!--{loop $childcats $i $cat}-->
+<div class="catlist">
+  <h1><a href="{$cat['linkurl']}">{$cat[catname]}</a></h1>
+<!--{loop $subcats[$i] $k $c}-->
+  <li><a href="{$c['linkurl']}">{$c[catname]}</a></li>
+<!--{/loop}-->
+</div> 
+<!--{/loop}-->
+      </td>
+      </tr>
+      <tr>
+        <td class="box_footer_2"></td>
+      </tr>
+    </table>
+<!--友情连接-->
+<table width="210" cellspacing="0" cellpadding="0" class="shopleft_box">
+      <tr>
+        <td class="box_header_4">&nbsp;</td>
+      </tr>
+      <tr>
+        <td valign="top" class="box_border_3">
+<!--浏览过的商品列表-->
+<div class="product_4" id="visitedproduct">
+&nbsp;&nbsp;正在加载浏览过的商品列表......
+</div>
+		</td>
+      </tr>
+      <tr>
+        <td class="box_footer_3"></td>
+      </tr>
+    </table>
+</td>
+    <td width="10"></td>
+    <td valign="top">
+	<table width="100%" cellspacing="0" cellpadding="0" class="border_1">
+      <tr>
+        <td height="80">栏目图片</td>
+      </tr>
+    </table>
+	<form name="myform" action="{$MOD[linkurl]}search.php" method="get">
+	  <table width="100%" cellspacing="0" cellpadding="0" class="shopsearch">
+  <tr>
+    <td width="21%">查找范围：
+      <select name="searchtype">
+    <option value="pdt_name">按商品名称</option>
+    <option value="pdt_No">按商品编号</option>
+    <option value="introduce">按商品介绍</option>
+    </select></td>
+    <td width="25%">关键字：
+      <input name="keyword" type="text" size="20" /></td>
+    <td width="19%">起始价：
+      <input name="fromprice" type="text" size="10" /></td>
+    <td width="18%">结束价：
+      <input name="toprice" type="text" size="10" /></td>
+<input type="hidden" name="dosubmit" value="1" />
+<input type="hidden" name="search" value="1" />
+    <td width="9%"><input src="{$skindir}/images/found.gif" alt="搜索" type="image" /></td>
+    <td width="8%"><a href="{$MOD[linkurl]}search.php" class="red">详细搜索</a></td>
+  </tr>
+</table>
+</form>
+	<div class="position">当前位置：<a href="{$MOD['linkurl']}">商城首页</a> >> {$position}</div>
+	<!--子栏目名称列表-->
+    <div class="subnav">{tag_模块子栏目列表}</div>
+
+<!--{if $enableadd}-->
+<div class="cat_box_1">
+<div class="cat_title">
+  <div class="cat_name">{$catname}</div>
+  <div class="cat_url"><a href="{$linkurl}" class="more">更多 &gt;&gt;</a></div>
+</div>
+{tag_一级栏目商品列表}
+</div>
+<!--{/if}-->
+
+<!--自定义栏目开始-->
+<!--{loop $cats $i $cat}-->
+<div class="cat_box_1">
+  <div class="cat_title">
+    <div class="cat_name">{$cat[catname]}</div>
+	<div class="cat_url"><a href="{$cat[linkurl]}" target="{$cat[target]}" class="more">更多 &gt;&gt;</a></div>
+  </div>
+  {tag_子栏目商品列表}
+  </div>
+<!--{/loop}-->
+<!--自定义栏目结束-->
+
+	</td>
+</tr>
+</table>
+<script type="text/javascript" src="{$MOD[linkurl]}visited.php?productid=0&visitednum={$MOD[visitednum]}"></script>
+{template 'phpcms','footer'}

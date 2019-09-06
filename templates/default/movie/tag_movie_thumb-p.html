@@ -1,0 +1,21 @@
+<table width="100%"  cellpadding="4" cellspacing="0">
+<!--{loop $movies $i $movie}-->
+{if $i%$cols==0}<tr>{/if}
+<td width="{$width}" valign="top">
+<div class="pictxt">
+<a href="{$movie['linkurl']}" {$target}><img src="{$movie[thumb]}">
+<span>{$movie[stitle]}</span></a>
+</div>
+</td>
+{if $introducelen}
+	<tr>
+	<td><span class="tag_description">&nbsp;&nbsp;&nbsp;&nbsp;{$movie[introduce]}</span></td>
+	</tr>
+{/if}
+{if $i%$cols==($cols-1)}</tr>{/if}
+{/loop}
+</table>
+
+<!--{if $pages}-->
+<div class="pages">{$pages}</div>
+<!--{/if}-->

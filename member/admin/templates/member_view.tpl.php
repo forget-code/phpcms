@@ -46,13 +46,13 @@ include admintpl('header');
 </tr>
 <tr>
 <td  class="tablerowhighlight" align="right">注册时间：</td>
-<td  class="tablerow"><?=date('Y-m-d h:i:s',$regtime)?></td>
+<td  class="tablerow"><?=date('Y-m-d H:i:s',$regtime)?></td>
 <td  class="tablerowhighlight" align="right">注册IP：</td>
 <td  class="tablerow"><?=$regip?> - <?=$regiparea?></td>
 </tr>
 <tr>
 <td  class="tablerowhighlight" align="right">最后登录时间：</td>
-<td  class="tablerow"><?=$lastlogintime ? date('Y-m-d h:i:s',$lastlogintime) : ''?></td>
+<td  class="tablerow"><?=$lastlogintime ? date('Y-m-d H:i:s',$lastlogintime) : ''?></td>
 <td  class="tablerowhighlight" align="right">最后登录IP：</td>
 <td  class="tablerow"><?=$lastloginip?> - <?=$lastloginiparea?></td>
 </tr>

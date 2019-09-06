@@ -7,15 +7,23 @@
 <div class="position">当前位置：{$position}</div>
 <div class="subnav">{tag_频道子栏目列表}</div>
 <!--{if $enableadd}-->
-<div class="cat_box">
+<div class="cat_box_1">
 <div class="cat_title">
-  <div class="cat_name">{$catname}</div>
-  <div class="cat_url"><a href="{$linkurl}" class="more">更多</a></div>
+<div class="cat_name">{$catname}</div>
+<div class="cat_url"><a class="more" href="{$linkurl}">更多 &gt;&gt;</a></div>
 </div>
-{tag_栏目页图片文章列表}
-{tag_一级栏目文章列表}
+<table cellspacing="0" cellpadding="0" width="100%">
+	<tbody>
+		<tr>
+		<td valign="top" width="50%">{tag_一级栏目文章列表}</td>
+		<td width="10"></td>
+		<td valign="top"  width="50%">{tag_栏目页图片文章列表}</td>
+		</tr>
+	</tbody>
+</table>
 </div>
 <!--{/if}-->
+
 <!--{loop $arrchildid $i $childcat}-->
 <div class="cat_box">
   <div class="cat_title">

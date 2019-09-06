@@ -1,8 +1,6 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
 include admintpl('header');
-
- //  <!--<? $do=$ms->TestRules(); $ms->TestArtical("http://ww.phpcms.cn/skin/2006/0915/template_40.html"); !-->
 ?>
 <script language="javascript">
 var tid=0;

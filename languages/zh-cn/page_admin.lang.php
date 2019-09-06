@@ -17,4 +17,5 @@ $LANG['page_id_not_null'] = '网页ID不能为空';
 $LANG['appoint_page_not_exist_or_no_permission'] = '指定单网页不存在或您无权修改';
 $LANG['single_page_list'] = '单网页列表';
 $LANG['single_page_label_manage'] = '单网页标签管理';
+$LANG['create_all'] = '更新所有单网页';
 ?>

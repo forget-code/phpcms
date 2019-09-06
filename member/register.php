@@ -1,13 +1,21 @@
 <?php
 require './include/common.inc.php';
 
+if($PHPCMS['enableserverpassport'])
+{
+	$registerurl = $PHPCMS['passport_serverurl'].$PHPCMS['passport_registerurl'];
+	if($PHP_QUERYSTRING) $registerurl .= strpos($registerurl, '?') ? '&'.$PHP_QUERYSTRING : '?'.$PHP_QUERYSTRING;
+	header('location:'.$registerurl);
+	exit;
+}
+
 if($_userid) showmessage($LANG['not_allow_register_repeat']);
 if(!$MOD['enableregister']) showmessage($LANG['sorry_new_register_not_allowed']);
 
 if(!isset($forward)) $forward = $PHP_REFERER;
 if(!isset($action)) $action = '';
 
-require_once PHPCMS_ROOT.'/admin/include/field.class.php';
+require_once PHPCMS_ROOT.'/include/field.class.php';
 $field = new field($CONFIG['tablepre'].'member_info');
 
 if($dosubmit)
@@ -41,9 +49,11 @@ if($dosubmit)
     $groupid = $MOD['enablemailcheck'] ? 4 : ($MOD['enableadmincheck'] ? 5 : 6);
 	@extract($member->group($groupid));
 
-	$begindate = date("Y-m-d");
+	$begindate = date('Y-m-d');
 	$date->dayadd($defaultvalidday);
 	$enddate = $defaultvalidday == -1 ? '0000-00-00' : $date->get_date();
+
+	$field->check_form();
 
 	$memberinfo = array('username'=>$username, 'password'=>$password, 'question'=>$question, 'answer'=>$answer,'email'=>$email,'showemail'=>$showemail,'groupid'=>$groupid,'chargetype'=>$chargetype,'point'=>$defaultpoint,'begindate'=>$begindate,'enddate'=>$enddate,
 		                'truename'=>$truename,'gender'=>$gender,'birthday'=>$birthday,'idtype'=>$idtype,'idcard'=>$idcard,'province'=>$province,'city'=>$city,'area'=>$area,'industry'=>$industry,'edulevel'=>$edulevel,'occupation'=>$occupation,'income'=>$income,'telephone'=>$telephone,'mobile'=>$mobile,'address'=>$address,'postid'=>$postid,'homepage'=>$homepage,'qq'=>$qq,'msn'=>$msn,'icq'=>$icq,'skype'=>$skype,'alipay'=>$alipay,'paypal'=>$paypal,'userface'=>$userface,'facewidth'=>$facewidth,'faceheight'=>$faceheight,'sign'=>$sign);
@@ -51,6 +61,7 @@ if($dosubmit)
 	if($userid = $member->register($memberinfo))
 	{
 		$field->update("userid=$userid");
+		if(isset($MODULE['union'])) include PHPCMS_ROOT.'/union/include/register.inc.php';
 		if($MOD['enablemailcheck'])
 		{
 			require PHPCMS_ROOT.'/include/mail.inc.php';
@@ -92,7 +103,13 @@ elseif($action == 'mailcheck')
 	if($member->check_authstr($username, $authstr))
 	{
 		$groupid = $MOD['enableadmincheck'] ? 5 : 6;
-		$member->set_group($username, $groupid);
+		@extract($member->group($groupid));
+
+		$begindate = date('Y-m-d');
+		$date->dayadd($defaultvalidday);
+		$enddate = $defaultvalidday == -1 ? '0000-00-00' : $date->get_date();
+        $db->query("UPDATE ".TABLE_MEMBER." SET groupid=$groupid,chargetype='$chargetype',point=>'$defaultpoint',begindate=>'$begindate',enddate=>'$enddate' WHERE username='$username'");
+
 		showmessage($LANG['mail_verify_success'], $PHP_SITEURL);
 	}
 	else
@@ -152,12 +169,14 @@ elseif($action == 'register')
 
     if(!isset($forward) || $forward == '') $forward = $PHP_SITEURL;
 
-	$fields = $field->get_form('<tr><td class="td_right" width="15%">$title:</td><td>$input $note</td></tr>');
+	$fields = $field->get_form('<tr><td class="td_right" width="15%">$title:</td><td>$input $tool $note</td></tr>');
 
     include template('member', 'register');
 }
 else
 {
+	if(!trim($MOD['reglicense'])) header('location:?action=register');
+
 	$head['title'] = $LANG['member_register'];
 	$head['keywords'] = $LANG['member_register'];
 	$head['description'] = $LANG['member_register'];

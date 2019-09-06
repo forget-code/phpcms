@@ -1,0 +1,124 @@
+{template 'product','header'}
+<table width="980" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="220" valign="top">
+<!--商城公告-->
+	<table width="210" cellspacing="0" cellpadding="0" class="shopleft_box">
+      <tr>
+        <td class="box_header_1">&nbsp;</td>
+      </tr>
+      <tr>
+        <td height="170" valign="top" class="box_border_1" valign="top">{tag_模块公告}</td>
+      </tr>
+      <tr>
+        <td class="box_footer_1"></td>
+      </tr>
+    </table>
+<!--查看购物车-->
+<table width="210" cellspacing="0" cellpadding="0">
+      <tr>
+        <td><a href="{$MOD[linkurl]}cart.php" target="_blank"><img src="{$skindir}/images/cart.gif" alt="查看购物车" border="0"/></a></td>
+      </tr>
+    </table>
+	</td>
+    <td width="10">&nbsp;</td>
+    <td valign="top"><table width="100%" cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="442" height="265" class="border_1">广告位</td>
+        <td width="10">&nbsp;</td>
+        <td valign="top"><table width="285" cellspacing="0" cellpadding="0">
+          <tr>
+            <td><img src="{$skindir}/images/hot_pro_header.gif" alt="热卖商品" /></td>
+          </tr>
+          <tr>
+            <td valign="top" class="box_border_4">
+  {tag_商城首页热卖商品}
+			</td>
+          </tr>
+          <tr>
+            <td><img src="{$skindir}/images/hot_pro_footer.gif" alt="热卖商品" width="285" height="13" /></td>
+          </tr>
+        </table></td>
+      </tr>
+    </table></td>
+  </tr>
+</table>
+<table width="980" align="center" cellpadding="0" cellspacing="0" class="mar_10">
+  <tr>
+    <td width="220" valign="top">
+<!--商品分类-->
+	<table width="210" cellspacing="0" cellpadding="0" class="shopleft_box">
+      <tr>
+        <td class="box_header_2">&nbsp;</td>
+      </tr>
+      <tr>
+        <td valign="top" class="box_border_2">
+<!--商品分类列表-->
+
+<!--{loop $childcats $i $cat}-->
+<div class="catlist">
+  <h1><a href="{$cat['linkurl']}">{$cat[catname]}</a></h1>
+<!--{loop $subcats[$i] $k $c}-->
+  <li><a href="{$c['linkurl']}">{$c[catname]}</a></li>
+<!--{/loop}-->
+</div> 
+<!--{/loop}-->
+</td>
+      </tr>
+      <tr>
+        <td class="box_footer_2"></td>
+      </tr>
+    </table>
+<!--友情连接-->
+<table width="210" cellspacing="0" cellpadding="0" class="shopleft_box">
+      <tr>
+        <td class="box_header_3">&nbsp;</td>
+      </tr>
+      <tr>
+        <td valign="top" class="box_border_3">{tag_商城首页链接}</td>
+      </tr>
+      <tr>
+        <td class="box_footer_3"></td>
+      </tr>
+    </table></td>
+    <td width="10">&nbsp;</td>
+    <td valign="top">
+
+	   <div class="cat_title">
+	    <div class="cat_name">最新商品</div>
+		<div class="cat_url"><a href="{$MOD[linkurl]}search.php?searchtype=pdt_name&keywords=&catid=0&brand_id=&fromprice=&toprice=&frommarketprice=&tomarketprice=&sales=&posid=0&searchfrom=30&before=0&ordertype=0&search=1&notshow=1">查看更多商品</a></div>
+	   </div>
+	   {tag_商城首页最新商品}
+
+<div class="clearboth"></div>
+<!--搜索-->
+<form name="myform" action="{$MOD[linkurl]}search.php" method="get">
+	  <table width="100%" cellspacing="0" cellpadding="0" class="shopsearch">
+  <tr>
+    <td width="21%">查找范围：
+      <select name="searchtype">
+    <option value="pdt_name">按商品名称</option>
+    <option value="pdt_No">按商品编号</option>
+    <option value="introduce">按商品介绍</option>
+    </select></td>
+    <td width="25%">关键字：
+      <input name="keyword" type="text" size="20" /></td>
+    <td width="19%">起始价：
+      <input name="fromprice" type="text" size="10" /></td>
+    <td width="18%">结束价：
+      <input name="toprice" type="text" size="10" /></td>
+<input type="hidden" name="dosubmit" value="1" />
+<input type="hidden" name="search" value="1" />
+    <td width="9%"><input src="{$skindir}/images/found.gif" alt="搜索" type="image" /></td>
+    <td width="8%"><a href="{$MOD[linkurl]}search.php" class="red">详细搜索</a></td>
+  </tr>
+</table>
+</form>
+
+    <div class="cat_title"><div class="cat_name">特价商品</div><div class="cat_url"><a href="{$MOD[linkurl]}search.php?searchtype=pdt_name&keywords=&catid=0&brand_id=&fromprice=0&toprice=1000&frommarketprice=&tomarketprice=&sales=&posid=0&searchfrom=0&before=0&ordertype=0&search=1&notshow=1">查看更多商品</a></div></div>
+{tag_商城首页特价商品}
+	
+    </td>
+  </tr>
+</table>
+{template 'phpcms','footer'}

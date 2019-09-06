@@ -1,4 +1,4 @@
-<?php include "./install/header.tpl.php";?>
+<?php include PHPCMS_ROOT."/install/header.tpl.php";?>
 <table  border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
   <tr>
     <td>
@@ -137,6 +137,22 @@
                         <?php }?></td>
                   </tr>
                   <tr bgcolor="#ECE9DB">
+                    <td align="left">服务器DNS解析</td>
+                    <td align="left">
+					<?php if($PHP_DNS){ ?>
+                         支持
+                    <?php }else{ ?>
+                         不支持
+                    <?php }?></td>
+                    <td align="left">建议设置正确</td>
+                    <td align="left">
+					    <?php if($PHP_DNS){ ?>
+                        <font color="blue">无影响</font>
+                        <?php }else{ ?>
+                        <font color="red">不支持采集和保存远程图片</font>
+                        <?php }?></td>
+                  </tr>
+                  <tr bgcolor="#ECE9DB">
                     <td align="left">Safe mode(安全模式)</td>
                     <td align="left"><?php if($PHP_SAFEMODE){ ?>
                       开启
@@ -183,4 +199,4 @@
 </td>
   </tr>
 </table>
-<?php include "./install/footer.tpl.php";?>
+<?php include PHPCMS_ROOT."/install/footer.tpl.php";?>

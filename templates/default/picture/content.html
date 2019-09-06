@@ -1,7 +1,7 @@
 {template 'phpcms','header'}
 <script language=javascript type="text/javascript">
 function fontZoom(size){
-$('{$addtime}l').style.fontSize=size+'px'
+$('content').style.fontSize=size+'px'
 }
 </script>
 <table width="980" cellpadding="0" cellspacing="0">
@@ -12,8 +12,6 @@ $('{$addtime}l').style.fontSize=size+'px'
 
 <!--主标题--><h1><a href="{$itemurl}">{$title}</a></h1>
 <!--文件属性--><div id="property">发布日期：{$adddate}&nbsp;&nbsp;作者：<a href="{PHPCMS_PATH}member/member.php?username={$username}" class="member_url">{$author}</a>&nbsp;&nbsp;来源：<a href="{$copyfromurl}" target="_blank">{$copyfromname}</a>&nbsp;&nbsp;浏览次数：<span id="hits">0</span>&nbsp;&nbsp;文字大小：【<a href="javascript:fontZoom(16)">大</a>】【<a href="javascript:fontZoom(14)">中</a>】【<a href="javascript:fontZoom(12)">小</a>】 </div>
-<div class="content_text" id="{$addtime}1"><a href="{$itemurl}">来源：{$PHPCMS['sitename']}({$PHP_SITEURL})<br/>作者：{$username}<br/>原文：{$title}({$itemurl})</a></div>
-
   <table width="740" align="center" cellPadding="0" cellSpacing="0" class="mar_10">
     <tbody>
       <tr>
@@ -84,8 +82,7 @@ window.onload = function()
       </tr>
     </tbody>
   </table>
-<div class="border_1 mar_10" id="{$addtime}l">{$introduce}</div>
-<div class="content_text" id="{$addtime}2"><a href="{$itemurl}">来源：{$_PHPCMS['sitename']}({$PHP_SITEURL})<br/>作者：{$username}<br/>原文：{$title}({$itemurl})</a></div>
+<div class="border_1 mar_10" id="content">{$introduce}</div>
 <h3>责任编辑：<a href="{PHPCMS_PATH}member/member.php?username={$checker}" class="member_url">{$checker}</a></h3>
 <div id="par" class="iconbox">
 <form action="{$MODULE['mail']['linkurl']}sendmail.php" name="sendmail" id="sendmail">
@@ -115,20 +112,6 @@ window.onload = function()
   </td>
   </tr>
 </table>
-<script type="text/javascript">
-document.getElementById('{$addtime}1').style.display="none";
-document.getElementById('{$addtime}2').style.display="none";
-function docheck()
-{
-    myform.itemurl.value = window.location;
-    if(myform.content.value=="") {
-       alert("请输入评论内容!");
-       myform.content.focus();
-       return false;
-    }
-    return true;
-}
-</script>
 <script type="text/javascript" src="{$channelurl}show_js.php?itemid={$pictureid}"></script>
 
 {template 'phpcms','footer'}

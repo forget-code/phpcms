@@ -143,7 +143,7 @@ function checkemailmessage(Request)
     <tr>
       <td class="td_right">Email地址：</td>
       <td>
-        <input name="email" type="text" id="email" size="30" maxlength="50"  onBlur="checkemail(this.value);">
+        <input name="email" type="text" id="email" size="30"  onBlur="checkemail(this.value);">
         <input type="checkbox" name="showemail" id="showemail" value="1" class="radio">
         <span class="color_1">是否公开</span> <span id="email_notice" class="color_1"></span></td>
     </tr>
@@ -171,7 +171,7 @@ document.all(c_Str).style.display='none'
 <tbody id="detail" style="display:none">
     <tr>
       <td width="15%" class="td_right">真实姓名：</td>
-      <td><input name="truename" type="text" id="truename" size="20" maxlength="50"></td>
+      <td><input name="truename" type="text" id="truename" size="20"></td>
     </tr>
     <tr>
       <td class="td_right">性　　别：</td>
@@ -370,7 +370,7 @@ var selectedarea = '{$PHPCMS[area]}';
     </tr>
     <tr>
       <td class="td_right">MSN帐号：</td>
-      <td><input name="msn" type="text" id="msn" size="20" maxlength="50"></td>
+      <td><input name="msn" type="text" id="msn" size="20"></td>
     </tr>
     <tr>
       <td class="td_right">ICQ号码：</td>
@@ -378,26 +378,26 @@ var selectedarea = '{$PHPCMS[area]}';
     </tr>
     <tr>
       <td class="td_right">Skype帐号：</td>
-      <td><input name="skype" type="text" id="skype" size="20" maxlength="50"></td>
+      <td><input name="skype" type="text" id="skype" size="20"></td>
     </tr>
     <tr>
       <td class="td_right">支付宝帐号：</td>
-      <td><input name="alipay" type="text" id="alipay" size="20" maxlength="50"></td>
+      <td><input name="alipay" type="text" id="alipay" size="20"></td>
     </tr>
     <tr>
       <td class="td_right">贝宝帐号：</td>
-      <td><input name="paypal" type="text" id="paypal" size="20" maxlength="50"></td>
+      <td><input name="paypal" type="text" id="paypal" size="20"></td>
     </tr>
     <tr>
       <td class="td_right">头像地址：</td>
-      <td><input name="userface" type="text" id="userface" size="50" maxlength="50"></td>
+      <td><input name="userface" type="text" id="userface" size="50"> <input type="button" value="上传" onClick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid=member&type=thumb&uploadtext=userface','upload','350','200')"></td>
     </tr>
     <tr>
       <td class="td_right">头像大小：</td>
       <td><span class="color_2">宽度：</span>
-          <input name="facewidth" type="text" id="facewidth" size="4" maxlength="50">
+          <input name="facewidth" type="text" id="facewidth" size="4">
         <span class="color_2">px 高度</span>：
-        <input name="faceheight" type="text" id="faceheight" size="4" maxlength="50">
+        <input name="faceheight" type="text" id="faceheight" size="4">
         <span class="color_2">px</span></td>
     </tr>
     <tr>

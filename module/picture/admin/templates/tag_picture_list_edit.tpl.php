@@ -3,6 +3,22 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admintpl('header');
 ?>
 <body>
+<script type="text/javascript">
+function showcat(keyid,catid)
+{
+    var url = "<?=$PHP_SELF?>";
+    var pars = "mod=phpcms&file=tag&action=category_select&catid="+catid+"&keyid="+keyid;
+	var myAjax = new Ajax.Updater(
+					'category_select',
+					url,
+					{
+					method: 'get',
+					parameters: pars
+					}
+	             ); 
+}
+</script>
+
 <?=$menu?>
 <table cellpadding="2" cellspacing="1" border="0" align=center class="tableBorder" >
   <tr>
@@ -27,20 +43,21 @@ include admintpl('header');
    <input name="mod" type="hidden" value="<?=$mod?>">
    <input name="file" type="hidden" value="<?=$file?>">
    <input name="channelid" type="hidden" value="<?=$channelid?>">
-   <input name="action" type="hidden" value="<?=$action?>" id="action">
+   <input name="job" type="hidden" value="<?=$job?>">
    <input name="function" type="hidden" value="<?=$function?>">
-   <input name="tagname" type="hidden" value="<?=$tagname?>">
    <input name="referer" type="hidden" value="<?=$PHP_REFERER?>">
    <input type="hidden" name="tag_config[func]" value="<?=$function?>">
+   <input name="tagname" type="hidden" value="<?=$tagname?>">
+   <input name="action" type="hidden" value="edit">
     <tr> 
       <td class="tablerow" width="40%"><b>标签名称</b><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</td>
-      <td class="tablerow">
+      <td  class="tablerow">
 	  <input type="text" size="20" value="<?=$tagname?>" disabled title="标题不可再修改" />
 	  </td>
     </tr>
     <tr> 
       <td class="tablerow" width="40%"><b>标签说明</b><br/>例如：首页最新推荐图片，10篇</td>
-      <td class="tablerow"><input name="tag_config[introduce]" id="introduce" type="text" size="60" value="<?=$tag_config['introduce']?>" /></td>
+      <td class="tablerow"><input name="tag_config[introduce]" id="introduce" type="text" size="50" value="<?=$tag_config['introduce']?>" /></td>
     </tr>
     <tr> 
       <td class="tablerowhighlight" colspan="2" align="center"><b>标签参数设置</b></td>
@@ -48,7 +65,7 @@ include admintpl('header');
     <tr> 
       <td class="tablerow" width="40%"><b>所属频道</b></td>
       <td  class="tablerow"><input name="tag_config[channelid]" id="setchannelid" type="text" size="15" value="<?=$tag_config['channelid']?>"> 
-<select name='selectchannelid' onchange="$('setchannelid').value=this.value">
+<select name='selectchannelid' onchange="$('setchannelid').value=this.value;showcat(this.value, 0)">
 <option>请选择频道</option>
 <option value='$channelid'>$channelid</option>
 <?php 
@@ -70,10 +87,11 @@ foreach($CHANNEL as $id=>$channel)
 	<td class="tablerow"><b>调用图片所属栏目ID</b><br><font color="blue">多个ID之前用半角逗号隔开，0表示不限栏目</font><br>某些情况下可使用变量<a href="###" onclick="$('catid').value='$catid'"><font color="red">$catid</font></a>作为参数</td>
 	<td  class="tablerow">
 	<input name="tag_config[catid]" type="text" size="15"  id="catid" value="<?=$tag_config['catid']?>">&nbsp;
+	<span id="category_select">
 	<select name='selectcatid' onchange="ChangeInput(this,document.myform.catid)">
 	<option value="0">不限栏目</option>
 	<option value='$catid'>$catid</option>
-	<?=$category_select?> &nbsp;选择时栏目ID会自动加入到表单中
+	<?=$category_select?></span> &nbsp;选择时栏目ID会自动加入到表单中
 	</td>
 	</tr>
     <tr> 

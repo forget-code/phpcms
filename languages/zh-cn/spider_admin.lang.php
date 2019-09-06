@@ -121,5 +121,7 @@ $LANG['prepare_site_rule_waiting'] = '正在准备站点规则信息，请等待
 $LANG['cannot_continue_load_job_rule'] = '站点规则导入无法继续，原因：没有找到上传的任务文件';
 $LANG['load_site_rule_success'] = '成功导入一条站点，正在转到任务管理页面!';
 $LANG['loading_site_rule_infomation_waiting'] = '正在导入站点规则信息，请稍候';
+$LANG['fsockopen_disabled_cannot_spider'] = 'fsockopen 函数被禁用，无法采集';
+$LANG['DNS_error_cannot_spider'] = '服务器DNS设置错误，无法采集';
 
 ?>
