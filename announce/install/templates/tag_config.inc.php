@@ -31,8 +31,8 @@ return array (
     ),
     'number' => '5',
     'type' => 'announce',
-    'sql' => 'SELECT * FROM phpcms2008_announce ORDER BY announceid DESC',
-    'tagcode' => 'tag(\'announce\', \'tag_announce\', "SELECT * FROM phpcms2008_announce WHERE TO_DAYS( NOW() ) - TO_DAYS( todate ) < 0  ORDER BY announceid DESC", 0, 6, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'titlelen\' => \'46\',  \'showauthor\' => \'0\',))',
+    'sql' => 'SELECT * FROM phpcms2008_announce WHERE `fromdate`<NOW() AND (`todate`>=NOW() OR `todate`=\'0000-00-00\') ORDER BY announceid DESC',
+    'tagcode' => 'tag(\'announce\', \'tag_announce\', "SELECT * FROM phpcms2008_announce WHERE `fromdate`<NOW() AND (`todate`>=NOW() OR `todate`=\'0000-00-00\') ORDER BY announceid DESC", 0, 5, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'titlelen\' => \'46\',  \'showauthor\' => \'0\',))',
   ),
   '会员中心公告' => 
   array (
@@ -59,8 +59,8 @@ return array (
     ),
     'number' => '1',
     'type' => 'announce',
-    'sql' => 'SELECT * FROM phpcms2008_announce ORDER BY announceid DESC',
-    'tagcode' => 'tag(\'announce\', \'tag_announce_member\', "SELECT * FROM phpcms2008_announce WHERE TO_DAYS( NOW() ) - TO_DAYS( todate ) < 0 ORDER BY announceid DESC", 0, 1, array (  \'class\' => \'url\',  \'target\' => \'_blank\',))',
+    'sql' => 'SELECT * FROM phpcms2008_announce WHERE `fromdate`<NOW() AND (`todate`>=NOW() OR `todate`=\'0000-00-00\') ORDER BY announceid DESC',
+    'tagcode' => 'tag(\'announce\', \'tag_announce_member\', "SELECT * FROM phpcms2008_announce WHERE `fromdate`<NOW() AND (`todate`>=NOW() OR `todate`=\'0000-00-00\') ORDER BY announceid DESC", 0, 1, array (  \'class\' => \'url\',  \'target\' => \'_blank\',))',
   ),
 );
 ?>

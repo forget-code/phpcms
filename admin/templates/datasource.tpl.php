@@ -24,7 +24,7 @@ foreach($data as $r)
     <td class="align_c"><?=$r['dbname']?></td>
     <td class="align_c"><?=$r['dbcharset']?></td>
     <td class="align_c">
-	<a href="###" onClick="javascript:$.get('?mod=<?=$mod?>&file=<?=$file?>&action=link', {name: <?=$r['name']?>}, function(data){alert(data==1 ? '连接成功' : '连接失败');});">连接测试</a> |
+	<a href="###" onClick="javascript:$.get('?mod=<?=$mod?>&file=<?=$file?>&action=link', {name: '<?=$r['name']?>'}, function(data){alert(data==1 ? '连接成功' : '连接失败');});">连接测试</a> |
 	<a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&name=<?=$r['name']?>">修改</a> |
 	<a href="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=delete&name=<?=urlencode($r['name'])?>','确认删除数据源 <?=$r['name']?> 吗？')">删除</a>
 	</td>

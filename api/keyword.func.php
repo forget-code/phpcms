@@ -14,9 +14,26 @@ function get_keywords($data, $number = 2)
 	}
 	else
 	{
-		$http = load('http.class.php');
-		$http->post(API_URL_GET_KEYWORDS, array('siteurl'=>SITE_URL, 'charset'=>CHARSET, 'data'=>$data, 'number'=>$number));
-		return $http->is_ok() ? $http->get_data() : '';
+		if(CHARSET == 'utf-8')
+		{
+			$data = iconv(CHARSET,'gbk', $data);
+			$http = load('http.class.php');
+			$http->post(API_URL_GET_KEYWORDS, array('siteurl'=>SITE_URL, 'charset'=>CHARSET, 'data'=>$data, 'number'=>$number));
+			$data = iconv(CHARSET,'gbk', $data);
+			if($http->is_ok())
+			{
+				$data = iconv('gbk', CHARSET, $http->get_data());
+				return $data;
+			}
+			return null;
+		}
+		else
+		{
+			$http = load('http.class.php');
+			$http->post(API_URL_GET_KEYWORDS, array('siteurl'=>SITE_URL, 'charset'=>CHARSET, 'data'=>$data, 'number'=>$number));
+			return $http->is_ok() ? $http->get_data() : '';
+		}
+
 	}
 }
 ?>

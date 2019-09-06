@@ -12,7 +12,7 @@ switch($action)
 			{
 				showmessage('请选择分类');
 			}
-			if(empty($name))
+			if(empty($linkname))
 			{
 				showmessage('请填写网站名称');
 			}
@@ -29,10 +29,9 @@ switch($action)
 				showmessage('请填写网站的logo');
 			}
 
-			$arr = array('typeid'=>$typeid,'linktype'=>$linktype,'style'=>$style,'name'=>$name,'url'=>$url,'logo'=>$logo,'introduce'=>$introduce,'username'=>$username,'elite'=>$elite,'passed'=>$passed,'addtime'=>TIME);
+			$arr = array('typeid'=>$typeid,'linktype'=>$linktype,'style'=>$style,'name'=>$linkname,'url'=>$url,'logo'=>$logo,'introduce'=>$introduce,'username'=>$username,'elite'=>$elite,'passed'=>$passed,'addtime'=>TIME);
 			if($link->add($arr))
 			{
-				//showmessage($LANG['operation_success'], "?mod=link&file=createhtml&forward=".urlencode($forward));
 				showmessage($LANG['operation_success'],"?mod=$mod&file=$file&action=manage");
 			}
 			else
@@ -57,7 +56,6 @@ switch($action)
 			{
 				if($link->del($linkid))
 				{	
-					//showmessage($LANG['operation_success'], "?mod=link&file=createhtml&forward=".urlencode($forward));
 					showmessage($LANG['operation_success'],"?mod=$mod&file=$file&action=manage");
 				}
 				else
@@ -76,8 +74,7 @@ switch($action)
 		if(isset($passed))
 		{
 			if($link->check($linkid,$passed))
-			{	
-			//	showmessage($LANG['operation_success'], "?mod=link&file=createhtml&forward=".urlencode($forward));
+			{
 				showmessage($LANG['operation_success'],$forward);
 			}
 			else
@@ -135,7 +132,7 @@ switch($action)
 			{
 				showmessage('请选择分类');
 			}
-			if(empty($name))
+			if(empty($linkname))
 			{
 				showmessage('请填写网站名称');
 			}
@@ -153,7 +150,7 @@ switch($action)
 			}
 
 
-			$arr = array('typeid'=>$typeid,'linktype'=>$linktype,'style'=>$style,'name'=>$name,'url'=>$url,'logo'=>$logo,'introduce'=>$introduce,'username'=>$username,'elite'=>$elite,'passed'=>$passed,'addtime'=>TIME);
+			$arr = array('typeid'=>$typeid,'linktype'=>$linktype,'style'=>$style,'name'=>$linkname,'url'=>$url,'logo'=>$logo,'introduce'=>$introduce,'username'=>$username,'elite'=>$elite,'passed'=>$passed,'addtime'=>TIME);
 			if(isset($linkid))
 			{
 				if($link->update($arr,$linkid))

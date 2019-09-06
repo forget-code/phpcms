@@ -23,7 +23,7 @@ include admin_tpl('header');
 
 <tr >
 	<th><strong>网站名称</strong></th>
-	<td><input name="name" size="30"  maxlength="20" value="<?=$links['name']?>" require="true" datatype="require" msg="网站名称不能为空" msgid="msgid2"><font color="#FF0000"> *</font><span id="msgid2"/></td>
+	<td><input name="linkname" size="30"  maxlength="20" value="<?=$links['name']?>" require="true" datatype="require" msg="网站名称不能为空" msgid="msgid2"><font color="#FF0000"> *</font><span id="msgid2"/></td>
 </tr>
 <tr >
 	<th><strong>链接颜色</strong></th>

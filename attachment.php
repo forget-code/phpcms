@@ -2,7 +2,20 @@
 require dirname(__FILE__).'/include/common.inc.php';
 require_once 'attachment.class.php';
 require_once 'image.class.php';
-
+if(!$_userid && !$PHPCMS['allowtourist'])
+{
+	if($from == 'fckeditor')
+	{
+		$message = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8".CHARSET."\"><script language='javascript'>";
+		$message .= "window.parent.show_ok('1-".$id."','没有上传权限！');";
+		$message .= "</script>";
+		exit($message);
+	}
+	else
+	{
+		showmessage('不允许游客上传！');
+	}
+}
 session_start();
 
 switch($action)

@@ -89,7 +89,7 @@ if(strpos($content, '[page]') !== false)
 			foreach($m[1] as $k=>$v)
 			{
 				$p = $k+1;
-				$titles .= '<a href="'.$pageurls[$p].'">'.$p.'、'.$v.'</a>';
+				$titles .= '<a href="'.$pageurls[$p][0].'">'.$p.'、'.$v.'</a>';
 			}
 		}
 	}

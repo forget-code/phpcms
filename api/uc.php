@@ -79,7 +79,7 @@ if($action == 'synlogin')
     ob_clean() ;
     header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
 	set_cookie('auth', $phpcms_auth, $cookietime);
-	set_cookie('username', urlencode(iconv('GBK','UTF-8',$arr['username'])), $cookietime);
+	set_cookie('username', $member->escape($arr['username']), $cookietime);
 	set_cookie('cookietime', $_cookietime, $cookietime);
 	exit('1');
 }

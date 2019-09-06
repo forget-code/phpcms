@@ -2,12 +2,17 @@
 defined('IN_YP') or exit('Access Denied');
 if(!isset($action)) $action = 'manage';
 $companytpl_config = include PHPCMS_ROOT.'templates/'.TPL_NAME.'/yp/companytplnames.php';
-
+foreach($companytpl_config AS $_k=>$_v)
+{
+	$_array_group = explode(',',$_v['groupid']);
+	if(!in_array($_groupid,$_array_group)) unset($companytpl_config[$_k]);
+}
 switch($action)
 {
 	case 'manage':
 		$diy = $company_user_infos['diy'];
 		$tplname = $company_user_infos['tplname'];
+
 		include template('yp', 'center_template');
 	break;
 

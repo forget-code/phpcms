@@ -115,15 +115,6 @@ class attachment
 				$aids[] = $this->add($uploadedfile);
 			}
 		}
-		$attachments = get_cookie('attachments');
-		if(is_array($attachments) && !empty($attachments))
-		{
-			foreach($attachments as $k=>$v)
-			{
-				$attachments[$k] = '';
-			}
-		}
-		set_cookie('attachments', $attachments);
 		return $aids;
 	}
 
@@ -168,7 +159,7 @@ class attachment
 
 	function download($field, $value, $ext = 'gif|jpg|jpeg|bmp|png', $absurl = '', $basehref = '')
 	{
-		
+		global $contentid;
 		$this->field = $field;
 		$dir = date('Y/md/', TIME);
 		$uploadpath = PHPCMS_PATH.UPLOAD_URL.$dir;
@@ -183,12 +174,26 @@ class attachment
 			$remotefileurls[$matche] = $this->fillurl($matche, $absurl, $basehref);
 		}
 		unset($matches, $string);
+		$attachments = get_cookie('attachments');
 		$remotefileurls = array_unique($remotefileurls);
 		$oldpath = $newpath = array();
+		$attachments = array_map('basename', $attachments);
 		foreach($remotefileurls as $k=>$file)
 		{
 			if(strpos($file, '://') === false) continue;
 			$filename = fileext($file);
+			$file_name = basename($file);
+			if($contentid)
+			{
+				$r = $this->db->get_one("SELECT `aid` FROM `".DB_PRE."attachment` WHERE `contentid`=$contentid AND `filename`='$file_name'");
+				if($r['aid']) continue;
+			}
+			if(in_array($file_name, $attachments))
+			{
+				$aid = array_search($file_name, $attachments);
+				$this->attachments[$this->field][$aid] = $file;
+				continue;
+			}
 			$filename = $this->getname($filename);
 			$newfile = $uploaddir.$filename;
 			$upload_func = UPLOAD_FUNC;
@@ -258,6 +263,7 @@ class attachment
 		$uploadedfile['aid'] = $aid;
 		$this->uploadedfiles[] = $uploadedfile;
 		$this->attachments[$this->field][$aid] = $uploadedfile['filepath'];
+		$attachments = get_cookie('attachments');
 		$attachments[$aid] = $uploadedfile['filepath'];
 		set_cookie('attachments', $attachments);
 		return $aid;

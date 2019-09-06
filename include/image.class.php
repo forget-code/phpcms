@@ -205,7 +205,11 @@ class image
 		}
 		if($ifwaterimage)
 		{
-			imagecopymerge($source_img, $water_img, $wx, $wy, 0, 0, $width, $height, $this->w_pct);
+			if($water_info[2] == 3) {
+				imageCopy($source_img, $water_img, $wx, $wy, 0, 0, $width, $height);
+			} else {
+				imagecopymerge($source_img, $water_img, $wx, $wy, 0, 0, $width, $height, $this->w_pct);
+			}
 		}
 		else
 		{

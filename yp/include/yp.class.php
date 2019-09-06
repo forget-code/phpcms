@@ -86,13 +86,17 @@ class yp
 		$id = $this->db->insert_id();
 		
         $modelinfo['id'] = $id;
+		if($CATEGORY[$data['catid']]['arrparentid'])
+		{
+			$arr_catids = substr($CATEGORY[$data['catid']]['arrparentid'],2).','.$data['catid'];
+		}
 		if($this->model_type=='product')
 		{
-			$this->db->query("UPDATE `$this->table_category` SET `pitems`=`pitems`+1 WHERE `catid`='".$data['catid']."'");
+			$this->db->query("UPDATE `$this->table_category` SET `pitems`=`pitems`+1 WHERE `catid` IN (".$arr_catids.")");
 		}
 		elseif($this->model_type=='buy')
 		{
-			$this->db->query("UPDATE `$this->table_category` SET `items`=`items`+1 WHERE `catid`='".$data['catid']."'");
+			$this->db->query("UPDATE `$this->table_category` SET `items`=`items`+1 WHERE `catid` IN (".$arr_catids.")");
 		}
 		$this->db->query("INSERT INTO `$this->table_count`(`id`,`model`) VALUES('$id','$this->model_type')");
 		return $id;

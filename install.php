@@ -85,7 +85,7 @@ switch($step)
 
 	case '5': //设置目录属性
 		$selectmod = isset($selectmod) ? ','.implode(',', $selectmod) : '';
-		$selectmod = 'phpcms,member'.$selectmod;
+		$selectmod = 'phpcms,member,pay'.$selectmod;
 		$selectmods = explode(',',$selectmod);
 		$selectmods = explode(',',$selectmod);
 		foreach($selectmods AS $dir)
@@ -305,6 +305,7 @@ switch($step)
 		$model->cache_field(3);
 		$model->cache_field(4);
 		$model->cache_field(5);
+		$model->cache_field(6);
 		require 'member/admin/include/model_member.class.php';
 		$member_model = new member_model();
 		$member_model->cache();

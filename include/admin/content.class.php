@@ -307,7 +307,7 @@ class content
 				$this->s->delete($r['searchid']);
 			}
 		}
-		else
+		elseif($r['status']==99)
 		{
 			$fulltext_array = cache_read($modelid.'_fields.inc.php',CACHE_MODEL_PATH);
 			foreach($fulltext_array AS $key=>$value)
@@ -460,14 +460,11 @@ class content
 			{
 				if($status==99 && isset($MODULE['pay']))
 				{
-					if(!$presentpoint && !$catid)
-					{
-							$cinfo = $this->get($id);
-							$r = $this->db->get_one("SELECT setting FROM `".DB_PRE."category` WHERE `catid`='$cinfo[catid]'");
-							$setting = string2array($r['setting']);
-							$presentpoint = $setting['presentpoint'];
-							$catid = $cinfo['catid'];
-					}
+					$cinfo = $this->get($id);
+					$r = $this->db->get_one("SELECT setting FROM `".DB_PRE."category` WHERE `catid`='$cinfo[catid]'");
+					$setting = string2array($r['setting']);
+					$presentpoint = $setting['presentpoint'];
+					$catid = $cinfo['catid'];
 					if($catid && $presentpoint)
 					{
 						$api_msg = $presentpoint > 0 ? '投稿奖励' : '发布信息扣点';
@@ -616,7 +613,7 @@ class content
 				$allow_status = $p->get_process_status($processid);
 				$contentids = $this->contentid($c, 0, $allow_status);
 				$process = $p->get($processid, $passname);
-				$this->status($contentids, $process['passstatus']);
+				$this->status((array)$contentids, $process['passstatus']);
 				unset($p);
 			}
 		}

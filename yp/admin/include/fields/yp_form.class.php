@@ -21,9 +21,8 @@ class content_form
 	function get($data = array())
 	{
 		global $_roleid,$_groupid;
-		if(isset($data['contentid'])) $this->contentid = $data['contentid'];
+		if(isset($data['id'])) $this->contentid = $data['id'];
 		$info = array();
-		$this->content_url = $data['url'];
 		foreach($this->fields as $field=>$v)
 		{
 			if(defined('IN_ADMIN'))

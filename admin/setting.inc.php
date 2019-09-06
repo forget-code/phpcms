@@ -40,6 +40,7 @@ switch($action)
 				showmessage('Ku6联盟帐号不正确，请重新填写');		
 			}
 		}
+		if($setting['uc'] && DB_PCONNECT) $setconfig['DB_PCONNECT'] = 0;
 		filter_write($setting['filter_word']);
 		module_setting($mod, $setting);
 		set_config($setconfig);

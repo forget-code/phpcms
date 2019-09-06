@@ -395,7 +395,8 @@ class category
 		{
 			if(!preg_match('/:\/\//',$data['url']))
 			{
-				$url = $this->u->category($catid);
+				$url_a = $this->u->category($catid);
+				$url = $url_a[1];
 			}
 			else
 			{
@@ -404,7 +405,8 @@ class category
 		}
 		else
 		{
-			$url = $this->u->category($catid);
+			$url_a = $this->u->category($catid);
+			$url = $url_a[1];
 		}
 		$url = preg_replace('/index\.[a-z]{3,5}$/', '', $url);
 		if($is_update)
@@ -415,13 +417,12 @@ class category
 			{
 				$categorys_c[$r['catid']] = $r;
 			}
-			if($data['parentid']==0 || (preg_match('/:\/\//', $url) && (substr_count($url, '/')==2)))
+			if($data['parentid']==0 || (preg_match('/:\/\//', $url) && (substr_count($url, '/')<4)))
 			{
 				$this->db->query("UPDATE `$this->table` SET url='$url' WHERE catid=$catid");
 			}
 			$arrchildid = $data['arrchildid'];
 			$arrchild = explode(',',$arrchildid);
-			$bound = array();
 			foreach($arrchild AS $k)
 			{
 				$parentdir = $second_domain = $parentid_arr = '';
@@ -429,50 +430,28 @@ class category
 				{
 					if(!$MODEL[$categorys_c[$k]['modelid']]['ishtml'])
 					{
-						$caturl = $this->u->category($k);
+						$url_a = $this->u->category($k);
+						$caturl = $url_a[1];
 						$this->db->query("UPDATE `$this->table` SET url='$caturl' WHERE catid=$k");
 						continue;
 					}
-					if($k == $catid || $categorys_c[$k]['type'] == 2) continue;
+					if($categorys_c[$k]['type'] == 2) continue;
 				}
 				else
 				{
 					$child_array_data = $this->get($k);
 					if(!$child_array_data['ishtml'])
 					{
-						$caturl = $this->u->category($k);
+						$url_a = $this->u->category($k);
+						$caturl = $url_a[1];
 						$this->db->query("UPDATE `$this->table` SET url='$caturl' WHERE catid=$k");
 						continue;
 					}
-					if($k == $catid || $categorys_c[$k]['type'] == 2) continue;	
+					if($categorys_c[$k]['type'] == 2) continue;	
 				}
-				if(preg_match('/:\/\//', $categorys_c[$k]['url']) && (substr_count($categorys_c[$k]['url'], '/')==2) && ($catid!=$k))
-				{
-					$bound = array_merge($bound, array_diff(explode(',', $categorys_c[$k]['arrchildid']),$bound));
-					if(in_array($k, $bound)) continue;
-				}
-				$arrparentid = $categorys_c[$k]['arrparentid'];
-				$arrparentid = explode(',',$arrparentid);
-				array_shift($arrparentid);
-				$count = intval(count($arrparentid)-1);
-				for($i=$count; $i>=0; $i--)
-				{
-					if(preg_match('/:\/\//',$categorys_c[$arrparentid[$i]]['url']) && substr_count($categorys_c[$arrparentid[$i]]['url'], '/')==2)
-					{
-						$second_domain = $categorys_c[$arrparentid[$i]]['url'];
-						break;
-					}
-					$parentid_arr[] = $arrparentid[$i];
-				}
-				if(is_array($parentid_arr))
-				{
-					$cou = count($parentid_arr)-1;
-					for($y=$cou; $y>=0; $y--)
-					{
-						$parentdir .= $categorys_c[$parentid_arr[$y]]['catdir'].'/';
-					}
-				}
-				$caturl = $second_domain ? $second_domain.'/'.$parentdir.$categorys_c[$k]['catdir'].'/' : $parentdir.$categorys_c[$k]['catdir'];
+				$url_a = $this->u->category($k);
+				$caturl = $url_a[1];
+				$caturl = preg_replace('/index\.[a-z]{3,5}$/', '', $caturl);
 				$this->db->query("UPDATE `$this->table` SET url='$caturl' WHERE catid=$k");
 			}
 			unset($url);

@@ -12,6 +12,7 @@ include admin_tpl('header');
              <input type="file" name="uploadfile" size="15">
              <input type="hidden" name="type" value="<?=$type?>">
              <input type="hidden" name="rename" value="<?=$rename?>">
+             <input type="hidden" name="catid" value="<?=$catid?> ?>">
 			 <input type="hidden" name="oldaid">
              <input type="hidden" name="oldname">
              <input type="hidden" name="MAX_FILE_SIZE" value="<?=$maxfilesize?>"> 

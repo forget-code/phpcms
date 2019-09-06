@@ -14,7 +14,7 @@ if($dosubmit)
             if(empty($title)) showmessage('请输入标题!');
             if($send->send_one($SingleEmail, stripslashes($title), stripslashes($content), $PHPCMS['mail_user']))
 			{
-				showmessage('发送成功！',$forward);
+				showmessage('发送成功！');
 			}
 			else
 			{

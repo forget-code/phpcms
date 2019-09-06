@@ -83,20 +83,13 @@ switch($action)
 	$head['keywords'] .= '商机';
 	$head['description'] .= '商机'.'_'.$PHPCMS['sitename'];
 	$head['title'] .= '商机'.'_'.$PHPCMS['sitename'];
-	
-	$c= new company();
-	$r = $c->get_yp_arrchildid($catid);
-	if($r['arrchildid'])
+	if($catid)
 	{
-		$r['arrchildid'] = $catid.','.$r['arrchildid'];
-	}
-	else
-	{
-		$r['arrchildid'] = $catid;
+		if($child == 1) $arrchildid = subcat('yp', $catid);
 	}
 	if($CATEGORY[$catid])
 	{
-		$where .= "b.catid IN ({$r['arrchildid']})";
+		$where .= "b.catid IN (".$CATEGORY[$catid]['arrchildid'].")";
 	}
 	else
 	{

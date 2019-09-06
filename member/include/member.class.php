@@ -872,16 +872,35 @@ class member
 
 	function escape($str)
 	{
-		preg_match_all("/[\x80-\xff].|[\x01-\x7f]+/",$str,$r);
-		$ar = $r[0];  
-		foreach($ar as $k=>$v)
+		if(strtolower(CHARSET)=='gbk')
 		{
-		  if(ord($v[0]) < 128)
-			  $ar[$k] = rawurlencode($v);
-		  else
-			  $ar[$k] = "%u".bin2hex(iconv("GB2312","UCS-2",$v));
-		}  
-		return join("",$ar);
+			preg_match_all("/[\x80-\xff].|[\x01-\x7f]+/",$str,$r);
+			$ar = $r[0];  
+			foreach($ar as $k=>$v)
+			{
+			  if(ord($v[0]) < 128)
+				  $ar[$k] = rawurlencode($v);
+			  else
+				  $ar[$k] = "%u".bin2hex(iconv(CHARSET,"UCS-2",$v));
+			}  
+			return join("",$ar);
+		}
+		else
+		{
+			preg_match_all("/[\xc2-\xdf][\x80-\xbf]+|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}|[\x01-\x7f]+/e",$str,$r);
+			$str = $r[0];
+			$len = count($str);
+			for($i=0; $i<$len; $i++) {
+				$value = ord($str[$i][0]);
+				if($value < 223){
+					$str[$i] = rawurlencode(utf8_decode($str[$i]));
+				} else {
+				$str[$i] = "%u".strtoupper(bin2hex(iconv("UTF-8","UCS-2",$str[$i])));
+				}
+			}
+			return join("",$str);
+
+		}
 	}
 }
 ?>

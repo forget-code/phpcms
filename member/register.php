@@ -8,7 +8,7 @@ if($PHPCMS['enableserverpassport'])
 	header('location:'.$registerurl);
 	exit;
 }
-if($_userid) showmessage($LANG['not_allow_register_repeat'],$MODULE['member']['url']);		//当用户以经登录存在$_userid时不得重复登录
+if($_userid && $action != 'activate') showmessage($LANG['not_allow_register_repeat'],$MODULE['member']['url']);		//当用户以经登录存在$_userid时不得重复登录
 if(!$forward) $forward = HTTP_REFERER;
 if(!isset($action)) $action = 'register';
 

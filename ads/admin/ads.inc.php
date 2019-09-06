@@ -13,13 +13,6 @@ switch($action)
 	case 'add':
 		if($dosubmit)
 		{
-			$attachment = new attachment($mod);
-			if(isset($_FILES['flash']) && !empty($_FILES['flash']['name']))
-			{
-				$ads['flashurl'] = $c_ads->upload('flash');
-				if(!$ads['flashurl']) shwomessage($attachment->error(), 'goback');
-				$ads['flashurl'] = UPLOAD_URL.$ads['flashurl'];
-			}
 			if(!$c_ads->add($ads)) showmessage($c_ads->msg(), 'goback');
 			showmessage($LANG['opration_successd_you_can_select_record_in_advertisement_order_list'], '?mod=ads&file=ads&action=manage','5000');
 		}
@@ -60,13 +53,6 @@ switch($action)
 
         if($dosubmit)
         {
-            $attachment = new attachment($mod);
-            if(isset($_FILES['flash']) && !empty($_FILES['flash']['name']))
-            {
-                $ads['flashurl'] = $c_ads->upload('flash');
-                if(!$ads['flashurl']) shwomessage($attachment->error(), 'goback');
-                $ads['flashurl'] = UPLOAD_URL.$ads['flashurl'];
-            }
             if(!$c_ads->edit($ads, $adsid)) showmessage($c_ads->msg(), 'goback');
             showmessage($LANG['edit_ads_success'], '?mod=ads&file=ads');
         }

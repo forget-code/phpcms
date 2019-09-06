@@ -86,7 +86,12 @@ function uploadSuccess(file, serverData) {
 	try {
 		if(serverData==1)
 		{
-			alert('上传的文件超过了 php.ini 中 upload_max_filesize 选项限制的值');
+			alert('上传的文件超过了 php.ini 中 upload_max_filesize=".ini_get('upload_max_filesize')." 选项限制的值');
+			return false;
+		}
+		else if(serverData==99)
+		{
+			alert('上传的文件超过了 php.ini 中 post_max_size=".ini_get('post_max_size')."选项限制的值');
 			return false;
 		}
 		var progress = new FileProgress(file, this.customSettings.progressTarget);

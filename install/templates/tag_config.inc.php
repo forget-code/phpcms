@@ -358,7 +358,7 @@ return array (
       2 => '_blank',
       3 => '14',
       4 => '62',
-      5 => '90',
+      5 => '87',
     ),
     'type' => 'content',
     'where' => 
@@ -374,7 +374,7 @@ return array (
       'posids' => '0',
     ),
     'modelid' => '0',
-    'tagcode' => 'tag(\'phpcms\', \'tag_content_pic\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99   AND  `thumb`!=\'\' ".get_sql_catid($catid)." ORDER BY contentid DESC", 0, 4, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'titlelen\' => \'14\',  \'height\' => \'62\',  \'width\' => \'90\',))',
+    'tagcode' => 'tag(\'phpcms\', \'tag_content_pic\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99   AND  `thumb`!=\'\' ".get_sql_catid($catid)." ORDER BY contentid DESC", 0, 4, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'titlelen\' => \'14\',  \'height\' => \'62\',  \'width\' => \'87\',))',
   ),
   '栏目页信息列表' => 
   array (
@@ -662,7 +662,7 @@ return array (
       1 => 'url',
       2 => '_blank',
       3 => '62',
-      4 => '90',
+      4 => '87',
       5 => '46',
     ),
     'type' => 'content',
@@ -679,7 +679,7 @@ return array (
       'posids' => '2',
     ),
     'modelid' => '0',
-    'tagcode' => 'tag(\'phpcms\', \'tag_content_cat_pic\', "SELECT a.contentid,a.catid,a.typeid,a.areaid,a.title,a.style,a.thumb,a.keywords,a.description,a.userid,a.updatetime,a.inputtime,a.posids,a.url FROM `phpcms2008_content` a, `phpcms2008_content_position` p WHERE a.contentid=p.contentid AND p.posid=2 AND a.status=99   AND  `thumb`!=\'\'  ORDER BY a.contentid DESC", 0, 10, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'height\' => \'62\',  \'width\' => \'90\',  \'titlelen\' => \'46\',))',
+    'tagcode' => 'tag(\'phpcms\', \'tag_content_cat_pic\', "SELECT a.contentid,a.catid,a.typeid,a.areaid,a.title,a.style,a.thumb,a.keywords,a.description,a.userid,a.updatetime,a.inputtime,a.posids,a.url FROM `phpcms2008_content` a, `phpcms2008_content_position` p WHERE a.contentid=p.contentid AND p.posid=2 AND a.status=99   AND  `thumb`!=\'\'  ORDER BY a.contentid DESC", 0, 10, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'height\' => \'62\',  \'width\' => \'87\',  \'titlelen\' => \'46\',))',
   ),
   '推荐图片文章' => 
   array (
@@ -791,7 +791,7 @@ return array (
     array (
       1 => 'url',
       2 => '_blank',
-      3 => '90',
+      3 => '87',
       4 => '142',
       5 => '16',
     ),
@@ -809,7 +809,7 @@ return array (
       'posids' => '0',
     ),
     'modelid' => '0',
-    'tagcode' => 'tag(\'phpcms\', \'tag_content_pic\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99   AND  `thumb`!=\'\' ".get_sql_catid($catid)." ORDER BY contentid DESC", 0, 4, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'height\' => \'90\',  \'width\' => \'142\',  \'titlelen\' => \'16\',))',
+    'tagcode' => 'tag(\'phpcms\', \'tag_content_pic\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99   AND  `thumb`!=\'\' ".get_sql_catid($catid)." ORDER BY contentid DESC", 0, 4, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'height\' => \'87\',  \'width\' => \'142\',  \'titlelen\' => \'16\',))',
   ),
   '二级栏目标题列表' => 
   array (
@@ -1355,7 +1355,7 @@ return array (
       2 => '_blank',
       3 => '24',
       4 => '141',
-      5 => '90',
+      5 => '87',
     ),
     'type' => 'content',
     'where' => 
@@ -1370,7 +1370,7 @@ return array (
       'posids' => '0',
     ),
     'modelid' => '0',
-    'tagcode' => 'tag(\'phpcms\', \'tag_content_pic_ul\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99  ".get_sql_catid($catid)." ORDER BY contentid DESC", $page, 36, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'titlelen\' => \'24\',  \'width\' => \'141\',  \'height\' => \'90\',), $catid)',
+    'tagcode' => 'tag(\'phpcms\', \'tag_content_pic_ul\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99  ".get_sql_catid($catid)." ORDER BY contentid DESC", $page, 36, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'titlelen\' => \'24\',  \'width\' => \'141\',  \'height\' => \'87\',), $catid)',
   ),
   '图片大栏目页标签' => 
   array (
@@ -1419,7 +1419,7 @@ return array (
       2 => '_blank',
       3 => '24',
       4 => '141',
-      5 => '90',
+      5 => '87',
     ),
     'type' => 'content',
     'where' => 
@@ -1435,7 +1435,7 @@ return array (
       'posids' => '0',
     ),
     'modelid' => '0',
-    'tagcode' => 'tag(\'phpcms\', \'tag_content_pic\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99   AND  `thumb`!=\'\' ".get_sql_catid($catid)." ORDER BY contentid DESC", 0, 8, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'titlelen\' => \'24\',  \'width\' => \'141\',  \'height\' => \'90\',))',
+    'tagcode' => 'tag(\'phpcms\', \'tag_content_pic\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99   AND  `thumb`!=\'\' ".get_sql_catid($catid)." ORDER BY contentid DESC", 0, 8, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'titlelen\' => \'24\',  \'width\' => \'141\',  \'height\' => \'87\',))',
   ),
   '图片子栏目循环推荐标签' => 
   array (
@@ -1976,7 +1976,7 @@ return array (
       1 => 'url',
       2 => '_blank',
       3 => '12',
-      4 => '90',
+      4 => '87',
       5 => '62',
     ),
     'type' => 'content',
@@ -1993,7 +1993,7 @@ return array (
       'posids' => '0',
     ),
     'modelid' => '0',
-    'tagcode' => 'tag(\'phpcms\', \'tag_content_pic\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99   AND  `thumb`!=\'\' ".get_sql_catid($catid)." ORDER BY contentid DESC", 0, 12, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'titlelen\' => \'12\',  \'width\' => \'90\',  \'height\' => \'62\',))',
+    'tagcode' => 'tag(\'phpcms\', \'tag_content_pic\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99   AND  `thumb`!=\'\' ".get_sql_catid($catid)." ORDER BY contentid DESC", 0, 12, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'titlelen\' => \'12\',  \'width\' => \'87\',  \'height\' => \'62\',))',
   ),
   '下载子栏目循环列表' => 
   array (
@@ -3523,7 +3523,7 @@ return array (
     array (
       1 => 'url',
       2 => '_blank',
-      3 => '90',
+      3 => '87',
       4 => '142',
       5 => '16',
     ),
@@ -3541,7 +3541,7 @@ return array (
       'posids' => '0',
     ),
     'modelid' => '0',
-    'tagcode' => 'tag(\'phpcms\', \'tag_content_pic\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99   AND  `typeid`=\'$typeid\'  AND  `thumb`!=\'\'  ORDER BY contentid DESC", 0, 4, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'height\' => \'90\',  \'width\' => \'142\',  \'titlelen\' => \'16\',))',
+    'tagcode' => 'tag(\'phpcms\', \'tag_content_pic\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99   AND  `typeid`=\'$typeid\'  AND  `thumb`!=\'\'  ORDER BY contentid DESC", 0, 4, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'height\' => \'87\',  \'width\' => \'142\',  \'titlelen\' => \'16\',))',
   ),
   '类别列表页标题列表' => 
   array (

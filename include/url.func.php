@@ -64,7 +64,7 @@ function avatar($userid)
 			$member_api = load('member_api.class.php', 'member', 'api');
 			$memberRelationRs=$member_api->get($userid,array('touserid','username'));
 			if($memberRelationRs['touserid']>0){
-				$avatar = UC_API."/avatar.php?uid=".$userid."&size=big";
+				$avatar = UC_API."/avatar.php?uid=".$memberRelationRs['touserid']."&size=big";
 			}
 		}
 	}

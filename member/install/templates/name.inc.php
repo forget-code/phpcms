@@ -29,5 +29,6 @@ return array (
   'upgrade_view.html' => '等级详细信息查看',
   'upload.html' => '上传头像',
   'view.html' => '用户详细信息',
+  'collect.html' => '会员收藏',
 );
 ?>

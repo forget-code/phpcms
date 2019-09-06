@@ -2,6 +2,7 @@
 define('IN_YP', TRUE);
 define('ADMIN_ROOT', str_replace("\\", '/',dirname(__FILE__)).'/');
 require '../include/common.inc.php';
+
 if(!$_userid) showmessage('您还没有登陆，即将跳转到登陆页面',$MODULE['member']['url'].'login.php?forward='.urlencode(URL));
 session_start();
 require_once MOD_ROOT.'include/output.func.php';

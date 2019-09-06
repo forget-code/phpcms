@@ -53,7 +53,10 @@ class database
 			$offset = 100;
 			if(!$startfrom)
 			{
-				$tabledump .= "DROP TABLE IF EXISTS `$tables[$i]`;\n";
+				if($tables[$i]!=DB_PRE.'session')
+				{
+					$tabledump .= "DROP TABLE IF EXISTS `$tables[$i]`;\n";
+				}
 				$createtable = $this->db->query("SHOW CREATE TABLE `$tables[$i]` ");
 				$create = $this->db->fetch_row($createtable);
 				$tabledump .= $create[1].";\n\n";
@@ -65,11 +68,16 @@ class database
 				{
 					$tabledump = preg_replace("/(DEFAULT)*\s*CHARSET=[a-zA-Z0-9]+/", "DEFAULT CHARSET=".$sqlcharset, $tabledump);
 				}
-			}
 
+				if($tables[$i]==DB_PRE.'session')
+				{
+					$tabledump = str_replace("CREATE TABLE `".DB_PRE."session`", "CREATE TABLE IF NOT EXISTS `".DB_PRE."session`", $tabledump);
+				}
+			}
 			$numrows = $offset;
 			while(strlen($tabledump) < $sizelimit * 1000 && $numrows == $offset)
 			{
+				if($tables[$i]==DB_PRE.'session' || $tables[$i]==DB_PRE.'member_cache') break;
 				$rows = $this->db->query("SELECT * FROM `$tables[$i]` LIMIT $startfrom, $offset");
 				$numfields = $this->db->num_fields($rows);
 				$numrows = $this->db->num_rows($rows);
@@ -104,7 +112,7 @@ class database
 			file_put_contents($bakfile, $tabledump);
 			@chmod($bakfile, 0777);
 			if(!EXECUTION_SQL) $filename = '分卷：'.$altid.'#';
-			showmessage($this->lang['bak_file']." $filename ".$this->lang['write_success'], '?mod='.$this->mod.'&file='.$this->file.'&action='.$action.'&sizelimit='.$sizelimit.'&sqlcompat='.$sqlcompat.'&sqlcharset='.$sqlcharset.'&tableid='.$tableid.'&fileid='.$fileid.'&startfrom='.$startrow.'&random='.$random.'&dosubmit=1&tabletype='.$tabletype);
+			showmessage($this->lang['bak_file']." $filename ".$this->lang['write_success'], '?mod='.$this->mod.'&file='.$this->file.'&action='.$action.'&sizelimit='.$sizelimit.'&sqlcompat='.$sqlcompat.'&sqlcharset='.$sqlcharset.'&tableid='.$tableid.'&fileid='.$fileid.'&startfrom='.$startrow.'&random='.$random.'&dosubmit=1&tabletype='.$tabletype.'&allow='.$allow);
 		}
 		else
 		{

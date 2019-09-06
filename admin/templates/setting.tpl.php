@@ -344,6 +344,12 @@ areaid_load(0);
       <th><strong>前台同一IP 24小时内允许上传附件的最大个数</strong></th>
       <td><input name='setconfig[UPLOAD_MAXUPLOADS]' type='text' id='UPLOAD_MAXUPLOADS' value='<?=UPLOAD_MAXUPLOADS?>' size='5' maxlength='5'></td>
     </tr>
+	<tr>
+      <th><strong>前台是否允许游客上传附件</strong></th>
+      <td><input name='setting[allowtourist]' type='radio' value='1' <?php if($allowtourist){ ?>checked <?php } ?>>  是
+	  &nbsp;&nbsp;&nbsp;&nbsp;
+	  <input type='radio' name='setting[allowtourist]' value='0'  <?php if($allowtourist == 0){ ?>checked <?php } ?>> 否</td>
+    </tr>
     <tr>
       <td colspan="3" class="tablerowhighlight" align="center">图片附件处理</td>
     </tr>

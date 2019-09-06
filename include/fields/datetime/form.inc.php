@@ -1,3 +1,4 @@
+	
 	function datetime($field, $value, $fieldinfo)
 	{
 		extract($fieldinfo);
@@ -6,9 +7,18 @@
 			if($defaulttype == 0)
 			{
 				$value = '';
+				$dateformat == 'datetime' ? 'Y-m-d H:i:s' : 'Y-m-d';
+				$isdatetime = $dateformat == 'datetime' ? 1 : 0;
+				if($dateformat == 'int')
+				{
+					if($format=='Y-m-d H:i:s' || $format=='Y-m-d H:i')
+					$isdatetime = 1;
+					else $isdatetime = 0;
+				}
 			}
 			elseif($defaulttype == 1)
 			{
+				
 				$df = $dateformat == 'datetime' ? 'Y-m-d H:i:s' : 'Y-m-d';
 				$isdatetime = $dateformat == 'datetime' ? 1 : 0;
 				if($dateformat == 'int')
@@ -18,6 +28,7 @@
 					$isdatetime = 1;
 					else $isdatetime = 0;
 				}
+				
 				$value = date($df, TIME);
 			}
 			else
@@ -28,7 +39,7 @@
 		else
 		{
 			if(substr($value, 0, 10) == '0000-00-00') $value = '';
-			if($defaulttype == 1 && $dateformat == 'int')
+			if($dateformat == 'int')
 			{
 				$value = date('Y-m-d H:i:s', $value);
 				if($format=='Y-m-d H:i:s' || $format=='Y-m-d H:i')

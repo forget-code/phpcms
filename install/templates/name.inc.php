@@ -62,5 +62,14 @@ return array (
   'type.html' => '分类首页',
   'type_list.html' => '分类列表页',
   'upload_field.html' => '内容模型前台上传',
+  'category_video.html' => '视频栏目页',
+  'downfiles.html' => '下载页',
+  'list_ku6video.html' => '',
+  'list_video.html' => '视频列表页',
+  'play.html' => '播放页',
+  'show_ku6.html' => '',
+  'show_video.html' => '视频内容页',
+  'tag_content_video.html' => '[标签]视频标签',
+  'tag_content_videolist.html' => '',
 );
 ?>

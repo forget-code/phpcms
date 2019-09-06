@@ -93,7 +93,7 @@ function alterUC(eID) {
           </tbody>
           <tbody id="flashid" style="display:none">
             <tr>
-              <td> FLASH地址：&nbsp;<?=form::file("flash", 'flash')?><input type='hidden' name="ads[flashurl]" value="<?=$_ads['flashurl']?>"><font color="red">*</font><br/>
+              <td> FLASH地址：&nbsp;<input type="text" name="ads[flashurl]" id="flashurl" value="" size="50" class="" /> <input type="button" name="ads[flashurl]_upimage" id="flashurl_upimage" value="上传FLASH" style="width:70px" onclick="javascript:openwinx('?mod=phpcms&file=upload&uploadtext=flashurl','upload','380','350')"/><input type='hidden' name="ads[flashurl]" value="<?=$_ads['flashurl']?>"><font color="red">*</font><br/>
                 背景透明：
                 <input type='radio' name='ads[wmode]' value='transparent' <?php if($_ads['wmode']=='transparent') {?>checked<? }?>>
                 是

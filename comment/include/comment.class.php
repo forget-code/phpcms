@@ -28,16 +28,14 @@ class comment {
 		$result = $this->db->query("SELECT `commentid`,`username`,`support`,`against`,`ip`,`addtime`,`status`,`content`, `userid` FROM `$this->_comment_table` WHERE `keyid` = '{$keyid}' AND `status` = '1' ORDER BY `addtime` DESC limit $offset,$pagesize");
 		while($r = $this->db->fetch_array($result))
         {
-			//$r['content'] = preg_replace_callback("/\[smile_[0-9]{1,3}\]/", 'smilecallback', $r['content']);
 			$r['content'] = str_replace( '[quote]', '<div class="reply">', $r['content']);
 			$r['content'] = str_replace( '[blue]', '<div href="#" class ="blue"><p>', $r['content']);
 			$r['content'] = str_replace( '[/quote]', '</div>', $r['content']);
 			$r['content'] = str_replace( '[/blue]', '</p></div>', $r['content']);
-			$r['addtime'] = date('Y-m-d H:m:s',$r['addtime']);
+			$r['addtime'] = date('Y-m-d H:i:s',$r['addtime']);
             list($r['ip_area'], ) = explode(' ', $ip_area->get($r['ip']));
             $r['ip_area'] = $r['ip_area'].'网友';
 			$r['ip'] = preg_replace("/^([0-9]{1,3}\.[0-9]{1,3})\.[0-9]{1,3}\.[0-9]{1,3}$/", "\\1.*.*", $r['ip']);
-            //$r['ip'] = $r['ip'].'：';
             $userid = $r['userid'];
             if(!$r['userid'])
             {

@@ -765,6 +765,8 @@ function thumb($imgurl, $width = 100, $height = 100 ,$autocut = 1, $smallpic = '
 {
 	global $image;
 	if(empty($imgurl)) return $smallpic;
+	list($width_t, $height_t, $type, $attr) = getimagesize(PHPCMS_ROOT.$imgurl);
+	if($with>=$width_t || $height>=$height_t) return $imgurl;
 	if(!extension_loaded('gd') || strpos($imgurl, '://')) return $imgurl;
 	if(!file_exists(PHPCMS_ROOT.$imgurl)) return 'images/nopic.gif';
 	$newimgurl = dirname($imgurl).'/thumb_'.$width.'_'.$height.'_'.basename($imgurl);
@@ -945,7 +947,7 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 				{ 
 					$from = $pages-($page-2);  
 					$to = $pages-1;  
-				} 
+				}
 				$more = 1;
 			} 
 			if($urlrule == '') $urlrule = url_par('page={$page}');
@@ -955,25 +957,25 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 			
 			if($curr_page>0)
 			{
-				$multipage .= $catid ? '<a href="'.$url->category($catid, $curr_page-1, 1).'">上一页</a>' : '<a href="'.pageurl($urlrule, $curr_page-1, $array).'">上一页</a>';
+				$multipage .= $catid ? '<a href="'.$url->category($catid, $curr_page-1, 1, 1).'">上一页</a>' : '<a href="'.pageurl($urlrule, $curr_page-1, $array).'">上一页</a>';
 				if($curr_page==1)
 				{
 					$multipage .= '<u><b>1</b></u> ';
 				}
-				if($curr_page>6 && $more)
+				elseif($curr_page>6 && $more)
 				{
-					$multipage .= $catid ? '<a href="'.$url->category($catid, 1, 1).'">1</a>..' : '<a href="'.pageurl($urlrule, 1, $array).'">1</a>..';
+					$multipage .= $catid ? '<a href="'.$url->category($catid, 1, 1, 1).'">1</a>..' : '<a href="'.pageurl($urlrule, 1, $array).'">1</a>..';
 				}
 				else
 				{
-					$multipage .= $catid ? '<a href="'.$url->category($catid, 1, 1).'">1</a>' : '<a href="'.pageurl($urlrule, 1, $array).'">1</a> ';
+					$multipage .= $catid ? '<a href="'.$url->category($catid, 1, 1, 1).'">1</a>' : '<a href="'.pageurl($urlrule, 1, $array).'">1</a> ';
 				}
 			}
 			for($i = $from; $i <= $to; $i++) 
 			{ 
 				if($i != $curr_page) 
 				{ 
-					$multipage .= $catid ? '<a href="'.$url->category($catid, $i, 1).'">'.$i.'</a> ' : '<a href="'.pageurl($urlrule, $i, $array).'">'.$i.'</a> '; 
+					$multipage .= $catid ? '<a href="'.$url->category($catid, $i, 1, 1).'">'.$i.'</a> ' : '<a href="'.pageurl($urlrule, $i, $array).'">'.$i.'</a> '; 
 				}
 				else
 				{ 
@@ -984,11 +986,11 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 			{
 				if($curr_page<$pages-5 && $more)
 				{
-					$multipage .= $catid ? '..<a href="'.$url->category($catid, $pages, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1).'">下一页</a>' : '..<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">下一页</a>';
+					$multipage .= $catid ? '..<a href="'.$url->category($catid, $pages, 1, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1).'">下一页</a>' : '..<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">下一页</a>';
 				}
 				else
 				{
-					$multipage .= $catid ? '<a href="'.$url->category($catid, $pages, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1).'">下一页</a>' : '<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">下一页</a>';
+					$multipage .= $catid ? '<a href="'.$url->category($catid, $pages, 1, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1, 1).'">下一页</a>' : '<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">下一页</a>';
 				}
 			}
 			elseif($curr_page==$pages)
@@ -1014,11 +1016,11 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 		if($catid)
 		{
 			$url = load('url.class.php');
-			$firstpage = $url->category($catid, 1, 1);
-			$prepage = $url->category($catid, $prepage, 1);
-			$nextpage = $url->category($catid, $nextpage, 1);
-			$lastpage = $url->category($catid, $pages, 1);
-			$urlpre = $url->category($catid, '', 1);
+			$firstpage = $url->category($catid, 1, 1, 1);
+			$prepage = $url->category($catid, $prepage, 1, 1);
+			$nextpage = $url->category($catid, $nextpage, 1, 1);
+			$lastpage = $url->category($catid, $pages, 1, 1);
+			$urlpre = $url->category($catid, '', 1, 1);
 		}
 		else
 		{

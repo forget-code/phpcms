@@ -8,7 +8,7 @@ include admin_tpl('header');
     	<tr>
     		<th><font color="red">*</font><strong>名称</strong></th>
     		<td>
-       	 		<input type="text" name="info[name]" require="true" datatype="limit|ajax" min="1" max="10" msg="表单名称必须为大于1且小于10的字节数|" url="?mod=<?=$mod?>&file=<?=$file?>&action=checkmodel&formid=<?=$formid?>" value="<?=$name?>" />
+       	 		<input type="text" name="info[name]" require="true" datatype="limit|ajax" min="1" max="30" msg="表单名称必须为大于1且小于30的字节数|" url="?mod=<?=$mod?>&file=<?=$file?>&action=checkmodel&formid=<?=$formid?>" value="<?=$name?>" />
         </td>
         	</td>
     	</tr>

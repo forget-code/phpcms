@@ -66,7 +66,7 @@ switch ( $action )
         if($M['enablecheckcode'])
         {
             $code = form::checkcode('checkcode',5);
-            echo format_js($code);
+            echo $code;
         }
         else
         {

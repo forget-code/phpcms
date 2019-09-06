@@ -77,7 +77,7 @@ function get_tables()
 	});
 }
 $(function(){
-    $('#div_tables').load('?mod=phpcms&file=datasource&action=tables', {dbhost: <?=$dbhost?>, dbuser: <?=$dbuser?>, dbpw: <?=$dbpw?>, dbname: <?=$dbname?>, dbcharset: <?=$dbcharset?>});
+    $('#div_tables').load('?mod=phpcms&file=datasource&action=tables', {dbhost: '<?=$dbhost?>', dbuser: '<?=$dbuser?>', dbpw: '<?=$dbpw?>', dbname: '<?=$dbname?>', dbcharset: '<?=$dbcharset?>'});
 	$('form').checkForm(1);
 });
 </script>

@@ -61,7 +61,8 @@ class html
 		}
 		ob_start();
 		include template('phpcms', $template);
-		$file = PHPCMS_ROOT.$this->url->category($catid, $curpage);
+		$file_a = $this->url->category($catid, $curpage);
+		$file = PHPCMS_ROOT.$file_a[0];
 		return createhtml($file);
 	}
 
@@ -104,7 +105,7 @@ class html
 		}
 		if($r['status'] != 99) return true;
 		$info = $this->url->show($r['contentid'], 0, $r['catid'], $r['inputtime']);
-		$show_url_path = $info[1];
+		$show_url_path = $info[0];
 		unset($info);
 		$show_url_path = str_replace('.'.$PHPCMS['fileext'],'',$show_url_path);
 		$GLOBALS['show_url_path'] = $show_url_path;

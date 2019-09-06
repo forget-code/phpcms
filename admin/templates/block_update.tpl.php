@@ -8,7 +8,7 @@ include admin_tpl('header');
 <form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>" method="post" name="myform">
 <input type="hidden" name="forward" value="<?=$forward?>"> 
 <input type="hidden" name="blockid" value="<?=$blockid?>"> 
-<input type="hidden" name="name" value="<?=$name?>"> 
+<input type="hidden" name="blockname" value="<?=$name?>"> 
 <table cellpadding="0" cellspacing="1" class="table_list">
     <caption><?=$name?></caption>
 <?php 

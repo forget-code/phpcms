@@ -4,10 +4,15 @@ defined('IN_PHPCMS') or exit('Access Denied');
 require_once 'attachment.class.php';
 
 $attachment = new attachment($mod);
-
+if($catid)
+{
+	$C = cache_read('category_'.$catid.'.php');
+}
+$upload_allowext = $C['upload_allowext'] ? $C['upload_allowext'] : UPLOAD_ALLOWEXT;
+$upload_maxsize = $C['upload_maxsize'] ? $C['upload_maxsize'] : UPLOAD_MAXSIZE;
 if($dosubmit)
 {
-	$attachment->upload('uploadfile', UPLOAD_ALLOWEXT, UPLOAD_MAXSIZE, 1);
+	$attachment->upload('uploadfile', $upload_allowext, $upload_maxsize, 1);
 	if($attachment->error) showmessage($attachment->error());
 	$imgurl = UPLOAD_URL.$attachment->uploadedfiles[0]['filepath'];	
 	$aid = $attachment->uploadedfiles[0]['aid'];

@@ -3,7 +3,7 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
-<form method="post" id="myform" action="?mod=link&file=link&action=<?=$action?>" enctype="multipart/form-data" onsubmit="return Check()">
+<form method="post" name="myform" id="myform" action="?mod=link&file=link&action=<?=$action?>" enctype="multipart/form-data" onsubmit="return Check()">
 <table cellpadding="0" cellspacing="1" class="table_form">
 <caption>添加友情链接</caption>
 <tr>
@@ -23,7 +23,7 @@ include admin_tpl('header');
 
 <tr >
 	<th><strong>网站名称</strong></th>
-	<td><input name="name" id="name" size="30"  maxlength="20" require="true" datatype="require" msg="网站名称不能为空" msgid="msgid1">
+	<td><input name="linkname" id="linkname" size="30"  maxlength="20" require="true" datatype="require" msg="网站名称不能为空" msgid="msgid1">
 	<font color="#FF0000"> *</font><span id="msgid1"/></td>
 </tr>
 <tr >

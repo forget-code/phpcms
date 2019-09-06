@@ -9,3 +9,4 @@ Disallow: /fckeditor
 Disallow: /install
 Disallow: /count.php$
 Disallow: /admin.php$
+Disallow: /comment

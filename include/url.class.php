@@ -21,7 +21,7 @@ class url
 		return 'index.'.$this->PHPCMS['fileext'];
 	}
 
-	function category($catid, $page = 0, $isurls = 0)
+	function category($catid, $page = 0, $isurls = 0, $type = 3)
 	{
 		if(!isset($this->CATEGORY[$catid])) return false;
         $C = cache_read('category_'.$catid.'.php', '', 1);
@@ -40,30 +40,49 @@ class url
 		}
 		if(is_numeric($page)) $page = intval($page);
 		$arrparentids = explode(',',$C['arrparentid']);
-		$arrparentid = $arrparentids[1];
-		if($isurls && preg_match('/:\/\//',$this->CATEGORY[$arrparentid]['url']))
+		$domain_dir = $domain_url = '';
+		if(preg_match('/:\/\//', $C['url']) && (substr_count($C['url'], '/')<4))
 		{
-			$parentdir = $this->CATEGORY[$arrparentid]['catdir'];
-			$parentdir = substr($C['parentdir'],strlen($parentdir));
-			$categorydir = $parentdir.$C['catdir'];
-
-			$catdir = $C['catdir'];
-			$fileext = $this->PHPCMS['fileext'];
-			$urlrules = explode('|', $this->URLRULE[$urlruleid]);
-			$urlrule = $page === 0 ? $urlrules[0] : $urlrules[1];
-			eval("\$url = \"$urlrule\";");
-			$url = $this->CATEGORY[$arrparentid]['url'].$url;
+			$url_a[0] = $C['parentdir'].$C['catdir'].'/index.'.$this->PHPCMS['fileext'];
+			$url_a[1] = $C['url'];
+			return $type<3 ? $url_a[$type] : $url_a;
 		}
 		else
 		{
-			$categorydir = $C['parentdir'].$C['catdir'];
-			$catdir = $C['catdir'];
-			$fileext = $this->PHPCMS['fileext'];
-			$urlrules = explode('|', $this->URLRULE[$urlruleid]);
-			$urlrule = $page === 0 ? $urlrules[0] : $urlrules[1];
-			eval("\$url = \"$urlrule\";");
-		}		
-		return $url;
+			$count = count($arrparentids)-1;
+			for($i=$count; $i>=0; $i--)
+			{
+				if(preg_match('/:\/\//', $this->CATEGORY[$arrparentids[$i]]['url']) && (substr_count($this->CATEGORY[$arrparentids[$i]]['url'], '/')<4))
+				{
+					$domain_dir = $this->CATEGORY[$arrparentids[$i]]['parentdir'].$this->CATEGORY[$arrparentids[$i]]['catdir'].'/';
+					$domain_url = $this->CATEGORY[$arrparentids[$i]]['url'];
+					break;
+				}
+			}
+		}
+		$categorydir = $C['parentdir'].$C['catdir'];
+		$catdir = $C['catdir'];
+		$fileext = $this->PHPCMS['fileext'];
+		$urlrules = explode('|', $this->URLRULE[$urlruleid]);
+		$urlrule = $page === 0 ? $urlrules[0] : $urlrules[1];
+		eval("\$url = \"$urlrule\";");	
+		if($C['type']==0 && $this->MODEL[$modelid]['ishtml'] && $domain_dir)
+		{
+			if(strpos($url, $domain_dir)===false)
+			{
+				$url_a[0] = $domain_dir.$url;
+			}
+			else
+			{
+				$url_a[0] = $url;
+			}
+			$url_a[1] = str_replace($domain_dir, $domain_url.'/', $url_a[0]);
+		}
+		else
+		{
+			$url_a[0] = $url_a[1] = $url;
+		}
+		return $type<3 ? $url_a[$type] : $url_a;
 	}
 
 	function show($contentid, $page = 0, $catid = 0, $time = 0, $prefix = '')
@@ -78,11 +97,13 @@ class url
 				{
 					$base_name = basename($r['url']);
 					$fileext = fileext($base_name);
-					return preg_replace('/.'.$fileext.'$/','_'.$page.'.'.$fileext,$r['url']);
+					$url_a[0] = $url_a[1] = preg_replace('/.'.$fileext.'$/','_'.$page.'.'.$fileext,$r['url']);
+					return $url_a;
 				}
 				else
 				{
-					return $r['url'];
+					$url_a[0] = $url_a[1] = $r['url'];
+					return $url_a;
 				}
 			}
 			$catid = $r['catid'];

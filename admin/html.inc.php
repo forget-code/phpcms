@@ -69,7 +69,7 @@ switch($action)
 					if($page == 1)
 					{
 						$contents = cache_count("SELECT COUNT(*) AS `count` FROM `".DB_PRE."content` WHERE catid=$catid AND status=99");
-						$total = ceil($contents/$PHPCMS['pagesize'])+1;
+						$total = ceil($contents/$PHPCMS['pagesize']);
 						$pages = ceil($total/$pagesize);
 					}
 					$max = min($offset+$pagesize, $total);

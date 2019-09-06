@@ -31,6 +31,10 @@ function group_icon($userid)
 	global $db,$M;
 	$userid = intval($userid);
 	$r = $db->get_one("SELECT groupid FROM `".DB_PRE."member_cache` WHERE `userid`='$userid'");
+	if(!$M['groupimg'][$r['groupid']])
+	{
+		return "<img src='yp/images/gold.gif'>";
+	}
 	return "<img src='".$M['groupimg'][$r['groupid']]."'>";
 }
 ?>
