@@ -102,7 +102,12 @@ $LANG['vv_trend']					=	'视频流量趋势图';
 $LANG['search_video']					=	'搜索视频';
 $LANG['vv_total']					=	'搜索视频';
 
-
+$LANG['update_status']						=	'更新状态'; 
+$LANG['please_choose_video']				=	'请选择要查看的视频！'; 
+$LANG['not_exist_vidoe']					=	'视频库中不存在此视频！'; 
+$LANG['communication_failed']				=	'通信失败，请重试！'; 
+$LANG['video_status_update_successful']		=	'视频状态更新完成！'; 
+$LANG['video_status_not_change']			=	'视频状态未发生变化！'; 
 
 
 

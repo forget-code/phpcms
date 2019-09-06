@@ -15,6 +15,7 @@
 				$info = array();
 				if (!$v['title']) $v['title'] = safe_replace($this->data['title']);
 				if ($v['vid']) { 
+					$info['channelid'] = intval($_POST['channelid']);
 					$info = array('vid'=>$v['vid'], 'title'=>$v['title'], 'cid'=>intval($this->data['catid']));
 					if ($this->data['keywords']) $info['tag'] = addslashes($this->data['keywords']);
 					if ($this->data['description']) $info['description'] = addslashes($this->data['description']);

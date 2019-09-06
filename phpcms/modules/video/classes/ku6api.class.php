@@ -532,6 +532,25 @@ class ku6api {
 			return false;
 		}
 	}
+
+	/**
+	 * Function check_status
+	 * 登陆后台同时登陆vms
+	 * @param array $data
+	 */
+	public function check_status($vid = '') {
+		if (!$vid) return false;
+		//构造post数据
+		$postdata = array();
+		$postdata['method'] = 'VideoStatusCheck';
+		$postdata['vid'] = $vid;
+		//向vms post数据，并获取返回值
+		if ($data = $this->post($postdata)) {
+			return $data;
+		} else {
+			return false;
+		}
+	}
 	
 	/**
 	 * Function http
@@ -567,7 +586,7 @@ class ku6api {
 			}
 			return $get_data;
 		} else {
-			return false;
+			return $get_data;
 		}
 	}
 	

@@ -548,6 +548,76 @@ class video extends admin {
 		$show_header = 1;
 		include $this->admin_tpl('view_video');
 	}
+
+	/**
+	 *@ function public_check_status
+	 *@ 手动检查视频状态 
+	 */
+	public function public_check_status() {
+		$id = intval($_GET['id']);
+		if (!$id) exit('1');
+		$r = $this->db->get_one(array('videoid'=>$id), 'vid,channelid,status');
+		if (!$r) exit('2');
+		$return = $this->ku6api->check_status($r['vid']);
+		if (!$return) exit('3');
+
+		if ($return['ku6status'] != $r['status']) {
+			$status_arr = pc_base::load_config('ku6status_config');
+			$this->db->update(array('status'=>$return['ku6status'], 'picpath'=>$return['pcipath']), array('videoid'=>$id));
+			if ($return['ku6status']==21) {
+				/**
+				 * 加载视频内容对应关系数据模型，检索与删除视频相关的内容。
+				 * 在对应关系表中找出对应的内容id，并更新内容的静态页
+				 */
+				$video_content_db = pc_base::load_model('video_content_model');
+				$result = $video_content_db->select(array('videoid'=>$id));
+				if (is_array($result) && !empty($result)) {
+					//加载更新html类
+					$html = pc_base::load_app_class('html', 'content');
+					$content_db = pc_base::load_model('content_model');
+					$content_check_db = pc_base::load_model('content_check_model');
+					$url = pc_base::load_app_class('url', 'content');
+					foreach ($result as $rs) {
+						$modelid = intval($rs['modelid']);
+						$contentid = intval($rs['contentid']);
+						$content_db->set_model($modelid);
+						$c_info = $content_db->get_one(array('id'=>$contentid), 'thumb');
+
+						$where = array('status'=>99);
+						if (!$c_info['thumb']) $where['thumb'] = $return['picpath'];
+						$content_db->update($where, array('id'=>$contentid));
+						$checkid = 'c-'.$contentid.'-'.$modelid;
+						$content_check_db->delete(array('checkid'=>$checkid));
+						$table_name = $content_db->table_name;
+						$r1 = $content_db->get_one(array('id'=>$contentid));
+						/**
+						 * 判断如果内容页生成了静态页，则更新静态页
+						 */
+						if (ishtml($r1['catid'])) {
+							$content_db->table_name = $table_name.'_data';
+							$r2 = $content_db->get_one(array('id'=>$contentid));
+							$r = array_merge($r1, $r2);unset($r1, $r2);
+							if($r['upgrade']) {
+								$urls[1] = $r['url'];
+							} else {
+								$urls = $url->show($r['id'], '', $r['catid'], $r['inputtime']);
+							}
+							$html->show($urls[1], $r, 0, 'edit');
+							
+						} else {
+							continue;
+						}
+					}
+				}
+				$msg_r = json_encode(array('change'=>1, 'status'=>21, 'statusname'=>iconv(CHARSET, 'UTF-8', $status_arr[$return['ku6status']])));
+			} else {
+				$msg_r = json_encode(array('change'=>1, 'status'=>$return['ku6status'], 'statusname'=>iconv(CHARSET, 'UTF-8', $status_arr[$return['ku6status']])));
+			}
+		} else {
+			$msg_r = json_encode(array('change'=>0));
+		}
+		exit($msg_r);
+	}
 	
 	/***********2013.1.15添加**********/
 	
@@ -560,7 +630,7 @@ class video extends admin {
 			//配置不存在，则先验证域名是否存在，如果存在，直接跳去验证页面
 			$check_user_back = APP_PATH . 'api.php?op=video_api';
 			$return_check = $this->ku6api->check_user_back($check_user_back);
-			if($return_check==200){//存在同域名记录，进行email验证
+			if ($return_check==200 && SITE_URL != 'localhost' && !preg_match("/^(127|192|10)\.([1-2]?)([0-9]?)([0-9])\.([1-2]?)([0-9]?)([0-9])\.([1-2]?)([0-9]?)([0-9])/", SITE_URL)) {//存在同域名记录，进行email验证
 				header("Location: ".APP_PATH."index.php?m=video&c=video&a=check_user_back&meunid=".$_GET['meunid'].'&pc_hash='.$_GET['pc_hash']);
 				exit;
 			}

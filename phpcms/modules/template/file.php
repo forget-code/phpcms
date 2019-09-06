@@ -130,10 +130,10 @@ class file extends admin {
 	}
 	
 	public function visualization() {
-		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">';
 		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\'), '', urldecode(trim($_GET['dir']))) : showmessage(L('illegal_operation'), HTTP_REFERER);
 		$file = isset($_GET['file']) && trim($_GET['file']) ? trim($_GET['file']) : showmessage(L('illegal_operation'), HTTP_REFERER);
 		ob_start();
+		//include $this->admin_tpl('base_tool');
 		include template($dir,basename($file, '.html'),$this->style);
 		$html = ob_get_contents();
 		ob_clean();
@@ -264,7 +264,7 @@ class file extends admin {
 						}
 						if(!file_exists($filepath)) showmessage($filepath.L('file_does_not_exists'));
 						if (replace_pc_tag($filepath, $old_pc_tag, $pc_tag, $this->style, $dir)) {
-							showmessage('<script style="text/javascript">if(!window.top.right){parent.location.reload();}art.dialog({id:"edit"}).close();</script>', '', '', 'edit');
+							showmessage(L('operation_success').'<script style="text/javascript">top.art.dialog({id:"edit"}).close();</script>', '', '', 'edit');
 						} else {
 							showmessage(L('failure_the_document_may_not_to_write'));
 						}

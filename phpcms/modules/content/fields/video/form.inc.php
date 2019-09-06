@@ -186,12 +186,18 @@ swfobject.embedSWF("'.$flash_info['flashurl'].'", "ku6uploader", "450", "45", "1
 		}
 		$authkey = upload_key("$upload_number,$upload_allowext,$isselectimage");
 		$video_store_sel = defined('IN_ADMIN') ? '<div class="picBut cu video_btn" style="float:right; margin-top:10px;"><a herf="javascript:void(0);" onclick="javascript:video_store_select(\''.$field.'_videoes\', \''.L('choose_videoes').'\',\'video_'.$field.'_list\',change_videoes, \''.$_GET['pc_hash'].'\')"> '.L('videoes_store').' </a></div>' : '';
+		$vms_str = $flash_info['allow_upload_to_vms'] ? '<label class="ib cu" style="width:125px"><input type="radio" name="channelid" value="2">'. L('upload_to_ku6vms', '', 'video').' </label>' : '';
 		return $data.'<input name="info['.$field.']" type="hidden" value="1"><input type="hidden" id="key" value="'.$key.'"><fieldset class="blue pad-10">
         <legend>'.L('videoes_lists').'</legend><center><div class="onShow" id="nameTip">'.L('videoes_num').'</center><div id="videoes" class="picList">'.$list_str.'</div>
 		</fieldset>
 		
 		<table width="100%" border="0" cellspacing="1" class="tbb">
     <tbody><tr>
+      <td width="15%" height="40">'.L('select_upload_channel', '', 'video').'</td>
+      <td height="40"><label class="ib cu" style="width:125px"><input type="radio" name="channelid" value="1" checked> '.L('upload_to_ku6').' </label>'.$vms_str.'
+	  </td>
+    </tr>
+	<tr>
       <td width="15%" height="40"><div align="right" ><input class="input_style" type="text" value="'.L('video_title', '', 'video').'" name="video_title" id="video_title" size="10"></div></td>
       <td height="40">
 	  '.$video_store_sel.'

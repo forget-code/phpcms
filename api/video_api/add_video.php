@@ -77,7 +77,7 @@ if (!$data['title']) {
 	echo json_encode(array('msg'=>'The parameter title must have a value', 'code'=>3));
 	exit;
 }
-if (!$_POST['picpath'] || strripos($picurl,'.jpg')===false) {
+if (!$_POST['picpath'] || strripos($_POST['picpath'],'.jpg')===false) {
 	echo json_encode(array('msg'=>'The parameter picpath must have a value', 'code'=>5));
 	exit;
 }
@@ -98,6 +98,7 @@ if (!$video_store = $video_store_db->get_one(array('vid'=>$video_data['vid']))) 
 	$video_data['status'] = $_POST['ku6status'] ? intval($_POST['ku6status']) : 1;
 	$video_data['picpath'] = safe_replace( format_url($_POST['picpath']) );
 	$video_data['addtime'] = $_POST['createtime'] ? $_POST['createtime'] : SYS_TIME;
+	$video_data['channelid'] = 1;
 	if (strtolower(CHARSET)!='utf-8') {
 		$video_data = array_iconv($video_data, 'utf-8', 'gbk');
 	}

@@ -46,7 +46,7 @@ endif;
 <script type="text/javascript">
 <!--
 function edit(id, name) {
-	window.top.art.dialog({id:'edit'}).close();
+	
 	window.top.art.dialog({title:'<?php echo L('editing_data_sources_call')?>《'+name+'》',id:'edit',iframe:'?m=tag&c=tag&a=edit&id='+id,width:'700',height:'500'}, function(){var d = window.top.art.dialog({id:'edit'}).data.iframe;d.document.getElementById('dosubmit').click();return false;}, function(){window.top.art.dialog({id:'edit'}).close()});
 }
 

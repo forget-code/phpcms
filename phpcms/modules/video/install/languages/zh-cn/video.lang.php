@@ -58,4 +58,56 @@ $LANG['import_select_ku6video']				=	'导入所选视频';
 $LANG['ku6video_preview']					=	'点击预览该视频'; 
 $LANG['ku6video_edittitle']					=	'点击可修改标题哦！'; 
 $LANG['delete_this_video']					=	'是否删除该视频?'; 
+$LANG['update_status']						=	'更新状态'; 
+$LANG['video_store']						=	'视频库';
+$LANG['view']								=	'预览';
+$LANG['succfull_create_index']				=	'操作完成。如果生成了静态，重新生成下视频模型的静态页！';
+
+
+/**2013.1.15后添加的资料*/
+$LANG['setting_notic']						=	'如果open api 地址发生变化，请您自行修改！';
+
+$LANG['player_name']						=	'播放器名称';
+$LANG['player_name']						=	'播放器名称';
+$LANG['thumb']								=	'缩略图';
+$LANG['default_player']						=	'默认播放器';
+$LANG['auto_play']							=	'自动播放';
+$LANG['auto_replay']						=	'自动重播';
+$LANG['show_player_share']					=	'显示分享';
+$LANG['show_player_elite']					=	'显示推荐';
+$LANG['click_setting']						=	'点击设置';
+$LANG['show_sound']							=	'播放声音';
+$LANG['not_support_attribute']				=	'该播放器不支持此属性';
+$LANG['select_upload_channel']				=	'选择服务提供商';
+$LANG['upload_to_ku6']						=	'上传到ku6';
+$LANG['upload_to_ku6vms']					=	'上传到ku6vms';
+$LANG['ku6video_priview']					=	'视频预览';
+
+/**新加语言包*/
+$LANG['login_to_snda']						=	'登录盛大通行证';
+$LANG['reg_to_snda']					=	'注册盛大通行证';
+$LANG['reg_new_member']					=	'注册新账号';
+$LANG['complete_info_open']					=	'完善资料申请开通';
+$LANG['forget_password']					=	'忘记密码';
+
+/**统计***/
+$LANG['today']						=	'今天';
+$LANG['yestoday']					=	'昨天';
+$LANG['this_week']					=	'本周';
+$LANG['this_month']					=	'本月';
+
+$LANG['today_vv']						=	'当日排行';
+$LANG['yestoday_vv']					=	'昨日排行';
+$LANG['this_week_vv']					=	'本周排行';
+$LANG['this_month_vv']					=	'本月排行';
+$LANG['vv_trend']					=	'视频流量趋势图';
+$LANG['search_video']					=	'搜索视频';
+$LANG['vv_total']					=	'搜索视频';
+
+$LANG['update_status']						=	'更新状态'; 
+$LANG['please_choose_video']				=	'请选择要查看的视频！'; 
+$LANG['not_exist_vidoe']					=	'视频库中不存在此视频！'; 
+$LANG['communication_failed']				=	'通信失败，请重试！'; 
+$LANG['video_status_update_successful']		=	'视频状态更新完成！'; 
+$LANG['video_status_not_change']			=	'视频状态未发生变化！'; 
 ?>
