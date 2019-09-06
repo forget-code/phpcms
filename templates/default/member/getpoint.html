@@ -1,0 +1,60 @@
+{template 'phpcms','header'}
+<table cellspacing="0" cellpadding="0" border="0" width="980" align="center">
+<tr>
+<td width="190" align="center" valign="top" bgcolor="#EBF6FB">
+{template 'member','left'}
+</td>
+<td width="20" valign="top">
+</td>
+<td width="770" valign="top">
+
+<form name='myform' action='{PHPCMS_PATH}member/exchange.php?action=getpoint' method='post'>
+  <table cellpadding="2" cellspacing="1" class="tableborder">
+    <tr>
+      <th colspan='2'>兑换点数</th>
+    </tr>
+    <tr>
+      <td width='120' align='right' class="tablerowhighlight" >用户名：</td>
+      <td class="tablerow" >{$_username}</td>
+    </tr>
+    <tr >
+      <td width='120' align='right'  class="tablerowhighlight" >资金余额：</td>
+      <td class="tablerow">{$_money} 元</td>
+    </tr>
+    <tr >
+      <td width='120' align='right'  class="tablerowhighlight" >可用积分：</td> 
+     <td class="tablerow">{$_credit} 分</td>
+    </tr>
+    <tr >
+      <td width='120' align='right'  class="tablerowhighlight" >可用点券数：</td>
+      <td class="tablerow">{$_point} 点</td>
+    </tr>
+    <tr >
+      <td width='120' align='right'  class="tablerowhighlight" >有效天数：</td>
+      <td class="tablerow">开始计算日期：{$_begindate}&nbsp;&nbsp;&nbsp;&nbsp;有效期：无限期<br>
+      </td>
+    </tr>
+    <tr >
+      <td width='120' align='right' class="tablerowhighlight" >兑换点券：</td>
+      <td class="tablerow" >
+        <input type='radio' name='changetype' value='1' checked>使用资金余额
+：        将 <input name='money' type='text' value='10' size='6' maxlength='8' style='text-align:center'> 元兑换成点数&nbsp;&nbsp;&nbsp;&nbsp;兑换比率：{$_PHPCMS['money2point']}
+        <br>
+        <input type='radio' name='changetype' value='0'>使用经验积分：
+        将 <input name='credit' type='text' value='10' size='6' maxlength='8' style='text-align:center'> 分兑换成点数&nbsp;&nbsp;&nbsp;&nbsp;兑换比率：{$_PHPCMS['credit2point']}      </td>
+    </tr>
+    <tr >
+      <td class="tablerowhighlight">
+      </td>
+      <td height='40' class="tablerow">
+        <input name='save' type='hidden' value='1'>
+        <input name='Submit' type='submit' id='Submit' value='执行兑换'>
+      </td>
+    </tr>
+  </table>
+</form>
+
+</td>
+</tr>
+</table>
+{template 'phpcms','footer'}

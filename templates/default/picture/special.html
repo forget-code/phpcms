@@ -1,0 +1,58 @@
+{template 'phpcms','header'}
+<table width="980" align="center" cellpadding="0"  cellspacing="0">
+  <tr>
+    <td width="210" valign="top" class="gray">
+	<table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
+      <tr>
+        <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
+        <td width="76%">推荐专题</td>
+        <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
+      </tr>
+    </table>
+<table width="190" cellpadding="0" cellspacing="0" class="mar_5" align="center">
+  <tr>
+    <td align="center" class="pic">
+<!--推荐专题，幻灯片显示-->
+{$slidespecial(0,$channelid,0,3,30,1,0,180,150,5000,-1)}
+	</td>
+  </tr>
+</table>
+      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar mar_5">
+        <tr>
+          <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
+          <td width="76%">推荐图片</td>
+          <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
+        </tr>
+    </table>
+{$picpicture(0,$channelid,0,1,0,0,5,28,0,1,0,1,1,0,150,150,1)}
+	</td>
+    <td width="10"></td>
+    <td width="760" valign="top">
+<!--位置导航-->
+   <table width="100%"  cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="position">当前位置：{$position}</td>
+      </tr>
+    </table>
+    <table width="100%" align="center" cellpadding="0" cellspacing="0">
+      <tr>
+        <td height="10"></td>
+      </tr>
+    </table>
+<!--搜索框-->
+<script language="Javascript" src="{PHPCMS_PATH}data/js/search.js"></script>
+	<table width="100%"  cellspacing="0" cellpadding="0" class="mar_10">
+      <tr>
+        <td class="titlebar" width="107">最新专题</td>
+        <td width="10" height="25"><img src="{$skindir}/images/tit3_r.jpg"></td>
+        <td class="bg_titlebar" width="602" align="right"><!--Temp--><a href="{$speciallisturl}" class="more">更多</a></td>
+        <td  width="37"><img src="{$skindir}/images/tit2_r.jpg"></td>
+      </tr>
+    </table>
+<!--专题列表-->
+{$speciallist(0,$channelid,0,0,10,50,100,0,0,3,120,90,1)}
+	</td>
+      </tr>
+    </table>
+
+	{template 'phpcms','footer'}

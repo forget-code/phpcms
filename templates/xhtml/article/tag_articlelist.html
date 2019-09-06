@@ -1,0 +1,13 @@
+{loop $articles $i $article}
+<li class="li_line">
+{if $datetype}<span class="px10 f_r">{$article[adddate]}</span>{/if}
+{$article[img]}{if $showcatname}{$article[catname]}{/if} <a href="{$article[url]}" title="{$article[alt]}" target="{$target}">{$article[title]}</a>
+{if $showhits}&nbsp;[点击:{$article[hits]}]{/if}
+{if $showauthor}&nbsp;[作者:{$article[author]}]{/if}
+{if $article[showcommentlink]}&nbsp;<a href="{PHPCMS_PATH}comment/?item=articleid&itemid={$article[articleid]}" target="_blank"><span class="f_red">评</span></a>{/if}
+{if $descriptionlen}</li><li><span class="tag_description">&nbsp;&nbsp;&nbsp;&nbsp;{$article[description]}</span>{/if}
+</li>
+{/loop}
+{if $pages}
+<li class="pages">{$pages}</li>
+{/if}

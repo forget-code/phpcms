@@ -1,0 +1,15 @@
+<table width="{$width}" height="{$height}" align="center" cellpadding="1" cellspacing="1">
+{loop $announces $i $announce}
+<tr>
+ <td class="announcelist">
+·<a href="{$announce[url]}" title="{$announce[title]}" target="{$target}" >{$announce[title]}</a>
+{if $datetype}[{$announce[addtime]}]{/if}
+{if $showauthor}[发布人：{$announce[username]}]{/if}
+ </td>
+</tr>
+{/loop}
+</table>
+
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

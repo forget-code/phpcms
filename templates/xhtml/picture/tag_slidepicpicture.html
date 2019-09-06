@@ -1,0 +1,35 @@
+<script type="text/javascript">
+//<![CDATA[
+{loop $pictures $i $picture}
+imgUrl{$i}="{$picture[flashpic]}";
+imgtext{$i}="{$picture[title]}"
+imgLink{$i}="{$picture[url]}";
+{/loop}
+if (navigator.appName == "Netscape")
+{document.write('<a href="'+imgLink0+'"><img src="'+imgUrl0+'" width="{$imgwidth}" height="{$imgheight}" border="0" class="slidepic" /><br> '+imgtext0+'</a> ')
+}
+else
+{
+	var focus_width={$imgwidth}
+
+	var focus_height={$imgheight}
+
+	var text_height=22
+
+	var swf_height = focus_height+text_height
+
+	var pics={$flash_pics}
+
+	var links={$flash_links}
+
+	var texts={$flash_texts}
+
+	
+	document.write('<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=6,0,0,0" width="'+ focus_width +'" height="'+ swf_height +'">');
+	document.write('<param name="allowScriptAccess" value="sameDomain"><param name="movie" value="{PHPCMS_PATH}images/focus.swf"><param name="quality" value="high"><param name="bgcolor" value="#F0F0F0">');
+	document.write('<param name="menu" value="false"><param name=wmode value="opaque">');
+	document.write('<param name="FlashVars" value="pics='+pics+'&links='+links+'&texts='+texts+'&borderwidth='+focus_width+'&borderheight='+focus_height+'&textheight='+text_height+'">');
+	document.write('<embed src="{PHPCMS_PATH}images/focus.swf" wmode="opaque" FlashVars="pics='+pics+'&links='+links+'&texts='+texts+'&borderwidth='+focus_width+'&borderheight='+focus_height+'&textheight='+text_height+'" menu="false" bgcolor="#F0F0F0" quality="high" width="'+ focus_width +'" height="'+ focus_height +'" allowScriptAccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />');		document.write('</object>');
+	}
+	//]]>
+	</script> 

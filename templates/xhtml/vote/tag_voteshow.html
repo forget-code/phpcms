@@ -1,0 +1,9 @@
+<li class="li_line"><b>{$subject}</b></li>
+<li><form action="{PHPCMS_PATH}vote/vote.php" method="post" target="_blank" name="voteform" >
+{loop $ops $op}<input name="{$voteoption}" type="{$type}" value="{$op[optionid]}" /> {$op[option]}<br />
+{/loop}
+<input name="voteid" type="hidden" value="{$voteid}" />
+<input name="referer" type="hidden" value="{PHPCMS_SITEURL}vote/show.php?voteid={$voteid}" />&nbsp;&nbsp;
+<input name="submit" type="submit" value="投 票" class="btn" /> &nbsp;&nbsp;
+<input name="show" type="button" value="结 果" onclick="window.open('{PHPCMS_SITEURL}vote/show.php?voteid={$voteid}')" class="btn" />
+</form></li>

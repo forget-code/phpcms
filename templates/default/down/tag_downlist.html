@@ -1,0 +1,23 @@
+<table width="96%" border="0" align="center" cellpadding="1" cellspacing="1">
+{loop $downs $i $down}
+{if $i%$cols==0}
+  <tr>
+{/if}
+    <td height="20" width="{$width}">
+{$down[img]} {$down[catname]} <a href="{$down[url]}" title="{$down[alt]}" target="{$target}">{$down[title]}</a>
+{if $showdowns}({$down[downs]}){/if}
+{if $showsize}({$down[filesize]}){/if}
+{if $showstars}({$down[stars]}){/if}
+{if $showauthor}[作者:{$down[author]}]{/if}
+{if $datetype}[{$down[adddate]}]{/if}
+{if $descriptionlen}<br/>{$down[introduce]}{/if}
+    </td>
+{if $i%$cols==($cols-1)}
+  </tr>
+{/if}
+{/loop}
+</table>
+
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

@@ -1,0 +1,14 @@
+{template 'phpcms','header'}
+<div class="main">
+<div class="main_content">
+	<div class="box_1">
+		<ul style="padding:6px;">
+		<li class="li_1"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />{$position}&gt;&gt;  {$title}</li>
+		<li class="li_line t_c">发布人：<a href="{PHPCMS_PATH}member/member.php?username={$username}" target="_blank">{$username}</a> 开始日期：{$fromdate} 结束日期：{$todate} 浏览次数：{$hits}</li>
+		<li> </li>
+		<li class="content">{$content}</li>
+		</ul>
+	</div>
+</div>
+</div>
+{template 'phpcms','footer'}

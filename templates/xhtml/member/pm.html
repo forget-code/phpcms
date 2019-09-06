@@ -1,0 +1,534 @@
+{template 'phpcms','header'}
+
+<div class="main">
+<div class="main_content">
+	<div class="main_left">
+
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />短信息</li>
+			</ul>
+			<!--//-->
+			{if $action=='send' || $action=='edit'}
+
+			<script type="text/javascript" src="{PHPCMS_PATH}fckeditor/fckeditor.js"></script>
+			<script type="text/javascript">
+			var editorBasePath = '{PHPCMS_PATH}fckeditor/';
+			var ChannelId = 0 ;
+			</script>
+
+			<script type="text/javascript">
+			window.onload = function()
+			{
+			var oFCKeditor = new FCKeditor('content') ;
+			oFCKeditor.BasePath	= editorBasePath ;
+			oFCKeditor.ReplaceTextarea() ;
+			}
+			</script>
+
+			<form method="post" name="myform" action="{PHPCMS_PATH}member/pm.php?action={$action}&submit=1" onsubmit="return doCheck()">
+			{if $action=='edit'}<input type="hidden" name="tousername" value="{$tousername}">
+			<input type="hidden" name="pmid" value="{$pmid}">{/if}
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+
+			<tr>
+			<th class="li_bg_1" colspan="2" class="li_bg_1">发送站内信件</th>
+			</tr>
+			<tr><td align="right" class="li_bg_1" width="10%">收件人:</td>
+			<td class="li_line" width="90%"><input type="text" name="tousername" size="55" value="{$tousername}" title="多个收件人请用','分隔，最多可以同时发送给5个人!"> &nbsp;
+			<select name="username" onchange='javascript:ChangeInput(this,document.myform.tousername)'>
+			<option>选择好友</option>
+			{loop $lists $list}
+			<option value="{$list[friendname]}">{$list[friendname]}</option>
+			{/loop}
+			</select></td></tr>
+			<tr>
+			<td align="right" class="li_bg_1">标 题:</td>
+			<td class="li_line"><input type="text" name="title" size="55" value="{$title}"></td>
+			</tr>
+
+			<tr>
+			<td class="li_line" colspan="2">
+			<textarea name="content" style="display:none">{$content}</textarea>
+			</td>
+			</tr>
+			<tr>
+			<td class="li_line">&nbsp; </td>
+			<td class="li_line">
+			<span class="smalltxt"><input type="checkbox" name="inbox" value="1"> 保存到发件箱</span> <input type="checkbox" name="toemail" value="1"> 同时发送邮件
+			</td>
+			</tr>
+			</table><br/>
+			<center>
+			<input type="submit" name="Submit" value=" 确定 "> &nbsp;&nbsp; 
+			<input type="hidden" name="unsend" value="0">
+			<input type="submit" name="Save" value=" 存草稿 " onClick="document.myform.unsend.value=1">
+			</center>
+			</form>
+			</td></tr></table><br/>
+
+		
+
+			{elseif $action=='view'}<!--查看信件-->
+
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<th class="li_bg_1">标题:{$pm['title']}</th>
+			</tr>
+
+			<tr>
+			<td class="li_line">来自:{$pm['fromusername']}&nbsp;&nbsp;&nbsp;时间:{$pm['posttime']} </td>
+			</tr>
+
+
+			<tr>
+			<td class="li_line">{$pm['content']}</td>
+			</tr>
+
+			<tr>
+			<td align="right" class="li_bg_1">
+			<a href="#" onclick="javascript:history.go(-1);">返回</a>
+			{if $pm['tousername']==$_username} | <a href="{PHPCMS_PATH}member/pm.php?action=addlist&type=0&username={$pm['fromusername']}">拒收</a> |
+			<a href="{PHPCMS_PATH}member/pm.php?action=torecycle&pmid={$pm['pmid']}">扔掉</a> |
+			<a href="{PHPCMS_PATH}member/pm.php?action=delete&pmid={$pm['pmid']}">删除</a> |
+			<a href="{PHPCMS_PATH}member/pm.php?action=send&tousername={$pm['fromusername']}">回复</a>{/if}
+			</td>
+			</tr>
+
+			</table>
+			<br />
+
+
+			{elseif $action=='search'}
+			<form method="get" name="searchform" action="{PHPCMS_PATH}member/pm.php">
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<th class="li_bg_1">信件搜索</th>
+			</tr>
+
+			<tr>
+			<td class="li_line">
+			关键字: <input type="text" name="keyword" size="25" value="">  <input type="radio" name="srchtype" value="0" {if !$srchtype}checked{/if}> 标题
+			<input type="radio" name="srchtype" value="1" {if $srchtype==1}checked{/if}> 发件人
+			<input type="radio" name="srchtype" value="2" {if $srchtype==2}checked{/if}> 内容&nbsp;&nbsp;
+			<select name="action">
+			<option value="inbox">收件箱</option>
+			<option value="outbox">发件箱</option>
+			<option value="draft">草稿箱</option>
+			<option value="recycle">垃圾箱</option>
+			</select>&nbsp;&nbsp;
+			<input type="submit" name="submit" value="提 &nbsp;交"><input type="hidden" name="submit" value="1"></td>
+			</tr>
+			</form>
+			</table>
+
+			<br/>
+
+
+			{elseif $action=='tract'}
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<th class="li_bg_1" colspan="5">信息追踪</th>
+			</tr>
+
+			<tr align="center">
+			<td class="li_bg_1">标题</td>
+			<td class="li_bg_1" width="100">收件人</td>
+			<td class="li_bg_1" width="130">时间</td>
+			<td class="li_bg_1" width="40">已读</td>
+			<td class="li_bg_1" width="160">操作</td>
+			</tr>
+			{if $pms}
+			{loop $pms $pm}
+			<tr class="li_line" align="center">
+			<td class="li_line" align="left"><a href="{PHPCMS_PATH}member/pm.php?action=view&pmid={$pm['pmid']}">{$pm['title']}</a></td>
+			<td class="li_line"><a href="{PHPCMS_PATH}member/pm.php?fromusername={$pm['tousername']}" title="列出[{$pm['tousername']}]的所有来信">{$pm['tousername']}</a></td>
+			<td class="li_line"><span style="font-size:10px">{$pm['posttime']}</span></td>
+			<td class="li_line">{if $pm['new']}<font color="red">否</font>{else}是{/if}</td>
+			<td class="li_line" title="提示:已读信件不能再进行编辑或删除!">
+			{if $pm['new']}<a href="{PHPCMS_PATH}member/pm.php?action=edit&pmid={$pm['pmid']}">编辑</a>{else}编辑{/if} |
+			{if $pm['new']}<a href="{PHPCMS_PATH}member/pm.php?action=deleted&pmid={$pm['pmid']}">删除</a>{else}删除{/if} |
+			{if $pm['new']}<a href="{PHPCMS_PATH}member/pm.php?action=unsend&pmid={$pm['pmid']}">取消</a>{else}取消{/if}
+			</td>
+			</tr>
+			{/loop}
+
+			<tr>
+			<td height="30" align="center" colspan="5" class="li_bg_1">{$pages}</td>
+			</tr>
+			{else}
+			<tr>
+			<td height="30" align="center" colspan="5" class="li_line" class="li_bg_1">抱歉！没有找到任何记录！</td>
+			</tr>
+			{/if}
+			</table>
+
+
+			<br />
+
+			<form method="get" name="searchform" action="{PHPCMS_PATH}member/pm.php">
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<td class="li_line"><input type="hidden" name="action" value="tract"><input type="hidden" name="submit" value="1">
+			关键字: <input type="text" name="keyword" size="25" value="">  <input type="radio" name="srchtype" value="0" checked> 标题 <input type="radio" name="srchtype" value="1">收件人
+			<input type="radio" name="srchtype" value="2"> 内容
+			</select>
+			<input type="submit" name="submit" value="信件搜索">
+			<input type="button" onclick="javascript:history.go(-1)" value="返&nbsp回"></td>
+			</tr>
+			</form>
+			</table>
+
+			<br />
+
+			{elseif $action=='draft'}
+
+			<form method="post" name="myform">
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+
+			<tr>
+			<th class="li_bg_1" colspan="5">草稿箱</th>
+			</tr>
+
+			<tr align="center">
+			<td class="li_bg_1" width="48"><input type="checkbox" name="chkall" onclick="checkall(this.form)">全选</td>
+			<td class="li_bg_1">标题</td>
+			<td class="li_bg_1" width="100">收件人</td>
+			<td class="li_bg_1" width="130">时间</td>
+			<td class="li_bg_1" width="70">操作</td>
+			</tr>
+			{if $pms}
+			{loop $pms $pm}
+			<tr class="li_line" align="center">
+			<td class="li_line"><input type="checkbox" name="pmid[]" value="{$pm['pmid']}"></td>
+			<td class="li_line" align="left"><a href="{PHPCMS_PATH}member/pm.php?action=view&pmid={$pm['pmid']}">{$pm['title']}</a></td>
+			<td class="li_line"><a href="{PHPCMS_PATH}member/pm.php?fromusername={$pm['tousername']}" title="列出[{$pm['fromusername']}]的所有信件">{$pm['tousername']}</a></td>
+			<td class="li_line"><span style="font-size:10px">{$pm['posttime']}</span></td>
+			<td class="li_line">
+			<a href="{PHPCMS_PATH}member/pm.php?action=edit&pmid={$pm['pmid']}">编辑</a> |
+			<a href="{PHPCMS_PATH}member/pm.php?action=deleted&pmid={$pm['pmid']}">删除</a>
+			</td>
+			</tr>
+			{/loop}
+
+			<tr>
+			<td height="30" align="center" colspan="5" class="li_bg_1">{$pages}</td>
+			</tr>
+			{else}
+			<tr>
+			<td height="30" align="center" colspan="5" class="li_bg_1">抱歉！没有找到任何记录！</td>
+			</tr>
+			{/if}
+			</table><br />
+			<center>
+			<input type="submit" name="submit" value="删除选中的信件" onClick="document.myform.action='?action=deleted'">
+			&nbsp;&nbsp;
+			<input type="button" onclick="window.location.reload()" value="刷新此页">
+			</center>
+			</form>
+
+			<br />
+
+			<form method="get" name="searchform" action="{PHPCMS_PATH}member/pm.php">
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<td class="li_line"><input type="hidden" name="action" value="draft"><input type="hidden" name="submit" value="1">
+			关键字: <input type="text" name="keyword" size="25" value="">  <input type="radio" name="srchtype" value="0" checked> 标题 <input type="radio" name="srchtype" value="1">发件人
+			<input type="radio" name="srchtype" value="2"> 内容
+			</select>
+			<input type="submit" name="submit" value="信件搜索">
+			<input type="button" onclick="javascript:history.go(-1)" value="返&nbsp回"></td>
+			</tr>
+			</form>
+			</table>
+			<br />
+			{elseif $action=='outbox'}
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<th class="li_bg_1" colspan="5">发件箱</th>
+			</tr>
+			<tr align="center">
+			<td class="li_bg_1">标题</td>
+			<td class="li_bg_1" width="100">收件人</td>
+			<td class="li_bg_1" width="130">时间</td>
+			<td class="li_bg_1" width="40">已读</td>
+			<td class="li_bg_1" width="160">操作</td>
+			</tr>
+			{if $pms}
+			{loop $pms $pm}
+			<tr class="li_line" align="center">
+			<td class="li_line" align="left"><a href="{PHPCMS_PATH}member/pm.php?action=view&pmid={$pm['pmid']}">{$pm['title']}</a></td>
+			<td class="li_line"><a href="{PHPCMS_PATH}member/pm.php?fromusername={$pm['tousername']}" title="列出[{$pm['fromusername']}]的所有信件">{$pm['tousername']}</a></td>
+			<td class="li_line"><span style="font-size:10px">{$pm['posttime']}</span></td>
+			<td class="li_line">{if $pm['new']}<font color="red">否</font>{else}是{/if}</td>
+			<td class="li_line">
+			{if $pm['new']}<a href="{PHPCMS_PATH}member/pm.php?action=edit&pmid={$pm['pmid']}">编辑</a>{else}编辑{/if} |
+			{if $pm['new']}<a href="{PHPCMS_PATH}member/pm.php?action=deleted&pmid={$pm['pmid']}" title="删除此信件">删除</a>{else}删除{/if} |
+			<a href="{PHPCMS_PATH}member/pm.php?action=deleteoutbox&pmid={$pm['pmid']}" title="从发件箱中删除">扔掉</a> |
+			<a href="{PHPCMS_PATH}member/pm.php?action=send&tousername={$pm['tousername']}">新信件</a>
+			</td>
+			</tr>
+			{/loop}
+
+			<tr>
+			<td height="30" align="center" colspan="5" class="li_bg_1">{$pages}</td>
+			</tr>
+
+			{else}
+			<tr>
+			<td height="30" align="center" colspan="5" class="li_bg_1">抱歉！没有找到任何记录！</td>
+			</tr>
+			{/if}
+			</table>
+			<br />
+
+			<form method="get" name="searchform" action="{PHPCMS_PATH}member/pm.php">
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<td class="li_line"><input type="hidden" name="action" value="outbox"><input type="hidden" name="submit" value="1">
+			关键字: <input type="text" name="keyword" size="25" value="">  <input type="radio" name="srchtype" value="0" checked> 标题 <input type="radio" name="srchtype" value="1">发件人
+			<input type="radio" name="srchtype" value="2"> 内容
+			</select>
+			<input type="submit" name="submit" value="信件搜索">
+			<input type="button" onclick="javascript:history.go(-1)" value="返&nbsp回"></td>
+			</tr>
+			</form>
+			</table>
+
+			<br />
+
+			{elseif $action=='recycle'}
+			<form method="post" name="myform">
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<th class="li_bg_1" colspan="6">垃圾箱</th>
+			</tr>
+			<tr align="center">
+			<td class="li_bg_1" width="48"><input type="checkbox" name="chkall" onclick="checkall(this.form)">全选</td>
+			<td class="li_bg_1">标题</td>
+			<td class="li_bg_1" width="100">来自</td>
+			<td class="li_bg_1" width="130">时间</td>
+			<td class="li_bg_1" width="40">已读</td>
+			<td class="li_bg_1" width="80">操作</td>
+			</tr>
+			{if $pms}
+			{loop $pms $pm}
+			<tr class="li_line" align="center">
+			<td class="li_line"><input type="checkbox" name="pmid[]" value="{$pm['pmid']}"></td>
+			<td class="li_line" align="left"><a href="{PHPCMS_PATH}member/pm.php?action=view&pmid={$pm['pmid']}">{$pm['title']}</a></td>
+			<td class="li_line"><a href="{PHPCMS_PATH}member/pm.php?fromusername={$pm['fromusername']}" title="列出[{$pm['fromusername']}]的所有信件">{$pm['fromusername']}</a></td>
+			<td class="li_line"><span style="font-size:10px">{$pm['posttime']}</span></td>
+			<td class="li_line">{if $pm['new']}<font color="red">否</font>{else}是{/if}</td>
+			<td class="li_line">
+			<a href="{PHPCMS_PATH}member/pm.php?action=unrecycle&pmid={$pm['pmid']}">还原</a> |
+			<a href="{PHPCMS_PATH}member/pm.php?action=delete&pmid={$pm['pmid']}">删除</a>
+			</td>
+			</tr>
+			{/loop}
+
+			<tr>
+			<td height="30" align="center" colspan="6" class="li_bg_1">{$pages}</td>
+			</tr>
+			{else}
+			<tr>
+			<td height="30" align="center" colspan="6" class="li_bg_1">抱歉！没有找到任何记录！</td>
+			</tr>
+			{/if}
+			</table><br />
+			<center>
+			<input name="submit" type="submit" value="还原选中的信件" onClick="document.myform.action='?action=unrecycle'" >&nbsp;&nbsp;
+			<input type="submit" name="submit" value="删除选中的信件" onClick="document.myform.action='?action=delete'">
+			&nbsp;&nbsp;
+			<input type="button" onclick="window.location.reload()" value="刷新此页">
+			</center>
+			</form>
+
+			<br />
+
+			<form method="get" name="searchform" action="{PHPCMS_PATH}member/pm.php">
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<td class="li_line"><input type="hidden" name="action" value="recycle"><input type="hidden" name="submit" value="1">
+			关键字: <input type="text" name="keyword" size="25" value="">  <input type="radio" name="srchtype" value="0" checked> 标题 <input type="radio" name="srchtype" value="1">发件人
+			<input type="radio" name="srchtype" value="2"> 内容
+			</select>
+			<input type="submit" name="submit" value="信件搜索">
+			<input type="button" onclick="javascript:history.go(-1)" value="返&nbsp回"></td>
+			</tr>
+			</form>
+			</table>
+
+			<br />
+			<!------------------>
+			{elseif $action=='addresslist'}
+			<form name="myform" method="post" action="{PHPCMS_PATH}member/pm.php?action=updatelistorder">
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<th class="li_bg_1" colspan="6">通讯录</th>
+			</tr>
+
+			<tr align="center">
+			<td class="li_bg_1" width="50">排序</td>
+			<td class="li_bg_1" width="120">用户名</td>
+			<td class="li_bg_1">Email</td>
+			<td class="li_bg_1" width="100">时间</td>
+			<td class="li_bg_1" width="250">操作</td>
+			</tr>
+			{if $lists}
+			{loop $lists $list}
+			<tr class="li_line" align="center">
+			<td class="li_line"><input size=4 name="orderid[{$list[friendname]}]" type=text value="{$list[orderid]}"></td>
+			<td class="li_line" align="left"><a href="{PHPCMS_PATH}member/pm.php?fromusername={$list['friendname']}" title="列出[{$list['friendname']}]的所有信件">{$list['friendname']}</a></td>
+			<td class="li_line">{$list['email']}</td>
+			<td class="li_line">{$list['addtime']}</td>
+			<td class="li_line">
+			<a href="{PHPCMS_PATH}member/pm.php?action=send&tousername={$list[friendname]}">给他/她发信</a> |
+			<a href="{PHPCMS_PATH}member/pm.php?fromusername={$list['friendname']}" target="_blank">列出来信</a> |
+			<a href="{PHPCMS_PATH}member/member.php?username={$list[friendname]}" target="_blank">查看资料</a> |
+			<a href="{PHPCMS_PATH}member/pm.php?action=deletelist&username={$list['friendname']}">删除</a>
+			</td>
+			</tr>
+			{/loop}
+
+			<tr>
+			<td height="30" align="center" colspan="5" class="li_bg_1">{$pages}</td>
+			</tr>
+			{else}
+			<tr>
+			<td height="30" align="center" colspan="5" class="li_bg_1">抱歉！没有找到任何记录！</td>
+			</tr>
+			{/if}
+
+			<tr>
+			<td  colspan="2" align="center" class="li_line"><input type="submit" name="submit" value=" 更新排序 "></form></td>
+			<td colspan="3" class="li_line"><form method="get" name="searchform" action="{PHPCMS_PATH}member/pm.php">
+			用户名:<input type="hidden" name="action" value="addlist"><input type="hidden" name="type" value="1">
+			<input type="text" name="username" size="25" value="">
+			<input type="submit" name="submit" value="添加到通讯录"></form> </td>
+			</tr>
+
+			</table><br />
+
+
+
+			{elseif $action=='blacklist'}
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<th class="li_bg_1"> 黑名单</th>
+			</tr>
+			<tr>
+			<td class="li_line">{if $lists}
+			{loop $lists $list}
+			<a href="{PHPCMS_PATH}member/pm.php?action=deletelist&username={$list['friendname']}">{$list[friendname]}</a>&nbsp;
+			{/loop}
+			{else}
+			抱歉！没有找到任何记录！
+			{/if}
+			</td>
+			</tr>
+			<table>
+			<br />
+
+			<form method="get" name="searchform" action="{PHPCMS_PATH}member/pm.php">
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<td class="li_line">用户名:<input type="hidden" name="action" value="addlist"><input type="hidden" name="type" value="0">
+			<input type="text" name="username" size="25" value="">
+			<input type="submit" name="submit" value="添加到黑名单"> 提示:点击用户名可以把用户从黑名单中删除!</td>
+			</tr>
+			</form>
+			</table>
+
+			<br />
+
+
+			{else}
+
+			<form method="post" name="myform">
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<th class="li_bg_1" colspan="6">收件箱</th>
+			</tr>
+			<tr align="center">
+			<td class="li_bg_1" width="50"><input type="checkbox" name="chkall" onclick="checkall(this.form)">全选</td>
+			<td class="li_bg_1">标题</td>
+			<td class="li_bg_1" width="100">来自</td>
+			<td class="li_bg_1" width="130">时间</td>
+			<td class="li_bg_1" width="40">已读</td>
+			<td class="li_bg_1" width="145">操作</td>
+			</tr>
+
+			{loop $syss $sys}
+			<tr class="li_line" align="center">
+			<td class="li_line"><font color="red">[注意]</font></td>
+			<td class="li_line" align="left"><a href="{PHPCMS_PATH}member/pm.php?action=view&pmid={$sys['pmid']}"><font color="red">{$sys['title']}</font></a></td>
+			<td class="li_line"> {$sys['fromusername']} </td>
+			<td class="li_line"><span style="font-size:10px">{$sys['posttime']}</span></td>
+			<td class="li_line"> - </td>
+			<td class="li_line">
+			System Message
+			</td>
+			</tr>
+			{/loop}
+
+
+			{if $pms}
+			{loop $pms $pm}
+			<tr class="li_line" align="center">
+			<td class="li_line"><input type="checkbox" name="pmid[]" value="{$pm['pmid']}"></td>
+			<td class="li_line" align="left"><a href="{PHPCMS_PATH}member/pm.php?action=view&pmid={$pm['pmid']}">{if $pm['new']}<font color="green"><b>{$pm['title']}</b></font>{else}{$pm['title']}{/if}</a></td>
+			<td class="li_line"><a href="{PHPCMS_PATH}member/pm.php?fromusername={$pm['fromusername']}" title="列出[{$pm['fromusername']}]的所有来信">{$pm['fromusername']}</a></td>
+			<td class="li_line"><span style="font-size:10px">{$pm['posttime']}</span></td>
+			<td class="li_line">{if $pm['new']}<font color="red">否</font>{else}是{/if}</td>
+			<td class="li_line">
+			<a href="{PHPCMS_PATH}member/pm.php?action=send&tousername={$pm['fromusername']}">回复</a> |
+			<a href="{PHPCMS_PATH}member/pm.php?action=torecycle&pmid={$pm['pmid']}">扔掉</a> |
+			<a href="{PHPCMS_PATH}member/pm.php?action=delete&pmid={$pm['pmid']}">删除</a>
+			</td>
+			</tr>
+			{/loop}
+
+			<tr>
+			<td height="30" align="center" colspan="6" class="li_bg_1">{$pages}</td>
+			</tr>
+			{else}
+			<tr>
+			<td height="30" align="center" colspan="6" class="li_bg_1">抱歉！没有找到任何记录！</td>
+			</tr>
+			{/if}
+			</table>
+			<br />
+			<center>
+			<input name="submit" type="submit" value="扔掉选中的信件" onClick="document.myform.action='?action=torecycle'" >&nbsp;&nbsp;
+			<input type="submit" name="submit" value="删除选中的信件" onClick="document.myform.action='?action=delete'">&nbsp;&nbsp;
+			<input type="button" onclick="window.location.reload()" value="刷新此页">
+			</center>
+			</form>
+			<br />
+			<form method="get" name="searchform" action="{PHPCMS_PATH}member/pm.php">
+			<table cellpadding="1" cellspacing="1" border="0" width="100%" align="center">
+			<tr>
+			<td class="li_line"><input type="hidden" name="submit" value="1">
+			关键字: <input type="text" name="keyword" size="25" value="">  <input type="radio" name="srchtype" value="0" checked> 标题 <input type="radio" name="srchtype" value="1">发件人
+			<input type="radio" name="srchtype" value="2"> 内容
+			</select>
+			<input type="submit" name="submit" value="信件搜索">
+			<input type="button" onclick="javascript:history.go(-1)" value="返&nbsp回"></td>
+			</tr>
+			</form>
+			</table>
+			<br />
+			{/if}
+
+
+			<!--\\-->
+		</div>
+
+	</div>
+	<div class="main_right">
+	{template 'member','right'}
+	</div>
+</div>
+</div>
+{template 'phpcms','footer'}

@@ -1,0 +1,65 @@
+{template "phpcms","header"}
+
+<div class="main">
+<div class="main_content">
+	<div class="main_left">
+
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />兑换有效期</li>
+			</ul>
+			<table cellpadding="2" cellspacing="1" border="0" width="98%" align="center">
+			<form name="myform" action="{PHPCMS_PATH}member/exchange.php?action=gettime" method="post">
+			<tr>
+			<td align="right" class="li_bg_1"  width="120">用户名：</td>
+			<td class="li_line">{$_username}</td>
+			</tr>
+			<tr >
+			<td align="right"  class="li_bg_1">资金余额：</td>
+			<td class="li_line">{$_money} 元</td>
+			</tr>
+			<tr >
+			<td align="right"  class="li_bg_1">可用积分：</td> 
+			<td class="li_line">{$_credit} 分</td>
+			</tr>
+			<tr >
+			<td align="right"  class="li_bg_1">可用点券数：</td>
+			<td class="li_line">{$_point} 点</td>
+			</tr>
+			<tr >
+			<td align="right"  class="li_bg_1">有效期限：</td>
+			<td class="li_line">服务起始日期：{$_begindate}&nbsp;&nbsp;&nbsp;&nbsp;服务截止日期：{$_enddate}<br>
+			</td>
+			</tr>
+			<tr >
+			<td align="right" class="li_bg_1">兑换点券：</td>
+			<td class="li_line">
+			<input type="radio" name="changetype" value="1" checked>使用资金余额
+			：        将 <input name="money" type="text" value="10" size="6" maxlength="8" style="text-align:center"> 元兑换成天数&nbsp;&nbsp;&nbsp;&nbsp;兑换比率：1元资金兑换{$_PHPCMS["money2time"]}天
+			<br>
+			<input type="radio" name="changetype" value="0">使用经验积分：
+			将 <input name="credit" type="text" value="10" size="6" maxlength="8" style="text-align:center"> 分兑换成天数&nbsp;&nbsp;&nbsp;&nbsp;兑换比率：1个积分兑换{$_PHPCMS["credit2time"]}天      </td>
+			</tr>
+			<tr >
+			<td class="li_bg_1">
+			</td>
+			<td height="40" class="li_line">
+			<input name="save" type="hidden" value="1">
+			<input name="Submit" type="submit" id="Submit" value="执行兑换">
+			</td>
+			</tr>
+			<tr>
+			<td colspan="2" height="8"></td>
+			</tr>
+			</form>
+			</table>
+		</div>
+
+	</div>
+	<div class="main_right">
+	{template "member","right"}
+	</div>
+</div>
+</div>
+{template "phpcms","footer"}

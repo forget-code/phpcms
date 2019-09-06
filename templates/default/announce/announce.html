@@ -1,0 +1,40 @@
+{template 'phpcms','header'}
+<table width="980" cellspacing="0" cellpadding="0" align="center">
+   <tr>
+    <td class="position">{$position} >> {$title}>></td>
+   </tr>
+</table>
+<table width="980" align="center" cellpadding="0" cellspacing="1" class="mar_10">
+  <tr>
+    <td align="center" width="210" valign="top">
+      <table width="100%" valign="top" cellpadding="0" cellspacing="1" class="tableborder">
+        <tr>
+          <th align="center" >网站公告</th>
+        </tr>
+        <tr>
+          <td align="center"><!--公告列表-->
+{$announcelist(0,0,0,5,30,2,0,1,250,100)}
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td width="10"></td>
+    <td valign="top" width="760">
+      <table width="100%" valign="top" cellpadding="0" cellspacing="1">
+        <tr>
+          <td align="center"><h3>{$title}</h3></td>
+        </tr>
+        <tr>
+          <td align="center" class="gray">发布人：<a href="{PHPCMS_PATH}member/member.php?username={$username}" target="_blank">{$username}</a> 开始日期：{$fromdate} 结束日期：{$todate} 浏览次数：{$hits}</td>
+        </tr>
+        <tr>
+          <td height="10"></td>
+        </tr>
+        <tr>
+          <td class="con_text">{$content}</td>
+        </tr>
+      </table>
+    </td>
+   </tr>
+  </table>
+{template 'phpcms','footer'}

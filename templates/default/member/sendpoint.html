@@ -1,0 +1,58 @@
+{template 'phpcms','header'}
+<table cellspacing="0" cellpadding="0" border="0" width="980" align="center">
+<tr>
+<td width="190" align="center" valign="top" bgcolor="#EBF6FB">
+{template 'member','left'}
+</td>
+<td width="20" valign="top">
+</td>
+<td width="770" valign="top">
+
+<form name='myform' action='?action=sendpoint' method='post'>
+  <table width='500' border='0' align='center' cellpadding='2' cellspacing='1' class='tableborder'>
+   <tr>
+   <th colspan='2'>赠送点券</th>
+  </tr>
+    <tr>
+      <td width='120' align='right' class="tablerowhighlight" >用户名：</td>
+      <td class="tablerow" >{$_username}</td>
+    </tr>
+    <tr >
+      <td width='120' align='right'  class="tablerowhighlight" >资金余额：</td>
+      <td class="tablerow">{$_money} 元</td>
+    </tr>
+    <tr >
+      <td width='120' align='right'  class="tablerowhighlight" >可用积分：</td> 
+     <td class="tablerow">{$_credit} 分</td>
+    </tr>
+    <tr >
+      <td width='120' align='right'  class="tablerowhighlight" >可用点券数：</td>
+      <td class="tablerow">{$_point} 点</td>
+    </tr>
+    <tr >
+      <td width='120' align='right'  class="tablerowhighlight" >有效天数：</td>
+      <td class="tablerow">开始计算日期：{$_begindate}&nbsp;&nbsp;&nbsp;&nbsp;有效期：无限期<br>
+      </td>
+    </tr>
+    <tr>
+      <td width='120' align='right' class='tablerowhighlight'>获赠人的用户名：</td>
+      <td class='tablerow'> <input name='username' type='text' size='30'> </td>
+    </tr>
+    <tr>
+      <td width='120' align='right' class='tablerowhighlight'>赠送的点券数：</td>
+      <td class='tablerow'> <input name='point' type='text' maxLength='16' size='30'> </td>
+    </tr>
+    <tr>
+      <td align='right' class='tablerowhighlight'></td>
+      <td height='40' class='tablerow'>
+        <input name='save' type='hidden' id='action' value='1'>
+        <input name='submit' type='submit' id='submit' value=' 确定赠送 '>
+      </td>
+    </tr>
+  </table>
+</form>
+
+</td>
+</tr>
+</table>
+{template 'phpcms','footer'}

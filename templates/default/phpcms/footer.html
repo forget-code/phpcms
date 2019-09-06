@@ -1,0 +1,18 @@
+<table width="980" height="75" align="center" cellpadding="0"  cellspacing="0" class="footer">
+   <tr>
+    <td align="center">{$_PHPCMS['copyright']}</td>
+  </tr>
+ <tr>
+    <td align="center">{$showdefinedpage(0)}<a href="{PHPCMS_PATH}guestbook/?channelid={$channelid}">留言本</a></td>
+  </tr>
+<!--{if debuginfo()}-->
+  <tr>
+    <td align="center">Processed in {$debuginfo[time]} second(s), {$debuginfo[queries]} queries<!--{if $gzipcompress}-->, Gzip enabled<!--{/if}--> </td>
+  </tr>
+<!--{/if}-->
+</table>
+<Script Language=Javascript Src="{PHPCMS_PATH}include/js/Std_StranJF.Js"></Script>
+</body>
+</html>
+{$copyright()}
+{$output()}

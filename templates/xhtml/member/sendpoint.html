@@ -1,0 +1,63 @@
+{template "phpcms","header"}
+
+<div class="main">
+<div class="main_content">
+	<div class="main_left">
+
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />赠送点券</li>
+			</ul>
+			<table cellpadding="2" cellspacing="1" border="0" width="98%" align="center">
+			<form name="myform" action="?action=sendpoint" method="post">
+			<tr>
+			<td align="right" class="li_bg_1"  width="120">用户名：</td>
+			<td class="li_line">{$_username}</td>
+			</tr>
+			<tr >
+			<td align="right"  class="li_bg_1">资金余额：</td>
+			<td class="li_line">{$_money} 元</td>
+			</tr>
+			<tr >
+			<td align="right"  class="li_bg_1">可用积分：</td> 
+			<td class="li_line">{$_credit} 分</td>
+			</tr>
+			<tr >
+			<td align="right"  class="li_bg_1">可用点券数：</td>
+			<td class="li_line">{$_point} 点</td>
+			</tr>
+			<tr >
+			<td align="right"  class="li_bg_1">有效天数：</td>
+			<td class="li_line">开始计算日期：{$_begindate}&nbsp;&nbsp;&nbsp;&nbsp;有效期：无限期<br>
+			</td>
+			</tr>
+			<tr>
+			<td align="right" class="li_bg_1">获赠人的用户名：</td>
+			<td class="li_line"> <input name="username" type="text" size="30"> </td>
+			</tr>
+			<tr>
+			<td align="right" class="li_bg_1">赠送的点券数：</td>
+			<td class="li_line"> <input name="point" type="text" maxLength="16" size="30"> </td>
+			</tr>
+			<tr>
+			<td align="right" class="li_bg_1"></td>
+			<td height="40" class="li_line">
+			<input name="save" type="hidden" id="action" value="1">
+			<input name="submit" type="submit" id="submit" value=" 确定赠送 ">
+			</td>
+			</tr>
+			<tr>
+			<td colspan="2" height="8"></td>
+			</tr>
+			</form>
+			</table>
+		</div>
+
+	</div>
+	<div class="main_right">
+	{template "member","right"}
+	</div>
+</div>
+</div>
+{template "phpcms","footer"}

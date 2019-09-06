@@ -1,0 +1,326 @@
+{template 'phpcms','header'}
+<script type="text/javascript" src="{PHPCMS_PATH}include/js/MyCalendar.js"></script>
+<script LANGUAGE="javascript">
+<!--
+function CheckForm() {
+if (document.myform.username.value=="")
+	{
+	  alert("请输入用户名！")
+	  document.myform.username.focus()
+	  return false
+	 }
+if (document.myform.password.value=="")
+	{
+	  alert("请输入密码！")
+	  document.myform.password.focus()
+	  return false
+	 }
+if (document.myform.pwdconfirm.value!=document.myform.password.value)
+	{
+	  alert("两次输入的密码不一致！")
+      document.myform.password.value = ""
+      document.myform.pwdconfirm.value = ""
+	  document.myform.password.focus()
+	  document.myform.password.select()
+	  return false
+	 }
+if (document.myform.email.value=="")
+	{
+	  alert("请输入E-mail！")
+	  document.myform.email.focus()
+	  return false
+	 }
+{if $_PHPCMS[enableregcheckcode]}
+if (document.myform.checkcode.value=="")
+	{
+	  alert("请输入验证码！")
+	  document.myform.checkcode.focus()
+	  return false
+	 }
+{/if}
+    document.myform.phpcms_user.value = escape(document.myform.username.value);
+    document.myform.province.value=area.document.regionform.province.value;
+    document.myform.city.value=area.document.regionform.city.value;
+    document.myform.submit.disabled=true;
+}
+//-->
+</script>
+<table width="780" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="side_3">基本资料（必填）</td>
+  </tr>
+</table>
+<table width="780" align="center" cellpadding="1" cellspacing="1" class="reg_tab mar_5">
+  <form name="myform" method="post" action="{PHPCMS_PATH}member/register.php" onSubmit='return CheckForm();'>
+    <tr>
+      <td width="22%" class="r_t_r">用户名：</td>
+      <td><input name="username" type="text" id="username" value="{$username}" size="15">
+          <input name="phpcms_user" type="hidden" id="phpcms_user">
+          <input type="button" name="submit" value="检查用户名" onClick="javascript:openwinx('{PHPCMS_PATH}member/checkuser.php?username='+myform.username.value,'checkuser','490','110')" class="btn">
+          <span class="color_1">3到20个字符，不得包含非法字符！</span></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">密　码：</td>
+      <td><input name="password" type="password" id="password" size="15">
+        <span class="color_1">4到20个字符</span></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">确认密码：</td>
+      <td><input name="pwdconfirm" type="password" id="pwdconfirm" size="15"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">密码提示问题：</td>
+      <td><input name="question" type="text" id="question" size="30"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">问题答案：</td>
+      <td><input name="answer" type="text" id="answer" size="30"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">Email地址：</td>
+      <td>
+        <input name="email" type="text" id="email" size="30" maxlength="50">
+        <input type="checkbox" name="showemail" id="showemail" value="1" class="radio">
+        <span class="color_1">是否公开</span> </td>
+    </tr>
+{if $_PHPCMS[enableregcheckcode]}
+    <tr>
+      <td class="r_t_r">验证码：</td>
+      <td>
+        <input name="checkcode" type="text" size="15">
+        <img src="{PHPCMS_PATH}checkcode.php" border="0">
+        <span class="color_1">请把图形中的字符填写到输入框中</span> </td>
+    </tr>
+{/if}
+</table>
+<table width="780" align="center" cellpadding="0" cellspacing="0" class="mar_5">
+    <tr>
+      <td class="side_3">详细资料（选填）</td>
+    </tr>
+</table>
+<table width="780" align="center" cellpadding="0" cellspacing="0" class="reg_tab mar_5">
+    <tr>
+      <td width="22%" class="r_t_r">真实姓名：</td>
+      <td><input name="truename" type="text" id="truename" size="20" maxlength="50"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">性　　别：</td>
+      <td>
+        <input name="gender" type="radio" style="border:0px " value="1" checked>
+        <span class="color_2">男</span>        <input type="radio" name="gender" value="0" class="radio">
+        <span class="color_2">女</span></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">生　　日：</td>
+      <td>
+        <input name="byear" type="text" size="4" value="19">
+        <span class="color_2">年</span>        <select name="bmonth" id="bmonth">
+          <option value="00"></option>
+          <option value="01">1</option>
+          <option value="02">2</option>
+          <option value="03">3</option>
+          <option value="04">4</option>
+          <option value="05">5</option>
+          <option value="06">6</option>
+          <option value="07">7</option>
+          <option value="08">8</option>
+          <option value="09">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+        </select>
+        <span class="color_2">月</span>        <select name="bday" id="bday">
+          <option value="00"></option>
+          <option value="01">1</option>
+          <option value="02">2</option>
+          <option value="03">3</option>
+          <option value="04">4</option>
+          <option value="05">5</option>
+          <option value="06">6</option>
+          <option value="07">7</option>
+          <option value="08">8</option>
+          <option value="09">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+          <option value="13">13</option>
+          <option value="14">14</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+          <option value="24">24</option>
+          <option value="25">25</option>
+          <option value="26">26</option>
+          <option value="27">27</option>
+          <option value="28">28</option>
+          <option value="29">29</option>
+          <option value="30">30</option>
+          <option value="31">31</option>
+        </select>
+        <span class="color_2">日</span></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">证件类别：</td>
+      <td>
+        <select name="idtype">
+          <option value="身份证" >身份证</option>
+          <option value="学生证" >学生证</option>
+          <option value="军人证" >军人证</option>
+          <option value="护照" >护照</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td class="r_t_r">证件号码：</td>
+      <td><input type=text name="idcard" value="" size=22 maxlength=18></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">>所在地：</td>
+      <td>
+        <iframe name='area' id='area' src='../region.php?country=&province=&city=' width='300' height='60' frameborder='0' scrolling='no'></iframe>
+        <input name='province' type='hidden'>
+        <input name='city' type='hidden'>
+      </td>
+    </tr>
+    <tr>
+      <td class="r_t_r">所属行业：</td>
+      <td>
+        <select name="industry">
+          <option value="">请选择　　</option>
+          <option value="金融业">金融业</option>
+          <option value="服务业">服务业</option>
+          <option value="信息产业">信息产业</option>
+          <option value="制造业">制造业</option>
+          <option value="传播业">传播业</option>
+          <option value="教育">教育</option>
+          <option value="政府机构">政府机构</option>
+          <option value="医疗保健">医疗保健</option>
+          <option value="房地产">房地产</option>
+          <option value="其它">其它</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td class="r_t_r">教育水平：</td>
+      <td>
+        <select name="edulevel" size=1>
+          <option value="">请选择　　</option>
+          <option value="博士">博士</option>
+          <option value="硕士">硕士</option>
+          <option value="大学">大学</option>
+          <option value="高中">高中</option>
+          <option value="初中">初中</option>
+          <option value="小学">小学</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td class="r_t_r">从事职业：</td>
+      <td>
+        <select name="occupation">
+          <option value="">请选择　　</option>
+          <option value="学生">学生</option>
+          <option value="职员">职员</option>
+          <option value="经理">经理</option>
+          <option value="专业人士">专业人士</option>
+          <option value="公务员">公务员</option>
+          <option value="私营主">私营主</option>
+          <option value="待业">待业</option>
+          <option value="退休">退休</option>
+          <option value="其它">其它</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td class="r_t_r">收入水平：</td>
+      <td>
+        <select name="income">
+          <option value="">请选择　　</option>
+          <option value="6000以上">6000以上</option>
+          <option value="4001-6000">4001-6000</option>
+          <option value="2001-4000">2001-4000</option>
+          <option value="1001-2000">1001-2000</option>
+          <option value="501-1000">501-1000</option>
+          <option value="500以下">500以下</option>
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td class="r_t_r">电　　话：</td>
+      <td><input name="telephone" type="text" id="telephone" size="20"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">手　　机：</td>
+      <td><input name="mobile" type="text" id="mobile" size="20"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">地　　址：</td>
+      <td><input name="address" type="text" id="address" size="50">
+      </td>
+    </tr>
+    <tr>
+      <td class="r_t_r">邮　　编：</td>
+      <td><input name="postid" type="text" id="postid" size="10">
+      </td>
+    </tr>
+    <tr>
+      <td class="r_t_r">主　　页：</td>
+      <td><input name="homepage" type="text" id="homepage" size="20"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">QQ号码：</td>
+      <td><input name="qq" type="text" id="qq" size="20" maxlength="20"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">MSN帐号：</td>
+      <td><input name="msn" type="text" id="msn" size="20" maxlength="50"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">ICQ号码：</td>
+      <td><input name="icq" type="text" id="icq" size="20" maxlength="20"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">Skype帐号：</td>
+      <td><input name="skype" type="text" id="skype" size="20" maxlength="50"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">支付宝帐号：</td>
+      <td><input name="alipay" type="text" id="alipay" size="20" maxlength="50"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">贝宝帐号：</td>
+      <td><input name="paypal" type="text" id="paypal" size="20" maxlength="50"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">头像地址：</td>
+      <td><input name="userface" type="text" id="userface" size="50" maxlength="50"></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">头像大小：</td>
+      <td><span class="color_2">宽度：</span>
+          <input name="facewidth" type="text" id="facewidth" size="4" maxlength="50">
+        <span class="color_2">px 高度</span>：
+        <input name="faceheight" type="text" id="faceheight" size="4" maxlength="50">
+        <span class="color_2">px</span></td>
+    </tr>
+    <tr>
+      <td class="r_t_r">签名信息：</td>
+      <td><textarea name='sign' cols='35' rows='5' id='sign'></textarea></td>
+    </tr>
+    <tr>
+    <tr>
+      <td class="r_t_r"></td>
+      <td height="60">
+  <input name="referer" type="hidden" id="referer" value="{$referer}">
+  <input type="submit" name="submit" value=" 注 册 " class="btn">
+　<input type="reset" name="Submit" value=" 清 除 " class="btn"></td>
+    </tr>
+  </form>
+</table>
+{template 'phpcms','footer'}

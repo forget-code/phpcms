@@ -1,0 +1,94 @@
+{template 'phpcms','header'}
+<table width="980" align="center" cellpadding="1" cellspacing="1" style="background:#C0C0C0;">
+<tr bgcolor="#FFFFFF">
+<td>
+<table width="100%"  border="0" cellspacing="3" cellpadding="3" align="center">
+<tr>
+<td height="23" bgcolor="#F5F5F5">&nbsp;当前位置:<a href="{PHPCMS_PATH}">网站首页</a>&gt;&gt;{$position}</td>
+</tr>
+</table>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td height="35" valign="middle" width="200">&nbsp;&nbsp;<a href="{PHPCMS_PATH}guestbook/index.php?channelid={$channelid}"><img src="{PHPCMS_PATH}images/guestbook/home.gif" width="76" height="24" border="0" alt="留言首页" /></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="{PHPCMS_PATH}guestbook/add.php?channelid={$channelid}"><img src="{PHPCMS_PATH}images/guestbook/add.gif" width="76" height="24" border="0" alt="签写留言" /></a></td>
+	<form method="post" name="search" action="{PHPCMS_PATH}guestbook/index.php?channelid=<?=$channelid?>">
+	<td>
+	<input name='channelid' type='hidden' value='<?=$channelid?>'>
+	关键字：
+	<input name='keywords' type='text' size='30' value='<?=$keywords?>'>&nbsp;
+	<input type="radio" name="srchtype" value="0" <?if(!$srchtype){?>checked<?}?>> 标题 	
+	<input type="radio" name="srchtype" value="1" <?if($srchtype==1){?>checked<?}?>> 内容	
+	<input type="radio" name="srchtype" value="2" <?if($srchtype==2){?>checked<?}?>> 会员
+	<input name='submit' type='submit' value='留言搜索'>
+	</td>
+  </tr>
+  </form>
+</table>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" align="center">
+<tr>
+<td>
+{loop $gbooks $gbook}
+	<table width="100%"  border="0" cellspacing="0" cellpadding="0" align="center" class="gbook_tit mar_5">
+	<tr>
+	<td width="90%">&nbsp;&nbsp;&nbsp;<b>留言主题 :  </b>{$gbook[title]} ---- [{$gbook[addtime]}]</td>
+	<td width="10%">No:{$gbook[gid]}&nbsp;</td>
+	</tr>
+	</table>
+
+	<table width="100%"  border="0" align="center" cellpadding="0" cellspacing="0">
+	<tr>
+	<td width="160" valign="top" class="left_line">
+		<table width="100%" height="100%"  border="0" align="center" cellpadding="0" cellspacing="0">
+		<tr>
+		<td align=center><img src="{PHPCMS_PATH}images/guestbook/face/{$gbook[head]}.gif" width="80" height="90" alt="" /></td>
+		<tr>
+		<td align=center><b>{$gbook[name]}</b></td>
+		</tr>
+		<tr>
+		<td height=25>
+		{if $gbook[homepage]}<a href="{$gbook[homepage]}" target="_blank"><img src="{PHPCMS_PATH}images/guestbook/url.gif" width="45" height="16" border="0" alt="Homepage:{$gbook[homepage]}"></a>{else}<img src="{PHPCMS_PATH}images/guestbook/nourl.gif" width="45" height="16" border="0" alt="Homepage">{/if}
+		{if $gbook[email]}<a href="mailto:{$gbook[email]}" target="_blank"><img src="{PHPCMS_PATH}images/guestbook/email.gif" width="45" height="16" border="0" alt="Email:{$gbook[email]}"></a>{else}<img src="{PHPCMS_PATH}images/guestbook/noemail.gif" width="45" height="16" border="0" alt="Email">{/if}
+		{if $gbook[qq]}<a href="http://wpa.qq.com/msgrd?V=1&Uin={$gbook[qq]}&Site={$_SERVER[HTTP_HOST]}&Menu=yes" target="_blank"><img src="{PHPCMS_PATH}images/guestbook/oicq.gif" width="45" height="16" border="0" alt="QQ:{$gbook[qq]}">{else}<img src="{PHPCMS_PATH}images/guestbook/nooicq.gif" width="45" height="16" border="0" alt="QQ">{/if}
+		</td>
+		</tr>
+		</table>
+	</td>
+	<td  valign="top" bgcolor="#FFFFFF">
+		<table width="100%"  border="0" cellspacing="3" cellpadding="3" align="center">
+		<tr>
+		<td  style="LEFT: 0px;WORD-WRAP: break-word">{$gbook[content]}</td>
+		</tr>
+		{if $gbook[reply]}
+		<tr>
+		<td align="center" valign="top">
+		<table width="96%"  border="0" cellspacing="0" cellpadding="0">
+		<tr>
+		<td class="dot_pane"  style="LEFT: 0px; WORD-WRAP: break-word"><b>管理员 [ <font color=red>{$gbook[replyer]}</font> ] 于 <font color=red>{$gbook[replytime]}</font> 回复：</b><br>{$gbook[reply]}</td>
+		</tr>
+		</table>
+		</td>
+		</tr>
+		{/if}
+		</table>
+	</td>
+	</tr>
+	</table>
+	{/loop}
+	{if $pages}
+	<table width="100%"  border="0" cellspacing="0" cellpadding="0" align="center">
+	<tr>
+	<td height="1" bgcolor="#C0C0C0"> </td>
+	</tr>
+	<tr>
+	<td height="25" align=center>{$pages}</td>
+	</tr>
+	</table>
+	{/if}
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+{template 'phpcms','footer'}

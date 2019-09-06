@@ -1,0 +1,9 @@
+<marquee direction="up" onmouseover="this.stop();" onmouseout="this.start();" behavior="scroll" scrollamount="3" width="{$width}" height="{$height}" >
+{loop $announces $i $announce}
+<div class="announcelist">
+·<a href="{$announce[url]}" title="{$announce[title]}" target="{$target}" >{$announce[title]}</a>
+{if $datetype}[{$announce[addtime]}]{/if}
+{if $showauthor}[发布人：{$announce[username]}]{/if}
+</div>
+{/loop}
+</marquee>

@@ -1,0 +1,157 @@
+{template 'phpcms','header'}
+
+<div class="main">
+<div class="main_content">
+	<div class="main_left">
+
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />基本资料</li>
+			</ul>
+			<table cellpadding="2" cellspacing="1" border="0" width="98%" align="center">
+			<tr>
+			<td width="18%" class="li_bg_1" align="right">用 户 名：</td>
+			<td width="32%" class="li_line">{$username} </td>
+			<td width="18%" class="li_bg_1" align="right">E-MAIL：</td>
+			<td width="32%" class="li_line">{$email} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">会 员 组：</td>
+			<td  class="li_line">{$_GROUP['groupname']} </td>
+			<td  class="li_bg_1" align="right">计费方式：</td>
+			<td  class="li_line">{$chargetype} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">资金余额：</td>
+			<td  class="li_line">{$money}元</td>
+			<td  class="li_bg_1" align="right">消费金额：</td>
+			<td  class="li_line">{$payment}元</td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">可用点数：</td>
+			<td  class="li_line">{$point}点</td>
+			<td  class="li_bg_1" align="right">可用积分：</td>
+			<td  class="li_line">{$credit}分</td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">服务起始日期：</td>
+			<td  class="li_line">{$begindate} </td>
+			<td  class="li_bg_1" align="right">服务截止日期：</td>
+			<td  class="li_line">{$enddate} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">发布特权：</td>
+			<td  class="li_line">{$_GROUP['enableaddalways']} </td>
+			<td  class="li_bg_1" align="right">购买折扣：</td>
+			<td  class="li_line">{$_GROUP['discount']}%</td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">注册时间：</td>
+			<td  class="li_line">{$regtime} </td>
+			<td  class="li_bg_1" align="right">注册IP：</td>
+			<td  class="li_line">{$regip} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">最后登录时间：</td>
+			<td  class="li_line">{$lastlogintime} </td>
+			<td  class="li_bg_1" align="right">最后登录IP：</td>
+			<td  class="li_line">{$lastloginip} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">登录次数：</td>
+			<td  class="li_line">{$logintimes}次</td>
+			<td  class="li_bg_1" align="right">当前状态：</td>
+			<td  class="li_line">{$locked} </td>
+			</tr>
+			<tr>
+			<td colspan="4" height="8"></td>
+			</tr>
+			</table>
+		</div>
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />详细资料</li>
+			</ul>
+			<table cellpadding="2" cellspacing="1" border="0" width="98%" align="center">
+			<tr>
+			<td  class="li_bg_1" width="18%" align="right">真实姓名：</td>
+			<td  class="li_line" width="32%">{$truename} </td>
+			<td  class="li_bg_1" width="18%"align="right">性别：</td>
+			<td  class="li_line" width="32%">{$gender} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">生日：</td>
+			<td  class="li_line">{$birthday} </td>
+			<td  class="li_bg_1" align="right">年龄：</td>
+			<td  class="li_line">{$old}岁</td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">证件类型：</td>
+			<td  class="li_line">{$idtype} </td>
+			<td  class="li_bg_1" align="right">证件号码：</td>
+			<td  class="li_line">{$idcard} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">所在地区：</td>
+			<td  class="li_line">{$province}-{$city} </td>
+			<td  class="li_bg_1" align="right">所属行业：</td>
+			<td  class="li_line">{$industry} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">教育水平：</td>
+			<td  class="li_line">{$edulevel} </td>
+			<td  class="li_bg_1" align="right">职    业：</td>
+			<td  class="li_line">{$occupation} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">收入状况：</td>
+			<td  class="li_line">{$income} </td>
+			<td  class="li_bg_1" align="right">电话：</td>
+			<td  class="li_line">{$telephone} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">手机：</td>
+			<td  class="li_line">{$mobile} </td>
+			<td  class="li_bg_1" align="right">地址：</td>
+			<td  class="li_line">{$address} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">邮编：</td>
+			<td  class="li_line">{$postid} </td>
+			<td  class="li_bg_1" align="right">主页：</td>
+			<td  class="li_line">{$homepage} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">QQ：</td>
+			<td  class="li_line"><a href="http://wpa.qq.com/msgrd?V=1&Uin={$qq}&Site={$PHP_DOMAIN}&Menu=yes" title="点击QQ交谈" target="_blank">{$qq}</a> </td>
+			<td  class="li_bg_1" align="right">MSN：</td>
+			<td  class="li_line">{$msn} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">ICQ：</td>
+			<td  class="li_line">{$icq} </td>
+			<td  class="li_bg_1" align="right">Skype：</td>
+			<td  class="li_line">{$skype} </td>
+			</tr>
+			<tr>
+			<td  class="li_bg_1" align="right">支付宝帐号：</td>
+			<td  class="li_line">{$alipay} </td>
+			<td  class="li_bg_1" align="right">贝宝帐号：</td>
+			<td  class="li_line">{$paypal} </td>
+			</tr>
+			<tr>
+			<td colspan="4" height="8"></td>
+			</tr>
+			</table>
+		</div>
+
+
+	</div>
+	<div class="main_right">
+	{template 'member','right'}
+	</div>
+</div>
+</div>
+{template 'phpcms','footer'}

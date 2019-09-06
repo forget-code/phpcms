@@ -1,0 +1,99 @@
+{template 'info','header'}
+<style type="text/css">
+<!--
+td{
+	FONT-FAMILY: "宋体";
+	FONT-SIZE: 9pt;
+}
+SELECT {
+	BORDER-TOP-WIDTH: 1px; BORDER-LEFT-WIDTH: 1px; FONT-SIZE: 12px; BORDER-BOTTOM-WIDTH: 1px; BORDER-RIGHT-WIDTH: 1px
+}
+-->
+</style>
+<script language="javascript">
+function checkform()
+{
+    if(areaform.province.value=='')
+	{
+		alert("请选择省/直辖市/自治区！");
+		return false;
+	}
+    if(areaform.city.value=='')
+	{
+		alert("请选择城市/区！");
+		return false;
+	}
+	return true;
+}
+</script>
+</head>
+<body>
+<table width="980" cellpadding="0" cellspacing="0">
+<tr>
+<td class="addstep_2">请选择发布信息的地区</td>
+</tr>
+</table>
+<table width="980" cellpadding="0" cellspacing="0">
+<tr>
+<td align="center">
+<table width="600" cellpadding="2" cellspacing="5">
+<form name="areaform" id="areaform" action="{PHPCMS_PATH}{$_CHA[channeldir]}/add.php" method="post" onsubmit="return checkform();">
+<tr>
+<td>　　省/直辖市/自治区</td>
+<td>　　市/区</td>
+<td>　　区/县</td>
+</tr>
+<tr>
+<td>
+<select name="province" id="province" size='2' style='height:100px;width:150px;' onChange="areaform.step.value='area';document.areaform.submit();" >
+{loop $provinces $pro}
+	{if $pro == $province}
+	<option value='{$pro}' selected>{$pro}</option>
+	{else}
+	<option value='{$pro}'>{$pro}</option>
+	{/if}
+{/loop}
+</select>
+</td>
+<td >
+<select name="city" id="city" size='2' style='height:100px;width:150px;' onChange="areaform.step.value='area';document.areaform.submit();" >
+{loop $citys $c}
+	{if $c == $city}
+	<option value='{$c}' selected>{$c}</option>
+	{else}
+	<option value='{$c}'>{$c}</option>
+	{/if}
+{/loop}
+</select>
+</td>
+<td >
+<select name="area" id="area" size='2' style='height:100px;width:150px;'>
+{loop $areas $a}
+	{if $a == $area}
+	<option value='{$a}' selected>{$a}</option>
+	{else}
+	<option value='{$a}'>{$a}</option>
+	{/if}
+{/loop}
+</select>
+</td>
+</tr>
+<tr>
+<td ></td>
+<td ></td>
+<td >
+<input type="hidden" name="catid1" value="<?=$catid1?>">
+<input type="hidden" name="catid2" value="<?=$catid2?>">
+<input type="hidden" name="catid3" value="<?=$catid3?>">
+<input type="hidden" name="catid" value="<?=$catid?>">
+<input type="hidden" name="step" value="area">
+<input type="submit" name="next" value="下一步" onclick="areaform.step.value='content'" style='height:25px;width:80px;'>
+</td>
+</tr>
+</form>
+</table>
+
+</td>
+</tr>
+</table>
+{template 'phpcms','footer'}

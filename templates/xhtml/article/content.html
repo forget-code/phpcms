@@ -1,0 +1,126 @@
+{template 'phpcms','header'}
+<script type="text/javascript">
+function fontZoom(size)
+{
+   document.getElementById('pre_{$addtime}l').style.fontSize=size+'px';
+}
+</script>
+<div class="main">
+<div class="main_content">
+<div class="main_left">
+	<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_1"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />当前位置：<a href="{$channelurl}">{$channelname}首页</a> &gt;&gt; {$position}</li>
+			<li class="title">{$title} {if $pagenumber>1}({$page}){/if}</li>
+
+			<li class="li_bg_1">&nbsp;{$adddate}&nbsp;&nbsp;作者：<a href="{PHPCMS_PATH}member/member.php?username={$username}" target="_blank">{$author}</a>&nbsp;&nbsp;来源：<a href="{$copyfromurl}" target="_blank">{$copyfromname}</a>&nbsp;&nbsp;浏览次数：<span id="hits">0</span>&nbsp;&nbsp;<a href="{PHPCMS_PATH}comment/index.php?item=articleid&amp;itemid={$articleid}&amp;itemurl={$itemurl}">网友评论<span id="commentnumber1">0</span>条</a></li>
+
+			<li class="li_line">&nbsp;文字大小：【<a href="javascript:fontZoom(16)">大</a>】【<a href="javascript:fontZoom(14)">中</a>】【<a href="javascript:fontZoom(12)">小</a>】 评分等级：{$stars}</li>
+
+			{if $description}<li class="contents" id="fontzoom"><span class="f_red f_b">简介：</span>{$description}</li>{/if}
+			<li class="content" id="pre_{$addtime}1">{$content}</li>
+			<li class="li_bg_1">本文引用地址：<a href="{$itemurl}">{$itemurl}</a></li>
+
+			{if $specialid}<li class="li_line f_red">进入专题：<a href="{$special[specialurl]}" class="specialurl">{$special[specialname]}</a></li>{/if}
+
+
+			{if $pages}<li class="pages">{$pages}</li>{/if}
+
+
+			<li class="li_line"><span class="f_r">责任编辑：<a href="{PHPCMS_PATH}member/member.php?username={$checker}" class="member_url">{$checker}</a></span></li>
+
+			
+
+			<li class="li_bg_1 t_c">【<a href="#comment">发表评论</a>】　【<a href="javascript:window.external.addFavorite(window.location,'{$title}')">加入收藏</a>】　【<a href="{PHPCMS_PATH}mail/sendmail.php?subject=推荐《{$title}》&amp;content={$title}&lt;br/&gt;{$itemurl}">告诉好友</a>】　【<a href="javascript:window.print();">打印本页</a>】　【<a href="javascript:window.close()">关闭窗口</a>】　【<a href="#top">返回顶部</a>】</li>
+			</ul>
+			
+			<div id="pre_and_next"> </div>
+
+		</div>
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />相关评论</li>
+			<li class="li_line"><a href="{PHPCMS_PATH}comment/index.php?item=articleid&amp;itemid={$articleid}&amp;itemurl={$itemurl}">共<span id="commentnumber">0</span>条评论 &nbsp;发表/查看更多评论</a></li>
+			<li><script type="text/javascript" src="{PHPCMS_PATH}comment/list_js.php?item=articleid&amp;itemid={$articleid}&amp;commentnum=10&amp;ordertype=1"></script></li>
+			</ul>
+		</div>
+
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />发表评论</li>
+			<li>
+			<form name="myform" method="post" action="{PHPCMS_PATH}comment/index.php?action=add&amp;submit=1" onsubmit="return docheck();">
+			<input name="item" type="hidden" value="articleid" />
+			<input name="itemid" type="hidden" value="{$articleid}" />
+			<input name="itemurl" type="hidden" value="{$itemurl}" />
+			评分：
+			<input name="score" type="radio" class="radio" title="很差" value="1" /> 1 
+			<input name="score" type="radio" class="radio" title="差" value="2" /> 2 
+			<input name="score" type="radio" class="radio" title="一般" value="3" checked="checked" /> 3 
+			<input name="score" type="radio" class="radio" title="好" value="4" /> 4 
+			<input name="score" type="radio" class="radio" title="很好" value="5" /> 5 
+			<br/>
+			<textarea name="content" cols="50" rows="8" id="content"></textarea><br/>
+			<span id="showcheckcode"></span>&nbsp;&nbsp;<input name="submit" type="submit" value=" 发表 " />&nbsp;&nbsp;<input name="reset" type="reset" value=" 重置 " /></form>
+			</li>
+			<li>·请遵守《互联网电子公告服务管理规定》及中华人民共和国其他各项有关法律法规。 </li>
+			<li>·严禁发表危害国家安全、损害国家利益、破坏民族团结、破坏国家宗教政策、破坏社会稳定、侮辱、诽谤、教唆、淫秽等内容 。</li>
+			<li>·用户需对自己在使用本站服务过程中的行为承担法律责任（直接或间接导致的）。</li> 
+			<li>·本站管理员有权保留或删除评论内容。</li>
+			</ul>
+		</div>
+
+
+	</div>
+
+	<div class="main_right">
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">最新{$_CHANNEL[$channelid][channelname]}</li>
+		{$articlelist(0,$channelid,$catid,1,0,0,10,24,0,0,0,1,0,0,0,0,1,1)}
+		</ul>
+		</div>
+
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">热点{$_CHANNEL[$channelid][channelname]}</li>
+		{$articlelist(0,$channelid,$catid,1,0,0,10,24,0,0,60,5,0,0,0,0,1,1)}
+		</ul>
+		</div>
+
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">推荐{$_CHANNEL[$channelid][channelname]}</li>
+		{$articlelist(0,$channelid,$catid,1,0,0,10,24,0,1,0,1,0,0,0,0,1,1)}
+		</ul>
+		</div>
+	
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">相关{$_CHANNEL[$channelid][channelname]}</li>
+		{$relatedarticle(0,$channelid,$keywords,$articleid,10,24,1)}
+		</ul>
+		</div>
+</div>
+</div>
+</div>
+<script type="text/javascript">
+function docheck()
+{
+    myform.itemurl.value = window.location;
+    if(myform.content.value=="") {
+       alert("请输入评论内容!");
+       myform.content.focus();
+       return false;
+    }
+    return true;
+}
+</script>
+<script type="text/javascript" src="{$channelurl}show_js.php?articleid={$articleid}"></script>
+{template 'phpcms','footer'}

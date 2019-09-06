@@ -1,0 +1,72 @@
+<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+   <!-- 图片文章列表循环显示开始 -->
+   {loop $articles $i $article}
+       {if $i%$cols==0}
+           <tr>
+       {/if}
+             <td class="tag_td_img">
+
+       {if $showtype==1}
+         <!-- 图片+标题+内容简介：上下排列 开始 -->
+         <table width="100%" border="0" align="center" cellpadding="0" cellspacing="5">
+           <tr>
+              <td class="pic"><a href='{$article[url]}' target='_blank'><img src='{$article[thumb]}' alt='{$article[alt]}' width='{$imgwidth}' height='{$imgheight}' border='0'></a></td>
+           </tr>
+           <tr>
+              <td height='22' align="center"><a href='{$article[url]}' target='_blank' title='{$article[alt]}'>{$article[title]}</a></td>
+           </tr>
+		   {if $descriptionlen}
+           <tr>
+              <td><b>内容简介：</b>{$article[description]} <a href='{$article[url]}' target='_blank'>详细>></a></td>
+           </tr>
+		   {/if}
+         </table>
+         <!-- 图片+标题+内容简介：上下排列 结束 -->
+       {elseif $showtype==2}
+         <!-- （图片+标题：上下排列）+内容简介：左右排列 开始 -->
+         <table width="100%" border="0" align="center" cellpadding="0" cellspacing="5">
+           <tr>
+              <td width='{$imgwidth}'>
+			  <a href='{$article[url]}' target='_blank'><img src='{$article[thumb]}' alt='{$article[alt]}' width='{$imgwidth}' height='{$imgheight}' border='0'></a>
+			  <br><br>
+			  <a href='{$article[url]}' target='_blank' title='{$article[alt]}'>{$article[title]}</a>
+			  </td>
+              {if $descriptionlen}
+			  <td valign="top"><b>内容简介：</b>{$article[description]} <a href='{$article[url]}' target='_blank'>详细>></a></td>
+			  {/if}
+           </tr>
+         </table>
+         <!-- （图片+标题：上下排列）+内容简介：左右排列 结束 -->
+       {else}
+         <!-- 图片+（标题+内容简介：上下排列）：左右排列 开始 -->
+         <table width="100%" border="0" align="center" cellpadding="0" cellspacing="5">
+           <tr>
+              <td width='{$imgwidth}' height='{$imgheight}' ><a href='{$article[url]}' target='_blank'><img src='{$article[thumb]}' alt='{$article[alt]}' width='{$imgwidth}' height='{$imgheight}' border='0'></a></td>
+              <td height='22' valign='top'><a href='{$article[url]}' target='_blank' title='{$article[alt]}'>{$article[title]}</a>
+			  {if $descriptionlen}
+			  <br><br>
+			  <b>内容简介：</b>{$article[description]} <a href='{$article[url]}' target='_blank'>详细>></a>{/if}
+			  </td>
+           </tr>
+		   
+         </table>
+        <!-- 图片+（标题+内容简介：上下排列）：左右排列 结束 -->
+       {/if}
+
+             </td>
+       {if $i%$cols==($cols-1)}
+          </tr>
+       {/if}
+   {/loop}
+   <!-- 文章列表循环显示结束 -->
+</table>
+
+   <!-- 如果 $pages 不为空则显示分页 -->
+{if $pages}
+    <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+         <tr>
+           <td class="tag_td_img">{$pages}</td>
+         </tr>
+    </table>
+{/if}
+   <!-- 分页显示结束 -->

@@ -1,0 +1,75 @@
+{template 'phpcms','header'}
+<table width="980" align="center" cellpadding="0"  cellspacing="0">
+  <tr>
+    <td width="210" height="147" valign="top" class="gray">
+	<table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
+      <tr>
+        <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
+        <td width="76%">推荐专题</td>
+        <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
+      </tr>
+    </table>
+	<table width="100%" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="150">
+	<!--推荐专题，幻灯片显示-->	<table width="190" align="center" cellpadding="0"  cellspacing="0" class="mar_5">
+      <tr>
+        <td align="center" class="pic">{$slidespecial(0,1,0,4,50,0,0,180,120,5000,-1)}</td>
+      </tr>
+      <tr>
+        <td height="5"></td>
+      </tr>
+    </table>	</td>
+  </tr>
+</table>
+      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar mar_5">
+        <tr>
+          <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
+          <td width="76%">推荐下载</td>
+          <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
+        </tr>
+    </table>
+{$downlist(0,$channelid,0,1,0,0,10,28,0,1,0,1,0,0,0,0,0,0,1,1)}
+	</td>
+    <td width="10">&nbsp;</td>
+    <td width="760" valign="top">
+	<!--位置导航-->
+	<table width="100%"  cellspacing="0" cellpadding="0" >
+      <tr>
+        <td class="position">当前位置：</td>
+      </tr>
+    </table>
+	<table width="100%" align="center" cellpadding="0" cellspacing="0">
+      <tr>
+        <td height="10"></td>
+      </tr>
+    </table>
+    <!--搜索框-->
+    <script language="text/javascript" src="{PHPCMS_PATH}data/js/search.js"></script>
+	<table width="100%" align="center" cellpadding="0" cellspacing="0">
+      <tr>
+        <td height="10"></td>
+      </tr>
+    </table>
+	<table width="100%"  cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="titlebar" width="107">本站专题</td>
+        <td width="10" height="25"><img src="{$skindir}/images/tit3_r.jpg"></td>
+        <td class="bg_titlebar" width="602" align="right"><a href="#" class="more">更多</a></td>
+        <td  width="37"><img src="{$skindir}/images/tit2_r.jpg"></td>
+      </tr>
+    </table>
+	<!--专题列表-->
+	{$speciallist(0,$channelid,0,$page,$_PHPCMS['pagesize'],50,100,$elite,0,3,120,90,1)}
+		<hr width="760" size="1" noshade>
+	
+		<table width="100%" align="center" cellpadding="0" cellspacing="0" class="gray">
+		<tr>
+		<td height="10"></td>
+		</tr>
+		</table>
+		  </td>
+      </tr>
+    </table>
+
+	{template 'phpcms','footer'}

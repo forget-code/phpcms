@@ -1,0 +1,12 @@
+{template 'phpcms','header'}
+<div class="main">
+<div class="main_content">
+	<div class="box_1">
+		<ul style="padding:6px;">
+		<li class="li_1"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />当前位置：<a href="{PHPCMS_PATH}">首页</a> &gt;&gt; {if $channelid}<a href="{$channelurl}">{$channelname}</a> &gt;&gt;{/if} <a href="{PHPCMS_PATH}vote/">投票列表</a></li>
+		{$votelist(0,$channelid,$page,16,30,0,3)}
+		</ul>
+	</div>
+</div>
+</div>
+{template 'phpcms','footer'}

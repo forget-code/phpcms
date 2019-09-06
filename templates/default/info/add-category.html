@@ -1,0 +1,93 @@
+{template 'info','header'}
+<style type="text/css">
+<!--
+td{
+	FONT-FAMILY: "宋体";
+	FONT-SIZE: 9pt;
+}
+SELECT {
+	BORDER-TOP-WIDTH: 1px; BORDER-LEFT-WIDTH: 1px; FONT-SIZE: 12px; BORDER-BOTTOM-WIDTH: 1px; BORDER-RIGHT-WIDTH: 1px
+}
+-->
+</style>
+<script language="javascript">
+function checkform()
+{
+	var iscatid1 = 1;
+	var iscatid2 = {$iscatid2};
+	var iscatid3 = {$iscatid3};
+    if(iscatid1 && myform.catid1.value=='')
+	{
+		alert("请选择一级分类！");
+		return false;
+	}
+    if(iscatid2 && myform.catid2.value=='')
+	{
+		alert("请选择二级分类！");
+		return false;
+	}
+    if(iscatid3 && myform.catid3.value=='')
+	{
+		alert("请选择三级分类！");
+		return false;
+	}
+    myform.catid.value = iscatid3 ? myform.catid3.value : (iscatid2 ? myform.catid2.value : myform.catid1.value);
+	return true;
+}
+</script>
+</head>
+<body>
+<table width="980" cellpadding="0" cellspacing="0">
+<tr>
+<td class="addstep_1">请选择信息分类</td>
+</tr>
+</table>
+<table width="900" cellpadding="2" cellspacing="10">
+<form name="myform" id="myform" action="{PHPCMS_PATH}{$_CHA[channeldir]}/add.php" method="post" onsubmit="return checkform();">
+<tr>
+<td align="right">
+<select name="catid1" id="catid1" size='2' style='height:100px;width:150px;' onChange="myform.step.value='category';myform.catid2.value=0;myform.catid3.value=0;myform.catid.value=myform.catid1.value;document.myform.submit();" >
+{loop $catid1s $cat}
+	{if $cat[catid] == $catid1}
+	<option value='{$cat[catid]}' selected>{$cat[catname]}</option>
+	{else}
+	<option value='{$cat[catid]}'>{$cat[catname]}</option>
+	{/if}
+{/loop}
+</select>
+</td>
+<td align="center">
+<select name="catid2" id="catid2" size='2' style='height:100px;width:150px;' onChange="myform.step.value='category';myform.catid3.value=0;myform.catid.value=myform.catid2.value;document.myform.submit();" >
+{loop $catid2s $cat}
+	{if $cat[catid] == $catid2}
+	<option value='{$cat[catid]}' selected>{$cat[catname]}</option>
+	{else}
+	<option value='{$cat[catid]}'>{$cat[catname]}</option>
+	{/if}
+{/loop}
+</select>
+</td>
+<td align="left">
+<select name="catid3" id="catid3" size='2' onclick="myform.catid.value=myform.catid3.value;" style='height:100px;width:150px;'>
+{loop $catid3s $cat}
+	{if $cat[catid] == $catid3}
+	<option value='{$cat[catid]}' selected>{$cat[catname]}</option>
+	{else}
+	<option value='{$cat[catid]}'>{$cat[catname]}</option>
+	{/if}
+{/loop}
+</select>
+</td>
+</tr>
+<tr>
+<td ></td>
+<td ></td>
+<td >
+<input type="hidden" name="catid" value="0">
+<input type="hidden" name="step" value="area">
+<input type="submit" name="next" value="下一步" onclick="myform.step.value='area'" style='height:25px;width:80px;'>
+</td>
+</tr>
+</form>
+</table>
+{template 'phpcms','footer'}

@@ -1,0 +1,11 @@
+#
+# robots.txt for PHPCMS
+# Version 3.0.0
+#
+
+User-agent: *
+Disallow: /admin
+Disallow: /fckeditor
+Disallow: /images
+Disallow: /include
+Disallow: /class

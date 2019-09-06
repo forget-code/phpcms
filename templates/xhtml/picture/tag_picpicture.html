@@ -1,0 +1,6 @@
+{loop $pictures $i $picture}
+<li class="li_pic"><a href="{$picture[url]}" target="_blank"><img src="{$picture[thumb]}" width="{$imgwidth}" height="{$imgheight}" alt="{$picture[alt]}" /><br />{$picture[title]}</a></li>
+{/loop}
+{if $pages}
+<li class="pages">{$pages}</li>
+{/if}

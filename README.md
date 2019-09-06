@@ -1,2 +1,0 @@
-# phpcms
-init

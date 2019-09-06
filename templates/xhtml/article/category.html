@@ -1,0 +1,68 @@
+{template 'phpcms','header'}
+
+<div class="main">
+<div class="main_content">
+	<div class="main_left">
+
+		<div class="left_box_2">
+			<ul style="padding:5px 0 0 5px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />{$catname}</li>
+			<li class="pd3">{$catlist(0,$channelid,$catid,0,1,0)}</li>
+			</ul>
+		</div>
+
+{if $enableadd}
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />图片{$_CHANNEL[$channelid][channelname]}</li>
+			</ul>
+			<ul>
+			{$picarticle(0,$channelid,$catid,0,0,0,5,12,0,0,0,1,1,1,100,100,5)}
+			</ul>
+		</div>
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />{$catname}</li>
+			</ul>
+			<ul>
+			{$articlelist(0,$channelid,$catid,0,0,0,10,40,0,0,0,$itemordertype,2,0,0,0,1,1)}
+			</ul>
+		</div>
+{/if}
+
+
+{loop $arrchildid $i $childcat}
+		<div class="left_box_1">
+			<ul style="padding:6px;">
+			<li class="li_header">
+			<span class="f_r"><a href="{$childcat[caturl]}" target="{$childcat[target]}"><img src="{PHPCMS_PATH}images/more.gif" width="34" height="9" alt="More" /></a></span>
+			<img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />{$childcat[catname]}</li>	{$articlelist(0,$channelid,$childcat[catid],1,0,0,$showchilditems,30,0,0,0,$childcat[itemordertype],2,0,0,0,1,1)}
+			</ul>
+		</div>
+		{if $i%2!=1}<div class="main_nav"><img src="{PHPCMS_PATH}images/spacer.gif" width="10" height="10" alt="" /></div>{/if}
+{/loop}
+		
+	</div>
+	<div class="main_right">
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">推荐{$_CHANNEL[$channelid][channelname]}</li>
+		{$articlelist(0,$channelid,$catid,1,0,0,10,24,0,1,0,1,0,0,0,0,1,1)}
+		</ul>
+		</div>
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">热点{$_CHANNEL[$channelid][channelname]}</li>
+		{$articlelist(0,$channelid,$catid,1,0,0,10,24,0,0,60,5,0,0,0,0,1,1)}
+		</ul>
+		</div>
+
+
+
+	</div>
+</div>
+</div>
+{template 'phpcms','footer'}

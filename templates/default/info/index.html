@@ -1,0 +1,103 @@
+{template 'info','header'}
+
+ <!--频道列表-->
+<table width="980" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="250" valign="top" class="gray">
+	  <table cellpadding="0" cellspacing="0" width="100%">
+	   <tr>
+	     <td width="38%" class="nuv">信息分类</td>
+	     <td width="62%" class="nuv"><a href="{PHPCMS_PATH}{$_CHA[channeldir]}/add.php">发布信息</a></td>
+	   </tr>
+	  </table>
+	  <table width="249"  cellspacing="0" cellpadding="0">
+        <tr>
+          <td class="nuv_head"></td>
+        </tr>
+        <tr>
+		  <td valign="top" class="side_3">
+{loop $childcats $i $cat}
+<h3><a href="{$cat[caturl]}"><strong>{$cat[catname]}</strong></a></h3>
+<ul>
+{loop $subcats[$i] $k $c}
+<li><a href="{$c[caturl]}">{$c[catname]}</a></li>
+{/loop}
+</ul>
+<div style="clear:both; "></div> 
+{/loop}
+			</td>
+        </tr>
+        <tr>
+          <td class="nuv_btm" height="10"></td>
+        </tr>
+      </table>
+    </td>
+    <td width="10">&nbsp;</td>
+    <td valign="top" width="720"><table width="100%"  cellspacing="0" cellpadding="0">
+      <tr>
+        <td width="3%"><img src="{$skindir}/images/ico_3.gif" width="19" height="19"></td>
+        <td width="97%" style="padding-left:10px">{$announcelist('tag_announcelist-left',$channelid,0,5,30,0,0,1,680,25)}</td>
+      </tr>
+    </table>
+<table width="100%" cellpadding="0"  cellspacing="0" class="mar_5">
+<tr>
+<td width="436" height="200" valign="top" style="border:1px solid #dcdcdc;">
+<table width="100%"  cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="title_1 orange">推荐信息</td>
+  </tr>
+  <tr>
+    <td style="padding-left:3px;">{$infolist(0,$channelid,0,1,0,0,20,30,0,1,0,1,0,0,0,0,1,2)}</td>
+  </tr>
+</table>
+  </td>
+  <td width="10"></td>
+<!--城市切换--><td width="274" valign="top" style="border:1px solid #dcdcdc; "><table width="100%"  cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="title_1">按省份浏览</td>
+  </tr>
+</table>
+  <table width="100%"  cellspacing="1" cellpadding="0">
+    <tr>
+      <td class="city"><a href="{$channelurl}search.php?search=1&province=<?=urlencode('北京市')?>" target="_blank" class="city">北京</a> 　<a href="{$channelurl}search.php?search=1&province=<?=urlencode('上海市')?>" target="_blank" class="city">上海</a>　<a href="{$channelurl}search.php?search=1&province=<?=urlencode('天津市')?>" target="_blank" class="city">天津</a>　<a href="{$channelurl}search.php?search=1&province=<?=urlencode('重庆市')?>" target="_blank" class="city">重庆</a></td>
+    </tr>
+    <tr>
+      <td class="province" style="padding-left:5px">
+	  {loop $provinces $i $province}
+{if $i>3}
+<a href="{$channelurl}search.php?search=1&catid={$catid}&province={$urlencode($province)}" target="_blank">{$province}</a>&nbsp;
+{/if}
+	  {/loop}
+	  </td>
+    </tr>
+  </table></td>
+        </tr>
+      </table>
+<!--搜索框-->
+      <table width="100%" cellpadding="0"  cellspacing="0">
+        <tr>
+		<td height="40">
+			  <script language="Javascript" src="{PHPCMS_PATH}data/js/search.js"></script>
+		</td>
+		</tr>
+	  </table>	  
+	  <table width="100%" cellpadding="0"  cellspacing="5">
+	  {loop $childcats $i $cat}
+       {if $i%3==0}<tr>{/if}
+          <td height="230" valign="top">
+		  
+		  <table width="230" cellspacing="0" cellpadding="0" class="subtitle">
+              <tr>
+                <td width="79%" class="left">{$cat[catname]}</td>
+                <td width="21%"><a href="{$cat[caturl]}" target="{$cat[target]}" class="more">更多</a>&nbsp;</td>
+              </tr>
+          </table>
+			  {$infolist(0,$channelid,$cat[catid],1,0,0,10,36,0,0,0,$cat[ordertype],0,0,0,0,$cat[target],1)}
+          </td>
+       {if $i%3==2}</tr>{/if}
+	   {/loop}
+      </table>
+      </td>
+  </tr>
+</table>
+{template 'phpcms','footer'}

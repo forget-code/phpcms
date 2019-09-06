@@ -1,0 +1,24 @@
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">{$username}的个人资料</li>
+		<li class="t_c"><img src="{$userface}" width="{$facewidth}" height="{$faceheight}" alt="" /></li>
+		<li class="li_line"><b>姓名:</b>{$truename}</li>
+		<li class="li_line"><b>性别:</b>{$gender}</li>
+		<li class="li_line"><b>生日:</b>{$birthday}</li>
+		<li class="li_line"><b>所在地:</b>{$province}-{$city}</li>
+		<li class="li_line"><b>地址:</b>{$address}</li>
+		<li class="li_line"><b>邮编:</b>{$postid}</li>
+		<li class="li_line"><b>电话:</b>{$telephone}</li>
+		<li class="li_line"><b>主页:</b><a href="{$homepage}" target="_blank">{$homepage}</a></li>
+		{if $showemail}
+		<li class="li_line"><b>邮件:</b><a href="{PHPCMS_PATH}mail/sendmail.php?mailto={$email}" target="_blank">{$email}</a></li>
+		{/if}
+		<li class="li_line"><b>QQ:</b><a href="http://wpa.qq.com/msgrd?V=1&Uin={$qq}&Site={$PHP_DOMAIN}&Menu=yes" title="点击QQ交谈" target="_blank">{$qq}</a></li>
+		<li class="li_line"><b>MSN:</b>{$msn}</li>
+		<li class="li_line"><b>ICQ:</b>{$icq}</li>
+		<li class="li_line"><b>SKYPE:</b>{$skype}</li>
+		<li class="li_line"><b>支付宝:</b>{$alipay}</li>
+		<li class="li_line"><b>贝宝:</b>{$paypal}</li>
+		<li class="li_line"><b>签名:</b>{$sign}</li>
+		</ul>
+		</div>

@@ -1,0 +1,61 @@
+{template 'phpcms','header'}
+
+<div class="main">
+<div class="main_content">
+	<div class="main_left">
+
+		<div class="left_box_2">
+			<ul style="padding:5px 0 0 5px;">
+			<li class="li_header">{$catname}</li>
+			<li class="pd3">{$catlist(0,$channelid,$catid,0,1,0)}</li>
+			</ul>
+		</div>
+{if $enableadd}
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header">
+			<span class="f_r"><a href="{$catlisturl}"><img src="{PHPCMS_PATH}images/more.gif" width="34" height="9" alt="More" /></a></span>
+			<img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />{$catname}</li>
+			</ul>
+			<ul>
+			{$picpicture(0,$channelid,$catid,0,0,0,5,12,0,0,0,1,1,1,100,100,5)}
+			</ul>
+		</div>
+{/if}
+{loop $arrchildid $i $childcat}
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header">
+			<span class="f_r"><a href="{$childcat[caturl]}" target="{$childcat[target]}"><img src="{PHPCMS_PATH}images/more.gif" width="34" height="9" alt="More" /></a></span>
+			<img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />{$childcat[catname]}</li>
+			</ul>
+			<ul>
+			{$picpicture(0,$channelid,$childcat[catid],1,0,0,$showchilditems,12,0,0,0,1,1,0,100,100,5)}
+			</ul>
+		</div>
+{/loop}	
+	</div>
+	<div class="main_right">
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">推荐{$_CHANNEL[$channelid][channelname]}</li>
+		</ul>
+		<ul>
+		{$picpicture(0,$channelid,$catid,1,0,0,1,20,0,1,0,3,1,0,180,160,1)}
+		</ul>
+		</div>
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">热门{$_CHANNEL[$channelid][channelname]}</li>
+		</ul>
+		<ul class="t_c">
+		{$picpicture(0,$channelid,$catid,1,0,0,1,20,0,0,60,5,1,0,180,160,1)}
+		</ul>
+		</div>
+
+	</div>
+</div>
+</div>
+{template 'phpcms','footer'}

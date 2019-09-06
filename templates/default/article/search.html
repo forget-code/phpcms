@@ -1,0 +1,108 @@
+{template 'phpcms','header'}
+      <table width="980" align="center" cellspacing="1" cellpadding="0" style="border:1px solid #ccc">
+	<tr>
+	  <td height="24" align="center" class="bg_titlebar"><b>{$channelname}搜索</b></td>
+	</tr>
+	<tr>
+	  <td>
+	    <table width="100%"  cellspacing="2" cellpadding="5" align="center">
+		<form name="myform" action="{$channelurl}search.php" method="get">
+		<tr>
+		<td width="20%" class="search_l">搜索范围 </td>
+		<td colspan="3" class="search_r">
+		<input type="radio" class="radio" name="srchtype" value="title" {$srchtypecheck['title']}> 标题
+        <input type="radio" class="radio" name="srchtype" value="content" {$srchtypecheck['content']} {if !$_PHPCMS['searchcontent']}disabled{/if}> 内容 
+		<input type="radio" class="radio" name="srchtype" value="username" {$srchtypecheck['username']}> 会员
+		<input type="radio" class="radio" name="srchtype" value="author" {$srchtypecheck['author']}> 作者
+        </td>
+		</tr>
+		<tr>
+		<td class="search_l">包含的关键字 </td>
+		<td width="23%" class="search_r"><input name="keywords" type="text" size="30" value="{$keywords}"> </td>
+		<td colspan="2" class="color_red">* 多个关键词之间用空格隔开</td>
+		</tr>
+		<tr>
+		<td class="search_l">所属栏目</td>
+		<td class="search_r">{$cat_select}</td>
+		<td width="8%">所属专题 </td>
+		<td width="49%">{$special_select}</td>
+		</tr>
+
+		<tr>
+		<td class="search_l">更新时间 </td>
+		<td colspan="3" class="search_r">
+		<select name="srchfrom">
+		<option value="0" {if !$srchfrom}selected{/if}>全部时间</option>
+		<option value="1" {if $srchfrom==1}selected{/if}>1 天前</option>
+		<option value="2" {if $srchfrom==2}selected{/if}>2 天前</option>
+		<option value="7" {if $srchfrom==7}selected{/if}>1 周前</option>
+		<option value="30" {if $srchfrom==30}selected{/if}>1 个月前</option>
+		<option value="90" {if $srchfrom==90}selected{/if}>3 个月前</option>
+		<option value="180" {if $srchfrom==180}selected{/if}>6 个月前</option>
+		<option value="365" {if $srchfrom==365}selected{/if}>1 年前</option>
+		</select>
+		<input type="radio" class="radio" name="before" value="0" {if !$before}checked{/if}> 之后
+		<input type="radio" class="radio" name="before" value="1" {if $before}checked{/if}> 之前
+		</td>
+		</tr>
+
+		<tr>
+		<td class="search_l">文章性质</td>
+		<td colspan="3" class="search_r">
+		<input type="checkbox" class="radio" name="elite" value="1" {if $elite}checked{/if}> 推荐
+		<input type="checkbox" class="radio" name="ontop" value="1" {if $ontop}checked{/if}> 置顶
+		</td>
+		</tr>
+
+		<tr>
+		<td class="search_l">排序方式</td>
+		<td colspan="3" class="search_r">
+		<select name="ordertype">
+		<option value="1" {if $ordertype==1}selected{/if}>更新时间降序</option>
+		<option value="2" {if $ordertype==2}selected{/if}>更新时间升序</option>
+		<option value="3" {if $ordertype==3}selected{/if}>浏览次数降序</option>
+		<option value="4" {if $ordertype==4}selected{/if}>浏览次数升序</option>
+		</select>
+		</td>
+		</tr>
+
+		<tr>
+		<td height="30" align="right" bgcolor="#F5F5F5">&nbsp;</td>
+		<td colspan="3" class="search_r">
+                <input type="hidden" name="search" value="1">
+		<input type="submit" name="submit" value="立即搜索" class="btn" />
+		<input type="button" onClick="location='search.php'" value="重新搜索" class="btn" />
+		</td>
+		</tr>
+
+		</form>
+		</table>
+	</td>
+	</tr>
+	{if $search}
+	<tr>
+	<td height="25" align="center" bgcolor="#F5F5F5">您输入的关键词是<b><font color=red>{$keywords}</font></b>，一共从
+
+<font color=red>{$totalnumber}</font>个结果中搜到<font color=red>{$number}</font>个结果</td>
+	</tr>
+
+	{loop $searchs $article}
+	<tr>
+	<td style="height:25px;padding-left:5px">
+	<b><a href="{$article[url]}" target="_blank" class="searchtitle">{$article[title]}</a></b> [{$article[adddate]}] </td>
+	</tr>
+	{if $article[description]}
+	<tr>
+	<td style="padding:15px; WORD-WRAP: break-word;">{$article[description]}</td>
+	</tr>
+	{/if}
+	<tr>
+	<td height="1" bgcolor="#eeeeee"> </td>
+	</tr>
+	{/loop}
+	<tr>
+	<td class="pages">{$pages}</td>
+	</tr>
+	{/if}
+	</table> 
+{template 'phpcms','footer'}

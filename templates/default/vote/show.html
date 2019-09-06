@@ -1,0 +1,51 @@
+{template 'phpcms','header'}
+<table cellpadding="0" cellspacing="0" width="980" align="center">
+   <tr>
+     <td class="position">当前位置：<a href="{PHPCMS_PATH}">首页</a> >> {if $channelid}<a href="{$channelurl}">{$channelname}</a> >>{/if} <a href="{PHPCMS_PATH}vote/">投票列表</a> >>{$subject}</td>
+   </tr>
+</table>
+<table cellpadding="0" cellspacing="0" width="980" align="center" class="mar_10">
+   <tr>
+    <td>
+<table cellpadding="2" cellspacing="1" class="tableBorder">
+   <tr>
+    <th colspan="2">{$subject}</th>
+  </tr>
+  <tr>
+    <td height="20" colspan="2" class="tablerow">
+投票人数：{$votemembers}{if $votemembers}（<a href="?voteid={$voteid}&showmember=1">查看参与投票的会员</a>）{/if}&nbsp;&nbsp;&nbsp;&nbsp;总票数：{$totalnumber} &nbsp;&nbsp;&nbsp;&nbsp;起始日期：{$fromdate}&nbsp;&nbsp;&nbsp;&nbsp;结束日期：{$todate}</td>
+  </tr>
+<form action="vote.php" method="post" name="votefrom" >
+ {loop $ops $op}
+  <tr>
+   <td width="30%" align="left" valign="middle" class="tablerow" > <input name="{$voteoption}" type="{$type}" value="{$op[optionid]}"> {$op[option]} </td>
+    <td class="tablerow">
+<img src="{PHPCMS_PATH}images/bar/bar{$op[i]}.gif" width="{$op[lenth]}" height="11">&nbsp;
+<b>{$op[number]}</b>&nbsp;({$op[per]})
+   </td>
+ </tr>
+{/loop}
+<tr>
+<td class="tablerow" colspan=2>&nbsp;&nbsp;
+<input name="voteid" type="hidden" value="{$voteid}" />
+<input name="submit" type="submit" value=" 投 票 ">
+</td>
+</tr>
+</form>
+
+{if $showmember}
+   <tr>
+    <td colspan="2" align="center" class="tablerowhighlight">参与投票的会员列表</td>
+  </tr>
+   <tr>
+<td colspan="2" class="tablerow" style="word-break:break-all">
+{$usernames}
+</td>
+  </tr>
+{/if}
+
+</table>
+    </td>
+  </tr>
+</table>
+{template 'phpcms','footer'}

@@ -1,0 +1,24 @@
+<table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#DDDDDD">
+  <tr>
+    <td height="30" bgcolor="#F5F5F5">
+<table width="100%" border="0" cellpadding="3" cellspacing="0" >
+  <form name="search" target="_blank" method="get" onSubmit="this.action=document.search.channelsearch.value">
+        <tr>
+          <td align="center">站内搜索：
+          <input size="40" type="text" name="keywords"> 
+      <select name="channelsearch">
+      {loop $_CHANNEL $channel}
+       {if $channel[channeltype]}
+       <option value="{$channel['channelurl']}search.php">{$channel['channelname']}</option> 
+       {/if}
+      {/loop}
+      </select> 
+         <input type="hidden" name="search" value="1">
+         <input type="submit" name="submit" value=" 搜 索 " class="btn">
+        </td>
+        </tr>
+  </form>
+</table>
+    </td>
+  </tr>
+</table>

@@ -1,0 +1,7 @@
+{loop $articles $i $article}
+<li class="li_line">
+{if $datetype}<span class="px10 f_r">{$article[adddate]}</span>{/if}
+{$article[img]} <a href="{$article[url]}" title="{$article[alt]}">{$article[title]}</a>
+{if $article[showcommentlink]}&nbsp;<a href="{PHPCMS_PATH}comment/index.php?item=articleid&itemid={$article[articleid]}" target="_blank"><span class="f_red">评</span></a>{/if}
+</li>
+{/loop}

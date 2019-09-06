@@ -1,0 +1,250 @@
+{template 'phpcms','header'}
+<script language=JavaScript>
+// 表单提交检测
+function doCheck(){
+
+	// 检测表单的有效性
+	// 如：标题不能为空，内容不能为空，等等....
+        if (document.myform.catid.value=='0'){
+            alert('指定的栏目不允许添加文章！只允许在其子栏目中添加文章。');
+            document.myform.catid.focus();
+            return false;
+        }
+	if (myform.title.value=="") {
+		alert("对不起，标题不能为空！");
+                document.myform.title.focus();
+		return false;
+	}
+{if $checkcodecontribute}
+        if (myform.checkcode.value=="") {
+                alert("请输入验证码!");
+                return false;
+        }
+{/if}
+}
+</script>
+
+<table cellspacing="0" cellpadding="0" border="0" width="980" align="center">
+<tr>
+<td class="tablerowhighlight" width="190" align="center" valign="top" bgcolor="#F7F2E3">
+{template 'member','left'}
+</td>
+<td width="20" valign="top">
+</td>
+<td width="770" valign="top">
+<!--\\-->
+<table width="100%" cellpadding="0" cellspacing="0" class="tableBorder">
+  <tr>
+    <td height="25" bgcolor="#F7F2E3">
+&nbsp;
+	·<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=add"><font color="red">发表文章</font></a>&nbsp;&nbsp;
+	·<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=manage&status=3">已通过[{$num_3}]</a>&nbsp;&nbsp;
+	·<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=manage&status=1">待审核[{$num_1}]</a>&nbsp;&nbsp;
+	·<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=manage&status=0">草稿[{$num_0}]</a>&nbsp;&nbsp;
+	·<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=manage&status=2">退稿[{$num_2}]</a>&nbsp;&nbsp;
+	</td>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="15" class="tablerow"> </td>
+  </tr>
+</table>
+
+{if $action=='add' || $action=='edit'}
+
+<script type="text/javascript" src="{PHPCMS_PATH}fckeditor/fckeditor.js"></script>
+<script type="text/javascript">
+	var editorBasePath = '{PHPCMS_PATH}fckeditor/';
+	var ChannelId = {$channelid} ;
+</script>
+
+<script type="text/javascript">
+window.onload = function()
+{
+	var oFCKeditor = new FCKeditor('content') ;
+	oFCKeditor.BasePath	= editorBasePath ;
+	oFCKeditor.ReplaceTextarea() ;
+}
+</script>
+
+<table width="100%" cellpadding="2" cellspacing="1" class="tableBorder">
+  <tr>
+    <th colspan="2">欢迎投稿</th>
+  </tr>
+   <form action="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action={$action}&submit=1&articleid={$articleid}" method="post" name="myform" onsubmit="return doCheck();">
+    <tr> 
+      <td class="tablerow" width="15%"> <b>所属栏目</b> </td>
+      <td class="tablerow" width="85%">
+{$cat_select}
+<font color='#FF0000'>*</font>
+</td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><b>所属专题</b> </td>
+      <td class="tablerow">
+{$special_select}
+</td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><b>标题</b></td>
+      <td class="tablerow">
+<input name='title' type='text' id='title' value='{$title}' size='50' maxlength='100'>
+<font color='#FF0000'>*</font>
+    </td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><b>关键词</b> </td>
+      <td class="tablerow"><input name="keywords" type="text" id="keywords" value='{$keywords}' size="30"> 多个关键词之间请用半角逗号“,”隔开</td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><b>作者</b> </td>
+      <td class="tablerow"><input name='author' type='text' id='author' value='{$author}' size='30' maxlength='30'></td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><b>E-mail</b> </td>
+      <td class="tablerow"><input name='authoremail' type='text' id='authoremail' value='{$authoremail}' size='30' maxlength='30'></td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><b>来源</b> </td>
+      <td class="tablerow">
+		<table width='100%' border='0' cellpadding='0' cellspacing='0'>
+		<tr><td width='40%'>网站名称 <input name='copyfromname' type='text' id='copyfromname' value='{$copyfromname}' size='15' maxlength='50'></td><td class="tablerow"> 网站地址 <input name='copyfromurl' type='text' id='copyfromurl' value='{$copyfromurl}' size='30' maxlength='200'></td></tr>
+		</table>
+</td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><b>内容简介</b> </td>
+      <td class="tablerow">
+    <textarea name="description" cols="64" rows="5">{$description}</textarea>
+    </td>
+    </tr>
+    <tr> 
+      <td class="tablerow"><b>内容</b> </td>
+      <td class="tablerow">
+		<textarea name="content" id="content" cols="64" rows="5">{$content}</textarea>
+   </td>
+    </tr>
+    <tr> 
+      <td class="tablerow" bgcolor="#F5F5F5"><b>标题图片</b> </td>
+      <td class="tablerow">
+         <input name='thumb' type='text' id='thumb' size='50' value='{$thumb}'> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=thumb&action=thumb&width=150&height=150','upload','360','300')">          </td>
+    </tr>
+
+    {$fields}
+
+{if $_PHPCMS['checkcodecontribute']}
+    <tr> 
+      <td class="tablerow" bgcolor="#F5F5F5"><b>验证码</b></td>
+      <td class="tablerow"><input name="checkcode" type="text" size="5" maxlength="4"><img src="{PHPCMS_PATH}checkcode.php" /></td>
+    </tr>
+{/if}
+	<tr> 
+      <td class="tablerow" bgcolor="#F5F5F5"><b>文章状态</b></td>
+      <td class="tablerow">
+		<input name='status' type='radio' value='3' {if $status==3}checked{/if} {if $disabled}disabled{/if}> 已通过&nbsp;
+		<input name='status' type='radio' value='1' {if !isset($status) || $status==1}checked{/if} > 待审核&nbsp;
+		<input name='status' type='radio' value='0' {if isset($status) && $status==0}checked{/if}>草稿&nbsp;
+		<input name='status' type='radio' value='2'  {if $status==2}checked{else}disabled{/if}> 退槁&nbsp;
+	</td>
+    </tr>
+    <tr> 
+      <td class="tablerow" colspan="2" height="30" align="center"><input type="Submit" name="Submit" value=" 发表 "> &nbsp; <input type="reset" name="Reset" value=" 重置 "></td>
+    </tr>
+  </form>
+</table>
+<!--//--->
+
+{elseif $action=='preview'}
+
+<table cellpadding="2" cellspacing="1" class="tableborder">
+  <tr>
+    <th colspan=6>{$title} - {$adddate}</th>
+  </tr>
+  <tr>
+    <td class="tablerow">{$content}</td>
+  </tr>
+  <tr align=right>
+    <td class="tablerow">
+	<a href="#" onclick="javascript:history.go(-1);">返回</a>
+	<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=edit&articleid={$articleid}">编辑</a>
+	<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=send&articleid={$articleid}">投稿</a>
+	<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=delete&articleid={$articleid}">删除</a>	
+	</td>
+  </tr>
+</table>
+
+{elseif $action=='manage'}
+
+<table cellpadding="2" cellspacing="1" class="tableborder">
+  <tr>
+    <th colspan=6>文章管理</th>
+  </tr>
+<tr align=center>
+<td width="8%"  class="tablerowhighlight">ID</td>
+<td width="43%" class="tablerowhighlight">标题</td>
+<td width="15%" class="tablerowhighlight">栏目</td>
+<td width="12%" class="tablerowhighlight">发表时间</td>
+<td width="10%" class="tablerowhighlight">点击</td>
+<td width="12%" class="tablerowhighlight">管理操作</td>
+</tr>
+<form method="post" name="myform">
+{loop $articles  $article}
+<tr align='center' onmouseout="this.style.backgroundColor='#ffffff'" onmouseover="this.style.backgroundColor='#EBF6FB'" bgColor='#ffffff'>
+<td>{$article[articleid]}</td>
+<td align=left>{if $article[status]==3}<a href="{$article[url]}" target="_blank">{else}<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=preview&articleid={$article[articleid]}">{/if}{$article[title]}</a>{if $article[ontop]}<font color=red> 顶</font>{/if}{if $article[elite]}<font color=blue> 荐</font>{/if}
+</td>
+<td><a href="{$article[catdir]}" target="_blank">{$_CAT[$article[catid]][catname]}</a></td>
+<td>{$article[adddate]}</td>
+<td>{$article[hits]}</td>
+<td>{if $status<3}<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=edit&articleid={$article[articleid]}">编辑</a> | <a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=delete&articleid={$article[articleid]}">删除</a>{else}<span style="color:#C0C0C0">编辑 | 删除</span>{/if}</td>
+</tr>
+{/loop}
+</table>
+
+<table width="100%" height="10" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+<table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align='center'>{$pages}</td>
+  </tr>
+</table>
+
+<table width="100%" cellpadding="0" cellspacing="0" class="tableBorder">
+<form method="get" name="search" action="{PHPCMS_PATH}member/myitem.php?">
+  <tr>
+    <td height="30" class="tablerow" align="center">
+	<input name='module' type='hidden' value='{$module}'>
+	<input name='catid' type='hidden' value='{$catid}'>
+        <input name='status' type='hidden' value='{$status}'>
+	<select name="srchtype">
+	<option value="0" {if $srchtype==0}selected{/if}> 标题 </option>
+	<option value="1" {if $srchtype==1}selected{/if}> 内容 </option>
+	<option value="2" {if $srchtype==2}selected{/if}> 作者 </option>
+	</select>&nbsp;
+	<input name='keywords' type='text' size='30' value='{$keywords}'>&nbsp;
+	{$cat_select}
+	<input type="checkbox" class="radio" name="elite" value="1" {if $elite==1}checked{/if}> 推荐
+	<input type="checkbox" class="radio" name="ontop" value="1" {if $ontop==1}checked{/if}> 置顶
+	<select name="ordertype">
+	<option value="1" {if $ordertype==1}selected{/if}>更新时间降序</option>
+	<option value="2" {if $ordertype==2}selected{/if}>更新时间升序</option>
+	<option value="3" {if $ordertype==3}selected{/if}>浏览次数降序</option>
+	<option value="4" {if $ordertype==4}selected{/if}>浏览次数升序</option>
+	</select>
+	<input name='submit' type='submit' value='文章搜索'></td>
+  </tr>
+</form>
+</table>
+
+<br />
+{/if}
+
+</td>
+</tr>
+</table>
+{template 'phpcms','footer'}

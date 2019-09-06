@@ -1,0 +1,339 @@
+{template 'phpcms','header'}
+<script type="text/javascript" src="{PHPCMS_PATH}include/js/MyCalendar.js"></script>
+<script LANGUAGE="javascript">
+<!--
+function CheckForm() {
+
+if (document.myform.pwdconfirm.value!=document.myform.password.value)
+	{
+	  alert("两次输入的密码不一致！")
+      document.myform.password.value = ""
+      document.myform.pwdconfirm.value = ""
+	  document.myform.password.focus()
+	  document.myform.password.select()
+	  return false
+	 }
+if (document.myform.email.value=="")
+	{
+	  alert("请输入E-mail！")
+	  document.myform.email.focus()
+	  return false
+	 }
+    document.myform.province.value=area.document.regionform.province.value;
+    document.myform.city.value=area.document.regionform.city.value;
+    document.myform.submit.disabled=true;
+}
+//-->
+</script>
+<table width="780" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td class="side_3">基本资料</td>
+  </tr>
+</table>
+<table cellpadding="0" cellspacing="0" width="780" align="center" class="reg_tab mar_5">
+<form name="myform" method="post" action="{PHPCMS_PATH}member/modify.php" onSubmit='return CheckForm();'>
+      <tr>
+	    <td width="10%">&nbsp;</td>
+        <td width="12%">用户名<br>
+        </td>
+        <td>{$username}
+        </td>
+      </tr>
+      <tr>
+	    <td>&nbsp;</td>
+        <td>密码<br></td>
+        <td><input name="password" type="password" id="password" size="15"> <span class="color_1">4到20个字符</span></td>
+      </tr>
+    <tr>
+      <td>&nbsp;</td>
+        <td>确认密码</td>
+        <td><input name="pwdconfirm" type="password" id="pwdconfirm" size="15"></td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>密码提示问题</td>
+        <td><input name="question" type="text" id="question" size="30" value="{$question}"></td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>问题答案</td>
+        <td><input name="answer" type="text" id="answer" size="30"></td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>Email地址</td>
+        <td> <input name="email" type="text" id="email" size="30" maxlength="50" value="{$email}"> <input type="checkbox" name="showemail" id="showemail" value="1" {if $showemail}checked{/if} class="radio"> <span class="color_1">是否公开</span> </td>
+      </tr>
+</table>
+<table width="780" align="center" cellpadding="0" cellspacing="0" class="mar_10">
+  <tr>
+    <td class="side_3">详细资料</td>
+  </tr>
+</table>
+<table cellpadding="0" cellspacing="0" width="780" align="center" class="reg_tab mar_5">
+      <tr>
+	    <td width="10%">&nbsp;</td>
+        <td width="12%">真实姓名</td>
+        <td><input name="truename" type="text" id="truename" size="20" maxlength="50" 
+
+value="{$truename}"></td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>性别</td>
+        <td>
+		<input name="gender" type="radio" style="border:0px " value="1" {if 
+
+$gender}checked{/if} > <span class="color_2">男</span> 
+        <input type="radio" name="gender" value="0" style="border:0px " {if !$gender}
+
+checked{/if}> <span class="color_2">女</span> </td>
+      </tr>
+  <tr>
+    <td></td>
+    <td>生日</td>
+    <td>
+<input name="byear" type="text" size="4" value="{$byear}">
+      <span class="color_2">年</span> 
+<select name="bmonth" id="bmonth">
+ <option value="00" {$bmonth['00']} ></option>
+ <option value="01" {$bmonth['01']}>1</option>
+ <option value="02" {$bmonth['02']}>2</option>
+ <option value="03" {$bmonth['03']}>3</option>
+ <option value="04" {$bmonth['04']}>4</option>
+ <option value="05" {$bmonth['05']}>5</option>
+ <option value="06" {$bmonth['06']}>6</option>
+ <option value="07" {$bmonth['07']}>7</option>
+ <option value="08" {$bmonth['08']}>8</option>
+ <option value="09" {$bmonth['09']}>9</option>
+ <option value="10" {$bmonth['10']}>10</option>
+ <option value="11" {$bmonth['11']}>11</option>
+ <option value="12" {$bmonth['12']} >12</option>
+      </select>
+      <span class="color_2">月</span> 
+      <select name="bday" id="bday">
+ <option value="00" {$bday['00']} ></option>
+ <option value="01" {$bday['01']} >1</option>
+ <option value="02" {$bday['02']} >2</option>
+ <option value="03" {$bday['03']} >3</option>
+ <option value="04" {$bday['04']} >4</option>
+ <option value="05" {$bday['05']} >5</option>
+ <option value="06" {$bday['06']} >6</option>
+ <option value="07" {$bday['07']} >7</option>
+ <option value="08" {$bday['08']} >8</option>
+ <option value="09" {$bday['09']} >9</option>
+ <option value="10" {$bday['10']} >10</option>
+ <option value="11" {$bday['11']} >11</option>
+ <option value="12" {$bday['12']} >12</option>
+ <option value="13" {$bday['13']} >13</option>
+ <option value="14" {$bday['14']} >14</option>
+ <option value="15" {$bday['15']} >15</option>
+ <option value="16" {$bday['16']} >16</option>
+ <option value="17" {$bday['17']} >17</option>
+ <option value="18" {$bday['18']} >18</option>
+ <option value="19" {$bday['19']} >19</option>
+ <option value="20" {$bday['20']} >20</option>
+ <option value="21" {$bday['21']} >21</option>
+ <option value="22" {$bday['22']} >22</option>
+ <option value="23" {$bday['23']} >23</option>
+ <option value="24" {$bday['24']} >24</option>
+ <option value="25" {$bday['25']} >25</option>
+ <option value="26" {$bday['26']} >26</option>
+ <option value="27" {$bday['27']} >27</option>
+ <option value="28" {$bday['28']} >28</option>
+ <option value="29" {$bday['29']} >29</option>
+ <option value="30" {$bday['30']} >30</option>
+ <option value="31" {$bday['31']} >31</option>
+        </select>
+      <span class="color_2">日</span> </td>
+    </tr>
+      <tr>
+	    <td></td>
+        <td>证件类别</td>
+        <td>
+		<select name="idtype">
+			<option value="身份证" {if $idtype=="身份证"}selected{/if} >身份证
+
+</option>
+			<option value="学生证" {if $idtype=="学生证"}selected{/if}>学生证
+
+</option>
+			<option value="军人证" {if $idtype=="军人证"}selected{/if}>军人证
+
+</option>
+			<option value="护照" {if $idtype=="护照"}selected{/if} >护照
+
+</option>
+		</select>
+		</td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>证件号码</td>
+        <td><input type=text name="idcard" value="{$idcard}" size=22 maxlength=18></td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>所在地：</td>
+        <td>
+<iframe name='area' id='area' src='../region.php?country=中华人民共和国&province=
+
+{$province}&city={$city}' width='300' height='60' frameborder='0' scrolling='no'></iframe>
+<input name='province' type='hidden'>
+<input name='city' type='hidden'>
+		</td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>所属行业</td>
+        <td>
+	<select name="industry">
+	 <option value="">请选择　　</option>
+	 <option value="金融业" {if $industry=="金融业"}selected{/if}>金融业</option>
+	 <option value="服务业" {if $industry=="服务业"}selected{/if}>服务业</option>
+	 <option value="信息产业" {if $industry=="信息产业"}selected{/if}>信息产业</option>
+	 <option value="制造业" {if $industry=="制造业"}selected{/if}>制造业</option>
+	 <option value="传播业" {if $industry=="传播业"}selected{/if} >传播业</option>
+	 <option value="教育" {if $industry=="教育"}selected{/if} >教育</option>
+	 <option value="政府机构" {if $industry=="政府机构"}selected{/if} >政府机构</option>
+	 <option value="医疗保健" {if $industry=="医疗保健"}selected{/if} >医疗保健</option>
+	 <option value="房地产" {if $industry=="房地产"}selected{/if} >房地产</option>
+	 <option value="其它" {if $industry=="其它"}selected{/if} >其它</option>
+	</select>
+		</td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>教育水平</td>
+        <td>
+	<select name="edulevel" size=1>
+	 <option value="">请选择　　</option>
+	 <option value="博士" {if $edulevel=="博士"}selected{/if} >博士</option>
+	 <option value="硕士" {if $edulevel=="硕士"}selected{/if}>硕士</option>
+	 <option value="大学" {if $edulevel=="大学"}selected{/if}>大学</option>
+	 <option value="高中" {if $edulevel=="高中"}selected{/if}>高中</option>
+	 <option value="初中" {if $edulevel=="初中"}selected{/if}>初中</option>
+	 <option value="小学" {if $edulevel=="小学"}selected{/if}>小学</option>
+	</select>
+		</td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>从事职业</td>
+        <td>
+	<select name="occupation">
+	 <option value="">请选择　　</option>
+	 <option value="学生" {if $occupation=="学生"}selected{/if}>学生</option>
+	 <option value="职员" {if $occupation=="职员"}selected{/if}>职员</option>
+	 <option value="经理" {if $occupation=="经理"}selected{/if}>经理</option>
+	 <option value="专业人士" {if $occupation=="专业人士"}selected{/if}>专业人士
+
+</option>
+	 <option value="公务员" {if $occupation=="公务员"}selected{/if}>公务员</option>
+	 <option value="私营主" {if $occupation=="私营主"}selected{/if}>私营主</option>
+	 <option value="待业" {if $occupation=="待业"}selected{/if}>待业</option>
+	 <option value="退休" {if $occupation=="退休"}selected{/if}>退休</option>
+	 <option value="其它" {if $occupation=="其它"}selected{/if}>其它</option>
+	</select>
+		</td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>收入水平</td>
+        <td>
+	<select name="income">
+	 <option value="">请选择　　</option>
+	 <option value="6000以上" {if $income=="6000以上"}selected{/if} >6000以上</option>
+	 <option value="4001-6000" {if $income=="4001-6000"}selected{/if}>4001-6000</option>
+	 <option value="2001-4000" {if $income=="2001-4000"}selected{/if}>2001-4000</option>
+	 <option value="1001-2000" {if $income=="1001-2000"}selected{/if}>1001-2000</option>
+	 <option value="501-1000" {if $income=="501-1000"}selected{/if}>501-1000</option>
+	 <option value="500以下" {if $income=="500以下"}selected{/if}>500以下</option>
+	</select>
+		</td>
+      </tr>
+     <tr>
+	    <td></td>
+       <td>电话</td>
+        <td><input name="telephone" type="text" id="telephone" size="20" 
+
+value="{$telephone}"></td>
+      </tr>
+     <tr>
+	    <td></td>
+       <td>手机</td>
+        <td><input name="mobile" type="text" id="mobile" size="20" value="{$mobile}"></td>
+      </tr>
+    <tr>
+	    <td></td>
+      <td>地址</td>
+        <td><input name="address" type="text" id="address" size="50" value="{$address}"></td>
+     </tr>
+    <tr>
+	   <td></td>
+      <td>邮编</td>
+       <td><input name="postid" type="text" id="postid" size="10" value="{$postid}"></td>
+    </tr>
+      <tr>
+	    <td></td>
+        <td>主页</td>
+        <td><input name="homepage" type="text" id="homepage" size="20" value="{$homepage}"></td>
+      </tr>
+	  <tr>
+	    <td></td>
+        <td>QQ号码</td>
+        <td><input name="qq" type="text" id="qq" size="20" maxlength="20" value="{$qq}"></td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>MSN帐号</td>
+        <td><input name="msn" type="text" id="msn" size="20" maxlength="50" value="{$msn}"></td>
+      </tr>
+	  <tr>
+	    <td></td>
+        <td>ICQ号码</td>
+        <td><input name="icq" type="text" id="icq" size="20" maxlength="20" value="{$icq}"></td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>Skype帐号</td>
+        <td><input name="skype" type="text" id="skype" size="20" maxlength="50" value="{$skype}"></td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>支付宝帐号</td>
+        <td><input name="alipay" type="text" id="alipay" size="20" maxlength="50" value="{$alipay}"></td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>贝宝帐号</td>
+        <td><input name="paypal" type="text" id="paypal" size="20" maxlength="50" value="{$paypal}"></td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>头像地址</td>
+        <td><input name="userface" type="text" id="userface" size="50" maxlength="50" value="{$userface}"></td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>头像大小</td>
+        <td><span class="color_2"> 宽度：</span><input name="facewidth" type="text" id="facewidth" size="4" maxlength="50" value="{$facewidth}">　<span class="color_2">px 高度：</span>  <input name="faceheight" type="text" id="faceheight" size="4" maxlength="50" value="{$faceheight}"> <span class="color_2"> px</span></td>
+      </tr>
+      <tr>
+	    <td></td>
+        <td>签名信息</td>
+        <td><textarea name='sign' cols='35' rows='5' id='sign'>{$sign}</textarea></td>
+      </tr>
+      <tr>
+    <tr>
+      <td height="43"></td>
+	  <td></td>
+        <td>
+     <input type="hidden" name="save" value="1">
+      <input type="submit" name="submit" value="修 改" class="btn">
+      <input type="reset" name="reset" value="清 除" class="btn"></td>
+		</td>
+    </tr>
+</form>
+</table>
+{template 'phpcms','footer'}

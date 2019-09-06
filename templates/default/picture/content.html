@@ -1,0 +1,315 @@
+{template 'phpcms','header'}
+
+<script language=javascript type=text/javascript>
+function fontZoom(size)
+{
+ document.getElementById('{$addtime}l').style.fontSize=size+'px'
+}
+var pictureurl=new Array();
+var picturename=new Array();
+{loop $pictureurls $id $pic}
+   pictureurl[{$id}] = "{$pic[url]}";
+   picturename[{$id}] = "{$pic[name]}";
+{/loop}
+</script>
+<!--图片浏览JS开始-->
+<script language=JavaScript>
+<!-- Begin
+var rotate_delay =4000; // delay in milliseconds (1000 = 1 secs)
+current = 0;
+function next() {
+	if(document.slideform.slide[current+1])
+	{
+		if(document.all){
+			document.images.show.style.filter="blendTrans(duration=2)"
+			document.images.show.style.filter="blendTrans(duration=crossFadeDuration)"
+			document.images.show.filters.blendTrans.Apply()      
+		}
+		document.images.show.src = pictureurl[current+1];
+	    setidval('picname',picturename[current+1]);
+		if(document.all){
+			document.images.show.filters.blendTrans.play()    
+		}
+		document.slideform.slide.selectedIndex = ++current;
+    }
+    else
+        first();
+}
+
+function previous()
+{	
+    if(current-1 >= 0)
+	{
+		if(document.all){
+			document.images.show.style.filter="blendTrans(duration=2)"
+			document.images.show.style.filter="blendTrans(duration=crossFadeDuration)"
+			document.images.show.filters.blendTrans.Apply()  
+		}
+		document.images.show.src = pictureurl[current-1];
+		setidval('picname',picturename[current-1]);
+		if(document.all){
+			document.images.show.filters.blendTrans.play()    
+		}		
+		document.slideform.slide.selectedIndex = --current;
+   }
+   else
+       last();
+
+}
+
+function first()
+{
+        current = 0;
+		if(document.all){
+			document.images.show.style.filter="blendTrans(duration=2)"
+			document.images.show.style.filter="blendTrans(duration=crossFadeDuration)"
+			document.images.show.filters.blendTrans.Apply() 
+		}
+	    document.images.show.src = pictureurl[0];
+		setidval('picname',picturename[0]);
+		if(document.all){
+			document.images.show.filters.blendTrans.play()    
+		}	
+        document.slideform.slide.selectedIndex = 0;
+}
+
+function last() {
+	current = document.slideform.slide.length-1;
+	if(document.all){
+			document.images.show.style.filter="blendTrans(duration=2)"
+			document.images.show.style.filter="blendTrans(duration=crossFadeDuration)"
+			document.images.show.filters.blendTrans.Apply() 
+	}
+	document.images.show.src = pictureurl[current];
+	setidval('picname',picturename[current]);
+	if(document.all){
+			document.images.show.filters.blendTrans.play()    
+	}	
+	document.slideform.slide.selectedIndex = current;
+}
+
+function ap(text) {
+	document.slideform.slidebutton.value = (text == "Stop") ? "Start" : "Stop";
+	rotate();
+}
+
+function change() {
+	current = document.slideform.slide.selectedIndex;
+	if(document.all){
+		document.images.show.style.filter="blendTrans(duration=2)"
+		document.images.show.style.filter="blendTrans(duration=crossFadeDuration)"
+		document.images.show.filters.blendTrans.Apply() 
+	}
+	document.images.show.src = pictureurl[current];
+	setidval('picname',picturename[current]);
+	if(document.all){
+		document.images.show.filters.blendTrans.play()    
+	}	
+}
+
+function rotate() {
+	if (document.slideform.slidebutton.value == "Stop") {
+		current = (current == document.slideform.slide.length-1) ? 0 : current+1;
+		if(document.all){
+			document.images.show.style.filter="blendTrans(duration=2)"
+			document.images.show.style.filter="blendTrans(duration=crossFadeDuration)"
+			document.images.show.filters.blendTrans.Apply() 
+		}
+		document.images.show.src = pictureurl[current];
+		setidval('picname',picturename[current]);
+		if(document.all){
+			document.images.show.filters.blendTrans.play()    
+		}	
+		document.slideform.slide.selectedIndex = current;
+		window.setTimeout("rotate()", rotate_delay);
+	}
+}
+function openpic()
+{
+   window.open(pictureurl[current]);
+}
+//  End -->
+</script>
+<!--图片浏览JS结束-->
+<table width="980" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="760" valign="top">
+<!--位置导航-->
+	<table width="100%" align="center" cellpadding="0"  cellspacing="0">
+            <tr>
+              <td class="position">当前位置：<a href="{$channelurl}">{$channelname}首页</a> >> {$position} {$title}</td>
+            </tr>
+          </table>
+
+<!--主标题--><div id="title" align="center">{$title}</div>
+<!--文件属性--><div class="par" align="center">发布日期：{$adddate}&nbsp;&nbsp;作者：<a href="{PHPCMS_PATH}member/member.php?username={$username}" class="member_url">{$author}</a>&nbsp;&nbsp;来源：<a href="{$copyfromurl}" target="_blank">{$copyfromname}</a>&nbsp;&nbsp;浏览次数：<span id="hits">0</span>&nbsp;&nbsp;<a href="{PHPCMS_PATH}comment/index.php?item=pictureid&itemid={$pictureid}&itemurl={$itemurl}" class="commenturl">网友评论<span id="commentnumber1">0</span>条</a>&nbsp;&nbsp;文字大小：【<a href="javascript:fontZoom(16)">大</a>】【<a href="javascript:fontZoom(14)">中</a>】【<a href="javascript:fontZoom(12)">小</a>】 评分等级：{$stars}</div>
+<hr align="center" width="740" size="1" noshade style="color:#cccccc;" />
+
+
+<div class="content_text" id="{$addtime}1"><a href="{$itemurl}">来源：{$_PHPCMS['sitename']}({$PHP_SITEURL})<br/>作者：{$username}<br/>原文：{$title}({$itemurl})</a></div>
+<div class="content_text" id="{$addtime}l">{$content}</div>
+{if $specialid}<div class="content_text" id="{$addtime}l">相关专题：<a href="{$special[specialurl]}" class="specialurl">{$special[specialname]}</a></div>{/if}
+
+
+<form name=slideform >
+  <table width="740" align="center" cellPadding="0" cellSpacing="0">
+    <tbody>
+      <tr>
+        <td valign="top">
+<!--图片显示-->
+	  <table width="100%" cellPadding=0 cellSpacing=0 class="content_text">
+            <tbody>
+              <tr>
+                <td align="center" height="24"><span id="picname" style="font-weight:bold;font-size:14px;">{$pictureurls[0][name]}</span></td>
+              </tr>
+              <tr>
+                <td align="center"><p><img src="{$pictureurls[0][url]}" align="center" name="show" id="picture{$id}" alt="{$pictureurls[0][name]}" border="0" style="cursor:hand;" onclick="openpic()" onload="javascript:setpicWH(picture{$id},720,1000)"></td>
+              </tr>
+            </tbody>
+          </table>
+         </td>
+      </tr>
+      <tr>
+        <td><!--图片名列表-->
+        <table cellSpacing=0 cellPadding=0 width="100%" align="center">
+            <tbody>
+              <tr>
+                <td align=center height=18>
+<select onchange="change();" name="slide">
+  {loop $pictureurls $id $pic}
+  <option value="{$id}">{$pic[name]}</option>
+  {/loop}
+</select>
+               </td>
+              </tr>
+            </tbody>
+          </table></td>
+      </tr>
+      <tr>
+        <td><!--控制按钮-->
+         <table cellSpacing=0 cellPadding=0 width="100%">
+            <tbody>
+              <tr>
+                <td align="center" height=29>
+                  <input title=Beginning onclick=first(); type=button value=" |<< " class="btn">
+                  <input title=Previous onclick=previous(); type=button value=" << " class="btn">
+                  <input title=AutoPlay onclick=ap(this.value); type=button value=Start name=slidebutton class="btn">
+                  <input title=Next onclick=next(); type=button value=" >> " class="btn">
+                  <input name="button" type=button title=End onClick=last(); value=" >>| " class="btn"></td>
+              </tr>
+            </tbody>
+          </table></td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+
+
+        <div class="content_text" id="{$addtime}2"><a href="{$itemurl}">来源：{$_PHPCMS['sitename']}({$PHP_SITEURL})<br/>作者：{$username}<br/>原文：{$title}({$itemurl})</a></div>
+        <div class="content_text" align="right" id="fontzoom">责任编辑：<a href="{PHPCMS_PATH}member/member.php?username={$checker}" class="member_url">{$checker}</a></div>
+        <div class="gray" align="center" id="par">【<a href="#comment">发表评论</a>】　【<a href="javascript:window.external.addFavorite(window.location,'{$title}')">加入收藏</a>】　【<a href="{PHPCMS_PATH}mail/sendmail.php?subject=推荐《{$title}》&content={$title}<br/>{$itemurl}">告诉好友</a>】　【<a href="javascript:window.print();">打印本页</a>】　【<a href="javascript:window.close()">关闭窗口</a>】　【<a href="#top">返回顶部</a>】</div>
+<br>
+ <table width="100%"  cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="titlebar" width="105">相关图片</td>
+        <td width="10" height="25"><img src="{$skindir}/images/tit3_r.jpg"></td>
+        <td class="bg_titlebar" width="587" align="right"></td>
+        <td width="36"><img src="{$skindir}/images/tit2_r.jpg"></td>
+      </tr>
+    </table>
+{$relatedpicture(0,$channelid,$keywords,$pictureid,10,100,1)}
+ <table width="100%"  cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="titlebar" width="105">相关评论</td>
+        <td width="10" height="25"><img src="{$skindir}/images/tit3_r.jpg"></td>
+        <td class="bg_titlebar" width="587" align="right"> <a href="{PHPCMS_PATH}comment/index.php?item=pictureid&itemid={$pictureid}&itemurl={$itemurl}" class="more">共<span id="commentnumber">0</span>条评论 &nbsp;发表/查看更多评论</a>&nbsp;</td>
+        <td  width="36"><img src="{$skindir}/images/tit2_r.jpg"></td>
+      </tr>
+    </table>	
+<script type="text/javascript" src="{PHPCMS_PATH}comment/list_js.php?item=pictureid&itemid={$pictureid}&commentnum=10&ordertype=1"></script>
+<table width="100%" cellpadding="2" cellspacing="2">
+	<tr>
+	<td bgcolor="#F5F5F5" height="23"><b>发表评论</b> </td>
+	<td align="right" bgcolor="#F5F5F5"><a name="comment">　【<a href="#top">返回顶部</a>】【<a href="javascript:window.close();">关闭窗口</a>】&nbsp;</td>
+	</tr>
+	<form name="myform" method="post" action="{PHPCMS_PATH}comment/index.php?action=add&submit=1" onSubmit="return docheck();">
+	<input name="item" type="hidden" value="pictureid">
+	<input name="itemid" type="hidden" value="{$pictureid}">
+	<input name="itemurl" type="hidden" value="{$itemurl}">
+	<tr>
+	<td valign="top">
+        评分：
+        <input name="score" type="radio" class="radio" title="很差" value="1"> 1 
+        <input name="score" type="radio" class="radio" title="差" value="2"> 2 
+        <input name="score" type="radio" class="radio" title="一般" value="3" checked> 3 
+        <input name="score" type="radio" class="radio" title="好" value="4"> 4 
+        <input name="score" type="radio" class="radio" title="很好" value="5"> 5 
+        <br/>
+	<textarea name="content" cols="50" rows="8" id="content"></textarea><br/>
+	<span id="showcheckcode"></span>&nbsp;&nbsp;<input name="submit" type="submit" class="btn" value=" 发表 ">&nbsp;&nbsp;<input name="reset" type="reset" class="btn" value=" 重置 ">
+	</td>
+	<td valign="top">
+		<ul style="border:#c0c0c0 1px dotted;padding:5px;">
+		<li>请遵守《互联网电子公告服务管理规定》及中华人民共和国其他各项有关法律法规。 </li>
+		<li>严禁发表危害国家安全、损害国家利益、破坏民族团结、破坏国家宗教政策、破坏社会稳定、侮辱、诽谤、教唆、淫秽等内容的评论 。</li>
+		<li>用户需对自己在使用本站服务过程中的行为承担法律责任（直接或间接导致的）。</li> 
+		<li>本站管理员有权保留或删除评论内容。</li>
+		</ul>
+	</td>
+	</tr>
+	</form>
+	</table>
+    </td>
+    <td width="10">&nbsp;</td>
+    <td width="210" align="center" valign="top" class="gray">
+
+      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
+        <tr>
+          <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
+          <td width="62%">最新图片</td>
+          <td width="14%">&nbsp;</td>
+          <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
+        </tr>
+     </table>
+  <script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&datenum=60&picturenum=4&titlelen=30&ordertype=1&type=picture"></script>
+
+      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
+        <tr>
+          <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
+          <td width="62%">推荐图片</td>
+          <td width="14%">&nbsp;</td>
+          <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
+        </tr>
+     </table>
+  <script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&iselite=1&datenum=60&picturenum=4&titlelen=30&ordertype=1&type=picture"></script>
+
+      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
+        <tr>
+          <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
+          <td width="62%">热门图片</td>
+          <td width="14%">&nbsp;</td>
+          <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
+        </tr>
+     </table>
+ <script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&datenum=60&picturenum=4&titlelen=30&ordertype=5&type=picture"></script>
+
+  </td>
+  </tr>
+</table>
+<script type=text/javascript>
+document.getElementById('{$addtime}1').style.display="none";
+document.getElementById('{$addtime}2').style.display="none";
+function docheck()
+{
+    myform.itemurl.value = window.location;
+    if(myform.content.value=="") {
+       alert("请输入评论内容!");
+       myform.content.focus();
+       return false;
+    }
+    return true;
+}
+</script>
+<script type="text/javascript" src="{$channelurl}show_js.php?pictureid={$pictureid}"></script>
+
+{template 'phpcms','footer'}

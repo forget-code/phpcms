@@ -1,0 +1,8 @@
+{loop $votes $i $vote}
+{if $showtype}
+<li class="li_line">·<a href="{$vote[url]}" title="{$vote[subject]}" target="_blank" >{$vote[subject]}</a></li>
+{else}
+{$voteshow(0,$vote[voteid])}
+{/if}
+{/loop}
+<li class="pages">{$pages}</li>

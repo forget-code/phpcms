@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={$charset}" />
+<title>{$meta_title}-{$_PHPCMS['meta_title']}-{$_PHPCMS['sitename']}</title>
+<meta name="keywords" content="{$meta_keywords}" />
+<meta name="description" content="{$meta_description}" />
+<meta name="generator" content="Phpcms {$version}" />
+<meta name="author" content="年华 www.master8.net QQ:30773700" /> 
+<link rel="stylesheet" href="{$skindir}/style.css" type="text/css" media="all" />
+<script type="text/javascript">
+var phpcms_path = "{PHPCMS_PATH}"
+</script>
+<script type="text/javascript" src="{PHPCMS_PATH}include/js/common.js"></script>
+<script type="text/javascript" src="{PHPCMS_PATH}ads/ads.php?id=3"></script>
+</head>
+<body {if $cat['enableprotect']}oncontextmenu='return false' ondragstart='return false' onselectstart ='return false' onselect='document.selection.empty()' oncopy='document.selection.empty()' onbeforecopy='return false'{/if}>
+
+<div id="top">
+	<div class="left"><script type="text/javascript" src="{PHPCMS_PATH}include/js/login.js"></script></div>
+	<div class="right">
+	<ul>
+	<li style="padding-right:5px;"><script type="text/javascript" src="{PHPCMS_PATH}data/js/search.js"></script></li>
+	{if $channelid}<li><a href="{$channelurl}rss.php?catid={$catid}"><img src="{PHPCMS_PATH}images/rss.gif" alt="Rss Feed" /></a>&nbsp;</li>{/if}
+	</ul>
+	</div>
+</div>
+
+
+<div id="header">
+	<div class="logo"><a href="{PHPCMS_PATH}"><img src="{$get_imgurl($_PHPCMS[logo])}" width="160" height="60" alt="{$_PHPCMS['sitename']}" /></a></div>
+	<div class="banner"><script type="text/javascript" src="{PHPCMS_PATH}ads/ads.php?id=1"></script></div>
+	<div class="right">
+	<ul>
+	<li><a href="#" onclick="this.style.behavior='url(#default#homepage)';this.setHomePage ('{$_PHPCMS['siteurl']}');">[设为首页]</a></li>
+	<li><a href="#" onclick="window.external.addFavorite('{$_PHPCMS['siteurl']}','{$_PHPCMS['sitename']}')">[加入收藏]</a></li>
+	<li><a id="StranLink">[繁体中文]</a></li>
+	</ul>
+	</div>
+</div>
+
+<div class="main">
+	<div id="menu">
+	  <ul>
+		<li {if $channelid==0}class="current"{/if}><a href="{PHPCMS_PATH}">首页</a></li>
+		{loop $_CHANNEL $channel}<li {if $channelid==$channel[channelid]}class="current"{/if}><a href="{$channel['channelurl']}">{$channel['channelname']}</a></li>{/loop}
+	  </ul>
+	</div>
+</div>
+
+
+{if $channelid && $mod==$_CHA['module']}
+<div class="main">
+	<div id="sub_menu">
+	<ul>
+	<li style="padding:5px;">
+	<a href="{$_CHANNEL[$channelid][channelurl]}"> {$_CHA[channelname]}首页</a>
+	{loop get_childcat($channelid,0) $cat}
+	| <a href="{$cat['caturl']}">{$cat['catname']}</a>
+	{/loop}
+	| <a href="{$channelurl}special/">专题</a>
+	| <a href="{PHPCMS_PATH}guestbook/?channelid={$channelid}">留言本</a> 
+	| <a href="{$channelurl}search.php">搜索</a>
+	</li>
+	</ul>
+	</div>
+</div>
+{else}
+<div class="main">
+	<div id="sub_menu">
+	<ul>
+	<li style="padding:5px;">
+	<span class="f_r"><b>站内公告</b>:{$announcelist(0,0,0,1,80,2,0,1,250,100)}</span>
+	<script type="text/javaScript" src="{PHPCMS_PATH}include/js/time.js"></script>
+	</li>
+	</ul>
+	</div>
+</div>
+{/if}
+<div class="blank10"><img src="{PHPCMS_PATH}images/spacer.gif" width="1" height="10" alt="" /></div>

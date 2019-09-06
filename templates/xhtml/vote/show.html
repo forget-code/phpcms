@@ -1,0 +1,38 @@
+{template 'phpcms','header'}
+<div class="main">
+<div class="main_content">
+	<div class="box_1">
+		<ul style="padding:6px;">
+		<li class="li_header t_c">[投票] {$subject}</li>
+		<li class="li_line">投票人数：{$votemembers}{if $votemembers}（<a href="?voteid={$voteid}&showmember=1">查看参与投票的会员</a>）{/if}&nbsp;&nbsp;&nbsp;&nbsp;总票数：{$totalnumber} &nbsp;&nbsp;&nbsp;&nbsp;起始日期：{$fromdate}&nbsp;&nbsp;&nbsp;&nbsp;结束日期：{$todate}</li>
+		</ul>
+		<table width="98%"  border="0" cellspacing="0" cellpadding="0" align="center">
+		<form action="vote.php" method="post" name="votefrom" />
+		<tr>
+		<td width="20%"></td>
+		<td width="80%"></td>
+		</tr>
+		{loop $ops $op}
+		<tr>
+		<td class="li_line"><input name="{$voteoption}" type="{$type}" value="{$op[optionid]}" /> {$op[option]}</td>
+		<td class="li_line"><img src="{PHPCMS_PATH}images/bar/bar{$op[i]}.gif" width="{$op[lenth]}" height="11">&nbsp;<b>{$op[number]}</b>&nbsp;({$op[per]})</td>
+		{/loop}
+		<tr>
+		<td colspan="2" height="30">&nbsp;&nbsp;
+		<input name="voteid" type="hidden" value="{$voteid}" />
+		<input name="submit" type="submit" value=" 投 票 " /> </form>
+		</td>
+		</tr>
+		</table>
+		{if $showmember}
+		<ul style="padding:6px;">
+		<li class="li_line">参与投票的会员列表</li>
+		<li class="content">{$usernames}</li>
+		</ul>
+		{/if}
+		
+	</div>
+</div>
+</div>
+
+{template 'phpcms','footer'}

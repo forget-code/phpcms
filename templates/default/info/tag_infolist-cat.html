@@ -1,0 +1,19 @@
+{loop $infos $i $info}
+<table cellpadding="0" cellspacing="0" width="100%" class="side_6">
+  <tr>
+    <td width="110" rowspan="2" align="center">
+	<img src="{$info[thumb]}" width="100" height="78">
+	</td>
+    <td width="610" height="25">
+		  <a href="{$info[url]}" title="{$info[alt]}" target="{$target}" class="tit">{$info[title]}</a> （{$show_area($info[province],$info[city],$info[area],$catid)}） {$info[adddate]}
+	</td>
+  </tr>
+  <tr>
+    <td height="60" valign="top" style="color:#666666; ">{$info[content]}</td>
+  </tr>
+</table>
+{/loop}
+
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

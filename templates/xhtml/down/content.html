@@ -1,0 +1,166 @@
+{template 'phpcms','header'}
+<div class="main">
+<div class="main_content">
+	<div class="box_1">
+		<ul style="padding:6px;">
+		<li class="li_"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />当前位置：<a href="{$channelurl}">{$channelname}首页</a> &gt;&gt; {$position} <span class="f_b">{$title}</span></li>
+		</ul>
+		<table width="98%" cellpadding="1" cellspacing="1" align="center" bgcolor="#C5D1D8">
+		<tr bgcolor="#FFFFFF">
+		<td width="210" rowspan="8" align="center">	<img src="{$thumb}" border="0" width="200" height="170" alt="{$title}" /></td>
+		<td width="85" class="li_bg_1">　授权形式：</td>
+		<td width="115">　{$copytype}</td>
+		<td width="100" class="li_bg_1">　作者/开发商：</td>
+		<td>　{$author}</td>
+		</tr>
+		<tr bgcolor="#FFFFFF">
+		<td class="li_bg_1">　所需点数：</td>
+		<td>　{$readpoint}</td>
+		<td class="li_bg_1">　软件来源：</td>
+		<td>　<a href="{$copyfromurl}" target="_blank" >{$copyfromname}</a></td>
+		</tr>
+		<tr bgcolor="#FFFFFF">
+		<td class="li_bg_1">　软件语言：</td>
+		<td>　{$language}</td>
+		<td class="li_bg_1">　更新时间：</td>
+		<td>　{$edittime}</td>
+		</tr>
+		<tr bgcolor="#FFFFFF">
+		<td class="li_bg_1">　版本号：</td>
+		<td>　{$version}</td>
+		<td class="li_bg_1">　软件平台：</td>
+		<td>　{$system}</td>
+		</tr>
+		<tr bgcolor="#FFFFFF">
+		<td class="li_bg_1">　软件类别：</td>
+		<td >　{$classtype}</td>
+		<td class="li_bg_1">　演示地址：</td>
+		<td>　<a href="{$demourl}" target="_blank">{$demourl}</a></td>
+		</tr>
+		<tr bgcolor="#FFFFFF">
+		<td class="li_bg_1">　评分等级：</td>
+		<td>　{$stars}</td>
+		<td class="li_bg_1">　注册地址：</td>
+		<td>　<a href="{$regurl}" target="_blank">{$regurl}</a></td>
+		</tr>
+		<tr bgcolor="#FFFFFF">
+		<td class="li_bg_1">　发布人：</td>
+		<td>　<a href="{PHPCMS_PATH}member/member.php?username={$username}" class="member_url">{$username}</a></td>
+		<td class="li_bg_1">　下载次数：</td>
+		<td>　<span id="downs">0</span>（今日：<span id="daydowns">0</span>，本周：<span id="weekdowns">0</span>，本月：<span id="monthdowns">0</span>）</td>
+		</tr>
+		<tr bgcolor="#FFFFFF">
+		<td class="li_bg_1">　浏览次数：</td>
+		<td>　<span id="hits">0</span>&nbsp;&nbsp;</td>
+		<td></td><td></td>
+		</tr>
+		</table>
+		<div class="blank10"><img src="{PHPCMS_PATH}images/spacer.gif" width="1" height="10" alt="" /></div>
+	</div>
+</div>
+</div>
+
+<div class="blank10"><img src="{PHPCMS_PATH}images/spacer.gif" width="1" height="10" alt="" /></div>
+
+<div class="main">
+<div class="main_content">
+<div class="main_left">
+	<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />下载地址</li>
+			<li>{$readmessage}
+			{loop $downurls $downurl} <a href="{$channelurl}download.php?downid={$downid}&amp;id={$downurl['id']}" title="{$downurl['name']}">{$downurl['name']}{$downurl['type']}</a> 
+			{/loop}</li>
+
+			<li class="content" id="fontzoom"><span class="f_red f_b">软件介绍</span><br /> {$introduce}</li>
+	
+			<li class="li_bg_1 t_c">【<a href="#comment">发表评论</a>】　【<a href="javascript:window.external.addFavorite(window.location,'{$title}')">加入收藏</a>】　【<a href="{PHPCMS_PATH}mail/sendmail.php?subject=推荐《{$title}》&amp;content={$title}<br/>{$itemurl}">告诉好友</a>】　【<a href="javascript:window.print();">打印本页</a>】　【<a href="javascript:window.close()">关闭窗口</a>】　【<a href="#top">返回顶部</a>】</li>
+			</ul>
+		</div>
+
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />相关下载</li>
+			{$relateddown(0,$channelid,$keywords,$downid,10,100,1)}
+			</ul>
+		</div>
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />相关评论</li>
+			<li class="li_line"><a href="{PHPCMS_PATH}comment/index.php?item=downid&amp;itemid={$downid}&amp;itemurl={$itemurl}">共<span id="commentnumber">0</span>条评论 &nbsp;发表/查看更多评论</a></li>
+			<li><script type="text/javascript" src="{PHPCMS_PATH}comment/list_js.php?item=downid&amp;itemid={$downid}&amp;commentnum=10&amp;ordertype=1"></script></li>
+			</ul>
+		</div>
+
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />发表评论</li>
+			<li>
+			<form name="myform" method="post" action="{PHPCMS_PATH}comment/index.php?action=add&amp;submit=1" onSubmit="return docheck();">
+			<input name="item" type="hidden" value="downid">
+			<input name="itemid" type="hidden" value="{$downid}">
+			<input name="itemurl" type="hidden" value="{$itemurl}">
+			评分：
+			<input name="score" type="radio" class="radio" title="很差" value="1" /> 1 
+			<input name="score" type="radio" class="radio" title="差" value="2" /> 2 
+			<input name="score" type="radio" class="radio" title="一般" value="3" checked="checked" /> 3 
+			<input name="score" type="radio" class="radio" title="好" value="4" /> 4 
+			<input name="score" type="radio" class="radio" title="很好" value="5" /> 5 
+			<br/>
+			<textarea name="content" cols="50" rows="8" id="content"></textarea><br/>
+			<span id="showcheckcode"></span>&nbsp;&nbsp;<input name="submit" type="submit" value=" 发表 " />&nbsp;&nbsp;<input name="reset" type="reset" value=" 重置 " /></form>
+			</li>
+			<li>·请遵守《互联网电子公告服务管理规定》及中华人民共和国其他各项有关法律法规。 </li>
+			<li>·严禁发表危害国家安全、损害国家利益、破坏民族团结、破坏国家宗教政策、破坏社会稳定、侮辱、诽谤、教唆、淫秽等内容 。</li>
+			<li>·用户需对自己在使用本站服务过程中的行为承担法律责任（直接或间接导致的）。</li> 
+			<li>·本站管理员有权保留或删除评论内容。</li>
+			</ul>
+			
+		</div>
+
+
+	</div>
+
+	<div class="main_right">
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">最新下载</li>
+		<script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&amp;downnum=10&amp;titlelen=24&amp;ordertype=1"></script>
+		</ul>
+		</div>
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">推荐下载</li>
+		<script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&amp;iselite=1&amp;downnum=10&amp;titlelen=24&amp;ordertype=1"></script>
+		</ul>
+		</div>
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">下载排行</li>
+		<script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&amp;downnum=10&amp;titlelen=25&amp;ordertype=5"></script>
+		</ul>
+		</div>
+
+</div>
+</div>
+</div>
+<script type="text/javascript" src="{$channelurl}show_js.php?downid={$downid}"></script>
+<script type="text/javascript">
+function docheck()
+{
+    myform.itemurl.value = window.location;
+    if(myform.content.value=="") {
+       alert("请输入评论内容!");
+       myform.content.focus();
+       return false;
+    }
+    return true;
+}
+</script>
+{template 'phpcms','footer'}

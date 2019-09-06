@@ -1,0 +1,80 @@
+ <table border='0' align='center' cellpadding='2' cellspacing='1' class='tableborder'>
+   <tr>
+   <th colspan='2'>{$username}的个人资料</th>
+  </tr>
+  <tr>
+   <td class="tablerow" align="center"><img id='UserFace' src='{$userface}' width='{$facewidth}' height='{$faceheight}'></td>
+  </tr>
+  <tr>
+   <td class="tablerow"> 
+             <table style="WORD-BREAK: break-all" cellSpacing=0 cellPadding=0 width="100%" border=0>
+                <tr>
+                  <td vAlign=top width=50><B>姓名:</B></td>
+                  <td>{$truename}</td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>性别:</B></td>
+                  <td>{$gender}</td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>生日:</B></td>
+                  <td>{$birthday}</td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>所在地:</B></td>
+                  <td>{$province}-{$city}</td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>地址:</B></td>
+                  <td>{$address}</td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>邮编:</B></td>
+                  <td>{$postid}</td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>电话:</B></td>
+                  <td>{$telephone}</td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>主页:</B></td>
+                  <td><a href="{$homepage}" target="_blank">{$homepage}</a></td>
+                </tr>
+{if $showemail}
+                <tr>
+                  <td vAlign=top><B>邮件:</B></td>
+                  <td><a href="{PHPCMS_PATH}mail/sendmail.php?mailto={$email}" target="_blank">{$email}</a></td>
+                </tr>
+{/if}
+                <tr>
+                  <td vAlign=top><B>QQ:</B></td>
+                  <td><a href="http://wpa.qq.com/msgrd?V=1&Uin={$qq}&Site={$PHP_DOMAIN}&Menu=yes" title="点击QQ交谈" target="_blank">{$qq}</a></td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>MSN:</B></td>
+                  <td>{$msn}</td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>ICQ:</B></td>
+                  <td>{$icq}</td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>SKYPE:</B></td>
+                  <td>{$skype}</td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>支付宝:</B></td>
+                  <td>{$alipay}</td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>贝宝:</B></td>
+                  <td>{$paypal}</td>
+                </tr>
+                <tr>
+                  <td vAlign=top><B>签名:</B></td>
+                  <td>{$sign}</td>
+                </tr>
+              </table>
+</td>
+  </tr>
+</table>

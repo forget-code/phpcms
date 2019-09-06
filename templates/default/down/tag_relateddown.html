@@ -1,0 +1,10 @@
+<table width="100%" border="0" align="center" cellpadding="1" cellspacing="1">
+{loop $downs $i $down}
+<tr>
+   <td height="20">
+{$down[img]} <a href="{$down[url]}" title="{$down[alt]}" class="tag_title_link">{$down[title]}</a>
+{if $datetype}[<span class="tag_date">{$down[adddate]}</span>]{/if}
+   </td>
+</tr>
+{/loop}
+</table>

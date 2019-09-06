@@ -1,0 +1,171 @@
+{template 'phpcms','header'}
+<script type="text/javascript" src="<?=PHPCMS_PATH?>fckeditor/fckeditor.js"></script>
+<script type="text/javascript">
+	var editorBasePath = '{PHPCMS_PATH}fckeditor/';
+	var ChannelId = {$channelid} ;
+</script>
+
+<script type="text/javascript">
+window.onload = function()
+{
+	var oFCKeditor = new FCKeditor('content') ;
+	oFCKeditor.BasePath	= editorBasePath ;
+	oFCKeditor.ReplaceTextarea() ;
+}
+</script>
+
+<script type="text/javascript">
+function changeimage()
+{
+  document.myform.headimg.value=document.myform.Image.value;
+  document.myform.showimages.src='{PHPCMS_PATH}images/guestbook/face/'+document.myform.Image.value+'.gif';
+}
+function Checkgb()
+{
+    if(document.myform.username.value==''){
+      alert('姓名不能为空！');
+      document.myform.username.focus();
+      return(false) ;
+    }
+  if(document.myform.username.value.length>30){
+    alert('姓名太长了');
+    document.myform.username.focus();
+    return(false);
+  }
+  if(document.myform.title.value==''){
+    alert('主题不能为空！');
+    document.myform.title.focus();
+    return(false);
+  }
+  if(document.myform.title.value.length>100){
+    alert('主题不能超过30字符！');
+    document.myform.title.focus();
+    return(false);
+  }
+	{if $_PHPCMS['gbook_checkcode']}
+
+	  if(document.myform.checkcode.value==''){
+		alert('请输入您的验证码！');
+		document.myform.checkcode.focus();
+		return(false);
+	  }
+
+	{/if}
+}
+</script>
+<div class="main">
+<table width="780" align="center" cellpadding="1" cellspacing="1" style="background:#C5D1D8;">
+<tr bgcolor="#FFFFFF">
+<td>
+
+<table width="100%"  border="0" cellspacing="3" cellpadding="3" align="center">
+<tr>
+<td height="23" class="li_bg_1">&nbsp;当前位置:<a href="{PHPCMS_PATH}">网站首页</a>&gt;&gt;签写留言</td>
+</tr>
+</table>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" align="center">
+  <tr>
+    <td height="35" valign="middle" width="200">&nbsp;&nbsp;<a href="{PHPCMS_PATH}guestbook/index.php?channelid={$channelid}"><img src="{PHPCMS_PATH}images/guestbook/home.gif" width="76" height="24" border="0" alt="留言首页" /></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="{PHPCMS_PATH}guestbook/add.php?channelid={$channelid}"><img src="{PHPCMS_PATH}images/guestbook/add.gif" width="76" height="24" border="0" alt="签写留言" /></a></td>
+	<form method="post" name="search" action="{PHPCMS_PATH}guestbook/index.php?channelid=<?=$channelid?>">
+	<td>
+	<input name='channelid' type='hidden' value='<?=$channelid?>'>
+	关键字：
+	<input name='keyword' type='text' size='30' value='<?=$keyword?>'>&nbsp;
+	<input type="radio" name="srchtype" value="0" <?if(!$srchtype){?>checked<?}?>> 标题 	
+	<input type="radio" name="srchtype" value="1" <?if($srchtype==1){?>checked<?}?>> 内容	
+	<input type="radio" name="srchtype" value="2" <?if($srchtype==2){?>checked<?}?>> 会员
+	<input name='submit' type='submit' value='留言搜索'>
+	</td>
+  </tr>
+  </form>
+</table>
+
+<table width="100%"  border="0" cellspacing="0" cellpadding="0" align="center">
+<tr height="1" bgcolor="#C0C0C0">
+<td> </td>
+</tr>
+<tr>
+<td>
+	<table width="100%"  border="0" cellspacing="3" cellpadding="3" align="center">
+	<tr>
+	<form name="myform" method="post" action="?channelid={$channelid}&action=add" onsubmit="return Checkgb()">
+	<input type="hidden" value="{$channelid}" name="channelid">
+	<td align="right" width="10%" class="li_bg_1"> <span class="f_red">*</span> 姓名：</td>
+	<td><input name="username" type="text" id="username" size="25" value="{$_username}"></td>
+	<td rowspan="4" width="700">
+	 <input type="hidden" value="01" name="headimg"> 
+	 <img height="90" src="{PHPCMS_PATH}images/guestbook/face/01.gif" width="80" style="border:#000000 1px solid" name="showimages" alt="点击选择头像" /><br>
+	<select onchange=changeimage(); size=1 name=Image>
+	<Option value=01>请选择头像</Option> 
+	<Option value=01>01</Option> 
+	<Option value=02>02</Option> 
+	<Option value=03>03</Option> 
+	<Option value=04>04</Option> 
+	<Option value=05>05</Option> 
+	<Option value=06>06</Option> 
+	<Option value=07>07</Option> 
+	<Option value=08>08</Option> 
+	<Option value=09>09</Option> 
+	<Option value=10>10</Option> 
+	</Select>
+	</td>
+	</tr>
+	<tr>
+	<td align="right" class="li_bg_1">性别：</td>
+	<td  colspan="2"><input type="radio" name="gender" value="1" checked style="border:0">
+	男
+	<input type="radio" name="gender" value="0" style="border:0">
+	女</td>
+	</tr>
+	<tr>
+	<td align="right" class="li_bg_1">邮件：</td>
+	<td><input name="email" type="text" id="email" size="25"></td>
+	</tr>
+	<tr>
+	<td align="right" class="li_bg_1">QQ：</td>
+	<td><input name="qq" type="text" id="qq" size="25"></td>
+	</tr>
+	<tr>
+	<td align="right" class="li_bg_1">主页：</td>
+	<td><input name="homepage" type="text" id="homepage" size="25"></td>
+	</tr>
+	<tr>
+	<td align="right" class="li_bg_1"> <span class="f_red">*</span>标题：</td>
+	<td colspan="2"><input name="title" type="text" id="title" size="50" value="{$title}"></td>
+	</tr>
+	<tr>
+	<td align="right" class="li_bg_1"> <span class="f_red">*</span> 内容：</td>
+	<td  colspan="2">
+<textarea name="content" style="display:none">{$content}</textarea>
+	</td>
+	</tr>
+	<tr>
+	<td align="right" class="li_bg_1">隐藏：</td>
+	<td  colspan="2"><input type="radio" name="hidden" value="1" style="border:0">
+	是
+	<input type="radio" name="hidden" value="0" checked style="border:0">
+	否</td>
+	</tr>
+	{if $_PHPCMS['gbook_checkcode']}
+	<tr>
+	<td align="right" class="li_bg_1"> <span class="f_red">*</span> 验证码：</td>
+	<td  colspan="2"><input name="checkcode" type="text" id="checkcode" size="5"> <img src="{PHPCMS_PATH}checkcode.php"  /></td>
+	</tr>
+	{/if}
+	<tr class="li_bg_1">
+	<td align="right">&nbsp;</td>
+	<td align="center"  colspan="2"><input type="submit" name="submit" value=" 提交 ">&nbsp;&nbsp;
+	<input type="reset" name="Reset" value=" 重置 "></td>
+	</tr>
+	</form>
+	</table>
+
+</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</div>
+{template 'phpcms','footer'}

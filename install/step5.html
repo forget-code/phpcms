@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>phpcms 3.0 安装向导</title>
+<link href="admin/skin/style.css" rel="stylesheet" type="text/css" />
+<script language="javascript" src="include/js/common.js"></script>
+<style type="text/css">
+<!--
+body {
+	margin-top: 30px;
+}
+.STYLE1 {color: #FF0000}
+-->
+</style>
+<script LANGUAGE="javascript">
+<!--
+function CheckForm() {
+    if (document.myform.username.value=="")
+	{
+	  alert("请输入用户名！")
+	  document.myform.username.focus()
+	  return false
+	}
+	if (trim(myform.username.value).length<3 || trim(myform.username.value).length>20){
+	    alert("用户名不得小于3个字符或大于20个字符！");
+	    myform.username.focus();
+	    return false;
+	}   
+	if (trim(myform.password.value).length<4 || trim(myform.password.value).length>32 ){
+	    alert("密码不能为空且不得少于4位或超过32位！");
+	    myform.password.focus();
+	    return false;
+	}
+    if (document.myform.password.value=="")
+	{
+	    alert("请输入密码！")
+	    document.myform.password.focus()
+	    return false
+	}
+    if (document.myform.pwdconfirm.value!=document.myform.password.value)
+	{
+	  alert("两次输入的密码不一致！")
+          document.myform.password.value = ""
+          document.myform.pwdconfirm.value = ""
+	  document.myform.password.focus()
+	  document.myform.password.select()
+	  return false
+	}
+    if (document.myform.email.value=="")
+	{
+	  alert("请输入E-mail！")
+	  document.myform.email.focus()
+	  return false
+	}
+<?php
+if($isoverwrite){
+?>
+	return confirm('继续安装会清空全部原有数据，您确定要继续吗?');
+<?php } ?>
+    return true;
+}
+//-->
+</script>
+</head>
+
+<body>
+<table cellpadding="2" cellspacing="1" class="tableborder" align="center" style="width:700px">
+  <tr>
+    <th>phpcms 3.0 安装向导</th>
+  </tr>
+  <tr>
+    <td class="tablerowhighlight"> 第五步：管理员设置</td>
+  </tr>
+  <form name="myform" method="post" action="install.php" onSubmit="return CheckForm();">
+  <tr>
+    <td height="200" align="center" class="tablerow">
+		<table width="95%" border="0" cellspacing="1" cellpadding="0" style='border: 1px solid #183789; BACKGROUND-COLOR: #ffffff;'>
+        <tr align="center">
+          <td colspan="2" class="tablerowhighlight">超级管理员设置</td>
+        </tr>
+        <tr>
+          <td width="30%"  align="right" class="tablerow"><strong>帐号：</strong></td>
+          <td align="left" class="tablerow"><input name="username" type="text" id="username" value="phpcms" size="20" style="width:150px"/> 3到20个字符，不得包含非法字符！</td>
+        </tr>
+        <tr>
+          <td align="right" class="tablerow"><strong>密码：</strong></td>
+          <td align="left" class="tablerow"><input name="password" type="password" id="password" size="20" style="width:150px"/> 4到20个字符</td>
+        </tr>
+        <tr>
+          <td align="right" class="tablerow"><strong>确认密码：</strong></td>
+          <td align="left" class="tablerow"><input name="pwdconfirm" type="password" id="pwdconfirm" size="20" style="width:150px"/></td>
+        </tr>
+        <tr>
+          <td align="right" class="tablerow"><strong>E-mail：</strong></td>
+          <td align="left" class="tablerow"><input name="email" type="text" id="email" size="20" style="width:150px"/></td>
+        </tr>
+		</table>
+	</td>
+  </tr>
+  <tr>
+    <td height="50" align="center" class="tablerow"><label>
+	  <input type="hidden" name="step" value="6" />
+      <input type="submit" name="Submit" value="下一步" style="width:100px;height:25px" />
+	  &nbsp;&nbsp;&nbsp;
+	  <input type="button" name="button" value="退出安装" onclick="window.close();"  style="width:100px;height:25px"/>
+    </label></td>
+  </tr>
+  </form>
+</table>
+</body>
+</html>

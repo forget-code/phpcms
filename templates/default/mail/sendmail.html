@@ -1,0 +1,84 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>发送电子邮件</title>
+<script language="javascript">
+
+function validEmail(emailV) {
+if (emailV.length < 6) return false;
+   	if (emailV.indexOf("@") < 1) return false;
+   	if (emailV.indexOf("@") > (emailV.length-4)) return false;
+for (var i=0; i < emailV.length; i++) {
+var tempV = emailV.substring(i, i+1)
+if (tempV == " " || tempV == "'" || tempV == '"' || tempV == ";" || tempV == "`" || tempV == "<" || tempV == ">") { 
+return false;
+}
+}
+return true;
+}
+
+function check()
+{
+
+   if (validEmail(myform.mail_to.value)==false)
+   {
+   		alert("请输入有效的收件人邮件地址!");
+myform.mail_to.focus();
+return false ;
+   }
+   if (myform.subject.value == "")
+   {
+   		alert("请输入邮件主题!");
+myform.subject.focus();
+return false ;
+   }
+   return true;     
+ }
+</script>
+
+<script type="text/javascript" src="<?=PHPCMS_PATH?>fckeditor/fckeditor.js"></script>
+<script type="text/javascript">
+	var editorBasePath = '<?=PHPCMS_PATH?>fckeditor/';
+	var ChannelId = 0 ;
+</script>
+
+<script type="text/javascript">
+window.onload = function()
+{
+	var oFCKeditor = new FCKeditor('content') ;
+	oFCKeditor.BasePath	= editorBasePath ;
+	oFCKeditor.ReplaceTextarea() ;
+}
+</script>
+
+<link href="{$skindir}/style.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+<table cellpadding="2" cellspacing="1" class="tableborder">
+  <tr>
+    <th colspan=2>{$mailmessage}</td>
+  </tr>
+      <form name="myform" method="post" action="sendmail.php" onsubmit="javascript:return check();">
+        <tr>
+          <td height="25" align="right" class="tablerow">收件人Email：</td>
+          <td class="tablerow"><input name="mailto" type="text" id="mail_to" size="30" value="{$mailto}"></td>
+        </tr>
+        <tr>
+          <td height="25" align="right" class="tablerow">邮件主题：</td>
+          <td class="tablerow"><input name="subject" type="text" id="subject" size="50" value="{$subject}"></td>
+        </tr>
+        <tr>
+          <td align="right" class="tablerow">邮件内容：</td>
+          <td class="tablerow">
+        <textarea name="content" style="display:none">{$content}</textarea>
+          </td>
+        </tr>
+        <tr>
+          <td height="35" class="tablerow">&nbsp;</td>
+          <td class="tablerow"><input name="Submit" type="submit" class="button" value=" 发送 ">
+            <input name="Reset" type="reset" class="button" value=" 重置 "> </td>
+        </tr>
+      </form>
+</table>
+</body>
+</html>

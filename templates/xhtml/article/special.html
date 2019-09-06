@@ -1,0 +1,35 @@
+{template 'phpcms','header'}
+<div class="main">
+<div class="main_content">
+	<div class="main_left">
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_1">
+			<span class="f_r"><a href="{$speciallisturl}"><img src="{PHPCMS_PATH}images/more.gif" width="34" height="9" alt="More" /></a></span>
+			<img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />当前位置：{$position}</li>
+			{$speciallist(0,$channelid,0,0,20,50,100,0,0,3,120,90,1)}
+			</ul>
+		</div>
+		
+	</div>
+	<div class="main_right">
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">推荐专题</li>
+		<li class="t_c">{$slidespecial(0,$channelid,0,3,24,0,0,180,160,5000,-1)}</li>
+		</ul>
+		</div>
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">推荐文章</li>
+		{$articlelist(0,$channelid,0,1,0,0,10,24,0,1,0,1,0,0,0,0,1,1)}
+		</ul>
+		</div>
+
+	</div>
+</div>
+</div>
+{template 'phpcms','footer'}

@@ -1,0 +1,8 @@
+{loop $downs $i $down}
+<li class="li_pic"><a href="{$down[url]}" target="_blank"><img src="{$down[thumb]}"  width="{$imgwidth}" height="{$imgheight}" alt="{$down[alt]}" /><br />{$down[title]}</a></li>
+{if $descriptionlen}
+<li><b>内容简介:</b>{$down[description]} <a href="{$down[url]}" target="_blank">详细&gt;&gt;</a></li>{/if}
+{/loop}
+{if $pages}
+<li class="pages">{$pages}</li>
+{/if}

@@ -1,0 +1,65 @@
+{template 'info','header'}
+
+ <table width="980" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+  <td width="250" valign="top">
+	<table width="249"  cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="nuv_head"></td>
+      </tr>
+      <tr>
+        <td valign="top" class="side_3">
+          <table width="94%" align="center" cellpadding="0"  cellspacing="0">
+          <tr>
+            <td class="lefttitle">本类推荐信息</td>
+          </tr>
+        </table>
+		<script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&iselite=1&infonum=10&titlelen=32&ordertype=1"></script>
+		</td>
+      </tr>
+      <tr>
+        <td class="nuv_btm" height="10"></td>
+      </tr>
+    </table>
+	<table cellpadding="0" cellspacing="0" >
+     <tr>
+	  <td height="10"></td>
+	 </tr>
+	</table>
+<table width="100%"  cellspacing="0" cellpadding="0">
+      <tr>
+        <td class="nuv_head"></td>
+      </tr>
+      <tr>
+        <td class="side_3">
+		<table width="94%" align="center" cellpadding="0"  cellspacing="0">
+          <tr>
+            <td class="lefttitle leftposition">本类热点信息</td>
+          </tr>
+        </table>
+		<script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&infonum=10&titlelen=32&ordertype=5"></script>
+		</td>
+      </tr>
+      <tr>
+        <td class="nuv_btm"></td>
+      </tr>
+    </table>
+</td>
+  <td width="10"></td>
+    <td width="720" valign="top" align="center">
+	<table width="100%"  cellspacing="0" cellpadding="0" class="position">
+      <tr>
+        <td style="padding-left:20px;">当前位置：<a href="{$channelurl}">{$channelname}首页</a> >> {$position}</td>
+        <td align="right" width="127"><a href="{$channelurl}add.php?step=area&catid={$catid}"><img src="{$skindir}/images/btns.gif" /></a></td>
+      </tr>
+    </table>
+<table cellpadding="0" cellspacing="0" ><tr><td height="10"></td></tr></table>
+ <!--分类信息-->
+{$infolist('tag_infolist-cat',$channelid,$catid,0,0,$page,$maxperpage,60,200,0,0,$itemordertype,1,0,0,0,0,1)}
+<table cellpadding="0" cellspacing="0" ><tr><td height="10"></td></tr></table>
+<!--搜索框--><script language="Javascript" src="{PHPCMS_PATH}data/js/search.js"></script>
+</td>
+  </tr>
+</table>
+
+{template 'phpcms','footer'}

@@ -1,0 +1,49 @@
+{template 'phpcms','header'}
+<table width="980" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td>
+
+<table cellpadding="2" cellspacing="1" class="tableborder">
+<form method="post" name="myform">
+  <tr>
+    <th colspan=13>广告报价</th>
+  </tr>
+<tr align="center">
+<td width="*" class="tablerowhighlight">广告位名称</td>
+<td width="8%" class="tablerowhighlight">所属频道</td>
+<td width="10%" class="tablerowhighlight">版位尺寸</td>
+<td width="10%" class="tablerowhighlight">广告价格</td>
+<td width="10%" class="tablerowhighlight">到期时间</td>
+<td width="10%" class="tablerowhighlight">租出</td>
+<td width="15%" class="tablerowhighlight">预订</td>
+</tr>
+{loop $places $place}
+<tr height="25" align="center" bgcolor="{$place['bgcolor']}">
+<td>{$place['placename']}</td>
+<td>{$_CHANNEL[$place[channelid]][channelname]}</td>
+<td>{$place['width']}x{$place['height']}</td>
+<td>{$place['price']}元</td>
+<td>{$place['todate']}</td>
+<td>{$place['status']}</td>
+<td><A HREF="?action=sign&placeid={$place['placeid']}">我要预订</A>
+</td>
+</tr>
+{/loop}
+</table>
+
+<table width="100%" height="30" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align=center>{$pages}</td>
+  </tr>
+</table>
+
+<table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+</td>
+  </tr>
+</table>
+{template 'phpcms','footer'}

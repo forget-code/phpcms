@@ -1,0 +1,52 @@
+{template 'phpcms','header'}
+<div class="main">
+<div class="main_content">
+	<div class="main_left">
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_1"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />当前位置：{$position}</li>
+			<li class="pd3"><img src="{$specialpic}" width="120" height="90" align="left"  alt="{$specialname}" hspace="5" vspace="5" />
+			<span class="f_blue f_b">{$specialname}</span><br />
+			专题简介：{$introduce}
+			</li>
+			</ul>
+		</div>
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />本专题图片下载</li>
+			</ul>
+			<ul>
+			{$picdown(0,$channelid,0,1,$specialid,0,5,12,0,0,0,1,1,1,100,100,5)}
+			</ul>
+		</div>
+
+		<div class="left_box_2">
+			<ul style="padding:6px;">
+			<li class="li_header"><img src="{$skindir}/images/arrow.gif" width="15" height="15" alt="" />本专题下载列表</li>
+			{$downlist(0,$channelid,0,1,$specialid,0,100,50,0,0,0,1,2,0,0,0,1,1)}
+			</ul>
+		</div>
+		
+	</div>
+	<div class="main_right">
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">推荐专题</li>
+		<li class="t_c">{$slidespecial(0,$channelid,0,3,50,0,0,180,160,5000,-1)}</li>
+		</ul>
+		</div>
+
+		<div class="right_box">
+		<ul style="padding:6px;">
+		<li class="li_header">推荐下载</li>
+		{$articlelist(0,$channelid,0,1,$specialid,0,10,24,0,1,0,0,0,0,0,0,1,1)}
+		</ul>
+		</div>
+
+	</div>
+</div>
+</div>
+{template 'phpcms','footer'}
