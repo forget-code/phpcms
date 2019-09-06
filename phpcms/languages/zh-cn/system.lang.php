@@ -90,7 +90,7 @@ $LANG['ctrl_more_selected'] = '按住Ctrl可多选';
 $LANG['file_does_not_writable'] = '文件不可写';
 $LANG['file_does_not_exists'] = '文件不存在';
 $LANG['file_exists'] = '文件已存在';
-$LANG['copyright'] = 'CopyRight 2006-2012  <a href="http://www.sdo.com" target="_blank">上海盛大网络发展有限公司</a> B2-20040053 <a href="http://www.phpcms.cn" target="_blank">PHPCMS TEAM</a> ';
+$LANG['copyright'] = 'CopyRight 2006-2013  <a href="http://www.sdo.com" target="_blank">上海盛大网络发展有限公司</a> B2-20040053 <a href="http://www.phpcms.cn" target="_blank">PHPCMS TEAM</a> ';
 $LANG['input_right'] = '输入正确';
 $LANG['update_success'] = '数据更新成功！';
 $LANG['select_all'] = '全选';

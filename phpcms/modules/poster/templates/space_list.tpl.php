@@ -40,8 +40,8 @@ if(is_array($infos)){
 	<td align="center"><?php echo $info['description']?></td>
 	<td align="center">
 	<a href="?m=poster&c=space&a=public_preview&spaceid=<?php echo $info['spaceid']?>" target="_blank"><?php echo L('preview')?></a> | <a href="javascript:call(<?php echo $info['spaceid']?>);void(0);"><?php echo L('get_code')?></a> | <a href='?m=poster&c=poster&a=init&spaceid=<?php echo $info['spaceid']?>&menuid=<?php echo $_GET['menuid']?>' ><?php echo L('ad_list')?></a> | 
-	<a href="###" onclick="edit(<?php echo $info['spaceid']?>, '<?php echo addslashes(htmlspecialchars($info['name']))?>')" title="<?php echo L('edit')?>" ><?php echo L('edit')?></a> | 
-	<a href='?m=poster&c=space&a=delete&spaceid=<?php echo $info['spaceid']?>' onClick="return confirm('<?php echo L('confirm', array('message' => addslashes(htmlspecialchars($info['name']))))?>')"><?php echo L('delete')?></a>
+	<a href="###" onclick="edit(<?php echo $info['spaceid']?>, '<?php echo addslashes(new_html_special_chars($info['name']))?>')" title="<?php echo L('edit')?>" ><?php echo L('edit')?></a> | 
+	<a href='?m=poster&c=space&a=delete&spaceid=<?php echo $info['spaceid']?>' onClick="return confirm('<?php echo L('confirm', array('message' => addslashes(new_html_special_chars($info['name']))))?>')"><?php echo L('delete')?></a>
 	| <a href="index.php?m=poster&c=poster&a=add&spaceid=<?php echo $info['spaceid']?>&menuid=<?php echo $_GET['menuid']?>&pc_hash=<?php echo $_SESSION['pc_hash']?>">添加广告</a>
 	</td>
 	</tr>

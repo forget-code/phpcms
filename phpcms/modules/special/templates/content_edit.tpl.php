@@ -49,7 +49,7 @@ html,body{background:#e2e9ea}
     </tr>
 	<tr>
       <th width="80"> <font color="red">*</font> <?php echo L('content_title')?>	  </th>
-      <td><input type="text" style="width:350px;" name="info[title]" id="title" value="<?php echo htmlspecialchars($info['title'])?>" class="measure-input " onBlur="$.post('api.php?op=get_keywords&number=3&sid='+Math.random()*5, {data:$('#title').val()}, function(data){if(data && $('#keywords').val()=='') $('#keywords').val(data); })" />
+      <td><input type="text" style="width:350px;" name="info[title]" id="title" value="<?php echo new_html_special_chars($info['title'])?>" class="measure-input " onBlur="$.post('api.php?op=get_keywords&number=3&sid='+Math.random()*5, {data:$('#title').val()}, function(data){if(data && $('#keywords').val()=='') $('#keywords').val(data); })" />
 		<input type="hidden" name="style_color" id="style_color" value="">
 		<input type="hidden" name="style_font_weight" id="style_font_weight" value="">
 		<input type="button" class="button" id="check_title_alt" value="<?php echo L('check_exist')?>" onclick="$.get('?m=special&c=content&a=public_check_title&sid='+Math.random()*5, {data:$('#title').val()}, function(data){if(data=='1') {$('#check_title_alt').val('<?php echo L('title_exist')?>');$('#check_title_alt').css('background-color','#FFCC66');} else if(data=='0') {$('#check_title_alt').val('<?php echo L('title_no_exist')?>');$('#check_title_alt').css('background-color','#F8FFE1')}})"/> <img src="statics/images/icon/colour.png" width="15" height="16" onclick="colorpicker('title_colorpanel','set_title_color');" style="cursor:hand"/> 

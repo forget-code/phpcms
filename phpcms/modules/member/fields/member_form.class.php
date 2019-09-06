@@ -23,7 +23,7 @@ class member_form {
 				if($v['disabled'] || $v['iscore'] || !$v['isadd'] || check_in($_roleid, $v['unsetroleids']) || check_in($_groupid, $v['unsetgroupids'])) continue;
 			}
 			$func = $v['formtype'];
-			$value = isset($data[$field]) ? htmlspecialchars($data[$field], ENT_QUOTES) : '';
+			$value = isset($data[$field]) ? new_html_special_chars($data[$field]) : '';
 			if($func=='pages' && isset($data['maxcharperpage'])) {
 				$value = $data['paginationtype'].'|'.$data['maxcharperpage'];
 			}

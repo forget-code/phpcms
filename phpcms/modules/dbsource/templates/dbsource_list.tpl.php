@@ -22,7 +22,7 @@ if(is_array($list)):
 <td width="80" align="center"><?php echo $v['id']?></td>
 <td align="center"><?php echo $v['name']?></td>
 <td align="center"><?php echo $v['host']?></td>
-<td align="center"><a href="javascript:edit(<?php echo $v['id']?>, '<?php echo htmlspecialchars(new_addslashes($v['name']))?>')"><?php echo L('edit')?></a> | <a href="?m=dbsource&c=dbsource_admin&a=del&id=<?php echo $v['id']?>" onclick="return confirm('<?php echo htmlspecialchars(new_addslashes(L('confirm', array('message'=>$v['name']))))?>')"><?php echo L('delete')?></a></td>
+<td align="center"><a href="javascript:edit(<?php echo $v['id']?>, '<?php echo new_html_special_chars(new_addslashes($v['name']))?>')"><?php echo L('edit')?></a> | <a href="?m=dbsource&c=dbsource_admin&a=del&id=<?php echo $v['id']?>" onclick="return confirm('<?php echo new_html_special_chars(new_addslashes(L('confirm', array('message'=>$v['name']))))?>')"><?php echo L('delete')?></a></td>
 </tr>
 <?php 
 	endforeach;

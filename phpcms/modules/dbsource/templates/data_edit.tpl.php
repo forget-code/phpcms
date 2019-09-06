@@ -55,7 +55,7 @@ include $this->admin_tpl('header', 'admin');
 	<table width="100%"  class="table_form">
 	<tr>
     <th width="80"><?php echo L('name')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="name" id="name" size="30" value="<?php echo htmlspecialchars($edit_data['name'])?>" /></td>
+    <td class="y-bg"><input type="text" class="input-text" name="name" id="name" size="30" value="<?php echo new_html_special_chars($edit_data['name'])?>" /></td>
   </tr>
   <tr>
     <th><?php echo L('output_mode')?>：</th>

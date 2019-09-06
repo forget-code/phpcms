@@ -10,12 +10,22 @@
 <input type="hidden" value="init" name="a">
 <input type="hidden" value="<?php echo $_GET['menuid']?>" name="menuid">
 <div class="explain-col search-form">
-功能介绍：<br />
-&nbsp;&nbsp;&nbsp;&nbsp;通过短信平台向已绑定手机的用户群发短信，即时通知公告、订单状态。<br />
-&nbsp;&nbsp;&nbsp;&nbsp;用户注册、找回密码开启手机验证提高了网站的安全性。<br />
-&nbsp;&nbsp;&nbsp;&nbsp;黄页商家会员可以通过短信平台管理订单信息。<br />
+<?php echo get_smsnotice();?>
 </div>
 </form>
+<div class="btn text-l">
+<?php if(!empty($this->smsapi->userid)) {?>
+<span class="font-fixh green"><?php echo L('account')?></span> ： <span class="font-fixh"><?php echo $this->smsapi->userid?></span> ， <span class="font-fixh green"><?php echo L('smsnumber')?></span> ： </span><span class="font-fixh"><?php echo $smsinfo_arr['surplus']?></span> <span class="font-fixh green"><?php echo L('item')?></span>
+
+<?php } else {?>
+<span class="font-fixh green">未绑定平台账户，请点击<a href="index.php?m=sms&c=sms&a=sms_setting&menuid=1539&pc_hash=<?php echo $_GET['pc_hash'];?>"><span class="font-fixh">平台设置</span></a>绑定。</span>
+<?php }?>
+</div><br>
+
+<div class="btn text-l">
+<span class="font-fixh green">当前服务器IP为 ： <span class="font-fixh"><?php echo $_SERVER["SERVER_ADDR"];?></span> <?php if(!empty($smsinfo_arr['allow_send_ip']) &&!in_array($_SERVER["SERVER_ADDR"],$smsinfo_arr['allow_send_ip'])) echo '当前服务器所在IP不允许发送短信';?>
+</div>
+<br>
     <table width="100%" cellspacing="0">
         <thead>
             <tr>
@@ -44,21 +54,15 @@
 <?php }?>
     </tbody>
     </table>
+<div class="explain-col search-form">
+开启会员注册短信验证方法：后台->用户->会员模块配置->手机强制验证方式 选择 <font color="red">是</font>
+</div>
+</div>
+</div>
+<br>
 
-<div class="btn text-l">
-<?php if(!empty($this->smsapi->userid)) {?>
-<span class="font-fixh green"><?php echo L('account')?></span> ： <span class="font-fixh"><?php echo $this->smsapi->userid?></span> ， <span class="font-fixh green"><?php echo L('smsnumber')?></span> ： </span><span class="font-fixh"><?php echo $smsinfo_arr['surplus']?></span> <span class="font-fixh green"><?php echo L('item')?></span> ， <span class="font-fixh green"><?php echo L('iplimit')?></span> ： <span class="font-fixh"><?php if(empty($smsinfo_arr['allow_send_ip'])) {echo '未设置ip限制，建议到“<a href="http://sms.phpcms.cn/index.php?m=sms_service&c=center" target="_blank">短信通</a>”设置，多个服务器可绑定多个ip';} echo implode(' , ',$smsinfo_arr['allow_send_ip'])?></span> 
-
-<?php } else {?>
-<span class="font-fixh green">未绑定平台账户，请点击<a href="index.php?m=sms&c=sms&a=sms_setting&menuid=1539"><span class="font-fixh">平台设置</span></a>绑定。</span>
-<?php }?>
-</div>
-<div class="btn text-l">
-<span class="font-fixh green">当前服务器IP为 ： <span class="font-fixh"><?php echo $_SERVER["SERVER_ADDR"];?></span> <?php if(!empty($smsinfo_arr['allow_send_ip']) &&!in_array($_SERVER["SERVER_ADDR"],$smsinfo_arr['allow_send_ip'])) echo '当前服务器所在IP不允许发送短信';?>
-</div>
- <div id="pages"></div>
-</div>
-</div>
-</form>
+<br>
+<br>
+<br>
 </body>
 </html>

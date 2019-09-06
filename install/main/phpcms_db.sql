@@ -4998,7 +4998,6 @@ INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `lis
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1240, 'view_memberlinfo', 72, 'member', 'member', 'memberinfo', '', 0, '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1239, 'copyfrom_manage', 977, 'admin', 'copyfrom', 'init', '', 0, '1');
 
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1224, 'cnzz', 977, 'cnzz', 'index', 'init', '', 16, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1241, 'move_content', 822, 'content', 'content', 'move', '', 0, '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1242, 'poster_template', 56, 'poster', 'space', 'poster_template', '', 0, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1243, 'create_index', 873, 'content', 'create_html', 'public_index', '', 0, '1');
@@ -5044,7 +5043,6 @@ INSERT INTO `phpcms_module` VALUES ('collection', '采集模块', 'collection', 
 INSERT INTO `phpcms_module` VALUES ('dbsource', '数据源', '', '1', '', '', '', '0', '0', '2010-09-01', '2010-09-06');
 INSERT INTO `phpcms_module` VALUES ('template', '模板风格', '', '1', '1.0', '', '', '0', '0', '2010-09-01', '2010-09-06');
 INSERT INTO `phpcms_module` VALUES ('release', '发布点', '', '1', '1.0', '', '', '0', '0', '2010-09-01', '2010-09-06');
-INSERT INTO `phpcms_module` (`module`, `name`, `url`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES('cnzz', 'CNZZ统计', 'cnzz/', 0, '1.0', 'CNZZ统计', '', 0, 0, '2010-09-15', '2010-09-15');
 INSERT INTO `phpcms_module` (`module`, `name`, `url`, `iscore`, `version`, `description`, `setting`, `listorder`, `disabled`, `installdate`, `updatedate`) VALUES ('video', '视频库', '', 0, '1.0', '', '', 0, 0, '2012-09-28', '2012-09-28');
 
 -- ----------------------------

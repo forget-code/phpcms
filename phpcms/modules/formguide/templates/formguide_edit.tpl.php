@@ -8,7 +8,7 @@ include $this->admin_tpl('header', 'admin');
 <tbody>
 	<tr>
 		<th width="150"><strong><?php echo L('name')?>：</strong></th>
-		<td><input name="info[name]" id="name" class="input-text" type="text" value="<?php echo htmlspecialchars($data['name'])?>" size="30" ></td>
+		<td><input name="info[name]" id="name" class="input-text" type="text" value="<?php echo new_html_special_chars($data['name'])?>" size="30" ></td>
 	</tr>
 	<tr>
 		<th><strong><?php echo L('tablename')?>：</strong></th>

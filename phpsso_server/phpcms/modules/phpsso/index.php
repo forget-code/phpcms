@@ -599,9 +599,13 @@ class index extends phpsso {
 		if ($archive->extract(PCLZIP_OPT_PATH, $dir) == 0) {
 			die("Error : ".$archive->errorInfo(true));
 		}
-		
 		//判断文件安全，删除压缩包和非jpg图片
 		$avatararr = array('180x180.jpg', '30x30.jpg', '45x45.jpg', '90x90.jpg');
+		$files = glob($dir."*");
+		foreach($files as $_files) {
+			if(!in_array(basename($_files), $avatararr)) @unlink($_files);
+		}
+		
 		if($handle = opendir($dir)) {
 		    while(false !== ($file = readdir($handle))) {
 				if($file !== '.' && $file !== '..') {

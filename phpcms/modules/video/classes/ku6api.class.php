@@ -715,13 +715,14 @@ class ku6api {
 	 * 向vms请求搜索
 	 * @param string $vid vid
 	 */
-	public function Ku6search($keyword,$pagesize,$page,$len,$fenlei,$fq) { 
+	public function Ku6search($keyword,$pagesize,$page,$srctype,$len,$fenlei,$fq) { 
 		//构造post数据
 		$postdata['method'] = 'search';
 		$postdata['pagesize'] = $pagesize;
 		$postdata['keyword'] = $keyword;
 		$postdata['page'] = $page;
 		$postdata['fenlei'] = $fenlei;
+		$postdata['srctype'] = $srctype;
 		$postdata['len'] = $len;
 		$postdata['fq'] = $fq;
 		

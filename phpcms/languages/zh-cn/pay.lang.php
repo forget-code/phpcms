@@ -141,7 +141,7 @@ $LANG['select']['cancel'] = '交易取消';
 
 $LANG['alipay'] = '支付宝';
 $LANG['alipay_account'] = '支付宝帐户';
-$LANG['alipay_tip'] = '支付宝是国内领先的独立第三方支付平台，由阿里巴巴集团创办。致力于为中国电子商务提供“简单、安全、快速”的在线支付解决方案。<a href="http://fun.alipay.com/xtsz/phpcms.htm" target="_blank"><font color="red">立即在线申请</font></a>';
+$LANG['alipay_tip'] = '支付宝是国内领先的独立第三方支付平台，由阿里巴巴集团创办。致力于为中国电子商务提供“简单、安全、快速”的在线支付解决方案。';
 $LANG['alipay_key'] = '交易安全校验码(key)';
 $LANG['alipay_partner'] = '合作者身份(parterID)';
 $LANG['service_type'] = '选择接口类型';

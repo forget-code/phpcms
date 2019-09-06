@@ -27,7 +27,7 @@
 	foreach($member_model_list as $k=>$v) {
 ?>
     <tr>
-		<td align="left"><input type="checkbox" value="<?php echo $v['modelid']?>" name="modelid[]"></td>
+		<td align="left"><input type="checkbox" value="<?php echo $v['modelid']?>" name="modelid[]" <?php if($v['modelid']==10) echo "disabled";?>></td>
 		<td align="left"><?php echo $v['modelid']?></td>
 		<td align="center"><input type="text" name="sort[<?php echo $v['modelid']?>]" class="input-text" size="1" value="<?php echo $v['sort']?>"></th>
 		<td align="left"><?php echo $v['name']?></td>

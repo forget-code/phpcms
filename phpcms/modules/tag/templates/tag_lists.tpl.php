@@ -24,7 +24,7 @@ if(is_array($list)):
 <tr>
 <td align="center"><?php echo $v['name']?></td>
 <td align="center"><?php switch($v['type']){case 0:echo L('model_configuration');break;case 1:echo L('custom_sql');break;case 2:echo L('block');}?></td>
-<td align="center"><textarea ondblclick="copy_text(this)" style="width: 400px;height:30px" /><?php echo htmlspecialchars($v['tag'])?></textarea></td>
+<td align="center"><textarea ondblclick="copy_text(this)" style="width: 400px;height:30px" /><?php echo new_html_special_chars($v['tag'])?></textarea></td>
 </tr>
 <?php 
 	endforeach;

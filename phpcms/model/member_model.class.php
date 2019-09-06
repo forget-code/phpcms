@@ -18,7 +18,11 @@ class member_model extends model {
 	public function set_model($modelid = '') {
 		if($modelid) {
 			$model = getcache('member_model', 'commons');
-			$this->table_name = $this->db_tablepre.$model[$modelid]['tablename'];
+			if(isset($model[$modelid])) {
+				$this->table_name = $this->db_tablepre.$model[$modelid]['tablename'];
+			} else {
+				$this->table_name = $this->db_tablepre.$model[10]['tablename'];
+			}
 		} else {
 			$this->table_name = $this->db_tablepre.'member';
 		}

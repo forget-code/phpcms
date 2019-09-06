@@ -16,7 +16,7 @@ class smsapi {
 	 * @param string $sms_key 密钥
 	 */
 	public function __construct($userid = '', $productid = '', $sms_key = '') {
-		$this->smsapi_url = 'http://sms.phpcms.cn/api.php?';
+		$this->smsapi_url = 'http://sms.phpip.com/api.php?';
 		$this->userid = $userid;
 		$this->productid = $productid;
 		$this->sms_key = $sms_key;
@@ -38,9 +38,11 @@ class smsapi {
 	 * 获取短信产品购买地址
 	 */
 	public function get_buyurl($productid = 0) {
-		return 'http://sms.phpcms.cn/index.php?m=sms_service&c=center&a=buy&sms_pid='.$this->productid.'&productid='.$productid;
+		return 'http://sms.phpip.com/index.php?m=sms_service&c=center&a=buy&sms_pid='.$this->productid.'&productid='.$productid;
 	}
-			
+	public function show_qf_url() {
+		return $this->smsapi_url.'op=sms_qf_url&sms_uid='.$this->userid.'&sms_pid='.$this->productid.'&sms_key='.$this->sms_key;
+	}
 	/**
 	 * 获取短信剩余条数和限制短信发送ip
 	 */
@@ -68,122 +70,14 @@ class smsapi {
 		$res = $this->pc_file_get_contents();
 		return !empty($res) ? json_decode($res, 1) : array();		
 	}
-	
+
 	/**
-	 * 获取场景
- 	 */
-	public function get_scene() {
-		$this->param = array('op'=>'sms_get_scene');
-		$res = $this->pc_file_get_contents(120);
- 		if(!empty($res)){ //有返回数据，直接转为FROM表单
-			$return_data = json_decode($res, 1);
-			$scene_array = array();
-			foreach($return_data as $value) { 
-				if(strtolower(CHARSET) == 'gbk'){
-				$scene_array[$value['id']] = iconv('UTF-8','GBK',$value['scene_name']);
- 				}else{
-				$scene_array[$value['id']] = $value['scene_name'];
-				}
- 			}
-			$data = form::radio($scene_array, '2', 'name="scene" onchange="select_tpl(this)" onpropertychange="select_tpl(this)"', L('please_select'));
-		}else{
-			$data = array();	
-		}
-		return $data;
-	}
-	/**
-	 * 获取短信模
- 	 */
-	public function get_tpl($sceneid) {
-		$sceneid = intval($sceneid);
-		$this->param = array('op'=>'sms_get_tpl','sceneid'=>$sceneid);
-		$res = $this->pc_file_get_contents(120);
-  		if(!empty($res)){ //有返回数据，直接转为FROM表单
-			$return_data = json_decode($res, 1);
-			$tpl_array = array(); 
-			//使用li方式
- 			foreach($return_data as $value){
-				if(strtolower(CHARSET) == 'gbk'){
- 					$data .= '<li onclick="show_tpl('.$value['id'].')" id="tpl_'.$value['id'].'" name="tplarray[]">'.iconv('UTF-8','GBK',$value['tpl_name']).'('.$value['id'].')</li>';
-  				}else{
-					$data .= '<li onclick="show_tpl('.$value['id'].')" id="tpl_'.$value['id'].'" name="tplarray[]">'.$value['tpl_name'].'('.$value['id'].')</li>';
- 				}
- 			}
-		}else{
-			$data = '';	
-		}
-		return $data;
-	}
-	/**
-	 * 获取默认短信模版
- 	 */
-	public function get_default_tpl($sceneid) {
-		$sceneid = intval($sceneid);
-		$this->param = array('op'=>'sms_get_tpl','sceneid'=>$sceneid);
-		$res = $this->pc_file_get_contents(120);
-  		if(!empty($res)){ //有返回数据，直接转为FROM表单
-			$return_data = json_decode($res, 1);
-			$tpl_array = array(); 
-			//使用li方式
- 			foreach($return_data as $value){
-				if($value['id']=='16'){$class=' class="ac"';}
-				if(strtolower(CHARSET) == 'gbk'){
- 					$data .= '<li onclick="show_tpl('.$value['id'].')" id="tpl_'.$value['id'].'" name="tplarray[]"'.$class.'>'.iconv('UTF-8','GBK',$value['tpl_name']).'('.$value['id'].')</li>';
-  				}else{
-					$data .= '<li onclick="show_tpl('.$value['id'].')" id="tpl_'.$value['id'].'" name="tplarray[]"'.$class.'>'.$value['tpl_name'].'('.$value['id'].')</li>';
- 				}
- 			}
-		}else{
-			$data = '';	
-		}
-		return $data;
-	}
-	
-	/**
-	 * 显示默认短信模版内容
- 	 */
-	public function show_default_tpl($tplid) {
-		$tplid = intval($tplid);
-		$this->param = array('op'=>'sms_show_tpl','tplid'=>$tplid);
-		$res = $this->pc_file_get_contents(120);
-  		if(!empty($res)){ //有返回数据，直接转为FROM表单
-			$return_data = json_decode($res, 1);
- 				if(strtolower(CHARSET)=='gbk'){
-					$data = iconv('UTF-8','GBK',$return_data['tpl_mb']);
-				}else{
-					$data = $return_data['tpl_mb'];
-				}
- 		}else{
-			$data = '';	
-		}
-		return $data;
-	}
-	/**
-	 * 获取短信模版内容，
- 	 */
-	public function show_tpl($tplid,$is_case = '') {
-		$tplid = intval($tplid);
-		$this->param = array('op'=>'sms_show_tpl','tplid'=>$tplid);
-		$res = $this->pc_file_get_contents(120);
-  		if(!empty($res)){ //有返回数据，直接转为FROM表单
-			$return_data = json_decode($res, 1);
-			if($is_case==''){//转为 from的模版
-				if(strtolower(CHARSET)=='gbk'){
-					$data = iconv('UTF-8','GBK',$return_data['tpl_mb']);
-				}else{
-					$data = $return_data['tpl_mb'];
-				}
-			}else{//纯模版，供后台记录入库替换参数使用	
-				if(strtolower(CHARSET)=='gbk'){
-					$data = iconv('UTF-8','GBK',$return_data['tpl_case']);
-				}else{
-					$data = $return_data['tpl_case'];
-				}
-			}
- 		}else{
-			$data = '';	
-		}
-		return $data;
+	 * 获取短信api帮助
+	 */
+	public function get_sms_help() {
+		$this->param = array('op'=>'sms_help','page'=>$page);
+		$res = $this->pc_file_get_contents();
+		return !empty($res) ? json_decode($res, 1) : array();		
 	}
 	
 	/**
@@ -248,8 +142,14 @@ class smsapi {
 		} else {
 		$sms_report_db->insert(array('mobile'=>$mobile,'posttime'=>SYS_TIME,'send_userid'=>$send_userid,'status'=>'-2','msg'=>$new_content,'ip'=>$ip));
 		}
+		if($this->statuscode==0) {
+			$barr = explode(':',$arr[1]);
+			if($barr[0]=='KEY') {
+				return '短信已提交，请等待审批！审批时间为：9:00-18:00。 法定假日不审批！如需帮助，请联系phpcms.cn官网！';
+			}
+		}
 		//end
-		return isset($status[$arr[0]]) ? $status[$arr[0]] : '-2';
+		return isset($status[$arr[0]]) ? $status[$arr[0]] : $arr[0];
 	}
 		
 	/**

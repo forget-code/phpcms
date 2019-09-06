@@ -38,9 +38,9 @@ if(is_array($infos)){
 <span style="height:22"><a href='?m=special&c=content&a=init&specialid=<?php echo $info['id']?>'><?php echo L('manage_news')?></a></span> | 
 <span style="height:22"><a href='?m=special&c=template&specialid=<?php echo $info['id']?>' style="color:red" target="_blank"><?php echo L('template_manage')?></a></span><br/>
 <span style="height:22"><a href='?m=special&c=special&a=elite&value=<?php if($info['elite']==0) {?>1<?php } elseif($info['elite']==1) { ?>0<?php }?>&id=<?php echo $info['id']?>'><?php if($info['elite']==0) { echo L('elite_special'); } else {?><font color="red"><?php echo L('remove_elite')?></font><?php }?></a></span> | 
-<span style="height:22"><a href="javascript:comment('<?php echo id_encode('special', $info['id'], $this->get_siteid())?>', '<?php echo addslashes(htmlspecialchars($info['title']))?>');void(0);"><?php echo L('special_comment')?></a></span><br/>
+<span style="height:22"><a href="javascript:comment('<?php echo id_encode('special', $info['id'], $this->get_siteid())?>', '<?php echo addslashes(new_html_special_chars($info['title']))?>');void(0);"><?php echo L('special_comment')?></a></span><br/>
 <span style="height:22"><a href="?m=special&c=special&a=edit&specialid=<?php echo $info['id']?>&menuid=<?php echo $_GET['menuid']?>"><?php echo L('edit_special')?></a></span> | 
-<span style="height:22"><a href="?m=special&c=special&a=delete&id=<?php echo $info['id']?>" onclick="return confirm('<?php echo L('confirm', array('message'=>addslashes(htmlspecialchars($info['title']))))?>')"><?php echo L('del_special')?></a></span></td>
+<span style="height:22"><a href="?m=special&c=special&a=delete&id=<?php echo $info['id']?>" onclick="return confirm('<?php echo L('confirm', array('message'=>addslashes(new_html_special_chars($info['title']))))?>')"><?php echo L('del_special')?></a></span></td>
 	</tr>
 <?php 
 	}

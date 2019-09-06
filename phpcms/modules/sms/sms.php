@@ -142,7 +142,7 @@ class sms extends admin {
 			//发送短信
 			$return = $this->smsapi->send_sms($mobile, $content, $_POST['sendtime'], CHARSET,'',$tplid);
 			
-			showmessage($return, HTTP_REFERER);
+			showmessage($return, HTTP_REFERER,6000);
 		} else {
 			$smsinfo_arr = $this->smsapi->get_smsinfo();
 			if(!empty($smsinfo_arr['allow_send_ip']) &&!in_array($_SERVER["SERVER_ADDR"],$smsinfo_arr['allow_send_ip'])) {
@@ -160,13 +160,8 @@ class sms extends admin {
 			foreach ($modellistarr as $k=>$v) {
 				$modellist[$k] = $v['name'];
 			}
-			//获取服务器场景，组成表单单选项
-			$smsscene_arr = $this->smsapi->get_scene(); 
-			
-			//获取默认模版
-			$default_tpl = $this->smsapi->get_default_tpl(2);
-			//显示默认模版
-			$show_default_tpl = $this->smsapi->show_default_tpl(16);
+			//显示群发
+			$show_qf_url = $this->smsapi->show_qf_url();
 			
 			include $this->admin_tpl('sms_sent');
 		}

@@ -15,7 +15,7 @@ include $this->admin_tpl('header', 'admin');
 		<tbody>
 			<tr>
 				<th width="200"><?php echo L('special_title')?>：</th>
-				<td><input name="special[title]" id="title" class="input-text" value="<?php echo htmlspecialchars($info['title']);?>" type="text" size="40"></td>
+				<td><input name="special[title]" id="title" class="input-text" value="<?php echo new_html_special_chars($info['title']);?>" type="text" size="40"></td>
 			</tr>
 			<tr>
 				<th><?php echo L('special_banner')?>：</th>
@@ -44,7 +44,7 @@ include $this->admin_tpl('header', 'admin');
 		        <td valign="top">
 		        <div id="option_list">
 		        <?php if(is_array($types)) { $k = 1; foreach($types as $t) {?>
-		        	<div class="mb6"><span><?php echo L('type_id')?>：<?php echo $t['typeid']?>&nbsp;&nbsp;<?php echo L('type_name')?>：<input type="hidden" name="type[<?php echo $k?>][typeid]" value="<?php echo $t['typeid']?>"><input type="text" name="type[<?php echo $k?>][name]" <?php if ($k==1) {?>id="type_name"<?php }?> value="<?php echo htmlspecialchars($t['name'])?>" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('type_path')?>：<input type="text" name="type[<?php echo $k?>][typedir]" <?php if ($k==1) {?>id="type_path"<?php }?> value="<?php echo $t['typedir']?>" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('listorder')?>：<input type="text" name="type[<?php echo $k?>][listorder]" value="<?php echo $t['listorder']?>" size="6" class="input-text" ></span>&nbsp;<?php if ($k!=1) {?><a href="javascript:;" onclick="descItem(this, <?php echo $k?>);"><?php echo L('remove')?></a><?php }?></div>
+		        	<div class="mb6"><span><?php echo L('type_id')?>：<?php echo $t['typeid']?>&nbsp;&nbsp;<?php echo L('type_name')?>：<input type="hidden" name="type[<?php echo $k?>][typeid]" value="<?php echo $t['typeid']?>"><input type="text" name="type[<?php echo $k?>][name]" <?php if ($k==1) {?>id="type_name"<?php }?> value="<?php echo new_html_special_chars($t['name'])?>" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('type_path')?>：<input type="text" name="type[<?php echo $k?>][typedir]" <?php if ($k==1) {?>id="type_path"<?php }?> value="<?php echo $t['typedir']?>" class="input-text" size="15">&nbsp;&nbsp;<?php echo L('listorder')?>：<input type="text" name="type[<?php echo $k?>][listorder]" value="<?php echo $t['listorder']?>" size="6" class="input-text" ></span>&nbsp;<?php if ($k!=1) {?><a href="javascript:;" onclick="descItem(this, <?php echo $k?>);"><?php echo L('remove')?></a><?php }?></div>
 		        <?php $k++; } }?>
 		        </div>
 		        </td>

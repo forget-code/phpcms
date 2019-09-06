@@ -10,7 +10,11 @@ $apifilename = isset($_GET['apifilename']) && trim($_GET['apifilename']) ? trim(
 $charset = isset($_GET['charset']) && trim($_GET['charset']) ? trim($_GET['charset']) : exit('-1');
 $type = isset($_GET['type']) && trim($_GET['type']) ? trim($_GET['type']) : 'other';
 $synlogin = isset($_GET['synlogin']) && trim($_GET['synlogin']) ? trim($_GET['synlogin']) : '1';
-
+if(file_exists(CACHE_PATH.'phpsso_install.lock')) {
+	exit('-4');
+} else {
+	file_put_contents(CACHE_PATH.'phpsso_install.lock', '1');
+}
 
 $db = pc_base::load_model('admin_model');
 $memberinfo = $db->get_one(array('username'=>$username));
@@ -30,11 +34,23 @@ if(!empty($memberinfo)) {
 		if($appid > 0) {
 			$applist = $appdb->listinfo('', '', 1, 100, 'appid');
 			setcache('applist', $applist, 'admin');
-			echo $appid;exit;
+			echo $appid;
+			unset($_SESSION['_is_dos']);
+			exit;
 		} else {
 			exit('-3');
 		}
 	} else {
+		$try_num = $_SESSION['_is_dos'];
+		if($try_num){
+			if($try_num>15){
+				showmessage('try_again', APP_PATH);
+			}
+			$try_num = $try_num + 1;
+			$_SESSION['_is_dos'] = $try_num + 1; 
+		}else{
+			$_SESSION['_is_dos'] = 1;
+		}
 		exit('-2');
 	}
 } else {

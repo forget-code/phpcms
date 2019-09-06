@@ -99,7 +99,9 @@ class video_for_ck {
 		$data['title'] = safe_replace($data['title']);
 		$data['title'] = str_replace(array('select','from','concat'),'',$data['title']);
 		$data['description'] = addslashes(trim($_GET['description']));
+		$data['description'] = safe_replace(str_replace(array('select','from','concat'),'',$data['description']));
 		$data['keywords'] = addslashes(trim(strip_tags($_GET['keywords'])));
+		$data['keywords'] = safe_replace(str_replace(array('select','from','concat'),'',$data['keywords']));
 		//其次向vms post数据，并取得返回值
 		$get_data = $this->ku6api->vms_add($data);
 		if (!$get_data) {

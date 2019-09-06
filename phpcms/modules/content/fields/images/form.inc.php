@@ -2,7 +2,7 @@
 		extract($fieldinfo);
 		$list_str = '';
 		if($value) {
-			$value = string2array(html_entity_decode($value,ENT_QUOTES));
+			$value = string2array(new_html_entity_decode($value));
 			if(is_array($value)) {
 				foreach($value as $_k=>$_v) {
 				$list_str .= "<div id='image_{$field}_{$_k}' style='padding:1px'><input type='text' name='{$field}_url[]' value='{$_v[url]}' style='width:310px;' ondblclick='image_priview(this.value);' class='input-text'> <input type='text' name='{$field}_alt[]' value='{$_v[alt]}' style='width:160px;' class='input-text'> <a href=\"javascript:remove_div('image_{$field}_{$_k}')\">".L('remove_out', '', 'content')."</a></div>";

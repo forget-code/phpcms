@@ -21,7 +21,7 @@ class formguide_form {
 		if (is_array($this->fields)) { 
 			foreach($this->fields as $field=>$v) {
 				$func = $v['formtype'];
-				$value = isset($data[$field]) ? htmlspecialchars($data[$field], ENT_QUOTES) : '';
+				$value = isset($data[$field]) ? new_html_special_chars($data[$field]) : '';
 				if($func=='pages' && isset($data['maxcharperpage'])) {
 					$value = $data['paginationtype'].'|'.$data['maxcharperpage'];
 				}

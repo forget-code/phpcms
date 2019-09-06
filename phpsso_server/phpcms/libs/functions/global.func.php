@@ -35,7 +35,9 @@ function new_stripslashes($string) {
  * @return mixed
  */
 function new_html_special_chars($string) {
-	if(!is_array($string)) return htmlspecialchars($string);
+	$encoding = 'utf-8';
+	if(strtolower(CHARSET)=='gbk') $encoding = 'gb2312';
+	if(!is_array($string)) return htmlspecialchars($string,ENT_COMPAT,$encoding);
 	foreach($string as $key => $val) $string[$key] = new_html_special_chars($val);
 	return $string;
 }

@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" class="off">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET?>" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <title><?php echo L('admin_site_title')?></title>
 <link href="<?php echo CSS_PATH?>reset.css" rel="stylesheet" type="text/css" />
@@ -60,7 +60,7 @@ var pc_hash = '<?php echo $_SESSION['pc_hash']?>'
 <div class="header">
 	<div class="logo lf"><a href="<?php echo $currentsite['domain']?>" target="_blank"><span class="invisible"><?php echo L('phpcms_title')?></span></a></div>
     <div class="rt-col">
-    	<div class="tab_style white cut_line text-r"><a href="javascript:;" onclick="lock_screen()"><img src="<?php echo IMG_PATH.'icon/lockscreen.png'?>"> <?php echo L('lockscreen')?></a><span>|</span><a href="http://video.grandcloud.cn" target="_blank">视频云</a><span>|</span><a href="http://www.phpcms.cn/license/license.php" target="_blank"><?php echo L('authorization')?></a><span>|</span><a href="http://forum.grandcloud.cn/index.php" target="_blank"><?php echo L('igenus_for_postfix')?></a><span>|</span><a href="http://forum.grandcloud.cn/index.php" target="_blank"><?php echo L('help')?></a>
+    	<div class="tab_style white cut_line text-r"><a href="javascript:;" onclick="lock_screen()"><img src="<?php echo IMG_PATH.'icon/lockscreen.png'?>"> <?php echo L('lockscreen')?></a><span>|</span><a href="http://www.phpcms.cn" target="_blank">PHPCMS</a><span>|</span><a href="http://www.phpcms.cn/license/license.php" target="_blank"><?php echo L('authorization')?></a><span>|</span><a href="http://bbs.phpcms.cn" target="_blank"><?php echo L('igenus_for_postfix')?></a><span>|</span><a href="http://v9.help.phpcms.cn/" target="_blank"><?php echo L('help')?></a>
     <ul id="Skin">
 		<li class="s1 styleswitch" rel="styles1"></li>
 		<li class="s2 styleswitch" rel="styles2"></li>
@@ -327,7 +327,7 @@ function show_help(targetUrl) {
 	});
 	$("#help").data('time', 1);
 }
-setInterval("hidden_help()", 10000);
+setInterval("hidden_help()", 30000);
 function hidden_help() {
 	var htime = $("#help").data('time')+1;
 	$("#help").data('time', htime);

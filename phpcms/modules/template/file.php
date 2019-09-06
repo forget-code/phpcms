@@ -81,7 +81,7 @@ class file extends admin {
 			}
 		} else {
 			if (file_exists($filepath)) {
-				$data = htmlspecialchars(file_get_contents($filepath));
+				$data = new_html_special_chars(file_get_contents($filepath));
 			} else {
 				showmessage(L('file_does_not_exists'));
 			}

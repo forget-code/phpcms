@@ -21,7 +21,7 @@ a.close{background: url(<?php echo IMG_PATH?>cross.png) no-repeat left -46px; di
 <table width="100%"  class="table_form" id="table_form">
 <?php if ($data['type'] == 1) :?>
   <tr>
-    <td class="y-bg"><textarea cols="80" id="data" name="data" rows="10"><?php echo htmlspecialchars($data['data'])?></textarea>
+    <td class="y-bg"><textarea cols="80" id="data" name="data" rows="10"><?php echo new_html_special_chars($data['data'])?></textarea>
 <?php echo form::editor('data','full','','','',1)?></td>
   </tr>
 <?php else:?>
@@ -48,7 +48,7 @@ a.close{background: url(<?php echo IMG_PATH?>cross.png) no-repeat left -46px; di
 	<legend><?php echo L('pieces_template')?></legend>
 	<table width="100%"  class="table_form">
 	<tr>
-	<Td><textarea name="template" id="template" style="width:100%;height:120px;"><?php if ($data['template']) :echo htmlspecialchars($data['template']); else:?>{$name}
+	<Td><textarea name="template" id="template" style="width:100%;height:120px;"><?php if ($data['template']) :echo new_html_special_chars($data['template']); else:?>{$name}
 <ul>
 {loop $data $i $r}
 <li style="clear:both">

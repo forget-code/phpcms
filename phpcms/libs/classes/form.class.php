@@ -304,7 +304,7 @@ class form {
 			$key = trim($key);
 			$checked = ($id && in_array($key, $id)) ? 'checked' : '';
 			if($width) $string .= '<label class="ib" style="width:'.$width.'px">';
-			$string .= '<input type="checkbox" '.$str.' id="'.$field.'_'.$i.'" '.$checked.' value="'.htmlspecialchars($key).'"> '.htmlspecialchars($value);
+			$string .= '<input type="checkbox" '.$str.' id="'.$field.'_'.$i.'" '.$checked.' value="'.new_html_special_chars($key).'"> '.new_html_special_chars($value);
 			if($width) $string .= '</label>';
 			$i++;
 		}
@@ -323,7 +323,7 @@ class form {
 		foreach($array as $key=>$value) {
 			$checked = trim($id)==trim($key) ? 'checked' : '';
 			if($width) $string .= '<label class="ib" style="width:'.$width.'px">';
-			$string .= '<input type="radio" '.$str.' id="'.$field.'_'.htmlspecialchars($key).'" '.$checked.' value="'.$key.'"> '.$value;
+			$string .= '<input type="radio" '.$str.' id="'.$field.'_'.new_html_special_chars($key).'" '.$checked.' value="'.$key.'"> '.$value;
 			if($width) $string .= '</label>';
 		}
 		return $string;

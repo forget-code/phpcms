@@ -26,6 +26,7 @@ switch($step)
     case '1': //安装许可协议
 		param::set_cookie('reg_sso_succ','');
 		$license = file_get_contents(PHPCMS_PATH."install/license.txt");
+		
 		include PHPCMS_PATH."install/step/step".$step.".tpl.php";
 
 		break;
@@ -93,6 +94,8 @@ switch($step)
 						);
 				set_config($reg_sso,'system');
 				param::set_cookie('reg_sso_succ',$returnid);
+			} elseif($returnid == '-4') {
+				$reg_sso_status = '请删除phpsso_server/caches/phpsso_install.lock';
 			} else {
 				$reg_sso_status = 'PHPSSO 的 URL 地址可能填写错误，请检查!';
 			}
@@ -399,7 +402,9 @@ switch($step)
 }
 
 function format_textarea($string) {
-	return nl2br(str_replace(' ', '&nbsp;', htmlspecialchars($string)));
+	$chars = 'utf-8';
+	if(CHARSET=='gbk') $chars = 'gb2312';
+	return nl2br(str_replace(' ', '&nbsp;', htmlspecialchars($string,ENT_COMPAT,$chars)));
 }
 
 function _sql_execute($sql,$r_tablepre = '',$s_tablepre = 'phpcms_') {

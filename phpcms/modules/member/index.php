@@ -19,6 +19,7 @@ class index extends foreground {
 
 	public function init() {
 		$memberinfo = $this->memberinfo;
+		
 		//初始化phpsso
 		$phpsso_api_url = $this->_init_phpsso();
 		//获取头像数组
@@ -105,10 +106,9 @@ class index extends foreground {
 			if($member_setting['enablemailcheck']) {	//是否需要邮件验证
 				$userinfo['groupid'] = 7;
 			} elseif($member_setting['registerverify']) {	//是否需要管理员审核
-				$modelinfo_str = $userinfo['modelinfo'] = isset($_POST['info']) ? array2string(array_map('htmlspecialchars',$_POST['info'])) : '';
+				$modelinfo_str = $userinfo['modelinfo'] = isset($_POST['info']) ? array2string(array_map("safe_replace", new_html_special_chars($_POST['info']))) : '';
 				$this->verify_db = pc_base::load_model('member_verify_model');
 				unset($userinfo['lastdate'],$userinfo['connectid'],$userinfo['from']);
-				$userinfo = array_map('htmlspecialchars',$userinfo);
 				$userinfo['modelinfo'] = $modelinfo_str;
 				$this->verify_db->insert($userinfo);
 				showmessage(L('operation_success'), 'index.php?m=member&c=index&a=register&t=3');
@@ -142,7 +142,7 @@ class index extends foreground {
 				        require_once CACHE_MODEL_PATH.'member_update.class.php';
 						$member_input = new member_input($userinfo['modelid']);
 						
-						$_POST['info'] = array_map('htmlspecialchars',$_POST['info']);
+						$_POST['info'] = array_map('new_html_special_chars',$_POST['info']);
 						$user_model_info = $member_input->get($_POST['info']);
 						$user_model_info['userid'] = $userid;
 	
@@ -1449,7 +1449,7 @@ class index extends foreground {
 			}
 			
 			pc_base::load_sys_func('mail');
-			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
+			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
 
 			$code = sys_auth($memberinfo['userid']."\t".SYS_TIME, 'ENCODE', $phpcms_auth_key);
 
@@ -1467,7 +1467,7 @@ class index extends foreground {
 			sendmail($email, L('forgetpassword'), $message, '', '', $sitename);
 			showmessage(L('operation_success'), 'index.php?m=member&c=index&a=login');
 		} elseif($_GET['code']) {
-			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
+			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
 			$hour = date('y-m-d h', SYS_TIME);
 			$code = sys_auth($_GET['code'], 'DECODE', $phpcms_auth_key);
 			$code = explode("\t", $code);
@@ -1479,7 +1479,7 @@ class index extends foreground {
 					showmessage(L('operation_failure'), 'index.php?m=member&c=index&a=login');
 				}
 				$updateinfo = array();
-				$password = random(8);
+				$password = random(8,"23456789abcdefghkmnrstwxy");
 				$updateinfo['password'] = password($password, $memberinfo['encrypt']);
 				
 				$this->db->update($updateinfo, array('userid'=>$code[0]));
@@ -1488,7 +1488,16 @@ class index extends foreground {
 					$this->_init_phpsso();
 					$this->client->ps_member_edit('', $email, '', $password, $memberinfo['phpssouid'], $memberinfo['encrypt']);
 				}
-	
+				$email = $memberinfo['email'];
+				//获取站点名称
+				$sitelist = getcache('sitelist', 'commons');		
+				if(isset($sitelist[$memberinfo['siteid']]['name'])) {
+					$sitename = $sitelist[$memberinfo['siteid']]['name'];
+				} else {
+					$sitename = 'PHPCMS_V9_MAIL';
+				}
+				pc_base::load_sys_func('mail');
+				sendmail($email, L('forgetpassword'), "New password:".$password, '', '', $sitename);
 				showmessage(L('operation_success').L('newpassword').':'.$password);
 
 			} else {

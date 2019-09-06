@@ -63,7 +63,7 @@ $(function(){
     </tr>
 	<tr> 
       <th><strong><?php echo L('field_tip');?></strong><br /><?php echo L('field_tips');?></th>
-      <td><textarea name="info[tips]" rows="2" cols="20" id="tips" style="height:40px; width:80%"><?php echo htmlspecialchars($tips);?></textarea></td>
+      <td><textarea name="info[tips]" rows="2" cols="20" id="tips" style="height:40px; width:80%"><?php echo new_html_special_chars($tips);?></textarea></td>
     </tr>
 
 	<tr> 
@@ -73,11 +73,11 @@ $(function(){
 	<?php if(in_array($formtype,$att_css_js)) { ?>
 	<tr> 
       <th><strong><?php echo L('form_attr');?></strong><br /><?php echo L('form_attr_tips');?></th>
-      <td><input type="text" name="info[formattribute]" size="50" class="input-text" value="<?php echo htmlspecialchars($formattribute);?>"></td>
+      <td><input type="text" name="info[formattribute]" size="50" class="input-text" value="<?php echo new_html_special_chars($formattribute);?>"></td>
     </tr>
 	<tr> 
       <th><strong><?php echo L('form_css_name');?></strong><br /><?php echo L('form_css_name_tips');?></th>
-      <td><input type="text" name="info[css]" size="10" class="input-text" value="<?php echo htmlspecialchars($css);?>"></td>
+      <td><input type="text" name="info[css]" size="10" class="input-text" value="<?php echo new_html_special_chars($css);?>"></td>
     </tr>
 	<?php } ?>
 	<tr> 
@@ -104,7 +104,7 @@ $(function(){
     </tr>
 	<tr> 
       <th><strong><?php echo L('data_passed_msg');?></strong></th>
-      <td><input type="text" name="info[errortips]" value="<?php echo htmlspecialchars($errortips);?>" size="50" class="input-text"></td>
+      <td><input type="text" name="info[errortips]" value="<?php echo new_html_special_chars($errortips);?>" size="50" class="input-text"></td>
     </tr>
 	
 	<tr> 

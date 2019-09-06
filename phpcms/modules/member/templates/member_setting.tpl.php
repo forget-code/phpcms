@@ -35,7 +35,7 @@ $(function(){
 			<td width="200"><?php echo L('register_email_auth')?></td> 
 			<td>
 				<?php echo L('yes')?><input type="radio" name="info[enablemailcheck]"  class="input-radio"<?php if($member_setting['enablemailcheck']) {?>checked<?php }?> value='1' <?php if($mail_disabled) {?>disabled<?php }?>>
-				<?php echo L('no')?><input type="radio" name="info[enablemailcheck]"  class="input-radio"<?php if(!$member_setting['enablemailcheck']) {?>checked<?php }?> value='0'> <font color=red><?php echo L('enablemailcheck_notice')?></font>
+				<?php echo L('no')?><input type="radio" name="info[enablemailcheck]"  class="input-radio"<?php if(!$member_setting['enablemailcheck']) {?>checked<?php }?> value='0'> &nbsp;&nbsp;&nbsp;&nbsp;<font color=red><?php echo L('enablemailcheck_notice')?></font>
 			</td>
 		</tr>
 		<tr>
@@ -46,11 +46,11 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
-			<td width="200"><?php echo L('mobile_checktype')?></td> 
+			<td width="200"><font color="red"><?php echo L('mobile_checktype')?></font></td> 
 			<td> 
-				<?php echo L('user_sendsms')?>&nbsp;<input type="radio" name="info[mobile_checktype]"  class="input-radio" <?php if($member_setting['mobile_checktype']=='1') {?>checked<?php }?> value='1' <?php if($sms_disabled) {?>disabled<?php }?> onclick="$('#sendsms_titleid').show();">&nbsp;
-				<?php echo L('get_verify')?>&nbsp;<input type="radio" name="info[mobile_checktype]"  class="input-radio" <?php if($member_setting['mobile_checktype']=='2') {?>checked<?php }?> value='2' <?php if($sms_disabled) {?>disabled<?php }?> onclick="$('#sendsms_titleid').hide();">&nbsp;
-				<?php echo L('no_checksms')?><input type="radio" name="info[mobile_checktype]"  class="input-radio" <?php if($member_setting['mobile_checktype']=='0' ||$sms_disabled ) {?>checked<?php }?> value='0' onclick="$('#sendsms_titleid').hide();">
+				<?php echo L('yes')?>&nbsp;<input type="radio" name="info[mobile_checktype]"  class="input-radio" <?php if($member_setting['mobile_checktype']=='2') {?>checked<?php }?> value='2' <?php if($sms_disabled) {?>disabled<?php }?> onclick="$('#sendsms_titleid').hide();">&nbsp;
+				<?php echo L('no')?><input type="radio" name="info[mobile_checktype]"  class="input-radio" <?php if($member_setting['mobile_checktype']=='0' ||$sms_disabled ) {?>checked<?php }?> value='0' onclick="$('#sendsms_titleid').hide();">
+				&nbsp;&nbsp;&nbsp;&nbsp;<a href="?m=sms&c=sms&a=sms_setting"><font color=red>短信平台配置</font></a>
 			</td>
 		</tr>
 		<!--配置用户自发短信提示信息，需要结合PHPCMS申请记录-->

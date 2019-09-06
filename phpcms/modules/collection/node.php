@@ -244,7 +244,11 @@ class node extends admin {
 		$nodeid = isset($_GET['nodeid']) ? intval($_GET['nodeid']) : showmessage(L('illegal_parameters'), HTTP_REFERER);
 		pc_base::load_app_class('collection', '', 0);
 		if ($data = $this->db->get_one(array('nodeid'=>$nodeid))) {
-			print_r(collection::get_content($url, $data));
+			$contents = collection::get_content($url, $data);
+			foreach ($contents as $_key=>$_content) {
+				if(trim($_content)=='') $contents[$_key] = '◆◆◆◆◆◆◆◆◆◆'.$_key.' empty◆◆◆◆◆◆◆◆◆◆';
+			}
+			print_r($contents);
 		} else {
 			showmessage(L('notfound'));
 		}

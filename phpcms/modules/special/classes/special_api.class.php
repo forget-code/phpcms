@@ -423,7 +423,7 @@ class special_api {
 							'siteid' => $siteid,
 							'module' => 'special',
 							'modelid' => 0,
-							'name' => htmlspecialchars($info['title']),
+							'name' => new_html_special_chars($info['title']),
 							'parentid' => $specialid,
 							'typedir' => strtolower(implode('', $letters)),
 							'listorder' => 1,

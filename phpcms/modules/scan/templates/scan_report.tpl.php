@@ -41,7 +41,7 @@
 	$d = array_unique($d);
 	foreach ($d as $vs)
 	{
-		echo "<font color='red'>".htmlentities($vs)."</font>  ";
+		echo "<font color='red'>".new_htmlentities($vs)."</font>  ";
 	}
 }?></td>
 		<td align="left"><?php if(isset($v['zend'])){echo '<font color=\'red\'>Yes</font>';}else{echo 'No';}?></td>

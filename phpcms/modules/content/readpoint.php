@@ -12,7 +12,7 @@ class readpoint {
 	}
 
 	public function init() {
-		$allow_visitor = htmlspecialchars($_GET['allow_visitor']);
+		$allow_visitor = new_html_special_chars($_GET['allow_visitor']);
 		$auth = sys_auth($allow_visitor,'DECODE');
 		if(strpos($auth,'|')===false) showmessage(L('illegal_operation'));
 		$auth_str = explode('|', $auth);

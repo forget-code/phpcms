@@ -42,7 +42,7 @@
 		<td align="left"><a href="javascript:void(0)" onclick="$('#tab_<?php echo $v['id']?>').toggle()"><?php echo L('view')?></a></td>
     </tr>
       <tr id="tab_<?php echo $v['id']?>" style="display:none">
-		<td align="left" colspan="5"><textarea style="width:98%;height:300px;"><?php echo htmlspecialchars($v['data'])?></textarea></td>
+		<td align="left" colspan="5"><textarea style="width:98%;height:300px;"><?php echo new_html_special_chars($v['data'])?></textarea></td>
     </tr>
 <?php
 	}

@@ -60,14 +60,14 @@ class xml {
 					echo str_repeat("\t", $level),'<',$tag;
 					if(array_key_exists("$key attr", $data)) {
 						while(list($attr_name, $attr_value) = each($data["$key attr"])) {
-							echo ' ',$attr_name,'="',htmlspecialchars($attr_value),'"';
+							echo ' ',$attr_name,'="',new_html_special_chars($attr_value),'"';
 						}
 						reset($data["$key attr"]);   
 					}
 					if(is_null($value)) {
 						echo " />\n";
 					} elseif(!is_array($value)) {
-						echo '>',htmlspecialchars($value),"</$tag>\n";
+						echo '>',new_html_special_chars($value),"</$tag>\n";
 					} else {
 						echo ">\n",$this->xml_serialize($value, $level+1),str_repeat("\t", $level),"</$tag>\n";
 					}

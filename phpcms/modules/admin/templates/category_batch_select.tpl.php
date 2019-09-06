@@ -23,7 +23,7 @@ include $this->admin_tpl('header','admin');?>
 </select></td>
       <td>
 	  <input type="hidden" value="<?php echo $type;?>">
-	  <input type="submit" value="<?php echo L('submit');?>">
+	  <input type="submit" value="<?php echo L('submit');?>" class="button">
 	  </td>
     </tr>
 

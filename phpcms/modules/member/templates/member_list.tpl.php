@@ -72,7 +72,7 @@
 		<td align="left"><?php if($v['islock']) {?><img title="<?php echo L('lock')?>" src="<?php echo IMG_PATH?>icon/icon_padlock.gif"><?php }?></td>
 		<td align="left"><?php echo $v['userid']?></td>
 		<td align="left"><img src="<?php echo $v['avatar']?>" height=18 width=18 onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'"><?php if($v['vip']) {?><img title="<?php echo L('vip')?>" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?><?php echo $v['username']?><a href="javascript:member_infomation(<?php echo $v['userid']?>, '<?php echo $v['modelid']?>', '')"><?php echo $member_model[$v['modelid']]['name']?><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a></td>
-		<td align="left"><?php echo htmlspecialchars($v['nickname'])?></td>
+		<td align="left"><?php echo new_html_special_chars($v['nickname'])?></td>
 		<td align="left"><?php echo $v['email']?></td>
 		<td align="left"><?php echo $grouplist[$v['groupid']]?></td>
 		<td align="left"><?php echo $v['regip']?></td>

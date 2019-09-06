@@ -64,8 +64,8 @@ class content_input {
 				$info['model'][$field] = $value;
 			}
 			//颜色选择为隐藏域 在这里进行取值
-			$info['system']['style'] = $_POST['style_color'] ? strip_tags($_POST['style_color']) : '';
-			if($_POST['style_font_weight']) $info['system']['style'] = $info['system']['style'].';'.strip_tags($_POST['style_font_weight']);
+			$info['system']['style'] = $_POST['style_color'] && preg_match('/^#([0-9a-z]+)/i', $_POST['style_color']) ? $_POST['style_color'] : '';
+			if($_POST['style_font_weight']=='bold') $info['system']['style'] = $info['system']['style'].';'.strip_tags($_POST['style_font_weight']);
 		}
 		return $info;
 	}

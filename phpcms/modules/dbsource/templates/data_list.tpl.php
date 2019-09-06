@@ -29,8 +29,8 @@ if(is_array($list)):
 <td align="center"><?php echo $v['name']?></td>
 <td align="center"><?php switch($v['dis_type']){case 1:echo 'json';break;case 2:echo 'xml';break;case 3:echo 'js';break;}?></td>
 <td align="center"><?php switch($v['type']){case 0:echo L('model_configuration');break;case 1:echo L('custom_sql');break;}?></td>
-<td align="center"><input type="text" ondblclick="copy_text(this)" value="<?php if($v['dis_type']==3){ echo  htmlspecialchars('<script type="text/javascript" src="'.APP_PATH.'index.php?m=dbsource&c=call&a=get&id='.$v['id'].'"></script>')?><?php } else { echo APP_PATH?>index.php?m=dbsource&c=call&a=get&id=<?php echo $v['id']?><?php }?>" size="30" /></td>
-<td align="center"><a href="javascript:edit(<?php echo $v['id']?>, '<?php echo htmlspecialchars(new_addslashes($v['name']))?>')"><?php echo L('edit')?></a> | <a href="?m=dbsource&c=data&a=del&id=<?php echo $v['id']?>" onclick="return confirm('<?php echo htmlspecialchars(new_addslashes(L('confirm', array('message'=>$v['name']))))?>')"><?php echo L('delete')?></a></td>
+<td align="center"><input type="text" ondblclick="copy_text(this)" value="<?php if($v['dis_type']==3){ echo  new_html_special_chars('<script type="text/javascript" src="'.APP_PATH.'index.php?m=dbsource&c=call&a=get&id='.$v['id'].'"></script>')?><?php } else { echo APP_PATH?>index.php?m=dbsource&c=call&a=get&id=<?php echo $v['id']?><?php }?>" size="30" /></td>
+<td align="center"><a href="javascript:edit(<?php echo $v['id']?>, '<?php echo new_html_special_chars(new_addslashes($v['name']))?>')"><?php echo L('edit')?></a> | <a href="?m=dbsource&c=data&a=del&id=<?php echo $v['id']?>" onclick="return confirm('<?php echo new_html_special_chars(new_addslashes(L('confirm', array('message'=>$v['name']))))?>')"><?php echo L('delete')?></a></td>
 </tr>
 <?php 
 	endforeach;

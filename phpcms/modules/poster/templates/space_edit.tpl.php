@@ -7,7 +7,7 @@ include $this->admin_tpl('header', 'admin');
 <tbody>
 	<tr>
 		<th width="80"><strong><?php echo L('boardtype')?>：</strong></th>
-		<td><input name="space[name]" class="input-text" id="name" type="text" value="<?php echo htmlspecialchars($info['name'])?>" size="25"></td>
+		<td><input name="space[name]" class="input-text" id="name" type="text" value="<?php echo new_html_special_chars($info['name'])?>" size="25"></td>
 	</tr>
 	<tr>
 		<th><strong><?php echo L('ads_type')?>：</strong></th>

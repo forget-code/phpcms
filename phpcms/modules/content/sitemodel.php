@@ -230,7 +230,6 @@ class sitemodel extends admin {
 				if(!empty($model_import_data)) {
 					$this->sitemodel_field_db = pc_base::load_model('sitemodel_field_model');
 					$system_field = array('title','style','catid','url','listorder','status','userid','username','inputtime','updatetime','pages','readpoint','template','groupids_view','posids','content','keywords','description','thumb','typeid','relation','islink','allow_comment');
-					
 					foreach($model_import_data as $v) {
 						$field = $v['field'];
 						if(in_array($field,$system_field)) {
@@ -253,6 +252,8 @@ class sitemodel extends admin {
 							}
 							require MODEL_PATH.'add.sql.php';
 							$v['tips'] = addslashes($v['tips']);
+							$v['formattribute'] = addslashes($v['formattribute']);
+							
 							$v['setting'] = array2string($v['setting']);
 							$v['modelid'] = $modelid;
 							$v['siteid'] = $this->siteid;

@@ -35,9 +35,17 @@ function new_stripslashes($string) {
  * @return mixed
  */
 function new_html_special_chars($string) {
-	if(!is_array($string)) return htmlspecialchars($string);
+	$encoding = 'utf-8';
+	if(strtolower(CHARSET)=='gbk') $encoding = 'gb2312';
+	if(!is_array($string)) return htmlspecialchars($string,ENT_QUOTES,$encoding);
 	foreach($string as $key => $val) $string[$key] = new_html_special_chars($val);
 	return $string;
+}
+
+function new_html_entity_decode($string) {
+	$encoding = 'utf-8';
+	if(strtolower(CHARSET)=='gbk') $encoding = 'gb2312';
+	return html_entity_decode($string,ENT_QUOTES,$encoding);
 }
 /**
  * 安全过滤函数

@@ -32,7 +32,7 @@ class index {
 			$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
 			$pagesize = 10;
 			$q = safe_replace(trim($_GET['q']));
-			$q = htmlspecialchars(strip_tags($q));
+			$q = new_html_special_chars(strip_tags($q));
 			$q = str_replace('%', '', $q);	//过滤'%'，用户全文搜索
 			$search_q = $q;	//搜索原内容
 			

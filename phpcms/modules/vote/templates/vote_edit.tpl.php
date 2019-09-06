@@ -29,8 +29,8 @@ include $this->admin_tpl('header','admin');
     <th width="100"> <?php echo L('select_type')?> </th>
     <td>
 	<select name="subject[ischeckbox]" id="" onchange="AdsType(this.value)">
-			<option value="0" <?php if($ischeckbox == '0') {?> selected<?}?>><?php echo L('radio');?></option>
-			<option value="1" <?php if($ischeckbox == '1') {?> selected<?}?>><?php echo L('checkbox');?></option>
+			<option value="0" <?php if($ischeckbox == '0') {?> selected<?php }?>><?php echo L('radio');?></option>
+			<option value="1" <?php if($ischeckbox == '1') {?> selected<?php }?>><?php echo L('checkbox');?></option>
 	</select>
 	</td>
     </tr>

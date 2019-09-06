@@ -17,7 +17,7 @@ if(empty($_GET['title']) || empty($_GET['url'])) {
 		$title = addslashes($title);
 	}
 	
-	$title = htmlspecialchars($title);
+	$title = new_html_special_chars($title);
 	$url = safe_replace(addslashes(urldecode($_GET['url'])));
 	$url = trim_script($url);
 }

@@ -2,7 +2,7 @@
 		extract(string2array($fieldinfo['setting']));
 		$list_str = '';
 		if($value) {
-			$value = string2array(html_entity_decode($value,ENT_QUOTES));
+			$value = string2array(new_html_entity_decode($value));
 			if(is_array($value)) {
 				foreach($value as $_k=>$_v) {
 				$list_str .= "<div id='multifile{$_k}'><input type='text' name='{$field}_fileurl[]' value='{$_v[fileurl]}' style='width:310px;' class='input-text'> <input type='text' name='{$field}_filename[]' value='{$_v[filename]}' style='width:160px;' class='input-text'> <a href=\"javascript:remove_div('multifile{$_k}')\">".L('remove_out')."</a></div>";

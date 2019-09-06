@@ -24,7 +24,7 @@ include $this->admin_tpl('header', 'admin');
  if($code) {
 	 foreach ($code as $val) {
 	 	if($val) {
-	 		echo "<input type='button' onclick=\"fnSearch('".htmlentities($val)."');\" value='".htmlentities($val)."' class='button'> ";
+	 		echo "<input type='button' onclick=\"fnSearch('".new_htmlentities($val)."');\" value='".new_htmlentities($val)."' class='button'> ";
 	 	}
 	 }
  }
@@ -32,7 +32,7 @@ include $this->admin_tpl('header', 'admin');
     </tr>
 <?php endif;?>
     <tr>
-    <td><textarea name="code" id="code" style="width:650px;height: 380px;"><?php echo htmlspecialchars($html)?></textarea></td>
+    <td><textarea name="code" id="code" style="width:650px;height: 380px;"><?php echo new_html_special_chars($html)?></textarea></td>
     </tr>
 </table>
 </div>

@@ -8,7 +8,7 @@ include $this->admin_tpl('header', 'admin');
 <tbody>
 	<tr>
 		<th width="80"><?php echo L('announce_title')?></th>
-		<td><input name="announce[title]" id="title" value="<?php echo htmlspecialchars($an_info['title'])?>" class="input-text" type="text" size="50" ></td>
+		<td><input name="announce[title]" id="title" value="<?php echo new_html_special_chars($an_info['title'])?>" class="input-text" type="text" size="50" ></td>
 	</tr>
 	<tr>
 		<th><?php echo L('startdate')?>：</th>

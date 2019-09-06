@@ -288,7 +288,7 @@ class index {
 
 			$MODEL = getcache('model','commons');
 			if(isset($MODEL[$modelid])) {
-				$keywords = safe_replace(htmlspecialchars($_GET['keywords']));
+				$keywords = safe_replace(new_html_special_chars($_GET['keywords']));
 				$keywords = addslashes(iconv('utf-8','gbk',$keywords));
 				$this->db->set_model($modelid);
 				$result = $this->db->select("keywords LIKE '%$keywords%'",'id,title,url',10);

@@ -439,46 +439,20 @@ class video extends admin {
 		$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '*:*';
 		$len = isset($_GET['len']) ? $_GET['len'] : '';//时长s:小于4分钟 I:大于4分钟
 		$fenlei = isset($_GET['fenlei']) ? $_GET['fenlei'] : '*:*';//搜索分类
-		$srctype = isset($_GET['srctype']) ? $_GET['srctype'] : '*:*';//视频质量 
-		$videotime = isset($_GET['videotime']) ? $_GET['videotime'] : '*:*';//视频质量 
+		$srctype = isset($_GET['srctype']) ? $_GET['srctype'] : 0;//视频质量 
+		$videotime = isset($_GET['videotime']) ? $_GET['videotime'] : 0;//视频时长 
  		$page = isset($_GET['page']) ? $_GET['page'] : '1';
 		$pagesize = 20;
  		$list = array();
-		$fq = '';
 		
 		if(CHARSET!='utf-8'){
 			$keyword = iconv('gbk', 'utf-8', $keyword);
 		}
 		$keyword = urlencode($keyword);
-		//增加搜索条件 
-		if ($fenlei !== '*:*' && $fenlei!='') {
-				$keyword .= '%20categoryid:' . $fenlei;
-		}
-		//视频质量条件 
-		if ($srctype !== '*:*' && $srctype!='') {
-				if ($srctype == '1') {
-					$keyword .= '%20srctype:[0%20TO%201]';				
-				} elseif ($srctype == '2') {
-					$keyword .= '%20srctype:[2%20TO%203]';				
-				} elseif ($srctype == '3') {
-					$keyword .= '%20srctype:[4%20TO%207]';				
-				}
-		}
 		
-		if($videotime!=''){
-			if($videotime == '1'){
-				$fq .= '[0%20TO%20600]';
-			}elseif($videotime == '2'){
-				$fq .= '[600%20TO%201800]';
-			}elseif($videotime == '3'){
-				$fq .= '[1800%20TO%203600]';
-			}elseif($videotime == '4'){
-				$fq .= '[3600%20TO%20*]';
-			}
- 		}
-  		$data = $this->ku6api->Ku6search($keyword,$pagesize,$page,$len,$fenlei,$fq); 
- 		$totals = $data['data']['response']['numFound'];
-		$list = $data['data']['response']['docs'];
+  		$data = $this->ku6api->Ku6search($keyword,$pagesize,$page,$srctype,$len,$fenlei,$videotime); 
+ 		$totals = $data['data']['total'];
+		$list = $data['data']['list'];
 		//获取视频大小接口
 		if(isset($list) && is_array($list) && count($list) > 0) {
 			foreach ($list as $key=>$v) {
@@ -496,7 +470,7 @@ class video extends admin {
 		//分类数组
 		$fenlei_array = array('101000'=>'资讯','102000'=>'体育','103000'=>'娱乐','104000'=>'电影','105000'=>'原创','106000'=>'广告','107000'=>'美女','108000'=>'搞笑','109000'=>'游戏','110000'=>'动漫','111000'=>'教育','113000'=>'生活','114000'=>'汽车','115000'=>'房产','116000'=>'音乐','117000'=>'电视','118000'=>'综艺','125000'=>'女生','126000'=>'记录','127000'=>'科技','190000'=>'其它');
 		//视频质量
-		$srctype_array = array('1'=>'流畅','2'=>'标清','3'=>'高清');
+		$srctype_array = array('1'=>'超清','2'=>'高清','3'=>'标清','4'=>'流畅');
  		$videotime_array = array('1'=>'短视频','2'=>'普通视频','3'=>'中视频','4'=>'长视频');
 		
 		//本机视频栏目

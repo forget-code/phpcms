@@ -31,7 +31,7 @@
 					$_k = $page - 1;
 					if ($_k==0) $arr = reset($new_result);
 					else $arr = next($new_result);
-					$return_data['data'][$page]['title'] = $arr['title'] ? htmlspecialchars($arr['title']) : htmlspecialchars($this->data['title']);
+					$return_data['data'][$page]['title'] = $arr['title'] ? new_html_special_chars($arr['title']) : new_html_special_chars($this->data['title']);
 					$return_data['data'][$page]['url'] = $urls[0];
 					$return_data['vid'] = $arr['vid'];
 					$return_data['channelid'] = $arr['channelid'];

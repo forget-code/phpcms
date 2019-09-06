@@ -10,7 +10,7 @@
     </tr>
 	<tr> 
       <td>默认值</td>
-      <td><textarea name="setting[defaultvalue]" rows="2" cols="20" id="defaultvalue" style="height:60px;width:250px;" ><?php echo htmlspecialchars($setting['defaultvalue']);?></textarea></td>
+      <td><textarea name="setting[defaultvalue]" rows="2" cols="20" id="defaultvalue" style="height:60px;width:250px;" ><?php echo new_html_special_chars($setting['defaultvalue']);?></textarea></td>
     </tr>
 	<tr> 
       <td>是否允许Html</td>
