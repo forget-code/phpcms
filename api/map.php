@@ -1,13 +1,17 @@
 <?php
-defined('IN_PHPCMS') or exit('No permission resources.'); 
+defined('IN_PHPCMS') or exit('No permission resources.');
 $field = remove_xss(safe_replace(trim($_GET['field'])));
 $modelid = intval($_GET['modelid']);
 $data = getcache('model_field_'.$modelid,'model');
 $setting = string2array($data[$field]['setting']);
-$key = $_GET['api_key'] ? $_GET['api_key'] : $setting['api_key'];
+$key = $_GET['api_key'] ? safe_replace($_GET['api_key']) : $setting['api_key'];
+$key = str_replace(array('/','(',')','&',';'),'',$key);
 $maptype = $_GET['maptype'] ? intval($_GET['maptype']) : ($setting['maptype'] ? $setting['maptype'] : 1);
 $defaultcity = $_GET['defaultcity'] ? $_GET['defaultcity'] : ($setting['defaultcity'] ? $setting['defaultcity'] : '北京');
-$defaultcity = remove_xss(safe_replace($_GET['defaultcity']));
+$defaultcity = remove_xss(safe_replace($defaultcity));
+
+if(CHARSET=="utf-8" && !is_utf8($defaultcity)) exit('-1');
+if(CHARSET=="gbk" && is_utf8($defaultcity)) exit('-2');
 $hotcitys = explode(",",$setting['hotcitys']);
 if(!isset($_GET['city'])) {
 ?>
@@ -67,7 +71,7 @@ body{font-size: 12px;}
   //设置中心点为北京
   //设置地图初始化参数对象
   var mapOptions = new MMapOptions();
-  var defaultcity = "<?php echo strtolower(CHARSET)!='utf-8' ? iconv(CHARSET,'UTF-8',$defaultcity) : $defaultcity?>";
+  var defaultcity = "<?php echo $defaultcity;?>";
   mapOptions.toolbar = MConstants.MINI;
   mapOptions.scale = new MPoint(20,20);  
   mapOptions.zoom = 10;

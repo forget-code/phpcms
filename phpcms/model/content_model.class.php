@@ -93,6 +93,7 @@ class content_model extends model {
 		//更新URL地址
 		if($data['islink']==1) {
 			$urls[0] = trim_script($_POST['linkurl']);
+			$urls[0] = str_replace(array('select ',')','\\','#',"'"),' ',$urls[0]);
 		} else {
 			$urls = $this->url->show($id, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix'],$inputinfo,'add');
 		}
@@ -154,6 +155,7 @@ class content_model extends model {
 					$this->insert($modelinfo);
 					if($data['islink']==1) {
 						$urls = $_POST['linkurl'];
+						$urls = str_replace(array('select ',')','\\','#',"'"),' ',$urls);
 					} else {
 						$urls = $this->url->show($newid, 0, $cid, $systeminfo['inputtime'], $data['prefix'],$inputinfo,'add');
 					}
@@ -278,6 +280,7 @@ class content_model extends model {
 		}
 		if($data['islink']==1) {
 			$systeminfo['url'] = $_POST['linkurl'];
+			$systeminfo['url'] = str_replace(array('select ',')','\\','#',"'"),' ',$systeminfo['url']);
 		} else {
 			//更新URL地址
 			$urls = $this->url->show($id, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix'],$inputinfo,'edit');

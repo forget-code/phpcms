@@ -96,6 +96,8 @@ class video_for_ck {
 		$data['vid'] = $_GET['vid'];
 		if (!$data['vid']) exit('1');
 		$data['title'] = isset($_GET['title']) && trim($_GET['title']) ? addslashes(trim($_GET['title'])) : exit('2');
+		$data['title'] = safe_replace($data['title']);
+		$data['title'] = str_replace(array('select','from','concat'),'',$data['title']);
 		$data['description'] = addslashes(trim($_GET['description']));
 		$data['keywords'] = addslashes(trim(strip_tags($_GET['keywords'])));
 		//其次向vms post数据，并取得返回值

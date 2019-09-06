@@ -47,11 +47,24 @@ class attachments {
 	public function swfupload(){
 		$grouplist = getcache('grouplist','member');			
 		if(isset($_POST['dosubmit'])){
+			//判断是否登录
+			if(empty($this->userid)){
+				exit('0');
+			} 
+		
 			if( $_POST['swf_auth_key'] != md5(pc_base::load_config('system','auth_key').$_POST['SWFUPLOADSESSID']) || ($_POST['isadmin']==0 && !$grouplist[$_POST['groupid']]['allowattachment'])) exit();
 			pc_base::load_sys_class('attachment','',0);
 			$attachment = new attachment($_POST['module'],$_POST['catid'],$_POST['siteid']);
 			$attachment->set_userid($_POST['userid']);
 			$aids = $attachment->upload('Filedata',$_POST['filetype_post'],'','',array($_POST['thumb_width'],$_POST['thumb_height']),$_POST['watermark_enable']);
+			//验证上传文件格式是否合规
+			$siteid = get_siteid();
+			$site_setting = get_site_setting($siteid);
+			$site_allowext = $site_setting['upload_allowext'];
+			$allowext_array = explode('|',$site_allowext);
+			if(!in_array($attachment->uploadedfiles[0]['fileext'],$allowext_array)){
+				exit('0');
+			} 
 			if($aids[0]) {
 				$filename= (strtolower(CHARSET) != 'utf-8') ? iconv('gbk', 'utf-8', $attachment->uploadedfiles[0]['filename']) : $attachment->uploadedfiles[0]['filename'];
 				if($attachment->uploadedfiles[0]['isimage']) {
