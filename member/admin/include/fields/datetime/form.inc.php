@@ -17,6 +17,7 @@
 				$value = $defaultvalue;
 			}
 		}
+		if(substr($value, 0, 10) == '0000-00-00') $value = '';
 		$isdatetime = $dateformat == 'datetime' ? 1 : 0;
 		$str = form::date("info[$field]", $value, $isdatetime);
 		return $str;

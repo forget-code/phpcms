@@ -106,6 +106,7 @@ class ask
 			$id = intval($id);
 			if($id < 1) return false;
 			$this->db->query("UPDATE $this->table SET status=3 WHERE askid=$id");
+			$this->db->query("UPDATE $this->table_posts SET status=3 WHERE askid=$id");
 		}
 		return true;
 	}

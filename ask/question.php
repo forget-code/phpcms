@@ -33,11 +33,13 @@ if($dosubmit)
 			require 'cache.func.php';
 			cache_common();
 			file_put_contents(CACHE_PATH.'cache_ask_update.php',TIME);
+			@chmod(CACHE_PATH.'cache_ask_update.php');
 		}
 	}
 	else
 	{
 		file_put_contents(CACHE_PATH.'cache_ask_update.php',TIME);
+		@chmod(CACHE_PATH.'cache_ask_update.php');
 	}
 	if($M['publish_check'])
 	{

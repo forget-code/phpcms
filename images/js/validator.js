@@ -157,8 +157,10 @@ validator={
 		var type=this['element'].attr('type');
 		var errcls=this['errcls'];
 		var yescls=this['yescls'];
-		var param = val ?this['element'].attr('param') + '&value=' + val : this['element'].attr('param');
-		var method=this['element'].attr('method') || 'post';
+		var param = val ?this['element'].attr('param') + '&value=' + val : this['element'].attr('param');	
+		var Charset = Browser.isIE ? document.charset : document.characterSet;
+		var methodtype = (Charset.toLowerCase() == 'utf-8') ? 'post' : 'get';
+		var method=this['element'].attr('method') || methodtype;
 		var s = $.ajax({
 			type: method,
 			url: url,

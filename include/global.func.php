@@ -848,7 +848,8 @@ function tag($module, $template, $sql, $page = 0, $number = 10, $setting = array
 		{
 			$page = max(intval($page), 1);
 			$offset = $number*($page-1);
-			$count = cache_count("SELECT COUNT(*) AS `count` ".stristr($sql, 'from'));
+			$sql_count = preg_replace("/^SELECT([^(]+)\s*FROM(.+)(ORDER BY.+)$/i", "SELECT COUNT(*) AS `count` FROM\\2", $sql);
+			$count = cache_count($sql_count);
 			$urlruleid = isset($setting['urlruleid']) ? intval($setting['urlruleid']) : 0;
 			$urlrule = $urlruleid > 0 ? $URLRULE[$urlruleid] : '';
 			$pages = pages($count, $page, $number, $urlrule, $setting, $catid);

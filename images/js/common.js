@@ -10,9 +10,11 @@ function Dialog(url,name,w,h)
 
 function redirect(url)
 {
+	if(url.lastIndexOf('/.') > 0) url = url.replace(/\/(\.[a-zA-Z]+)([0-9]+)$/g, "/$2$1");
 	if(url.indexOf('://') == -1 && url.substr(0, 1) != '/' && url.substr(0, 1) != '?') url = $('base').attr('href')+url;
 	location.href = url;
 }
+
 //添加收藏夹
 function myAddPanel(title,url)
 {

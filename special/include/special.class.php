@@ -85,12 +85,12 @@ class special
 			$contentid = array_map('intval', $contentid);
 			foreach($contentid AS $id)
 			{
-				$this->db->query("INSERT INTO `$this->table_special_content` (`specialid`, `contentid`) VALUE($specialid, $id)");
+				$this->db->query("INSERT INTO `$this->table_special_content` (`specialid`, `contentid`) VALUES($specialid, $id)");
 			}
 		}
 		else
 		{
-			$this->db->query("INSERT INTO `$this->table_special_content` (`specialid`, `contentid`) VALUE($specialid, $contentid)");
+			$this->db->query("INSERT INTO `$this->table_special_content` (`specialid`, `contentid`) VALUES($specialid, $contentid)");
 		}
         return true;
     }

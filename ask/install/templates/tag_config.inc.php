@@ -712,8 +712,8 @@ return array (
     'flag' => '-1',
     'status' => '5',
     'orderby' => 'askid DESC',
-    'page' => '$page',
-    'number' => '10',
+    'page' => '0',
+    'number' => '30',
     'template' => 'tag_ask_list',
     'var_description' => 
     array (
@@ -737,7 +737,7 @@ return array (
       4 => '45',
     ),
     'type' => 'ask',
-    'tagcode' => 'tag(\'ask\', \'tag_ask_list\', "SELECT * FROM `phpcms2008_ask` WHERE status=\'5\'  ORDER BY askid DESC", $page, 10, array (  \'catid\' => \'0\',  \'userid\' => \'\',  \'flag\' => \'-1\',  \'action\' => $action,  \'urlruleid\' => \'29\',  \'class\' => \'url\',  \'target\' => \'_blank\',  \'showcatname\' => \'0\',  \'titlelen\' => \'45\',))',
+    'tagcode' => 'tag(\'ask\', \'tag_ask_list\', "SELECT * FROM `phpcms2008_ask` WHERE status=\'5\'  ORDER BY askid DESC", 0, 30, array (  \'catid\' => \'0\',  \'userid\' => \'\',  \'flag\' => \'-1\',  \'action\' => $action,  \'urlruleid\' => \'29\',  \'class\' => \'url\',  \'target\' => \'_blank\',  \'showcatname\' => \'0\',  \'titlelen\' => \'45\',))',
   ),
   '全部待解决问题' => 
   array (
@@ -749,8 +749,8 @@ return array (
     'flag' => '-1',
     'status' => '3',
     'orderby' => 'askid DESC',
-    'page' => '$page',
-    'number' => '10',
+    'page' => '0',
+    'number' => '30',
     'template' => 'tag_ask_list',
     'var_description' => 
     array (
@@ -774,7 +774,7 @@ return array (
       4 => '46',
     ),
     'type' => 'ask',
-    'tagcode' => 'tag(\'ask\', \'tag_ask_list\', "SELECT * FROM `phpcms2008_ask` WHERE status=\'3\'  ORDER BY askid DESC", $page, 10, array (  \'catid\' => \'0\',  \'userid\' => \'\',  \'flag\' => \'-1\',  \'action\' => $action,  \'urlruleid\' => \'29\',  \'class\' => \'url\',  \'target\' => \'_blank\',  \'showcatname\' => \'0\',  \'titlelen\' => \'46\',))',
+    'tagcode' => 'tag(\'ask\', \'tag_ask_list\', "SELECT * FROM `phpcms2008_ask` WHERE status=\'3\'  ORDER BY askid DESC", 0, 30, array (  \'catid\' => \'0\',  \'userid\' => \'\',  \'flag\' => \'-1\',  \'action\' => $action,  \'urlruleid\' => \'29\',  \'class\' => \'url\',  \'target\' => \'_blank\',  \'showcatname\' => \'0\',  \'titlelen\' => \'46\',))',
   ),
   '全部投票问题' => 
   array (

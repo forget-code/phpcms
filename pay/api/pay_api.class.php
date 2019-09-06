@@ -183,7 +183,7 @@ class pay_api
         {
             if(empty($row))
             {
-                $sql = "INSERT INTO `$this->stat_table` (`date`, `type` , `receipts`) VALUE ('$keyid','$type','$num')";
+                $sql = "INSERT INTO `$this->stat_table` (`date`, `type` , `receipts`) VALUES ('$keyid','$type','$num')";
             }
             else
             {
@@ -195,7 +195,7 @@ class pay_api
             $n = -$num;
             if(empty($row))
             {
-                $sql = "INSERT INTO `$this->stat_table` (`date`, `type` , `advances`) VALUE ('$keyid','$type','$n')";
+                $sql = "INSERT INTO `$this->stat_table` (`date`, `type` , `advances`) VALUES ('$keyid','$type','$n')";
             }
             else
             {

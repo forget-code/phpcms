@@ -78,7 +78,7 @@ class comment {
             $ip = IP;
             $addtime = TIME;
             $status = '1';
-            $sql = "INSERT INTO `$this->_comment_table` (`contentid`, `module`, `userid` , `username`, `content`, `ip`, `addtime`, `status`) VALUE ('$contentid', '$module', '$userid' , '$username', '$content', '$ip', '$addtime', '$status')";
+            $sql = "INSERT INTO `$this->_comment_table` (`contentid`, `module`, `userid` , `username`, `content`, `ip`, `addtime`, `status`) VALUES ('$contentid', '$module', '$userid' , '$username', '$content', '$ip', '$addtime', '$status')";
 
             $sql2 = "SELECT `commentid`, `username`, `support`, `against`, `ip`, `addtime`, `status`, `content` FROM `$this->_comment_table` WHERE `contentid` = '1' AND `status` = '1' ORDER BY `addtime` DESC";
             $result = $this->db->query($sql2);
@@ -120,7 +120,7 @@ class comment {
 		  }
 		  if($this->updatecounter($keyid, $status))
           {
-			  $sql = "INSERT INTO $this->_comment_table (`keyid`, `userid` , `username`,`content`,`ip`,`addtime`,`status`) VALUE ('$keyid', '$_userid' , '$username','$content','$ip','$addtime','$status')";
+			  $sql = "INSERT INTO $this->_comment_table (`keyid`, `userid` , `username`,`content`,`ip`,`addtime`,`status`) VALUES ('$keyid', '$_userid' , '$username','$content','$ip','$addtime','$status')";
 			  return $this->db->query($sql);
 		  }
 	  }

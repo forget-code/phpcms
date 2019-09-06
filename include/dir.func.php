@@ -94,7 +94,7 @@ function dir_touch($path, $mtime = TIME, $atime = TIME)
 {
 	if(!is_dir($path)) return false;
 	$path = dir_path($path);
-	touch($path, $mtime, $atime);
+	if(!is_dir($path)) touch($path, $mtime, $atime);
 	$files = glob($path.'*');
 	foreach($files as $v)
 	{

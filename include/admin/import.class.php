@@ -104,7 +104,7 @@ class import
 		}
 		$number = $import_info['number'];
 		$data['modelid'] = $import_info['modelid'];
-		$this->connect_db($import_info['dbtype'], $import_info['dbhost'], $import_info['dbuser'], $import_info['dbpw'], $import_info['dbname']);
+		$this->connect_db($import_info['dbtype'], $import_info['dbhost'], $import_info['dbuser'], $import_info['dbpw'], $import_info['dbname'], $import_info['charset']);
 
 		$fields = cache_read($import_info['modelid'].'_fields.inc.php', CACHE_MODEL_PATH);
 		$memberfields = include 'admin/import_fields.inc.php';

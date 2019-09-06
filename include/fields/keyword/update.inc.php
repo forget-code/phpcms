@@ -9,5 +9,6 @@
 			$tag = addslashes(trim($tag));
 			if($tag) $this->db->query("INSERT INTO `".DB_PRE."content_tag` (`tag`,`contentid`) VALUES('$tag','$this->contentid')");
 		}
+        if(function_exists('cache_keyword')) cache_keyword();
 		return true;
 	}

@@ -100,13 +100,13 @@ class position
 			$contentid = array_map('intval', $contentid);
 			foreach($contentid AS $id)
 			{
-				$this->db->query("INSERT INTO `$this->table_content_position` (`posid`, `contentid`) VALUE($posid, $id)");
+				$this->db->query("INSERT INTO `$this->table_content_position` (`posid`, `contentid`) VALUES($posid, $id)");
 				$this->db->query("UPDATE `$this->table_content` SET `posids`=1 where `contentid`=$id");
 			}
 		}
 		else
 		{
-			$this->db->query("INSERT INTO `$this->table_content_position` (`posid`, `contentid`) VALUE($posid, $contentid)");
+			$this->db->query("INSERT INTO `$this->table_content_position` (`posid`, `contentid`) VALUES($posid, $contentid)");
 			$this->db->query("UPDATE `$this->table_content` SET `posids`=1 where `contentid`=$contentid");
 		}
         return true;

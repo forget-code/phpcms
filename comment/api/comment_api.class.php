@@ -61,7 +61,7 @@ class comment_api
         }
         if($this->updateCounter($keyid, $status))
         {
-          $sql = "INSERT INTO `$this->comment_table` (`keyid`, `userid` , `username`,`content`,`ip`,`addtime`,`status`) VALUE ('$keyid', '$_userid' , '$username','$content','$ip','$addtime','$status')";
+          $sql = "INSERT INTO `$this->comment_table` (`keyid`, `userid` , `username`,`content`,`ip`,`addtime`,`status`) VALUES ('$keyid', '$_userid' , '$username','$content','$ip','$addtime','$status')";
           return $this->db->query($sql);
         }
     }

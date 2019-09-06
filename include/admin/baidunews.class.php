@@ -66,7 +66,7 @@ class baidunews
 			$category = htmlspecialchars($CATEGORY[$data['catid']]['catname']);
 			$author = htmlspecialchars($data['author']);
 			$source = htmlspecialchars($data['copyfrom']);
-			$pubdate = htmlspecialchars(gmdate('Y-m-d H:i',$data['inputtime'] + $this->updateperi * 3600));
+			$pubdate = htmlspecialchars(date('Y-m-d H:i', strtotime($data['inputtime'])+$this->updateperi * 3600));
 
 			$this->baidunews .= "<item>\n";
 			$this->baidunews .= "<title>$title </title>\n";

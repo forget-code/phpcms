@@ -218,6 +218,8 @@ class attachment
 		{
 			$image = UPLOAD_ROOT.$r['filepath'];
 			@unlink($image);
+			$thumbs = glob(dirname($image).'/*'.basename($image));
+			if($thumbs) foreach($thumbs as $thumb) @unlink($thumb);
 			if($r['isthumb'])
 			{
 				$thumb = $this->get_thumb($image);

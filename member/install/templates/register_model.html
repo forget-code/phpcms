@@ -6,12 +6,12 @@
         	<caption>{$MODEL[$_modelid][name]}</caption>
             {loop $forminfos $forminfo}
             <tr>
-            	<th><strong>{$forminfo['name']}</strong></th><td>{$forminfo['form']}</td>
+            	<th><strong>{$forminfo['name']}</strong></th><td>{$forminfo[form]}</td>
             </tr>
             {/loop}
             <tr>
             	<th></th>
-                <td><input type="submit" name="dosubmit" id="registerform" value="提交" /> <input type="reset" name="reset" value="重置" /></td>
+                <td><input type="submit" name="dosubmit" id="registerform" value=" 确 定 " /> &nbsp; &nbsp; <input type="reset" name="reset" value=" 重 置 " /></td>
             </tr>
         </table>
     </form>

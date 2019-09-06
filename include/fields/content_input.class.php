@@ -4,6 +4,7 @@ class content_input
 	var $modelid;
 	var $fields;
 	var $data;
+	var $isimport;
 
     function __construct($modelid)
     {
@@ -21,6 +22,7 @@ class content_input
 	function get($data, $isimport = 0)
 	{
 		global $_roleid, $MODEL, $_groupid,$action,$G;
+		$this->isimport = $isimport;
 		if(!$G['allowpost']) showmessage('你所在的用户组没有发表权限');
 		$this->data = $data;
 		$info = array();

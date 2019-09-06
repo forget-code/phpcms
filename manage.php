@@ -37,38 +37,64 @@ switch($action)
         require_once 'attachment.class.php';
 		$attachment = new attachment($mod, $catid);
 		$presentpoint = intval($presentpoint);
-		if($dosubmit)
+		if($CATEGORY[$catid]['child'])
 		{
-			if(!$MODEL[$modelid]['ischeck']) $info['status'] = 99;
-			if(isset($MODULE['pay']) && $contentid = $c->add($info) && $presentpoint)
+			require_once 'stat.class.php';
+			$stat = new stat();
+			$totalnumber = $stat->count_content("userid='$_userid'");
+			if(isset($CATEGORY[$catid]) && $CATEGORY[$catid]['type'] == 0)
 			{
-				$api_msg = $presentpoint > 0 ? '投稿奖励' : '发布信息扣点';
-				$pay_api = load('pay_api.class.php', 'pay', 'api');
-				$pay_api->update_exchange('phpcms', 'point', $presentpoint, $api_msg);
+				$cats = submodelcat($CATEGORY[$catid]['modelid']);
+				$categorys = '<select name="catid" id="catid" size="2" style="height:260px;width:350px;"><option value="0">请选择栏目</option>';
+				foreach($cats AS $k=>$v)
+				{
+					$selected = '';
+					if($v['child'] == 0 && $catid == $k) $selected = 'selected';
+					$categorys .= "<option value='$k' $selected>$v[catname]</option>";
+				}
+				$categorys .= '</select>';
 			}
-			showmessage('发布成功！', $forward);
+			else
+			{
+				$categorys = form::select_category('phpcms', 0, 'catid', 'catid', '请选择栏目', $catid, 'size="2" style="height:260px;width:350px;"', 1, 1);
+			}
+			include template($mod, 'contribute_category');
 		}
 		else
 		{
-			if($presentpoint < 0 && $_point < abs($presentpoint))
+			if($dosubmit)
 			{
-				if(isset($MODULE['pay']))
+				if(!$MODEL[$modelid]['ischeck']) $info['status'] = 99;
+				if(isset($MODULE['pay']) && $contentid = $c->add($info) && $presentpoint)
 				{
-					showmessage("您的积分不足！请充值！",$MODULE['pay']['url'].'showpayment.php?action=type&pay=card');
+					$api_msg = $presentpoint > 0 ? '投稿奖励' : '发布信息扣点';
+					$pay_api = load('pay_api.class.php', 'pay', 'api');
+					$pay_api->update_exchange('phpcms', 'point', $presentpoint, $api_msg);
 				}
-				else
-				{
-					showmessage("您的积分不足！");
-				}
+				showmessage('发布成功！', $forward);
 			}
-			require CACHE_MODEL_PATH.'content_form.class.php';
-			$content_form = new content_form($modelid);
-			$data['catid'] = $catid;
-			$forminfos = $content_form->get($data);
-			$position = catpos($catid, SCRIPT_NAME.'?action=manage&catid={$catid}');
-			$member_detail = $db->get_one("SELECT c.email,d.* FROM ".DB_PRE."member_cache c,".DB_PRE."member_detail d WHERE c.userid=d.userid AND c.userid='$_userid'");
-			$head['title'] = $CATEGORY[$catid]['catname'].'_发布信息_'.$PHPCMS['sitename'];
-			include template($mod, 'manage');
+			else
+			{
+				if($presentpoint < 0 && $_point < abs($presentpoint))
+				{
+					if(isset($MODULE['pay']))
+					{
+						showmessage("您的积分不足！请充值！",$MODULE['pay']['url'].'showpayment.php?action=type&pay=card');
+					}
+					else
+					{
+						showmessage("您的积分不足！");
+					}
+				}
+				require CACHE_MODEL_PATH.'content_form.class.php';
+				$content_form = new content_form($modelid);
+				$data['catid'] = $catid;
+				$forminfos = $content_form->get($data);
+				$position = catpos($catid, SCRIPT_NAME.'?action=manage&catid={$catid}');
+				$member_detail = $db->get_one("SELECT c.email,d.* FROM ".DB_PRE."member_cache c,".DB_PRE."member_detail d WHERE c.userid=d.userid AND c.userid='$_userid'");
+				$head['title'] = $CATEGORY[$catid]['catname'].'_发布信息_'.$PHPCMS['sitename'];
+				include template($mod, 'manage');
+			}
 		}
 		break;
 

@@ -8,7 +8,8 @@ defined('IN_PHPCMS') or exit('Access Denied');
  */
 function return_url($code)
 {
-    return SITE_URL.'pay/respond.php?code='.$code;
+	global $MODULE;
+    return $MODULE['pay']['url'].'respond.php?code='.$code;
 }
 function changeorder($sn)
 {
@@ -23,20 +24,25 @@ function changeorder($sn)
 function get_payment($code)
 {
 	global $db;
-    $sql = "SELECT * FROM " .DB_PRE."payment WHERE pay_code = '$code' AND enabled = '1'";
+    $sql = "SELECT * FROM " .DB_PRE."payment WHERE `pay_code` = '$code' AND `enabled` = '1'";
     $info= $db->get_one($sql);
 	$cfg = $info['config'];
-	if (is_string($cfg) && ($arr = unserialize($cfg)) !== false)
-	{
-		$config = array();
+    if (is_string($cfg) )
+    {
+        $arr = string2array($cfg);
+        $config = array();
 
-		foreach ($arr AS $key => $val)
-		{
-			$config[$key] = $val['value'];
-		}
+        foreach ($arr AS $key => $val)
+        {
+            $config[$key] = $val['value'];
+        }
+        return $config;
+    }
+    else
+    {
+        return false;
+    }
 
-		return $config;
-	}
 }
 function pay_fee( $amount, $fee)
 {

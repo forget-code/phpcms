@@ -29,6 +29,7 @@ foreach($MODEL as $modelid=>$v)
 if(isset($MODULE['formguide']))
 {
 	require_once PHPCMS_ROOT.'formguide/admin/include/formguide_admin.class.php';
+	require_once PHPCMS_ROOT.'formguide/admin/include/formguide_fields.class.php';
 	$formguide_admin = new formguide_admin();
 	$formguide_admin->cache();
 	$FORMGUIDE = cache_read('formguide.php');

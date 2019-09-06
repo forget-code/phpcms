@@ -17,7 +17,7 @@ switch ($action)
 {
 	/*进行用户注册*/
 	case 'register':
-			if ($dosubmit)
+			if($dosubmit)
 			{
 				checkcode($checkcodestr, $M['enablecheckcodeofreg'], $forward);
 				if($PHPCMS['uc'])
@@ -38,7 +38,7 @@ switch ($action)
 					}
 					$authstr = $member->make_authcode($memberinfo);
 					$title = $PHPCMS['sitename'].$LANG['member_register_email_verify'];
-					$authurl = SITE_URL.$M['url']."register.php?action=activate&userid=$userid&authcode=$authstr";
+					$authurl = url($M['url'], 1)."register.php?action=activate&userid=$userid&authcode=$authstr";
 					$content = tpl_data($mod, 'register_mailcheck');
 					$sendmail->send($memberinfo['email'], $title, stripslashes($content), $PHPCMS['mail_user']);
 				}
@@ -51,7 +51,7 @@ switch ($action)
 				if($memberinfo['modelid'] && $M['choosemodel'] && !$M['enablemailcheck'] && !$M['enableadmincheck'])
 				{
 					$result = $member->login($memberinfo['username'], $memberinfo['password']);
-					showmessage('修改模型资料'.$script, $M['url'].'register_model.php');
+					showmessage('开始填写详细资料！'.$script, $M['url'].'register_model.php');
 				}
 				if($member->msg())
 				{
@@ -59,7 +59,7 @@ switch ($action)
 				}
 				else
 				{
-					showmessage('注册成功'.$script, SITE_URL);
+					showmessage('注册成功！'.$script, SITE_URL);
 				}
 			}
 			else
@@ -69,7 +69,8 @@ switch ($action)
 					header('Location:'.url($M['url'].'choice_model.php', 1));
 					exit;
 				}
-				if($modelid && !isset($member->MODEL[$modelid])) showmessage('该模块不存在');
+				if($modelid && !isset($member->MODEL[$modelid])) showmessage('该模型不存在');
+				$head['title'] = '新用户注册_'.$PHPCMS['sitename'];
 				include template($mod, 'register');
 			}
 		break;
@@ -77,7 +78,7 @@ switch ($action)
 	case 'activate':
 			$result = $member->verify_authcode($userid, $authcode);
 			if(!$result) showmessage($member->msg(), HTTP_REFERER);
-			showmessage($LANG['mail_verify_success'], "$M[url]login.php");
+			showmessage($LANG['mail_verify_success'], $M['url'].'login.php');
 		break;
 	/*进行用户名检查,用于注册时做用户体验*/
 	case 'checkuser':

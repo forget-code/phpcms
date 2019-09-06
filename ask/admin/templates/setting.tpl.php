@@ -32,12 +32,16 @@ include admin_tpl('header');
     </tr>
     <tr>
     	<th><strong>发表问题是否开启验证</strong></th>
-        <td><input name='setting[publish_code]' type='radio' value="1" <?php if($publish_check) echo "checked";?>> 是 <input name='setting[publish_code]' type='radio' value="0" <?php if(!$publish_check) echo "checked";?>> 否        
+        <td><input name='setting[publish_code]' type='radio' value="1" <?php if($publish_code) echo "checked";?>> 是 <input name='setting[publish_code]' type='radio' value="0" <?php if(!$publish_code) echo "checked";?>> 否        
         </td>
     </tr>
 	<tr>
       <th><strong>回答是否需要审核</strong></th>
       <td><input name='setting[answer_check]' type='radio' value="1" <?php if($answer_check) echo "checked";?>> 是 <input name='setting[answer_check]' type='radio' value="0" <?php if(!$answer_check) echo "checked";?>> 否</td>
+    </tr>
+	<tr>
+      <th><strong>回答是否需要开启验证</strong></th>
+      <td><input name='setting[answer_code]' type='radio' value="1" <?php if($answer_code) echo "checked";?>> 是 <input name='setting[answer_code]' type='radio' value="0" <?php if(!$answer_code) echo "checked";?>> 否</td>
     </tr>
 	<tr>
       <th><strong>高分上限设置</strong></th>

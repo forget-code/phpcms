@@ -21,9 +21,13 @@
 3. 欢迎原创. 您的独家报料与独特视角是编辑与访客的宝贵财富.<BR>
 4. 如果您是本站的忠实支持者，请注册为本站会员<BR>
 5. 会员可以拥有自己的空间，所有您发布的信息将会在这里显示<BR><BR>
-
+{if $_userid}
+欢迎您的光临：<font color="red">{$_username}</font><BR>
+当前积分是：<font color="red">{$_point}</font><BR>
+总共发布 <font color="red">{$totalnumber}</font> 条信息
+{else}
 还不是会员？<a href="{$MODULE[member][url]}register.php">点击这里注册</a><BR> 已经是会员，<a href="{$MODULE[member][url]}login.php">点击这里登陆</a>
-
+{/if}
 </td>
         <td>
 		{$categorys}

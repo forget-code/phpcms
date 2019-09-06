@@ -25,7 +25,7 @@ include admin_tpl('header');
 		{
 			if(!$id) continue;
 		?>
-		<a href="<?=url_par("groupid=$id")?>" id="groupinfo_<?=$id?>" title="<?=$groupname?>"><?php echo $groupname; ?></a>
+		<a href="?mod=member&file=member&action=manage&groupid=<?=$id?>" id="groupinfo_<?=$id?>" title="<?=$groupname?>"><?php echo $groupname; ?></a>
 		<?php 
 		}	
 		?>

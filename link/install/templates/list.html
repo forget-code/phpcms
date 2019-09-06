@@ -22,7 +22,7 @@
     <h4>友情链接分类</h4>
     <div id="link_cat"> {loop $datas $i $type} <a href="{$M[url]}index.php?typeid={$type[typeid]}">{$type[name]}</a> {/loop} </div>
     <div id="link_apply">
-      <input type="submit" value="我要申请链接" onclick="self.location='{$M[url]}register.php'"/>
+      <input type="submit" value="我要申请链接" onclick="redirect('{$M[url]}register.php')"/>
     </div>
   </div>
 </div>

@@ -23,7 +23,8 @@ class url
 
 	function type($typeid, $page = 0)
 	{
-		$typedir = $this->TYPE[$typeid]['typedir'];
+        $type = cache_read('type.php');
+		$typedir = $type[$typeid]['typedir'];
 		$fileext = $this->PHPCMS['fileext'];
 		$urlruleid = $this->M['type_urlruleid'];
 		$urlrules = explode('|', $this->URLRULE[$urlruleid]);

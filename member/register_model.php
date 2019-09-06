@@ -49,6 +49,7 @@ else
 	{
 		header('location:'.url(SITE_URL, 1));
 	}
+	$head['title'] = '填写详细资料_新用户注册_'.$PHPCMS['sitename'];
 	include template($mod, 'register_model');
 }
 ?>

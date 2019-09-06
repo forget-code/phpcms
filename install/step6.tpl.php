@@ -31,8 +31,8 @@
 <th align="right">数据库字符集：</th>
 <td>
 <input name="dbcharset" type="radio" id="dbcharset" value="" <?php if(strtolower(DB_CHARSET)=='') echo ' checked '?>/>默认
-<input name="dbcharset" type="radio" id="dbcharset" value="gbk" <?php if(strtolower(DB_CHARSET)=='gbk') echo ' checked '?> disabled/>GBK
-<input name="dbcharset" type="radio" id="dbcharset" value="utf8" <?php if(strtolower(DB_CHARSET)=='utf8') echo ' checked '?> />utf8 
+<input name="dbcharset" type="radio" id="dbcharset" value="gbk" <?php if(strtolower(DB_CHARSET)=='gbk') echo ' checked '?>  disabled/>GBK
+<input name="dbcharset" type="radio" id="dbcharset" value="utf8" <?php if(strtolower(DB_CHARSET)=='utf8') echo ' checked '?>/>utf8 
 <input name="dbcharset" type="radio" id="dbcharset" value="latin1" <?php if(strtolower(DB_CHARSET)=='latin1') echo ' checked '?> />latin1 
 <img src="install/images/help.png" style="cursor:pointer;" title="如果Mysql版本为4.0.x，则请选择默认；&#10;如果Mysql版本为4.1.x或以上，则请选择其他字符集（一般选GBK）" align="absmiddle" />
 <span id='helpdbcharset'></span>
@@ -114,6 +114,16 @@ function checkform()
 		$('#email').focus();
 		return false;
 	}
+	else
+	{
+		var emailPattern = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+		if (emailPattern.test($('#email').val())==false)
+		{
+			alert('请填写正确的E-mail！');
+			return false;
+		}
+	}
+
 	var url = '?step=dbtest&dbhost='+$('#dbhost').val()+'&dbuser='+$('#dbuser').val()+'&dbpw='+$('#dbpw').val()+'&dbname='+$('#dbname').val()+'&tablepre='+$('#tablepre').val()+'&sid='+Math.random()*5;
     $.get(url, function(data){
 		if(data > 1)

@@ -6,9 +6,9 @@ $voteid = intval($voteid);
 if(!$voteid) showmsg($LANG['illegal_parameters']);
 $info = $admin_vote->check($voteid);
 
-if(!is_array($info) && $info<=0) showmsg($LANG[$errmsg[$info]] ,SITE_URL.'vote/show.php?voteid='.$voteid);
+if(!is_array($info) && $info<=0) showmsg($LANG[$errmsg[$info]], $MODULE['vote']['url'].'show.php?voteid='.$voteid);
 
-if(!$info['allowguest'] && !$_userid) showmsg($LANG['anonymous_cant_not_vote'],SITE_URL.'member/login.php?forward='.urlencode(SITE_URL.SCRIPT_NAME).'?'.QUERY_STRING);
+if(!$info['allowguest'] && !$_userid) showmsg($LANG['anonymous_cant_not_vote'], $MODULE['member']['url'].'login.php?forward='.urlencode(SITE_URL.SCRIPT_NAME).'?'.QUERY_STRING);
 
 $votable = TRUE;
 if(!is_array($info))

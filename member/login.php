@@ -71,10 +71,11 @@ switch($action)
 					header('location:'.$url);
                     exit;
 				}
+				if($cookietime) $jscookiedays = $cookietime/3600/24;
 				$script = "<script language='javascript'>";
-				$script .= "setcookie('username', '".$username."', 0);";
+				$script .= "setcookie('username', '".$username."', '".$jscookiedays."');";
 				$script .= "</script>";
-                showmessage($LANG['login_success'].$code.$script,$forward);
+                showmessage($LANG['login_success'].$code.$script, $forward);
 			}
 		}
 		else

@@ -65,10 +65,10 @@ switch($action)
 			$where = '';
 			if($addtime) $addtime = strtotime($addtime);
 			if($endtime) $endtime = strtotime($endtime);
-			if($username) $where .= " AND `username`='$username'";
-			if($addtime && !$endtime) $where .= " AND `addtime`>$addtime";
-			if($endtime && !$addtime) $where .= " AND `endtime`<$endtime";
-			if($addtime && $endtime) $where .= " AND `addtime`>$addtime AND `endtime`<$endtime";
+			if($username) $where .= " `username`='$username'";
+			if($addtime && !$endtime) $where .= ($where) ? " AND `addtime`>$addtime" : " `addtime`>$addtime";
+			if($endtime && !$addtime) $where .= ($where) ? " AND `endtime`<$endtime" : " `endtime`<$endtime";
+			if($addtime && $endtime) $where .= ($where) ? " AND `addtime`>$addtime AND `endtime`<$endtime": " `addtime`>$addtime AND `endtime`<$endtime";
 			if($ischeck) $where .= " AND `ischeck`='$ischeck'";
 			if(!$where) showmessage('请选择删除条件', $forward);
 			$result = $ask->listinfo($where);

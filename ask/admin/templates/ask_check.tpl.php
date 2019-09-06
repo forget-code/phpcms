@@ -18,20 +18,20 @@ include admin_tpl('header');
 		<th>状态</td>
 		<th>管理操作</td>
 	</tr>
-		<form method="post" name="myform" action="?mod=<?=$mod?>&file=<?=$file?>&action=delete">
+		<form method="post" name="myform"  action="?mod=<?=$mod?>&file=<?=$file?>&action=delete">
 <?php
 	foreach ($infos as $info) {
 ?>
-		<tr align="center" onmouseout="this.style.backgroundColor='#F1F3F5'" onmouseover="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5'>
-		   <td align="center" valign="middle"><input type="checkbox" name="id[]"  id="id" value="<?=$info['askid']?>"></td>
-			<td align="center" valign="middle"><?=$info['askid']?></td>
-			<td align="center" ><?=$CATEGORY[$info['catid']]['catname']?></td>
-			<td align="left" ><a href="<?=$M['url']?>show.php?id=<?=$info['askid']?>" target="_blank"><?=$info['title']?></a></td>
-			<td align="center" ><?=$info['username']?></td>
-			<td align="center" ><?=date('m-d H:i',$info['addtime'])?></td>
-			<td align="center" ><?=$info['reward']?></td>
-			<td align="center" >待审核</td>
-			<td align="center" valign="middle">
+		<tr align="center" bgColor='#F1F3F5'>
+		  <td class="align_c"><input type="checkbox" name="id[]"  id="checkbox" value="<?=$info['askid']?>"></td>
+			<td class="align_c"><?=$info['askid']?></td>
+			<td class="align_c"><?=$CATEGORY[$info['catid']]['catname']?></td>
+			<td class="align_c"><a href="<?=$M['url']?>show.php?id=<?=$info['askid']?>" target="_blank"><?=$info['title']?></a></td>
+			<td class="align_c"><?=$info['username']?></td>
+			<td class="align_c"><?=date('m-d H:i',$info['addtime'])?></td>
+			<td class="align_c"><?=$info['reward']?></td>
+			<td class="align_c">待审核</td>
+			<td class="align_c">
 			<a href="?mod=<?=$mod?>&file=<?=$file?>&action=view&id=<?=$info['askid']?>">查看</a> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=delete&id=<?=$info['askid']?>" onclick="return confirm('您确定要删除此项吗？')">删除</a>
 			</td>
 		</tr>
@@ -42,7 +42,8 @@ include admin_tpl('header');
 </table>
 <table width="100%" height="25" border="0" cellpadding="0" cellspacing="1">
 	<tr>
-		<td width="100%" align="left" height="40" valign="middle" colspan="8"><input name='chkall' id="chkall" type='checkbox' onclick='checkall(this.form);' value='checkbox'>&nbsp;全部选中&nbsp;&nbsp;<input type="hidden" name="dosubmit" value="submitted">
+		<td width="100%" align="left" height="40" valign="middle" colspan="8"><input name='chkall' id="chkall" type='button' onclick="checkall()" value='全部选中'>
+		<input type="hidden" name="dosubmit" value="submitted">
 		<input type="submit" name="dosubmit" value="删除选定" onclick="return confirm('您确定要删除吗？')">
 		<input type='submit' value='通过审核' onClick="document.myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=check'">
 		<input type='submit' value='移动问题' onClick="document.myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=move'">
@@ -50,6 +51,6 @@ include admin_tpl('header');
 	</tr>
 </table>
 </form>
-<div class="align_c"><?=$ask->pages?></div>
+<div id="pages"><?=$ask->pages?></div>
 </body>
 </html>

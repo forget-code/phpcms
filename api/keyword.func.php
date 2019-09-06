@@ -5,6 +5,7 @@ function get_keywords($data, $number = 2)
 {
 	$data = trim(strip_tags($data));
     if(empty($data)) return '';
+	if(CHARSET != 'utf-8') $data = iconv('utf-8', CHARSET, $data);
 	if(extension_loaded('scws'))
 	{
 		$scws = load('scws.class.php');

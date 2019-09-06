@@ -44,6 +44,7 @@ class mails
     //游客订阅，退订
     function send($email, $typeids, $flag = 0)
     {
+	    global $MODULE;
         if(!is_email($email))
 		{
 			$this->error = 0;
@@ -58,7 +59,7 @@ class mails
         $tp = implode(",", $typeids);
         $auth = md5(AUTH_KEY.$email.$flag.$tp.$tm);
         $content = '请点击下面的连接或直接复制该连接到浏览器中激活订阅或退订</br>';
-        $url = SITE_URL.'mail/auth.php?tp='.$tp.'&em='.$email.'&auth='.$auth.'&tm='.$tm;
+        $url = $MODULE['mail']['url'].'auth.php?tp='.$tp.'&em='.$email.'&auth='.$auth.'&tm='.$tm;
         if($flag) $url .= '&ac=check'; else $content .= '&ac=del'; //ac=0 退订
         $content .= "<a target=\"_blank\" href=".$url.">".$url."</a>";
         $title = '订阅确认';
