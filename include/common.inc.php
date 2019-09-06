@@ -27,7 +27,7 @@ define('PATH_INFO', isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '');
 define('DOMAIN', isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : preg_replace("/([^:]*)[:0-9]*/i", "\\1", $_SERVER['HTTP_HOST']));
 define('SCHEME', $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://');
 define('SITE_URL', SCHEME.$_SERVER['HTTP_HOST'].PHPCMS_PATH);
-define('RELATE_URL', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : SCRIPT_NAME.(QUERY_STRING ? '?'.QUERY_STRING : PATH_INFO));
+define('RELATE_URL', str_replace(array('(', '$', ')', '{', '}', '<', '>'), '', isset($_SERVER['REQUEST_URI']) ? (MAGIC_QUOTES_GPC ? new_stripslashes($_SERVER['REQUEST_URI']) : new_addslashes($_SERVER['REQUEST_URI'])) : SCRIPT_NAME.(QUERY_STRING ? '?'.QUERY_STRING : PATH_INFO)));
 define('URL', SCHEME.$_SERVER['HTTP_HOST'].RELATE_URL);
 define('RELATE_REFERER',urlencode(RELATE_URL));
 define('CACHE_FORM', PHPCMS_ROOT.'data/formguide/');
