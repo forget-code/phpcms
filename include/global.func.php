@@ -765,10 +765,10 @@ function thumb($imgurl, $width = 100, $height = 100 ,$autocut = 1, $smallpic = '
 {
 	global $image;
 	if(empty($imgurl)) return $smallpic;
-	list($width_t, $height_t, $type, $attr) = getimagesize(PHPCMS_ROOT.$imgurl);
-	if($with>=$width_t || $height>=$height_t) return $imgurl;
 	if(!extension_loaded('gd') || strpos($imgurl, '://')) return $imgurl;
 	if(!file_exists(PHPCMS_ROOT.$imgurl)) return 'images/nopic.gif';
+	list($width_t, $height_t, $type, $attr) = getimagesize(PHPCMS_ROOT.$imgurl);
+	if($with>=$width_t || $height>=$height_t) return $imgurl;
 	$newimgurl = dirname($imgurl).'/thumb_'.$width.'_'.$height.'_'.basename($imgurl);
 	if(file_exists(PHPCMS_ROOT.$newimgurl)) return $newimgurl;
 	if(!is_object($image))
@@ -951,7 +951,7 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 				$more = 1;
 			} 
 			if($urlrule == '') $urlrule = url_par('page={$page}');
-			$url = load('url.class.php');
+			if(is_object($url)) $url = load('url.class.php');
 
 			$multipage .= '总数：<b>'.$num.'</b>&nbsp;&nbsp;';
 			

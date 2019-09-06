@@ -1,6 +1,5 @@
 <?php
 require './include/common.inc.php';
-cache_page_start();
 require_once MOD_ROOT.'/include/company.class.php';
 $readproid = get_cookie('readproid');
 if(intval($readproid))$prowhere = $readproid;
@@ -25,6 +24,8 @@ switch($action)
 		$productid = intval($id);
 		if(!$productid) exit('非法参数');
 		$yp->set_model('product');
+		$yp->hits($id);
+		cache_page_start();
 		$rs = $yp->get($productid);
 		if($rs['status'] != 99) showmessage('信息正在审核中...');
 		$head['keywords'] .= $rs['keywords'].'_产品';
@@ -116,9 +117,16 @@ switch($action)
 		{
 			$areaname = 0;
 		}
-		$order = intval($order);
-		$orderby = $order ? 'ASC' : 'DESC';
-		$sql = "SELECT * FROM `".DB_PRE."yp_product` p,`".DB_PRE."member_company` c $where ORDER BY p.price {$orderby}";
+		if(isset($order))
+		{
+			$order = intval($order);
+			$orderby = $order ? 'ASC' : 'DESC';
+			$sql = "SELECT * FROM `".DB_PRE."yp_product` p,`".DB_PRE."member_company` c $where ORDER BY p.price {$orderby}";
+		}
+		else
+		{
+			$sql = "SELECT * FROM `".DB_PRE."yp_product` p,`".DB_PRE."member_company` c $where ORDER BY p.id DESC";
+		}
 		$templateid = 'product';
 		if($M['enable_rewrite'])
 		{

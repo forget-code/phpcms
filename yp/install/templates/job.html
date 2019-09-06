@@ -4,7 +4,7 @@
     <h3 class="bt mar_10">推荐招聘企业</h3>
      <div class="box">
      <div class="tj">
-	 {get sql="SELECT c.companyname, c.userid, j.title, j.id FROM phpcms_member_company c LEFT JOIN phpcms_yp_job j ON j.userid = c.userid WHERE j.elite = 1 GROUP BY j.userid" rows="12"}
+	 {get sql="SELECT c.companyname, c.userid, j.title, j.id FROM phpcms_member_company c LEFT JOIN phpcms_yp_job j ON j.userid = c.userid WHERE c.elite = 1 GROUP BY j.userid" rows="12"}
      <h5><a href="{company_url($r['userid'])}" title="">{$r['companyname']}</a></h3>
      <p><a href="yp/job.php?action=show&id={$r['id']}"><samp class="{$r['style']}">{$r['title']}</samp></a></p>
       {/get}     

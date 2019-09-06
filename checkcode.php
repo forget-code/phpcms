@@ -4,7 +4,7 @@ require dirname(__FILE__).'/include/common.inc.php';
 session_start();
 
 $enablegd = 1;
-$funcs = array('imagecreatetruecolor','imagecolorallocate','imagefill','imagestring','imageline','imagerotate','imagedestroy','imagecolorallocatealpha','imageellipse','imagepng');
+$funcs = array('imagecreatetruecolor','imagecolorallocate','imagefill','imageline','imagedestroy','imagecolorallocatealpha','imageellipse','imagepng');
 foreach($funcs as $func)
 {
 	if(!function_exists($func))
@@ -13,8 +13,7 @@ foreach($funcs as $func)
 		break;
 	}
 }
-
-ob_clean();
+if(!function_exists('ob_gzhandler')) ob_clean();
 
 if($enablegd)
 {

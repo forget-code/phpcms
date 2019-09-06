@@ -36,8 +36,14 @@ if(function_exists('date_default_timezone_set')) date_default_timezone_set(TIMEZ
 header('Content-type: text/html; charset='.CHARSET);
 
 if(CACHE_PAGE && !defined('IN_ADMIN')) cache_page_start();
-if(GZIP && extension_loaded('zlib')) ini_set('zlib.output_compression', 'On');
-ob_start();
+if(GZIP && function_exists('ob_gzhandler'))
+{
+	ob_start('ob_gzhandler');
+}
+else
+{
+	ob_start();
+}
 
 $dbclass = 'db_'.DB_DATABASE;
 require $dbclass.'.class.php';

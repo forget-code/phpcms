@@ -71,7 +71,7 @@ if(is_array($infos)){
 		<input type="button" name="move" value=" 通过审核 " onclick="myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=status&status=1&forward=<?=urlencode(URL)?>';myform.submit();"> 
 		<input type="button" name="move" value=" 设为待审 " onclick="myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=status&status=0&forward=<?=urlencode(URL)?>';myform.submit();"> 
 </div>
-<div id="pages"><?=$c->pages?></div>
+<div id="pages"><?=$company->pages?></div>
 </form>
 </body>
 </html>

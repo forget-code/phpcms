@@ -668,6 +668,9 @@ areaid_load(0);
      <td><input type="submit" name="dosubmit" value=" 确定 ">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" name="reset" value=" 重置 "></td>
   </tr>
 </table>
+<input type="hidden" name="setting[wss_enable]" value="<?=$wss_enable?>">
+<input type="hidden" name="setting[wss_site_id]" value="<?=$wss_site_id?>">
+<input type="hidden" name="setting[wss_password]" value="<?=$wss_password?>">
 </form>
 </body>
 </html>

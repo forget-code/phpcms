@@ -166,7 +166,7 @@ class html
 					foreach($m[1] as $k=>$v)
 					{
 						$page = $k+1;
-						$titles .= '<a href="'.$pageurls[$page][0].'">'.$page.'、'.$v.'</a>';
+						$titles .= '<a href="'.$pageurls[$page][0].'">'.$page.'、'.strip_tags($v).'</a>';
 					}
 				}
 			}

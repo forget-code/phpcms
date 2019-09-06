@@ -201,7 +201,7 @@ switch($action)
 
 	case 'cache':
         template_cache();
-		showmessage($LANG['operation_success'], $forward);
+		showmessage('模板缓存更新完成','goback');
 		break;
 
 	case 'showtags':

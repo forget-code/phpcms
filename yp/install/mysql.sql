@@ -56,6 +56,8 @@ CREATE TABLE `phpcms_member_company` (
   `employnum` varchar(12) NOT NULL COMMENT '员工人数',
   `turnover` varchar(20) NOT NULL COMMENT '年营业额',
   `elite` tinyint(1) NOT NULL DEFAULT '0',
+  `fax` varchar(18) NOT NULL,
+  `zip` mediumint(8) unsigned NOT NULL default '0',
   UNIQUE KEY `userid` (`userid`),
   KEY `sitedomain` (`sitedomain`,`status`),
   KEY `elite` (`elite`,`status`)

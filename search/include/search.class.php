@@ -60,12 +60,18 @@ class search
 
 	function update($searchid, $title, $content, $url)
 	{
-		$data = $this->segment($title.$content);
-		$data = $title.' '.$data;
-		$data = $this->db->escape($data);
-		$this->db->query("UPDATE `$this->table` SET `type`='$this->type',`data`='$data' WHERE `searchid`='$searchid'");
-		//if($this->db->affected_rows() == 0) return false;
-		$this->set_data($searchid, array('title'=>$title, 'content'=>$content, 'url'=>$url));
+		if($this->db->get_one("SELECT `searchid` FROM `$this->table` WHERE `searchid`='$searchid'"))
+		{
+			$data = $this->segment($title.$content);
+			$data = $title.' '.$data;
+			$data = $this->db->escape($data);
+			$this->db->query("UPDATE `$this->table` SET `type`='$this->type',`data`='$data' WHERE `searchid`='$searchid'");
+			$this->set_data($searchid, array('title'=>$title, 'content'=>$content, 'url'=>$url));
+		}
+		else
+		{
+			$this->add($title, $content, $url);
+		}
 		return true;
 	}
 

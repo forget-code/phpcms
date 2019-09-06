@@ -252,9 +252,12 @@ class member
 		$phpcms_auth = phpcms_auth($this->_userid."\t".$md5_password, 'ENCODE', $phpcms_auth_key);
 		set_cookie('auth', $phpcms_auth, $cookietime);
 		set_cookie('cookietime', $_cookietime, $cookietime);
-		$username = $this->escape($username);
-		set_cookie('username', $username, $cookietime);
-		$this->db->query("UPDATE $this->table_info SET lastloginip='".IP."',lastlogintime=".TIME.",logintimes=logintimes+1 WHERE userid=$this->_userid");
+		if(CHARSET=='gbk')
+		{
+			$username = $this->escape($username);
+			set_cookie('username', $username, $cookietime);
+		}
+		$this->db->query("UPDATE $this->table_info SET lastloginip='".IP."',lastlogintime=".TIME.",logintimes=logintimes+1 WHERE userid='$this->_userid'");
 		require_once PHPCMS_ROOT.'member/include/group.class.php';
 		$group = new group();
 		$group->extend_update();

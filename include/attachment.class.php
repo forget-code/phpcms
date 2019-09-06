@@ -160,6 +160,7 @@ class attachment
 	function download($field, $value, $ext = 'gif|jpg|jpeg|bmp|png', $absurl = '', $basehref = '')
 	{
 		global $contentid;
+
 		$this->field = $field;
 		$dir = date('Y/md/', TIME);
 		$uploadpath = PHPCMS_PATH.UPLOAD_URL.$dir;
@@ -170,7 +171,7 @@ class attachment
 		$remotefileurls = array();
 		foreach($matches[3] as $matche)
 		{
-			if(DOMAIN && strpos($matche, DOMAIN) !== false) continue;
+			if(strpos($matche, '://') === false) continue;
 			$remotefileurls[$matche] = $this->fillurl($matche, $absurl, $basehref);
 		}
 		unset($matches, $string);

@@ -185,19 +185,21 @@ class content
 			$systeminfo['inputtime'] = TIME;
 		}
 		$systeminfo['updatetime'] = TIME;
-		unset($systeminfo['status']);
+		
 		if($data['islink']==1)
 		{
 			$systeminfo['url'] = $data['linkurl'];
 		}
 		else
 		{
-			$prefix = $data['prefix'] ? $data['prefix'] : ($PHPCMS['enable_urlencode'] ? hash_string($contentid) : $contentid);
+			$prefix = $data['prefix'] ? $data['prefix'] : ($PHPCMS['enable_urlencode'] ? hash_string($contentid) : '');
 			$info = $this->url->show($contentid, 0, $data['catid'], $systeminfo['inputtime'], $prefix);
 			$systeminfo['url'] = $info[1];
 			unset($info);
 		}
 		$this->db->update($this->table, $systeminfo, "`contentid`=$contentid $this->userid_sql");
+		unset($systeminfo['status']);
+
 		if($modelinfo) $this->db->update($this->model_table, $modelinfo, "`contentid`=$contentid");
 
 		$content_update = new content_update($this->modelid, $contentid);

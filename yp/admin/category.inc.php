@@ -43,8 +43,7 @@ switch($action)
 			$letter = gbk_to_pinyin($letter);
 			$category['letter'] = substr($letter[0],0,1);
 			$catid = $cat->add($category, $setting);
-			cache_common();
-	        showmessage($LANG['operation_success'], '?mod='.$mod.'&file='.$file.'&action=updatecache&catid='.$catid.'&forward='.urlencode($forward));
+	        showmessage('分类添加完成，待全部添加完成后，请修复分类', '?mod='.$mod.'&file='.$file.'&action=add');
 		}
 		else
 	    {
@@ -137,28 +136,38 @@ switch($action)
 		break;
 
 	case 'manage':
-		$list = $cat->listinfo();
-		if(is_array($list))
-	    {
-			$categorys = array();
-			foreach($list as $catid => $category)
-			{
-				 $url = url($category['url']);
-				 $catdir = $category['type'] ? "<a href='$url' title='".$LANG['click_view']."' target='_blank'>".str_cut($url,20)."</a>" : "<a href='$url' title='".$LANG['click_view']."' target='_blank'>".$category['catdir']."</a>";
-				 $model = $MODEL[$category['modelid']]['name'];
-				 $add_child_cat = $category['islink'] ? '<font color="#CCCCCC">'.$LANG['add_child_category'].'</font>' : "<a href='?mod=$mod&file=$file&action=add&catid=$catid'>".$LANG['add_child_category']."</a>";
-				 $categorys[$category['catid']] = array('id'=>$category['catid'],'parentid'=>$category['parentid'],'name'=>$category['catname'],'type'=>$type,'catdir'=>$catdir,'listorder'=>$category['listorder'],'model'=>$model,'style'=>$category['style'],'mod'=>$mod,'file'=>$file,'add_child_cat'=>$add_child_cat,'clear_cat'=>$clear_cat);
-			}
-			$str = "<tr>
-						<td style='text-align:center'><input name='listorder[\$id]' type='text' size='3' value='\$listorder'></td>
-						<td style='text-align:center'>\$id</td>
-						<td style='text-align:left'>\$spacer<a href='?mod=\$mod&file=\$file&action=edit&catid=\$id&parentid=\$parentid'><span class='\$style'>\$name</span></a></td>
-						<td style='text-align:center'>\$add_child_cat | <a href='?mod=\$mod&file=\$file&action=edit&catid=\$id&parentid=\$parentid'>".$LANG['edit']."</a> | <a href=javascript:confirmurl('?mod=\$mod&file=\$file&action=delete&catid=\$id','".$LANG['confirm_delete_category']."')>".$LANG['delete']."</a></td>
-					</tr>";
-			$tree->tree($categorys);
-			$categorys = $tree->get_tree(0,$str);
+		if(count($CATEGORY) < 100)
+		{
+				$list = $cat->listinfo();
+				if(is_array($list))
+				{
+					$categorys = array();
+					foreach($list as $catid => $category)
+					{
+						 $url = url($category['url']);
+						 $catdir = $category['type'] ? "<a href='$url' title='".$LANG['click_view']."' target='_blank'>".str_cut($url,20)."</a>" : "<a href='$url' title='".$LANG['click_view']."' target='_blank'>".$category['catdir']."</a>";
+						 $model = $MODEL[$category['modelid']]['name'];
+						 $add_child_cat = $category['islink'] ? '<font color="#CCCCCC">'.$LANG['add_child_category'].'</font>' : "<a href='?mod=$mod&file=$file&action=add&catid=$catid'>".$LANG['add_child_category']."</a>";
+						 $categorys[$category['catid']] = array('id'=>$category['catid'],'parentid'=>$category['parentid'],'name'=>$category['catname'],'type'=>$type,'catdir'=>$catdir,'listorder'=>$category['listorder'],'model'=>$model,'style'=>$category['style'],'mod'=>$mod,'file'=>$file,'add_child_cat'=>$add_child_cat,'clear_cat'=>$clear_cat);
+					}
+					$str = "<tr>
+								<td style='text-align:center'><input name='listorder[\$id]' type='text' size='3' value='\$listorder'></td>
+								<td style='text-align:center'>\$id</td>
+								<td style='text-align:left'>\$spacer<a href='?mod=\$mod&file=\$file&action=edit&catid=\$id&parentid=\$parentid'><span class='\$style'>\$name</span></a></td>
+								<td style='text-align:center'>\$add_child_cat | <a href='?mod=\$mod&file=\$file&action=edit&catid=\$id&parentid=\$parentid'>".$LANG['edit']."</a> | <a href=javascript:confirmurl('?mod=\$mod&file=\$file&action=delete&catid=\$id','".$LANG['confirm_delete_category']."')>".$LANG['delete']."</a></td>
+							</tr>";
+					$tree->tree($categorys);
+					$categorys = $tree->get_tree(0,$str);
+				}
+				include admin_tpl('category');
 		}
-		include admin_tpl('category');
+		else
+		{
+			$parentid = (isset($catid) && $catid) ? intval($catid) : 0;
+			$data = $cat->listinfo($parentid);
+			include admin_tpl('category_manage');
+		}
+		
 		break;
 
 	case 'checkname':

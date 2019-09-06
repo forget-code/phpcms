@@ -19,8 +19,8 @@
 <body onload="menu_selected('{php echo $catid ? $catid : $mod;}')">
 <div id="top">
 {if isset($MODULE['search'])}
-{php $types = include PHPCMS_ROOT.$MODULE['search']['path'].'include/type.inc.php';}
-  <div class="f_r">
+{php $types = cache_read('search_type.php');}
+<div class="f_r">
      <form name="site_search" action="{$MODULE[search][url]}" target="_blank">
 	  <input type="hidden" name="type" value="all"/>
       <input type="text" name="q" size="20"/>

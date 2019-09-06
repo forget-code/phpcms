@@ -90,8 +90,10 @@ class yp
 		{
 			$arr_catids = substr($CATEGORY[$data['catid']]['arrparentid'],2).','.$data['catid'];
 		}
+		if(empty($arr_catids)) $arr_catids = $data['catid'];
 		if($this->model_type=='product')
 		{
+			
 			$this->db->query("UPDATE `$this->table_category` SET `pitems`=`pitems`+1 WHERE `catid` IN (".$arr_catids.")");
 		}
 		elseif($this->model_type=='buy')
@@ -110,6 +112,7 @@ class yp
 
 		$content_input = new yp_input($this->modelid);
 		$inputinfo = $content_input->get($data);
+		$inputinfo['updatetime'] = TIME;
 		$this->db->update($this->table, $inputinfo, "`id`=$id $this->userid_sql");
 
 		$content_update = new yp_update($this->modelid, $id);

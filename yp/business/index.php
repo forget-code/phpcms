@@ -5,7 +5,6 @@ require '../include/common.inc.php';
 
 if(!$_userid) showmessage('您还没有登陆，即将跳转到登陆页面',$MODULE['member']['url'].'login.php?forward='.urlencode(URL));
 session_start();
-require_once MOD_ROOT.'include/output.func.php';
 if(!isset($file) || empty($file)) $file = 'panel';
 
 /* $company_user_infos 获取企业会员信息 */

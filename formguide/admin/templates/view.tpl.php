@@ -23,10 +23,8 @@ include admin_tpl('header');
 	</tr>
 </table>
 </form>
-<form name="myform" method="post">
-<input type="hidden" name="mod" value="<?=$mod?>">
-<input type="hidden" name="file" value="<?=$file?>">
-<input type="hidden" name="action" id="action" value="<?=$action?>">
+<form name="myform" method="post" action="?mod=<?=$mod?>&file=view&action=delete&formid=<?=$formid?>">
+
 <table cellpadding="0" cellspacing="1" class="table_list">
 	<caption><?=$formname?></caption>
     <tr>
@@ -72,7 +70,7 @@ include admin_tpl('header');
 		?>
         <td class="align_c">
 		<a href="?mod=formguide&file=viewinfo&formid=<?=$formid?>&dataid=<?=$dataid?>">查看</a> | 
-		<a href="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=delete&formid=<?=$formid?>&dataid=<?=$r['dataid']?>', '删除该条信息')">删除</a>
+		<a href="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=delete&formid=<?=$formid?>&dataid=<?=$dataid?>', '删除该条信息')">删除</a>
 		</td>
     </tr>
     <?php
@@ -81,7 +79,7 @@ include admin_tpl('header');
 </table>
 <div class="button_box">
 	<input name='button' type='button' class="button_style" id='chkall' onclick='checkall()' value='全选'>
-	<input name="button" type="submit" onClick="$('#action').val('delete');" value="删除">
+	<input name="button2" type="submit"  value="删除">
 </div>
 </form>
 <div id="pages">

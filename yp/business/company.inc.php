@@ -73,7 +73,9 @@ switch($action)
 			$linkman = htmlspecialchars($linkman);
 			$email = htmlspecialchars($email);
 			$telephone = htmlspecialchars($telephone);
-			$db->query("UPDATE ".DB_PRE."member_company SET `logo`='$logo',`banner`='$banner',`linkman`='$linkman',`email`='$email',`telephone`='$telephone',`introduce`='$introduce' WHERE `userid`='$userid'");
+			$fax = htmlspecialchars($fax);
+			$zip = intval($zip);
+			$db->query("UPDATE ".DB_PRE."member_company SET `logo`='$logo',`banner`='$banner',`linkman`='$linkman',`email`='$email',`telephone`='$telephone',`introduce`='$introduce',`fax`='$fax',`zip`='$zip' WHERE `userid`='$userid'");
 			showmessage('更新成功',$forward);
 		}
 	break;

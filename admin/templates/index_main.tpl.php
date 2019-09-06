@@ -113,18 +113,14 @@ th{ font-size:12px; background: url(admin/skin/images/bg_table.jpg) repeat-x 0 -
 	</table>
     <div id="phpcms_notice"></div>
 	<table cellpadding="0" cellspacing="1">
-	<caption>Phpcms 开发团队</caption>
+		<caption>Phpcms 开发团队</caption>
 		<tr>
-			<td width="100" class="align_r">总架构</td>
-			<td class="align_l">钟胜辉</td>
+			<td class="align_r">程序研发组</td>
+			<td class="align_l">王参加 陈周瑜 陈学旺 张华伟 崔馨方 陈鹏 王铁成</td>
 		</tr>
 		<tr>
-			<td class="align_r">程序开发</td>
-			<td class="align_l">王参加 司天宇 邹智海 陈周瑜 陈学旺</td>
-		</tr>
-		<tr>
-			<td class="align_r">UI设计</td>
-			<td class="align_l">康凯军</td>
+			<td class="align_r">UI设计组</td>
+			<td class="align_l">张二强 董飞龙 刘韦君</td>
 		</tr>
 		<tr>
 			<td class="align_r">官方网站</td>

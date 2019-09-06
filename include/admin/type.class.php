@@ -6,6 +6,7 @@ class type
 	var $pages;
 	var $number;
     var $module;
+    var $modelid;
 
     function __construct($module = 'phpcms')
     {
@@ -28,6 +29,7 @@ class type
 
 	function add($info)
 	{
+		$this->modelid = $info['modelid'];
         if($this->check($info['name'])) return false;
 		if(!is_array($info) || empty($info['name'])) return false;
         $info['module'] = $this->module;
@@ -87,7 +89,7 @@ class type
     //相同mod 下的 typename 相同
     function check($typename)
     {
-        $row = $this->db->get_one("SELECT `name` FROM `$this->table` WHERE `name` = '$typename' AND `module` = '$this->module'");
+        $row = $this->db->get_one("SELECT `name` FROM `$this->table` WHERE `name` = '$typename' AND `module` = '$this->module' AND `modelid`='$this->modelid'");
         if(empty($row))
         {
             return false;

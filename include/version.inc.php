@@ -1,4 +1,4 @@
 <?php
-define('PHPCMS_VERSION', '2008 sp1');
-define('PHPCMS_RELEASE', '20090612');
+define('PHPCMS_VERSION', '2008 sp2');
+define('PHPCMS_RELEASE', '20090820');
 ?>

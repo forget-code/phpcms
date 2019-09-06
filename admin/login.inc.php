@@ -41,6 +41,11 @@ if($dosubmit)
 	require_once 'admin/admin.class.php';
 	$a = new admin();
 	$admin = $a->get($userid);
+	if($admin['disabled'] == 1)
+	{
+        $member->logout();
+        showmessage('您的账号没有权限访问网站后台，请联系管理员！');
+	}
 	if($admin['allowmultilogin'] == 0 && $a->is_multilogin($userid))
 	{
         $member->logout();

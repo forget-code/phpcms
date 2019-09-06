@@ -1,6 +1,5 @@
 <?php
 require './include/common.inc.php';
-cache_page_start();
 require_once MOD_ROOT.'/include/company.class.php';
 $template = 'buy';
 $readproid = get_cookie('readproid');
@@ -18,11 +17,13 @@ if($catid)
 switch($action)
 {
 	case 'show':
+	cache_page_start();
 	require_once MOD_ROOT.'include/yp.class.php';
 	$company = new company();
 	$yp = new yp();
 	$buyid = intval($id);
 	$yp->set_model('buy');
+	$yp->hits($id);
 	$rs = $yp->get($id);
 	$head['keywords'] .= $rs['title'].'_商机';
 	$head['title'] .= $rs['title'].'_商机'.'_'.$PHPCMS['sitename'];

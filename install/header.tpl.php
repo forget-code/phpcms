@@ -3,6 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8>">
 <title><?php echo $steps[$step];?> - Phpcms2008 安装向导</title>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <style type="text/css">
 <!--
 *{margin:0; padding:0;}

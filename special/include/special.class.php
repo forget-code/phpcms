@@ -153,5 +153,15 @@ class special
 		$value = $value == 1 ? 1: 0;
 		return $this->db->query("UPDATE `$this->table` SET `disabled`='$value' WHERE `specialid`=$specialid");
 	}
+
+	function update_urls()
+	{
+		$result = $this->db->query("SELECT specialid,typeid,filename FROM $this->table");
+		while($r = $this->db->fetch_array($result))
+		{
+			$url = $this->M['url'].$this->url->show($r['specialid'], $r['filename'], $r['typeid']);
+			$this->db->query("UPDATE `$this->table` SET `url`='$url' WHERE `specialid`='$r[specialid]'");
+		}
+	}
 }
 ?>

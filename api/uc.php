@@ -40,12 +40,6 @@ if($action=='updatepw')
 	!API_UPDATEPW && exit(API_RETURN_FORBIDDEN);
 	//更改用户密码
 	exit(API_RETURN_SUCCEED);
-/*	$password = md5(PASSWORD_KEY.$arr['password']) ;
-	$username = $arr['username'] ;
-	$db->query("update ".DB_PRE."member set password='$password' where username='$username'");
-	$db->query("update ".DB_PRE."member_cache  set password='$password' where username='$username'");
-	exit('1');
-*/
 }
 
 if($action == 'synlogin')

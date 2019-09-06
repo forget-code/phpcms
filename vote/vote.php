@@ -73,7 +73,7 @@ $head['title']=$LANG['vote_subject'].' '.$title.' - '.$PHPCMS['sitename'];
 
 if($action=='js')
 {
-	ob_clean();
+	if(!function_exists('ob_gzhandler')) ob_clean();
 	ob_start();
 
 	$template = ($template =='vote')?'vote_submit' : $template ;

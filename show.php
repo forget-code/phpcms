@@ -47,7 +47,7 @@ if(isset($r['paginationtype']))
 	$paginationtype = $r['paginationtype'];
 	$maxcharperpage = $r['maxcharperpage'];
 }
-$page = max(intval($page), 1);
+$page = $page ? $page : 1;
 $pages = $titles = '';
 if($paginationtype==1)
 {
@@ -89,7 +89,7 @@ if(strpos($content, '[page]') !== false)
 			foreach($m[1] as $k=>$v)
 			{
 				$p = $k+1;
-				$titles .= '<a href="'.$pageurls[$p][0].'">'.$p.'、'.$v.'</a>';
+				$titles .= '<a href="'.$pageurls[$p][0].'">'.$p.'、'.strip_tags($v).'</a>';
 			}
 		}
 	}

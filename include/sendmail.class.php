@@ -3,6 +3,11 @@ class sendmail
 {
 	function sendmail()
 	{
+		$this->__construct();
+	}
+
+	function __construct()
+    {
 		global $PHPCMS;
 		$this->set($PHPCMS['mail_server'], $PHPCMS['mail_port'], $PHPCMS['mail_user'], $PHPCMS['mail_password'], $PHPCMS['mail_type']);
 		$this->auth = 1;
@@ -18,7 +23,7 @@ class sendmail
         $this->delimiter = $delimiter == 1 ? "\r\n" : ($delimiter == 2 ? "\r" : "\n");
 		$this->mailusername = $mailusername;
 	}
-
+	
 	function send($email_to, $email_subject, $email_message, $email_from = '')
 	{
 		global $PHPCMS;

@@ -1,8 +1,10 @@
 <?php
 define('API_URL_GET_KEYWORDS', 'http://tool.phpcms.cn/api/get_keywords.php');
 
-function get_keywords($data, $number = 2)
+function get_keywords($data, $number = 2, $m = 1)
 {
+	global $PHPCMS;
+	if($m && !$PHPCMS['enablegetkeywords']) return '';
 	$data = trim(strip_tags($data));
     if(empty($data)) return '';
 	if(CHARSET != 'utf-8') $data = iconv('utf-8', CHARSET, $data);

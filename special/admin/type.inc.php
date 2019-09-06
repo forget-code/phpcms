@@ -19,7 +19,7 @@ switch($action)
 			{
 				$info['url'] = $typeurl->type($result);
 				$type->edit($result, $info);
-				showmessage('操作成功！', $forward);
+				showmessage('操作成功！', '?mod=special&file=type&action=add');
 			}
 			else
 			{

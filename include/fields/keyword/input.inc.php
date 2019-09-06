@@ -28,7 +28,7 @@
 			}
 			else
 			{
-				$this->db->query("INSERT INTO `".DB_PRE."keyword` (`tag`,`usetimes`,`lastusetime`) VALUES('$tag','1','".TIME."')");
+				$this->db->query("REPLACE INTO `".DB_PRE."keyword` (`tag`,`usetimes`,`lastusetime`) VALUES('$tag','1','".TIME."')");
 			}
 		}
 		return implode(' ', $keywords);

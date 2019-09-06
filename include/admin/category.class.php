@@ -73,8 +73,14 @@ class category
 			$this->menu->update('catid_'.$catid, array('parentid'=>$this->menu->menuid('catid_'.$parentid), 'name'=>$category['catname'], 'url'=>'?mod=phpcms&file=content&action=manage&catid='.$catid));
 			if($parentid) $this->menu->update('catid_'.$parentid, array('url'=>''));
 		}
-		if($category['type'] < 2) $this->url($catid);
-		$this->repair();
+		if($category['type'] == 2)
+		{
+			return true;
+		}
+		else
+		{
+			$this->url($catid);
+		}
 		return $catid;
 	}
 
@@ -96,9 +102,14 @@ class category
 			$this->menu->update('catid_'.$catid, array('parentid'=>$this->menu->menuid('catid_'.$parentid), 'name'=>$category['catname'], 'url'=>$url));
             if($parentid) $this->menu->update('catid_'.$parentid, array('url'=>''));
 		}
-		if($category['type'] < 2) $this->url($catid);
-		$this->repair();
-		$this->cache();
+		if($category['type'] == 2)
+		{
+			return true;
+		}
+		else
+		{
+			$this->url($catid);
+		}
 		return true;
 	}
 
@@ -228,6 +239,7 @@ class category
 	function repair()
 	{
 		@set_time_limit(600);
+
 		if(is_array($this->category))
 		{
 			foreach($this->category as $catid => $cat)
@@ -238,7 +250,7 @@ class category
 				$arrchildid = $this->get_arrchildid($catid);
 				$child = is_numeric($arrchildid) ? 0 : 1;
 				$this->db->query("UPDATE `$this->table` SET arrparentid='$arrparentid',parentdir='$parentdir',arrchildid='$arrchildid',child='$child' WHERE catid=$catid");
-				if($cat['module']=='phpcms') $this->url($catid);
+				if($cat['module']=='phpcms' && $cat['type']!=2) $this->url($catid);
 			}
 		}
 		$this->cache();
@@ -425,6 +437,7 @@ class category
 			$arrchild = explode(',',$arrchildid);
 			foreach($arrchild AS $k)
 			{
+				if($categorys_c[$k]['type'] == 2) continue;
 				$parentdir = $second_domain = $parentid_arr = '';
 				if($categorys_c[$k]['modelid'])
 				{
@@ -435,7 +448,6 @@ class category
 						$this->db->query("UPDATE `$this->table` SET url='$caturl' WHERE catid=$k");
 						continue;
 					}
-					if($categorys_c[$k]['type'] == 2) continue;
 				}
 				else
 				{
@@ -447,7 +459,6 @@ class category
 						$this->db->query("UPDATE `$this->table` SET url='$caturl' WHERE catid=$k");
 						continue;
 					}
-					if($categorys_c[$k]['type'] == 2) continue;	
 				}
 				$url_a = $this->u->category($k);
 				$caturl = $url_a[1];

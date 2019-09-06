@@ -61,7 +61,7 @@ class priv_role
 	function module()
 	{
 		global $mod, $file, $action, $MODULE, $catid, $contentid;
-		if($this->issuperadmin || ($this->ischiefeditor && (in_array($file,array('content','category','block','position','html','url','content_all')) || $mod == 'special')) || ($this->isdesigner && ($file == 'template' || $file == 'tag'))) return true;
+		if($this->issuperadmin || ($this->ischiefeditor && (in_array($file,array('content','category','block','position','html','url','content_all','tag','comment','copyfrom')) || $mod == 'special')) || ($this->isdesigner && ($file == 'template' || $file == 'tag'))) return true;
 		$privs = cache_read('priv.inc.php', PHPCMS_ROOT.$MODULE[$mod]['path'].'include/');
 		if(!$privs) return true;
 		if($this->check('module', $mod, 'all')) return true;

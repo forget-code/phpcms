@@ -7,14 +7,16 @@ class member_api
 	var $table_info;
 	var $member_fields;
 	var $MODEL;
+	var $M;
 
 	/**
 	 *初始化用户API类
 	**/
 	function __construct()
 	{
-		global $db, $MODEL;
+		global $db, $MODEL,$M;
 		$this->db = &$db;
+		$this->M = $M;
 		$this->table = DB_PRE.'member';
 		$this->table_cache = DB_PRE.'member_cache';
 		$this->table_info = DB_PRE.'member_info';
@@ -101,7 +103,7 @@ class member_api
 
 	function add($info, $import = 0)
 	{
-		global $M;		
+		global $M,$MODULE;		
 		$member_fields = array('userid', 'username','password','email','groupid','areaid','amount','point','modelid','touserid');//modify by skyz
 		if($info['groupid'])
 		{
@@ -133,6 +135,31 @@ class member_api
 		$arr_info['userid'] = $moreinfo['userid'] = $userid = $this->db->insert_id();
         $this->db->insert($this->table_cache, $arr_info);
        	$this->db->insert($this->table_info, $moreinfo);
+		if(isset($MODULE['pay']))
+		{
+			$pay_api = load('pay_api.class.php', 'pay', 'api');
+			if($this->M['defualtamount'] > 0.01)
+			{		
+				$pay_api->update_exchange('member', 'amount', $this->M['defualtamount'], '注册赠送金钱', $userid);
+			}
+			if($this->M['defualtpoint'])
+			{
+				$pay_api->update_exchange('member', 'point', $this->M['defualtpoint'], '注册赠送积分', $userid);
+			}
+		}
+		else
+		{
+			if($this->M['defualtamount'])
+			{
+				$this->db->update($this->table, array('amount'=>$this->M['defualtamount']), "userid='$userid'");
+				$this->db->update($this->table_cache, array('amount'=>$this->M['defualtamount']), "userid='$userid'");
+			}
+			if($this->M['defualtpoint'])
+			{
+				$this->db->update($this->table, array('point'=>$this->M['defualtpoint']), "userid='$userid'");
+				$this->db->update($this->table_cache, array('point'=>$this->M['defualtpoint']), "userid='$userid'");
+			}
+		}
 		return $userid;
 	}
 

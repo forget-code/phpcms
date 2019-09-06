@@ -89,6 +89,23 @@ switch($action)
 			exit('success');
 		}
 	break;
-
+	
+	case 'stat':
+		$r = $db->get_one("SELECT `name`,`tablename` FROM ".DB_PRE."formguide WHERE formid='$formid'");
+		$formname = $r['name'];
+		$tablename = $r['tablename'];
+		$infos = $datas = array();
+		$result = $db->query("SELECT * FROM ".DB_PRE."formguide_fields WHERE formid='$formid' AND formtype='box'");
+		while($r = $db->fetch_array($result))
+		{
+			$infos[] = $r;
+		}
+		$result = $db->query("SELECT * FROM ".DB_PRE."form_$tablename");
+		while($r = $db->fetch_array($result))
+		{
+			$datas[] = $r;
+		}
+		include admin_tpl('stat');
+		break;
 }
 ?>

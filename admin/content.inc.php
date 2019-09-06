@@ -107,6 +107,7 @@ switch($action)
 
 		if($dosubmit)
 		{
+			$info['status'] = ($status == 2 || $status == 3) ? $status : 99;
 			$c->edit($contentid, $info);
 
 			showmessage('修改成功！', $forward);

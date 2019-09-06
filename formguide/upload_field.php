@@ -40,6 +40,7 @@ elseif($type == 'image')
 }
 elseif($type == 'file')
 {
+	$upload_maxsize = sizecount($upload_maxsize);
 	include template($mod, 'upload');
 }
 ?>

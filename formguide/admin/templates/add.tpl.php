@@ -57,7 +57,7 @@ include admin_tpl('header');
     <tr>
     	<th><strong>模板管理</strong></th>
         <td>
-        	<?=form::select_template($mod, 'info[template]', 'template', '', '', 'form_')?> &nbsp;<input type="button" value="修改选中模板" title="修改选中模板" onClick="location.href='?mod=phpcms&file=template&action=edit&template='+ $('#template').val()+'&module=<?=$mod?>&forward=<?=urlencode(URL)?>'">&nbsp;<input type="button" value="添加模板" title="添加模板" onClick="location.href='?mod=phpcms&file=template&action=add&module=<?=$mod?>&forward=<?=urlencode(URL)?>'">
+        	<?=form::select_template($mod, 'info[template]', 'template', 'form_index', '', 'form_')?> &nbsp;<input type="button" value="修改选中模板" title="修改选中模板" onClick="location.href='?mod=phpcms&file=template&action=edit&template='+ $('#template').val()+'&module=<?=$mod?>&forward=<?=urlencode(URL)?>'">&nbsp;<input type="button" value="添加模板" title="添加模板" onClick="location.href='?mod=phpcms&file=template&action=add&module=<?=$mod?>&forward=<?=urlencode(URL)?>'">
         </td>
     </tr>
     <tr>

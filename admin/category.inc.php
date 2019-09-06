@@ -23,9 +23,8 @@ switch($action)
 			$catid = $cat->add($category, $setting);
 			$priv_group->update('catid', $catid, $priv_groupid);
 			$priv_role->update('catid', $catid, $priv_roleid);
-			cache_common();
-			$forward = '?mod='.$mod.'&file='.$file.'&action=repair';
-	        showmessage('添加成功！开始更新网站地图...', '?mod=phpcms&file=sitemap&dosubmit=1&forward='.urlencode($forward));
+			$forward = '?mod='.$mod.'&file='.$file.'&action=add';
+	        showmessage('栏目添加成功！待栏目全部添加完成，请修复栏目', $forward);
 		}
 		else
 	    {
@@ -255,7 +254,7 @@ switch($action)
                 }
             }
 			if(!$catid) showmessage('添加失败', '?mod=phpcms&file=category&action=more');
-	        showmessage('添加成功', $forward);
+	        showmessage('添加成功', '?mod=phpcms&file=category&action=more');
 		}
 		else
 	    {

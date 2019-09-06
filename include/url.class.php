@@ -91,7 +91,7 @@ class url
 		if($catid == 0 || $time == 0 || $prefix == '')
 		{
 			$r = $this->db->get_one("SELECT * FROM `".DB_PRE."content` WHERE `contentid`='$contentid'");
-			if($r['isupgrade'])
+			if($r['isupgrade'] && !empty($r['url']))
 			{
 				if($page>1)
 				{
