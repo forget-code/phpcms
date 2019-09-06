@@ -32,13 +32,10 @@ class video extends admin {
 		$this->userid = $_SESSION['userid'];
 		pc_base::load_app_class('ku6api', 'video', 0);
 		pc_base::load_app_class('v', 'video', 0);
-		$this->v =  new v($this->db);
-		
+		$this->v =  new v($this->db); 
 		//获取短信平台配置信息
 		$this->setting = getcache('video');
-		if(empty($this->setting) && ROUTE_A!='setting') {
-			showmessage(L('video_setting_not_succfull'), 'index.php?m=video&c=video&a=setting&meunid='.$_GET['meunid']);
-		}
+		
 		$this->ku6api = new ku6api($this->setting['sn'], $this->setting['skey']);
 	}
 	
@@ -87,6 +84,7 @@ class video extends admin {
 			$data['title'] = isset($_POST['title']) && trim($_POST['title']) ? trim($_POST['title']) : showmessage(L('video_title_not_empty'), 'index.php?m=video&c=video&a=add&meunid='.$_GET['meunid']);
 			$data['description'] = trim($_POST['description']);
 			$data['keywords'] = trim(strip_tags($_POST['keywords']));
+			$data['channelid'] = intval($_POST['channelid']);
 			//其次向vms post数据，并取得返回值
 			$get_data = $this->ku6api->vms_add($data);
 			if (!$get_data) {
@@ -94,6 +92,7 @@ class video extends admin {
 			}
 			$data['vid'] = $get_data['vid'];
 			$data['addtime'] = SYS_TIME;
+			
 			$data['userupload'] = intval($_POST['userupload']);
 			$videoid = $this->v->add($data);
 			if ($videoid) {
@@ -102,8 +101,11 @@ class video extends admin {
 				showmessage(L('operation_failure'), 'index.php?m=video&c=video&a=add&meunid='.$_GET['meunid']);
 			}
 		} else {
+			if((empty($this->setting['sn']) || empty($this->setting['skey'])) && ROUTE_A!='open') {
+				header("Location: ".APP_PATH."index.php?m=video&c=video&a=open&meunid=".$_GET['meunid'].'&pc_hash='.$_GET['pc_hash']);
+			}
 			if(!$this->ku6api->testapi()) {
-				showmessage(L('vms_sn_skey_error'),'?m=video&c=video&a=setting&menuid='.$_GET['menuid']);
+				header("Location: ".APP_PATH."index.php?m=video&c=video&a=open&meunid=".$_GET['meunid'].'&pc_hash='.$_GET['pc_hash']);
 			}
 			$flash_info = $this->ku6api->flashuploadparam();
 			$show_validator = true;
@@ -249,15 +251,30 @@ class video extends admin {
 			$this->ku6api->ku6api_sn = $_POST['setting']['sn'];
 			$this->module_db->update(array('setting'=>$setting),array('module'=>'video'));
 			if(!$this->ku6api->testapi()) {
-				showmessage(L('vms_sn_skey_error'),HTTP_REFERER);
+				showmessage(L('vms_sn_skey_error'),'?m=video&c=video&a=open');
 			}
-			showmessage(L('operation_success'),HTTP_REFERER);
+			showmessage(L('operation_success'),'?m=video&c=video&a=open');
 		} else {
 			$show_pc_hash = '';
 			$v_model_categorys = $this->ku6api->get_categorys(true, $this->setting['catid']);
 			$category_list = '<select name="setting[catid]" id="catid"><option value="0">'.L('please_choose_catid').'</option>'.$v_model_categorys.'</select>';
-			include $this->admin_tpl('video_setting');
+			include $this->admin_tpl('video_open');
 		}
+	}
+	
+	//获取SKEY ,SN 写入缓存
+	public function set_video_setting(){
+		$array['skey'] = $_GET['skey'];
+		$array['sn'] = $_GET['sn'];
+		if(empty($_GET['skey']) || empty($_GET['sn'])){
+			showmessage(L('操作失败！正在返回！'),'?m=admin');
+		}
+		$setting = array2string($array);
+		setcache('video', $array);
+		$this->ku6api->ku6api_skey = $_GET['skey'];
+		$this->ku6api->ku6api_sn = $_GET['sn'];
+		$this->module_db->update(array('setting'=>$setting),array('module'=>'video'));
+		showmessage(L('operation_success'),'?m=admin');
 	}
 	
 	/**
@@ -301,8 +318,11 @@ class video extends admin {
 				showmessage(L('please_choose_catid_and_channel'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid']);
 			}
 		} else {
+			if((empty($this->setting['sn']) || empty($this->setting['skey'])) && ROUTE_A!='open') {
+				header("Location: ".APP_PATH."index.php?m=video&c=video&a=open&meunid=".$_GET['meunid'].'&pc_hash='.$_GET['pc_hash']);
+			}
 			if(!$this->ku6api->testapi()) {
-				showmessage(L('vms_sn_skey_error'),'?m=video&c=video&a=setting&menuid='.$_GET['menuid']);
+				header("Location: ".APP_PATH."index.php?m=video&c=video&a=open&meunid=".$_GET['meunid'].'&pc_hash='.$_GET['pc_hash']);
 			}
 			//获取用户订阅信息
 			$v_model_categorys = $this->ku6api->get_categorys(true);
@@ -395,6 +415,9 @@ class video extends admin {
 	* 导入KU6视频
 	*/
 	public function import_ku6video(){
+		if(!$this->ku6api->testapi()) {
+			header("Location: ".APP_PATH."index.php?m=video&c=video&a=open&meunid=".$_GET['meunid'].'&pc_hash='.$_GET['pc_hash']);
+		}
 		pc_base::load_sys_class('format','',0);
 		$do = isset($_GET['do']) ? $_GET['do'] : '';
 		$ku6url = isset($_GET['ku6url']) ? $_GET['ku6url'] : '';
@@ -520,11 +543,171 @@ class video extends admin {
 	public function public_view_video() {
 		$id = intval($_GET['id']);
 		if (!$id) showmessage('请选择要浏览的视频！');
-		$r = $this->db->get_one(array('videoid'=>$id), 'vid');
+		$r = $this->db->get_one(array('videoid'=>$id), 'vid,channelid');
 		$video_cache = $this->setting;
 		$show_header = 1;
 		include $this->admin_tpl('view_video');
 	}
+	
+	/***********2013.1.15添加**********/
+	
+	/** 
+	 * 后台申请开通视频聚合功能。服务器自动返回配置视频参数。包括身份识别码、加密密钥、调用方案编号等信息
+	 */
+	public function open() {   
+		$this->setting = getcache('video');
+ 		if(empty($this->setting['skey']) || empty($this->setting['sn'])){
+			//配置不存在，则先验证域名是否存在，如果存在，直接跳去验证页面
+			$check_user_back = APP_PATH . 'api.php?op=video_api';
+			$return_check = $this->ku6api->check_user_back($check_user_back);
+			if($return_check==200){//存在同域名记录，进行email验证
+				header("Location: ".APP_PATH."index.php?m=video&c=video&a=check_user_back&meunid=".$_GET['meunid'].'&pc_hash='.$_GET['pc_hash']);
+				exit;
+			}
+			
+			//配置不存在，跳转至盛大通行证登录页面 
+			$user_back = APP_PATH . 'api.php?op=video_api';
+			$user_back = str_replace("/","__",$user_back);
+			$user_back = urlencode(str_replace(".php","@php",$user_back));
+			include $this->admin_tpl('video_open');
+		} else {
+			$config_flag = false;
+			if($this->ku6api->testapi()) {
+				$config_flag = true;
+			}
+			include $this->admin_tpl('video_setting');
+		} 
+	}
+	
+	//完善详细资料，通过API接口完善资料,获取 SKEY,SN 
+	public function complete_info() { 
+ 		if(isset($_POST['dosubmit'])) {
+			$info = safe_replace($_POST['info']); //包含隐藏的uid
+			if (CHARSET == 'gbk') {
+				$info = array_iconv($info);
+			}
+			//提交数据，获取SKEY,SN  
+			$return_skey_sn = $this->ku6api->complete_info($info);
+ 			if(is_array($return_skey_sn) && !empty($return_skey_sn)){
+				$setting = array2string($return_skey_sn);
+				setcache('video', $return_skey_sn);
+				$this->ku6api->ku6api_skey = $return_skey_sn['skey'];
+				$this->ku6api->ku6api_sn = $return_skey_sn['sn'];
+				$this->module_db->update(array('setting'=>$setting),array('module'=>'video'));
+				showmessage('资料提交成功，已成功开通视频应用，正在返回！','?m=video&c=video&a=open');
+			}else{
+				echo $return_skey_sn;exit;
+			showmessage('资料提交失败，请联系商务人员处理！','?m=video&c=video&a=open');
+			} 
+		}else{ 
+			//如果传递uid,snid则为登录通行证成功，返回完善资料，没有传递则为自行填写资料申请开通视频应用
+			$uid = intval($_GET['uid']);
+			$snid = $_GET['snid'];
+			
+			//如果skey,sn存在，通过接口调取用户完善的资料，再提交为修改操作
+			$skey_sn_array = getcache('video');
+			if(!empty($skey_sn_array['skey']) && !empty($skey_sn_array['sn'])){ 
+   				$return_info = $this->ku6api->Get_Complete_Info($skey_sn_array);
+				if (CHARSET == 'gbk') {
+					$return_info = array_iconv($return_info,'utf-8','gbk');
+				} 
+  				$complete_info = is_array($return_info) ? $return_info : array(); 
+				$uid = $complete_info['uid'];
+				$snid = $complete_info['sndaid'];
+			}else{
+				//没有配置则判断域名在聚合平台是否已经存在，如果存在进行验证获取SKEY
+				$check_user_back = APP_PATH . 'api.php?op=video_api';
+				$return_check = $this->ku6api->check_user_back($check_user_back);
+				if($return_check==200){//存在同域名记录，进行email验证
+					showmessage('域名已经存在，请验证开通视频应用！','?m=video&c=video&a=check_user_back');
+				}
+ 				$complete_info = array();	
+			}
+			$show_dialog = 1;
+			$show_header = $show_scroll = true;
+			include $this->admin_tpl('video_complete_info');
+		}
+	}
+	
+	//Email 验证老网站，获取sn,skey
+	public function check_user_back(){
+		if(isset($_POST['dosubmit_new'])) {
+			$data['email'] = $_POST['email'];
+			$data['code'] = $_POST['code'];
+			if(empty($data['email']) || empty($data['code'])) return false;
+			$return_skey_sn = $this->ku6api->check_email_code($data);
+			if(is_array($return_skey_sn) && !empty($return_skey_sn)){
+				$setting = array2string($return_skey_sn);
+				setcache('video', $return_skey_sn);
+				$this->ku6api->ku6api_skey = $return_skey_sn['skey'];
+				$this->ku6api->ku6api_sn = $return_skey_sn['sn'];
+				$this->module_db->update(array('setting'=>$setting),array('module'=>'video'));
+				showmessage('验证成功，已成功开通视频应用，正在返回！','?m=video&c=video&a=open');
+			}else{
+				showmessage('验证失败，请返回！',HTTP_REFERER);
+			}  
+		}else{
+			$show_dialog = 1;
+			$show_header = $show_scroll = true;
+			include $this->admin_tpl('video_check_user_back');
+		}
+	}
+	
+	//由平台发送验证码到指定信箱
+	public function send_code(){ 
+		$data['email'] = $_GET['email'];
+		$data['url'] = APP_PATH . 'api.php?op=video_api';
+ 		$return = $this->ku6api->send_code($data);
+ 		if($return['code']=='200'){
+			echo 1;
+		}else{
+			echo 2;
+		}
+	}
+	
+	
+	//获取传递的skey ,sn 写入缓存
+	public function get_skey_sn(){
+		$skey = $_REQUEST['skey'];
+		$sn = $_REQUEST['sn'];
+		if(empty($skey) || empty($sn)){
+			showmessage('视频配置信息不能为空',HTTP_REFERER);
+		}
+		$setting_arr['skey'] = $skey;
+		$setting_arr['sn'] = $sn;
+		$setting = array2string($setting_arr);
+		setcache('video', $setting_arr);//写缓存  
+		$this->module_db->update(array('setting'=>$setting),array('module'=>'video'));//更新模版数据
+		//验证配置
+		$this->ku6api->ku6api_skey = $skey;
+		$this->ku6api->ku6api_sn = $sn;
+		if(!$this->ku6api->testapi()) {
+			showmessage(L('vms_sn_skey_error'),'?m=video&c=video&a=open');
+		}
+		showmessage(L('operation_success'),'?m=video&c=video&a=open');
+	}
+	
+	public function open_setting() {
+		if(isset($_POST['dosubmit'])) {
+			$setting = array2string($_POST['setting']);
+			setcache('video', $_POST['setting']);
+			$this->ku6api->ku6api_skey = $_POST['setting']['skey'];
+			$this->ku6api->ku6api_sn = $_POST['setting']['sn'];
+			$this->module_db->update(array('setting'=>$setting),array('module'=>'video'));
+			if(!$this->ku6api->testapi()) {
+				showmessage(L('vms_sn_skey_error'),HTTP_REFERER);
+			}
+			showmessage(L('operation_success'),HTTP_REFERER);
+		} else {
+			$show_pc_hash = '';
+			$v_model_categorys = $this->ku6api->get_categorys(true, $this->setting['catid']);
+			$category_list = '<select name="setting[catid]" id="catid"><option value="0">'.L('please_choose_catid').'</option>'.$v_model_categorys.'</select>';
+			include $this->admin_tpl('video_opensetting');
+		}
+	}
+	
+	
+	
 }
 
 ?>

@@ -192,5 +192,22 @@ function video_makeurlrule() {
 		$url = preg_replace('/-[0-9]+.html$/','-{$page}.html',get_url());
 		return $url;
 	}
-} 
+}
+
+function player_code($id = 'video_player',$channelid,$vid,$width = 622, $height = 460, $style_projectid = '') {
+	if(!$channelid) return 'channelid empty!';
+	if(!$vid) return 'vid empty!';
+	$player = getcache('player', 'video');
+	
+	$player_config = $player[$channelid];
+	$default_style = $player_config['default'];
+
+	$style_projectid = $style_projectid ? $style_projectid : $default_style;
+	$_config = $player_config['STY-'.$style_projectid];
+	if(empty($_config)) return 'style error!';
+
+	$playerurl = pc_base::load_config('ku6server', 'player_url').$vid.'/style/'.$style_projectid.'/v.swf';
+	$string = '<embed id="'.$id.'" name="'.$id.'" src="'.$playerurl.'" width="'.$width.'" height="'.$height.'" quality="high" align="middle" allowScriptAccess="always" allowfullscreen="true" type="application/x-shockwave-flash"></embed>';
+	return $string;
+}
 ?>

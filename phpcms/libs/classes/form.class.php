@@ -122,7 +122,7 @@ class form {
 	 * @param int $size 表单大小
 	 * @param string $class 表单风格
 	 * @param string $ext 表单扩展属性 如果 js事件等
-	 * @param string $alowexts 允许图片格式
+	 * @param string $alowexts 允许上传的文件格式
 	 * @param array $file_setting 
 	 */
 	public static function upfiles($name, $id = '', $value = '', $moudle='', $catid='', $size = 50, $class = '', $ext = '', $alowexts = '',$file_setting = array() ) {

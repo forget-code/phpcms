@@ -9,18 +9,6 @@ include $this->admin_tpl('header','admin');?>
 	parent.document.getElementById('center_frame').src = '?m=content&c=content&a=public_categorys&type=add&menuid=<?php echo $_GET['menuid'];?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>';
 	window.top.$("#current_pos").data('clicknum',0);
 }
-$(document).ready(function(){
-	setInterval(closeParent,5000);
-});
-function closeParent() {
-	if($('#closeParentTime').html() == '') {
-		window.top.$(".left_menu").addClass("left_menu_on");
-		window.top.$("#openClose").addClass("close");
-		window.top.$("html").addClass("on");
-		$('#closeParentTime').html('1');
-		window.top.$("#openClose").data('clicknum',1);
-	}
-}
 //-->
 </SCRIPT>
 <div class="pad-10">

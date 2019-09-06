@@ -74,7 +74,11 @@ $cat_info = $cat_db->get_one(array('catid'=>$data['catid']));
 
 $data['title'] = $video_data['title'] = $_POST['title'];
 if (!$data['title']) {
-	echo json_encode(array('msg'=>'Video\'s title not empty', 'code'=>3));
+	echo json_encode(array('msg'=>'The parameter title must have a value', 'code'=>3));
+	exit;
+}
+if (!$_POST['picpath'] || strripos($picurl,'.jpg')===false) {
+	echo json_encode(array('msg'=>'The parameter picpath must have a value', 'code'=>5));
 	exit;
 }
 $data['content'] = $_POST['description'] ? addslashes($_POST['description']) : '';
@@ -84,9 +88,10 @@ $video_data['timelen'] = intval($_POST['timelen']);
 $video_data['size'] = intval($_POST['size']);
 $video_data['vid'] = $_POST['vid'];
 if (!$video_data['vid']) {
-	echo json_encode(array('msg'=>'Vid do not empty', 'code'=>4));
+	echo json_encode(array('msg'=>'The parameter vid must have a value', 'code'=>4));
 	exit;
 }
+
 //先将视频加入到视频库中，并取得videoid
 //判断vid是否已经存在视频库中
 if (!$video_store = $video_store_db->get_one(array('vid'=>$video_data['vid']))) {

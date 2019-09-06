@@ -69,6 +69,8 @@ class import extends admin {
 			$new_s = array();
  			foreach ($datas as $data) {
   				$data['cid'] = $select_category;
+				$data['import'] = 1;
+				$data['channelid'] = 1;
 				$return_data = array();
   				$return_data = $this->ku6api->vms_add($data);//插入VMS,返回能播放使用的vid
 				//$new_s[] = $return_data;
@@ -88,6 +90,7 @@ class import extends admin {
 				$video_data['picpath'] = safe_replace( format_url($data['picpath']) );
  				$video_data['timelen'] = intval($data['timelen']);
 				$video_data['size'] = intval($data['size']); 
+				$video_data['channelid'] = 1; 
 				
 				$videoid = $video_store_db->insert($video_data, true);//插入视频库
  				
@@ -102,7 +105,7 @@ class import extends admin {
 					$content_data['content'] = $data['desc']; 
 					$content_data['description'] = str_cut($data['desc'],198,' '); 
 					$content_data['keywords'] = str_cut($data['tag'],38,' ');
-					$content_data = array_filter($content_data,rtrim());
+					$content_data = array_filter($content_data,'rtrim');
 					$content_data['thumb'] = $data['picpath']; 
 					$content_data['status'] = 99;  
 					//组合POST数据,入库时会自动对应关系 
@@ -145,7 +148,12 @@ class import extends admin {
 				 
   			}
 			$page = intval($_POST['page']) + 1;
-			$forward = "?m=video&c=video&a=import_ku6video&menuid=".$_POST['menuid']."&fenlei=".$_POST['fenlei']."&srctype=".$_POST['srctype']."&videotime=".$_POST['videotime']."&keyword=".$_POST['keyword']."&dosubmit=%CB%D1%CB%&page=".$page;
+			if($_POST['fenlei'] || $_POST['keyword']){
+				$forward = "?m=video&c=video&a=import_ku6video&menuid=".$_POST['menuid']."&fenlei=".$_POST['fenlei']."&srctype=".$_POST['srctype']."&videotime=".$_POST['videotime']."&keyword=".$_POST['keyword']."&dosubmit=%CB%D1%CB%&page=".$page;
+			}else{
+				$forward = "?m=video&c=video&a=import_ku6video&menuid=".$_POST['menuid'];
+			}
+			
      		showmessage('KU6视频导入成功，正在返回！',$forward);
 		}else{
  			showmessage('请选择要导入的视频！',HTTP_REFERER);

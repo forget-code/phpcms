@@ -106,6 +106,7 @@ class index extends foreground {
 				$userinfo['modelinfo'] = isset($_POST['info']) ? array2string($_POST['info']) : '';
 				$this->verify_db = pc_base::load_model('member_verify_model');
 				unset($userinfo['lastdate'],$userinfo['connectid'],$userinfo['from']);
+				$userinfo = array_map('htmlspecialchars',$userinfo);
 				$this->verify_db->insert($userinfo);
 				showmessage(L('operation_success'), 'index.php?m=member&c=index&a=register&t=3');
 			} else {
@@ -137,6 +138,8 @@ class index extends foreground {
 						require_once CACHE_MODEL_PATH.'member_input.class.php';
 				        require_once CACHE_MODEL_PATH.'member_update.class.php';
 						$member_input = new member_input($userinfo['modelid']);
+						
+						$_POST['info'] = array_map('htmlspecialchars',$_POST['info']);
 						$user_model_info = $member_input->get($_POST['info']);
 						$user_model_info['userid'] = $userid;
 	

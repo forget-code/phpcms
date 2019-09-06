@@ -90,6 +90,12 @@ $(function(){
 <div class="common-form">
 <form name="myform" action="?m=video&c=video&a=<?php echo $_GET['a']?>" method="post" id="myform" enctype="multipart/form-data" onsubmit="return checkform()"><input type="hidden" name="userupload" value="1">
 <table width="100%" class="table_form">
+
+<tr>
+	<td width="120"><?php echo L('select_upload_channel');?></td> 
+		<td><label class="ib cu" style="width:125px"><input type="radio" name="channelid" value='1' checked> <?php echo L('upload_to_ku6');?> </label> 
+		<?php if($flash_info['allow_upload_to_vms']) {?><label class="ib cu" style="width:125px"><input type="radio" name="channelid" value='2'> <?php echo L('upload_to_ku6vms');?> </label><?php }?></td>
+	</tr>
 	<tr>
 		<td width="120"><?php echo L('choose_videoes');?></td> 
 		<td><div id="ku6uploader"></div><BR><span id="list_name" style="color:red"></span></td>

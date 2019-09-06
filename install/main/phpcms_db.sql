@@ -803,47 +803,6 @@ CREATE TABLE `phpcms_pay_spend` (
 ) TYPE=MyISAM;
 
 -- ----------------------------
--- Table structure for `phpcms_plugin`
--- ----------------------------
-DROP TABLE IF EXISTS `phpcms_plugin`;
-CREATE TABLE IF NOT EXISTS `phpcms_plugin` (
-  `pluginid` smallint(6) unsigned NOT NULL AUTO_INCREMENT,
-  `appid` int(10) DEFAULT NULL,
-  `name` varchar(40) NOT NULL DEFAULT '',
-  `identification` varchar(40) NOT NULL DEFAULT '',
-  `description` varchar(255) NOT NULL DEFAULT '',
-  `datatables` varchar(255) NOT NULL DEFAULT '',
-  `dir` varchar(100) NOT NULL DEFAULT '',
-  `copyright` varchar(100) NOT NULL DEFAULT '',
-  `setting` text NOT NULL,
-  `iframe` text NOT NULL,
-  `version` varchar(20) NOT NULL DEFAULT '',
-  `listorder` tinyint(3) NOT NULL DEFAULT '0',
-  `disable` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`pluginid`),
-  UNIQUE KEY `identification` (`identification`)
-) TYPE=MyISAM ;
-
--- ----------------------------
--- Table structure for `phpcms_plugin`
--- ----------------------------
-DROP TABLE IF EXISTS `phpcms_plugin_var`;
-CREATE TABLE IF NOT EXISTS `phpcms_plugin_var` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `pluginid` smallint(6) unsigned NOT NULL DEFAULT '0',
-  `title` varchar(100) NOT NULL DEFAULT '',
-  `description` varchar(255) NOT NULL DEFAULT '',
-  `fieldname` varchar(40) NOT NULL DEFAULT '',
-  `fieldtype` varchar(20) NOT NULL DEFAULT 'text',
-  `value` text NOT NULL,
-  `setting` text NOT NULL,
-  `formattribute` varchar(255) DEFAULT NULL,
-  `listorder` tinyint(3) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `pluginid` (`pluginid`)
-) TYPE=MyISAM ;
-
--- ----------------------------
 -- Table structure for `phpcms_position`
 -- ----------------------------
 DROP TABLE IF EXISTS `phpcms_position`;
@@ -4756,8 +4715,6 @@ INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `lis
 
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(29, 'module_manage', 2, 'admin', 'module', '', '', 0, '1');
 
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`, `project1`) VALUES(9, 'plugin', 0, 'admin', 'plugin', 'init', '', 8, '1', '0');
-
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`, `project1`) VALUES(10, 'panel', 0, 'admin', 'index', 'public_main', '', 0, '1', '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(35, 'menu_add', 31, 'admin', 'menu', 'add', '', 0, '1');
 
@@ -5032,15 +4989,6 @@ INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `lis
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1355, 'pay_cancel', 898, 'pay', 'payment', 'pay_cancel', '', 0, '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1356, 'discount', 898, 'pay', 'payment', 'discount', '', 0, '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1360, 'category_batch_edit', 43, 'admin', 'category', 'batch_edit', '', 6, '1');
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1361, 'plugin', 9, 'admin', 'plugin', 'init', '', 0, '1');
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1362, 'appcenter', 1361, 'admin', 'plugin', 'appcenter', '', 0, '1');
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1365, 'appcenter_detail', 1362, 'admin', 'plugin', 'appcenter_detail', '', 0, '0');
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1366, 'install_online', 1362, 'admin', 'plugin', 'install_online', '', 0, '0');
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1363, 'plugin_import', 1361, 'admin', 'plugin', 'import', '', 2, '1');
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1364, 'plugin_list', 1361, 'admin', 'plugin', 'init', '', 1, '1');
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1367, 'plugin_close', 1364, 'admin', 'plugin', 'status', '', 0, '0');
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1368, 'uninstall_plugin', 1364, 'admin', 'plugin', 'delete', '', 0, '0');
-
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1500, 'listorder', 822, 'content', 'content', 'listorder', '', 0, '0');
 INSERT INTO `phpcms_menu` (`name` ,`parentid` ,`m` ,`c` ,`a` ,`data` ,`listorder` ,`display` ,`project1` ,`project2` ,`project3` ,`project4` ,`project5`) VALUES ('a_clean_data',  '873',  'content',  'content',  'clear_data',  '',  '0',  '1',  '0',  '0',  '0',  '0',  '0');
 -- ----------------------------
@@ -5267,18 +5215,24 @@ CREATE TABLE IF NOT EXISTS `phpcms_video_store` (
   `size` char(20) NOT NULL,
   `timelen` mediumint(9) NOT NULL DEFAULT '0',
   `userupload` tinyint(1) NOT NULL DEFAULT '0',
+  `channelid` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`videoid`),
   KEY `videoid` (`videoid`,`status`)
 ) TYPE=MyISAM;
 
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES
-(1576, 'video_manage', 821, 'video', 'video', 'init', '', 0, '1'),
-(1577, 'manage_video', 1576, 'video', 'video', 'init', '', 0, '1'),
-(1578, 'video_add', 1576, 'video', 'video', 'add', '', 0, '1'),
-(1579, 'video_edit', 1576, 'video', 'video', 'edit', '', 0, '0'),
-(1580, 'video_delete', 1576, 'video', 'video', 'delete', '', 0, '0'),
-(1581, 'setting_video', 1576, 'video', 'video', 'setting', '', 0, '1'),
-(1582, 'subscribe_manage', 1576, 'video', 'video', 'subscribe_list', '', 0, '1'),
-(1583, 'sub_delete', 1576, 'video', 'video', 'sub_del', '', 0, '0'),
-(1584, 'album_import', 868, 'special', 'album', 'import', '', 0, '1'),
-(1585, 'import_ku6_video', 1576, 'video', 'video', 'import_ku6video', '', 0, '1');
+INSERT INTO `v9_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`, `project1`, `project2`, `project3`, `project4`, `project5`) VALUES
+(9, 'video', 0, 'video', 'video', 'init', '', 11, '1', 1, 1, 1, 1, 1),
+(1589, 'video', 9, 'video', 'video', 'init', '', 0, '1', 1, 1, 1, 1, 1),
+(1583, 'sub_delete', 1589, 'video', 'video', 'sub_del', '', 0, '0', 1, 1, 1, 1, 1),
+(1582, 'subscribe_manage', 1589, 'video', 'video', 'subscribe_list', '', 0, '1', 1, 1, 1, 1, 1),
+(1581, 'video_open', 1589, 'video', 'video', 'open', '', 0, '1', 1, 1, 1, 1, 1),
+(1592, 'complete_info', 1581, 'video', 'video', 'complete_info', '', 0, '1', 1, 1, 1, 1, 1),
+(1591, 'video_inputinfo', 1581, 'video', 'video', 'open', '', 0, '1', 1, 1, 1, 1, 1),
+(1577, 'video_manage', 1589, 'video', 'video', 'init', '', 0, '1', 1, 1, 1, 1, 1),
+(1590, 'player_manage', 1589, 'video', 'player', 'init', '', 0, '1', 1, 1, 1, 1, 1),
+(1585, 'import_ku6_video', 1589, 'video', 'video', 'import_ku6video', '', 0, '1', 1, 1, 1, 1, 1),
+(1579, 'video_edit', 1589, 'video', 'video', 'edit', '', 0, '0', 1, 1, 1, 1, 1),
+(1580, 'video_delete', 1589, 'video', 'video', 'delete', '', 0, '0', 1, 1, 1, 1, 1),
+(1578, 'video_upload', 1589, 'video', 'video', 'add', '', 0, '1', 1, 1, 1, 1, 1),
+(1593, 'video_stat', 1589, 'video', 'stat', 'init', '', 0, '1', 1, 1, 1, 1, 1),
+(1586, 'video_store', 1589, 'video', 'video', 'video2content', '', 0, '0', 1, 1, 1, 1, 1);

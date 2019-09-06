@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `phpcms_video_store` (
   `size` char(20) NOT NULL,
   `timelen` mediumint(9) NOT NULL DEFAULT '0',
   `userupload` tinyint(1) NOT NULL DEFAULT '0',
+  `channelid` tinyint(3) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`videoid`),
   KEY `videoid` (`videoid`,`status`)
 ) TYPE=MyISAM ;

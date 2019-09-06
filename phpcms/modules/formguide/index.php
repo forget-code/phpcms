@@ -56,6 +56,7 @@ class index {
 			require CACHE_MODEL_PATH.'formguide_input.class.php';
 			$formguide_input = new formguide_input($formid);
 			$data = new_addslashes($_POST['info']);
+			$data = array_map('htmlspecialchars',$data);
 			$data = $formguide_input->get($data);
 			$data['userid'] = $userid;
 			$data['username'] = param::get_cookie('_username');

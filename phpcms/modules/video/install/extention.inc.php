@@ -1,15 +1,22 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
 defined('INSTALL') or exit('Access Denied');
-$parentid = $menu_db->insert(array('name'=>'video_manage', 'parentid'=>'29', 'm'=>'video', 'c'=>'video', 'a'=>'init', 'data'=>'', 'listorder'=>0, 'display'=>'1'), true);
-$menu_db->insert(array('name'=>'manage_video', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'init', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
-$menu_db->insert(array('name'=>'video_add', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'add', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
+$parentid = $menu_db->insert(array('name'=>'video', 'parentid'=>'0', 'm'=>'video', 'c'=>'video', 'a'=>'init', 'data'=>'', 'listorder'=>0, 'display'=>'1'), true);
+$parentid = $menu_db->insert(array('name'=>'video', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'init', 'data'=>'', 'listorder'=>0, 'display'=>'1'), true);
+$menu_db->insert(array('name'=>'video_manage', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'init', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
+$menu_db->insert(array('name'=>'video_upload', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'add', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
 $menu_db->insert(array('name'=>'video_edit', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'edit', 'data'=>'', 'listorder'=>0, 'display'=>'0'));
 $menu_db->insert(array('name'=>'video_delete', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'delete', 'data'=>'', 'listorder'=>0, 'display'=>'0'));
-$menu_db->insert(array('name'=>'setting_video', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'setting', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
+$o_mid = $menu_db->insert(array('name'=>'video_open', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'open', 'data'=>'', 'listorder'=>0, 'display'=>'1'), true);
+$menu_db->insert(array('name'=>'video_inputinfo', 'parentid'=>$o_mid, 'm'=>'video', 'c'=>'video', 'a'=>'open', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
+$menu_db->insert(array('name'=>'complete_info', 'parentid'=>$o_mid, 'm'=>'video', 'c'=>'video', 'a'=>'complete_info', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
 $menu_db->insert(array('name'=>'subscribe_manage', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'subscribe_list', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
-$menu_db->insert(array('name'=>'sub_delete', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'sub_del', 'data'=>'', 'listorder'=>0, 'display'=>'0'));
+$menu_db->insert(array('name'=>'sub_delete', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'sub_del', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
+$menu_db->insert(array('name'=>'import_ku6_video', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'import_ku6video', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
 $menu_db->insert(array('name'=>'video_store', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'video2content', 'data'=>'', 'listorder'=>0, 'display'=>'0'));
+$menu_db->insert(array('name'=>'player_manage', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'player', 'a'=>'init', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
+$menu_db->insert(array('name'=>'video_stat', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'stat', 'a'=>'init', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
+
 if (module_exists('special')) {
 	$special_db = pc_base::load_model('special_model');
 	if( !$special_db->field_exists('aid') ){
@@ -48,5 +55,5 @@ $content = str_replace('*position4*',$position_4,$content);
 
 file_put_contents($tpl_file,$content);
 
-$language = array('video_manage'=>'视频库管理', 'manage_video'=>'视频管理', 'video_add'=>'添加视频','video_edit'=>'修改视频', 'video_delete'=>'删除视频', 'setting_video'=>'视频设置', 'subscribe_manage'=>'订阅管理', 'sub_delete'=>'删除订阅', 'album_import'=>'视频专辑导入', 'video_store'=>'视频库');
+$language = array('video'=>'视频', 'video_manage'=>'视频库管理', 'video_upload'=>'视频上传','video_edit'=>'修改视频', 'video_delete'=>'删除视频', 'video_open'=>'申请开通', 'video_inputinfo'=>'视频配置', 'complete_info'=>'填写资料', 'subscribe_manage'=>'订阅管理', 'sub_delete'=>'删除订阅', 'import_ku6_video'=>'导入ku6视频', 'album_import'=>'视频专辑导入', 'video_store'=>'视频库', 'video_stat'=>'视频统计', 'player_manage'=>'播放器管理');
 ?>

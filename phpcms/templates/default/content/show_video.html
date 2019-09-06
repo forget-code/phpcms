@@ -1,12 +1,9 @@
 {template "content","header"}
-{php $video_cache = getcache('video', 'video');}
 <link href="{CSS_PATH}vms/vms.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="{JS_PATH}jquery.tools_tabs.min.js"></script>
 <script type="text/javascript">
-var vid = '{$video[vid]}';
-var id = '{$video_cache['style_projectid']}';//皮肤样式
 $(function(){
-	$('#html').val('<embed src="{pc_base::load_config('ku6server', 'player_url')}'+vid+'/style/'+id+'/" quality="high" width="600" height="500" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="" type="application/x-shockwave-flash" wmode="transparent"></embed>');
+	$('#html').val('{player_code('video_player',$video['channelid'],$video['vid'],622,460)}');
 	$('#tag1').tabs("div.tabn1 > ul");
 }) 
 
@@ -35,7 +32,7 @@ function copy_text(matter){
     	<div class="plbox">   
 {if $allow_visitor==1}
 	{if $video[vid]!=""}
-	<embed id="video_player" name="video_player" src="{pc_base::load_config('ku6server', 'player_url')}{$video['vid']}/style/{$video_cache['style_projectid']}/" height="460" width="622" quality="high" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1&api=1&adss=0" type="application/x-shockwave-flash"></embed>
+	{player_code('video_player',$video['channelid'],$video['vid'],622,460)}
 	{else}
 	该视频不存在，请返回！
 	{/if} 		
@@ -69,13 +66,13 @@ function copy_text(matter){
 				</li> 
             </ul>
         </div>
+		{if $video[data] && count($video[data])>1}
         <div class="clr bfj wp">
-		{if $video[data]}
 		{loop $video[data] $v}
          	<a href="{$v[url]}" >{$v[title]}</a>
 		{/loop}
-		{/if}
         </div> 
+		{/if}
 		 <div class="clr mgt10 mgb10">
 			{if $allow_comment && module_exists('comment')}
       <iframe src="{APP_PATH}index.php?m=comment&c=index&a=init&commentid={id_encode("content_$catid",$id,$siteid)}&iframe=1" width="100%" height="100%" id="comment_iframe" frameborder="0" scrolling="no"></iframe>

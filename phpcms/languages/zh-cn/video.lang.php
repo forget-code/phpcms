@@ -34,8 +34,7 @@ $LANG['choose_videoes']						=	'选择视频';
 $LANG['tags']								=	'标签';
 $LANG['separated_by_spaces']				=	'多个用空格隔开';
 $LANG['video_id']							=	'视频ID';
-$LANG['subscribe_notic']					=	'请到 v.ku6vms.com 申请开通帐号，申请地址：<a href="http://v.ku6vms.com/" target="_blank">http://v.ku6vms.com/</a>
-<br />订阅说明：订阅是将ku6的视频入库到本系统的功能。设置订阅后，ku6vms定时向设置的栏目及推荐位中添加ku6的推荐视频。';
+$LANG['subscribe_notic']					=	'请正确填写相关资料开通视频应用！';
 $LANG['pass_settings']						=	'通行证设置';
 $LANG['vms_sn']								=	'身份识别码';
 $LANG['vms_skey']							=	'加密密钥';
@@ -61,4 +60,50 @@ $LANG['delete_this_video']					=	'是否删除该视频?';
 $LANG['video_store']						=	'视频库';
 $LANG['view']								=	'预览';
 $LANG['succfull_create_index']				=	'操作完成。如果生成了静态，重新生成下视频模型的静态页！';
+
+
+/**2013.1.15后添加的资料*/
+$LANG['setting_notic']						=	'如果open api 地址发生变化，请您自行修改！';
+
+$LANG['player_name']						=	'播放器名称';
+$LANG['player_name']						=	'播放器名称';
+$LANG['thumb']								=	'缩略图';
+$LANG['default_player']						=	'默认播放器';
+$LANG['auto_play']							=	'自动播放';
+$LANG['auto_replay']						=	'自动重播';
+$LANG['show_player_share']					=	'显示分享';
+$LANG['show_player_elite']					=	'显示推荐';
+$LANG['click_setting']						=	'点击设置';
+$LANG['show_sound']							=	'播放声音';
+$LANG['not_support_attribute']				=	'该播放器不支持此属性';
+$LANG['select_upload_channel']				=	'选择服务提供商';
+$LANG['upload_to_ku6']						=	'上传到ku6';
+$LANG['upload_to_ku6vms']					=	'上传到ku6vms';
+$LANG['ku6video_priview']					=	'视频预览';
+
+/**新加语言包*/
+$LANG['login_to_snda']						=	'登录盛大通行证';
+$LANG['reg_to_snda']					=	'注册盛大通行证';
+$LANG['reg_new_member']					=	'注册新账号';
+$LANG['complete_info_open']					=	'完善资料申请开通';
+$LANG['forget_password']					=	'忘记密码';
+
+/**统计***/
+$LANG['today']						=	'今天';
+$LANG['yestoday']					=	'昨天';
+$LANG['this_week']					=	'本周';
+$LANG['this_month']					=	'本月';
+
+$LANG['today_vv']						=	'当日排行';
+$LANG['yestoday_vv']					=	'昨日排行';
+$LANG['this_week_vv']					=	'本周排行';
+$LANG['this_month_vv']					=	'本月排行';
+$LANG['vv_trend']					=	'视频流量趋势图';
+$LANG['search_video']					=	'搜索视频';
+$LANG['vv_total']					=	'搜索视频';
+
+
+
+
+
 ?>

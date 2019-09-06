@@ -17,7 +17,7 @@
     </div>
     	<div class="plbox clr"> 
 {if $video_info[vid]!=""}
-<embed id="video_player" name="video_player" src="{pc_base::load_config('ku6server', 'player_url')}{$video_info['vid']}/style/{$video_cache['style_projectid']}/" height="500" width="600" quality="high" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1&api=1&adss=0" type="application/x-shockwave-flash"></embed>
+{player_code('video_player',$video_info['channelid'],$video_info['vid'],600,500)}
 {else}
 非常抱歉，该视频不存在，或者尚没有通过审核！
 {/if}
@@ -119,13 +119,10 @@
 <script language="JavaScript" src="{APP_PATH}api.php?op=count&id={$contentid}&modelid={$CATEGORYS[$catid][modelid]}"></script>
 <script language="JavaScript">
 <!--
-var play_url = "{pc_base::load_config('ku6server', 'player_url')}";
-var vid = '{$video_info[vid]}';
-var id = '{$video_cache['style_projectid']}';//皮肤样式
 $(function(){ 
 	var ck = getcookie('player_list'); 
 	show_playerlist();
-	$('#html').val('<embed src="'+play_url+vid+'/style/'+id+'/" quality="high" width="600" height="500" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1" type="application/x-shockwave-flash"></embed>');
+	$('#html').val('<embed src="{player_code('video_player',$video_info['channelid'],$video_info['vid'],600,500)}" quality="high" width="600" height="500" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1" type="application/x-shockwave-flash"></embed>');
 	return false;
 })
 

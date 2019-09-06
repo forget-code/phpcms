@@ -32,6 +32,7 @@ class ku6api {
 			$this->set_sn();
 		}
 		$this->ku6api_url = pc_base::load_config('ku6server', 'api_url');
+		$this->ku6api_api = pc_base::load_config('ku6server', 'api');
 		$this->http = pc_base::load_sys_class('http');
 		$this->xxtea = pc_base::load_app_class('xxtea', 'video');
 		
@@ -44,7 +45,7 @@ class ku6api {
 	 */
 	private function set_sn() {
 		//获取短信平台配置信息
-		$setting = getcache('video');
+		$setting = getcache('video', 'video');
 		if ($setting['sn'] && $setting['skey']) {
 			$this->ku6api_skey = $setting['skey'];
 			$this->ku6api_sn = $setting['sn'];
@@ -61,6 +62,7 @@ class ku6api {
 			//处理数据
 			$data['tag'] = $this->get_tag($data);
 			$data['v'] = 1;
+			$data['channelid'] = $data['channelid'] ? intval($data['channelid']) : 1;
 			//将gbk编码转为utf-8编码
 			if (CHARSET == 'gbk') {
 				$data = array_iconv($data);
@@ -441,9 +443,6 @@ class ku6api {
 		}
 		if ($_GET['keyword']) {
 			$postdata['key'] = addslashes($_GET['keyword']);
-			if (strtolower(CHARSET) == 'gbk') {
-				$postdata['key'] = iconv('gbk', 'utf-8', $postdata['key']);
-			}
 		}
 		if ($_GET['categoryid']) {
 			$postdata['categoryid'] = intval($_GET['categoryid']);
@@ -544,6 +543,9 @@ class ku6api {
 		$data['sn'] = $this->ku6api_sn;
 		$data['posttime'] = SYS_TIME;
 		$data['token'] = $this->xxtea->encrypt($data['posttime'], $this->ku6api_skey);
+		if (strtolower(CHARSET) == 'gbk') {
+			$datas = array_iconv($datas, 'gbk', 'utf-8');
+		}
 		if (is_array($datas)) {
 			foreach ($datas as $_k => $d) {
 				if (is_array($d)) {
@@ -589,6 +591,24 @@ class ku6api {
 	}
 
 	/**
+	 * Function vms_update_video 
+	 * 更新视频库视频到新系统
+	 * @param array $data array of video
+	 */
+	public function vms_update_video($data = array()) {
+		if (empty($data)) return false;
+		//构造post数据
+		$postdata['method'] = 'VideoUpdate';
+		$postdata['data'] = $data;
+		//向vms post数据，并获取返回值
+		if ($data = $this->post($postdata)) {
+			return $data;
+		} else {
+			return false;
+		}
+	}
+
+	/**
 	 * Function Preview
 	 * 向vms请求vid
 	 * @param string $vid vid
@@ -625,7 +645,6 @@ class ku6api {
  		if ($data = $this->post($postdata)) { 
   			return $data;
 		} else { 
- 			echo '没有返回数据！';exit;
    			return false;
 		}
 	}
@@ -641,6 +660,30 @@ class ku6api {
 		return $sitelist[$siteid]['name'];
 
 	}
+	
+	/**
+	 * Function update_vms 
+	 * @升级视频系统，向新系统添加用户
+	 * @param $data POST数据
+	 */
+	public function update_vms_member($data = array()) {
+		if (empty($data)) return false;
+		//构造post数据
+		$data['sn'] = $this->ku6api_sn;
+		$data['skey'] = $this->ku6api_skey;
+		$postdata['data'] = json_encode($data);
+		$api_url = pc_base::load_config('sub_config','member_add_dir').'MemberUpgrade.php';
+
+		$data = $this->post_api($api_url, $postdata);
+		
+		//向vms post数据，并获取返回值
+ 		if ($data) { 
+  			return $data;
+		} else { 
+			return $data;
+   			return false;
+		}
+	}
 
 	/**
 	 * Function testapi
@@ -654,5 +697,212 @@ class ku6api {
 		} else {
 			return false;
 		}
+	} 
+	
+	/******************以下为视频统计使用*****************/
+	
+	/*
+	* 最近视频播放量走势图
+	*/
+	public function get_stat_bydate($start_time,$end_time,$pagesize,$page){
+		//构造post数据
+		$postdata['pagesize'] = $pagesize; 
+		$postdata['page'] = $page;
+		$postdata['start_time'] = $start_time; 
+		$postdata['end_time'] = $end_time; 
+		$postdata['method'] = 'GetStatBydate'; 
+		
+ 		//向vms post数据，并获取返回值
+		$data = $this->post($postdata);
+		return $data;
+	}
+	
+	/*
+	* 根据关键字来搜索视频
+	*/
+	public function get_video_bykeyword($type,$keyword){
+		$postdata['type'] = $type; 
+		$postdata['keyword'] = $keyword; 
+		$postdata['method'] = 'GetVideoBykeyword';  
+ 		//向vms post数据，并获取返回值
+		$data = $this->post($postdata);  
+		if ($data['code']==200) { 
+  			return $data;
+		} else { 
+ 			echo '搜索出现错误，请联系管理员!';exit;
+   			return false;
+		}
+	}
+	
+	/*
+	* 查看视频流量走势
+	*/
+	public function show_video_stat($vid){
+		if(!$vid) return false;
+		$postdata['vid'] = $vid; 
+		$postdata['method'] = 'ShowVideoStat';  
+ 		//向vms post数据，并获取返回值
+		$data = $this->post($postdata);  
+		if ($data['code']==200) { 
+  			return $data;
+		} else { 
+ 			echo '查看视频统计出错，请联系管理员!'; 
+   			return false;
+		}
+		
+	}
+	
+	/*
+	* 视频流量总体趋势图 
+	*/
+	public function vv_trend(){  
+		$postdata['method'] = 'VvTrend';   
+		$data = $this->post($postdata);  
+		if ($data['code']==200) { 
+  			return $data;
+		} else { 
+ 			echo '视频流量总体趋势图!'; 
+   			return false;
+		} 
+	}
+	
+	
+	/*
+	* 按时间查看当日视频播放排行榜，以播放次数倒叙
+	* $date 2012-02-03
+	*/
+	/* 王参加注释，这个是否还有用？
+	public function get_stat_single($date){
+		//构造post数据 
+		$postdata['method'] = 'get_stat_single';
+		$postdata['pagesize'] = $pagesize;
+		$postdata['date'] = $date;
+		$postdata['page'] = $page; 
+		
+ 		//向vms post数据，并获取返回值
+ 		if ($data = $this->post($postdata)) { 
+  			return $data;
+		} else { 
+ 			echo '没有返回查询时间点的数据！';exit;
+   			return false;
+		}
+	}
+	*/
+	//完善资料
+	public function complete_info($data){
+		//构造post数据
+		$postdata = $data; 
+		$postdata['user_back'] = APP_PATH . 'api.php?op=video_api';   
+ 		//向vms post数据，并获取返回值 
+		
+		$url = $this->ku6api_api."CompleteInfo.php"; 
+		$return_data = $this->post_api($url, $postdata);
+  		if ($return_data['code']=='200') { 
+   			return $return_data['data'];
+		} else { 
+ 			return '-1'; 
+		} 
+	} 
+	
+	/*
+	* 获得用户填写的详细资料
+	* 返回值：　用户完善的资料
+	*/
+	public function Get_Complete_Info($data){
+		if (empty($data)) return false; 
+		$url = $this->ku6api_api."Get_Complete_Info.php"; 
+		$return_data = $this->post_api($url, $data);
+   		if ($return_data['code']=='200') { 
+   			return $return_data['data'];
+		} else { 
+  			return false; 
+		} 
+	}
+	
+	/*
+	* 获得用户填写的详细资料
+	* 返回值：　用户完善的资料
+	*/
+	public function check_user_back($url){
+		if (empty($url)) return false; 
+		$data['url'] = $url;
+		$url = $this->ku6api_api."Check_User_Back.php"; 
+		$return_data = $this->post_api($url, $data);
+   		if ($return_data['code']=='200') { 
+   			return 200;
+		} else { 
+  			return -200; 
+		} 
+	}
+	
+	//发送验证码到指定邮件
+	public function send_code($data){
+		if (empty($data)) return false; 
+		$new_data['email'] = $data['email'];
+		$new_data['url'] = $data['url'];
+		$url = $this->ku6api_api."Send_Code.php";  
+		$return_data = $this->post_api($url, $new_data); 
+    	return $return_data;
+	}
+	
+	//验证信箱和验证码，包含email and  code
+	public function check_email_code($data){
+		if (empty($data)) return false;  
+		$url =  $this->ku6api_api."Check_Email_Code.php";  
+		$return_data = $this->post_api($url, $data); 
+		if($return_data['code']=='200'){
+			return $return_data['data'];
+		}else{
+			return false;
+		} 
+	}
+	
+	
+	/**
+	 * Function 
+	 * 获取播放器列表
+	 */
+	public function player_list() {
+		$postdata['method'] = 'PlayerList';
+		$data = $this->post($postdata);
+		if ($data['code']==200) {
+			return $data;
+		} else {
+			return false;
+		}
+	}
+	/**
+	 * Function 
+	 * 获取播放器列表
+	 */
+	public function player_edit($field,$style) {
+		$postdata['method'] = 'PlayerEdit';
+		$postdata['field'] = $field;
+		$postdata['style'] = $style;
+		$data = $this->post($postdata);
+		if ($data['code']==200) {
+			return $data;
+		} else {
+			return false;
+		}
+	} 
+
+	/**
+	 * FUNCTION post_api
+	 * @post数据到api，post方法是post数据到api下面的v5，而post_api是post到api下面
+	 * @$data array post数据
+	 */
+	private function post_api($url = '', $data = array()) {
+		if (empty($url) || !preg_match("/^(http:\/\/)?([a-z0-9\.]+)(\/api)(\/[a-z0-9\._]+)/i", $url) || empty($data)) return false;
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, $url);
+		curl_setopt($ch, CURLOPT_POST, 1);
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER , 1);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+		curl_setopt($ch, CURLOPT_USERAGENT, 'Client SDK ');
+		$output = curl_exec($ch);
+		$return_data = json_decode($output,true);
+   		return $return_data;
 	}
 }

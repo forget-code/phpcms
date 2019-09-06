@@ -3,10 +3,8 @@
 <link href="{CSS_PATH}vms/vms.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="{JS_PATH}jquery.tools_tabs.min.js"></script>
 <script type="text/javascript">
-var vid = '{$video[vid]}';
-var id = '{$video_cache['style_projectid']}';//皮肤样式
 $(function(){
-	$('#html').val('<embed src="{pc_base::load_config('ku6server', 'player_url')}'+vid+'/style/'+id+'/" quality="high" width="600" height="500" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1" type="application/x-shockwave-flash" wmode="transparent"></embed>');
+	$('#html').val('{player_code('video_player',$video['channelid'],$video['vid'],622,460)}');
 	$('#tag1').tabs("div.tabn1 > ul");
 
 }) 
@@ -36,7 +34,7 @@ function copy_text(matter){
     </div>
     	<div class="plbox">   
 {if $video[vid]!=""}
-<embed id="video_player" name="video_player" src="{pc_base::load_config('ku6server', 'player_url')}{$video['vid']}/style/{$video_cache['style_projectid']}/" height="460" width="622" quality="high" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1&api=1&adss=0" type="application/x-shockwave-flash"></embed>
+{player_code('video_player',$video['channelid'],$video['vid'],622,460)}
 {else}
 该视频不存在，请返回！
 {/if} 

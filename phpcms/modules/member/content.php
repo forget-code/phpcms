@@ -49,7 +49,7 @@ class content extends foreground {
 			$fields = array_keys($fields);
 			$info = array();
 			foreach($_POST['info'] as $_k=>$_v) {
-				if(in_array($_k, $fields)) $info[$_k] = $_v;
+				if(in_array($_k, $fields)) $info[$_k] = htmlspecialchars($_v);
 			}
 			$post_fields = array_keys($_POST['info']);
 			$post_fields = array_intersect_assoc($fields,$post_fields);

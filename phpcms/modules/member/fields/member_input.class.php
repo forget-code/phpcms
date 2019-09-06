@@ -27,6 +27,7 @@ class member_input {
 		if(is_array($data)) {
 			foreach($data as $field=>$value) {
 				if($data['islink']==1 && !in_array($field,$debar_filed)) continue;
+				$field = safe_replace($field);
 				$name = $this->fields[$field]['name'];
 				$minlength = $this->fields[$field]['minlength'];
 				$maxlength = $this->fields[$field]['maxlength'];

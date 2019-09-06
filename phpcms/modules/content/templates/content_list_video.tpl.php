@@ -25,15 +25,7 @@ include $this->admin_tpl('header','admin');?>
 	parent.document.getElementById('center_frame').src = '?m=content&c=content&a=public_categorys&type=add&menuid=<?php echo $_GET['menuid'];?>&pc_hash=<?php echo $_SESSION['pc_hash'];?>';
 	window.top.$("#current_pos").data('clicknum',0);
 }
-function closeParent() {
-	if($('#closeParentTime').html() == '') {
-		window.top.$(".left_menu").addClass("left_menu_on");
-		window.top.$("#openClose").addClass("close");
-		window.top.$("html").addClass("on");
-		$('#closeParentTime').html('1');
-		window.top.$("#openClose").data('clicknum',1);
-	}
-}
+
 $.fn.inputlimiter = function () {
     var _this = this;
     _this.mb_substr = function(str, startp, endp) {
@@ -111,7 +103,7 @@ $.fn.inputlimiter = function () {
     });
 };
 $(document).ready(function(){
-	setInterval(closeParent,5000);
+	
 	$('.bghd').css("opacity","0.6");
 	$('.img175').hover(function(){
 		$(this).find(".hids").toggle();$(this).find('.sjt').toggle();

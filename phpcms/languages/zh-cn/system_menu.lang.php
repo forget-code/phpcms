@@ -532,4 +532,16 @@ $LANG['album_import'] = '视频专辑导入';
 $LANG['sys_setting'] = '设置';
 $LANG['module'] = '模块';
 $LANG['a_clean_data'] = '一键清理数据';
+$LANG['video'] = '视频';
+$LANG['video_setting'] = '相关设置';
+$LANG['video_open'] = '申请开通';
+$LANG['video_player_setting'] = '播放器设置';
+$LANG['video_stat'] = '视频统计';
+$LANG['video_isopen'] = '申请开通';
+$LANG['video_opensetting'] = '视频配置';
+$LANG['video_inputinfo'] = '视频配置';
+$LANG['complete_info'] = '填写资料'; 
+$LANG['clear_data'] = '一键清理';
+$LANG['player_manage'] = '播放器管理';
+$LANG['video_upload'] = '视频上传'; 
 ?>

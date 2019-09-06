@@ -56,7 +56,7 @@ class video_for_ck {
 	public function search() {
 		$title = safe_replace($_GET['title']);
 		if (CHARSET=='gbk') {
-			$title = iconv('gbk', 'utf-8', $title);
+			$title = iconv('utf-8', 'gbk', $title);
 		}
 		$where = '`status`=21';
 		if ($title) {
@@ -186,6 +186,13 @@ class video_for_ck {
 	 */
 	public function check_vid() {
 		$vid = $_GET['vid'];
+		$r = $this->db->get_one(array('vid'=>$vid));
+		if (is_array($r)) {
+			$data = player_code('video_player',$r['channelid'],$r['vid'],300,225);
+			exit($data);
+		} else {
+			exit(1);
+		}
 		$url = pc_base::load_config('ku6server', 'player_url').$vid.'/style/'.$this->setting['style_projectid'].'/';
 		$data = @file_get_contents($url);
 		if ($data = json_decode($data,true)) {

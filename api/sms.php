@@ -10,7 +10,7 @@ $siteid = get_siteid() ? get_siteid() : 1 ;
 $sms_setting = getcache('sms','sms');
 $sitelist = getcache('sitelist', 'commons');
 $sitename = $sitelist[$siteid]['name'];
-if(!preg_match('/^1([0-9]{9})/',$mobile)) exit('mobile phone error');
+if(!preg_match('/^(?:13\d{9}|15[0|1|2|3|5|6|7|8|9]\d{8}|18[0|2|3|5|6|7|8|9]\d{8}|14[5|7]\d{8})$/',$mobile)) exit('mobile phone error');
 $posttime = SYS_TIME-86400;
 $where = "`mobile`='$mobile' AND `posttime`>'$posttime'";
 $num = $sms_report_db->count($where);

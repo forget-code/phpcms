@@ -193,11 +193,13 @@ $.ajaxSetup({
 function a_click(obj) {
 	var vid = $(obj).attr('data-vid');
 	var vid_msg = '';
+	var d = '';
 	$.get('index.php', {m:'video', c:'video_for_ck', a:'check_vid', vid:vid}, function(data){
-		if (data!=1) {
-			alert(data);
+		if (data==1) {
+			alert('视频地址错误！');
 			vid_msg = false;
 		} else {
+			d = data;
 			vid_msg = true;	
 		}
 	});
@@ -205,8 +207,7 @@ function a_click(obj) {
 		$("#ulic div.w9 a").removeClass("ac");
 		$(obj).addClass("ac");
 		$('#video_url').val(vid);
-		var html = '<embed src="{$player_url}'+$(obj).attr('data-vid')+'/style/{$video_setting[style_projectid]}/" quality="high" width="300" height="225" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1" type="application/x-shockwave-flash"></embed>';
-		$('#video_view').html(html);
+		$('#video_view').html(d);
 	}
 }
 $('#ct2').hide();

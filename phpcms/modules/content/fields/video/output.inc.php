@@ -36,6 +36,7 @@
 					$return_data['data'][$page]['url'] = $urls[0];
 					if ($page==$currpage) {
 						$return_data['vid'] = $arr['vid'];
+						$return_data['channelid'] = $arr['channelid'];
 					}
 				}
 
