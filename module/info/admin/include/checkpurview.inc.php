@@ -15,7 +15,7 @@ elseif($_grade >= 3)
 		if(!in_array($action, array('left','main','add','edit','manage', 'action', 'sendback','preview','checktitle'))) showmessage($LANG['you_have_no_permission']);
         if($_grade == 4)
 		{			
-			if(!in_array($action, array('left','main','add','edit','manage','checktitle's))) showmessage($LANG['you_have_no_permission']);
+			if(!in_array($action, array('left','main','add','edit','manage','checktitle'))) showmessage($LANG['you_have_no_permission']);
 			if($job && !in_array($job, array('myitem'))) showmessage($LANG['you_have_no_permission']);
 			if($action == 'manage' && !$job) $job = 'myitem';
 		}

@@ -32,7 +32,7 @@ else
 	}
 	if(!$channelid) $channelid = '$channelid';
 	$category_select = str_replace("<select name='catid' ><option value='0'></option>",'',category_select('catid'));
-	$special_select = str_replace("<select name='specialid' ><option value='0'></option>",'',special_select($channelid, 'specialid',''));
+	$special_select = str_replace("<select name='specialid' ><option value='0'>1</option>",'',special_select($channelid, 'specialid','1'));
     include admintpl('tag_'.$function.'_add');
 }
 ?>

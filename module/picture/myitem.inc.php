@@ -224,7 +224,7 @@ case 'preview':
 		if($url == '' || !strpos($url, "|")) continue;
 		$url = explode("|", $url);
 		$r['alt'] = $url[0];
-		$r['src'] = strpos($url[1], "://") ? $url[1] :  imgurl($PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$MOD['upload_dir'].'/'.$url[1]);
+		$r['src'] = strpos($url[1], "://") ? $url[1] :  imgurl($url[1]);
 		$pictureurls[] = $r;
 	}
 	$myfields = cache_read('phpcms_'.$mod.'_'.$channelid.'_fields.php');

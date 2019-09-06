@@ -7,7 +7,7 @@ if(!isset($filename) && $file == 'tag' && $action != 'clear')
 	require_once PHPCMS_ROOT.'/include/formselect.func.php';
 
 	$action = $action ? $action : 'manage';
-	$actions = array('add','edit','copy','delete','manage','save', 'preview', 'checkname', 'list','category_select', 'quickoperate','listtag');
+	$actions = array('add','edit','copy','delete','manage','save', 'preview', 'checkname', 'list','category_select', 'quickoperate','listtag','specialid_select');
 	if(!in_array($action, $actions)) showmessage($LANG['illegal_action']);
 
 	$function = isset($function) ? $function : 'phpcms_cat';
@@ -60,7 +60,7 @@ switch($action)
 	case 'quickoperate':
         require PHPCMS_ROOT.'/templates/'.$CONFIG['defaulttemplate'].'/tags.php';
 	    $tagname = preg_replace("/^[^{]*[{]?tag_([^}]+)[}]?.*/", "\\1", trim($tagname));
-        if(!isset($tags[$tagname])) showmessage('标签不存在！', $PHP_REFERER);
+        if(!isset($tags[$tagname])) showmessage($LANG['label'].$LANG['not_exist'], $PHP_REFERER);
 		$tag = $tags[$tagname];
 		preg_match("/^(([a-z0-9]+)[_][a-z0-9_]*)[(]/", $tag, $m);
 		$function = $m[1];
@@ -166,6 +166,17 @@ switch($action)
 			echo '<select name="setcatid"><option value="0"></option></select>';
 		}
 		break;
+
+	case 'specialid_select':
+	if($keyid && strpos($keyid, '$') === FALSE)
+	    {	
+			echo str_replace('<option value=\'0\'>1</option>','<option value="0">不限专题</option><option value=\'$specialid\'>$specialid</option>',special_select($keyid, 'specialid','1','','onchange="$(\'specialid\').value=this.value"'));
+		}
+		else
+	{
+				echo '<select name="setcatid" onchange="$(\'specialid\').value=this.value"><option value="0">不限专题</option><option value=\'$specialid\'>$specialid</option></select>';
+	}
+	break;
 }
 
 function get_var($string)

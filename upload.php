@@ -76,10 +76,6 @@ if(isset($save))
 				$wm->image($water_image,$upload->saveto);
 			}
 		}
-		if(isset($oldname) && $oldname && !strpos($oldname, '://'))
-		{
-			@unlink(PHPCMS_ROOT.'/'.$oldname);
-		}
 		showmessage($LANG['file_upload_success']."<script language='javascript'>window.opener.myform.".$uploadtext.".value='".$upload->saveto."';window.close();</script>","?".$PHP_QUERYSTRING.$querystring);
     }
 	else

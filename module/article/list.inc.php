@@ -19,7 +19,7 @@ $head['description'] = $seo_description.'-'.$CHA['seo_description'];
 $position = catpos($catid);
 
 $skindir = $skinid ? PHPCMS_PATH.'templates/'.$CONFIG['defaulttemplate'].'/skins/'.$skinid : $skindir;
-if($child==1 && !isset($page))
+if($child==1)
 {
 	$linkurl =  linkurl(cat_url('url', $catid, 1));
 	$arrchildid = subcat($channelid, $catid, 'list');

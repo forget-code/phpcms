@@ -1,20 +1,17 @@
-<?php 
+<?php
 require './include/common.inc.php';
 include_once PHPCMS_ROOT."/include/upload.class.php";
 
 if(!isset($formid)) showmessage($LANG['illegal_submit'] ,'goback');
 $formid = intval($formid);
 if(!isset($dopost) || !$dosubmit) showmessage($LANG['illegal_submit'] ,'goback');
-if(empty($itemstr)) showmessage($LANG['templete_edit_error']);
-$itemstr = stripslashes($itemstr);
-$formitems = unserialize($itemstr);
-
+@extract($db->get_one("SELECT * FROM ".TABLE_FORMGUIDE." WHERE formid=$formid"));
+$formitems = unserialize($formitems);
 if(!$MOD['allowmultisubmit'])
 {
 	$r = $db->get_one("SELECT formid,ip FROM ".TABLE_FORMGUIDE_DATA." WHERE ip='$PHP_IP' AND formid='$formid' limit 1");
 	if($r) showmessage($LANG['not_allowed_to_resubmit'],"close");
 }
-
 if($formitems)
 {
 	$receive = array();
@@ -25,7 +22,7 @@ if($formitems)
 			if($formitems['ismust'][$k]==1 && ${'f'.$k}=='')
 			{
 				showmessage($LANG['confirm_all_form_complete']);
-			}			
+			}
 		}
 		else if($formitems['ismust'][$k]==1 && empty($_FILES['f'.$k]['tmp_name']))
 		{

@@ -78,7 +78,7 @@ $LANG['paid'] = '已付款';
 $LANG['not_paid'] = '未付款';
 $LANG['shipped'] = '已发货';
 $LANG['not_shipped'] = '未发货';
-
-
-
+$LANG['generate_product_html'] = '更新商品Html';
+$LANG['product_manage'] = '商品管理';
+$LANG['order_list'] = '订单列表';
 ?>

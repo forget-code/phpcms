@@ -1,6 +1,5 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
-
 function template_compile($module,$template)
 {
 	global $CONFIG;
@@ -66,7 +65,7 @@ function template_parse($str)
 	$str = preg_replace("/\{(\\$[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)\}/","<?php echo \\1;?>",$str);
 	$str = preg_replace("/\{(\\$[a-zA-Z0-9_\[\]\'\"\$\x7f-\xff]+)\}/es", "addquote('<?php echo \\1;?>')",$str);
 	$str = preg_replace("/\{([A-Z_\x7f-\xff][A-Z0-9_\x7f-\xff]*)\}/s", "<?php echo \\1;?>",$str);
-	$str = "<?php defined('IN_PHPCMS') or exit('Access Denied'); ?>\n".$str;
+	$str = "<?php defined('IN_PHPCMS') or exit('Access Denied'); ?>".$str;
 	return $str;
 }
 

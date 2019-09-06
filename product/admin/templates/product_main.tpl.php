@@ -20,7 +20,7 @@ include admintpl('header');
 
 <table cellpadding="2" cellspacing="1" class="tableborder">
   <tr>
-    <th colspan="4">文章管理</th>
+    <th colspan="4">商品管理</th>
   </tr>
 <tr align="center">
 <td width="10%" class="tablerowhighlight">ID</td>

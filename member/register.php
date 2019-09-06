@@ -88,6 +88,7 @@ if($dosubmit)
 				header('location:'.$url);
 				exit;
 			}
+			if(isset($MODULE['yp']) && $member_type == 'enterprise') $forward = $MODULE['yp']['linkurl'].'register.php';
 			showmessage($LANG['registered_success_login_please'].'...', $forward);
 		}
 	}
@@ -108,8 +109,7 @@ elseif($action == 'mailcheck')
 		$begindate = date('Y-m-d');
 		$date->dayadd($defaultvalidday);
 		$enddate = $defaultvalidday == -1 ? '0000-00-00' : $date->get_date();
-        $db->query("UPDATE ".TABLE_MEMBER." SET groupid=$groupid,chargetype='$chargetype',point=>'$defaultpoint',begindate=>'$begindate',enddate=>'$enddate' WHERE username='$username'");
-
+        $db->query("UPDATE ".TABLE_MEMBER." SET groupid=$groupid,chargetype='$chargetype',point='$defaultpoint',begindate='$begindate',enddate='$enddate' WHERE username='$username'");
 		showmessage($LANG['mail_verify_success'], $PHP_SITEURL);
 	}
 	else
@@ -152,7 +152,7 @@ elseif($action == 'checkemail')
 	{
 		echo 1;
 	}
-	elseif($member->email_exists($email))
+	elseif(!$MOD['enablemultiregperemail'] && $member->email_exists($email))
 	{
 		echo 2;
 	}

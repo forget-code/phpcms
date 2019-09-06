@@ -27,7 +27,7 @@ $result = $db->query($query);
 while($r = $db->fetch_array($result))
 {
 	$r['adddate'] = date('Y-m-d H:i:s', $r['addtime']);
-	$r['linkurl'] = linkurl($CHA['linkurl'].$r['linkurl'], 1);
+	$r['linkurl'] = linkurl($r['linkurl'], 1);
 	$r['introduce'] = strip_tags($r['content']);
 	if($MOD['rss_length']) $r['introduce'] = str_cut($r['introduce'], $MOD['rss_length'], '...');
 	$r['author'] = $r['author'] ? $r['author'] : $r['username'];

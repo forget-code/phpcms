@@ -88,7 +88,7 @@ function checkemail(email)
         $('email_notice').innerHTML="<font color='red'>E-mail 不能为空！</font>";
         Field.focus('email');
     }else{
-        var checkurl = '/member/register.php';
+        var checkurl = '{$MOD[linkurl]}register.php';
 		var pars = "action=checkemail&email="+email;
 		var myAjax = new Ajax.Request(checkurl, {method: 'post', parameters: pars, onComplete: checkemailmessage});
     }
@@ -118,6 +118,12 @@ function checkemailmessage(Request)
 <h1>基本资料 [必填]</h1>
   <form name="myform" method="post" action="{$MOD[linkurl]}register.php" onSubmit='return CheckForm();'>
    <table cellpadding="0" cellspacing="0" class="righttable">
+{if isset($MODULE['yp'])}
+    <tr>
+      <td class="td_right">用户类型：</td>
+      <td> <input name="member_type" type="radio" style="border:0px " value="person" checked>  <span class="color_2">个人</span> <input type="radio" name="member_type" value="enterprise" class="radio"> <span class="color_2">企业</span></td>
+    </tr>
+{/if}
     <tr>
       <td width="15%" class="td_right">用户名：</td>
       <td><input name="username" type="text" id="reg_username" value="{$username}" size="15" onBlur="checkuser(this.value);">

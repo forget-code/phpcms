@@ -1,5 +1,6 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
+$tablename = channel_table('picture', $channelid);
 $itemid = $pictureid = isset($pictureid) ? intval($pictureid) : 0;
 if(!$pictureid) return FALSE;
 $picture = $db->get_one("SELECT * FROM ".channel_table('picture', $channelid)." WHERE pictureid=$pictureid ");
@@ -69,11 +70,10 @@ foreach($urls as $k=>$url)
 		}
 		else
 		{
-			$r['src'] = imgurl($PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$MOD['upload_dir'].'/'.$url[1]);
-			$r['thumb'] = $thumb_exists ? dirname($r['src']).'/thumb_'.basename($r['src']) : $r['src'];
+			$r['src'] = $thumb_exists ? imgurl($PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$MOD['upload_dir'].'/'.$url[1]) : imgurl($url[1]);
+			$r['thumb'] = $thumb_exists ? dirname($r['src']).'/thumb_'.basename($r['src']) : linkurl($r['src']);
 		}
 	}
-
 	$r['href'] = linkurl(item_url('url', $catid, $ishtml, $urlruleid, $htmldir, $prefix, $pictureid, $addtime, $r['id']));
 	$pictureurls[] = $r;
 }

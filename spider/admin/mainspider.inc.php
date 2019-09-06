@@ -470,46 +470,52 @@ class MainSpider
 
 	function HtmlTrim($strHtml,$serial) 
 	{
-		$ids = explode(',',$serial);//获取要排除html代码的序号
-		$aryReg =array(
-					  "/<a[^>]*?>([\s\S]*?)<\/a>/i",
-					  "/<br[^>]*?>/i",
-					  "/<table[^>]*?>([\s\S]*?)<\/table>/i",
-					  "/<tr[^>]*?>([\s\S]*?)<\/tr>/i",
-					  "/<td[^>]*?>([\s\S]*?)<\/td>/i",
-					  "/<p[^>]*?>([\s\S]*?)<\/p>/i",
-					  "/<font[^>]*?>([\s\S]*?)<\/font>/i",
-					  "/<div[^>]*?>([\s\S]*?)<\/div>/i",
-					  "/<span[^>]*?>([\s\S]*?)<\/span>/i",
-					  "/<tbody[^>]*?>([\s\S]*?)<\/tbody>/i",
-					  "/<([\/]?)b>/i",								  
-					  "/<img[^>]*?>/i",
-					  "/[&nbsp;]{2,}/i",
-					  "/<script[^>]*?>([\w\W]*?)<\/script>/i",
-					  );
-		$aryRep = array(
-					   "\\1",
-					   "",
-					   "\\1",
-					   "\\1",
-					   "\\1",
-					   "\\1",
-					   "\\1",
-					   "\\1",
-					   "\\1",
-					   "\\1",
-					   "",								   
-					   "",
-					   "&nbsp;",
-					   "\\1",
-					   );
-		$strOutput = $strHtml;
-		foreach($ids as $id)
+		if($serial!='')
 		{
-			if(!empty($id))
-			$strOutput = preg_replace($aryReg[$id],$aryRep[$id],$strOutput);
+			$ids = explode(',',$serial);//获取要排除html代码的序号
+			$aryReg =array(
+						  "/<a[^>]*?>([\s\S]*?)<\/a>/i",
+						  "/<br[^>]*?>/i",
+						  "/<table[^>]*?>([\s\S]*?)<\/table>/i",
+						  "/<tr[^>]*?>([\s\S]*?)<\/tr>/i",
+						  "/<td[^>]*?>([\s\S]*?)<\/td>/i",
+						  "/<p[^>]*?>([\s\S]*?)<\/p>/i",
+						  "/<font[^>]*?>([\s\S]*?)<\/font>/i",
+						  "/<div[^>]*?>([\s\S]*?)<\/div>/i",
+						  "/<span[^>]*?>([\s\S]*?)<\/span>/i",
+						  "/<tbody[^>]*?>([\s\S]*?)<\/tbody>/i",
+						  "/<([\/]?)b>/i",								  
+						  "/<img[^>]*?>/i",
+						  "/[&nbsp;]{2,}/i",
+						  "/<script[^>]*?>([\w\W]*?)<\/script>/i",
+						  );
+			$aryRep = array(
+						   "\\1",
+						   "",
+						   "\\1",
+						   "\\1",
+						   "\\1",
+						   "\\1",
+						   "\\1",
+						   "\\1",
+						   "\\1",
+						   "\\1",
+						   "",								   
+						   "",
+						   "&nbsp;",
+						   "\\1",
+						   );
+			$strOutput = $strHtml;
+			foreach($ids as $id)
+			{
+				$strOutput = preg_replace($aryReg[$id],$aryRep[$id],$strOutput);
+			}
+			return $strOutput;
 		}
-		return $strOutput;
+		else
+		{
+			return $strHtml;
+		}
 	}		
 }
 

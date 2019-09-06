@@ -15,6 +15,7 @@ if($action == 'login')
 		$a = $db->get_one("SELECT grade FROM ".TABLE_ADMIN." WHERE userid=$userid limit 0,1");
 		if(!$a || $a['grade'] > 0) $isadmin = 0;
 	}
+	if($gender==0)	$gender = 2;
 	$txt = "time=$PHP_TIME&cookietime=$cookietime&username=$username&password=$password&secques=".quescrypt(1,'phpcms')."&gender=$gender&email=$email&isadmin=$isadmin&regip=$regip&regdate=$regtime&oicq=$qq&msn=$msn&showemail=$showemail&bday=$birthday&site=$homepage&location=".substr($address, 0, 30);
 	$auth = phpcms_auth($txt, 'ENCODE', $PHPCMS['passport_key']);
 	$verify = md5('login'.$auth.$forward.$PHPCMS['passport_key']);

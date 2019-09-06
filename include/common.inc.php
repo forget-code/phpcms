@@ -5,10 +5,27 @@ unset($LANG, $_REQUEST, $HTTP_ENV_VARS, $HTTP_POST_VARS, $HTTP_GET_VARS, $HTTP_P
 set_magic_quotes_runtime(0);
 define('IN_PHPCMS', TRUE);
 define('PHPCMS_ROOT', str_replace("\\", '/', substr(dirname(__FILE__), 0, -8)));
+require PHPCMS_ROOT.'/include/global.func.php';
+
+$search_arr = array("/ union /i","/ select /i","/ update /i","/ outfile /i","/ or /i");
+$replace_arr = array('&nbsp;union&nbsp;','&nbsp;select&nbsp;','&nbsp;update&nbsp;','&nbsp;outfile&nbsp;','&nbsp;or&nbsp;');
+$_POST = strip_sql($_POST);
+$_GET = strip_sql($_GET);
+$_COOKIE = strip_sql($_COOKIE);
+unset($search_arr, $replace_arr);
+
+$magic_quotes_gpc = get_magic_quotes_gpc();
+if(!$magic_quotes_gpc)
+{
+	$_POST = new_addslashes($_POST);
+	$_GET = new_addslashes($_GET);
+}
+@extract($_POST, EXTR_OVERWRITE);
+@extract($_GET, EXTR_OVERWRITE);
+unset($_POST, $_GET);
 
 require PHPCMS_ROOT.'/config.inc.php';
 require PHPCMS_ROOT.'/languages/'.$CONFIG['language'].'/phpcms.lang.php';
-require PHPCMS_ROOT.'/include/global.func.php';
 
 define('PHPCMS_PATH', $CONFIG['rootpath']);
 define('PHPCMS_CACHEDIR', $CONFIG['cachedir']);
@@ -64,23 +81,8 @@ if(!defined('IN_ADMIN'))
 	{
 		parse_str(str_replace(array('/', '-', ' '), array('&', '=', ''), $urlvar[1]));
 	}
-	$search_arr = array("/ union /i","/ select /i","/ update /i","/ outfile /i","/ or /i");
-	$replace_arr = array('&nbsp;union&nbsp;','&nbsp;select&nbsp;','&nbsp;update&nbsp;','&nbsp;outfile&nbsp;','&nbsp;or&nbsp;');
-	$_POST = strip_sql($_POST);
-	$_GET = strip_sql($_GET);
-	$_COOKIE = strip_sql($_COOKIE);
-	unset($search_arr, $replace_arr);
+	
 }
-
-$magic_quotes_gpc = get_magic_quotes_gpc();
-if(!$magic_quotes_gpc)
-{
-	$_POST = new_addslashes($_POST);
-	$_GET = new_addslashes($_GET);
-}
-@extract($_POST, EXTR_SKIP);
-@extract($_GET, EXTR_SKIP);
-unset($_POST, $_GET);
 
 require PHPCMS_ROOT.'/include/'.$db_file.'.class.php';
 require PHPCMS_ROOT.'/include/tag.func.php';

@@ -92,16 +92,16 @@ function doCheck(){
 <option value='8' <?php if($tag_config['cols']==8) { ?>selected<? } ?>>8列</option>
 <option value='9' <?php if($tag_config['cols']==9) { ?>selected<? } ?>>9列</option>
 <option value='10' <?php if($tag_config['cols']==10) { ?>selected<? } ?>>10列</option>
-<option value='1' <?php if($tag_config['cols']==11) { ?>selected<? } ?>>11列</option>
-<option value='2' <?php if($tag_config['cols']==12) { ?>selected<? } ?>>12列</option>
-<option value='3' <?php if($tag_config['cols']==13) { ?>selected<? } ?>>13列</option>
-<option value='4' <?php if($tag_config['cols']==14) { ?>selected<? } ?>>14列</option>
-<option value='5' <?php if($tag_config['cols']==15) { ?>selected<? } ?>>15列</option>
-<option value='6' <?php if($tag_config['cols']==16) { ?>selected<? } ?>>16列</option>
-<option value='7' <?php if($tag_config['cols']==17) { ?>selected<? } ?>>17列</option>
-<option value='8' <?php if($tag_config['cols']==18) { ?>selected<? } ?>>18列</option>
-<option value='9' <?php if($tag_config['cols']==19) { ?>selected<? } ?>>19列</option>
-<option value='10' <?php if($tag_config['cols']==20) { ?>selected<? } ?>>20列</option>
+<option value='11' <?php if($tag_config['cols']==11) { ?>selected<? } ?>>11列</option>
+<option value='12' <?php if($tag_config['cols']==12) { ?>selected<? } ?>>12列</option>
+<option value='13' <?php if($tag_config['cols']==13) { ?>selected<? } ?>>13列</option>
+<option value='14' <?php if($tag_config['cols']==14) { ?>selected<? } ?>>14列</option>
+<option value='15' <?php if($tag_config['cols']==15) { ?>selected<? } ?>>15列</option>
+<option value='16' <?php if($tag_config['cols']==16) { ?>selected<? } ?>>16列</option>
+<option value='17' <?php if($tag_config['cols']==17) { ?>selected<? } ?>>17列</option>
+<option value='18' <?php if($tag_config['cols']==18) { ?>selected<? } ?>>18列</option>
+<option value='19' <?php if($tag_config['cols']==19) { ?>selected<? } ?>>19列</option>
+<option value='20' <?php if($tag_config['cols']==20) { ?>selected<? } ?>>20列</option>
 </select>
       </td>
     </tr>

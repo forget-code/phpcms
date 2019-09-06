@@ -23,7 +23,7 @@ else
 	$tagname = preg_replace("/^[^{]*[{]?tag_([^}]+)[}]?.*/", "\\1", trim($tagname));
 	$tag_config = $tag->get_tag_config($tagname);
 	$category_select = str_replace("<select name='catid' ><option value='0'></option>",'',category_select('catid'));
-	if(isset($tag_config['specialid'])) $special_select = str_replace("<select name='specialid' ><option value='0'></option>",'',special_select($channelid, 'specialid', '', $tag_config['specialid']));
+	if(isset($tag_config['specialid'])) $special_select = str_replace("<select name='specialid' ><option value='0'>1</option>",'',special_select($channelid, 'specialid', '1', $tag_config['specialid']));
 	include admintpl('tag_'.$function.'_'.$action);
 }
 ?>

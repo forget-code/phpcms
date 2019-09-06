@@ -58,7 +58,7 @@ include admintpl('header');
 <form method="post" name="myform">
 <?=$categorys?>
   <tr>
-    <td class="tablerow"><input name='chkall' type='checkbox' id='chkall' onclick='checkall(this.form)' value='checkbox'>全?</td>
+    <td class="tablerow"><input name='chkall' type='checkbox' id='chkall' onclick='checkall(this.form)' value='checkbox'>全选</td>
     <td class="tablerow" colspan="5">&nbsp;&nbsp;
 	<input type="submit" name="submit1" value="生成列表" onClick="document.myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=list'">&nbsp;&nbsp;
 	<input type="submit" name="submit2" value="生成商品" onClick="document.myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=cat_product'">

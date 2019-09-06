@@ -25,6 +25,8 @@ if($dosubmit)
 	$movie['editor'] = $movie['checker'] = $_username;
 	$movie['urlruleid'] = $movie['ishtml'] ? $html_urlrule : $php_urlrule;
 	$movie['addtime'] = $movie['edittime'] = $movie['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $movie['addtime']) ? strtotime($movie['addtime'].' '.date('H:i:s',$PHP_TIME)) : $PHP_TIME;
+	if(!$movie['onlineview']) $movie['onlineview'] = 0;
+	if(!$movie['allowdown']) $movie['allowdown'] = 0;
 	foreach($url AS $k=>$v)
 	{
 		if(!$delSelected[$k])
@@ -37,7 +39,6 @@ if($dosubmit)
 		$letter = convert_encoding('gbk','pinyin',$letter);
 		$movie['letter'] = substr($letter,0,1);
 	}
-
 	if(isset($movie['arrposid']))
 	{
 		$arrposid = $movie['arrposid'];
@@ -48,9 +49,7 @@ if($dosubmit)
         $arrposid = array();
 		$movie['arrposid'] = '';
 	}
-
 	$field->check_form();
-
 	$movieid = $d->edit($movie);
 	if($movieid)
 	{
@@ -109,7 +108,6 @@ else
 			$selected = '';
 		}
 	$player_select .= "</select>";
-	
 	$server_select = "<select name='movie[serverid]' ><option value='0'>".$LANG['choose_server']."</option>";
 	$result = $db->query("SELECT * FROM ".TABLE_MOVIE_SERVER);
 	while($r=$db->fetch_array($result))

@@ -30,6 +30,15 @@ function showcat(keyid,catid)
 					parameters: pars
 					}
 	             ); 
+				 pars = "mod=phpcms&file=tag&action=specialid_select&catid="+catid+"&keyid="+keyid;
+	var tags = new Ajax.Updater(
+	'selectspecialid',
+		url,
+		{
+	method: 'get',
+	parameters: pars
+		}	
+	);
 }
 </script>
 <table cellpadding="2" cellspacing="1" border="0" align="center" class="tableBorder" >
@@ -110,10 +119,12 @@ foreach($CHANNEL as $id=>$channel)
       <td class="tablerow"><b>所属专题</b></td>
       <td  class="tablerow">
 	  <input name="tag_config[specialid]" id="specialid" type="text" size="15" value="0"> 
+		<span id="selectspecialid">
 		<select onchange="$('specialid').value=this.value">
 		<option value="0">不限专题</option>
 		<option value='$specialid'>$specialid</option>
 		<?=$special_select?>
+		</span>
 	</td>
 	</tr>
 	

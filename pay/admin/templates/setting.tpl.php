@@ -1,7 +1,7 @@
 <?php defined('IN_PHPCMS') or exit('Access Denied');
 include admintpl('header');
 ?>
-<body>
+<body onload="<?=$alipay_service == 'trade_create_by_buyer' ? 'pay(\'trade_create_by_buyer\')' : ''?>">
 <table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
   <tr>
     <td></td>
@@ -20,10 +20,23 @@ include admintpl('header');
       <td class='tablerow'><strong>支付宝帐号</strong></td>
       <td class='tablerow'><input name='setting[alipay]' type='text' id='alipay' value='<?=$alipay?>' size='40' maxlength='100'> 支付宝收款帐号</td>
     </tr>
+	<script type="text/javascript">
+	function pay(obj)
+	{
+		if(obj=='trade_create_by_buyer')
+		{
+			$('trade').style.display = 'block';
+		}
+		else
+		{
+			$('trade').style.display = 'none';
+		}
+	}
+	</script>
     <tr>
       <td class='tablerow'><strong>支付宝交易类型</strong></td>
       <td class='tablerow'>
-	  <select name="setting[alipay_service]">
+	  <select name="setting[alipay_service]" onchange="pay(this.value)">
 	  <option value="create_digital_goods_trade_p" <?=$alipay_service == 'create_digital_goods_trade_p' ? 'selected' : ''?>>虚拟类交易</option>
 	  <option value="trade_create_by_buyer" <?=$alipay_service == 'trade_create_by_buyer' ? 'selected' : ''?>>实物类交易</option>
 	  <option value="create_donate_trade_p" <?=$alipay_service == 'create_donate_trade_p' ? 'selected' : ''?>>捐赠类交易</option>
@@ -31,6 +44,40 @@ include admintpl('header');
 	  </select>
 	  </td>
     </tr>
+	<tbody id="trade" style="display:none;">
+	<tr>
+	<td class="tablerow">
+	<strong>物流配送方法</strong>
+	</td>
+	<td class="tablerow">
+	<select name="setting[logistics_type]" id="logistics_type">
+	<option value="POST" <?=$logistics_type == 'POST' ? 'selected' : ''?>>平邮</option>
+	<option value="EMS" <?=$logistics_type == 'EMS' ? 'selected' : ''?>>EMS</option>
+	<option value="EXPRESS" <?=$logistics_type == 'EXPRESS' ? 'selected' : ''?>>其他快递</option>
+	</select>
+	</td>
+	</tr>
+	<tr>
+	<td class="tablerow">
+	<strong>物流配送付款方式</strong>
+	</td>
+	<td class="tablerow">
+	<select name="setting[logistics_payment]" id="logistics_payment">
+	<option value="SELLER_PAY" <?=$logistics_payment == 'SELLER_PAY' ? 'selected' : ''?>>卖家支付</option>
+	<option value="BUYER_PAY" <?=$logistics_payment == 'BUYER_PAY' ? 'selected' : ''?>>买家支付</option>
+	<option value="BUYER_PAY_AFTER_RECEIVE" <?=$logistics_payment == 'BUYER_PAY_AFTER_RECEIVE' ? 'selected' : ''?>>货到付款</option>
+	</select>
+	</td>
+	</tr>
+	<tr>
+	<td class="tablerow">
+	<strong>物流配送费用</strong>
+	</td>
+	<td class="tablerow">
+	<input type="text" name="setting[logistics_fee]" id="logistics_fee" value="<?=$logistics_fee?>">
+	</td>
+	</tr>
+	</tbody>
     <tr>
       <td class='tablerow'><strong>银行卡支付设置</strong></td>
       <td class='tablerow'>
