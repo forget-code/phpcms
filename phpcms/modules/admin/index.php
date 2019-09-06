@@ -50,7 +50,7 @@ class index extends admin {
 
 			if($rtime['times'] >= $maxloginfailedtimes) {
 				$minute = 60-floor((SYS_TIME-$rtime['logintime'])/60);
-				showmessage(L('wait_1_hour',array('minute'=>$minute)));
+				if($minute>0) showmessage(L('wait_1_hour',array('minute'=>$minute)));
 			}
 			//查询帐号
 			$r = $this->db->get_one(array('username'=>$username));

@@ -90,7 +90,7 @@ class attachments {
 		}
 	}
 	
-	public function crop_upload() {	
+	public function crop_upload() {
 		if (isset($GLOBALS["HTTP_RAW_POST_DATA"])) {
 			$pic = $GLOBALS["HTTP_RAW_POST_DATA"];
 			if (isset($_GET['width']) && !empty($_GET['width'])) {
@@ -109,6 +109,8 @@ class attachments {
 						$file_arr = explode('_', $basename);
 						$basename = array_pop($file_arr);
 					}
+					$fileext = strtolower(fileext($basename));
+					if (!in_array($fileext, array('jpg', 'gif', 'jpeg', 'png', 'bmp'))) exit();
 					$new_file = 'thumb_'.$width.'_'.$height.'_'.$basename;
 				} else {
 					pc_base::load_sys_class('attachment','',0);
@@ -117,7 +119,7 @@ class attachments {
 					$siteid = $this->get_siteid();
 					$attachment = new attachment($module, $catid, $siteid);
 					$uploadedfile['filename'] = basename($_GET['file']); 
-					$uploadedfile['fileext'] = fileext($_GET['file']);
+					$uploadedfile['fileext'] = strtolower(fileext($_GET['file']));
 					if (in_array($uploadedfile['fileext'], array('jpg', 'gif', 'jpeg', 'png', 'bmp'))) {
 						$uploadedfile['isimage'] = 1;
 					}
@@ -227,8 +229,8 @@ class attachments {
 	 */
 	public function swfupload_json() {
 		$arr['aid'] = intval($_GET['aid']);
-		$arr['src'] = trim($_GET['src']);
-		$arr['filename'] = urlencode($_GET['filename']);
+		$arr['src'] = safe_replace(trim($_GET['src']));
+		$arr['filename'] = urlencode(safe_replace($_GET['filename']));
 		$json_str = json_encode($arr);
 		$att_arr_exist = param::get_cookie('att_json');
 		$att_arr_exist_tmp = explode('||', $att_arr_exist);

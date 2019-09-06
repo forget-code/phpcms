@@ -49,9 +49,11 @@ class index extends foreground {
 		
 		header("Cache-control: private");
 		if(isset($_POST['dosubmit'])) {
-			if($member_setting[enablcodecheck]=='1'){//开启验证码
-				if (empty($_SESSION['connectid']) && $_SESSION['code'] != strtolower($_POST['code'])) {
+			if($member_setting['enablcodecheck']=='1'){//开启验证码
+				if ((empty($_SESSION['connectid']) && $_SESSION['code'] != strtolower($_POST['code'])) || empty($_SESSION['code'])) {
 					showmessage(L('code_error'));
+				} else {
+					$_SESSION['code'] = '';
 				}
 			}
 			

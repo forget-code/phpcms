@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
 <meta http-equiv="X-UA-Compatible" content="IE=7" />
 <title>phpcmsV9 - {L('member','','member').L('manage_center')}</title>
 <script type="text/javascript" src="{JS_PATH}jquery.min.js"></script>
@@ -209,7 +209,7 @@ function show_protocol() {
 <body>
 <div id="header">
 	<div class="content">
-	<div class="logo"><img src="{IMG_PATH}v9/logo.jpg"/></div>
+	<div class="logo"><img src="{IMG_PATH}v9/member_logo.jpg"/></div>
     <span class="log"></span>
     </div>
 </div>
@@ -330,7 +330,7 @@ function show_protocol() {
 		{/if}
 		
 		{if $member_setting['enablcodecheck']=='1'}
-		<div class="input"><label>{L('checkcode')}：</label><input type="text" id="code" name="code" size="10" class="input-text">{form::checkcode('code_img', '4', '14', 80, 24)}</div>
+		<div class="input"><label>{L('checkcode')}：</label><input type="text" id="code" name="code" size="10" class="input-text">{form::checkcode('code_img', '5', '14', 120, 26)}</div>
 		{/if}
 		
 		

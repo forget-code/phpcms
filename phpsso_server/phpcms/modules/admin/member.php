@@ -191,14 +191,16 @@ class member extends admin {
 	 */
 	public function delete() {
 		$uidarr = isset($_POST['uid']) ? $_POST['uid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
-		
+		$new_arr = array();
 		foreach($uidarr as $v) {
+			$v = intval($v);
+			$new_arr[] = $v;
 			//删除头像
 			$dir = ps_getavatar($v, 1);
 			ps_unlink($dir);
 		}
 			
-		$where = to_sqls($uidarr, '', 'uid');
+		$where = to_sqls($new_arr, '', 'uid');
 		
 		//ucenter部份
 		if ($this->config['ucuse']) {
@@ -222,7 +224,7 @@ class member extends admin {
 			
 		if ($this->db->delete($where)) {
 			/*插入消息队列*/
-			$noticedata = array('uids'=>$uidarr);
+			$noticedata = array('uids'=>$new_arr);
 			messagequeue::add('member_delete', $noticedata);
 								
 			showmessage(L('operation_success'), HTTP_REFERER);

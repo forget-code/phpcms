@@ -43,7 +43,12 @@ class checkcode {
 	private $x_start;
 		
 	function __construct() {
-		$this->font = PC_PATH.'libs'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'font'.DIRECTORY_SEPARATOR.'elephant.ttf';
+		$rand = rand(0,1);
+		if($rand==0) {
+			$this->font = PC_PATH.'libs'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'font'.DIRECTORY_SEPARATOR.'elephant.ttf';
+		} else {
+			$this->font = PC_PATH.'libs'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'font'.DIRECTORY_SEPARATOR.'Vineta.ttf';
+		}
 	}
 	
 	/**

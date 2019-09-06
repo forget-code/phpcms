@@ -28,7 +28,7 @@ class file extends admin {
 	}
 	
 	public function init() {
-		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\'), '', trim($_GET['dir'])) : '';
+		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\', '/', '\\'), '', trim($_GET['dir'])) : '';
 		$filepath = $this->filepath.$dir;
 		$list = glob($filepath.DIRECTORY_SEPARATOR.'*');
 		if(!empty($list)) ksort($list);

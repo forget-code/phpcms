@@ -105,7 +105,13 @@ class param {
 	 */
 	public static function get_cookie($var, $default = '') {
 		$var = pc_base::load_config('system','cookie_pre').$var;
-		return isset($_COOKIE[$var]) ? sys_auth($_COOKIE[$var], 'DECODE') : $default;
+		$value = isset($_COOKIE[$var]) ? sys_auth($_COOKIE[$var], 'DECODE') : $default;
+		if(in_array($var,array('_userid','siteid'))) {
+			$value = intval($value);
+		} elseif($var=='_usename') {
+			$value = safe_replace($value);
+		}
+		return $value;
 	}
 
 	/**

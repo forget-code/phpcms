@@ -108,6 +108,8 @@ class deposit extends foreground {
 			if(!param::get_cookie('trade_sn')) {showmessage(L('illegal_creat_sn'));}
 			
 			$trade_sn	= param::get_cookie('trade_sn');
+			if(preg_match('![^a-zA-Z0-9/+=]!', $trade_sn)) showmessage(L('illegal_creat_sn'));
+
 			$usernote = $_POST['info']['usernote'] ? $_POST['info']['name'].'['.$trade_sn.']'.'-'.new_html_special_chars(trim($_POST['info']['usernote'])) : $_POST['info']['name'].'['.$trade_sn.']';
 			
 			$surplus = array(
@@ -115,7 +117,7 @@ class deposit extends foreground {
 					'username'    => $this->_username,
 					'money'       => trim(floatval($_POST['info']['price'])),
 					'quantity'    => $_POST['quantity'] ? trim(intval($_POST['quantity'])) : 1,
-					'telephone'   => preg_match('/[0-9\-]+/', $_POST['info']['telephone']) ? trim($_POST['info']['telephone']) : '',
+					'telephone'   => preg_match('/[^0-9\-]+/', $_POST['info']['telephone']) ? '' : trim($_POST['info']['telephone']),
 					'contactname' => $_POST['info']['name'] ? trim($_POST['info']['name']).L('recharge') : $this->_username.L('recharge'),
 					'email'       => is_email($_POST['info']['email']) ? trim($_POST['info']['email']) : '',
 					'addtime'	  => SYS_TIME,

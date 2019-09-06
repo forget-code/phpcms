@@ -4,7 +4,7 @@
  *
  * @copyright			(C) 2005-2010 PHPCMS
  * @license				http://www.phpcms.cn/license/
- * @lastmodify			2011-04-12
+ * @lastmodify			2013-06-07
  */
 define('PHPCMS_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 include PHPCMS_PATH.'phpcms/base.php';
@@ -18,10 +18,10 @@ if(isset($_GET['id'])) {
 	$filename = !empty($filename) ? $filename : $identification;
 	$action = !empty($action) ? $action : 'init';
 }
-
+if(!preg_match("/^[a-z0-9_\-]+$/i", $identification)) showmessage(L('plugin_not_exist','','plugin'));
 $cache = getcache($identification,'plugins');
 
-if(!$cache['disable'] || !preg_match("/^[a-z0-9_\-]+$/i", $identification) || $filename=='plugin_admin'  || $filename=='hook') {
+if(!$cache['disable'] || $filename=='plugin_admin'  || $filename=='hook') {
 	showmessage(L('plugin_not_exist','','plugin'));
 } else {
 	$status = plugin_stat($cache['appid']);

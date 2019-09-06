@@ -125,6 +125,7 @@ class member_model extends admin {
 	 */
 	function delete() {
 		$modelidarr = isset($_POST['modelid']) ? $_POST['modelid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$modelidarr = array_map('intval',$modelidarr);
 		$where = to_sqls($modelidarr, '', 'modelid');
 
 		$modelinfo = $this->db->select($where);

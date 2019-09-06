@@ -449,6 +449,7 @@ class member extends admin {
 	 */
 	function delete() {
 		$uidarr = isset($_POST['userid']) ? $_POST['userid'] : showmessage(L('illegal_parameters'), HTTP_REFERER);
+		$uidarr = array_map('intval',$uidarr);
 		$where = to_sqls($uidarr, '', 'userid');
 		$phpsso_userinfo = $this->db->listinfo($where);
 		$phpssouidarr = array();
