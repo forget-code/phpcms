@@ -32,7 +32,7 @@ include admin_tpl('header');
   </tr>
   <tr>
     <th><strong>数量</strong></th>
-    <td><input type="text" name="number" value="<?=$amount?>" size="10"  require="true" datatype="number" msg="请输入数字" msgid="code1"/>&nbsp;<font id = "numberid" name="numberid" style="color:red">元</font><span id="code1"></span>
+    <td><input type="text" name="number" value="<?=$amount?>" size="10"  require="true" datatype="currency|limit" max="6" msg="请输入数字|最大为6位" msgid="code1"/>&nbsp;<font id = "numberid" name="numberid" style="color:red">元</font><span id="code1"></span>
     </td>
   </tr>
   <tr>

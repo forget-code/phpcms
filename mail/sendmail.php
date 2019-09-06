@@ -46,7 +46,7 @@ switch ($action)
 		{
            	$mailto = isset($mailto) ? $mailto : '';
 			$title = isset($title) ? $title : '';
-			$content = isset($content) ? $content : '';
+			$content = isset($content) ? stripslashes($content) : '';
 			$title = htmlspecialchars(stripslashes($title));
 			$mailmessage = isset($mailmessage) ? $mailmessage : $LANG['send_email'];
 			include template("mail","sendmail");

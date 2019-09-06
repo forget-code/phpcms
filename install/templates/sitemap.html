@@ -14,7 +14,7 @@
 	{/if}
 {/loop}
 {if isset($MODULE[ask])}
-<h3><a href="{$cat[url]}">问吧</a></h3>
+<h3><a href="{$MODULE[ask][url]}">问吧</a></h3>
 <p>
 {loop $CATEGORY $catid $cat}
 {if $cat[module]=='ask'}<span style="width:100px"><a href="{$cat[url]}">{$cat[catname]}</a></span>{/if}

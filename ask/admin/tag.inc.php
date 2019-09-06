@@ -45,6 +45,7 @@ switch($action)
 		include admin_tpl('tag_'.$function.'_copy');
 		break;
 	case 'update':
+		if($isadd && isset($t->TAG[$tagname])) showmessage('该标签已经存在');
 		$sql = '';
 		$tag_config['type'] = $function;
 		if($function == 'ask')
@@ -175,6 +176,16 @@ switch($action)
 		}
 		
 	break;	
+	case 'checktag':
+		if(isset($t->TAG[$value]))
+		{
+			exit('该标签已经存在');
+		}
+		else
+		{
+			exit('success');
+		}
+	break;
 }
 function get_var($string)
 {

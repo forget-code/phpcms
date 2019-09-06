@@ -36,10 +36,12 @@
 	<h4>信息分类</h4>
     <div id="info_nav">
 	{loop $catlist $c}
-      <dl>{php $cols=1;}
+      <dl>
         {if $c[parentid]==$catid}<dt><a href="{$c[url]}">{$c[catname]}</a></dt>
+		{php $cols=1;}
 			<dd>{loop $catlist $cat}
-			{if $cols<4 && $cat[parentid]==$c[catid]}<a href="{$c[url]}">{$c[catname]}</a>{/if}
+			{php $cols=1;}
+			{if $cat[parentid]==$c[catid]}<a href="{$c[url]}">{$cat[catname]}</a>{/if}
 			{php $cols++;}
 			{/loop}<a href="{$c[url]}">>></a></dd>
 		{/if}

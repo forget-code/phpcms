@@ -118,7 +118,6 @@ class payonline
         $data['username'] = $_username;
         $data['ip'] = IP;
         $data['addtime'] = TIME;
-        $data['sn'] = create_sn();
 		$this->_db->insert( $this->table_pay_account, $data);
         return $this->_db->insert_id();
 	}
@@ -130,7 +129,6 @@ class payonline
 		$onlines = array();
 		while ( $row = $this->_db->fetch_array($result) )
 		{
-			//$row['config'] = unserialize($row['config']);
 			$onlines['info'][] = $row;
 		}
 		$radio = "";

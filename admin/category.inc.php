@@ -246,6 +246,7 @@ switch($action)
                     continue;
                 }
             }
+			if(!$catid) showmessage('添加失败', '?mod=phpcms&file=category&action=more');
 	        showmessage('添加成功', $forward);
 		}
 		else

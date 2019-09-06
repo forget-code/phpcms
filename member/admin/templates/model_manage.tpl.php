@@ -11,7 +11,7 @@ include admin_tpl('header');
 <th width="15%">数据表</th>
 <th width="5%">会员数</th>
 <th width="5%">状态</th>
-<th width="30%">管理操作</th>
+<th width="25%">管理操作</th>
 </tr>
 <?php 
 if(is_array($infos)){
@@ -28,7 +28,7 @@ if(is_array($infos)){
 	<font color="#cccccc">删除</font>
 	<?php } else { ?>
      <a href="#" onClick="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=delete&modelid=<?=$info['modelid']?>', '是否删除该会员模型')">删除</a>
-	<?php } ?> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=export&modelid=<?=$info['modelid']?>">导出为模板</a> | <a href="?mod=<?=$mod?>&file=member&action=model_move&frommodelid=<?=$info['modelid']?>">移动模型会员</a>
+	<?php } ?> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=export&modelid=<?=$info['modelid']?>">导出为模板</a> | <a href="?mod=<?=$mod?>&file=member&action=model_move&frommodelid=<?=$info['modelid']?>">移动</a>
 </td>
 </tr>
 <?php 

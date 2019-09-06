@@ -24,6 +24,11 @@ switch($action)
 		showmessage('操作成功！', $forward);
 		break;
 
+	case 'delete':
+		$ipbanned->delete($ip);
+		showmessage('操作成功！', $forward);
+		break;
+
     default :
 		$where = '';
 		if($sip) $where = "`ip` LIKE '%$sip%'";

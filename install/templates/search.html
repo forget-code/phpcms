@@ -34,7 +34,7 @@
   <dl class="search_list">
     <dt><a href="{$r[url]}" target="_blank">{$r[title]}</a></dt>
     <dd class="search_txt">{$r[description]}</dd>
-    <dd class="search_attribute">{url($r[url], 1)}　{date('Y-m-d', $r[updatetime])}</dd>
+    <dd class="search_attribute">{url($r[url], 1)}　{if $r[updatetime]}{date('Y-m-d', $r[updatetime])}{/if}</dd>
   </dl>
 	{/loop}
 {/if}

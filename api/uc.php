@@ -17,20 +17,20 @@ if ($action=='deleteuser')
 {
 	exit('1') ;
 }
-
 if($action=='updatepw')
 {
-	$password=md5(PASSWORD_KEY.$arr['password']) ;
+	$password = md5(PASSWORD_KEY.$arr['password']) ;
 	$username = $arr['username'] ;
 	$db->query("update ".DB_PRE."member set password='$password' where username='$username'");
 	$db->query("update ".DB_PRE."member_cache  set password='$password' where username='$username'");
-	exit(API_RETURN_SUCCEED);
+	exit('1');
 }
 
 if($action == 'synlogin')
 {
 	$userid = $arr['uid'];
 	$userinfo = $member->get($userid);
+
 	if(!$userinfo) exit('0');
 	extract($userinfo);
 	if(!$cookietime) $get_cookietime = 86400 * 365;
@@ -42,7 +42,7 @@ if($action == 'synlogin')
     header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
 	set_cookie('auth', $phpcms_auth, $cookietime);
 	set_cookie('cookietime', $_cookietime, $cookietime);
-	exit(1);
+	exit('1');
 }
 
 if($action=='updatecredit')
@@ -59,7 +59,7 @@ if($action=='updatecredit')
 	if(!$userinfo || !$amount)  exit(API_RETURN_SUCCEED);
 	$db->query("update ".DB_PRE."member set $credit=$credit+$amount where username='$username' ");
 	$db->query("update ".DB_PRE."member_cache set $credit=$credit+$amount where username='$username' ");
-	exit(API_RETURN_SUCCEED);
+	exit('1');
 }
 
 if($action=='synlogout')
@@ -99,7 +99,7 @@ if($action == 'updatecreditsettings') {
 	
 	cache_write('creditsettings.php', $outextcredits);
 
-	exit(API_RETURN_SUCCEED);
+	exit('1');
 
 }
 ?>

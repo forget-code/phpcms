@@ -225,7 +225,7 @@ class ads_place
 		if(!$placeid) return FALSE;
 		$ip = IP;
 		$time = time();
-		$adses = $this->db->select("SELECT * FROM ".DB_PRE."ads a, $this->table p WHERE a.placeid=p.placeid AND p.placeid=$placeid AND a.fromdate<=UNIX_TIMESTAMP() AND a.todate>=UNIX_TIMESTAMP() AND a.passed=1 AND a.status=1");
+		$adses = $this->db->select("SELECT * FROM ".DB_PRE."ads a, $this->table p WHERE a.placeid=p.placeid AND p.placeid=$placeid AND a.fromdate<=UNIX_TIMESTAMP() AND a.todate>=UNIX_TIMESTAMP() AND a.passed=1 AND a.status=1 AND p.passed=1");
 		if($adses[0]['option'])
 		{
 			foreach($adses as $ads)

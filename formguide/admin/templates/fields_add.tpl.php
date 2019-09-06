@@ -2,16 +2,16 @@
 defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
-<body onload="is_ie();$('#setting').load('?mod=<?=$mod?>&file=<?=$file?>&action=setting_add&formid=<?=$formid?>&formtype='+myform.formtype.value);">
-<table cellpadding="0" cellspacing="1" class="table_form">
+<body onLoad="is_ie();$('#setting').load('?mod=<?=$mod?>&file=<?=$file?>&action=setting_add&formid=<?=$formid?>&formtype='+myform.formtype.value);">
 <form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&formid=<?=$formid?>" method="post" name="myform">
+<table cellpadding="0" cellspacing="1" class="table_form">
   <caption>表单<?=$FORMGUIDE[$formid][name]?>——添加字段</caption>
 	<tr> 
       <th width="30%">
       <strong>字段名</strong><br />
 	  只能由英文字母、数字和下划线组成，并且仅能字母开头，不以下划线结尾
 	  </th>
-      <td><input size="20" name="info[field]" id="field" size="20" require="true" datatype="limit|ajax" min="1" max="20" url="?mod=<?=$mod?>&file=<?=$file?>&action=checkfield&formid=<?=$formid?>" msg="字符须为1到10位|">
+      <td><input name="info[field]" id="field" size="20" require="true" datatype="limit|ajax" min="1" max="20" url="?mod=<?=$mod?>&file=<?=$file?>&action=checkfield&formid=<?=$formid?>" msg="字符须为1到10位|">
 	  <font color="red">*</font></td>
     </tr>
 	<tr> 
@@ -95,6 +95,7 @@ foreach($patterns as $p)
       &nbsp; <input type="reset" name="reset" value=" 清除 ">
 	  </td>
 	</tr>
+    </table>
 	</form>
 </body>
 </html>

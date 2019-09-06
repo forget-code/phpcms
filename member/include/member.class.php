@@ -178,13 +178,12 @@ class member
 		}
 		$userid = $this->get_userid($username);
 		$r = $this->get($userid, '*', 1);
-		$this->cache_group = cache_read('member_group_'.$r['groupid'].'.php');
 		if(!$r)
 		{
 			$this->msg = 'username_not_exist';
 			return FALSE;
 		}
-		if($r['password'] != $this->password($password))
+		if($r['password'] != $this->password($password) && $r['password'] != substr($this->password($password), 8, 16))
 		{
 			$this->msg = 'password_not_right';
 			return FALSE;
@@ -193,6 +192,7 @@ class member
 		{
 			$_SESSION['admin_groupid'] = $r['groupid'];
 		}
+		$this->cache_group = cache_read('member_group_'.$r['groupid'].'.php');
 		if($r['groupid'] == 5 && !$this->cache_group['allowvisit'])
 		{
 			$this->msg = 'your_account_is_approvalling';
@@ -347,7 +347,7 @@ class member
 		if(isset($MODULE['pay']))
 		{
 			$pay_api = load('pay_api.class.php', 'pay', 'api');
-			if($this->M['defualtamount'])
+			if($this->M['defualtamount'] > 0.01)
 			{		
 				$pay_api->update_exchange('member', 'amount', $this->M['defualtamount'], '注册赠送金钱', $userid);
 			}

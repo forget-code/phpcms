@@ -76,26 +76,34 @@ switch($action)
 		break;
 
 	case 'manage':
-
-		$list = $are->listinfo();
-
-		if(is_array($list))
-	    {
-			$areas = array();
-			foreach($list as $areaid => $area)
+		if(count($AREA) < 50)
+		{
+			$list = $are->listinfo();
+	
+			if(is_array($list))
 			{
-				$areas[$area['areaid']] = array('id'=>$area['areaid'],'parentid'=>$area['parentid'],'name'=>$area['name'],'listorder'=>$area['listorder'],'style'=>$area['style'],'mod'=>$mod,'file'=>$file,'keyid'=>$keyid);
+				$areas = array();
+				foreach($list as $areaid => $area)
+				{
+					$areas[$area['areaid']] = array('id'=>$area['areaid'],'parentid'=>$area['parentid'],'name'=>$area['name'],'listorder'=>$area['listorder'],'style'=>$area['style'],'mod'=>$mod,'file'=>$file,'keyid'=>$keyid);
+				}
+				
+				$str = "<tr>
+							<td style='text-align:center'><input name='listorder[\$id]' type='text' size='3' value='\$listorder'></td>
+							<td style='text-align:center'>\$id</td>
+							<td align='left'>\$spacer<span class='\$style'>\$name</span></td>
+							<td style='text-align:center'><a href='?mod=\$mod&file=\$file&action=add&areaid=\$id&keyid=\$keyid'>".$LANG['add_child_area']."</a> | <a href='?mod=\$mod&file=\$file&action=edit&areaid=\$id&parentid=\$parentid&keyid=\$keyid'>".$LANG['edit']."</a> | <a href=javascript:confirmurl('?mod=\$mod&file=\$file&action=delete&areaid=\$id&keyid=\$keyid','".$LANG['confirm_delete_area']."')>".$LANG['delete']."</a></td></tr>";
+				$tree->tree($areas);
+				$areas = $tree->get_tree(0,$str);
 			}
-			
-			$str = "<tr>
-						<td style='text-align:center'><input name='listorder[\$id]' type='text' size='3' value='\$listorder'></td>
-						<td style='text-align:center'>\$id</td>
-						<td align='left'>\$spacer<span class='\$style'>\$name</span></td>
-						<td style='text-align:center'><a href='?mod=\$mod&file=\$file&action=add&areaid=\$id&keyid=\$keyid'>".$LANG['add_child_area']."</a> | <a href='?mod=\$mod&file=\$file&action=edit&areaid=\$id&parentid=\$parentid&keyid=\$keyid'>".$LANG['edit']."</a> | <a href=javascript:confirmurl('?mod=\$mod&file=\$file&action=delete&areaid=\$id&keyid=\$keyid','".$LANG['confirm_delete_area']."')>".$LANG['delete']."</a></td></tr>";
-			$tree->tree($areas);
-			$areas = $tree->get_tree(0,$str);
+			include admin_tpl('area');
 		}
-		include admin_tpl('area');
+		else
+		{
+			$parentid = (isset($areaid) && $areaid) ? intval($areaid) : 0;
+			$data = $are->listinfo($parentid);
+			include admin_tpl('area_manage');
+		}
 		break;
 }
 ?>

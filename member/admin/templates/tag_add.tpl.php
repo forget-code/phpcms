@@ -26,6 +26,10 @@ function var_del(i)
 	$('#var'+i).remove();
 	return true;
 }
+
+$().ready(function() {
+	  $('form').checkForm(1);
+	});
 </script>
 <body>
 <table cellpadding="2" cellspacing="1" class="table_form">
@@ -35,11 +39,12 @@ function var_del(i)
    <input name="file" type="hidden" value="<?=$file?>">
    <input name="action" type="hidden" id="action" value="<?=$action?>">
    <input name="module" type="hidden" value="<?=$module?>">
+   <input type="hidden" name="isadd" value="1">
    <input name="forward" type="hidden" value="<?=$forward?>">
     <tr> 
       <th width="30%"><strong>标签名称</strong><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</th>
       <td >
-	  <input name="tagname" id="tagname" type="text" size="30" value="<?=$tagname?>"><br/>
+	  <input name="tagname" id="tagname" type="text" size="30" value="<?=$tagname?>" require="true" datatype="require|ajax" url="?mod=<?=$mod?>&file=<?=$file?>&action=checktag" msg="标签名称必填|"><br/>
 	  </td>
     </tr>
     <tr> 
@@ -85,7 +90,7 @@ function var_del(i)
  ?>
 	<tr> 
       <th width="25%"><strong><?=$info['name']?></strong><br />
-	  常用变量表示：<a href="###" onClick="javascript:$('#<?=$field?>').val('$<?=$field?>')" style="color:blue">$<?=$field?></a>
+	  常用变量表示：<a href="###" onClick="javascript:if($('#<?=$field?>').val() == '$<?=$field?>'){$('#<?=$field?>').val('')}else{$('#<?=$field?>').val('$<?=$field?>')}" style="color:blue">$<?=$field?></a>
 	  </th>
       <td><?=$info['form']?> </td>
     </tr>

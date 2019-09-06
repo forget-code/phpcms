@@ -66,9 +66,9 @@ function set_amount()
       <tr>
         <th><b>会员资费：</b></th>
         <td style="color:orange;font-weight:bold;">
-		<input type="radio" name="unit" id="price_y" value="y" checked onclick="set_amount()"> 包年： {$price_y}{$unitname}/年<br />
-		<input type="radio" name="unit" id="price_m" value="m" onclick="set_amount()"> 包月： {$price_m}{$unitname}/月<br />
-		<input type="radio" name="unit" id="price_d" value="d" onclick="set_amount()"> 包日： {$price_d}{$unitname}/天<br />
+		{if $price_y>0}<input type="radio" name="unit" id="price_y" value="y" checked onclick="set_amount()"> 包年： {$price_y}{$unitname}/年<br />{/if}
+		{if $price_m>0}<input type="radio" name="unit" id="price_m" value="m" onclick="set_amount()"> 包月： {$price_m}{$unitname}/月<br />{/if}
+		{if $price_d>0}<input type="radio" name="unit" id="price_d" value="d" onclick="set_amount()"> 包日： {$price_d}{$unitname}/天<br />{/if}
 		</td>
       </tr>
       <tr>

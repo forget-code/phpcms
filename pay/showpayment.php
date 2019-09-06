@@ -60,6 +60,7 @@ switch ($action)
 		$order['order_sn']	= create_sn();
 		$payment = $payinfo->get_payment($paymentid);
 		$payment['config']		= $payinfo->unserialize_config($payment['config']);
+
 		$payment['pay_fee']		= pay_fee($amount, $payment['pay_fee'].'%');//计算支付手续费
 		$order['order_amount']	= $amount + $payment['pay_fee'];//实际要支付的金额
 		//支付记录
@@ -70,6 +71,7 @@ switch ($action)
 				'userid'      => $_userid,
 				'username'    => $_username,
 				'amount'      => $order['order_amount'],//$amount,
+                'quantity'    => $amount,
 				'telephone'   => $telephone,
 				'contactname' => $contactname,
 				'addtime'	  => TIME,

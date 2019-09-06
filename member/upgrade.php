@@ -20,11 +20,14 @@ switch($action)
 		$r = $group->get($groupid);
 	    if(!$r) showmessage('会员组不存在！');
 		extract($r);
+	
+        if($disabled || !$allowupgrade) showmessage('系统已禁止自助升级至此会员组！');
 
 		if($dosubmit)
 	    {
 			if(!in_array($unit, array('y', 'm', 'd')) || !preg_match("/^[0-9]+$/", $number) || $number < 1) showmessage('参数错误！');
 			$price = $r['price_'.$unit];
+			if(intval($price) == 0) showmessage('价格为0，不允许升级！');
 			$total = $number*$price;
 			$pay_api = load('pay_api.class.php', 'pay', 'api');
 			if(!$pay_api->update_exchange('member', $M['paytype'], -$total, "会员升级"))
@@ -45,11 +48,14 @@ switch($action)
     case 'continue':
 		$r = $group->extend_get($_userid, $groupid);
 	    if(!$r) showmessage('会员组不存在！');
+		extract($r);
+        if($disabled || !$allowupgrade) showmessage('系统已禁止自助续费此会员组！');
 
 		if($dosubmit)
 	    {
 			if(!in_array($unit, array('y', 'm', 'd')) || !preg_match("/^[0-9]+$/", $number) || $number < 1) showmessage('参数错误！');
 			$price = $r['price_'.$unit];
+			if(intval($price) == 0) showmessage('价格为0，不允许续费！');
 			$total = $number*$price;
 			$pay_api = load('pay_api.class.php', 'pay', 'api');
 			if(!$pay_api->update_exchange('member', $M['paytype'], -$total, "会员续费"))

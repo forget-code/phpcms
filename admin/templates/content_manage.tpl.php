@@ -56,7 +56,7 @@ areaid_load(0);
   <caption>信息管理</caption>
 <tr>
 <th width="30">选中</th>
-<th width="40">排序</th>
+<th width="50">排序</th>
 <th width="40">ID</th>
 <th>标题</th>
 <th width="50">点击量</th>
@@ -71,7 +71,7 @@ if(is_array($infos)){
 ?>
 <tr>
 <td><input type="checkbox" name="contentid[]" value="<?=$info['contentid']?>" id="content_<?=$info['contentid']?>" /></td>
-<td class="align_c"><input type="text" name="listorders[<?=$info['contentid']?>]" value="<?=$info['listorder']?>" size="3" /></td>
+<td class="align_c"><input type="text" name="listorders[<?=$info['contentid']?>]" value="<?=$info['listorder']?>" size="4" /></td>
 <td><?=$info['contentid']?></td>
 <td><a href="<?=$info['url']?>" target="_blank"><?=output::style($info['title'], $info['style'])?></a> <?=$info['thumb'] ? '<font color="red">图</font>' : ''?>&nbsp;<?=$info['posids']?'<font color="green">荐</font>': ''?></td>
 <td class="align_c" title="总点击量：<?=$r['hits']?><?="\n"?>今日点击：<?=$r['hits_day']?><?="\n"?>本周点击：<?=$r['hits_week']?><?="\n"?>本月点击：<?=$r['hits_month']?>"><?=$r['hits']?></td>

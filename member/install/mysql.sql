@@ -63,6 +63,7 @@ CREATE TABLE `phpcms_member_group` (
   `allowvisit` tinyint(1) unsigned NOT NULL default '0',
   `allowpost` tinyint(1) unsigned NOT NULL default '0',
   `allowsearch` tinyint(1) unsigned NOT NULL default '0',
+  `allowupgrade` tinyint(1) unsigned NOT NULL default '1',
   `price_y` decimal(8,2) unsigned NOT NULL default '0.00',
   `price_m` decimal(8,2) unsigned NOT NULL default '0.00',
   `price_d` decimal(8,2) unsigned NOT NULL default '0.00',

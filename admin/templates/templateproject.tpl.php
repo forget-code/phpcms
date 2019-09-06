@@ -3,9 +3,9 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
+<form method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=update">
 <table cellpadding="0" cellspacing="1" class="table_list">
     <caption>模板方案管理</caption>
-<form method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=update">
 <tr>
 <th>方案名称</th>
 <th width="100">模板目录</th>

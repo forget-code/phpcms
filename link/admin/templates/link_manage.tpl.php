@@ -20,12 +20,12 @@ include admin_tpl('header');
   </tr>
 </form>
 </table>
-
+ <form name="myform" method="post" action="?mod=link&file=link&action=updatelistorderid">
 <table cellpadding="0" cellspacing="1" class="table_list">
   <caption>管理友情链接</caption>
   <tr>
     <th style="width:5%">选中</th>
-    <th style="width:3%">排序</th>
+    <th style="width:5%">排序</th>
     <th>网站名称</th>
     <th>网站Logo</th>
 
@@ -34,7 +34,6 @@ include admin_tpl('header');
 	<th>点击次数</th>
 	<th style="width:10%;">操作</th>
   </tr>
-  <form name="myform" method="post" action="?mod=link&file=link&action=updatelistorderid">
 <? if(is_array($links)) foreach($links AS $link) { ?>
   <tr>
     <td style="text-align:center"><input name='linkid[]' type='checkbox' id='linkid[]' value='<?=$link['linkid']?>'></td>

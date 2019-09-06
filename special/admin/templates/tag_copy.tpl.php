@@ -26,6 +26,10 @@ function var_del(i)
 	$('#var'+i).remove();
 	return true;
 }
+
+$().ready(function() {
+	  $('form').checkForm(1);
+	});
 </script>
 <body>
 <form name="myform" method="post" action="?" >
@@ -34,17 +38,18 @@ function var_del(i)
 <input name="action" id="action" type="hidden" value="update">
 <input name="module" type="hidden" value="<?=$module?>">
 <input name="type" type="hidden" value="<?=$type?>">
+ <input type="hidden" name="isadd" value="1">
 <table cellpadding="0" cellspacing="1" class="table_form">
   <caption>复制标签</caption>
     <tr> 
       <th width="30%"><strong>标签名称</strong><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</th>
       <td>
-	  <input name="tagname" id="tagname" type="text" size="30" ><br/>
+	  <input name="tagname" id="tagname" type="text" size="30"  require="true" datatype="require|ajax" url="?mod=<?=$mod?>&file=<?=$file?>&action=checktag" msg="标签名称必填|"><br/>
 	  </td>
     </tr>
     <tr> 
       <th><strong>标签说明</strong><br/>例如：首页最新推荐产品，10篇</th>
-      <td><input name="tag_config[introduce]" id="introduce" type="text" size="60" /></td>
+      <td><input name="tag_config[introduce]" id="introduce" type="text" size="60"/></td>
     </tr>
     <tr> 
       <td class="tablerowhighlight" colspan=2 align="center"><b>数据调用条件</b></td>

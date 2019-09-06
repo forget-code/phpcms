@@ -4,8 +4,8 @@ include admin_tpl('header');
 ?>
 <body>
 <?=$menu?>
-<table cellpadding="2" cellspacing="1" class="table_form">
 <form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&workflowid=<?=$workflowid?>" method="post" name="myform">
+<table cellpadding="2" cellspacing="1" class="table_form">
     <caption>添加工作流步骤</caption>
 	<tr> 
       <th><strong>步骤名称</strong></th>
@@ -48,7 +48,7 @@ include admin_tpl('header');
       &nbsp; <input type="reset" name="reset" value=" 清除 ">
 	  </td>
     </tr>
-	</form>
 </table>
+</form>
 </body>
 </html>

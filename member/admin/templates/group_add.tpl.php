@@ -34,19 +34,15 @@ include admin_tpl('header');
 	<tr>
 		<th><strong>允许发布：</strong></th>
 		<td>
-            <?=form::radio($allowposts, 'groupinfo[allowpost]', 'allowpost', 1)?>
+            <?=form::radio($choices, 'groupinfo[allowpost]', 'allowpost', 1)?>
 		</td>
 	</tr>
 	<tr>
-		<th><strong>是否禁用：</strong></th>
-		<td><?=form::radio($disableds, 'groupinfo[disabled]', 'disabled', 0)?></td>
+		<th><strong>允许会员自助升级：</strong></th>
+		<td>
+            <?=form::radio($choices, 'groupinfo[allowupgrade]', 'allowupgrade', 1)?>
+		</td>
 	</tr>
-	<tr>
-    	<th><strong>最大短消息数：</strong></th>
-        <td>
-        	<?=form::text('groupinfo[allowmessage]', 'allowmessage', $value = '1000', $type = 'text', $size = 6, $class = '', $ext = 'manxlength="50"')?>
-        条</td>
-    </tr>
 	<tr>
 		<th><strong>包年价格：</strong></th>
 		<td>
@@ -66,11 +62,21 @@ include admin_tpl('header');
         </td>
 	</tr>
 	<tr>
+    	<th><strong>最大短消息数：</strong></th>
+        <td>
+        	<?=form::text('groupinfo[allowmessage]', 'allowmessage', $value = '1000', $type = 'text', $size = 6, $class = '', $ext = 'manxlength="50"')?>
+        条</td>
+    </tr>
+	<tr>
+		<th><strong>是否禁用：</strong></th>
+		<td><?=form::radio($choices, 'groupinfo[disabled]', 'disabled', 0)?></td>
+	</tr>
+	<tr>
 		<td></td>
 		<td><input type="submit" name="dosubmit" value=" 确定 ">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" name="reset" value=" 清除 "></td>
 	</tr>
-	</form>
-</table>
+	</table>
+</form>
 </body>
 </html>
 <script LANGUAGE="javascript">

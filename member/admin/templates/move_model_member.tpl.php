@@ -9,10 +9,10 @@ include admin_tpl('header');
 <table cellpadding="0" cellspacing="1" class="table_form">
 	<caption>按模型移动会员</caption>
 	<tr>
-		<th width="30%"><strong>原有模型</strong></th><td><?=$MODEL[$frommodelid]['name']?></td>
+		<th width="30%"><strong>所在模型</strong></th><td><?=$MODEL[$frommodelid]['name']?></td>
 	</tr>
 	<tr>
-		<th><strong>要移动的模型</strong></th>
+		<th><strong>目标模型</strong></th>
 		<td>
 			<?=form::select($arr_model, 'tomodelid', 'tomodellid')?>
 		</td>

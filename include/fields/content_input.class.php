@@ -26,7 +26,7 @@ class content_input
 		if(!$G['allowpost']) showmessage('你所在的用户组没有发表权限');
 		$this->data = $data;
 		$info = array();
-		$debar_filed = array('catid','title','style','thumb','status','islink');
+		$debar_filed = array('catid','title','style','thumb','status','islink','description');
 		foreach($data as $field=>$value)
 		{
 			if($data['islink']==1 && !in_array($field,$debar_filed)) continue;
@@ -55,6 +55,7 @@ class content_input
 			if($this->fields[$field]['issystem']) $info['system'][$field] = $value;
 			else $info['model'][$field] = $value;
 		}
+		if($isimport) $info['system']['username'] = $data['username'];
 		return $info;
 	}
 

@@ -77,8 +77,9 @@ td.align_r,th.align_r{ text-align:right;}
 /*后台位置导航*/
 #position {background: url(images/position.gif) no-repeat 5px -32px; text-align:left; color:#069; text-indent:24px; height:30px; line-height:30px; width:500px; float:left;}
 #position strong {color:#069;}
-#position a:link, #position a:visited {color:#069; background:url(images/position.gif) no-repeat right -72px; padding-right:16px; text-decoration:underline;}
-#position a:hover, #position a:active {color:#069; background:url(images/position.gif) no-repeat right -72px; padding-right:16px; text-decoration:underline;}
+.pos{margin-left:10px;margin-top:10px; text-align:left;color:#2e6ab1;}
+#position a:link, #position a:visited,.pos a:link, .pos a:visited {color:#069; background:url(images/position.gif) no-repeat right -72px; padding-right:16px; text-decoration:underline;}
+#position a:hover, #position a:active,.pos a:hover, .pos a:active {color:#069; background:url(images/position.gif) no-repeat right -72px; padding-right:16px; text-decoration:underline;}
 #pages {width:99%;}
 /*标签菜单*/
 .tag_menu { width:100%; margin:0 auto 0; *margin-bottom:-7px; /*border-bottom:3px solid #99D3FB;*/ overflow:hidden;}

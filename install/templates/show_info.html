@@ -80,6 +80,7 @@ a.catname:link,a.catname:visited,a.catname:hover,a.catname:active{color:#f90;}
         {if isset($MODULE[error_report])}
       <form action="{$MODULE[error_report][url]}error_report.php" name="errors" id="errors">
         <input type="hidden" name="title" value="{$title}" />
+		<input type="hidden" name="contentid" value="{$contentid}" />
       </form>
       {/if}
       <p id="text_1">{if isset($MODULE[error_report])}<a href="javascript:$('#errors').submit();">[错误报告]</a>{/if} {if isset($MODULE[mail])}<a href="javascript:$('#sendmail').submit();">[推荐]</a>{/if} <a href="javascript:myAddPanel('{$title}',window.location.href)">[收藏]</a> <a href="javascript:window.print();">[打印]</a> <a href="javascript:window.close();">[关闭]</a> <a href="{SITE_URL}{$url}#top">[返回顶部]</a> </p>

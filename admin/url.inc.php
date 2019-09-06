@@ -2,7 +2,6 @@
 defined('IN_PHPCMS') or exit('Access Denied');
 
 $html = load('url.class.php');
-
 if($dosubmit)
 {
 	if($type == 'lastinput')
@@ -73,6 +72,12 @@ if($dosubmit)
 		if($r['islink']) continue;
 		$url = $html->show($r['contentid']);
 		$html->update($r['contentid'],$url);
+		if(!is_a($c, 'content'))
+		{
+			require 'admin/content.class.php';
+			$c = new content();	
+		}
+		$c->search_api($r['contentid']);
 	}
 	if($pages > $page)
 	{

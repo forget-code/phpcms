@@ -13,21 +13,41 @@ if($dosubmit)
     $today = date('Y-m-d');
     $domain = SITE_URL;
     $sm     =& new google_sitemap();
-    $smi    =& new google_sitemap_item($domain, $today, $content_changefreq, $content_priority);
+    $smi    =& new google_sitemap_item($domain, $today, 'daily', '1.0');
     $sm->add_item($smi);
-    $sql = "SELECT `url` FROM ".DB_PRE."category ";
-    $result = $db->query($sql);
-    while($r = $db->fetch_array($result))
-    {
-         $smi    =& new google_sitemap_item($domain.$r['url'], $today, $content_changefreq, $content_priority);
-        $sm->add_item($smi);
-    }
 
-    $result1 = $db->query("SELECT `url` FROM ".DB_PRE."content ORDER BY `inputtime` DESC LIMIT 0 , $num ");
+    $result1 = $db->query("SELECT * FROM ".DB_PRE."content ORDER BY `inputtime` DESC LIMIT 0 , $num ");
     while($r = $db->fetch_array($result1))
     {
-        $smi    =& new google_sitemap_item($domain.$r['url'], $today, $content_changefreq, $content_priority);
-        $sm->add_item($smi);
+        $row = $db->get_one("SELECT * FROM ".DB_PRE."content_position AS a,".DB_PRE."content_count AS b WHERE a.contentid = b.contentid AND a.contentid = $r[contentid] AND b.hits > '100'");
+        if($row)
+        {
+            $smi    =& new google_sitemap_item($domain.$r['url'], $today, $content_changefreq, '0.8');//推荐文件
+            $sm->add_item($smi);
+        }
+        else
+        {
+            $row = $db->get_one("SELECT * FROM ".DB_PRE."content_position WHERE `contentid` = $r[contentid]");
+            if($row)
+            {
+                $smi    =& new google_sitemap_item($domain.$r['url'], $today, $content_changefreq, '0.6');//推荐文件
+                $sm->add_item($smi);
+            }
+            else
+            {
+                $row = $db->get_one("SELECT * FROM ".DB_PRE."content_count WHERE `contentid` = $r[contentid]");//热点文章
+                if($row[hits] > 1000)
+                {
+                    $smi    =& new google_sitemap_item($domain.$r['url'], $today, $content_changefreq, '0.5');
+                    $sm->add_item($smi);
+                }
+                else
+                {
+                    $smi    =& new google_sitemap_item($domain.$r['url'], $today, $content_changefreq, $content_priority);
+                    $sm->add_item($smi);
+                }
+            }
+        }
     }
 
     $sm_file = PHPCMS_ROOT.'sitemaps.xml';

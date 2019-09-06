@@ -59,9 +59,9 @@ function CheckedRev(){
 </script>
 <body>
 <?=$menu?>
+<form method="get" name="search" action="?">
 <table cellpadding="0" cellspacing="1" class="table_list">
    <caption>查询交易记录</caption>
-<form method="get" name="search" action="?">
 <input name="mod" type="hidden" value="<?=$mod?>">
 <input name="file" type="hidden" value="<?=$file?>">
 <input name="action" type="hidden" value="list">

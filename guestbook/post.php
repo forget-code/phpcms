@@ -1,5 +1,6 @@
 <?php
 require './include/common.inc.php';
+if(!$M['enableTourist'] && !$_userid) showmessage('请登录后再发表留言',$MODULE['member']['url'].'login.php?forward='.urlencode(URL));
 require_once './include/guestbook.class.php';
 $g = new guestbook;
 if($dosubmit)

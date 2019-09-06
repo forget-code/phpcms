@@ -2,18 +2,17 @@
 defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
-<body onload="is_ie();$('#setting').load('?mod=<?=$mod?>&file=<?=$file?>&action=setting_edit&formid=<?=$formid?>&fieldid=<?=$fieldid?>&formtype=<?=$formtype?>');">
-<table cellpadding="2" cellspacing="1" class="table_form">
-<form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&formid=<?=$formid?>&formtype=<?=$formtype?>&issystem=<?=$issystem?>" method="post" name="myform">
+<body onLoad="is_ie();$('#setting').load('?mod=<?=$mod?>&file=<?=$file?>&action=setting_edit&formid=<?=$formid?>&fieldid=<?=$fieldid?>&formtype=<?=$formtype?>');">
+<form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&formid=<?=$formid?>&formtype=<?=$formtype?>&issystem=<?=$issystem?>" method="post" name="myform"><table cellpadding="2" cellspacing="1" class="table_form">
   <caption>复制<?=$field?>字段</caption>
 	<tr> 
       <th width="25%"><strong>字段名</strong><br />
 	  只能由英文字母、数字和下划线组成，并且仅能字母开头，不以下划线结尾
 	  </th>
-      <td><input size="20" name="info[field]" id="field" size="20" require="true" datatype="limit|ajax" min="1" max="20" url="?mod=<?=$mod?>&file=<?=$file?>&action=checkfield&formid=<?=$formid?>" msg="字符须为1到10位|"><font color="red">*</font></td>
+      <td><input name="info[field]" id="field" size="20" require="true" datatype="limit|ajax" min="1" max="20" url="?mod=<?=$mod?>&file=<?=$file?>&action=checkfield&formid=<?=$formid?>" msg="字符须为1到10位|"><font color="red">*</font></td>
     </tr>
 	<tr> 
-      <th><strong>字段别名</strong><br />例如：文章标题</td>
+      <th><strong>字段别名</strong><br />例如：文章标题</th>
       <td><input type="text" name="info[name]" size="30" require="true" datatype="limit|ajax" min="3" max="20" url="?mod=<?=$mod?>&file=<?=$file?>&action=checkname&formid=<?=$formid?>" msg="字符须为3到10位|"></td>
     </tr>
 	<tr> 
@@ -38,7 +37,7 @@ include admin_tpl('header');
       <td><div id="setting"></div></td>
     </tr>
 	<tr> 
-      <th><strong>表单附加属性</strong><br />可以通过此处加入javascript事件</td>
+      <th><strong>表单附加属性</strong><br />可以通过此处加入javascript事件</th>
       <td><input type="text" name="info[formattribute]" value="<?=$formattribute?>" size="50"></td>
     </tr>
 	<tr> 
@@ -84,13 +83,14 @@ foreach($patterns as $p)
       <td><?=$unsetgroups?></td>
     </tr>
 	<tr>
-	  <td></td>
+	  <th></th>
 	  <td>
 		<input type="hidden" name="forward" value="?mod=<?=$mod?>&file=<?=$file?>&action=manage&formid=<?=$formid?>"> 
 		<input type="submit" name="dosubmit" value=" 确定 "> 
       &nbsp; <input type="reset" name="reset" value=" 清除 ">
 	  </td>
 	</tr>
+    </table>
 	</form>
 </body>
 </html>

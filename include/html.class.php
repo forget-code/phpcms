@@ -16,6 +16,8 @@ class html
 
 	function index()
 	{
+		global $PHPCMS;
+		if(!$PHPCMS['ishtml']) return true;
 		extract($GLOBALS, EXTR_SKIP);
 		$head['title'] = $PHPCMS['sitename'].'-'.$PHPCMS['meta_title'];
 		$head['keywords'] = $PHPCMS['meta_keywords'];

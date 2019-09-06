@@ -3,8 +3,8 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
-<table cellpadding="2" cellspacing="1" class="table_form">
 <form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>" method="post" name="myform">
+<table cellpadding="2" cellspacing="1" class="table_form">
     <caption>添加推荐位</caption>
 	<tr> 
       <th><font color="red">*</font> <strong>推荐位名称</strong></th>
@@ -26,8 +26,8 @@ include admin_tpl('header');
       &nbsp; <input type="reset" name="reset" value=" 清除 ">
 	  </td>
     </tr>
-	</form>
 </table>
+</form>
 </body>
 </html>
 <script language="javascript" type="text/javascript">

@@ -3,8 +3,8 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
-<table cellpadding="0" cellspacing="1" class="table_form">
 <form method="post" name="myform" action="?mod=<?=$mod?>&file=<?=$file?>&action=edit">
+<table cellpadding="0" cellspacing="1" class="table_form">
  	<caption>修改会员组</caption>
   	<tr>
 		<th width="20%"><strong>名称：</strong></th>
@@ -34,19 +34,15 @@ include admin_tpl('header');
 	<tr>
 		<th><strong>允许发布：</strong></th>
 		<td>
-            <?=form::radio($allowposts, 'groupinfo[allowpost]', 'allowpost', $allowpost)?>
+            <?=form::radio($choices, 'groupinfo[allowpost]', 'allowpost', $allowpost)?>
 		</td>
 	</tr>
 	<tr>
-		<th><strong>是否禁用：</strong></th>
-		<td><?=form::radio($disableds, 'groupinfo[disabled]', 'disabled', $disabled)?></td>
+		<th><strong>允许会员自助升级：</strong></th>
+		<td>
+            <?=form::radio($choices, 'groupinfo[allowupgrade]', 'allowupgrade', $allowupgrade)?>
+		</td>
 	</tr>
-	<tr>
-    	<th><strong>最大短消息数：</strong></th>
-        <td>
-        	<?=form::text('groupinfo[allowmessage]', 'allowmessage', $allowmessage, 'text', 6, '', 'manxlength="50"')?>
-        条</td>
-    </tr>
 	<tr>
 		<th><strong>包年价格：</strong></th>
 		<td>
@@ -66,15 +62,25 @@ include admin_tpl('header');
         </td>
 	</tr>
 	<tr>
+    	<th><strong>最大短消息数：</strong></th>
+        <td>
+        	<?=form::text('groupinfo[allowmessage]', 'allowmessage', $allowmessage, 'text', 6, '', 'manxlength="50"')?>
+        条</td>
+    </tr>
+	<tr>
+		<th><strong>是否禁用：</strong></th>
+		<td><?=form::radio($choices, 'groupinfo[disabled]', 'disabled', $disabled)?></td>
+	</tr>
+	<tr>
 		<td></td>
 		<td>
         <input type="hidden" name="groupid" value="<?=$groupid?>">
         <input type="submit" name="dosubmit" value=" 确定 ">&nbsp;&nbsp;&nbsp;&nbsp;
         <input type="reset" name="reset" value=" 清除 ">
 		</td>		
-	</tr>
-	</form>
+	</tr>	
 </table>
+</form>
 </body>
 </html>
 <script LANGUAGE="javascript">

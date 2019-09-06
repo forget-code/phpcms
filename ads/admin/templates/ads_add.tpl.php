@@ -83,14 +83,14 @@ function alterUC(eID) {
 	<table cellpadding="0" cellspacing="0" id="table">
           <tbody id="imageid" style="display:none">
             <tr>
-              <td> 上传图片：&nbsp;<?=form::file("thumb", 'thumb')?><font color="red">*</font><br/>
+              <td> 上传图片：&nbsp;<?=form::upload_image("ads[imageurl]", 'thumb')?><font color="red">*</font><br/>
                 图片提示：
                 <input type="text" name="ads[alt]" size="50">
                 <br/>
                 链接地址：
                  http://<input name="ads[linkurl]" type="text" size="43" id='linkurl'>
                 <font color="red">*</font><br />
-                上传图片1：<?=form::file("thumb1", 'thumb1')?><br />
+                上传图片1：<?=form::upload_image("ads[s_imageurl]", 'thumb1')?><br />
                 (第二张图片当广告为随屏移动广告或者对联广告的时有效) </td>
             </tr>
           </tbody>

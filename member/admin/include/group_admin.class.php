@@ -82,6 +82,8 @@ class group_admin extends group
 		$result = $this->db->query("SELECT * FROM $this->table $where $order $limit");
 		while($r = $this->db->fetch_array($result))
 		{
+			$extends = $this->extend_group_list($r['groupid']);
+			$r['extend_disable'] = $extends['disabled'] ?  $extends['disabled'] : 0 ;
 			$array[] = $r;
 		}
 		$this->number = $this->db->num_rows($result);

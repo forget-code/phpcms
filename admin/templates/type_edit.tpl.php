@@ -3,8 +3,8 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
-<table cellpadding="0" cellspacing="1" class="table_form">
 <form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&typeid=<?=$typeid?>&module=<?=$module?>" method="post" name="myform">
+<table cellpadding="0" cellspacing="1" class="table_form">
     <caption>修改类别</caption>
 	<tr> 
       <th><strong>类别名称</strong></th>
@@ -26,7 +26,7 @@ include admin_tpl('header');
       &nbsp; <input type="reset" name="reset" value=" 清除 ">
 	  </td>
     </tr>
-	</form>
 </table>
+</form>
 </body>
 </html>

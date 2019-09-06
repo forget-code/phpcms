@@ -3,6 +3,7 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <?=$menu?>
+<form action="?mod=<?=$mod?>&file=<?=$file?>&action=delete" method="post" onsubmit="return del_customer();">
 <table width="100%" cellpadding="0" cellspacing="1"  class="table_list">
  <caption>会员头衔管理</caption>
 	<tr>
@@ -13,8 +14,7 @@ include admin_tpl('header');
 		<th width="18%"  >头衔名称</th>
 		<th width="30%"  >积分</th>
 		<th width="15%"  >管理操作</th>
-	</tr>
-		<form action="?mod=<?=$mod?>&file=<?=$file?>&action=delete" method="post" onsubmit="return del_customer();">
+	</tr>		
 <?php
 	foreach ($infos as $info) {
 ?>

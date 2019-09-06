@@ -143,8 +143,8 @@ class attachment
 			$upload_func = UPLOAD_FUNC;
 			if(@$upload_func($file, $newfile))
 			{
-				$oldpath[$k] = $file;
-				$newpath[$k] = $uploadpath.$filename;
+				$oldpath[] = $k;
+				$newpath[] = $uploadpath.$filename;
 				@chmod($newfile, 0777);
 				$fileext = fileext($filename);
 				$filetype = '';
@@ -207,7 +207,8 @@ class attachment
 		$uploadedfile['aid'] = $aid;
 		$this->uploadedfiles[] = $uploadedfile;
 		$this->attachments[$this->field][$aid] = $uploadedfile['filepath'];
-		$_SESSION['attachments'][$aid] = $uploadedfile['filepath'];
+		$attachments[$aid] = $uploadedfile['filepath'];
+		set_cookie('attachments', $attachments);
 		return $aid;
 	}
 
@@ -262,10 +263,11 @@ class attachment
 		if(!isset($this->attachments[$field]) && $html == '') return 0;
 		$contentid = intval($contentid);
 		$aids = '';
-		if($html && isset($_SESSION['attachments']) && empty($_SESSION['downfiles']) && empty($_SESSION['field_images']) && empty($_SESSION['field_image']))
+		$attachments = get_cookie('attachments');
+		if($html && !empty($attachments) && empty($_SESSION['downfiles']) && empty($_SESSION['field_images']) && empty($_SESSION['field_image']))
 		{
 			$aids_del = array();
-			foreach($_SESSION['attachments'] as $aid => $url)
+			foreach($attachments as $aid => $url)
 			{
 				if(!isset($this->downloadedfiles[$aid]) && strpos($html, $url) === false)
 				{
@@ -288,7 +290,15 @@ class attachment
 		}
 		$aids = implodeids($aids);
 		if($aids) $this->db->query("UPDATE `$this->table` SET `catid`='$this->catid',`contentid`=$contentid,`field`='$field' WHERE `aid` IN($aids)");
-		unset($_SESSION['attachments'],$_SESSION['downfiles'],$_SESSION['field_images']);
+		if(is_array($attachments) && !empty($attachments))
+		{
+			foreach($attachments as $k=>$v)
+			{
+				$attachments[$k] = '';
+			}
+		}
+		set_cookie('attachments', $attachments);
+		unset($attachments,$_SESSION['downfiles'],$_SESSION['field_images']);		
 		return $aids ? 1 : 0;
 	}
 

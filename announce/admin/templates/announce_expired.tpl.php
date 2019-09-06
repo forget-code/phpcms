@@ -3,9 +3,9 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
+<form method="post" name="myform">
 <table cellpadding="0" cellspacing="1" class="table_list">
 <caption>过期公告</caption>
-<form method="post" name="myform">
 <tr>
 	<th>选中</th>
 	<th>标题</th>

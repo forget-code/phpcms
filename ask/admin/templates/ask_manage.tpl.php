@@ -3,9 +3,9 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <?=$menu?>
+ <form method="post" name="search" action="?mod=<?=$mod?>&file=<?=$file?>">
 <table cellpadding="0" cellspacing="1" class="table_list">
-<caption>查询问题</caption>
-  <form method="post" name="search" action="?mod=<?=$mod?>&file=<?=$file?>">
+<caption>查询问题</caption> 
   <tr>
     <td class="align_c" width="20%">
 		用户名：<input type="text" name="username" value="<?=$username?>" />
@@ -17,9 +17,9 @@ include admin_tpl('header');
 	<td>
 	<?=form::select_category($mod, 0, 'category[parentid]', 'parentid', '请选择栏目进行管理', $catid,"onchange=\"if(this.value!=''){location='?mod=$mod&file=$file&action=$action&job=$job&elite=$elite&catid='+this.value;}\"")?>
 	</td>
-  </tr>
-  </form>
+  </tr> 
 </table>
+ </form>
 <form method="post" name="myform" action="?mod=<?=$mod?>&file=<?=$file?>&action=delete">
 <table width="100%" cellpadding="3" cellspacing="1"  class="table_list">
 <caption>管理问题</caption>

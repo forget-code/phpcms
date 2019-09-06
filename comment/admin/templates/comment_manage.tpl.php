@@ -94,7 +94,7 @@ foreach($comments['info'] AS $comment)
 	<td class="align_c"><?=$comment['against']?></td>
 	<td title="<?=$comment['addtime']?>"><?=$comment['addtime']?></td>
 	<td>
-	  <a href='?mod=comment&file=comment&ip=<?=$comment['ip']?>' title="IP：<?=$comment['ip']?> - <?=$comment['area']?>点击查看来自该ip的所有评论">IP</a> | <a href="<?=$comment['url']?>" target='_blank' title="该评论所属文章">原文</a> | <a href='?mod=comment&file=comment&keyid=<?=$comment['keyid']?>' title="与该评论所属文章相同的评论">相关评论</a>
+	  <a href='<?=ip_url($comment['ip'])?>' title="IP：<?=$comment['ip']?> - <?=$comment['area']?>点击查看来自该ip的所有评论">IP</a> | <a href="<?=$comment['url']?>" target='_blank' title="该评论所属文章">原文</a> | <a href='?mod=comment&file=comment&keyid=<?=$comment['keyid']?>' title="与该评论所属文章相同的评论">相关评论</a>
 	</td>
 	</tr>
 <?

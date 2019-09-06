@@ -3,8 +3,8 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
-<table cellpadding="2" cellspacing="1" class="table_form">
 <form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&modelid=<?=$modelid?>" method="post" name="myform">
+<table cellpadding="2" cellspacing="1" class="table_form">
   <caption>修改<?=$name?>模型</caption>
 	<tr> 
       <th width="15%"><strong>会员模型名称:</strong></th>
@@ -28,8 +28,8 @@ include admin_tpl('header');
       </div>
 	  </td>
     </tr>
-	</form>
 </table>
+</form>
 </body>
 </html>
 <script LANGUAGE="javascript">

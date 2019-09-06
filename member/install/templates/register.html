@@ -80,7 +80,7 @@
       <input type="hidden" name="memberinfo[modelid]" value="{if $modelid}{$modelid}{else}10{/if}"  />
 	  <tr>
         <th></th>
-        <td> <input type="checkbox" name="regagreement" id="regagreement" checked="checked" value="1" datatype="group" min="1" max="1" require="true" msg="请选择是否同意网站协议" msgid="reg" /><a href="javascript:void(0);" id="regagree" onClick="modal('/member/reagreement.php', this.id, 'toggle_pannel', 'ajax')"> 阅读并同意《{$PHPCMS[sitename]}网络服务使用协议》</a>
+        <td> <input type="checkbox" name="regagreement" id="regagreement" checked="checked" value="1" datatype="group" min="1" max="1" require="true" msg="请选择是否同意网站协议" msgid="reg" /><a href="javascript:void(0);" id="regagree" onClick="modal('member/reagreement.php', this.id, 'toggle_pannel', 'ajax')"> 阅读并同意《{$PHPCMS[sitename]}网络服务使用协议》</a>
         <span id="reg" ></span>
         </td>
       </tr>

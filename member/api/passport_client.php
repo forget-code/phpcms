@@ -58,7 +58,6 @@
 		}
 		else 
 		{
-			if(!$memberfields['groupid']) $memberfields['groupid'] = 4;
 			require_once 'member_api.class.php';
 			$member_api = new member_api();
 			$userid = $member_api->add($memberfields);

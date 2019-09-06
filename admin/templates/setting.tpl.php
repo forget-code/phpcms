@@ -89,6 +89,13 @@ include admin_tpl('header');
 	  </td>
     </tr>
 	<tr>
+		<th><strong>开启后台左侧菜单滚动条</strong></th>
+		<td>
+		<input type='radio' name='setting[enablegetscrollbar]' value='1'  <?php if($enablegetscrollbar){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type='radio' name='setting[enablegetscrollbar]' value='0'  <?php if(!$enablegetscrollbar){ ?>checked <?php } ?>> 否
+		</td>
+	</tr>
+	<tr>
       <th><strong>启用自动提取关键词功能</strong></th>
       <td>
 	  <input type='radio' name='setting[enablegetkeywords]' value='1'  <?php if($enablegetkeywords){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
@@ -588,7 +595,7 @@ areaid_load(0);
      <tr>
     <th><strong>Ucenter 数据库表前缀</strong></th>
     <td>
-    <input type="text" name="setting[uc_dbpre]" id="uc_dbpre" value="<?=$uc_dbpre?>" size="50" id="uc_dbpre">
+    <input type="text" name="setting[uc_dbpre]" id="uc_dbpre" value="<?=$uc_dbpre?>" size="50">
     <input type="button" id="test_uc" value="测试数据库连接" />
     </td>
     </tr>
@@ -597,7 +604,7 @@ areaid_load(0);
         <td>
         <select name="setting[uc_charset]" id="uc_charset">
 	  		<option value="gbk" <?=($uc_charset == 'gbk' ? 'selected' : '')?>>GBK/GB2312</option>
-	  		<option value="utf-8" <?=($uc_charset == 'utf-8' ? 'selected' : '')?>>UTF-8</option>
+	  		<option value="utf8" <?=($uc_charset == 'utf8' ? 'selected' : '')?>>UTF-8</option>
 	  		<option value="big5" <?=($uc_charset == 'big5' ? 'selected' : '')?>>BIG5</option>
 	  	</select>
         </td>

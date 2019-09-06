@@ -11,7 +11,7 @@ if (isset($username) && !empty($username))
 }
 if(!intval($userid)) $userid = $_userid;
 $is_host = (isset($_userid) && ($userid == $_userid)) ? 1 : 0;
-if($userid < 1) showmessage('请选择你想查看的用户');
+if($userid < 1) showmessage('请选择你想查看的用户', $MODULE['member']['url'].'list.php?modelid=10');
 $result = $member_api->get($userid, array('m.userid', 'disabled'));
 if(!$result) showmessage('所查看的用户不存在');
 if($result['disabled']) showmessage('该用户已被禁用', $forward);

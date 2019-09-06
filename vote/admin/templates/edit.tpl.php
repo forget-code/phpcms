@@ -22,8 +22,8 @@ if(!$subject['ismultiple']){
         <input type="radio" name="voteinfo[ischeckbox]" sn="optiontype" value="1" <?php if($subject['ischeckbox'] == '1') {?>checked="checked"<?}?> onclick="$('#range_1').show();"/>
         多选&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
         <span id="range_1" <?php if($subject['ischeckbox']){ ?>style="display:"<?php }else{?>style="display:none"<?php }?> >
-        最少选择<input type="text" name="voteinfo[minval]"  value="1" size="3"  prefix="[minval]" value="<?=$subject['minval']?>"/>项 &nbsp;&nbsp;&nbsp;&nbsp;
-        最多选择<input type="text" name="voteinfo[maxval]"  value="0" size="3" prefix="[maxval]" value="<?=$subject['maxval']?>"/>项
+        最少选择<input type="text" name="voteinfo[minval]"  size="3"  prefix="[minval]" value="<?=$subject['minval']?>"/>项 &nbsp;&nbsp;&nbsp;&nbsp;
+        最多选择<input type="text" name="voteinfo[maxval]" size="3" prefix="[maxval]" value="<?=$subject['maxval']?>"/>项
         </span>
         </td>
       </tr>

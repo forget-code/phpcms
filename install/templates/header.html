@@ -5,7 +5,7 @@
 <title>{$head[title]}</title>
 <meta content="{$head[keywords]}" name="keywords" />
 <meta content="{$head[description]}" name="description" />
-<base href="{$PHPCMS[siteurl]}" />
+<base href="{SITE_URL}" />
 <link href="favicon.ico" rel="shortcut icon" />
 <link href="{SKIN_PATH}{$mod}.css" rel="stylesheet" type="text/css" />
 <link rel="alternate" type="application/rss+xml" title="{$head[title]}" href="/rss.php?rssid={$catid}" />
@@ -23,24 +23,24 @@
   <div class="f_r">
      <form name="site_search" action="{$MODULE[search][url]}" target="_blank">
 	  <input type="hidden" name="type" value="all"/>
-      <input type="text" name="q" size="20"/>
+      <input type="text" name="q" size="20" class="input_blur"/>
       <select>
         <option value="all">全部</option>
 		{loop $types $k $name}
         <option value="{$k}">{$name}</option>
 		{/loop}
       </select>
-      <input type="submit" name="s" id="button" value="搜索" />
+      <input type="submit" name="s" id="button" value="搜索" class="button_style"/>
 	 </form>
   </div>
 {/if}
   <div class="f_l">
-    <div id="div_login" style="display:block">
+    <div id="div_login" style="display:none">
 		<form action="{$MODULE[member][url]}login.php" method="post" name="login" onsubmit="return loginSubmit(this, {PASSPORT_ENABLE});">
-		用户名：<input type="text" name="username" size="12"/>
-		密码：<input type="password" name="password" size="12"/>
-			  <input type="submit" name="dosubmit" value="登录" />
-			  <input type="button" name="register" value="注册" onclick="redirect('{$MODULE[member][url]}register.php')"/>
+		用户名：<input type="text" name="username" size="12" class="input_blur"/>
+		密码：<input type="password" name="password" size="12" class="input_blur"/>
+			  <input type="submit" name="dosubmit" value="登录" class="button_style"/>
+			  <input type="button" name="register" value="注册" onclick="redirect('{$MODULE[member][url]}register.php')" class="button_style"/>
 			  <input type="hidden" name="cookietime" value="0"/>
 		</form>
 	</div>

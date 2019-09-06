@@ -49,7 +49,6 @@ switch($action)
 		foreach($member_tag_form->fields as $field=>$v)
 		{
 			$fields[$field] = $v['name'];
-			if(isset($_GET['modelid']) && $v['isselect']) $selectfields[] = $field;
 			if(in_array($field, array_keys($member_tag_form->common_fields)))
 			{
 				$orderfields['a.'.$field.' ASC'] = $v['name'].' 升序';
@@ -79,7 +78,6 @@ switch($action)
 		foreach($member_tag_form->fields as $field=>$v)
 		{
 			$fields[$field] = $v['name'];
-			if(isset($_GET['modelid']) && $v['isselect']) $selectfields[] = $field;
 			if(in_array($field, array_keys($member_tag_form->common_fields)))
 			{
 				$orderfields['a.'.$field.' ASC'] = $v['name'].' 升序';
@@ -101,6 +99,7 @@ switch($action)
 		include admin_tpl('tag_manage');
 		break;
 	case 'update':
+		if($isadd && isset($t->TAG[$tagname])) showmessage('该标签已经存在');
 		if(!$tag_config['mode'])
 		{
 			$tag_config['where'] = $info;
@@ -110,6 +109,7 @@ switch($action)
 		}
 		$tag_config['modelid'] = $modelid;
 		$t->update($tagname, $tag_config);
+		
 		if($ajax)
 		{
 			if($template_data) file_put_contents(TPL_ROOT.TPL_NAME.'/'.$mod.'/'.$tag_config['template'].'.html', stripslashes($template_data));
@@ -136,5 +136,15 @@ switch($action)
         $t->delete($tagname);
 		showmessage('操作成功！', "?mod=$mod&file=$file&action=manage&module=$module");
 		break;
+	case 'checktag':
+		if(isset($t->TAG[$value]))
+		{
+			exit('该标签已经存在');
+		}
+		else
+		{
+			exit('success');
+		}
+	break;
 }
 ?>

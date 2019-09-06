@@ -22,13 +22,26 @@ include admin_tpl('header');
 <?php 
 if(is_array($groups))
 {
-  foreach($groups as $group){
+	$today = date('Y-m-d');
+    foreach($groups as $group){
 ?>
 <tr>
 <td class="align_c"><input type="text" name="listorders[<?=$group['groupid']?>]" value="<?=$group['listorder']?>" size="3"></td>
-<td class="align_c"><a href="?mod=member&file=member&action=manage&groupid=<?=$group['groupid']?>"><?=$group['name']?></a></td>
+<td class="align_c">
+<?php if($group['groupid'] > 6){ ?>
+<a href="?mod=member&file=extend&action=manage&groupid=<?=$group['groupid']?>"><?=$group['name']?></a>
+<?php }else{ ?>
+<a href="?mod=member&file=member&action=manage&groupid=<?=$group['groupid']?>"><?=$group['name']?></a>
+<?php } ?>
+</td>
 <td><?=str_cut(strip_tags($group['description']), 50)?></td>
-<td class="align_c"><a href="?mod=member&file=member&action=manage&groupid=<?=$group['groupid']?>"><?=$member_admin->count_member("groupid=$group[groupid]")?></a></td>
+<td class="align_c">
+<?php if($group['groupid'] > 6){ ?>
+<a href="?mod=member&file=extend&action=manage&groupid=<?=$group['groupid']?>"><?=cache_count("select count(*) as count from ".DB_PRE."member_group_extend where groupid=$group[groupid] and disabled=0 and enddate>'$today'")?></a>
+<?php }else{ ?>
+<a href="?mod=member&file=member&action=manage&groupid=<?=$group['groupid']?>"><?=$member_admin->count_member("groupid=$group[groupid]")?></a>
+<?php } ?>
+</td>
 <td class="align_c"><?=$group['allowpost']?'<font color="red">√</font>':''?></td>
 <td class="align_c"><?=$group['allowvisit']?'<font color="red">√</font>':''?></td>
 <td class="align_c"><?=$group['issystem']?'<font color="red">√</font>':''?></td>

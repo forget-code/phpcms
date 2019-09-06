@@ -172,3 +172,4 @@ switch ($action)
 		}
 	break;
 }
+?>

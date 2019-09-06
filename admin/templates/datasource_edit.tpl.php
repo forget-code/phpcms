@@ -28,7 +28,7 @@ include admin_tpl('header');
   </tr>
   <tr>
     <th><strong>数据库字符集：</strong></th>
-    <td><?=form::radio(array('gbk'=>'GBK','utf-8'=>'UTF-8','latin1'=>'latin1'), 'info[dbcharset]', 'dbcharset', $dbcharset)?></td>
+    <td><?=form::radio(array('gbk'=>'GBK','utf8'=>'UTF8','latin1'=>'latin1'), 'info[dbcharset]', 'dbcharset', $dbcharset)?></td>
   </tr>
   <tr>
     <th><strong>数据表：</strong></th>

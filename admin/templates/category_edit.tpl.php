@@ -119,13 +119,13 @@ include admin_tpl('header');
           ?>
 			  <tr>
 				  <td><?=$name?></td>
-				  <td><input type="checkbox" name="priv_roleid[]" value="view,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'view', $roleid) ? 'checked' : ''?>></td>
-				  <td><input type="checkbox" name="priv_roleid[]" value="add,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'add', $roleid) ? 'checked' : ''?>></td>
-				  <td><input type="checkbox" name="priv_roleid[]" value="edit,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'edit', $roleid) ? 'checked' : ''?>></td>
-				  <td><input type="checkbox" name="priv_roleid[]" value="check,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'check', $roleid) ? 'checked' : ''?>></td>
-				  <td><input type="checkbox" name="priv_roleid[]" value="listorder,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'listorder', $roleid) ? 'checked' : ''?>></td>
-				  <td><input type="checkbox" name="priv_roleid[]" value="cancel,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'cancel', $roleid) ? 'checked' : ''?>></td>
-				  <td><input type="checkbox" name="priv_roleid[]" value="manage,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'manage', $roleid) ? 'checked' : ''?>></td>
+				  <td><input type="checkbox" name="priv_roleid[]" <?=($roleid==1||$roleid==2)?'disabled checked':''?> value="view,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'view', $roleid) ? 'checked' : ''?>></td>
+				  <td><input type="checkbox" name="priv_roleid[]" <?=($roleid==1||$roleid==2)?'disabled checked':''?> value="add,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'add', $roleid) ? 'checked' : ''?>></td>
+				  <td><input type="checkbox" name="priv_roleid[]" <?=($roleid==1||$roleid==2)?'disabled checked':''?> value="edit,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'edit', $roleid) ? 'checked' : ''?>></td>
+				  <td><input type="checkbox" name="priv_roleid[]" <?=($roleid==1||$roleid==2)?'disabled checked':''?> value="check,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'check', $roleid) ? 'checked' : ''?>></td>
+				  <td><input type="checkbox" name="priv_roleid[]" <?=($roleid==1||$roleid==2)?'disabled checked':''?> value="listorder,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'listorder', $roleid) ? 'checked' : ''?>></td>
+				  <td><input type="checkbox" name="priv_roleid[]" <?=($roleid==1||$roleid==2)?'disabled checked':''?> value="cancel,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'cancel', $roleid) ? 'checked' : ''?>></td>
+				  <td><input type="checkbox" name="priv_roleid[]" <?=($roleid==1||$roleid==2)?'disabled checked':''?> value="manage,<?=$roleid?>" <?=$priv_role->check('catid', $catid, 'manage', $roleid) ? 'checked' : ''?>></td>
 			  </tr>
 		  <?php
 		  }
@@ -179,22 +179,7 @@ include admin_tpl('header');
 </form>
 
 <?php }elseif($type == 1){ ?>
-
-<script language='JavaScript' type='text/JavaScript'>
-function CheckForm(){
-	if(document.myform.catname.value==''){
-		alert('请输入单网页名称！');
-		document.myform.catname.focus();
-		return false;
-	}
-	if(document.myform.catdir.value==''){
-		alert('请输入单网页英文名！');
-		document.myform.catdir.focus();
-		return false;
-	}
-}
-</script>
-<form name="myform" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&catid=<?=$catid?>" onSubmit='return CheckForm();'>
+<form name="myform" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&catid=<?=$catid?>">
 <input type="hidden" name="category[type]" value="<?=$type?>">
 <table cellpadding="0" cellspacing="1" class="table_form">
   <caption>修改单网页</caption>
@@ -205,11 +190,11 @@ function CheckForm(){
   </tr>
     <tr>
       <th><strong>单网页名称</strong></th>
-      <td><input name='category[catname]' type='text' id='catname' value='<?=$catname?>' size='40' maxlength='50'> <?=form::style('category[style]', $style)?>  <font color="red">*</font></td>
+      <td><input name='category[catname]' type='text' id='catname' value='<?=$catname?>' size='40' maxlength='50' require="true" datatype="require" msg="单网页名称不能为空"> <?=form::style('category[style]', $style)?>  <font color="red">*</font></td>
     </tr>
     <tr>
       <th><strong>单网页英文名</strong></th>
-      <td><input name='category[catdir]' type='text' id='catdir' value='<?=$catdir?>' size='20' maxlength='50'>  <font color="red">*</font></td>
+      <td><input name='category[catdir]' type='text' id='catdir' value='<?=$catdir?>' size='20' maxlength='50' require="true" datatype="require" msg="单网页英文名不能为空">  <font color="red">*</font></td>
     </tr>
     <tr>
       <th><strong>单网页图片</strong></th>
@@ -308,7 +293,7 @@ function CheckForm(){
     </tr>
 	<tr>
       <th><strong>链接地址</strong></th>
-      <td><input name='category[url]' type='text' id='url' value="<?=$url?>" size='60' maxlength='100'>  <font color="red">*</font></td>
+      <td><input name='category[url]' type='text' id='url' size='60' maxlength='100' require="true" datatype="require" msg="链接地址不能为空">  <font color="red">*</font></td>
     </tr>
 	<tr>
      <td width='30%'></td>

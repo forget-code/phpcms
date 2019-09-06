@@ -28,6 +28,7 @@
 			@extract($this->data);
 			$updatetime = date('Y-m-d');
 			$userid = $this->userid('userid', $userid);
+			$copyfrom = $this->copyfrom('copyfrom',$copyfrom);
 			$head['title'] = $title.' - '.$PHPCMS['sitename'];
 			$head['keywords'] = $keywords;
 			$head['description'] = $this->data['title'];

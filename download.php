@@ -25,7 +25,7 @@ require_once 'admin/content.class.php';
 $c = new content();
 $c->hits($downid);
 
-if(strpos($fileurl, '://'))//远程文件
+if(strpos($fileurl, ':/'))//远程文件
 {
 	header("Location: $fileurl");
 }

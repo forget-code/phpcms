@@ -227,11 +227,26 @@ class group
 		return true;
 	}
 
+	function extend_disable($groupid, $disable=1)
+	{
+		$groupid = intval($groupid);
+		$disable = intval($disable);
+		$this->db->query("UPDATE `$this->table_extend` SET `disabled`=$disable WHERE `groupid`=$groupid");
+		return true;
+	}
+
 	function extend_get($userid, $groupid, $fields = '*')
 	{
 		$userid = intval($userid);
 		$groupid = intval($groupid);
 		return $this->db->get_one("SELECT $fields FROM `$this->table_extend` a LEFT JOIN `$this->table` b ON a.groupid=b.groupid WHERE a.`userid`=$userid AND b.`groupid`=$groupid");
+	}
+
+	function extend_cancel($userid, $groupid)
+	{
+		$userid = intval($userid);
+		$groupid = intval($groupid);
+		return $this->db->query("DELETE FROM `$this->table_extend` WHERE `userid`=$userid AND `groupid`=$groupid");
 	}
 
     function extend_list($userid, $disabled = -1)
@@ -248,6 +263,20 @@ class group
 		$disabled = intval($disabled);
 		$where = $disabled > -1 ? "AND `disabled`=$disabled " : '';
 		return $this->db->select("SELECT * FROM `$this->table_extend` WHERE `groupid`=$groupid $where", 'groupid');
+	}
+
+	function group_list($groupid, $disabled = -1)
+	{
+		$groupid = intval($groupid);
+		$disabled = intval($disabled);
+		$where = $disabled > -1 ? "AND `disabled`=$disabled " : '';
+		$result = $this->db->query("SELECT * FROM `$this->table_extend` WHERE `groupid`=$groupid $where");
+		while($r = $this->db->fetch_array($result))
+		{
+			$array[] = $r;
+		}
+		$this->db->free_result($result);
+		return $array;
 	}
 
 	function msg()

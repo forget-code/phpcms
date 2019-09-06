@@ -15,8 +15,24 @@ defined('IN_PHPCMS') or exit('Access Denied');
 body {
 	width:100%;
 	background:#ECF7FE url(admin/skin/images/bg_body.jpg) repeat-y top left;
+	<?php
+	if($PHPCMS[enablegetscrollbar])
+	{
+	?>
+	scrollbar-face-color: #E7F5FE; 
+	scrollbar-highlight-color: #006699; 
+	scrollbar-shadow-color: #006699; 
+	scrollbar-3dlight-color: #E7F5FE; 
+	scrollbar-arrow-color: #006699; 
+	scrollbar-track-color: #E7F5FE; 
+	scrollbar-darkshadow-color: #E7F5FE; 
+	scrollbar-base-color: #E7F5FE;
+	<?php
+	}
+	?>
 }
 </style>
+
 </head>
 <body scroll="no">
 <!--head-->
@@ -35,10 +51,22 @@ body {
 </div>
 <div id="admin_left">
   <div id="inner" class="inner">
-    <h4><em style="float:right"><img src="admin/skin/images/up.gif" id="up" width="25" height="23" border="0" alt="向上" /> <img src="admin/skin/images/down.gif" id="down" width="25" height="23" border="0" alt="向下" /></em><span id="menu_name">我的面板</span></h4>
-    <div id="tree_box" class="p_r" style="top:10px; left:8px;" >
+    <h4><em style="float:right"><img src="admin/skin/images/refresh.gif" onClick="javascript:menu_refresh()" width="16" height="25" id="menurefresh" alt="刷新" title="刷新" /><img src="admin/skin/images/up.gif" id="up" width="19" height="23" border="0" alt="向上" /> <img src="admin/skin/images/down.gif" id="down" width="25" height="23" border="0" alt="向下" /></em><span id="menu_name">我的面板</span></h4>
+	<?php
+	if($PHPCMS[enablegetscrollbar])
+	{
+	?>
+    <div id="tree_box" class="p_r" style="top:10px; left:6px;" >
+      <div id="tree" class="tree p_a" style="top:34px;overflow:auto;overflow-x:hidden;"></div>
+    <?php
+	}else{
+	?>
+	 <div id="tree_box" class="p_r" style="top:10px; left:8px;" >
       <div id="tree" class="tree p_a" style="top:34px;"></div>
-      <div id="tree_bg" class="p_a"></div>
+	<?php
+	}
+	?>
+	  <div id="tree_bg" class="p_a"></div>
       <div id="tree_click"  class="p_a"></div>
     </div>
   </div>
@@ -126,6 +154,11 @@ foreach($menu as $val){
 </div>
 <script type="text/javascript" src="images/js/jqDnR.js"></script>
 <script language="JavaScript">
+var cut_nums = 0;
+if(!$.browser.msie) cut_nums = 10;
+var screen_h = parseInt(document.documentElement.clientHeight)-95-parseInt(cut_nums);
+$("#tree").css("height",screen_h);
+
 var site_url = 'admin/skin/';
 get_menu(2,'tree',0);
 $("#menu_2").addClass("selected");
@@ -416,6 +449,83 @@ function set_memo(data){
 function parent_file_list(obj)
 {
 	right.parent_file_list(obj);
+}
+
+function show_admin_lists() 
+{
+	show_div('msg_div');
+	$.getJSON("?mod=phpcms&file=index&action=show_admin_list", function (data){
+		if(data) 
+		{
+			var str = '';
+			var first = 0;
+			$.each(data, function (i, n) 
+			{
+				var classes = 'group_1';
+				if(i=="1") 
+				{
+					classes = 'group_2';
+				}
+				str += '<li class="group"><div class="'+classes+'" onclick="admin_list(\'adminlist_'+i+'\',this)" width="24" height="24"></div> <a href="?mod=message&file=sendmessage_role&roleid='+i+'" target="right" title="群发短消息">'+n.name+'</a><font color="#cccccc">('+n.count+')</font></li>';
+				if(n.users) 
+				{
+					$.each(n.users, function (s, d) 
+					{
+						var color = ' style="color:#cccccc"';
+						var img = 'admin/skin/images/icon_gray.jpg';
+						if(d.online==1) 
+						{
+							color = ' style="color:red"';
+							img = 'admin/skin/images/icon_red.jpg';
+						}
+						var style = 'style="display:none;"';
+						if(first == 0)
+						{
+							style = 'style="display:block;"';
+						}
+						str += '<li class="adminlist_'+i+'" '+style+'><img src="'+img+'"> <a href="<?php echo($MODULE['message']['url'])?>send.php?userid='+d.userid+'" target="right"'+color+'>'+d.username+'</a></li>';
+					})
+				}
+				first = 1;
+			});
+			$("#adminlist").html(str);
+		}
+		else 
+		{
+			alert('网络出现问题，无法正常获得管理员列表。');
+		}
+	});
+}
+
+function admin_list(d,obj) 
+{
+	if($("."+d).css('display')!='none') 
+	{
+		obj.className = 'group_1';
+	}
+	else 
+	{
+		obj.className = 'group_2';
+	}
+	$("."+d).toggle();
+}
+
+function get_msg() 
+{
+	$.get('?mod=phpcms&file=index&action=get_msg&time='+Math.random(), function(data){
+	if(data=='1') 
+	{
+		$('#msg_href').attr('href', 'javascript:show_admin_lists();go_right(\'message/inbox.php?userid=<?php echo($_userid)?>\')');
+		$('#msg_img').attr('src', 'admin/skin/images/icon_8.gif');
+		$('#new_msg').show();
+	}
+	else 
+	{
+		$('#msg_href').attr('href', 'javascript:show_admin_lists()');
+		$('#msg_img').attr('src', 'admin/skin/images/icon_4.gif');
+		$('#new_msg').hide();
+	}
+	})
 }
 
 function show_map() 

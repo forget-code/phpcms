@@ -1638,7 +1638,7 @@ array_unshift($tagtype, "新建标签");
 1499
 1500
 </textarea>
-<textarea id='txt_main' name='content' id='content' onscroll='show_ln()' align="left" wrap='off' style='width:90%;height:360px;overflow:auto;scrolling:yes;border-left:0px;font-family:Fixedsys,verdana,宋体;font-size:12px;'><?=htmlspecialchars($content)?></textarea>
+<textarea id='txt_main' name='content' onscroll='show_ln()' align="left" wrap='off' style='width:90%;height:360px;overflow:auto;scrolling:yes;border-left:0px;font-family:Fixedsys,verdana,宋体;font-size:12px;'><?=htmlspecialchars($content)?></textarea>
 <script>
 var i=1694;
 function show_ln()

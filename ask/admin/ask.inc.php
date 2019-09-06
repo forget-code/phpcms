@@ -69,7 +69,7 @@ switch($action)
 			if($addtime && !$endtime) $where .= ($where) ? " AND `addtime`>$addtime" : " `addtime`>$addtime";
 			if($endtime && !$addtime) $where .= ($where) ? " AND `endtime`<$endtime" : " `endtime`<$endtime";
 			if($addtime && $endtime) $where .= ($where) ? " AND `addtime`>$addtime AND `endtime`<$endtime": " `addtime`>$addtime AND `endtime`<$endtime";
-			if($ischeck) $where .= " AND `ischeck`='$ischeck'";
+			if($ischeck) $where .= ($where) ? " AND `ischeck`='$ischeck'" : "`ischeck`='$ischeck'";
 			if(!$where) showmessage('请选择删除条件', $forward);
 			$result = $ask->listinfo($where);
 			if($result)

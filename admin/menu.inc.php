@@ -18,8 +18,6 @@ switch($action)
 			$menuid = $m->add($info);
 			if($menuid)
 			{
-				$priv_role->update('menuid', $menuid, $roleids);
-				$priv_group->update('menuid', $menuid, $groupids);
 				showmessage('操作成功！', $forward);
 			}
 			else
@@ -43,8 +41,6 @@ switch($action)
 			$result = $m->edit($menuid, $info);
 			if($result)
 			{
-				$priv_role->update('menuid', $menuid, $roleids);
-				$priv_group->update('menuid', $menuid, $groupids);
 				showmessage('操作成功！', $forward);
 			}
 			else
@@ -66,10 +62,6 @@ switch($action)
 			{
 				$parentname = '无';
 			}
-			$roleids = $priv_role->get_roleid('menuid', $menuid);
-			$groupids = $priv_group->get_groupid('menuid', $menuid);
-			$roleids = implode(',', $roleids);
-			$groupids = implode(',', $groupids);
 			include admin_tpl('menu_edit');
 		}
 		break;
@@ -151,7 +143,7 @@ switch($action)
 		$max = array_slice($data, -1);
 		$data['max'] = $max[0]['menuid'];
 		$data = json_encode($data);
-		header('Content-type: text/html; charset=utf-8');
+		if(PHP_OS < 5.0) header('Content-type: text/html; charset=utf-8');
 		echo $data;
 	break;
 

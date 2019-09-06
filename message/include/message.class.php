@@ -180,7 +180,7 @@ class message
 		$num_message = $this->count_message($where = " (send_to_id='$userid' OR send_from_id='$userid') AND replyid=0");
 		$member_api = load('member_api.class.php', 'member', 'api');
 		$message_info = $this->_get($msgid, $where = "send_to_id=$userid");
-		if($message_info['status'] == 1 && $num_message >= $G['allowmessage'])
+		if($message_info['status'] == 1 && $num_message > $G['allowmessage'])
 		{
 			$this->msg = 'msg_limit_is_reached';
 			return false;

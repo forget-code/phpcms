@@ -11,8 +11,10 @@ CREATE TABLE `phpcms_error_report` (
   `typeid` smallint(5) unsigned NOT NULL default '0',
   `addtime` int(10) unsigned NOT NULL default '0',
   `status` tinyint(1) unsigned NOT NULL default '0',
+  `contentid` mediumint(8) unsigned NOT NULL default '0',
   PRIMARY KEY  (`error_id`),
   KEY `keyid` (`typeid`,`status`,`error_id`)
 ) TYPE=MyISAM;
+
 INSERT INTO `phpcms_type` (`typeid`, `module`, `name`, `style`, `typedir`, `description`, `thumb`, `url`, `template`, `listorder`) VALUES (2, 'error_report', '错字', '', '', '', '', '', '', 0);
 INSERT INTO `phpcms_type` (`typeid`, `module`, `name`, `style`, `typedir`, `description`, `thumb`, `url`, `template`, `listorder`) VALUES (3, 'error_report', '无效URL', '', '', '', '', '', '', 0);

@@ -56,7 +56,7 @@ if(!empty($listfiles) && is_array($listfiles))
 ?>
 <tr>
 <td align='left' height='20'>
-<?php if($type!="thumb"){ ?><img src='images/ext/<?=$lfile['ext']?>.gif' width='24' height='24'><?php } ?><a href='#' onClick="window.returnValue='<?=$lfile['path']?>|<?=$lfile['size']?>';window.close();"><?=$lfile['name']?></a></td>
+<?php if($type!="thumb"){ ?><img src='images/ext/<?=$lfile['ext']?>.gif' width='24' height='24'><?php } ?><?=$lfile['name']?></td>
  <td width='60' class="align_c"><?=$lfile['size']?>&nbsp;K</td>
   <?php if(is_array($listfiles)) echo "<td width='60' class='align_c'>$lfile[imagesize]</td>";?>
  <td width='180' class="align_c">&nbsp;<?=$lfile['type']?></td>

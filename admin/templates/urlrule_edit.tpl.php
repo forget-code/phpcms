@@ -3,8 +3,8 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
-<table cellpadding="2" cellspacing="1" class="table_form">
 <form action="?mod=phpcms&file=urlrule&action=edit&urlruleid=<?=$urlruleid?>" method="post" name="myform">
+<table cellpadding="2" cellspacing="1" class="table_form">
     <caption>修改URL规则</caption>
     <tr>
       <th width="20%"><strong>URL规则名称</strong></th>
@@ -51,9 +51,9 @@ include admin_tpl('header');
 	  <input type="submit" name="dosubmit" value=" 确定 ">
       &nbsp; <input type="reset" name="reset" value=" 清除 ">
 	  </td>
-    </tr>
-	</form>
+    </tr>	
 </table>
+</form>
 </body>
 </html>
 <script language="javascript" type="text/javascript">

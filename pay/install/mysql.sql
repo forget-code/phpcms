@@ -62,6 +62,7 @@ CREATE TABLE `phpcms_pay_user_account` (
   `inputer` char(20) NOT NULL,
   `inputerid` mediumint(8) unsigned NOT NULL default '0',
   `amount` decimal(8,2) unsigned NOT NULL,
+  `quantity` decimal(8,2) unsigned NOT NULL,
   `addtime` int(10) NOT NULL default '0',
   `paytime` int(10) NOT NULL default '0',
   `adminnote` char(255) NOT NULL,

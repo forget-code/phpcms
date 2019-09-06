@@ -89,13 +89,6 @@ class alipay
         {
             if (!empty($order['order_sn']))
             {
-				/*实体商品 */
-				//$service =  (!empty($payment['alipay_real_method']) && $payment['alipay_real_method'] == 1) ?
-					//'create_direct_pay_by_user' : 'trade_create_by_buyer';
-				/* 虚拟商品 */
-				//$service = (!empty($payment['alipay_virtual_method']) && $payment['alipay_virtual_method'] == 1) ?
-                        //'create_direct_pay_by_user' : 'create_digital_goods_trade_p';
-				/* 非订单方式，按照虚拟商品处理 */
                 $service = (!empty($payment['alipay_virtual_method']) && $payment['alipay_virtual_method'] == 1) ?
                     'create_direct_pay_by_user' : 'create_digital_goods_trade_p';
             }
@@ -167,16 +160,12 @@ class alipay
 		/*成功支付*/
 		if ( $_GET['trade_status'] == "TRADE_FINISHED" )
         {//order_sn
+
             $orderid = $_GET['out_trade_no'];
             $orderid = trim($orderid);
-			if(changeorder($orderid))
+            if(changeorder($orderid))
             {
-                $pay = load('pay_api.class.php', 'pay', 'api');
-                $n = $_GET['total_fee'];
-                $n = trim($n);
-                $note = '用户网上充值';
-                $pay->update_exchange('pay', 'amount', $n, $note);
-                //return true;
+                return true;
             }
         }
     }

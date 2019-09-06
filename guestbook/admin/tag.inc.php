@@ -10,6 +10,7 @@ switch($action)
     case 'add':
 		if(isset($dosubmit))
 		{
+			if($isadd && isset($t->TAG[$tagname])) showmessage('该标签已经存在');
 			if($tag_config['func'])
 			{				
 				$tag_config['number'] = $tag_config['guestbooknum'];
@@ -30,6 +31,7 @@ switch($action)
 	case "copy":
 		if(isset($dosubmit))
 		{
+			if($isadd && isset($t->TAG[$tagname])) showmessage('该标签已经存在');
 			if($tag_config['func'])
 			{
 				$tag_config['number'] = $tag_config['linknum'];
@@ -172,5 +174,15 @@ switch($action)
         $t->delete($tagname);
 		showmessage('操作成功！', "?mod=$mod&file=$file&action=manage&module=$module");
 		break;
+	case 'checktag':
+		if(isset($t->TAG[$value]))
+		{
+			exit('该标签已经存在');
+		}
+		else
+		{
+			exit('success');
+		}
+	break;
 }
 ?>

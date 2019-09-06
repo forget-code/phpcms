@@ -3,8 +3,8 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
-<table cellpadding="0" cellspacing="1" class="table_form">
 <form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>" method="post" name="myform">
+<table cellpadding="0" cellspacing="1" class="table_form">
     <caption>添加稿件状态</caption>
   	<tr> 
       <th><strong>状态值</strong></th>

@@ -26,9 +26,9 @@ include admin_tpl('header');
   </tr>
 </table>
 </form>
+<form name="myform" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=update&module=<?=$module?>">
 <table cellpadding="0" cellspacing="1" class="table_list">
   <caption>模板管理</caption>
-<form name="myform" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=update&module=<?=$module?>">
 <tr>
 <th width="150">模板名称</th>
 <th>文件名</th>

@@ -1,4 +1,4 @@
-<?php 
+<?php
 defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
@@ -10,7 +10,6 @@ include admin_tpl('header');
   财务操作
   </caption>
   <tr>
-  <form name="myform" method="post" action="" ">
     <th width="25%"><strong>用户名</strong></th>
     <td width="75%">admin</td>
   </tr>
@@ -24,11 +23,11 @@ include admin_tpl('header');
   </tr>
   <tr>
     <th><strong>支付结果</strong></th>
-    <td><?php if($status){?>支付成功<?php }else{?><font style="color:red">支付失败</font><?php }?></td>
+    <td><?php if($ispay){?>支付成功<?php }else{?><font style="color:red">支付失败</font><?php }?></td>
   </tr>
   <tr>
     <th><strong>下单时间</strong></th>
-    <td><?=date('Y-d-m',$addtime)?></td>
+    <td><?=$addtime ? date('Y-d-m',$addtime) : ''?></td>
   </tr>
   <tr>
     <th><strong>支付时间</strong></th>
@@ -50,7 +49,6 @@ include admin_tpl('header');
     <th><strong>电话</strong></th>
     <td><?=$telephone?></td>
   </tr>
- </form>
 </table>
 </body>
 </html>

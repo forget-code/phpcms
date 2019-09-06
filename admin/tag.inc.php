@@ -34,6 +34,7 @@ switch($action)
 		$tag_config = $t->get_tag_config($tagname);
 		$tempmodelid = $modelid;
 		if($tag_config) extract(new_htmlspecialchars($tag_config));
+		
 		if($tempmodelid) $modelid = $tempmodelid;
 		$tpl = 'tag_'.$type.'_edit';
 		if($type == 'content')
@@ -46,7 +47,6 @@ switch($action)
 			foreach($content_tag_form->fields as $field=>$v)
 			{
 				$fields[$field] = $v['name'];
-				if(isset($_GET['modelid']) && $v['isselect']) $selectfields[] = $field;
 				if($v['isorder'])
 				{
 					$orderfields[$field.' ASC'] = $v['name'].' 升序';
@@ -58,6 +58,7 @@ switch($action)
 		elseif($type == 'category')
 		{
 		}
+		
 		if($ajax) $tpl = 'tag_'.$type.'_edit_ajax';
 		include admin_tpl($tpl);
 		break;
@@ -75,7 +76,6 @@ switch($action)
 			foreach($content_tag_form->fields as $field=>$v)
 			{
 				$fields[$field] = $v['name'];
-				if(isset($_GET['modelid']) && $v['isselect']) $selectfields[] = $field;
 				if($v['isorder'])
 				{
 					$orderfields[$field.' ASC'] = $v['name'].' 升序';
@@ -93,6 +93,7 @@ switch($action)
 		break;
 	case 'update':
 		$tag_config['type'] = $type;
+		if($isadd && isset($t->TAG[$tagname])) showmessage('该标签已经存在');
 		if($type == 'content')
 	    {
 			if(!$tag_config['mode'])
@@ -102,7 +103,7 @@ switch($action)
 				$content_tag = new content_tag($modelid);
 				$tag_config['sql'] = $content_tag->get($tag_config['selectfields'], $info, $tag_config['orderby']);
 			}
-			$tag_config['modelid'] = $modelid;
+			$tag_config['modelid'] = $modelid;			
 			$t->update($tagname, $tag_config);
 		}
 		elseif($type == 'category')
@@ -183,10 +184,10 @@ switch($action)
 			$module = $m[2];
 			$t = new tag($module);
 			$tag_config = $t->get_tag_config($tagname);
-			if(isset($tag_config['catid']))
+			if(isset($info['catid']) || $tag_config['catid'] == '$catid')
 			{
 				preg_match("/\\$[a-zA-Z0-9]+/i", $tag_config['module'], $module_vars);
-				preg_match("/\\$[a-zA-Z0-9]+/i", $tag_config['catid'], $cat_vars);
+				preg_match("/\\$[a-zA-Z0-9]+/i", $tag_config['catid'], $cat_vars);			
 				if(!empty($module_vars) || !empty($cat_vars))
 				{
 					$vars = array_merge($module_vars, $cat_vars);
@@ -225,10 +226,12 @@ switch($action)
 			else
 			{
 				$tag = $t->preview($tagname, $tag_config);
-
+				
 				$tag['module'] = $module;
 				$sql = $tag['sql'];
 				preg_match("/\\$[a-zA-Z0-9]+/i", $sql, $vars);
+				if(strpos($sql, 'get_sql_catid') && !in_array('$catid', $vars)) $vars[] = '$catid';
+
 				if(is_array($vars) && !empty($vars))
 				{
 					foreach($vars as $var)
@@ -262,7 +265,6 @@ switch($action)
 		else
 		{
 			$tag_config['type'] = $type;
-
 			if($type == 'content')
 			{
 				if(!$tag_config['mode'])
@@ -274,17 +276,29 @@ switch($action)
 				}
 				$tag_config['modelid'] = $modelid;
 			}
-			if(isset($info['catid']))
+
+			if(isset($info['catid']) || $type == 'category')
 			{
 				preg_match("/^(tag\(')?([a-z0-9]+)/i", $t->get_tag($tagname), $m);
 				$module = $m[2];
 				$t = new tag($module);
-				preg_match("/\\$[a-zA-Z0-9]+/i", $tag_config['module'], $module_vars);
-				preg_match("/\\$[a-zA-Z0-9]+/i", $info['catid'], $cat_vars);
-				if(!empty($module_vars) || !empty($cat_vars))
+				
+				if($tag_config['sql'])
 				{
-					$vars = array_merge($module_vars, $cat_vars);
+					$sql = $tag_config['sql'];
+					preg_match("/\\$[a-zA-Z0-9]+/i", $sql, $vars);
+					if(strpos($sql, 'get_sql_catid') && !in_array('$catid', $vars)) $vars[] = '$catid';
 				}
+				else
+				{
+					preg_match("/\\$[a-zA-Z0-9]+/i", $tag_config['module'], $module_vars);
+					preg_match("/\\$[a-zA-Z0-9]+/i", $tag_config['catid'], $cat_vars);
+					if(!empty($module_vars) || !empty($cat_vars))
+					{
+						$vars = array_merge($module_vars, $cat_vars);
+					}
+				}
+
 				if(is_array($vars) && !empty($vars))
 				{
 					foreach($vars as $var)
@@ -297,6 +311,7 @@ switch($action)
 						}
 					}
 				}
+
 				if($chk_var == 0)
 				{
 					eval("\$catid = \"$catid\";");
@@ -340,8 +355,10 @@ switch($action)
 						$tag_config['sql'] = $member_tag->get($tag_config['selectfields'], $info, $tag_config['orderby']);
 					}
 				}
+
 				$tag_config['modelid'] = $modelid;
 				$tag = $t->preview($tagname, $tag_config);
+				
 				$tag['module'] = $module;
 				if(empty($tag['template'])) showmessage('请选择模板');
 				if($ajax)
@@ -389,6 +406,16 @@ switch($action)
 		if(isset($tag_config)) extract($tag_config, EXTR_SKIP);
 		include admin_tpl('tag_'.$type.'_add');
 		break;
+	case 'checktag':
+		if(isset($t->TAG[$value]))
+		{
+			exit('该标签已经存在');
+		}
+		else
+		{
+			exit('success');
+		}
+	break;
 }
 
 function get_var($string)

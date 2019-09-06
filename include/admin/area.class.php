@@ -110,10 +110,11 @@ class area
 		return TRUE;
 	}
 
-	function listinfo()
+	function listinfo($parentid = -1)
 	{
 		$areas = array();
-		$result = $this->db->query("SELECT `areaid` FROM $this->table WHERE 1 ORDER BY `listorder`,`areaid`");
+		$where = $parentid > -1 ? " AND parentid='$parentid'" : '';
+		$result = $this->db->query("SELECT `areaid` FROM $this->table WHERE 1 $where ORDER BY `listorder`,`areaid`");
 		while($r = $this->db->fetch_array($result))
 		{
 			$areas[$r['areaid']] = $this->get($r['areaid']);

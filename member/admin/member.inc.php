@@ -167,22 +167,25 @@ switch($action)
 				$arr_userid[] = $v['userid'];
 			}
 			$userids = implode(',', $arr_userid);
+			$userids = $userids ? $userids : "''";
 			unset($arr_userid);
 		}
 		if($extgroup)
 		{
-			$result = $group_admin->extend_group_list($extgroup, 0);
+			$result = $group_admin->group_list($extgroup);
 			foreach($result as $v)
 			{
 				$arr_userid[] = $v['userid'];
 			}
+
 			$ext_userid = implode(',', $arr_userid);
+			$ext_userid = $ext_userid ? $ext_userid : "''";
 			unset($arr_userid);
 		}
         if(!isset($username)) $username = '';
         $condition = '';
-		$condition .= ($modelid && $issearch) ? " AND m.userid IN ('$userids')" : '';
-		$condition .= ($extgroup) ? " AND m.userid IN ('$ext_userid')" : '';
+		$condition .= ($modelid && $issearch) ? " AND m.userid IN ($userids)" : '';
+		$condition .= ($extgroup) ? " AND m.userid IN ($ext_userid)" : '';
 		$condition .= $username ? " AND m.username like '%$username%'" : '';
 		$condition .= $groupid ? " AND m.groupid='$groupid'" : '';
 		$condition .= $email ? " AND m.email='$email'" : '';
@@ -197,7 +200,7 @@ switch($action)
 		$condition .= (isset($disabled) && ($disabled != -1) && !empty($disabled)) ? " AND m.disabled=$disabled" : '';
 		$r = $db->get_one("SELECT count(*) as num FROM ".DB_PRE."member_cache m WHERE 1 $condition");
 		$pages = pages($r['num'], $page, $pagesize);
-		$order = $orderby ? $orderby : 'm.userid ASC';
+		$order = $orderby ? $orderby : 'm.userid DESC';
 		$members = $member->listinfo($condition, $order, $page, $pagesize);
 		$GROUP['0'] = '请选择';
 		ksort($GROUP);

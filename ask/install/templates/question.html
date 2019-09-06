@@ -11,11 +11,11 @@
 	<form name="myform" method="post" action="{$M[url]}question.php?" onSubmit="return checkform(this);">
       <tr>
         <th width="90">您的问题</th>
-        <td><input type="text" name="info[title]" id="title" value="{$title}" size="50"></td>
+        <td><input type="text" name="info[title]" id="title" value="{$title}" size="50" {if $M[publish_code]}onclick="$('#reg_code').load('{$M[url]}question.php', {action:'getcheckcode'});"{/if}></td>
       </tr>
       <tr>
         <th style="vertical-align:top">问题补充</th>
-        <td><textarea name="message" id="message" rows="9" cols="60"></textarea>
+        <td><textarea name="message" id="message" rows="9" cols="60" ></textarea>
 		{if $M[use_editor]}{form::editor('message','introduce','100%',200,0)}{/if}
         </td>
       </tr>
@@ -65,9 +65,7 @@
       {if $M[publish_code]}
       <tr>
   	    <th>验证码</th>
-    	<td>
-        	<input name="checkcodestr" type="text" style="ime-mode:disabled" require="true" datatype="limit" min="4" max="4" msgid="code" msg="验证码必须填写" size="6" />
-          &nbsp;<img src="checkcode.php" id="checkcode" onClick="this.src='checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" width="48" height="19" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle" class="color_1" />&nbsp;<span class="color_1"></span><span id="code"></span>
+    	<td id="reg_code">
         </td>
       </tr>
       {/if}

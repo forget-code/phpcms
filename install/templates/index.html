@@ -64,6 +64,7 @@ function set_type(type)
     </div>
 <!--{/loop}-->
     <!--end 栏目列表-->
+    <div class="clear"></div>
   </div>
   <!--end left-->
   <!--begin right-->
@@ -114,7 +115,7 @@ function set_type(type)
 <!--{if isset($MODULE['vote'])}-->
 	<h4><a href="{$MODULE[vote][url]}"><img src="images/more.gif" alt="更多" /></a>投票调查</h4>
     <div id="vote_list">  
-    <script language='javascript' src='{$MODULE[vote][url]}vote.php?action=js&voteid=1'></script>
+    <script language='javascript' src='{$MODULE[vote][url]}vote.php?voteid=1&action=js'></script>
     </div>   
 <!--{/if}-->
 <!--{if isset($MODULE['mail']) }-->

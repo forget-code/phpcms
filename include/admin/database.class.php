@@ -250,7 +250,6 @@ class database
 					{
 						$str = file_get_contents(PHPCMS_ROOT.'data/bakup/'.$filename);
 						$str = str_charset($from, $to, $str);
-						echo $from.' '.$to;
 						file_put_contents(PHPCMS_ROOT.'data/bakup/'.$to.$filename, $str);
 						@chmod(PHPCMS_ROOT.'data/bakup/'.$to.$filename, 0777);
 					}

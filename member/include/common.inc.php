@@ -18,6 +18,7 @@ if($PHPCMS['uc'])
 	define("UC_IP", $PHPCMS['uc_ip']) ;
 	define("UC_DBTABLEPRE", $PHPCMS['uc_dbpre']);
 	define("UC_CONNECT", 'mysql');
+	define('API_RETURN_SUCCEED', 1);
     define('UC_DBCHARSET', $PHPCMS['uc_charset']); 
 	define('API_UPDATECREDIT', 1);		//更新用户积分 开关
 	define('API_GETCREDITSETTINGS', 1);	//向 UCenter 提供积分设置 开关

@@ -135,7 +135,7 @@ $entryarray = array(
             'sitemap.xml'
           );
 
-$writelist = array('data/bakup','data/cache_model','data/cache_page','data/cache','data/cache_tag','data/cache_template','data/filterlog','data/log','data/temp','data/txt','uploadfile','data/js','about','templates');
+$writelist = array('data/bakup','data/cache_model','data/cache_page','data/cache_tag','data/cache_template','data/filterlog','data/log','data/temp','data/txt','uploadfile','data/js','about','templates');
 foreach($writelist as $directory)
 {
     getdirentry($directory);

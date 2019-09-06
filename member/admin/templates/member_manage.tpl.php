@@ -53,7 +53,7 @@ include admin_tpl('header');
         <th width="5%"><strong>选中</strong></th>
         <th>
         	<strong>
-            	<a href="<?=($orderby=='m.username ASC')? url_par("orderby=m.username DESC") : url_par("orderby=m.username ASC")?>" title="按用户名排序">用户名
+            	<a href="<?=($orderby=='m.username ASC')? url_par("orderby=m.username DESC") : url_par("orderby=m.username ASC")?>" title="按用户名排序">用户名</a>
             </strong>
         </th>
         <th width="10%"><strong>会员组</strong></th>

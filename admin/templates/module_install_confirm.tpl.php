@@ -44,7 +44,7 @@ include admin_tpl('header');
       &nbsp; <input type="button" name="cancel" value=" 取消安装 " onClick="window.location='?mod=<?=$mod?>&file=module'">
 		</td>
     </tr>
-  </form>
 </table>
+</form>
 </body>
 </html>

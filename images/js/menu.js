@@ -1,3 +1,5 @@
+var refresh = 0;
+var menuid = 0;
 function evet(){
 	$(".tree_div").mouseover(function(){
 		$("#tree_bg").show();
@@ -32,6 +34,10 @@ function get_menu(id,obj,islen){
 	{
 		$("#tree_box").css('top', 0);
 	}
+	if (islen==0)
+	{
+		menuid = id;
+	}
 	$('#position').load('?mod=phpcms&file=menu&action=menu_pos&menuid='+id);
 	$("#"+obj).html('<img src="'+site_url+'images/loading.gif" width="16" height="16" border="0" />');
 	var touimg_src = '';
@@ -60,8 +66,9 @@ function get_menu(id,obj,islen){
 	}
 	$("#touimg_"+id).attr('src',site_url+'images/'+touimg_src);
 	$("#img_"+id).attr('src',site_url+'images/'+img_src);
-
-	$.getJSON('?mod=phpcms&file=menu&action=get_menu_list&menuid='+id,function(json){
+	
+	var cache_refresh = refresh ? 'false': 'true';
+	$.ajax({type:'get', url:'?mod=phpcms&file=menu&action=get_menu_list&menuid='+id, cache:cache_refresh,dataType:'json', success:function(json){
 	var htmls="";
 	var isend ="tree_line";
 	var open = new Array();
@@ -111,5 +118,25 @@ function get_menu(id,obj,islen){
 	$.each(open,function(i,n){get_menu(n,'tree_'+n,1)});
 	}
 	evet();
-	});
+	}});
+}
+
+function menu_refresh()
+{
+	if (refresh==1)
+	{
+		refresh = 0;
+		$('#menurefresh').attr('title', '点击设置为刷新状态');
+		$('#menurefresh').attr('alt', '点击设置为刷新状态');
+		$('#menurefresh').attr('src', 'admin/skin/images/refresh.gif');
+	}
+	else
+	{
+		refresh = 1;
+		$('#menurefresh').attr('title', '点击设置为缓存状态');
+		$('#menurefresh').attr('alt', '点击设置为缓存状态');
+		$('#menurefresh').attr('src', 'admin/skin/images/refreshed.gif');		
+		get_menu(menuid, 'tree', 0);
+		setTimeout(menu_refresh, 30000);	
+	}
 }

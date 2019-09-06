@@ -8,4 +8,5 @@
 <script type="text/javaScript" src="images/js/admin.js"></script>
 <script type="text/javaScript" src="images/js/jquery.min.js"></script>
 <script type="text/javaScript" src="images/js/css.js"></script>
+<script type="text/javascript" src="images/js/validator.js"></script>
 </head>

@@ -4,7 +4,7 @@ if(!$PHPCMS['uc'])  exit('Ucenter client disabled !');
 if(!$_userid) showmessage($LANG['please_login'], $M['url'].'login.php?forward='.urlencode(URL));
 if(!$forward) $forward = HTTP_REFERER;
 $outcredit = cache_read('creditsettings.php');
-if(!$outcredit) showmessage('没有相关的更新积分兑换方案，请到Ucenter处添加', UC_API);
+if(!$outcredit && $_groupid==1) showmessage('没有相关的更新积分兑换方案，请到Ucenter处添加', UC_API);
 $avatar = avatar($_userid);
 
 $pay_api = load('pay_api.class.php', 'pay', 'api');
@@ -19,6 +19,10 @@ switch($action)
 		{
 			exit('超过'.$credit.'的最大值');
 		}
+		else
+		{
+			exit('success');
+		}
 		break;
 	default:
 		if($dosubmit)
@@ -32,6 +36,8 @@ switch($action)
 			{
 				showmessage('超过你所有的最大值', $forward);
 			}
+			$key = $toappid.'|'.$tocreditid;
+			$fromcredit = floor($fromcredit / $outcredit[$key]['ratio']);
 			$ucresult = uc_call('uc_credit_exchange_request', array($_userid, $fromcreditid, $tocreditid, $toappid, $fromcredit));
 			if(!$ucresult)
 			{

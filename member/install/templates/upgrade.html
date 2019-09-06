@@ -21,17 +21,22 @@
 		{if $r['iscontinue']}
 		<span style="color:{if $r['isexpired']}gray{else}blue{/if}">{$r['startdate']} ~ {$r['enddate']}</span>
 		{/if}</td>
-        <td style="color:orange;font-weight:bold;text-align:left">{$r[price_y]}元/年<br />{$r[price_m]}元/月<br />{$r[price_d]}元/天</td>
+        <td style="color:orange;font-weight:bold;text-align:left">{if $r['price_y']>0}{$r[price_y]}元/年<br />{/if}{if $r['price_m']>0}{$r[price_m]}元/月<br />{/if}{if $r['price_d']>0}{$r[price_d]}元/天{/if}</td>
         <td>
-		{if $r['iscontinue']}
-		<a href="{$M[url]}upgrade.php?action=continue&groupid={$r[groupid]}" style="color:green">续费</a>
+		{if $r[disabled] || !$r[allowupgrade]}
+			<font color="#cccccc">{if $r['iscontinue']}续费{else}升级{/if}</font>
 		{else}
-		<a href="{$M[url]}upgrade.php?action=pay&groupid={$r[groupid]}" style="color:red">升级</a>
+			{if $r['iscontinue']}
+			<a href="{$M[url]}upgrade.php?action=continue&groupid={$r[groupid]}" style="color:green">续费</a>
+			{else}
+			<a href="{$M[url]}upgrade.php?action=pay&groupid={$r[groupid]}" style="color:red">升级</a>
+			{/if}
 		{/if}
 		</td>
       </tr>
 {/loop}
     </table>
   </form>
+</div>
 </div>
 {template "member","footer"}

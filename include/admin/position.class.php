@@ -142,6 +142,7 @@ class position
 		{
 			$contentid = array_map('intval', $contentid);
             $contentids = implodeids($contentid);
+			$this->db->query("DELETE FROM `$this->table_content_position` WHERE posid=$posid AND `contentid` IN($contentids)");
 			foreach($contentid as $id)
 			{
 				$this->content_pos($id);
@@ -150,9 +151,10 @@ class position
 		else
 		{
             $contentids = $contentid;
+			$this->db->query("DELETE FROM `$this->table_content_position` WHERE posid=$posid AND `contentid` IN($contentids)");
 			$this->content_pos($contentid);
 		}
-		return $this->db->query("DELETE FROM `$this->table_content_position` WHERE posid=$posid AND `contentid` IN($contentids)");
+		return true;
 	}
 
 	function content_exists($posid, $contentid)

@@ -10,11 +10,11 @@ include admin_tpl('header');
 <table cellpadding="0" cellspacing="1" class="table_form">
 	<caption>修改模型</caption>
 	<tr>
-		<th width="10%"><strong>现有模型</strong></th>
+		<th width="10%"><strong>所在模型：</strong></th>
 		<td><?=$MODEL[$modelid][name]?></td>
 	</tr>
     <tr>
-    	<th><strong>要改变的模型</strong></th>
+    	<th><strong>目标模型：</strong></th>
         <td><?=form::select_member_model('tomodelid', 'tomodelid', '请选择', '', 'require="true" ')?></td>
     </tr>
     <tr>

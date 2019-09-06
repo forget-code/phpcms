@@ -4,8 +4,9 @@ include admin_tpl('header');
 ?>
 <body>
 <?=$menu?>
-<table cellpadding="0" cellspacing="1" class="table_form">
 <form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&confirm=1" method="post" name="myform">
+
+<table cellpadding="0" cellspacing="1" class="table_form">
     <caption>第一步：填写模块目录</caption>
 	<tr> 
       <th><strong>模块目录</strong></th>
@@ -20,8 +21,8 @@ include admin_tpl('header');
       &nbsp; <input type="button" name="cancel" value=" 取消安装 " onClick="window.location='?mod=<?=$mod?>&file=module'">
 	  </td>
     </tr>
-	</form>
-</table>
+</table>	
+</form>
 <br />
 <table cellpadding="2" cellspacing="1" class="table_info">
 <tr>

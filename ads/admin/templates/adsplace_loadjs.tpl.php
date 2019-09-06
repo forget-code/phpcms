@@ -2,7 +2,8 @@
 defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
-<table cellpadding="0" cellspacing="0" class="table_form"><form method="post" name="myform">
+<form method="post" name="myform">
+<table cellpadding="0" cellspacing="0" class="table_form">
 <tr>
 <caption><?php echo $loadadsplace['placename']; ?>&nbsp;广告位代码调用</caption>
 </tr>
@@ -45,5 +46,6 @@ include admin_tpl('header');
 &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="window.open('?mod=ads&file=ads_place&action=view&placeid=<?=$placeid?>');" value="预览广告位"></td>
 </tr>
 </table>
+</form>
 </body>
 </html>

@@ -34,6 +34,7 @@
         </ul>
       </div>
 </div>
+<div class="clear"></div>
 <!--专题文章end-->
 <!--begin comment-->
 {if isset($MODULE[comment])}
@@ -122,16 +123,13 @@
         }
       //-->
       </script>
-      <script language="JavaScript" src="count.php?specialid={$specialid}"></script>
     {/if} 
-
-  </div>
+  <!--end comment-->
+    </div>
   <!--begin right-->
   <div id="main_r">
     <!--{block("specialid_$specialid", 3)}-->
   </div>
   <!--end right-->
-
-  <!--end comment-->
 </div>
 {template 'phpcms','footer'}

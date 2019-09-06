@@ -7,7 +7,7 @@
 	<a href="{$MODULE[member][url]}view.php?userid={$v[userid]}" class="name"><span style="color:red">{$v[username]}</span></a>
 	<em>所在地区： {$AREA[$v[areaid]][name]}</em>
 	<em>用户组：{$GROUP[$v[groupid]]}</em>
-	<em>最后登录时间：{date('Y-m-d', $v[lastlogintime])}</em>
+	<em>最后登录时间：{if $v[lastlogintime]}{date('Y-m-d', $v[lastlogintime])}{/if}</em>
 </dd> 
 <dd>
 	联系方式：<em>{$v[email]}</em>

@@ -71,7 +71,8 @@ class url
 		global $PHPCMS;
 		if($catid == 0 || $time == 0 || $prefix == '')
 		{
-			$r = $this->db->get_one("SELECT `catid`,`inputtime`,`prefix` FROM `".DB_PRE."content` WHERE `contentid`='$contentid'");
+			$r = $this->db->get_one("SELECT * FROM `".DB_PRE."content` WHERE `contentid`='$contentid'");
+			if($r['isupgrade']) return $r['url'];
 			$catid = $r['catid'];
 			$time = $r['inputtime'];
 			if(!$prefix) $prefix = $r['prefix'];
@@ -115,9 +116,13 @@ class url
 		return '<a href="'.$pageurls[$prepage].'">上一页</a>'.$pages.'<a href="'.$pageurls[$nextpage].'">下一页</a>';
 	}
 
-	function update($contentid,$urls)
+	function update($contentid,$url)
 	{
-		$this->db->query("UPDATE `".DB_PRE."content` SET url='$urls' WHERE `contentid`='$contentid'");
+		if(!$this->db->get_one("SELECT contentid FROM `".DB_PRE."content` WHERE `contentid`='$contentid' AND `url`='$url'"))
+		{
+			return $this->db->query("UPDATE `".DB_PRE."content` SET url='$url' WHERE `contentid`='$contentid'");
+		}
+		return true;
 	}
 }
 ?>

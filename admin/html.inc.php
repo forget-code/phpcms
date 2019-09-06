@@ -188,7 +188,7 @@ switch($action)
 				$creatednum = $offset + count($data);
 				$percent = round($creatednum/$total, 2)*100;
 				$message = "共需更新 <font color='red'>$total</font> 条信息<br />已完成 <font color='red'>{$creatednum}</font> 条（<font color='red'>{$percent}%</font>）";
-				$forward = $start ? "?mod=phpcms&file=html&type=$type&dosubmit=1&firest=$first&action=$action&fromid=$fromid&toid=$toid&fromdate=$fromdate&todate=$todate&pagesize=$pagesize&page=$page&pages=$pages&total=$total" : preg_replace("/&page=([0-9]+)&pages=([0-9]+)&total=([0-9]+)/", "&page=$page&pages=$pages&total=$total", URL);;
+				$forward = $start ? "?mod=phpcms&file=html&type=$type&dosubmit=1&first=$first&action=$action&fromid=$fromid&toid=$toid&fromdate=$fromdate&todate=$todate&pagesize=$pagesize&page=$page&pages=$pages&total=$total" : preg_replace("/&page=([0-9]+)&pages=([0-9]+)&total=([0-9]+)/", "&page=$page&pages=$pages&total=$total", URL);;
 			}
 			else
 			{

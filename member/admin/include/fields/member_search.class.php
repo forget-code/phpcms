@@ -52,10 +52,8 @@ class member_search
 		}
 		else
 		{
-			if($where) $where = "WHERE $where";
-			$sql = "SELECT * FROM $this->table AND a.userid=i.userid $where ORDER BY $orderby";
+			return true;
 		}
-		$this->sql = $sql;
 		$this->sql = $sql;
 		return true;
 	}
@@ -68,20 +66,6 @@ class member_search
 		$this->model_fields = cache_read($this->modelid.'_fields.inc.php', CACHE_MODEL_PATH);
 		$this->fields = $this->modelid ? array_merge($this->model_fields, $this->common_fields) : $this->common_fields;
 		return true;
-	}
-
-	function get($where, $orderby = '')
-	{
-		foreach($where as $field=>$value)
-		{
-			$issearch = $this->fields[$field]['issearch'];
-			$func = $this->fields[$field]['formtype'];
-			if(!$issearch || !method_exists($this, $func)) continue;
-			$where[$field] = $this->$func($field, $value);
-		}
-		$where = implode(' AND ', array_filter($where));
-		if(!$orderby) $orderby = 'a.userid DESC';
-		return "SELECT * FROM $this->table WHERE a.userid=b.userid AND $where ORDER BY $orderby";
 	}
 
 	function data($page = 1, $pagesize = 20)

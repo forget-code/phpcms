@@ -18,6 +18,7 @@ include admin_tpl('header');
   </tr> 
 </table>
 </form>
+<form method="post" name="myform" action="?mod=<?=$mod?>&file=<?=$file?>&action=delete">
 <table cellpadding="0" cellspacing="1" class="table_list">
 <caption>管理问题答案</caption>
 	<tr>
@@ -30,7 +31,6 @@ include admin_tpl('header');
 		<th>状态</td>
 		<th>管理操作</td>
 	</tr>
-		<form method="post" name="myform" action="?mod=<?=$mod?>&file=<?=$file?>&action=delete">
 <?php
 	foreach ($infos as $info) {
 ?>
@@ -59,6 +59,5 @@ include admin_tpl('header');
 </div>
 </form>
 <div id="pages"><?=$answer->pages?></div>
-
 </body>
 </html>

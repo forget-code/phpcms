@@ -22,6 +22,7 @@ if($contentid)
 	$catid = $data['catid'];
 	$modelid = $CATEGORY[$catid]['modelid'];
 }
+
 switch($action)
 {
     case 'add':
@@ -65,7 +66,7 @@ switch($action)
 			if($dosubmit)
 			{
 				if(!$MODEL[$modelid]['ischeck']) $info['status'] = 99;
-				if(isset($MODULE['pay']) && $contentid = $c->add($info) && $presentpoint)
+				if($contentid = $c->add($info) && isset($MODULE['pay']) && $presentpoint)
 				{
 					$api_msg = $presentpoint > 0 ? '投稿奖励' : '发布信息扣点';
 					$pay_api = load('pay_api.class.php', 'pay', 'api');
@@ -164,6 +165,7 @@ switch($action)
 			foreach($CATEGORY as $cid => $cat)
 			{
 				if($cat['type']) continue;
+				if(!$priv_group->check('catid', $cat['catid'], 'input', $_groupid)) continue;
 				$count = $c->count("`catid`=$cid AND `status`=$status");
 				$post = $cat['child'] ? "<font color='gray'>发布</font>" : "<a href='".SCRIPT_NAME."?action=add&catid=".$cat['catid']."'>发布</a>";
 				$manage = " | <a href='".SCRIPT_NAME."?action=manage&catid=".$cat['catid']."&status=".$status."'>管理</a>";

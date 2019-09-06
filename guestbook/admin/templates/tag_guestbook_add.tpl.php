@@ -26,6 +26,10 @@ function var_del(i)
 	$('#var'+i).remove();
 	return true;
 }
+
+$().ready(function() {
+	  $('form').checkForm(1);
+	});
 </script>
 
 <form name="myform" method="get" action="?" onSubmit="return doCheck();">
@@ -36,12 +40,13 @@ function var_del(i)
 	<input name="action" id="action" type="hidden" value="<?=$action?>">
 	<input name="job" type="hidden" value="<?=$job?>">
 	<input name="function" type="hidden" value="<?=$function?>">
+	<input type="hidden" name="isadd" value="1">
 	<input name="tag_config[func]" type="hidden" value="<?=$function?>">
 	<input name="forward" type="hidden" value="<?=$forward?>">
     <tr>
       <td><b>标签名称</b><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</td>
       <td width="75%">
-	  <input name="tagname" id="tagname" type="text" size="20" value="<?=$tagname?>"> <input type="button" value=" 检查是否已经存在 " onClick="Dialog('?mod=<?=$mod?>&file=<?=$file?>&action=checkname&tagname='+$('tagname').value+'','','300','40','no')">
+	  <input name="tagname" id="tagname" type="text" size="20" value="<?=$tagname?>" require="true" datatype="require|ajax" url="?mod=<?=$mod?>&file=<?=$file?>&action=checktag" msg="标签名称必填|">
 	  </td>
     </tr>
     <tr>

@@ -24,9 +24,16 @@ class ipbanned
 
 	function delete($ip)
 	{
-		if(!$ip) return false;
-		$ips = is_array($ip) ? "'".implode("','", $ip)."'" : $ip;
-		$this->db->query("DELETE FROM `$this->table` WHERE `ip` IN($ips)");
+		if(!$ip) return false;		
+		if(is_array($ip))
+		{
+			array_map(array(&$this, 'delete'), $ip);
+		}
+		else
+		{
+			$this->db->query("DELETE FROM `$this->table` WHERE `ip`='$ip'");
+		}
+		return true;
 	}
 
 	function clear()

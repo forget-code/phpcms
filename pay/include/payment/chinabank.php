@@ -107,8 +107,10 @@ class chinabank
         {
             if ($v_pstatus == '20')
             {
-				changeorder($v_oid);
-                return true;
+                if(changeorder($v_oid))
+                {
+                    return true;
+                }
             }
         }
         else

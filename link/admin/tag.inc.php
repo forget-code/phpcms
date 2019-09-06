@@ -11,6 +11,7 @@ switch($action)
     case 'add':		
 		if(isset($dosubmit))
 		{
+			if($isadd && isset($t->TAG[$tagname])) showmessage('该标签已经存在');
 			if($tag_config['func'])
 			{
 				$sql = " WHERE linktype='$tag_config[linktype]' and passed=1";
@@ -41,6 +42,7 @@ switch($action)
 	case "copy":
 		if(isset($dosubmit))
 		{
+			if($isadd && isset($t->TAG[$tagname])) showmessage('该标签已经存在');
 			if($tag_config['func'])
 			{
 				$sql = " where linktype='$tag_config[linktype]' and passed=1";
@@ -154,6 +156,16 @@ switch($action)
 			include admin_tpl('tag_preview', 'phpcms');
 		}
 	break;	
-
+	
+	case 'checktag':
+		if(isset($t->TAG[$value]))
+		{
+			exit('该标签已经存在');
+		}
+		else
+		{
+			exit('success');
+		}
+	break;
 }
 ?>

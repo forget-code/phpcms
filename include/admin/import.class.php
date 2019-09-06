@@ -186,6 +186,7 @@ class import
 			{
 				if($member_api->check_email_user($val['username'], $val['email']))	continue;
 			}
+			if(DB_CHARSET == 'utf8' && $import_info['dbtype'] == 'access') $val = str_charset(CHARSET, 'gbk', $val);
 			$userid = $member_api->add($val, 1);
 			if($val['modelid'])
 			{
@@ -300,6 +301,8 @@ class import
 		}
 		foreach ($s as $val)
 		{
+			if($val['url']) $val['islink'] = 1;
+			if(DB_CHARSET == 'utf8' && $import_info['dbtype'] == 'access') $val = str_charset(CHARSET, 'gbk', $val);
 			$contentid = $content->add($val, 0, 1);
 		}
         $finished = 0;

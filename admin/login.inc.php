@@ -3,7 +3,7 @@ defined('IN_PHPCMS') or exit('Access Denied');
 
 if($_userid && $_groupid == 1 && $_SESSION['is_admin'] == 1) showmessage($LANG['you_are_logined'], '?mod=phpcms&file=index&action=index');
 
-if($PHPCMS['adminaccessip'] && !ip_access(IP, $PHPCMS['adminaccessip'])) showmessage($LANG['visit_banned']);
+if($PHPCMS['adminaccessip'] && ip_access(IP, $PHPCMS['adminaccessip'])) showmessage($LANG['visit_banned']);
 
 $code = new times();
 $code->set('checkcode', 3600, 1);

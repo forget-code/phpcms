@@ -87,7 +87,7 @@ function var_del(i)
  ?>
 	<tr> 
       <th width="25%"><strong><?=$info['name']?></strong><br />
-	  常用变量表示：<a href="###" onClick="javascript:$('#<?=$field?>').val('$<?=$field?>')" style="color:blue">$<?=$field?></a>
+	  常用变量表示：<a href="###" onClick="javascript:if($('#<?=$field?>').val() == '$<?=$field?>'){$('#<?=$field?>').val('')}else{$('#<?=$field?>').val('$<?=$field?>')}" style="color:blue">$<?=$field?></a>
 	  </th>
       <td><?=$info['form']?> </td>
     </tr>

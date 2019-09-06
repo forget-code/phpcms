@@ -3,8 +3,8 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
-<table cellpadding="2" cellspacing="1" class="table_form">
 <form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>" method="post" name="myform">
+<table cellpadding="2" cellspacing="1" class="table_form">
 <input type="hidden" name="info[modeltype]" value="2">
   <caption>添加会员模型</caption>
 	<tr>

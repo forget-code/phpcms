@@ -58,9 +58,12 @@ class image
 		if(!$type) $type = $info['type'];
 		$type = strtolower($type);
 		unset($info);
+		
 		$scale = min($maxwidth/$srcwidth, $maxheight/$srcheight);
 		$createwidth = $width  = (int)($srcwidth*$scale);
 		$createheight = $height = (int)($srcheight*$scale);
+		if($maxwidth >= $srcwidth) $createwidth = $width = $srcwidth;
+		if($maxheight >= $srcheight) $createheight = $height = $srcheight;
 		$psrc_x = $psrc_y = 0;
 		if($autocut)
 		{

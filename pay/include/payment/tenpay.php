@@ -160,8 +160,10 @@ class tenpay
         elseif ($pay_result == 0)
         {
             /* 改变订单状态 */
-            changeorder($sp_billno);
-            return true;
+            if(changeorder($sp_billno))
+            {
+                return true;
+            }
         }
 		else
 		{

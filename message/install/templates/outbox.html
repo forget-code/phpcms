@@ -32,7 +32,7 @@
 				&nbsp;
 				<input type="button" name="export" id="export" value="导出" />
 				&nbsp;
-				<input type="submit" name="dosubmit" id="delete" value="删除" onClick="if(confirm('确认批量删除这些消息吗？')) $('form').submit()" />
+				<input type="button" name="dosubmit" id="delete" value="删除" onClick="if(confirm('确认批量删除这些消息吗？')) $('form').submit();return false;" />
 			</td>
 		</tr>
 		</table>
@@ -45,6 +45,7 @@
 			</tr>
 		</table>
 		{/if}
+		</form>
 	</div>
 </div>
 <div class="clear"></div>

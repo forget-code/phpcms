@@ -28,6 +28,7 @@ class pay_api
 
 	function update_exchange($module, $type, $number, $note = '', $userid =0, $authid = '')
 	{
+        error_reporting(E_ALL);
 		global $MODULE, $_userid, $_username, $_point, $_amount;
         $inputid = $_userid;
         $inputer = $_username;
@@ -52,7 +53,8 @@ class pay_api
                 if ('amount' == $type)
                 {
                     $blance = $_amount + $number;
-                    if($blance<0)  {$this->error = 0; return false;} //showmessage('金额不足');
+                    if($blance < 0)  {$this->error = 0; return false;} //showmessage('金额不足');
+					if($blance > 9999.99) {$this->error = 7;return false;} //showmessage('金额超过最大额');
                 }
                 else
                 {
@@ -70,6 +72,7 @@ class pay_api
                 {
                     $blance = $userinfo['amount'] + $number;
                     if($blance < 0)  {$this->error = 0; return false;} //showmessage('金额不足');
+					if($blance > 9999.99) {$this->error = 7;return false;} //showmessage('金额超过最大额');
                 }
                 else
                 {
@@ -214,7 +217,8 @@ class pay_api
 					3 => '你的查看时间已过期',
                     4 => '参数设置出错',
                     5 => '错误的参数',
-                    6 => '数量不能为空'
+                    6 => '数量不能为空',
+					7 => '金额超过用户最大额'
 				);
 		return $ERRORMSG[$this->error];
 	}

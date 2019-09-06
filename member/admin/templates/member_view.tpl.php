@@ -7,10 +7,10 @@ include admin_tpl('header');
 	<caption>相关操作</caption>
     <tr>
     	<td><input type="button" value="修改资料" onClick="location.href='?mod=member&file=member&action=edit&userid=<?=$userid?>&forward=<?=urlencode("?mod=member&file=member&action=view&userid=$userid")?>'" />&nbsp;<input type="button" value="修改模型" onClick="location.href='?mod=member&file=member&action=model_edit&modelid=<?=$modelid?>&userid=<?=$userid?>&forward=<?=urlencode("?mod=member&file=member&action=view&userid=$userid")?>'">
-		<?php if(!in_array($userid, $arr_founder) || $userid == $_userid) 
+		<?php if(!in_array($userid, $arr_founder) || $userid != $_userid) 
 			{
 		?>
-		&nbsp;<input type="button" value="修改用户组" onClick="location.href='?mod=member&file=member&action=move&userid=<?=$userid?>&forward=<?=urlencode("?mod=member&file=member&action=view&userid=$userid")?>'" />
+		&nbsp;<input type="button" value="修改会员组" onClick="location.href='?mod=member&file=member&action=move&userid=<?=$userid?>&forward=<?=urlencode("?mod=member&file=member&action=view&userid=$userid")?>'" />
 		&nbsp;<input type="button" value="删除" onClick="javascript:confirmurl('?mod=member&file=member&action=delete&userid=<?=$userid?>', '是否删除该会员')" />&nbsp;<input type="button" value="<?=$disabled?'启用':'禁用'?>" onClick="location.href='?mod=member&file=member&action=lock&userid=<?=$userid?>&val=<?=$disabled?'0':'1'?>&forward=<?=urlencode("?mod=member&file=member&action=view&userid=$userid")?>'" /><?php
 			}
 		?>&nbsp;<input type="button" value="备注" onClick="location.href='?mod=member&file=member&action=note&userid=<?=$userid?>&forward=<?=urlencode("?mod=member&file=member&action=view&userid=$userid")?>'" />
@@ -107,7 +107,35 @@ include admin_tpl('header');
 	}
 	?>
 </table>
-
-
+<?php
+if($arr_ext_group) { 
+?>
+<table cellpadding="0" cellspacing="1" class="table_list">
+	<caption>所拥有的服务</caption>
+	<tr>
+		<th width="20%"><strong>服务名称</strong></th>
+		<th><strong>服务简介</strong></th>
+		<th width="15%"><strong>管理操作</strong></th>
+	</tr>
+<?php 
+		foreach($arr_ext_group as $ext_group)
+		{
+?>
+	<tr>
+		<td><?=$GROUP[$ext_group['groupid']]?></td>
+		<td><?php $result = $group_admin->get($ext_group['groupid']); echo $result['description'];?></td>
+		<td class="align_c">
+			<?php $result = $group_admin->extend_get($userid, $ext_group['groupid'], 'a.disabled'); $disabled = $result['disabled']; ?><a href="?mod=member&file=group&action=extenddisable&groupid=<?=$ext_group['groupid']?>&userid=<?=$userid?>&disable=<?=$disabled?0:1?>"><?php if($disabled) {?>启用<?php }else{ ?>禁用<?php } ?>服务</a>
+			| <a href="?mod=member&file=group&action=extenddelete&groupid=<?=$ext_group['groupid']?>&userid=<?=$userid?>">删除服务</a>
+		</td>
+	</tr>
+<?php 
+		}
+	
+?>
+</table>
+<?php
+	}
+?>
 </body>
 </html>

@@ -26,6 +26,10 @@ function var_del(i)
 	$('#var'+i).remove();
 	return true;
 }
+
+$().ready(function() {
+	  $('form').checkForm(1);
+	});
 </script>
 <body>
 <form name="myform" method="get" action="?" >
@@ -34,12 +38,13 @@ function var_del(i)
 <input name="action" id="action" type="hidden" value="">
 <input name="module" type="hidden" value="<?=$module?>">
 <input name="type" type="hidden" value="<?=$type?>">
+ <input type="hidden" name="isadd" value="1">
 <table cellpadding="2" cellspacing="1" class="table_form">
     <caption>添加<?=$types[$type]?>标签</caption>
     <tr> 
       <th><strong>标签名称</strong><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</th>
       <td>
-	  <input name="tagname" id="tagname" type="text" size="30" value="<?=$tagname?>"><br/>
+	  <input name="tagname" id="tagname" type="text" size="30" value="" require="true" datatype="require|ajax" url="?mod=<?=$mod?>&file=<?=$file?>&action=checktag" msg="标签名称必填|"><br/>
 	  </td>
     </tr>
     <tr> 

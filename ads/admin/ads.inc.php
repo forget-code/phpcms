@@ -14,18 +14,6 @@ switch($action)
 		if($dosubmit)
 		{
 			$attachment = new attachment($mod);
-			if(isset($_FILES['thumb']) && !empty($_FILES['thumb']['name']))
-			{
-				$ads['imageurl'] = $c_ads->upload('thumb');
-				if(!$ads['imageurl']) showmessage($attachment->error(), 'goback');
-				$ads['imageurl'] = UPLOAD_URL.$ads['imageurl'];
-			}
-			if(isset($_FILES['thumb1']) && !empty($_FILES['thumb1']['name']))
-			{
-				$ads['s_imageurl'] = $c_ads->upload('thumb1');
-				if(!$ads['s_imageurl']) showmessage($attachment->error(), 'goback');
-				$ads['s_imageurl'] = UPLOAD_URL.$ads['s_imageurl'];
-			}
 			if(isset($_FILES['flash']) && !empty($_FILES['flash']['name']))
 			{
 				$ads['flashurl'] = $c_ads->upload('flash');
@@ -65,7 +53,7 @@ switch($action)
 		$adssigns = $place = array();
 		$adssigns = $c_ads->manage($offset, $pagesize);
 		$place = $c_ads->get_places();
-		$expireds = array(3=>$LANG['selling_ads'], 1=>$LANG['right_ads'], 2=>$LANG['timeout_ads']);
+		$expireds = array(3=>'等待广告列表', 1=>$LANG['right_ads'], 2=>$LANG['timeout_ads']);
 		include admin_tpl('ads_manage');
 	break;
 
@@ -74,18 +62,6 @@ switch($action)
         if($dosubmit)
         {
             $attachment = new attachment($mod);
-            if(isset($_FILES['thumb']) && !empty($_FILES['thumb']['name']))
-            {
-                $ads['imageurl'] = $c_ads->upload('thumb');
-                if(!$ads['imageurl']) showmessage($attachment->error(), 'goback');
-                $ads['imageurl'] = UPLOAD_URL.$ads['imageurl'];
-            }
-            if(isset($_FILES['thumb1']) && !empty($_FILES['thumb1']['name']))
-            {
-                $ads['s_imageurl'] = $c_ads->upload('thumb1');
-                if(!$ads['s_imageurl']) showmessage($attachment->error(), 'goback');
-                $ads['s_imageurl'] = UPLOAD_URL.$ads['s_imageurl'];
-            }
             if(isset($_FILES['flash']) && !empty($_FILES['flash']['name']))
             {
                 $ads['flashurl'] = $c_ads->upload('flash');

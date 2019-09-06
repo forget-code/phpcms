@@ -24,7 +24,8 @@ include admin_tpl('header');
 </tr>
 </table>
 </form>
-<table cellpadding="3" cellspacing="1" class="table_list" id='Tabs0'><form method="post" name="myform">
+<form method="post" name="myform">
+<table cellpadding="3" cellspacing="1" class="table_list" id='Tabs0'>
   <caption>管理广告位</caption>
 <tr>
 <th width="30"><strong>选中</strong></th>
@@ -41,7 +42,7 @@ if(is_array($places)){
 	foreach($places as $place){
 ?>
 <tr>
-<td class="align_c"><input type="checkbox" id="checkbox" name="placeid[]"  id="placeid[]" value="<?=$place['placeid']?>"></td>
+<td class="align_c"><input type="checkbox" id="checkbox" name="placeid[]" value="<?=$place['placeid']?>"></td>
 <td><A HREF="?mod=ads&file=ads_place&action=view&placeid=<?=$place['placeid']?>" target="_blank"><?=$place['placename']?></A></td>
 <td><?=$place['introduce']?></td>
 <td class="align_c"><?=$place['width']?>x<?=$place['height']?></td>

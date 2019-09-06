@@ -87,9 +87,10 @@ class search
 
 	function q($q, $order = 0, $page = 1, $pasesize = 10, $is_red = 1)
 	{
+		global $M;
 		$page = max(intval($page), 1);
 		$offset = $pasesize*($page-1);
-		if($this->ft_min_word_len > 2)
+		if(!$M['fulltextenble'])
 		{
 			$where = " `data` LIKE '%$q%' ";
 		}

@@ -45,3 +45,15 @@
 </div>
 <!--end　主体-->
 {template 'phpcms','footer'}
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+var digg_listurl = "顶过了";
+function digg(id)
+{
+	$.get('{$MODULE[digg][url]}digg.php?contentid='+id+'&flag=1', function(data){
+		 if(data > 0) $('#diggDivCount_'+id).html(data);
+		 $('#diggDivDo_'+id).html(digg_listurl);
+	});
+}
+//-->
+</SCRIPT>

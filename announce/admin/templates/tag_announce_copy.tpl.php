@@ -27,6 +27,10 @@ function var_del(i)
 	$('#var'+i).remove();
 	return true;
 }
+
+$().ready(function() {
+	  $('form').checkForm(1);
+	});
 </script>
 <?=$menu?>
 <table class="table_form" cellspacing="1" cellpadding="0">
@@ -45,11 +49,12 @@ function var_del(i)
    <input name="job" type="hidden" value="<?=$job?>">
    <input name="function" type="hidden" value="<?=$function?>">
    <input name="tag_config[func]" type="hidden" value="<?=$function?>">
+   <input type="hidden" name="isadd" value="1">
    <input name="forward" type="hidden" value="<?=$forward?>"> 
     <tr> 
       <td><b>新标签名称</b><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</td>
       <td width="75%">
-	  <input type="text" name="tagname" id="tagname" size="20"/>
+	  <input type="text" name="tagname" id="tagname" size="20"  require="true" datatype="require|ajax" url="?mod=<?=$mod?>&file=<?=$file?>&action=checktag" msg="标签名称必填|"/>
 	  </td>
     </tr>
     <tr>

@@ -14,6 +14,7 @@ function checkform()
 		return false;
 	}
 	var linkurl = $('#linkurl').val();
+	
 	if(linkurl)
 	{
 		if(!linkurl.search('http:'))
@@ -35,6 +36,7 @@ function checkform()
 			return false;
 		}
 	}
+	return true;
 }
 function alterUC(eID) {
 	$("#table tbody").hide();
@@ -78,14 +80,14 @@ function alterUC(eID) {
   <table cellpadding="0" cellspacing="0" id="table">
           <tbody id="imageid" style="display:none">
             <tr>
-              <td> 上传图片：&nbsp;<?=form::file("thumb", 'thumb')?><input type='hidden' name="ads[imageurl]" value="<?=$_ads['imageurl']?>"><font color="red">*</font><br/>
+              <td> 上传图片：&nbsp;<?=form::upload_image("ads[imageurl]", 'thumb', $_ads['imageurl'])?><font color="red">*</font><br/>
                 图片提示：
                 <input type="text" name="ads[alt]" size="50" value="<?=$_ads['alt']?>">
                 <br/>
                 链接地址：
                 <input name="ads[linkurl]" type="text" size="50" value="<?=$_ads['linkurl']?>" id="linkurl">
                 <font color="red">*</font><br />
-                上传图片1：<?=form::file("thumb1", 'thumb1')?><input type='hidden' name="ads[s_imageurl]" value="<?=$_ads['s_imageurl']?>"><br />
+                上传图片1：<?=form::upload_image("ads[s_imageurl]", 'thumb', $_ads['s_imageurl'])?><br />
                 (第二张图片当广告为随屏移动广告或者对联广告的时有效) </td>
             </tr>
           </tbody>

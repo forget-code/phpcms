@@ -27,7 +27,7 @@
 		{if $r['status']==0}<br /><a href="{$M[url]}index.php?action=pay&orderid={$r[orderid]}"><span style="color:red">立即付款</span></a>{elseif $r['status']==2}<br /><a href="{$M[url]}index.php?action=receive&orderid={$r[orderid]}"><span style="color:red">确认收货</span></a>{/if}
 		</td>
 		<td class="align_c">
-		<a href="{$M[url]}index.php?action=view&orderid={$r[orderid]}">查看</a> | <a href="#" href="{$M[url]}index.php?action=memo&orderid={$r[orderid]}">备注</a> | {if $r[status] == 0}<a href="javascript:confirmurl('{url($M[url], 1)}index.php?action=cancel&orderid={$r[orderid]}', '取消该订单')" title="取消订单">取消</a>{else}<font color="#cccccc">取消</font>{/if}
+		<a href="{$M[url]}index.php?action=view&orderid={$r[orderid]}">查看</a> | <a href="{$M[url]}index.php?action=memo&orderid={$r[orderid]}">备注</a> | {if $r[status] == 0}<a href="javascript:confirmurl('{url($M[url], 1)}index.php?action=cancel&orderid={$r[orderid]}', '取消该订单')" title="取消订单">取消</a>{else}<font color="#cccccc">取消</font>{/if}
         </td>
       </tr>
       {/loop}

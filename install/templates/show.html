@@ -67,6 +67,7 @@
        {if isset($MODULE[error_report])}
       <form action="{$MODULE[error_report][url]}error_report.php" name="errors" id="errors">
         <input type="hidden" name="title" value="{$title}" />
+		<input type="hidden" name="contentid" value="{$contentid}" />
       </form>
       {/if}
       <p id="text_1" style="margin-top:1%;">

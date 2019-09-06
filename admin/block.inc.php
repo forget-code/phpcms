@@ -86,7 +86,7 @@ switch($action)
 			extract($r);
 			$template = $block->get_template($blockid);
 			$logs = $block->logs($blockid);
-			$actions = array('add'=>'添加', 'edit'=>'修改', 'update'=>'更新','delete'=>'删除');
+			$actions = array('add'=>'添加', 'edit'=>'修改', 'update'=>'更新','delete'=>'删除','post'=>'更新');
             if(!str_exists($forward, '?')) $forward = URL;
 			$tpl = $ajax ? 'block_update_ajax' : 'block_update';
 			include admin_tpl($tpl);

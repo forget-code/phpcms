@@ -9,7 +9,17 @@
 		{tag_信息地区页面图文列表}
       </ul>
     </div>
-		{tag_信息地区页面文字列表}
+		<ul class="text_list text_list_f14">
+		{php $arrchildid = $CATEGORY[$catid][arrchildid]}
+		{if $arrchildid}
+		<!--{get sql="SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms_content` WHERE status=99 AND `areaid`='$areaid' AND `catid` IN ($arrchildid) ORDER BY contentid DESC" rows="10" page="$page"}-->
+			<li><span class="date">{date('Y-m-d',$r[updatetime])}</span>
+			<a href="{$CATEGORY[$r[catid]][url]}" class="catname">[{$CATEGORY[$r[catid]][catname]}]</a>
+			<a href="{$r[url]}" target="_blank">{if $r[style]}<span class="{$r[style]}">{str_cut($r[title], 60)}</span>{else}{str_cut($r[title], 60)}{/if}</a></li>
+		<!--{/get}-->
+		</ul>
+		{if $pages}<div id="pages">{$pages}</div>{/if}
+		{/if}
   </div>
   <div id="main_r">
     <!--广告位-->

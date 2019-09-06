@@ -24,12 +24,6 @@ foreach($vars as $var)
 
 <body>
 <form name="myform" method="get" action="?" onSubmit="javascript:return doCheck();">
-<?php 
-foreach($hiddens as $k=>$v)
-{
-	echo "<input type='hidden' name='$k' value='$v'>\n";
-}
-?>
 <table cellpadding="0" cellspacing="1" class="table_form">
   <caption>{tag_<?=$tagname?>} 标签变量赋值</caption>
   <tr>
@@ -41,9 +35,19 @@ foreach($hiddens as $k=>$v)
  <input type="hidden" name="file" value="<?=$file?>">
  <input type="hidden" name="action" value="<?=$action?>">
  <input name="ajax" type="hidden" value="<?=$ajax?>">
+<?php 
+foreach($vars as $k=>$var)
+{
+	$varname = str_replace('$','',$var);
+	$varname = str_replace("'",'',$varname);
+?>
+<tr>
     <th><strong><?=$var?>：</strong></th>
     <td><input type="text" name="<?=$varname?>" id="var_<?=$varname?>" size="20"></td>
   </tr>
+<?php
+}
+?>
 <tr>
 <th></th>
 <td><input type="submit" name="dosubmit" value=" 预览 ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="返回上一步" onClick="javascript:history.back();"></td>
@@ -57,6 +61,7 @@ foreach($hiddens as $k=>$v)
     <td>
 如果标签中存在变量，预览的时候必须先给这些变量赋值才能预览，可以根据实际情况临时赋值。<p>
 <font color="red">常用标签变量：</font><br />
+<font color="blue">$mod</font> ：一般用来表示模型ID （0 表示不限模型）<br />
 <font color="blue">$catid</font> ：一般用来表示栏目ID （0 表示不限栏目）<br />
 <font color="blue">$specialid</font> ：一般用来表示专题ID （0 表示不限专题）<br />
 <font color="blue">$typeid</font> ：一般用来表示类别ID （0 表示不限类别）<br />

@@ -65,12 +65,12 @@ areaid_reload();
 		if($groupid == 1)
 		{
 		?>
-		<?=$GROUP[$groupid]?>
+		管理员
 		<?php
 		if($userid != $_userid)
 		{
 		?>
-		<a href="javascript:confirmurl('?mod=phpcms&file=admin&action=delete&userid=<?=$userid?>&forward=<?=urlencode(URL)?>', '你确认撤销管理员“<?=$username?>”吗？');">修改会员组</a>
+		<a href="javascript:confirmurl('?mod=phpcms&file=admin&action=delete&userid=<?=$userid?>', '你确认撤销管理员“<?=$username?>”吗？');">撤销管理员</a>
 		<?php
 		}
 		?>

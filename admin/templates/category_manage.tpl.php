@@ -4,7 +4,7 @@ include admin_tpl('header');
 ?>
 <body>
 <?php if($catid){ ?>
-<div class="align_left" style="margin-left:10px;margin-top:10px;">当前位置：<a href="?mod=phpcms&file=category&action=manage">栏目管理</a> > <?=catpos($catid, '?mod=phpcms&file=category&action=manage&catid=$catid')?></div>
+<div class="pos"><strong>当前栏目</strong>：<a href="?mod=phpcms&file=category&action=manage">栏目管理</a><?=catpos($catid, '?mod=phpcms&file=category&action=manage&catid=$catid')?></div>
 <?php } ?>
 <form method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=listorder">
 <table cellpadding="0" cellspacing="1" class="table_list">
@@ -30,7 +30,7 @@ foreach($data as $k=>$r)
 	<td class="align_c"><?php if($r['type'] == 0) { ?><a href="?mod=phpcms&file=model_field&action=manage&modelid=<?=$r['modelid']?>"><?=$MODEL[$r['modelid']]['name']?></a><?php } ?></td>
 	<td class="align_c"><a href='<?=$r['url']?>' target='_blank'>访问</a></td>
 	<td class="align_c">
-	<?php if($r['type']){ ?>
+	<?php if($r['type']>1){ ?>
 	<font color="#CCCCCC">添加子栏目</font> | 
 	<font color="#CCCCCC">子栏目</font> | 
 	<a href='?mod=<?=$mod?>&file=<?=$file?>&action=edit&catid=<?=$r['catid']?>&parentid=<?=$r['parentid']?>'>修改</a> | 
@@ -40,8 +40,12 @@ foreach($data as $k=>$r)
 	<a href='?mod=<?=$mod?>&file=<?=$file?>&action=add&catid=<?=$r['catid']?>'>添加子栏目</a> | 
 	<a href='?mod=<?=$mod?>&file=<?=$file?>&action=manage&catid=<?=$r['catid']?>'>子栏目</a> | 
 	<a href='?mod=<?=$mod?>&file=<?=$file?>&action=edit&catid=<?=$r['catid']?>&parentid=<?=$r['parentid']?>'>修改</a> | 
+	<?php if($r['type']==1) { ?>
+	<font color="#CCCCCC">移动</font> | <font color="#CCCCCC">清空</font> | 
+	<?php }else{ ?>
 	<a href='?mod=<?=$mod?>&file=content_all&action=move&catid=<?=$r['catid']?>'>移动</a> | 
 	<a href="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=recycle&catid=<?=$r['catid']?>', '确认清空“<?=$r['catname']?>”栏目吗？')" >清空</a> | 
+	<?php } ?>
 	<a href="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=delete&catid=<?=$r['catid']?>', '确认删除“<?=$r['catname']?>”栏目吗？')">删除</a>
 	<?php } ?>
 	</td>

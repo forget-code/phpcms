@@ -63,7 +63,7 @@ switch($action)
 			        $action = 'login';
 					if($PHPCMS['passport_charset'] && $PHPCMS['passport_charset'] != CHARSET)
 					{
-						$info = iconv(CHARSET, $PHPCMS['passport_charset'], $info);
+						$info = str_charset(CHARSET, $PHPCMS['passport_charset'], $info);
 					}
 					$info['password'] = md5($password);
 					extract($info);

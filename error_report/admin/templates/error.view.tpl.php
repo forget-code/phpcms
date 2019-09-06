@@ -21,7 +21,7 @@ include admin_tpl('header');
     <th>报告地址</th>
 	<th>用户名</th>
     <th style="width:10%">提交时间</th>
-	<th style="width:10%">删除</th>
+	<th width="15%">管理操作</th>
   </tr>
 <?
   foreach($error['info'] as $error)
@@ -30,12 +30,12 @@ include admin_tpl('header');
   <tr>
     <td style="text-align:center;"><input type="checkbox" name="errorid[]" id="errorid" value="<?=$error['error_id']?>"/></td>
     <td style="text-align:center;"><?=output::style($TYPE[$error['typeid']]['name'], $TYPE[$error['typeid']]['style'])?></td>
-    <td style="text-align:center;"><?=$error['error_title']?></td>
+    <td style="text-align:center;"><a href="?mod=phpcms&file=content&action=edit&catid=0&contentid=<?=$error['contentid']?>"><?=$error['error_title']?></a></td>
     <td style="text-align:center;"><?=$error['error_text']?></td>
 	<td style="text-align:center;"><a href="<?=$error['error_link']?>" target="_blank"><?=$error['error_link']?></a></td>
     <td style="text-align:center;"><? if($error['userid']) {?><a href="?mod=member&file=member&action=view&userid=1"><?=$error['username']?></a><?}else{?> <?=$error['username']?><?}?></td>
 	<td style="text-align:center;"><?=date('Y-m-d', $error['addtime'])?></td>
-	<td style="text-align:center;"><? if ($error['status']){?>已审核<?  }else{ ?><a href="javascript:if(confirm('确定要审核该条记录吗？')) location='?mod=<?=$mod?>&file=<?=$file?>&action=check&errorid=<?=$error['error_id']?>'">未审核</a><? } ?>|<a href="javascript:if(confirm('确定删除该条记录吗？')) location='?mod=<?=$mod?>&file=<?=$file?>&action=delete&errorid=<?=$error['error_id']?>'" >删除</a></td>
+	<td style="text-align:center;"><a href="?mod=phpcms&file=content&action=edit&catid=0&contentid=<?=$error['contentid']?>">原文</a> | <? if ($error['status']){?>已审核<?  }else{ ?><a href="javascript:if(confirm('确定要审核该条记录吗？')) location='?mod=<?=$mod?>&file=<?=$file?>&action=check&errorid=<?=$error['error_id']?>'">未审核</a><? } ?> | <a href="javascript:if(confirm('确定删除该条记录吗？')) location='?mod=<?=$mod?>&file=<?=$file?>&action=delete&errorid=<?=$error['error_id']?>'" >删除</a></td>
   </tr>
 <?
     }

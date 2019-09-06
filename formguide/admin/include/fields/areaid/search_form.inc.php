@@ -5,7 +5,7 @@
 		$js = "<script type=\"text/javascript\">
 					function area_load(id)
 					{
-						\$.get('load.php', { field: 'areaid', id: id },
+						\$.get('load.php', { field: 'areaid', id: id, value: '".$field."'  },
 							  function(data){
 								\$('#$field').val(id);
 								\$('#load_$field').append(data);

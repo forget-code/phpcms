@@ -36,7 +36,7 @@ if(is_array($members))
 }
 ?>
 </table>
-<div class="button_box"
+<div class="button_box">
 		<input name='button2' type='button' class="button_style" id='chkall' onclick='checkall();' value='全选'>
 		<input type="submit" name="dosubmit" value="批量批准" onClick="document.myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=check&dosubmit=1'">&nbsp;&nbsp;
 		<input type="submit" name="dosubmit" value="批量删除" onClick="if(confirm('确认批量删除这些用户吗？')) document.myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=delete&dosubmit=1'">&nbsp;&nbsp;

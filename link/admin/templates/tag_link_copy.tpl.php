@@ -27,6 +27,10 @@ function var_del(i)
 	$('#var'+i).remove();
 	return true;
 }
+
+$().ready(function() {
+	  $('form').checkForm(1);
+	});
 </script>
 
 <form name="myform" method="get" action="?" onSubmit="return doCheck();">
@@ -38,7 +42,8 @@ function var_del(i)
    <input name="job" type="hidden" value="<?=$job?>">
    <input name="function" type="hidden" value="<?=$function?>">
    <input name="tag_config[func]" type="hidden" value="<?=$function?>">
-   <input name="forward" type="hidden" value="<?=$forward?>"> 
+   <input name="forward" type="hidden" value="<?=$forward?>">
+   <input type="hidden" name="isadd" value="1">
     <tr> 
       <td><b>新标签名称</b><font color="red">*</font><br/>可用中文，不得包含特殊字符 ' " $ { } ( ) \ / , ;</td>
       <td width="75%">
@@ -47,7 +52,7 @@ function var_del(i)
     </tr>
     <tr> 
       <td><b>标签说明</b><br/>例如：首页推荐链接，10条</td>
-      <td ><input name="tag_config[introduce]" id="introduce" type="text" size="50" value="<?=$tag_config['introduce']?>" /></td>
+      <td ><input name="tag_config[introduce]" id="introduce" type="text" size="50" value="<?=$tag_config['introduce']?>"  require="true" datatype="require|ajax" url="?mod=<?=$mod?>&file=<?=$file?>&action=checktag" msg="标签名称必填|"/></td>
     </tr>
     <tr> 
       <td><b>链接类型</b></td>

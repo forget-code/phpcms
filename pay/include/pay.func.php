@@ -9,14 +9,45 @@ defined('IN_PHPCMS') or exit('Access Denied');
 function return_url($code)
 {
 	global $MODULE;
-    return $MODULE['pay']['url'].'respond.php?code='.$code;
+    return url($MODULE['pay']['url'].'respond.php?code='.$code, 1);
 }
+
 function changeorder($sn)
 {
 	global $db;
-	$sql = "UPDATE ".DB_PRE."pay_user_account SET `ispay` = '1' WHERE `sn` = '$sn'";
-	return $db->query($sql);
+    $sn = trim($sn);
+    $row = $db->get_one("SELECT * FROM ".DB_PRE."pay_user_account WHERE `sn` = '$sn' AND `ispay` = '1'");
+    if(empty($row))
+    {
+        $sql = "UPDATE ".DB_PRE."pay_user_account SET `ispay` = '1', `paytime` =".TIME." WHERE `sn` = '$sn'";
+	    if( $db->query($sql) )
+        {
+            $info = get_order($sn);
+            $pay = load('pay_api.class.php', 'pay', 'api');
+            $note = '用户网上充值';
+            if($pay->update_exchange('pay', 'amount', $info['quantity'], $note, $info['userid']))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+    else
+    {
+        return false;
+    }
 }
+
+function get_order($sn)
+{
+    global $db;
+    $sn = trim($sn);
+    return $db->get_one("SELECT * FROM ".DB_PRE."pay_user_account WHERE `sn` = '$sn' ");
+}
+
 /**
  *  取得某支付方式信息
  *  @param  string  $code   支付方式代码
@@ -24,7 +55,7 @@ function changeorder($sn)
 function get_payment($code)
 {
 	global $db;
-    $sql = "SELECT * FROM " .DB_PRE."payment WHERE `pay_code` = '$code' AND `enabled` = '1'";
+    $sql = "SELECT * FROM " .DB_PRE."pay_payment WHERE `pay_code` = '$code' AND `enabled` = '1'";
     $info= $db->get_one($sql);
 	$cfg = $info['config'];
     if (is_string($cfg) )

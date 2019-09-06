@@ -30,8 +30,8 @@
 <tr>
 <th align="right">数据库字符集：</th>
 <td>
-<input name="dbcharset" type="radio" id="dbcharset" value="" <?php if(strtolower(DB_CHARSET)=='') echo ' checked '?>/>默认
-<input name="dbcharset" type="radio" id="dbcharset" value="gbk" <?php if(strtolower(DB_CHARSET)=='gbk') echo ' checked '?>  disabled/>GBK
+<input name="dbcharset" type="radio" id="dbcharset" value="utf8" <?php if(strtolower(DB_CHARSET)=='') echo ' checked '?>/>默认
+<input name="dbcharset" type="radio" id="dbcharset" value="gbk" <?php if(strtolower(DB_CHARSET)=='gbk') echo ' checked '?> disabled/>GBK
 <input name="dbcharset" type="radio" id="dbcharset" value="utf8" <?php if(strtolower(DB_CHARSET)=='utf8') echo ' checked '?>/>utf8 
 <input name="dbcharset" type="radio" id="dbcharset" value="latin1" <?php if(strtolower(DB_CHARSET)=='latin1') echo ' checked '?> />latin1 
 <img src="install/images/help.png" style="cursor:pointer;" title="如果Mysql版本为4.0.x，则请选择默认；&#10;如果Mysql版本为4.1.x或以上，则请选择其他字符集（一般选GBK）" align="absmiddle" />
@@ -57,7 +57,7 @@
   </tr>
   <tr>
 	<th align="right">密码：</th>
-	<td><input name="password" type="password" id="password" value="phpcms" style="width:120px" /> 4到20个字符<font color="FFFF00">（默认为 phpcms）</font></td>
+	<td><input name="password" type="password" id="password" value="phpcms" style="width:120px" /> 6到20个字符<font color="FFFF00">（默认为 phpcms）</font></td>
   </tr>
   <tr>
 	<th align="right">确认密码：</th>
@@ -95,6 +95,11 @@ function checkform()
 	if($('#username').val().length<2 || $('#username').val().length>20)
 	{
 		alert('超级管理员帐号不能少于2个字符或者大于20个字符');
+		return false;
+	}
+	if($('#password').val().length<6 || $('#username').val().length>20)
+	{
+		alert('超级管理员密码不能少于6个字符或者大于20个字符');
 		return false;
 	}
 	if($('#password').val()!=$('#pwdconfirm').val())

@@ -21,7 +21,7 @@ switch($action)
 	    {
 			$setting['siteurl'] .= '/';
 		}
-		else
+		elseif(empty($setting['siteurl']))
 	    {
 			$setting['siteurl'] = SITE_URL;
 		}

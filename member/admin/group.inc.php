@@ -7,11 +7,8 @@ $group = new group_admin();
 $menu = admin_menu($LANG['member_group_manage']);
 $action=$action ? $action : 'manage';
 
-$choices = array('1'=>'是', '0'=>'否');
-$disableds = array('1'=>'是', '0'=>'否');
 $grouptypes = array('0'=>'自定义', '1'=>'系统组');
-$allowposts = array('1'=>'是', '0'=>'否');
-$allowsearch = array('1'=>'是', '0'=>'否');
+$choices = array('1'=>'是', '0'=>'否');
 if(!$forward) $forward = '?mod='.$mod.'&file='.$file.'&action=manage';
 
 switch($action)
@@ -76,6 +73,16 @@ switch($action)
 	case 'delete':
 		$group->delete($groupid);
 		cache_member_group();
+		showmessage($LANG['operation_success'], $forward);
+	break;
+
+	case 'extenddisable':
+		$group->extend_disable($groupid, $disable);
+		showmessage($LANG['operation_success'], $forward);
+	break;
+
+	case 'extenddelete':
+		$group->extend_cancel($userid, $groupid);
 		showmessage($LANG['operation_success'], $forward);
 	break;
 

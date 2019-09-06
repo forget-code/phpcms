@@ -15,6 +15,13 @@ include admin_tpl('header');
       <td><input type='text' name='setting[descriptionlen]' id='descriptionlen' value='<?=$descriptionlen?>' size='5' maxlength='50'></td>
     </tr>
 	<tr>
+		<th><strong>启用全文检索：</strong></th>
+		<td>
+			<input name='setting[fulltextenble]' type='radio' id='url' value='1' <?php if($fulltextenble) echo 'checked'; ?>>是&nbsp;
+			<input name='setting[fulltextenble]' type='radio' id='url' value='0' <?php if(!$fulltextenble) echo 'checked'; ?>>否
+		</td>
+	</tr>
+	<tr>
       <th><strong>模块URL地址：</strong></th>
       <td><input name='setting[url]' type='text' id='url' value='<?=$url?>' size='40' maxlength='50'></td>
     </tr>
