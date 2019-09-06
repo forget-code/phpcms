@@ -10,7 +10,7 @@ class data extends admin {
 	
 	public function init() {
 		$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=dbsource&c=data&a=add\', title:\''.L('adding_data_source_call').'\', width:\'700\', height:\'500\', lock:true}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('adding_data_source_call'));
-		$page = isset($_POST['page']) && intval($_POST['page']) ? intval($_POST['page']) : 1;
+		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		$list = $this->db->listinfo('','id desc', $page, 20);
 		$pages = $this->db->pages;
 		include $this->admin_tpl('data_list');

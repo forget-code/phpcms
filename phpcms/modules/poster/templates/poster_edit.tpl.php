@@ -61,7 +61,7 @@ $authkey = upload_key('1,'.$this->M['ext'].',1');
   <tr>
     <th width="80"><?php echo L('linkurl')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[images][1][linkurl]" id="linkurl3" size="30" value="<?php echo $info['setting'][1]['linkurl']?>" /></td>
-    <td rowspan="2"><a href="javascript:flashupload('imgurl_images', '<?php echo L('flash_upload')?>','imgurl',preview,'1,<?php echo $this->M['ext']?>,1','poster', '', '<?php echo $authkey?>');void(0);"><img src="<?php echo $info['setting'][1]['imageurl']?>" id="imgurl_s" width="105" height="88" onerror="this.src='<?php echo IMG_PATH;?>nopic.gif'"></a><input type="hidden" id="imgurl" name="setting[images][1][imageurl]" value="<?php echo $info['setting'][1]['imageurl']?>"></td>
+    <td rowspan="2"><a href="javascript:flashupload('imgurl_images', '<?php echo L('upload_photo')?>','imgurl',preview,'1,<?php echo $this->M['ext']?>,1','poster', '', '<?php echo $authkey?>');void(0);"><img src="<?php echo $info['setting'][1]['imageurl']?>" id="imgurl_s" width="105" height="88" onerror="this.src='<?php echo IMG_PATH;?>nopic.gif'"></a><input type="hidden" id="imgurl" name="setting[images][1][imageurl]" value="<?php echo $info['setting'][1]['imageurl']?>"></td>
   </tr>
   <tr>
     <th><?php echo L('alt')?>：</th>
@@ -97,10 +97,15 @@ $authkey = upload_key('1,'.$this->M['ext'].',1');
 <?php } ?>
 </fieldset></div><?php } if(array_key_exists('text', $setting['type'])) {?><div class="pad-10" id="textdiv" style="display:">
 	<fieldset>
-	<legend><?php if ($sinfo['type']=='text') { echo L('word_link'); } elseif ($sinfo['type']=='code') { echo L('code_setting'); } ?></legend>
+	<legend><?php if ($sinfo['type']=='code') { echo L('code_setting'); } else { echo L('word_link'); } ?></legend>
 	<table width="100%"  class="table_form">
 	<tbody>
-	<?php if($sinfo['type']=='text') {?>
+	<?php if($sinfo['type']=='code') {?>
+  <tr>
+    <th width="80"><?php echo L('code_content')?>：</th>
+    <td class="y-bg"><textarea name="setting[text][code]" id="code" cols="55" rows="6"><?php echo $info['setting']['code']?></textarea></td>
+  </tr>
+  <?php } else {?>
   <tr>
     <th width="80"><?php echo L('word_content')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[text][1][title]" value="<?php echo $info['setting'][1]['title']?>" id="title" size="30" /></td>
@@ -108,11 +113,6 @@ $authkey = upload_key('1,'.$this->M['ext'].',1');
   <tr>
     <th><?php echo L('linkurl')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[text][1][linkurl]" id="link" size="30" value="<?php echo $info['setting'][1]['linkurl']?>"  /></td>
-  </tr>
-  <?php } elseif($sinfo['type']=='code') {?>
-  <tr>
-    <th width="80"><?php echo L('code_content')?>：</th>
-    <td class="y-bg"><textarea name="setting[text][code]" id="code" cols="55" rows="6"><?php echo $info['setting']['code']?></textarea></td>
   </tr><?php }?>
   </tbody>
 </table>

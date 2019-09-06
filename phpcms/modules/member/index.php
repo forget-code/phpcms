@@ -569,7 +569,7 @@ class index extends foreground {
 					}
 					$password = $r['password'];
 					$synloginstr = $this->client->ps_member_synlogin($r['phpssouid']);
-				} else {
+ 				} else {
 					if($status == -1) {	//用户不存在
 						showmessage(L('user_not_exist'), 'index.php?m=member&c=index&a=login');
 					} elseif($status == -2) { //密码错误
@@ -662,7 +662,7 @@ class index extends foreground {
 			param::set_cookie('_username', $username, $cookietime);
 			param::set_cookie('_groupid', $groupid, $cookietime);
 			param::set_cookie('_nickname', $nickname, $cookietime);
-			param::set_cookie('cookietime', $_cookietime, $cookietime);
+			//param::set_cookie('cookietime', $_cookietime, $cookietime);
 			$forward = isset($_POST['forward']) && !empty($_POST['forward']) ? urldecode($_POST['forward']) : 'index.php?m=member&c=index';
 			showmessage(L('login_success').$synloginstr, $forward);
 		} else {
@@ -1200,8 +1200,63 @@ class index extends foreground {
 		
 	}
 	
+	
 	/**
-	 * QQ登录
+	 * QQ号码登录
+	 * 该函数为QQ登录回调地址
+	 */
+	public function public_qq_loginnew(){
+                $appid = pc_base::load_config('system', 'qq_appid');
+                $appkey = pc_base::load_config('system', 'qq_appkey');
+                $callback = pc_base::load_config('system', 'qq_callback');
+                pc_base::load_app_class('qqapi','',0);
+                $info = new qqapi($appid,$appkey,$callback);
+                $this->_session_start();
+                if(!isset($_GET['oauth_token'])){
+                         $info->redirect_to_login();
+                }else{
+					$info->get_openid();//调取QQ openid值
+					if(!empty($_SESSION['openid'])){
+						$r = $this->db->get_one(array('connectid'=>$_SESSION['openid'],'from'=>'qq'));
+						 if(!empty($r)){
+								//QQ已存在于数据库，则直接转向登陆操作
+								$password = $r['password'];
+								$this->_init_phpsso();
+								$synloginstr = $this->client->ps_member_synlogin($r['phpssouid']);
+								$userid = $r['userid'];
+								$groupid = $r['groupid'];
+								$username = $r['username'];
+								$nickname = empty($r['nickname']) ? $username : $r['nickname'];
+								$this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
+								if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
+								$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
+								$cookietime = $_cookietime ? TIME + $_cookietime : 0;
+								$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
+								$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+								param::set_cookie('auth', $phpcms_auth, $cookietime);
+								param::set_cookie('_userid', $userid, $cookietime);
+								param::set_cookie('_username', $username, $cookietime);
+								param::set_cookie('_groupid', $groupid, $cookietime);
+								param::set_cookie('cookietime', $_cookietime, $cookietime);
+								param::set_cookie('_nickname', $nickname, $cookietime);
+								$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
+								showmessage(L('login_success').$synloginstr, $forward);
+						}else{	
+								//未存在于数据库中，跳去完善资料页面。页面预置用户名（QQ返回是UTF8编码，如有需要进行转码）
+								$user = $info->get_user_info();
+ 								$_SESSION['connectid'] = $_SESSION['openid'];
+								$_SESSION['from'] = 'qq';
+								if(CHARSET != 'utf-8') {//转编码
+									$connect_username = iconv('utf-8', CHARSET, $user['nickname']); 
+								}
+ 								include template('member', 'connect');
+						}
+					}
+                }
+    }
+	
+	/**
+	 * QQ微博登录
 	 */
 	public function public_qq_login() {
 		define('QQ_AKEY', pc_base::load_config('system', 'qq_akey'));
@@ -1214,7 +1269,7 @@ class index extends foreground {
 			
 			if(!empty($_SESSION['last_key']['name'])) {
 				//检查connect会员是否绑定，已绑定直接登录，未绑定提示注册/绑定页面
-				$where = array('connectid'=>$_SESSION['last_key']['name'], 'from'=>'qq');
+				$where = array('connectid'=>$_REQUEST['openid'], 'from'=>'qq');
 				$r = $this->db->get_one($where);
 				
 				//connect用户已经绑定本站用户
@@ -1247,7 +1302,7 @@ class index extends foreground {
 				} else {				
 					//弹出绑定注册页面
 					$_SESSION = array();
-					$_SESSION['connectid'] = $_SESSION['last_key']['name'];
+					$_SESSION['connectid'] = $_REQUEST['openid'];
 					$_SESSION['from'] = 'qq';
 					$connect_username = $_SESSION['last_key']['name'];
 
@@ -1318,17 +1373,68 @@ class index extends foreground {
 			include template('member', 'connect_qq');	
 		}
 
-	}	
+	}
+
+
+	//QQ登录功能
+	public function public_qq_login2(){
+                $appid = pc_base::load_config('system', 'qq_appid');
+                $appkey = pc_base::load_config('system', 'qq_appkey');
+                $callback = pc_base::load_config('system', 'qq_callback');
+                pc_base::load_app_class('qqapi','',0);
+                $info = new qqapi($appid,$appkey,$callback);
+                $this->_session_start();
+                if(!isset($_GET['oauth_token'])){
+                        $info->redirect_to_login();
+                }else{
+                        $info->get_openid();
+                        if(!empty($_SESSION['openid'])){
+                                $r = $this->db->get_one(array('connectid'=>$_SESSION['openid'],'from'=>'qq'));
+                                if(!empty($r)){
+                                        //登陆
+                                        $password = $r['password'];
+                                        $this->_init_phpsso();
+                                        $synloginstr = $this->client->ps_member_synlogin($r['phpssouid']);
+                                        $userid = $r['userid'];
+                                        $groupid = $r['groupid'];
+                                        $username = $r['username'];
+                                        $nickname = empty($r['nickname']) ? $username : $r['nickname'];
+                                        $this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
+                                        if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
+                                        $_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime: 0);
+                                        $cookietime = $_cookietime ? TIME + $_cookietime : 0;
+                                        $phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
+                                        $phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+                                        param::set_cookie('auth', $phpcms_auth, $cookietime);
+                                        param::set_cookie('_userid', $userid, $cookietime);
+                                        param::set_cookie('_username', $username, $cookietime);
+                                        param::set_cookie('_groupid', $groupid, $cookietime);
+                                        param::set_cookie('cookietime', $_cookietime, $cookietime);
+                                        param::set_cookie('_nickname', $nickname, $cookietime);
+                                        $forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
+                                        showmessage(L('login_success').$synloginstr, $forward);
+                                }else{
+                                        $user = $info->get_user_info();
+                                        $_SESSION['connectid'] = $_SESSION['openid'];
+                                        $_SESSION['from'] = 'qq';
+                                        $connect_username = $user['nickname'];
+                                        include template('member', 'connect');
+                                }
+                        }
+                }
+        }	
 	/**
 	 * 找回密码
 	 */
 	public function public_forget_password () {
 		
 		$email_config = getcache('common', 'commons');
-		if(empty($email_config['mail_user']) || empty($email_config['mail_password'])) {
-			showmessage(L('email_config_empty'), HTTP_REFERER);
+		//SMTP MAIL 二种发送模式
+ 		if($email_config['mail_type'] == '1'){
+			if(empty($email_config['mail_user']) || empty($email_config['mail_password'])) {
+				showmessage(L('email_config_empty'), HTTP_REFERER);
+			}
 		}
-			
 		$this->_session_start();
 		$member_setting = getcache('member_setting');
 		if(isset($_POST['dosubmit'])) {

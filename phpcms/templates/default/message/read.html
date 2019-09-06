@@ -39,7 +39,7 @@ $(function(){
 	 {php $userid = get_memberinfo_buyusername($infos['send_from_id'],userid)}
      {php $user_pic = get_memberavatar($userid,1,45);}
      <tr>
-       <th><div align=center><img src="{$user_pic}" width="50" height="50" onerror="this.src='{$phpsso_api_url}/statics/images/member/nophoto.gif'"><br><font color=red>{$infos['send_from_id']}</font></div></th>
+       <th><div align=center><img src="{$user_pic}" width="50" height="50" onerror="this.src='{IMG_PATH}member/nophoto.gif'"><br><font color=red>{$infos['send_from_id']}</font></div></th>
        <td>{$infos['subject']} - {date('Y-m-d H:i:s',$infos['message_time'])}<br><br>{$infos['content']}</td>
      </tr>
      
@@ -47,7 +47,7 @@ $(function(){
      {php $userid = get_memberinfo_buyusername($reply_info['send_from_id'],userid)}
      {php $user_pic = get_memberavatar($userid,1,45);}
       <tr>
-       <th><div align=center><img src="{$user_pic}" width="50" height="50" onerror="this.src='{$phpsso_api_url}/statics/images/member/nophoto.gif'"></img><br>{$reply_info['send_from_id']}</div></th>
+       <th><div align=center><img src="{$user_pic}" width="50" height="50" onerror="this.src='{IMG_PATH}member/nophoto.gif'"></img><br>{$reply_info['send_from_id']}</div></th>
        <td>{$reply_info['subject']} - {date('Y-m-d H:i:s',$reply_info['message_time'])}<br><br></br>{$reply_info['content']}</td>
      </tr> 
      {/loop}

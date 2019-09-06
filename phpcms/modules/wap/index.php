@@ -246,7 +246,8 @@ class index {
 		pc_base::load_app_func('global','comment');	
 		$typeid  = intval($_GET['typeid']);	
 		$GLOBALS['siteid'] = max($this->siteid,1);
-		$commentid = isset($_GET['commentid']) && trim(urldecode($_GET['commentid'])) ? trim(urldecode($_GET['commentid'])) : exit('参数错误');	
+		$commentid = isset($_GET['commentid']) && trim(addslashes(urldecode($_GET['commentid']))) ? trim(addslashes(urldecode($_GET['commentid']))) : exit(L('illegal_parameters'));
+		if(!preg_match("/^[a-z0-9_\-]+$/i",$commentid)) exit(L('illegal_parameters'));
 		list($modules, $contentid, $siteid) = decode_commentid($commentid);	
 		list($module, $catid) = explode('_', $modules);
 		$comment_setting_db = pc_base::load_model('comment_setting_model');
@@ -254,7 +255,7 @@ class index {
 		
 		//通过API接口调用数据的标题、URL地址
 		if (!$data = get_comment_api($commentid)) {
-			exit('参数错误');
+			exit(L('illegal_parameters'));
 		} else {
 			$title = $data['title'];
 			$url = $data['url'];

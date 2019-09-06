@@ -83,7 +83,7 @@
 				  
 				  <tr>
                     <td>fsockopen</td>
-                    <td><?php if(ini_get('fsockopen')){ ?>√<?php }else{ ?>×<?php }?></td>
+                    <td><?php if(function_exists('fsockopen')){ ?>√<?php }else{ ?>×<?php }?></td>
                     <td>建议打开</td>
                     <td><?php if($PHP_FSOCKOPEN=='1'){ ?><span><img src="images/correct.gif" /></span><?php }else{ ?><font class="red"><img src="images/error.gif" />&nbsp;不支持fsockopen函数</font><?php }?></td>
                   </tr>

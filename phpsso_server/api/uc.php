@@ -4,6 +4,8 @@ define('PHPCMS_PATH', dirname(__FILE__).'/../');
 include PHPCMS_PATH.'/phpcms/base.php';
 
 define('UC_KEY', pc_base::load_config('system', 'uc_key'));
+define('UCUSE', pc_base::load_config('system', 'ucuse'));
+if(UC_KEY=='' || UCUSE==0){exit('please check uc config!');}
 
 define('API_RETURN_SUCCEED', '1');
 define('API_RETURN_FAILED', '-1');
@@ -52,7 +54,9 @@ class uc_note {
 	public function deleteuser($get,$post) {
 		pc_base::load_app_func('global', 'admin');
 		pc_base::load_app_class('messagequeue', 'admin' , 0);
-		$ids = new_stripslashes($get['ids']);
+ 		$ids = new_stripslashes($get['ids']);
+		$ids = array_map('intval',explode(',',$ids));
+		$ids = implode(',',$ids);
 		$s = $this->member_db->select("ucuserid in ($ids)", "uid");
 		$this->member_db->delete("ucuserid in ($ids)");
 		$noticedata['uids'] = array();

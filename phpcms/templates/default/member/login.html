@@ -123,6 +123,9 @@ $(function(){
 						{if $setting['qq_akey'] || $setting['qq_skey']}
                         	<li style="margin-right:14px;"><a href="javascript:;" onclick="show_login('qq');return false;" style="background-image:url({IMG_PATH}member/logo/qq_16_16.png)">腾讯微博登录</a></li>
 						{/if}
+						{if $setting['qq_appkey'] || $setting['qq_appid']}
+                        	<li style="margin-right:14px;"><a href="{APP_PATH}index.php?m=member&c=index&a=public_qq_loginnew" target="_blank" style="background-image:url({IMG_PATH}member/logo/qq_16_16.png)">腾讯QQ登录</a></li>
+						{/if}
                         </ul>
                         <p>
                         	<span class="blue">{L('other_passport_introduce')}</span>

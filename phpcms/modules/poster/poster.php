@@ -244,7 +244,7 @@ class poster extends admin {
 	 */
 	private function get_setting($type) {
 		$data = $poster_template = array();
-		$poster_template = getcache('poster_template', 'commons');
+		$poster_template = getcache('poster_template_'.$this->get_siteid(), 'commons');
 		if (is_array($poster_template) && !empty($poster_template)) {
 			$data = $poster_template[$type];
 		} else {

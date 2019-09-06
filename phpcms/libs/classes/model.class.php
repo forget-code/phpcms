@@ -6,7 +6,7 @@
  * @license				http://www.phpcms.cn/license/
  * @lastmodify			2010-6-7
  */
-
+defined('IN_PHPCMS') or exit('Access Denied');
 pc_base::load_sys_class('db_factory', '', 0);
 class model {
 	

@@ -226,12 +226,11 @@ class create_html extends admin {
 				} elseif(count($catids)==1 && $catids[0] == 0) {
 					$catids = array();
 					foreach($this->categorys as $catid=>$cat) {
-							if($cat['child'] || $cat['siteid'] != $this->siteid || $cat['type']!=0) continue;
-								$setting = string2array($cat['setting']);
-								if(!$setting['content_ishtml']) continue;
-							$catids[] = $catid;
-						}
-					print_r($catids);
+						if($cat['child'] || $cat['siteid'] != $this->siteid || $cat['type']!=0) continue;
+							$setting = string2array($cat['setting']);
+							if(!$setting['content_ishtml']) continue;
+						$catids[] = $catid;
+					}
 					setcache('html_show_'.$_SESSION['userid'], $catids,'content');
 					$catids = implode(',',$catids);
 					$where .= " AND catid IN($catids) ";

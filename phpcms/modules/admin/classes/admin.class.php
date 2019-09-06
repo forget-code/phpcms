@@ -22,7 +22,7 @@ class admin {
 		self::check_ip();
 		self::lock_screen();
 		self::check_hash();
-		if(pc_base::load_config('system','admin_url') && $_SERVER["SERVER_NAME"]!= pc_base::load_config('system','admin_url')) {
+		if(pc_base::load_config('system','admin_url') && $_SERVER["HTTP_HOST"]!= pc_base::load_config('system','admin_url')) {
 			Header("http/1.1 403 Forbidden");
 			exit('No permission resources.');
 		}

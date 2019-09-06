@@ -31,7 +31,10 @@ class param {
 				if(!isset($_GET[$_key])) $_GET[$_key] = $_value;
 			}
 		}
-		if(isset($_GET['page'])) $_GET['page'] = max(intval($_GET['page']),1);
+		if(isset($_GET['page'])) {
+			$_GET['page'] = max(intval($_GET['page']),1);
+			$_GET['page'] = min($_GET['page'],1000000000);
+		}
 		return true;
 	}
 
@@ -40,6 +43,7 @@ class param {
 	 */
 	public function route_m() {
 		$m = isset($_GET['m']) && !empty($_GET['m']) ? $_GET['m'] : (isset($_POST['m']) && !empty($_POST['m']) ? $_POST['m'] : '');
+		$m = $this->safe_deal($m);
 		if (empty($m)) {
 			return $this->route_config['m'];
 		} else {
@@ -52,6 +56,7 @@ class param {
 	 */
 	public function route_c() {
 		$c = isset($_GET['c']) && !empty($_GET['c']) ? $_GET['c'] : (isset($_POST['c']) && !empty($_POST['c']) ? $_POST['c'] : '');
+		$c = $this->safe_deal($c);
 		if (empty($c)) {
 			return $this->route_config['c'];
 		} else {
@@ -64,6 +69,7 @@ class param {
 	 */
 	public function route_a() {
 		$a = isset($_GET['a']) && !empty($_GET['a']) ? $_GET['a'] : (isset($_POST['a']) && !empty($_POST['a']) ? $_POST['a'] : '');
+		$a = $this->safe_deal($a);
 		if (empty($a)) {
 			return $this->route_config['a'];
 		} else {
@@ -100,6 +106,14 @@ class param {
 	public static function get_cookie($var, $default = '') {
 		$var = pc_base::load_config('system','cookie_pre').$var;
 		return isset($_COOKIE[$var]) ? sys_auth($_COOKIE[$var], 'DECODE') : $default;
+	}
+
+	/**
+	 * 安全处理函数
+	 * 处理m,a,c
+	 */
+	private function safe_deal($str) {
+		return str_replace(array('/', '.'), '', $str);
 	}
 
 }

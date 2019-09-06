@@ -173,15 +173,15 @@ class module_api {
 				}
 			}
 		}
-		if (file_exists($this->uninstalldir.'extention.inc.php')) {
-			@include ($this->uninstalldir.'extention.inc.php');
-		}
 		if (is_array($models) && !empty($models)) {
 			foreach ($models as $m) {
 				$this->m_db = pc_base::load_model($m.'_model');
 				$sql = file_get_contents($this->uninstalldir.$m.'.sql');
 				$this->sql_execute($sql);
 			}
+		}
+		if (file_exists($this->uninstalldir.'extention.inc.php')) {
+			@include ($this->uninstalldir.'extention.inc.php');
 		}
 		if (file_exists(PC_PATH.'languages'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'lang').DIRECTORY_SEPARATOR.$this->module.'.lang.php')) {
 			@unlink(PC_PATH.'languages'.DIRECTORY_SEPARATOR.pc_base::load_config('system', 'lang').DIRECTORY_SEPARATOR.$this->module.'.lang.php');

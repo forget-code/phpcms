@@ -10,7 +10,7 @@
  	 {php $userid = get_memberinfo_buyusername($infos['send_from_id'],userid)}
      {php $user_pic = get_memberavatar($userid,1,45);}
      <tr>
-       <th><div align=center><img src="{$user_pic}" width="50" height="50" onerror="this.src='{$phpsso_api_url}/statics/images/member/nophoto.gif'"><br><font color=red>{$infos['send_from_id']}</font></div></th>
+       <th><div align=center><img src="{$user_pic}" width="50" height="50" onerror="this.src='{IMG_PATH}member/nophoto.gif'"><br><font color=red>{$infos['send_from_id']}</font></div></th>
        <td><b>{$infos['subject']}</b> - {date('Y-m-d H:i:s',$infos['inputtime'])}<br><br>{nl2br($infos['content'])}</td>
      </tr>
      

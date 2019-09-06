@@ -136,12 +136,12 @@ class index extends foreground {
 		} else {
 			if(is_array($_POST['messageid'])){
 				foreach($_POST['messageid'] as $messageid_arr) {
+					$messageid_arr = intval($messageid_arr);
 					$this->message_db->update(array('folder'=>'outbox'),array('messageid'=>$messageid_arr,'send_to_id'=>$this->_username));
 				}
 				showmessage(L('operation_success'), HTTP_REFERER);
 			}
-			
-		}
+ 		}
 	}
 	
 	/**
@@ -154,7 +154,8 @@ class index extends foreground {
 		} else {
 				if(is_array($_POST['messageid'])){
 					foreach($_POST['messageid'] as $messageid_arr) {
-						$this->message_db->update(array('del_type'=>'1'),array('messageid'=>$messageid_arr,'send_from_id'=>$this->_username));
+						$messageid_arr = intval($messageid_arr);
+ 						$this->message_db->update(array('del_type'=>'1'),array('messageid'=>$messageid_arr,'send_from_id'=>$this->_username));
 					}
 					showmessage(L('operation_success'), HTTP_REFERER);
 				} 
@@ -162,14 +163,36 @@ class index extends foreground {
 	}
 	
 	/**
+	 * 查看短消息 - 对当前用户是否有权限查看
+	 */
+	public function check_user($messageid,$where){
+		$username = $this->_username;
+		$messageid = intval($messageid);
+		if($where=="to"){
+			$result = $this->message_db->get_one(array("send_to_id"=>$username,"messageid"=>$messageid));
+		}else{
+			$result = $this->message_db->get_one(array("send_from_id"=>$username,"messageid"=>$messageid));
+		}
+ 		if(!$result){//不是当前用户的消息，不能查看
+			showmessage('请勿非法访问！', HTTP_REFERER);echo '0';
+ 		} 
+	}
+	
+	
+	/**
 	 * 查看短消息
 	 */
 	public function read() { 
 		if((!isset($_GET['messageid']) || empty($_GET['messageid'])) && (!isset($_POST['messageid']) || empty($_POST['messageid']))) return false;
-		//查看过修改状态 为 0 
-		$this->message_db->update(array('status'=>'0'),array('messageid'=>$_GET['messageid']));
+		$messageid = $_GET['messageid'] ? $_GET['messageid'] : $_POST['messageid'];
+		$messageid = intval($messageid);
+		//判断是否属于当前用户
+		$check_user = $this->check_user($messageid,'to'); 
+		
+ 		//查看过修改状态 为 0 
+		$this->message_db->update(array('status'=>'0'),array('messageid'=>$messageid));
 		//查询消息详情
-		$infos = $this->message_db->get_one(array('messageid'=>$_GET['messageid']));
+		$infos = $this->message_db->get_one(array('messageid'=>$messageid));
 		if($infos['send_from_id']!='SYSTEM') $infos = new_html_special_chars($infos);
 		//查询回复消息
 		$where = array('replyid'=>$infos['messageid']);
@@ -182,9 +205,16 @@ class index extends foreground {
 	 * 查看自己发的短消息
 	 */
 	public function read_only() { 
-		if((!isset($_GET['messageid']) || empty($_GET['messageid'])) && (!isset($_POST['messageid']) || empty($_POST['messageid']))) return false;
+		$messageid = $_GET['messageid'] ? $_GET['messageid'] : $_POST['messageid'];
+		$messageid = intval($messageid);
+		if(!$messageid || empty($messageid)){
+			showmessage('请勿非法访问！', HTTP_REFERER);
+		}
+		//判断是否属于当前用户
+		$check_user = $this->check_user($messageid,'from'); 
+		
 		//查询消息详情
-		$infos = $this->message_db->get_one(array('messageid'=>$_GET['messageid']));
+		$infos = $this->message_db->get_one(array('messageid'=>$messageid));
 		$infos = new_html_special_chars($infos);
 		//查询回复消息
 		$where = array('replyid'=>$infos['messageid']);
@@ -215,8 +245,12 @@ class index extends foreground {
 	 */
 	public function reply() {
 		if(isset($_POST['dosubmit'])) {
+			$messageid = intval($_POST['info']['replyid']);
 			//判断当前会员，是否可发，短消息．
 			$this->message_db->messagecheck($this->_userid);
+			//检查此消息是否有权限回复 
+			$this->check_user($messageid,'to');
+			
  			$_POST['info']['send_from_id'] = $this->_username;
 			$_POST['info']['message_time'] = SYS_TIME;
 			$_POST['info']['status'] = '1';

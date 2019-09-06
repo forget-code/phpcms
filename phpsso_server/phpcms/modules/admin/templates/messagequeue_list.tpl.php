@@ -17,10 +17,12 @@ include $this->admin_tpl('header');
 	            <th><?php echo L('notice_num')?></th>
 	            <th><?php echo L('notice_dateline')?></th>
 				<?php
+					if(is_array($applist)) {
 					foreach($applist as $k=>$v) {
 				?>
 				<th><?php echo $v['name']?></th>
 				<?php
+					}
 					}	
 				?> 
             </tr>
@@ -37,6 +39,7 @@ foreach($messagequeue as $k=>$v) {
 		<td align="center"><?php echo date('Y-m-d H:i:s', $v['dateline']);?></td>
 		
 		<?php
+			if(is_array($applist)) {
 			foreach($applist as $app_k=>$app_v) {
 		?>
 		<td align="center" id='status_<?php echo $v['id'].'_'.$app_k;?>'>
@@ -45,7 +48,7 @@ foreach($messagequeue as $k=>$v) {
 			
 		</td>
 		<?php
-			}
+			}}
 		?>
 		
 	</tr>

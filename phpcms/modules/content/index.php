@@ -229,7 +229,7 @@ class index {
 		if(!$setting['meta_title']) $setting['meta_title'] = $catname;
 		$SEO = seo($siteid, '',$setting['meta_title'],$setting['meta_description'],$setting['meta_keywords']);
 		define('STYLE',$setting['template_list']);
-		$page = $_GET['page'];
+		$page = intval($_GET['page']);
 
 		$template = $setting['category_template'] ? $setting['category_template'] : 'category';
 		$template_list = $setting['list_template'] ? $setting['list_template'] : 'list';

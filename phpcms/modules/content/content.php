@@ -397,7 +397,7 @@ class content extends admin {
 						}
 					} else if (isset($_GET['id']) && $_GET['id']) {
 						$id = intval($_GET['id']);
-						$content_info = $this->db->get_one(array('id'=>$id), 'username');
+						$content_info = $this->db->get_content($catid,$id);
 						$memberinfo = $member_db->get_one(array('username'=>$content_info['username']), 'userid, username');
 						$flag = $catid.'_'.$id;
 						if($setting['presentpoint']>0) {
@@ -406,6 +406,11 @@ class content extends admin {
 						} else {
 							pc_base::load_app_class('spend','pay',0);
 							spend::point($setting['presentpoint'], L('contribute_del_point'), $memberinfo['userid'], $memberinfo['username'], '', '', $flag);
+						}
+						//单篇审核，生成静态
+						if($setting['content_ishtml'] == '1'){//栏目有静态配置
+						$urls = $this->url->show($id, 0, $content_info['catid'], $content_info['inputtime'], '',$content_info,'add');
+						$html->show($urls[1],$urls['data'],0);
 						}
 					}
 				}
@@ -576,6 +581,7 @@ class content extends admin {
 
 		if($r['relation']) {
 			$relation = str_replace('|', ',', $r['relation']);
+			$relation = trim($relation,',');
 			$where = "id IN($relation)";
 			$infos = array();
 			$this->db->table_name = $tablename;
@@ -819,8 +825,7 @@ class content extends admin {
 
 			$tree->init($categorys);
 			$string .= $tree->get_tree(0, $str);
-			print_r($string);exit;
-			$str  = "<option value='\$catid'>\$spacer \$catname</option>";
+ 			$str  = "<option value='\$catid'>\$spacer \$catname</option>";
 			$source_string = '';
 			$tree->init($categorys);
 			$source_string .= $tree->get_tree(0, $str);

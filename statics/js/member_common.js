@@ -19,7 +19,7 @@ function show_element(name) {
 
 $(document).ready(function(){
 　　$("input.input-text").blur(function () { this.className='input-text'; } );
-　　$("input.input-text',input[type='password'],textarea").focus(function () { this.className='input-focus'; } );
+　　$(":text").focus(function(){this.className='input-focus';});
 });
 
 /**

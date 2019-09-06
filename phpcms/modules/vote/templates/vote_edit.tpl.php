@@ -171,7 +171,7 @@ function del_old2(o){
 }
 
 function del_old(id) {
-	$.get('?m=vote&c=vote&a=del_option&optionid='+id,null,function (msg) { 
+	$.get('?m=vote&c=vote&a=del_option&optionid='+id+'&pc_hash='+pc_hash,null,function (msg) { 
 	if (msg==1) { 
 	$("div [id=\'option"+id+"\']").remove(); 
 	} else {

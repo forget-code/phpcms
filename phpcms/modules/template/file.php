@@ -262,11 +262,13 @@ class file extends admin {
 						if (in_array($tag_md5, $tag_md5_list[0])) {
 							$old_pc_tag = $tag_md5_list[1][$tag_md5];
 						}
+						if(!file_exists($filepath)) showmessage($filepath.L('file_does_not_exists'));
 						if (replace_pc_tag($filepath, $old_pc_tag, $pc_tag, $this->style, $dir)) {
 							showmessage('<script style="text/javascript">if(!window.top.right){parent.location.reload();}art.dialog({id:"edit"}).close();</script>', '', '', 'edit');
 						} else {
 							showmessage(L('failure_the_document_may_not_to_write'));
 						}
+						
 				}
 				include $this->admin_tpl('pc_tag_modules');
 				break;

@@ -9,6 +9,7 @@ class index {
 		$this->vote_data = pc_base::load_model('vote_data_model'); //投票统计的数据模型
 		$this->username = param::get_cookie('_username');
 		$this->userid = param::get_cookie('_userid'); 
+		$this->groupid = param::get_cookie('_groupid'); 
 		$this->ip = ip();
 		
 		$siteid = isset($_GET['siteid']) ? intval($_GET['siteid']) : get_siteid();
@@ -219,9 +220,14 @@ class index {
 			showmessage(L('vote_votepassed'),"?m=vote&c=index&a=result&subjectid=$subjectid&siteid=$siteid");
  		}
  		//游客是否可以投票
-		if($subject_arr['allowguest']==0 && !$this->username){
-			showmessage(L('vote_votenoguest'),"?m=vote&c=index&a=result&subjectid=$subjectid&siteid=$siteid");
-		}
+		if($subject_arr['allowguest']==0 ){
+			if(!$this->username){
+				showmessage(L('vote_votenoguest'),"?m=vote&c=index&a=result&subjectid=$subjectid&siteid=$siteid");
+ 			}elseif($this->groupid == '7'){
+				showmessage('对不起，不允许邮件待验证用户投票！',"?m=vote&c=index&a=result&subjectid=$subjectid&siteid=$siteid");
+			}
+ 		}
+		
  		//是否有投票记录 
 		$user_info = $this->vote_data->select(array('subjectid'=>$subjectid,'ip'=>$this->ip,'username'=>$this->username),'*','1',' time DESC'); 
 		if(!$user_info){

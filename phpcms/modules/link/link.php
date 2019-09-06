@@ -11,7 +11,7 @@ class link extends admin {
 
 	public function init() {
 		if($_GET['typeid']!=''){
-			$where = array('typeid'=>$_GET['typeid'],'siteid'=>$this->get_siteid());
+			$where = array('typeid'=>intval($_GET['typeid']),'siteid'=>$this->get_siteid());
 		}else{
 			$where = array('siteid'=>$this->get_siteid());
 		}
@@ -53,6 +53,7 @@ class link extends admin {
 	//添加分类时，验证分类名是否已存在
 	public function public_check_name() {
 		$type_name = isset($_GET['type_name']) && trim($_GET['type_name']) ? (pc_base::load_config('system', 'charset') == 'gbk' ? iconv('utf-8', 'gbk', trim($_GET['type_name'])) : trim($_GET['type_name'])) : exit('0');
+		$type_name = safe_replace($type_name);
  		$typeid = isset($_GET['typeid']) && intval($_GET['typeid']) ? intval($_GET['typeid']) : '';
  		$data = array();
 		if ($typeid) {
@@ -75,8 +76,14 @@ class link extends admin {
 			$_POST['link']['siteid'] = $this->get_siteid();
 			if(empty($_POST['link']['name'])) {
 				showmessage(L('sitename_noempty'),HTTP_REFERER);
+			} else {
+				$_POST['link']['name'] = safe_replace($_POST['link']['name']);
 			}
-			$linkid = $this->db->insert($_POST['link'],true);
+			if ($_POST['link']['logo']) {
+				$_POST['link']['logo'] = safe_replace($_POST['link']['logo']);
+			}
+			$data = new_addslashes($_POST['link']);
+			$linkid = $this->db->insert($data,true);
 			if(!$linkid) return FALSE; 
  			$siteid = $this->get_siteid();
 	 		//更新附件状态
@@ -114,6 +121,7 @@ class link extends admin {
  	public function listorder() {
 		if(isset($_POST['dosubmit'])) {
 			foreach($_POST['listorders'] as $linkid => $listorder) {
+				$linkid = intval($linkid);
 				$this->db->update(array('listorder'=>$listorder),array('linkid'=>$linkid));
 			}
 			showmessage(L('operation_success'),HTTP_REFERER);

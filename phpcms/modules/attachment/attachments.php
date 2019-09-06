@@ -15,9 +15,9 @@ class attachments {
 		$this->upload_path = pc_base::load_config('system','upload_path');		
 		$this->imgext = array('jpg','gif','png','bmp','jpeg');
 		$this->userid = param::get_cookie('userid') ? param::get_cookie('userid') : param::get_cookie('_userid');
-		$this->isadmin = param::get_cookie('userid') ? 1 : 0;		
+		$this->isadmin = $_SESSION['roleid'] ? 1 : 0;
 		$this->groupid = param::get_cookie('_groupid') ? param::get_cookie('_groupid') : 8;
-		$this->admin_username = param::get_cookie('admin_username');
+		$this->admin_username = $_SESSION['roleid'] ? param::get_cookie('admin_username') : '';
 	}
 	
 	/**
@@ -160,6 +160,8 @@ class attachments {
 		if($_GET['args']) extract(getswfinit($_GET['args']));
 		if($_GET['dosubmit']){
 			extract($_GET['info']);
+			$where = '';
+			$filename = safe_replace($filename);
 			if($filename) $where = "AND `filename` LIKE '%$filename%' ";
 			if($uploadtime) {
 				$start_uploadtime = strtotime($uploadtime.' 00:00:00');
@@ -170,7 +172,7 @@ class attachments {
 		}
 		pc_base::load_sys_class('form');
 		$page = $_GET['page'] ? $_GET['page'] : '1';
-		$infos = $this->att_db->listinfo($where, $order = 'aid DESC', $page, $pagesize = 8,'',5);
+		$infos = $this->att_db->listinfo($where, 'aid DESC', $page, 8,'',5);
 		foreach($infos as $n=>$v){
 			$ext = fileext($v['filepath']);
 			if(in_array($ext,$this->imgext)) {
@@ -191,7 +193,7 @@ class attachments {
 	public function album_dir() {
 		if(!$this->admin_username) return false;
 		if($_GET['args']) extract(getswfinit($_GET['args']));
-		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\'), '', trim($_GET['dir'])) : '';
+		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\','..'), '', trim($_GET['dir'])) : '';
 		$filepath = $this->upload_path.$dir;
 		$list = glob($filepath.'/'.'*');
 		if(!empty($list)) rsort($list);

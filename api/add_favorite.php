@@ -11,15 +11,15 @@ if(empty($_GET['title']) || empty($_GET['url'])) {
 	exit('-2');	
 } else {
 	$title = $_GET['title'];
-	$title = urldecode($title);
+	$title = addslashes(urldecode($title));
 	if(CHARSET != 'utf-8') {
 		$title = iconv('utf-8', CHARSET, $title);
 	}
 	
 	$title = htmlspecialchars($title);
-	$url = safe_replace(urldecode($_GET['url']));
+	$url = safe_replace(addslashes(urldecode($_GET['url'])));
 }
-
+$_GET['callback'] = safe_replace($_GET['callback']);
 //判断是否登录	
 $phpcms_auth = param::get_cookie('auth');
 if($phpcms_auth) {

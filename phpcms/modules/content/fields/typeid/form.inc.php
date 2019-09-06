@@ -17,8 +17,10 @@
 			$siteid = $this->siteid;
 		}
 		$type_data = getcache('type_content_'.$siteid,'commons');
-		foreach($type_data as $_key=>$_value) {
-			if(in_array($_key,$usable_array)) $data[$_key] = $_value['name'];
+		if($type_data) {
+			foreach($type_data as $_key=>$_value) {
+				if(in_array($_key,$usable_array)) $data[$_key] = $_value['name'];
+			}
 		}
 		return form::select($data,$value,'name="info['.$field.']" id="'.$field.'" '.$formattribute.' '.$css,L('copyfrom_tips'));
 	}

@@ -30,11 +30,11 @@ $(function(){
     <td class="y-bg"><input type="text" class="input-text" name="name" value="<?php echo $data['name']?>" id="name" /></td>
   </tr><tr>
     <th><?php echo L('application_url')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="url"  value="<?php echo $data['url']?>" id="url" /> </td>
+    <td class="y-bg"><input type="text" class="input-text" name="url"  value="<?php echo $data['url']?>" id="url" size="50"/> </td>
   </tr>
   <tr>
     <th><?php echo L('authkey')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="authkey" id="authkey"  value="<?php echo $data['authkey']?>" /> <input type="button" class="button" name="dosubmit" value="<?php echo L('automatic_generation')?>" onclick="creat_authkey()" /></td>
+    <td class="y-bg"><input type="text" class="input-text" name="authkey" id="authkey"  value="<?php echo $data['authkey']?>" size="50"/> <input type="button" class="button" name="dosubmit" value="<?php echo L('automatic_generation')?>" onclick="creat_authkey()" /></td>
   </tr>
    <tr>
     <th><?php echo L('type')?>：</th>
@@ -50,7 +50,7 @@ $(function(){
   </tr>
    <tr>
     <th><?php echo L('application_apifilename')?>：</th>
-    <td class="y-bg"><input type="text" class="input-text" name="apifilename" id="apifilename" value="<?php echo $data['apifilename']?>" /></td>
+    <td class="y-bg"><input type="text" class="input-text" name="apifilename" id="apifilename" value="<?php echo $data['apifilename']?>" size="50"/></td>
   </tr>
    <tr>
     <th><?php echo L('application_charset')?>：</th>

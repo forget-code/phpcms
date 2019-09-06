@@ -97,9 +97,23 @@ class link_tag {
   			return form::select($arr, $value, $html, L('please_select')); 
 	}
 	
-	public function count(){
-		
+	public function count($data) {
+		if($data['action'] == 'lists') {
+ 			$typeid = intval($data['typeid']);//分类ID
+			$linktype = $data['linktype']? $data['linktype'] : 0;
+			$siteid = $data['siteid'];
+			if (empty($siteid)){ 
+				$siteid = get_siteid();
+			}
+			if($typeid!='' || $typeid=='0'){
+					$sql = array('typeid'=>$typeid,'linktype'=>$linktype,'siteid'=>$siteid,'passed'=>'1');
+				}else {
+					$sql = array('linktype'=>$linktype,'siteid'=>$siteid,'passed'=>'1');
+			}
+ 			return $this->link_db->count($sql); 
+		}
 	}
+
 	
 	/**
 	 * pc 标签调用

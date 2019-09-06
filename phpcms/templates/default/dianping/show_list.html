@@ -18,7 +18,7 @@
 {if $data}
 {loop $data $r}
     <div class="opinion-row">
-    	<div class="img-box"> <img height="50" width="54" src="{if $r[username]}{get_memberavatar($r[userid],'1','90')}{else}{IMG_PATH}member/nophoto.gif{/if}" alt="" style="margin-top: 0px;" onerror="this.src='{$phpsso_api_url}/statics/images/member/nophoto.gif'"><p>{if $r['username']}{$r['username']}{else}本站网友{/if} </p></div>
+    	<div class="img-box"> <img height="50" width="54" src="{if $r[username]}{get_memberavatar($r[userid],'1','90')}{else}{IMG_PATH}member/nophoto.gif{/if}" alt="" style="margin-top: 0px;" onerror="this.src='{APP_PATH}/statics/images/member/nophoto.gif'"><p>{if $r['username']}{$r['username']}{else}本站网友{/if} </p></div>
 		<?php $data2 = string2array($r['data']);?>
         <div class="text-box">
         	<div class="opinion-box clear">

@@ -490,7 +490,7 @@ CREATE TABLE `phpcms_member` (
   `vip` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `overduedate` int(10) unsigned NOT NULL DEFAULT '0',
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '1',
-  `connectid` char(15) NOT NULL DEFAULT '',
+  `connectid` char(35) NOT NULL DEFAULT '',
   `from` char(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`userid`),
   UNIQUE KEY `username` (`username`),
@@ -4953,7 +4953,7 @@ INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `lis
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1350, 'member_menu_add', 1349, 'member', 'member_menu', 'add', '', 0, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1351, 'member_menu_edit', 1349, 'member', 'member_menu', 'edit', '', 0, '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1352, 'member_menu_delete', 1349, 'member', 'member_menu', 'delete', '', 0, '0');
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1353, 'batch_show', 822, 'content', 'content', 'batch_show', '', 0, '1');
+INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1353, 'batch_show', 822, 'content', 'create_html', 'batch_show', '', 0, '1');
 
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1354, 'pay_delete', 898, 'pay', 'payment', 'pay_del', '', 0, '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1355, 'pay_cancel', 898, 'pay', 'payment', 'pay_cancel', '', 0, '0');

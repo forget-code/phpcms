@@ -52,7 +52,11 @@ class application {
 				$classname = 'MY_'.$filename;
 				include $mypath;
 			}
-			return new $classname;
+			if(class_exists($classname)){
+				return new $classname;
+			}else{
+				exit('Controller does not exist.');
+ 			}
 		} else {
 			exit('Controller does not exist.');
 		}

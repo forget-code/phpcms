@@ -110,6 +110,7 @@ $(function(){
 	}else{
 		colRight.show();
 	}
+	openClose.height(rh);
 	$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){window.top.art.dialog({content:msg,lock:true,width:'200',height:'50'}, 	function(){$(obj).focus();
 	boxid = $(obj).attr('id');
 	if($('#'+boxid).attr('boxid')!=undefined) {

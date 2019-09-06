@@ -60,7 +60,7 @@
 <!--
 function view(url) {
 	window.top.art.dialog({id:'edit'}).close();
-	window.top.art.dialog({title:'<?php echo L('view_code')?>',id:'edit',iframe:'?m=scan&c=index&a=public_view&url='+url,width:'700',height:'500'});
+	window.top.art.dialog({title:'<?php echo L('view_code')?>',id:'edit',iframe:'?m=scan&c=index&a=view&url='+url,width:'700',height:'500'});
 }
 //-->
 </script>

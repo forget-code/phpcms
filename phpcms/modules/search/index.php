@@ -14,7 +14,8 @@ class index {
 	public function init() {
 		//获取siteid
 		$siteid = isset($_REQUEST['siteid']) && trim($_REQUEST['siteid']) ? intval($_REQUEST['siteid']) : 1;
-		
+		$SEO = seo($siteid);
+
 		//搜索配置
 		$search_setting = getcache('search');
 		$setting = $search_setting[$siteid];
@@ -197,6 +198,9 @@ class index {
 	
 	public function public_get_suggest_keyword() {
 		$url = $_GET['url'].'&q='.$_GET['q'];
+		$trust_url = array('c8430fcf851e85818b546addf5bc4dd3');
+		$urm_md5 = md5($url);
+		if (!in_array($urm_md5, $trust_url)) exit;
 		
 		$res = @file_get_contents($url);
 		if(CHARSET != 'gbk') {

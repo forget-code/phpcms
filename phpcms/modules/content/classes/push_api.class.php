@@ -68,7 +68,7 @@ class push_api {
 						$this->db->table_name = $this->db->table_name.'_data';
 						$this->db->insert(array('id'=>$newid));
 						$hitsid = 'c-'.$modelid.'-'.$newid;
-						$this->hits_db->insert(array('hitsid'=>$hitsid,'updatetime'=>SYS_TIME));
+						$this->hits_db->insert(array('hitsid'=>$hitsid,'catid'=>$catid,'updatetime'=>SYS_TIME));
 				}
 			}
 			return true;

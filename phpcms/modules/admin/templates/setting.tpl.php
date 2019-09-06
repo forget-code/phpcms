@@ -70,7 +70,7 @@ include $this->admin_tpl('header');?>
   <tr>
     <th width="120"><?php echo L('setting_upload_url')?></th>
     <td class="y-bg"><input type="text" class="input-text" name="setconfig[upload_url]" id="upload_url" size="50" value="<?php echo $upload_url?>" /></td>
-  </tr>       
+  </tr>
 </table>
 </div>
 <div id="div_setting_2" class="contentList pad-10 hidden">
@@ -165,8 +165,8 @@ include $this->admin_tpl('header');?>
   <tr>
     <th><?php echo L('mail_auth')?></th>
     <td class="y-bg">
-    <input name="setting[mail_auth]" id="mail_auth" value="1" type="radio" <?php echo $mail_auth==1 ? ' checked' : ''?>> <?php echo L('mail_auth_open')?>
-	<input name="setting[mail_auth]" id="mail_auth" value="0" type="radio" <?php echo $mail_auth==0 ? ' checked' : ''?>> <?php echo L('mail_auth_close')?></td>
+    <input name="setting[mail_auth]" checkbox="mail_auth" value="1" type="radio" <?php echo $mail_auth==1 ? ' checked' : ''?>> <?php echo L('mail_auth_open')?>
+	<input name="setting[mail_auth]" checkbox="mail_auth" value="0" type="radio" <?php echo $mail_auth==0 ? ' checked' : ''?>> <?php echo L('mail_auth_close')?></td>
   </tr> 
 
 	  <tr>
@@ -213,6 +213,15 @@ include $this->admin_tpl('header');?>
 	App secret key <input type="text" class="input-text" name="setconfig[qq_skey]" id="qq_skey" size="40" value="<?php echo $qq_skey ?>"/> <a href="http://open.t.qq.com/" target="_blank"><?php echo L('click_register')?></a>
 	</td>
   </tr> 
+  <tr>
+    <th><?php echo L('setting_connect_qqnew')?></th>
+    <td class="y-bg">
+	App I D  &nbsp;<input type="text" class="input-text" name="setconfig[qq_appid]" id="qq_appid" size="20" value="<?php echo $qq_appid;?>"/>
+	App key <input type="text" class="input-text" name="setconfig[qq_appkey]" id="qq_appkey" size="40" value="<?php echo $qq_appkey;?>"/> 
+	<?php echo L('setting_connect_qqcallback')?> <input type="text" class="input-text" name="setconfig[qq_callback]" id="qq_callback" size="40" value="<?php echo $qq_callback;?>"/>
+	<a href="http://connect.qq.com" target="_blank"><?php echo L('click_register')?></a>
+	</td>
+  </tr> 
 
   </table>
 </div>
@@ -245,7 +254,8 @@ function showsmtp(obj,hiddenid){
 }
 function test_mail() {
 	var mail_type = $('input[checkbox=mail_type][checked]').val();
-    $.post('?m=admin&c=setting&a=public_test_mail&mail_to='+$('#mail_to').val(),{mail_type:mail_type,mail_server:$('#mail_server').val(),mail_port:$('#mail_port').val(),mail_user:$('#mail_user').val(),mail_password:$('#mail_password').val(),mail_auth:$('#mail_auth').val(),mail_auth:$('#mail_auth').val(),mail_from:$('#mail_from').val()}, function(data){
+	var mail_auth = $('input[checkbox=mail_auth][checked]').val();
+    $.post('?m=admin&c=setting&a=public_test_mail&mail_to='+$('#mail_to').val(),{mail_type:mail_type,mail_server:$('#mail_server').val(),mail_port:$('#mail_port').val(),mail_user:$('#mail_user').val(),mail_password:$('#mail_password').val(),mail_auth:mail_auth,mail_from:$('#mail_from').val()}, function(data){
 	alert(data);
 	});
 }

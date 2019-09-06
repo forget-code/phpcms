@@ -12,7 +12,7 @@ $menu_db->insert(array('name'=>'check_register', 'parentid'=>$parentid, 'm'=>'li
 
 $link_db = pc_base::load_model('link_model');
 $link_db->insert(array('siteid'=>1,'typeid'=>$typeid,'linktype'=>'1','name'=>'PHPCMS','url'=>'http://www.phpcms.cn','logo'=>'http://www.phpcms.cn/images/logo_88_31.gif','passed'=>1,'addtime'=>SYS_TIME)); 
-$link_db->insert(array('siteid'=>1,'typeid'=>$typeid,'linktype'=>'1','name'=>'盛大在线','url'=>'http://www.sdo.com','logo'=>'http://www.snda.com/cn/logo/comp_logo_sdo.gif','passed'=>1,'addtime'=>SYS_TIME));
+$link_db->insert(array('siteid'=>1,'typeid'=>$typeid,'linktype'=>'1','name'=>'网站云','url'=>'http://web.grandcloud.cn','logo'=>'http://web.grandcloud.cn/statics/images/logo_webcloudgrand.gif','passed'=>1,'addtime'=>SYS_TIME));
 
 $language = array('link'=>'友情链接', 'add_link'=>'添加友情链接', 'edit_link'=>'编辑友情链接', 'delete_link'=>'删除友情链接', 'link_setting'=>'模块配置', 'add_type'=>'添加类别', 'list_type'=>'分类管理', 'check_register'=>'审核申请');
 ?>

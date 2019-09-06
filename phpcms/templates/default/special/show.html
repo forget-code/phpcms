@@ -1,7 +1,7 @@
 {template "content","header"}
 <div class="main">
 	<div class="col-left">
-    	<div class="crumbs"><a href="">首页</a><span> &gt; </span> <a href="{APP_PATH}index.php?m=special&c=index&a=special">专题</a> <span> &gt; </span> <a href="{$_special['url']}">{$s_info['title']}</a> <span> &gt; </span> {$title}</div>
+    	<div class="crumbs"><a href="{APP_PATH}">首页</a><span> &gt; </span> <a href="{APP_PATH}index.php?m=special&c=index&a=special">专题</a> <span> &gt; </span> <a href="{$_special['url']}">{$s_info['title']}</a> <span> &gt; </span> {$title}</div>
         <div id="Article">
         	<h1>{$title}<br />
 <span>{date('Y-m-d H:i:s', $inputtime)}&nbsp;&nbsp;&nbsp;评论：<a href="#comment_iframe" id="comment">0</a> 点击：</span><span id="hits"></span></h1>

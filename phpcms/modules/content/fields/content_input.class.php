@@ -28,7 +28,7 @@ class content_input {
 			$pattern = $this->fields[$field]['pattern'];
 			$errortips = $this->fields[$field]['errortips'];
 			if(empty($errortips)) $errortips = $name.' '.L('not_meet_the_conditions');
-			$length = empty($value) ? 0 : is_string($value) ? strlen($value) : count($value);
+			$length = empty($value) ? 0 : (is_string($value) ? strlen($value) : count($value));
 
 			if($minlength && $length < $minlength) {
 				if($isimport) {

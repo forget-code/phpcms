@@ -91,6 +91,19 @@
                 {/pc}
             </div>
         </div>
+        
+        {pc:maillist  action="get_wzz" siteid="$siteid"}
+        {if (!empty ($data['wzz']) && $data['is_activate'])}
+        <div class="bk10"></div>
+        <div class="box" style="margin:0; padding:0">
+            <h5 class="title-2">订阅</h5>
+            <div class="content special" style="padding:2px">
+                    <iframe frameborder="0" height="100" width="100%" scrolling="no" style="overflow:hidden" src="http://o.sdo.com/dyFrame.ext?css=tint&o={$data['wzz']}"></iframe>
+            </div>
+        </div>
+        {/if}   
+        {/pc}
+        
         <div class="bk10"></div>
         <div class="box">
         	<h5 class="title-2">专题<a href="{APP_PATH}index.php?m=special&c=index&a=special&siteid={$siteid}" class="more">更多>></a></h5>

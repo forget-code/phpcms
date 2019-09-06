@@ -19,7 +19,7 @@
 			{/pc}
          </div>
 		 
-		{pc:link action="lists" typeid="$type_id" siteid="$siteid" linktype="0" order="desc" num="2" page="$page" return="dat"}
+		{pc:link action="lists" typeid="$type_id" siteid="$siteid" linktype="0" order="desc" num="2" page="$_GET[page]" return="dat"}
         <div class="tag_a">
   				{loop $dat $v}
 	       		 <a href="{$v[url]}" title="{$v[name]}" target="_blank">{$v[name]} </a>

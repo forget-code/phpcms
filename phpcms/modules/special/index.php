@@ -23,7 +23,7 @@ class index {
 	 * 专题首页
 	 */
 	public function init() {
-		$specialid = $_GET['id'] ? $_GET['id'] : ($_GET['specialid'] ? $_GET['specialid'] : 0);
+		$specialid = $_GET['id'] ? intval($_GET['id']) : ($_GET['specialid'] ? intval($_GET['specialid']) : 0);
 		if (!$specialid) showmessage(L('illegal_action'));
 		$info = $this->db->get_one(array('id'=>$specialid, 'disabled'=>0));
 		if(!$info) showmessage(L('special_not_exist'), 'back');
@@ -41,10 +41,11 @@ class index {
 			$vote_info = explode('|', $voteid);
 			$voteid = $vote_info[1];
 		}
-		$siteid =  $_GET['siteid'] ? $_GET['siteid'] : get_siteid();
+		$siteid =  $_GET['siteid'] ? intval($_GET['siteid']) : get_siteid();
 		$SEO = seo($siteid, '', $title, $description);
 		$commentid = id_encode('special', $id, $siteid);
 		$template = $info['index_template'] ? $info['index_template'] : 'index';
+		define('STYLE',$info['style']);
 		include template('special', $template);
 	}
 	
@@ -62,7 +63,7 @@ class index {
 		$css = get_css(unserialize($css));
 		if(!$typeid) showmessage(L('illegal_action'));
 		$type_db = pc_base::load_model('type_model');
-		$info = $type_db->get_one(array('typeid'=>$_GET['typeid']));
+		$info = $type_db->get_one(array('typeid'=>$typeid));
 		$SEO = seo($siteid, '', $info['typename'], '');
 		$template = $list_template ? $list_template : 'list';
 		include template('special', $template);
@@ -78,11 +79,11 @@ class index {
 		$page = max(intval($_GET['page']), 1);
 		$c_db = pc_base::load_model('special_content_model');
 		$c_data_db = pc_base::load_model('special_c_data_model');
-		$rs = $c_db->get_one(array('id'=>$_GET['id']));
+		$rs = $c_db->get_one(array('id'=>$id));
 		if(!$rs) showmessage(L('content_checking'),'blank');
 		extract($rs);
 		if ($isdata) {
-			$arr_content = $c_data_db->get_one(array('id'=>$_GET['id']));
+			$arr_content = $c_data_db->get_one(array('id'=>$id));
 			if (is_array($arr_content)) extract($arr_content);
 		}
 		$siteid = get_siteid();
@@ -115,7 +116,7 @@ class index {
 				$pagenumber--;
 			}
 			for ($i=1; $i<=$pagenumber; $i++) {
-				$pageurls[$i] = content_url($_GET['id'], $i, $inputtime, 'php');
+				$pageurls[$i] = content_url($id, $i, $inputtime, 'php');
 			}
 			if ($END_POS !== false) {
 				if($CONTENT_POS>7) {

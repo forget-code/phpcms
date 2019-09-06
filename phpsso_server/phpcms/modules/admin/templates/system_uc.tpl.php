@@ -23,7 +23,7 @@ include $this->admin_tpl('header');
 		<tr>
 			<th width="140"><?php echo L('uc_api_host')?></th>
 			<td>
-			<input type="text" class="input-text" name="data[uc_api]" id="uc_api" value="<?php if(isset($data['uc_api'])){echo $data['uc_api'];}?>" /><?php echo L('uc_host_notice')?></td>
+			<input type="text" class="input-text" name="data[uc_api]" id="uc_api" value="<?php if(isset($data['uc_api'])){echo $data['uc_api'];}?>" size="50"/><?php echo L('uc_host_notice')?></td>
 		</tr>
 		<tr>
 			<th width="140">Ucenter api IP：</th>
@@ -76,7 +76,7 @@ include $this->admin_tpl('header');
 			<tr>
 			<th><?php echo L('uc_key')?></th>
 			<td>
-			<input type="text" class="input-text" name="data[uc_key]" id="uc_key" value="<?php if(isset($data['uc_key'])){echo $data['uc_key'];}?>" /></td>
+			<input type="text" class="input-text" name="data[uc_key]" id="uc_key" value="<?php if(isset($data['uc_key'])){echo $data['uc_key'];}?>" size="50"/></td>
 		</tr>
 	</tbody>
 	</table>

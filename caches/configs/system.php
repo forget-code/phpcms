@@ -60,6 +60,11 @@ return array(
 
 'qq_akey' => '',	//qq skey
 'qq_skey' => '',	//qq skey
+
+'qq_appkey' => '',	//QQ号码登录 appkey
+'qq_appid' => '',	//QQ号码登录 appid
+'qq_callback' => '',	//QQ号码登录 callback
+
 'plugin_debug' => '0',	//插件测试
 'admin_url' => '',	//允许访问后台的域名
 );
