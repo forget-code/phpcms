@@ -2,6 +2,12 @@
 defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
+<table cellpadding="0" cellspacing="1" class="table_form">
+  <caption>稿件统计</caption>
+  <tr>
+    <td><a href='?mod=phpcms&file=statistics&action=show_users&userid=<?=$userid?>' >按栏目查看</a> | <a href='?mod=phpcms&file=admin&action=view&userid=<?=$userid?>'><font color="#ff0000">按月份查看</font></a></td>
+  </tr>
+</table>
 <table width="95%" cellpadding="0" cellspacing="1" class="table_list">
 <caption>稿件统计搜索</caption>
 <tr>

@@ -178,7 +178,7 @@ switch($action)
         if(!isset($username)) $username = '';
         $condition = '';
 		$condition .= ($modelid && $issearch) ? " AND m.userid IN ($userids)" : '';
-		$condition .= ($extgroup) ? " AND m.userid IN ($ext_userid)" : '';
+		$condition .= ($extgroup) ? " AND m.username like '%$username%'" : '';
 		$condition .= $username ? " AND m.username like '%$username%'" : '';
 		$condition .= $groupid ? " AND m.groupid='$groupid'" : '';
 		$condition .= $email ? " AND m.email='$email'" : '';

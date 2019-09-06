@@ -11,6 +11,27 @@ extract($r);
 
 $C = cache_read('category_'.$catid.'.php');
 if(!$readpoint) $readpoint = $C['defaultchargepoint'];
+
+$allow_readpoint = 1;
+
+if($C['defaultchargepoint'] || $r['readpoint'])
+{
+	$readpoint = $r['readpoint'] ? $r['readpoint'] : $C['defaultchargepoint'];
+	$pay = load('pay_api.class.php', 'pay', 'api');
+	if($C['repeatchargedays'])
+	{
+		if($pay->is_exchanged($contentid, $C['repeatchargedays']) === FALSE)
+		{
+			$allow_readpoint = 0;
+		}
+		else
+		{
+			header("Location: ".$PHPCMS['siteurl'].$url);
+			exit;
+		}
+	}
+}
+
 //判断是否支付或者到期
 if($_point < $readpoint) showmessage('点数不足,请充值', $MODULE['pay']['url'].'showpayment.php?action=type&pay=card&forward='.urlencode($forward));
 

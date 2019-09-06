@@ -57,6 +57,40 @@ switch($action)
 		$data = $a->view($userid);
 	    extract($data);
 		$roles = $a->get_role_name($roleids);
+
+		$year = $year ? $year : date("Y", TIME);	//当前年
+		$month = $month ? $month : date("n", TIME);	//当前月
+		$week = date("W", TIME);	//当前周
+		$daynums = date("t", mktime(0, 0, 0, $month, 1, $year));	//本月天数
+		$s = mktime(0, 0, 0, $month, 1, $year);	//本月开始时间
+		$e = mktime(0, 0, 0, $month, $daynums, $year);	//本月结束时间
+		$weeknum = $weekhits = $weekcomments = 0;
+		$monthnum = $monthhits = $monthcomments = 0;
+		//选出单用户本月所有文章
+		$sql = "SELECT c.contentid, c.inputtime, cc.hits, cc.comments
+				FROM ".DB_PRE."content c 
+				LEFT JOIN ".DB_PRE."content_count cc 
+				ON c.contentid=cc.contentid 
+				WHERE c.userid='$userid' AND c.inputtime BETWEEN $s AND $e";
+
+		$query = $db->query($sql);
+		$numarr = array();
+		while($res = $db->fetch_array($query)) {
+			$numarr[date('d', $res['inputtime'])]++;	//用天做key 算文章数
+			if(date('W', $res['inputtime']) == $week) {
+				$weeknum++;
+				$weekhits += $res['hits'];
+				$weekcomments += $res['comments'];
+			}
+			if(date('n', $res['inputtime']) == $month) {
+				$monthnum++;
+				$monthhits += $res['hits'];
+				$monthcomments += $res['comments'];
+			}
+			$contenthit[date('d', $res['inputtime'])] += $res['hits'];
+			$contentcomment[date('d', $res['inputtime'])] += $res['comments'];
+		}
+
 		include admin_tpl('admin_view');
 		break;
 

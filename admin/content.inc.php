@@ -33,6 +33,8 @@ else
 	$attachment = new attachment($mod, $catid);
 	$p = new process($workflowid);
 	$PROCESS = cache_read('process_'.$workflowid.'.php');
+	//获取该工作流下面的状态
+	$workflow_infos =$p->listinfo("workflowid='$workflowid'");
 
 	$submenu = $allowprocessids = array();
 	if($allow_add)
@@ -46,6 +48,17 @@ else
 		{
 			if($priv_role->check('processid', $pid))
 			{
+				foreach($workflow_infos AS $_w)
+				{
+					if($pid == $_w['processid'] && $_w['passstatus']==99)
+					{
+						$allow_manage = 1;
+					}
+					else
+					{
+						$allow_manage = 0;
+					}
+				}
 				$allow_processids[] = $pid;
 				if($pid==1) $add_status = '&status=3';
 				$submenu[] = array($processname, '?mod='.$mod.'&file='.$file.'&action=check&catid='.$catid.'&processid='.$pid.$add_status);
@@ -57,6 +70,7 @@ else
 		$submenu[] = array('管理', '?mod='.$mod.'&file='.$file.'&action=manage&catid='.$catid);
 		$submenu[] = array('回收站', '?mod='.$mod.'&file='.$file.'&action=recycle&catid='.$catid);
 		$submenu[] = array('碎片', '?mod='.$mod.'&file='.$file.'&action=block&catid='.$catid);
+		$submenu[] = array('定时发布', '?mod='.$mod.'&file='.$file.'&action=publish&catid='.$catid);
 	}
 	elseif($allow_view)
 	{
@@ -75,9 +89,20 @@ switch($action)
 
 		if($dosubmit)
 		{
-			$info['status'] = ($status == 2 || $status == 3) ? $status : ($allow_manage ? 99 : 3);
+			//增加判断如果发布时间大于当前时间则设定为定时发布状态98
+			$info['status'] = ($status == 2 || $status == 3) ? $status : ($allow_manage ? ($PHPCMS['publish'] && (strtotime($info['inputtime']) > TIME) ? 98 : 99)  : 3);
+
 			if(isset($info['inputtime'])) $info['updatetime'] = $info['inputtime'];
 			$contentid = $c->add($info,$cat_selected);
+
+			//如果状态为定时发布，文章id作为key，发布时间作为value，写入缓存
+			if($info['status']==98) {
+				$tmp_publisharr = cache_read('publish.php');
+				$tmp_publisharr[$contentid] = strtotime($info['updatetime']);
+				cache_write('publish.php', $tmp_publisharr);
+				unset($tmp_publisharr);
+			}
+
 			if($contentid) showmessage('发布成功！', '?mod=phpcms&file=content&action=add&catid='.$catid);
 		}
 		else
@@ -173,6 +198,7 @@ switch($action)
 
 		if($dosubmit)
 		{
+			$info['status'] = ($status == 2 || $status == 3) ? $status : ($allow_manage ? ($PHPCMS['publish'] && (strtotime($info['inputtime']) > TIME) ? 98 : 99)  : 3);
 			$c->edit($contentid, $info);
 			showmessage('修改成功！', $forward);
 		}
@@ -216,7 +242,41 @@ switch($action)
         $pagetitle = $CATEGORY[$catid]['catname'].'-审核';
 		include admin_tpl('content_check');
 		break;
-	
+	case 'publish':
+		if($do) {
+			//如果操作定时发布文章，从缓存中移除该文章id。
+			if(is_array($contentid)) {
+				$tmp_publisharr = cache_read('publish.php');
+				foreach($contentid as $v) {
+					unset($tmp_publisharr[$v]);
+				}
+				cache_write('publish.php', $tmp_publisharr);
+			}
+
+			if($do == 'publish') {
+				if(!$allow_manage) showmessage('无管理权限！');
+				$c->status($contentid, 99);
+				showmessage('操作成功！', $forward);	
+			} elseif($do == 'del') {
+				if(!$allow_manage) showmessage('无管理权限！');
+				$c->delete($contentid);
+				showmessage('操作成功！', $forward);
+			} else {}
+			
+			$where = "`catid`=$catid ";
+			$where .= " AND `status`=98";
+			$infos = $c->listinfo($where, 'listorder DESC,contentid DESC', $page, 20);
+			$process = $p->get($processid, 'passname,passstatus,rejectname,rejectstatus');
+			extract($process);	
+		} else {
+			$where = "`catid`=$catid ";
+			$where .= " AND `status`=98";
+			$infos = $c->listinfo($where, 'listorder DESC,contentid DESC', $page, 20);
+			$process = $p->get($processid, 'passname,passstatus,rejectname,rejectstatus');
+			extract($process);
+		}
+		include admin_tpl('content_publish');
+		break;	
 	case 'check_title':
 		if(CHARSET=='gbk') $c_title = iconv('utf-8', 'gbk', $c_title);
 		if($c->get_contentid($c_title))

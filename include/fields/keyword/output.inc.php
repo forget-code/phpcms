@@ -2,7 +2,14 @@
 	{
 	    if($value == '') return '';
 		$v = '';
-		$tags = explode(' ', $value);
+		if(strpos($value, ',')===false)
+		{
+			$tags = explode(' ', $value);
+		}
+		else
+		{
+			$tags = explode(',', $value);
+		}
 		foreach($tags as $tag)
 		{
 			$v .= '<a href="tag.php?tag='.urlencode($tag).'" class="keyword">'.$tag.'</a>';

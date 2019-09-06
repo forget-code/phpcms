@@ -18,7 +18,7 @@ function new_stripslashes($string)
 	return $string;
 }
 
-function filter_xss($string, $allowedtags = '', $disabledattributes = array('onabort', 'onactivate', 'onafterprint', 'onafterupdate', 'onbeforeactivate', 'onbeforecopy', 'onbeforecut', 'onbeforedeactivate', 'onbeforeeditfocus', 'onbeforepaste', 'onbeforeprint', 'onbeforeunload', 'onbeforeupdate', 'onblur', 'onbounce', 'oncellchange', 'onchange', 'onclick', 'oncontextmenu', 'oncontrolselect', 'oncopy', 'oncut', 'ondataavaible', 'ondatasetchanged', 'ondatasetcomplete', 'ondblclick', 'ondeactivate', 'ondrag', 'ondragdrop', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'onerror', 'onerrorupdate', 'onfilterupdate', 'onfinish', 'onfocus', 'onfocusin', 'onfocusout', 'onhelp', 'onkeydown', 'onkeypress', 'onkeyup', 'onlayoutcomplete', 'onload', 'onlosecapture', 'onmousedown', 'onmouseenter', 'onmouseleave', 'onmousemove', 'onmoveout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onmove', 'onmoveend', 'onmovestart', 'onpaste', 'onpropertychange', 'onreadystatechange', 'onreset', 'onresize', 'onresizeend', 'onresizestart', 'onrowexit', 'onrowsdelete', 'onrowsinserted', 'onscroll', 'onselect', 'onselectionchange', 'onselectstart', 'onstart', 'onstop', 'onsubmit', 'onunload'))
+function filter_xss($string, $allowedtags = '', $disabledattributes = array('onabort', 'onactivate', 'onafterprint', 'onafterupdate', 'onbeforeactivate', 'onbeforecopy', 'onbeforecut', 'onbeforedeactivate', 'onbeforeeditfocus', 'onbeforepaste', 'onbeforeprint', 'onbeforeunload', 'onbeforeupdate', 'onblur', 'onbounce', 'oncellchange', 'onchange', 'onclick', 'oncontextmenu', 'oncontrolselect', 'oncopy', 'oncut', 'ondataavaible', 'ondatasetchanged', 'ondatasetcomplete', 'ondblclick', 'ondeactivate', 'ondrag', 'ondragdrop', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'onerror', 'onerrorupdate', 'onfilterupdate', 'onfinish', 'onfocus', 'onfocusin', 'onfocusout', 'onhelp', 'onkeydown', 'onkeypress', 'onkeyup', 'onlayoutcomplete', 'onload', 'onlosecapture', 'onmousedown', 'onmouseenter', 'onmouseleave', 'onmousemove', 'onmoveout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onmove', 'onmoveend', 'onmovestart', 'onpaste', 'onpropertychange', 'onreadystatechange', 'onreset', 'onresize', 'onresizeend', 'onresizestart', 'onrowexit', 'onrowsdelete', 'onrowsinserted', 'onscroll', 'onselect', 'onselectionchange', 'onselectstart', 'onstart', 'onstop', 'onsubmit', 'onunload','iframe'))
 {
 	if(is_array($string))
 	{
@@ -780,22 +780,35 @@ function template($module = 'phpcms', $template = 'index', $istag = 0)
 	return $compiledtplfile;
 }
 
-function thumb($imgurl, $width = 100, $height = 100 ,$autocut = 1, $smallpic = 'images/nopic_small.gif')
+function thumb($imgurl, $width = 100, $height = 100 ,$autocut = 1, $smallpic = 'images/nopic_small.gif', $ftp = 0)
 {
 	global $image;
 	if(empty($imgurl)) return $smallpic;
-	if(!extension_loaded('gd') || strpos($imgurl, '://')) return $imgurl;
-	if(!file_exists(PHPCMS_ROOT.$imgurl)) return 'images/nopic.gif';
-	list($width_t, $height_t, $type, $attr) = getimagesize(PHPCMS_ROOT.$imgurl);
-	if($width>=$width_t || $height>=$height_t) return $imgurl;
-	$newimgurl = dirname($imgurl).'/thumb_'.$width.'_'.$height.'_'.basename($imgurl);
-	if(file_exists(PHPCMS_ROOT.$newimgurl)) return $newimgurl;
+	if(!extension_loaded('gd')) return $imgurl;
+	if(strpos($imgurl, '://')) {
+		$newimgurl = dirname($imgurl).'/thumb_'.$width.'_'.$height.'_'.basename($imgurl);
+		$newimgurl = str_replace(UPLOAD_FTP_DOMAIN, '', $newimgurl);
+		if(file_exists(PHPCMS_ROOT.$newimgurl)) return $newimgurl;
+		@dir_create(UPLOAD_ROOT.date('Y/md/'));
+		@copy($imgurl, PHPCMS_ROOT.UPLOAD_URL.basename($imgurl));
+		$imgurl = UPLOAD_URL.basename($imgurl);
+		$ftp = 1;
+	} else {
+		if(!file_exists(PHPCMS_ROOT.$imgurl)) return 'images/nopic.gif';
+		list($width_t, $height_t, $type, $attr) = getimagesize(PHPCMS_ROOT.$imgurl);
+		if($width>=$width_t || $height>=$height_t) return $imgurl;
+
+		$newimgurl = dirname($imgurl).'/thumb_'.$width.'_'.$height.'_'.basename($imgurl);
+		if(file_exists(PHPCMS_ROOT.$newimgurl)) return $newimgurl;
+	}
+
 	if(!is_object($image))
 	{
 		require_once 'image.class.php';
 		$image = new image();
 	}
-	return $image->thumb(PHPCMS_ROOT.$imgurl, PHPCMS_ROOT.$newimgurl, $width, $height, '', $autocut) ? $newimgurl : $imgurl;
+	return $image->thumb(PHPCMS_ROOT.$imgurl, PHPCMS_ROOT.$newimgurl, $width, $height, '', $autocut, $ftp) ? $newimgurl : $imgurl;	
+
 }
 
 function ssi($file)
@@ -1431,5 +1444,56 @@ function contentpage($content = '', $maxpage = 10000)
 	}
 	$data = implode('[page]', $data);
 	return $data;
+}
+
+function menu_linkage($linkageid = 0, $id = 'linkid', $defaultvalue = 0)
+{
+	global $action;
+	$linkageid = intval($linkageid);
+	$datas = array();
+	$datas = @include PHPCMS_ROOT.'data/linkage/'.$linkageid.'.php';
+	$infos = $datas['data'];
+	if($action=='edit')
+	{
+		$title = $infos[$defaultvalue]['name'];
+	}
+	else
+	{
+		$title = $datas['title'];
+	}
+	
+	$colObj = random(3).date('is');
+	$string = '';
+	if(!defined('LINKAGE_INIT'))
+	{
+		define('LINKAGE_INIT', 1);
+		$string .= '<script type="text/javascript" src="images/linkage/js/mln.colselect.js"></script>';
+		if(defined('IN_ADMIN'))
+		{
+			$string .= '<link href="images/linkage/style/admin.css" rel="stylesheet" type="text/css">';
+		} 
+		else
+		{
+			$string .= '<link href="images/linkage/style/css.css" rel="stylesheet" type="text/css">';
+		}
+	}
+	$string .= '<input type="hidden" name="info['.$id.']" value="1"><div id="'.$id.'"></div>';
+	$string .= '<script type="text/javascript">';
+	$string .= 'var colObj'.$colObj.' = {"Items":[';
+	
+	foreach($infos AS $k=>$v)
+	{
+		$s .= '{"name":"'.$v['name'].'","topid":"'.$v['parentid'].'","colid":"'.$k.'","value":"'.$k.'","fun":function(){}},';
+	}
+
+	$string .= substr($s, 0, -1);
+	$string .= ']};';
+	$string .= '$("#'.$id.'").mlnColsel(colObj'.$colObj.',{';
+	$string .= 'title:"'.$title.'",';
+	$string .= 'value:"'.$defaultvalue.'",';
+	$string .= 'width:100';
+	$string .= '});';
+	$string .= '</script>';
+	return $string;
 }
 ?>

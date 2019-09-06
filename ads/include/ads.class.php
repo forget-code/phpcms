@@ -13,10 +13,7 @@ class ads
 		$this->adsid = $adsid;
 		$this->db = $db;
 		$this->table = DB_PRE.'ads';
-	}
-
-	function __destruct()
-	{
+		$this->stat_table = DB_PRE.'ads_'.date('ym',TIME);
 	}
 
 	function check_form($ads)
@@ -299,8 +296,8 @@ class ads
 			case '4':
 				$field='referer';
 		}
-		$stat_ads[0] = $this->db->select("SELECT *, COUNT($field) AS num FROM ".DB_PRE."ads_stat WHERE adsid=$id $where $date AND type=1 GROUP BY $field ORDER BY num DESC");
-		$stat_ads[1] = $this->db->select("SELECT *, COUNT($field) AS num FROM ".DB_PRE."ads_stat WHERE adsid=$id $where $date AND type=0 GROUP BY $field ORDER BY num DESC");
+		$stat_ads[0] = $this->db->select("SELECT *, COUNT($field) AS num FROM $this->stat_table WHERE adsid=$id $where $date AND type=1 GROUP BY $field ORDER BY num DESC");
+		$stat_ads[1] = $this->db->select("SELECT *, COUNT($field) AS num FROM $this->stat_table WHERE adsid=$id $where $date AND type=0 GROUP BY $field ORDER BY num DESC");
 		return $stat_ads;
 	}
 
@@ -310,11 +307,11 @@ class ads
 		if(!$adsid) return FALSE;
 		require 'ip_area.class.php';
 		$ip_area = new ip_area();
-		$res = $this->db->query("SELECT id, ip FROM ".DB_PRE."ads_stat WHERE adsid=$adsid AND area=''");
+		$res = $this->db->query("SELECT id, ip FROM $this->stat_table WHERE adsid=$adsid AND area=''");
 		while($r=$this->db->fetch_array($res))
 		{
 			$area = $ip_area->get($r['ip']);
-			$this->db->query("UPDATE ".DB_PRE."ads_stat SET area='$area' WHERE id=$r[id]");
+			$this->db->query("UPDATE $this->stat_table SET area='$area' WHERE id=$r[id]");
 		}
 		return true;
 	}

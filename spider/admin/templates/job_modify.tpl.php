@@ -552,7 +552,7 @@ function AddOnPos(obj, charvalue)
         <td width="13">从</td>
         <td width="223"><textarea name="rule[StartStr][<?=$labelkeys[$k]?>]" cols="30" rows="4" id="rule<?=$labelkeys[$k]?>StartStr"><?=$rule['StartStr'][$labelkeys[$k]]?></textarea></td>
         <td width="13">到</td>
-        <td width="803"><textarea name="rule[EndStr][<?=$labelkeys[$k]?>]" cols="30" rows="4" id="rule<?=$labelkeys[$k]?>EndStr"><?=$rule['EndStr'][$labelkeys[$k]]?></textarea>
+        <td width="803"><textarea name="rule[EndStr][<?=$labelkeys[$k]?>]" cols="30" rows="4" id="rule<?=$labelkeys[$k]?>EndStr"><?=htmlspecialchars($rule['EndStr'][$labelkeys[$k]])?></textarea>
         通配符: <a href="javascript:AddOnPos(document.myform.rule<?=$labelkeys[$k]?>StartStr,'(*)');"  style="color:#3300FF;">(*)</a>
           &nbsp; 通配符:<a href="javascript:AddOnPos(document.myform.rule<?=$labelkeys[$k]?>EndStr,'(*)');"  style="color:#3300FF;">(*)</a>
           </td>

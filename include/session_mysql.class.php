@@ -5,18 +5,13 @@ class session
 	var $db;
 	var $table;
 
-    function __construct()
+    function session()
     {
 		global $db;
 	    $this->lifetime = SESSION_TTL;
 		$this->db = &$db;
 		$this->table = '`'.DB_NAME.'`.`'.DB_PRE.'session`';
     	session_set_save_handler(array(&$this,'open'), array(&$this,'close'), array(&$this,'read'), array(&$this,'write'), array(&$this,'destroy'), array(&$this,'gc'));
-    }
-
-    function session()
-    {
-		$this->__construct();
     }
 
     function open($save_path, $session_name)

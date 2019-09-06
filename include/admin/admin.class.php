@@ -297,5 +297,32 @@ class admin
 	{
 		return $this->errormsg;
 	}
+
+	function list_online_admin($roleid)
+	{
+		$array = array();
+		$result = $this->db->query("SELECT * FROM $this->table_session WHERE groupid=1");
+		while($r = $this->db->fetch_array($result))
+		{
+			$online[$r['userid']] = $r;
+		}
+		$roleid = intval($roleid);
+		if($roleid) $where = "WHERE r.roleid=$roleid";
+		$result = $this->db->query("SELECT * FROM $this->table a LEFT JOIN $this->table_admin_role r ON a.userid=r.userid $where");
+		while($r = $this->db->fetch_array($result))
+		{
+			if($online[$r['userid']])
+			{
+				$r['online'] = 1;
+			}
+			else
+			{
+				$r['online'] = 0;
+			}
+			$array[$r['userid']] = $r;
+		}
+        $this->db->free_result($result);
+		return $array;
+	}
 }
 ?>

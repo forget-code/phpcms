@@ -80,7 +80,7 @@ body {
     <span class="btn_menu">
 		<?php
 		if(isset($MODULE['message'])){?>
-		<a href="<?=$MODULE['message']['url']?>" target="right"><img id="msg_img" src="admin/skin/images/icon_4.gif" title="短消息" height="22" width="22" /></a>
+		<a href="<?=$MODULE['message']['url']?>" onclick="show_admin_lists()" target="right"><img id="msg_img" src="admin/skin/images/icon_4.gif" title="短消息" height="22" width="22" /></a>
 		<?php }?>
         <a href="javascript:show_map();show_div(this)" id="show_map" title="后台管理地图"><img src="admin/skin/images/icon_9.gif" title="后台管理地图" height="22" width="22" /></a>
         <a href="javascript:add_menu()" title="添加常用操作"><img src="admin/skin/images/icon_1.gif" title="添加常用操作" height="22" width="22" /></a>

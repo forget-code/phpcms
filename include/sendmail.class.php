@@ -3,11 +3,6 @@ class sendmail
 {
 	function sendmail()
 	{
-		$this->__construct();
-	}
-
-	function __construct()
-    {
 		global $PHPCMS;
 		$this->set($PHPCMS['mail_server'], $PHPCMS['mail_port'], $PHPCMS['mail_user'], $PHPCMS['mail_password'], $PHPCMS['mail_type']);
 		$this->auth = 1;

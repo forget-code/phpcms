@@ -87,7 +87,7 @@ function preview_content()
 	myform.action = "preview.php";
 	myform.target = "_blank"; 
 	myform.submit(); 
-	myform.action = "?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&catid=<?=$catid?>&modelid=<?=$modelid?>";
+	myform.action = "?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&catid=<?=$catid?>&modelid=<?=$modelid?>&contentid=<?=$contentid?>";
 	myform.target="_self";
 }
 $().ready(function() {

@@ -27,7 +27,7 @@ switch($action)
 			$aids = $attachment->upload('uploadfile', UPLOAD_ALLOWEXT, UPLOAD_MAXSIZE, 1);
 			$filename = $attachment->uploadedfiles[0]['filename'];
 			$filepath = $attachment->uploadedfiles[0]['filepath'];
-			$fileurl = UPLOAD_URL.$filepath;
+			$fileurl = UPLOAD_FTP_ENABLE ? $filepath : UPLOAD_URL.$filepath;
 			$extension = fileext($filename);
 			
 			if($from == 'fckeditor')

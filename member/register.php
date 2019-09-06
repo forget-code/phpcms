@@ -29,7 +29,7 @@ switch ($action)
 				{
 					$userid = $member->register($memberinfo);
 				}
-				if(!$userid) showmessage($member->msg(), SITE_URL);
+				if(!$userid) showmessage($member->msg(), $forward);
 				if($M['enablemailcheck'])
 				{
 					if(!class_exists('sendmail'))
@@ -84,6 +84,7 @@ switch ($action)
 				}
 				if($modelid && !isset($member->MODEL[$modelid])) showmessage('该模型不存在');
 				$head['title'] = '新用户注册_'.$PHPCMS['sitename'];
+				header("Cache-control: private");
 				include template($mod, 'register');
 			}
 		break;

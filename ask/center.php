@@ -80,7 +80,7 @@ switch($action)
 			{
 				if($info['title'] == '') showmessage($LANG['title_no_allow_blank'],'goback');
 				$info['title'] = htmlspecialchars($info['title']);
-				$posts['message'] = $M['use_editor'] ? $posts['message'] : strip_tags($posts['message']);
+				$posts['message'] = $M['use_editor'] ? filter_xss($posts['message']) : strip_tags($posts['message']);
 				$ask->edit($id, $info, $posts, $_userid);
 				showmessage($LANG['operation_success'],$forward);
 			}
@@ -98,6 +98,7 @@ switch($action)
 		{
 			if($dosubmit)
 			{
+				$posts['message'] = $M['use_editor'] ? filter_xss($posts['message']) : strip_tags($posts['message']);
 				$answer->edit($id, $posts, $_userid);
 				showmessage($LANG['operation_success'], $forward);
 			}

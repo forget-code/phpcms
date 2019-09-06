@@ -2,8 +2,9 @@
 require './include/common.inc.php';
 require_once MOD_ROOT.'/include/company.class.php';
 $readproid = get_cookie('readproid');
-if(intval($readproid))$prowhere = $readproid;
+if(intval($readproid)) $prowhere = intval($readproid);
 $template = 'product';
+$where = '';
 $catid = intval($catid);
 if($head['title'])$head['title'] .= '_';
 if($catid)

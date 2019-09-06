@@ -155,7 +155,7 @@ class pay_api
 				$this->error = 2;
 				return FALSE;
 			}
-			elseif( TIME - ( strtotime($r['time']) + $chargedays*24*3600) )
+			elseif( TIME - ( strtotime($r['time']) + $chargedays*24*3600) < 0)
 			{
 				return TRUE;
 			}

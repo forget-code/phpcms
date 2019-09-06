@@ -25,7 +25,8 @@ if($dosubmit)
 {
 	$attachment->upload($uploadtext, $upload_allowext, $upload_maxsize, 1);
 	if($attachment->error) showmessage($attachment->error());
-	$imgurl = UPLOAD_URL.$attachment->uploadedfiles[0]['filepath'];
+	/*如果配置ftp上传附件*/
+	$imgurl = UPLOAD_FTP_ENABLE ? $attachment->uploadedfiles[0]['filepath'] :  UPLOAD_URL.$attachment->uploadedfiles[0]['filepath'];
 	$aid = $attachment->uploadedfiles[0]['aid'];
 	if($isthumb)
 	{

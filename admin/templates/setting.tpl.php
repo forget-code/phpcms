@@ -162,6 +162,10 @@ areaid_load(0);
       <th><strong>显示浏览次数</strong></th>
       <td><input name='setting[show_hits]' type='checkbox' id='show_hits' value='1' <?php if ($show_hits){echo 'checked';}?>></td>
     </tr>
+     <tr>
+      <th><strong>开启定时发布</strong><br />发布时间大于系统时间的文章将会定时发布</th>
+      <td><input name='setting[publish]' type='checkbox' id='publish' value='1' <?php if ($publish){echo 'checked';}?>></td>
+    </tr>
   </tbody>
 
   <tbody id='Tabs2' style='display:none'>
@@ -417,8 +421,47 @@ areaid_load(0);
 	  <tr align="center"  bgcolor="#ffffff"><td><input type="radio" name="setting[watermark_pos]" value="4" <?php if($watermark_pos==4){ ?>checked <?php } ?>> #4</td><td><input type="radio" name="setting[watermark_pos]" value="5" <?php if($watermark_pos==5){ ?>checked <?php } ?>> #5</td><td><input type="radio" name="setting[watermark_pos]" value="6" <?php if($watermark_pos==6){ ?>checked <?php } ?>> #6</td></tr>
 	  <tr align="center" bgcolor="#ffffff"><td><input type="radio" name="setting[watermark_pos]" value="7" <?php if($watermark_pos==7){ ?>checked <?php } ?>> #7</td><td><input type="radio" name="setting[watermark_pos]" value="8" <?php if($watermark_pos==8){ ?>checked <?php } ?>> #8</td><td><input type="radio" name="setting[watermark_pos]" value="9" <?php if($watermark_pos==9){ ?>checked <?php } ?>> #9</td></tr>
 	  </table>
-
     </tr>
+
+<tr>
+      <th width="35%"><strong>启用附件FTP上传功能</strong><br>开启附件FTP功能后，phpcms将采用ftp方式上传附件<br/>
+     <?php if(!function_exists('ftp_connect')){ ?><font color="red">当前PHP环境不支持FTP功能！</font><?php }?>
+	  </th>
+      <td>
+	  <input type='radio' name='setconfig[UPLOAD_FTP_ENABLE]' value='1'  <?php if(UPLOAD_FTP_ENABLE){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
+	  <input type='radio' name='setconfig[UPLOAD_FTP_ENABLE]' value='0'  <?php if(!UPLOAD_FTP_ENABLE){ ?>checked <?php } ?>> 否&nbsp;&nbsp;&nbsp;&nbsp;
+     </td>
+    </tr>
+    <tr>
+      <th><strong>FTP主机</strong></th>
+      <td><input name="setconfig[UPLOAD_FTP_HOST]" id="upload_ftp_host" type="text" size="40" value="<?=UPLOAD_FTP_HOST?>"></td>
+    </tr>
+    <tr>
+      <th><strong>FTP端口</strong></th>
+      <td><input name="setconfig[UPLOAD_FTP_PORT]" id="upload_ftp_port" type="text" size="40" value="<?=UPLOAD_FTP_PORT?>"></td>
+    </tr>
+    <tr>
+      <th><strong>FTP帐号</strong></th>
+      <td><input name="setconfig[UPLOAD_FTP_USER]" id="upload_ftp_user" type="text" size="40" value="<?=UPLOAD_FTP_USER?>"></td>
+    </tr>
+    <tr>
+      <th><strong>FTP密码</strong><br></th>
+      <td><input name="setconfig[UPLOAD_FTP_PW]" id="upload_ftp_pw" type="password" size="40" value="<?=UPLOAD_FTP_PW?>" onBlur="upload_ftpdir_list('/')"></td>
+    </tr>
+    <tr>
+      <th><strong>FTP域名</strong><br>上传附件通过此域名访问</th>
+      <td><input name="setconfig[UPLOAD_FTP_DOMAIN]" type="text" size="40" value="<?=UPLOAD_FTP_DOMAIN?>">	注意以“/”结尾</td>
+    </tr>
+    <tr>
+      <th><strong>Phpcms目录</strong><br>有很多虚拟主机的FTP根目录与Web根目录不一样<br/>您需要正确设置才能使用FTP功能</th>
+      <td><input name="setconfig[UPLOAD_FTP_PATH]" id="upload_ftp_path" type="text" size="20" value="<?=UPLOAD_FTP_PATH?>"> <span id="upload_ftpdir_list"></span>
+	  <br/>注意以“/”结尾，例如有的是 /wwwroot/ 或者 /www/<br/>留空则表示ftp根目录与phpcms根目录路径相同</td>
+    </tr>
+    <tr>
+      <th><strong>FTP连接测试</strong><br></th>
+      <td><input name="upload_ftp_test" type="button" size="40" value="点击测试 FTP 连接" onClick="javascript:upload_test_ftp();"></td>
+    </tr>
+
   </tbody>
 
    <tbody id='Tabs5' style='display:none'>
@@ -682,6 +725,13 @@ function ftpdir_list(path)
 	});
 }
 
+function upload_ftpdir_list(path)
+{
+    $.post('?file=setting&action=ftpdir_list&path='+path+'&ftp_host='+$('#upload_ftp_host').val()+'&ftp_port='+$('#upload_ftp_port').val()+'&ftp_pw='+$('#upload_ftp_pw').val(), {ftp_user:$('#upload_ftp_user').val()}, function(data){
+		if(data != 0) $('#upload_ftpdir_list').append(data);
+	});
+}
+
 function test_user()
 {
 	if($('#phpcms_username').val() == '')
@@ -713,6 +763,13 @@ function test_mail()
 function test_ftp()
 {
     $.post('?mod=phpcms&file=setting&action=test_ftp', {ftp_host:$('#ftp_host').val(), ftp_port: $('#ftp_port').val(), ftp_pw:$('#ftp_pw').val(), ftp_user:$('#ftp_user').val(), ftp_path: $('#ftp_path').val()}, function(data){
+		alert(data);
+	});
+}
+
+function upload_test_ftp()
+{
+    $.post('?mod=phpcms&file=setting&action=test_ftp', {ftp_host:$('#upload_ftp_host').val(), ftp_port: $('#upload_ftp_port').val(), ftp_pw:$('#upload_ftp_pw').val(), ftp_user:$('#upload_ftp_user').val(), ftp_path: $('#upload_ftp_path').val()}, function(data){
 		alert(data);
 	});
 }

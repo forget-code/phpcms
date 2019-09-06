@@ -27,7 +27,7 @@ include admin_tpl('header');
   </tr>
   <tr>
     <th><strong>下单时间</strong></th>
-    <td><?=$addtime ? date('Y-d-m',$addtime) : ''?></td>
+    <td><?=$addtime ? date('Y-m-d',$addtime) : ''?></td>
   </tr>
   <tr>
     <th><strong>支付时间</strong></th>
@@ -48,6 +48,10 @@ include admin_tpl('header');
   <tr>
     <th><strong>电话</strong></th>
     <td><?=$telephone?></td>
+  </tr>
+  <tr>
+    <th><strong>备注</strong></th>
+    <td><?=$usernote?></td>
   </tr>
 </table>
 </body>

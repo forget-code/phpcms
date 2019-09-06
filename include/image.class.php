@@ -46,7 +46,7 @@ class image
 		return $info;
     }
 
-    function thumb($image, $filename = '', $maxwidth = 200, $maxheight = 50, $suffix='_thumb', $autocut = 0) 
+    function thumb($image, $filename = '', $maxwidth = 200, $maxheight = 50, $suffix='_thumb', $autocut = 0, $ftp = 0) 
     {
 		if(!$this->thumb_enable || !$this->check($image)) return false;
         $info  = image::info($image);
@@ -102,6 +102,9 @@ class image
 		$imagefun($thumbimg, $filename);
 		imagedestroy($thumbimg);
 		imagedestroy($srcimg);
+		if($ftp) {
+			@unlink($image);
+		}
 		return $filename;
     }
 

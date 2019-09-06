@@ -33,6 +33,20 @@ switch($action)
 				extract($setting);
 				extract($info);
 				require_once 'fields/'.$formtype.'/field_add.inc.php';
+
+				/*如果字段作为搜索条件，增加索引*/
+				if($issearch) {
+					$sql = "SHOW INDEX FROM `$tablename`";
+					$query = $db->query($sql);
+					while($res = $db->fetch_array($query)) {
+						$indexarr[] = $res['Column_name'];
+					}
+					if(is_array($indexarr) && !in_array($field, $indexarr)) {
+						$sql = "ALTER TABLE `$tablename` ADD INDEX `$field` (`$field`)";
+						$db->query($sql);
+					}
+				}
+
 				showmessage('操作成功！', $forward);
 			}
 			else
@@ -61,6 +75,27 @@ switch($action)
 				extract($info);
 				if($issystem) $tablename = DB_PRE.'content';
 				require_once 'fields/'.$formtype.'/field_edit.inc.php';
+
+				/*非系统且作为搜索条件字段，增加索引*/
+				if(!$issystem) {
+					$sql = "SHOW INDEX FROM `$tablename`";
+					$query = $db->query($sql);
+					while($res = $db->fetch_array($query)) {
+						$indexarr[] = $res['Column_name'];
+					}
+					if(is_array($indexarr) && in_array($field, $indexarr)) {
+						if(!$issearch) {
+							$sql = "ALTER TABLE `$tablename` DROP INDEX `$field`";
+							$db->query($sql);
+						}
+					} else {
+						if($issearch) {
+							$sql = "ALTER TABLE `$tablename` ADD INDEX `$field` (`$field`)";
+							$db->query($sql);
+						}
+					}
+				}
+
 				showmessage('操作成功！', $forward);
 			}
 			else

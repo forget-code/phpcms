@@ -4,8 +4,9 @@ cache_page_start();
 require_once MOD_ROOT.'/include/company.class.php';
 $template = 'company';
 $readproid = get_cookie('readproid');
-if(intval($readproid))$prowhere = $readproid;
+if(intval($readproid)) $prowhere = intval($readproid);
 $catid = intval($catid);
+$where = '';
 if($head['title'])$head['title'] .= '_';
 if($catid)
 {

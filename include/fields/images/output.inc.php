@@ -48,7 +48,11 @@
 		{
 			foreach($images as $a)
 			{
-				$thumb = UPLOAD_URL.$attachment->get_thumb(UPLOAD_PATH.$a['filepath']);
+				if(strstr($a['filepath'], 'http://')) {
+					$thumb = $attachment->get_thumb($a['filepath']);
+				} else {
+					$thumb = UPLOAD_URL.$attachment->get_thumb(UPLOAD_PATH.$a['filepath']);
+				}
 				$url = 'images.php?aid='.$a['aid'];
 				$value .= "<a href='$url' target='_blank'><img src='$thumb' border='0' alt='$a[description]'></a><br/>$a[description]<br/>";
 			}

@@ -408,7 +408,8 @@ class category
 		$this->u->CATEGORY[$catid] = $data;
 		if($this->category[$catid]['type'] == 2) return false;
 		cache_write('category_'.$catid.'.php', $data);
-		if($MODEL[$this->category[$catid]['modelid']]['ishtml'])
+
+		if($data['ishtml']==1 || $MODEL[$this->category[$catid]['modelid']]['ishtml'])
 		{
 			if(!preg_match('/:\/\//',$data['url']))
 			{

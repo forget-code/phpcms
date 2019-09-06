@@ -54,7 +54,7 @@ switch($action)
 			$log->add($data);
 			$arr_log = array('data'=>$data);
 			$log->add($arr_log);
-	        showmessage('操作成功！', "?mod=$mod&file=$file&action=manage&modeule=$module");
+	        showmessage('操作成功！', "?mod=$mod&file=$file&action=manage&module=$module");
 		}
 		else
 	    {

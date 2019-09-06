@@ -14,7 +14,8 @@ if($dosubmit)
 {
 	$attachment->upload('uploadfile', $upload_allowext, $upload_maxsize, 1);
 	if($attachment->error) showmessage($attachment->error());
-	$imgurl = UPLOAD_URL.$attachment->uploadedfiles[0]['filepath'];	
+	//判断是否开启附件ftp上传，返回图片路径
+	$imgurl = UPLOAD_FTP_ENABLE ? $attachment->uploadedfiles[0]['filepath'] : UPLOAD_URL.$attachment->uploadedfiles[0]['filepath'];	
 	$aid = $attachment->uploadedfiles[0]['aid'];
 	$filesize = $attachment->uploadedfiles[0]['filesize'];
 	$filesize = $attachment->size($filesize);
@@ -32,6 +33,7 @@ if($dosubmit)
 			$image->watermark($img, $img, $PHPCMS['watermark_pos'], $PHPCMS['watermark_img'], '', 5, '#ff0000', $PHPCMS['watermark_jpgquality']);
 		}
 	}
+
 	showmessage("文件上传成功！<script language='javascript'>	try{ $(window.opener.document).find(\"form[@name='myform'] #$uploadtext\").val(\"$imgurl\");$(window.opener.document).find(\"form[@name='myform'] #{$uploadtext}_aid\").val(\"$aid\");$(window.opener.document).find(\"form[@name='myform'] #$filesize\").val(\"$filesize\");}catch(e){} window.close();</script>", HTTP_REFERER);
 }
 else

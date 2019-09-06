@@ -3,18 +3,13 @@ class times
 {
 	var $db;
 	var $table;
-    
-    function __construct($action = '')
-    {
+ 
+	function times($action = '')
+	{
 		global $db;
 		$this->db = &$db;
 		$this->table = DB_PRE.'times';
 		$this->action = $action;
-    }
-
-	function times($action = '')
-	{
-		$this->__construct($action);
 	}
 
 	function set($action, $interval = 3600, $times = 1)

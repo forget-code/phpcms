@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8>">
 <title><?=$PHPCMS['sitename']?>网站管理 - Power by PHPCMS <?=PHPCMS_VERSION?></title>
+<meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <link href="admin/skin/system.css" rel="stylesheet" type="text/css">
 <script type="text/javaScript" src="data/config.js"></script>
 <script type="text/javaScript" src="images/js/common.js"></script>

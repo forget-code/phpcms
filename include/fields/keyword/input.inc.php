@@ -10,13 +10,13 @@
 			}
 		    if(!$value) return '';
 		}
-		if(strpos($value, ' '))
-		{
-			$s = ' ';
-		}
-		elseif(strpos($value, ','))
+		if(strpos($value, ','))
 		{
 			$s = ',';
+		}
+		else
+		{
+			$s = ' ';
 		}
 		$keywords = isset($s) ? array_unique(array_filter(explode($s, $value))) : array($value);
 		foreach($keywords as $tag)
@@ -31,5 +31,5 @@
 				$this->db->query("REPLACE INTO `".DB_PRE."keyword` (`tag`,`usetimes`,`lastusetime`) VALUES('$tag','1','".TIME."')");
 			}
 		}
-		return implode(' ', $keywords);
+		return implode($s, $keywords);
 	}

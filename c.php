@@ -12,7 +12,12 @@ if($ads)
 	$info['ip'] = IP;
 	$info['adsid'] = $id;
 	$info['referer'] = HTTP_REFERER;
-	$table = DB_PRE.'ads_stat';
+	$year = date('ym',TIME);
+	$table = DB_PRE.'ads_'.$year;
+	$table_status = $db->table_status($table);
+	if(!$table_status) {
+		include MOD_ROOT.'include/create.table.php';
+	}
 	$db->insert($table, $info);
 	$url = strpos($ads['linkurl'], 'http://')===FALSE ? 'http://'.$ads['linkurl'] : $ads['linkurl'];
 }

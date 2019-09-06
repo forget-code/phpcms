@@ -7,16 +7,11 @@ class log
 	var $value;
 	var $pages;
 
-    function __construct()
-    {
+	function log()
+	{
 		global $db;
 		$this->db = &$db;
 		$this->table = DB_PRE.'log';
-    }
-
-	function log()
-	{
-		$this->__construct();
 	}
 
 	function set($field = '', $value = 0)

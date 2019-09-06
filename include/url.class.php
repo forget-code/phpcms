@@ -25,10 +25,11 @@ class url
 	{
 		if(!isset($this->CATEGORY[$catid])) return false;
         $C = cache_read('category_'.$catid.'.php', '', 1);
+		
 		if($C['type'] == 0)
 		{
 			$modelid = $C['modelid'];
-			$urlruleid = $this->MODEL[$modelid]['category_urlruleid'];
+			$urlruleid = isset($C['ishtml']) ? $C['category_urlruleid'] : $this->MODEL[$modelid]['category_urlruleid'];
 		}
 		elseif($C['type'] == 1)
 		{
@@ -66,7 +67,7 @@ class url
 		$urlrules = explode('|', $this->URLRULE[$urlruleid]);
 		$urlrule = $page === 0 ? $urlrules[0] : $urlrules[1];
 		eval("\$url = \"$urlrule\";");	
-		if($C['type']==0 && $this->MODEL[$modelid]['ishtml'] && $domain_dir)
+		if(($C['type']==0 && $C['ishtml']==1 && $domain_dir) || ($C['type']==0 && $this->MODEL[$modelid]['ishtml'] && $domain_dir))
 		{
 			if(strpos($url, $domain_dir)===false)
 			{
@@ -129,10 +130,10 @@ class url
 		$month = date('m', $time);
 		$day = date('d', $time);
 		$modelid = $C['modelid'];
-		$urlruleid = $this->MODEL[$modelid]['show_urlruleid'];
+		$urlruleid = $C['show_urlruleid'] ? $C['show_urlruleid'] : $this->MODEL[$modelid]['show_urlruleid'];
 		$urlrules = explode('|', $this->URLRULE[$urlruleid]);
 		$urlrule = $page < 2 ? $urlrules[0] : $urlrules[1];
-		if($this->MODEL[$modelid]['ishtml'])
+		if(isset($C['ishtml']) && $C['ishtml']==1 || $this->MODEL[$modelid]['ishtml'])
 		{
 			if($prefix)
 			{

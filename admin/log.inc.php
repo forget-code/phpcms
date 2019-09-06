@@ -33,11 +33,15 @@ switch($action)
 		break;
 
     case 'delete':
+		$admin_founders = explode(',',ADMIN_FOUNDERS);
+		if(!in_array($_userid,$admin_founders)) showmessage('为了安全，只有创始人才能删除日志');
 		$log->delete($module, $fromdate, $todate);
 		showmessage($LANG['operation_success'],'?mod=phpcms&file=log');
 		break;
 
     case 'clear':
+		$admin_founders = explode(',',ADMIN_FOUNDERS);
+		if(!in_array($_userid,$admin_founders)) showmessage('为了安全，只有创始人才能删除日志');
 		$log->clear();
 		showmessage($LANG['operation_success'],'?mod=phpcms&file=log');
 		break;

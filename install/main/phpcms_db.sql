@@ -259,7 +259,8 @@ INSERT INTO `phpcms_category` (`catid`, `module`, `type`, `modelid`, `parentid`,
 INSERT INTO `phpcms_category` (`catid`, `module`, `type`, `modelid`, `parentid`, `arrparentid`, `child`, `arrchildid`, `catname`, `style`, `image`, `description`, `parentdir`, `catdir`, `url`, `content`, `items`, `hits`, `setting`, `listorder`, `ismenu`) VALUES (9, 'phpcms', 2, 0, 0, '0', 0, '9', '问吧', '', '', '', '', '', 'ask/', '', 0, 0, '', 502, 1);
 INSERT INTO `phpcms_category` (`catid`, `module`, `type`, `modelid`, `parentid`, `arrparentid`, `child`, `arrchildid`, `catname`, `style`, `image`, `description`, `parentdir`, `catdir`, `url`, `content`, `items`, `hits`, `setting`, `listorder`, `ismenu`) VALUES (8, 'phpcms', 2, 0, 0, '0', 0, '8', '搜索', '', '', '', '', '', 'search/', '', 0, 0, '', 503, 1);
 INSERT INTO `phpcms_category` (`catid`, `module`, `type`, `modelid`, `parentid`, `arrparentid`, `child`, `arrchildid`, `catname`, `style`, `image`, `description`, `parentdir`, `catdir`, `url`, `content`, `items`, `hits`, `setting`, `listorder`, `ismenu`) VALUES (6, 'phpcms', 2, 0, 0, '0', 0, '6', '会员', '', '', '', '', '', 'member/list.php?modelid=10', '', 0, 0, '', 504, 1);
-INSERT INTO `phpcms_category` (`catid`, `module`, `type`, `modelid`, `parentid`, `arrparentid`, `child`, `arrchildid`, `catname`, `style`, `image`, `description`, `parentdir`, `catdir`, `url`, `content`, `items`, `hits`, `setting`, `listorder`, `ismenu`) VALUES (10, 'phpcms', 2, 0, 0, '0', 0, '10', '论坛', '', '', '', '', '', 'http://bbs.phpcms.cn', '', 0, 0, '', 505, 1);
+INSERT INTO `phpcms_category` (`catid`, `module`, `type`, `modelid`, `parentid`, `arrparentid`, `child`, `arrchildid`, `catname`, `style`, `image`, `description`, `parentdir`, `catdir`, `url`, `content`, `items`, `hits`, `setting`, `listorder`, `ismenu`) VALUES (10, 'phpcms', 2, 0, 0, '0', 0, '10', '最新更新', '', '', '', '', '', 'renew.php', '', 0, 0, '', 506, 1);
+INSERT INTO `phpcms_category` (`catid`, `module`, `type`, `modelid`, `parentid`, `arrparentid`, `child`, `arrchildid`, `catname`, `style`, `image`, `description`, `parentdir`, `catdir`, `url`, `content`, `items`, `hits`, `setting`, `listorder`, `ismenu`) VALUES (31, 'phpcms', 2, 0, 0, '0', 0, '10', '论坛', '', '', '', '', '', 'http://bbs.phpcms.cn', '', 0, 0, '', 507, 1);
 
 DROP TABLE IF EXISTS `phpcms_collect`;
 CREATE TABLE IF NOT EXISTS `phpcms_collect` (
@@ -581,6 +582,8 @@ INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `descri
 INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (206, 205, '添加URL规则', '', '?mod=phpcms&file=urlrule&action=add', '', 'right', '', '', '', '', 0, 0, 0, 0, '');
 INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (207, 205, '管理URL规则', '', '?mod=phpcms&file=urlrule&action=manage', '', 'right', '', '', '', '', 0, 0, 0, 0, '');
 
+INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (208, 170, '联动菜单管理', '', '?mod=phpcms&file=linkage', '', 'right', '', '', '', '', 0, 0, 0, 0, '');
+
 INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (210, 3, '系统工具', '', '', '', '_self', '', '', '', '', 1, 0, 0, 0, '');
 INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (211, 210, '木马扫描', '', '', '', '_self', '', '', '', '', 1, 0, 0, 0, '');
 INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (212, 211, '扫描木马', '', '?mod=phpcms&file=safe', '', 'right', '', '', '', '', 0, 0, 0, 0, '');
@@ -604,6 +607,8 @@ INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `descri
 INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (232, 210, '播放器管理', '', '?mod=phpcms&file=player&action=manage', '', 'right', '', '', '', '', 0, 0, 0, 0, '');
 INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (233, 210, 'CNZZ站长统计', '', '?mod=phpcms&file=wss', '', 'right', '', '', '', '', 0, 0, 0, 0, '');
 INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (234, 210, 'CNZZ统计配置', '', '?mod=phpcms&file=wss&action=setting', '', 'right', '', '', '', '', 0, 0, 0, 0, '');
+INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (235, 210, '稿件统计', '', '?mod=phpcms&file=statistics', '', 'right', '', '', '', '', 0, 0, 0, 0, '');
+INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (236, 210, '栏目访问统计', '', '?mod=phpcms&file=count', '', 'right', '', '', '', '', 0, 0, 0, 0, '');
 
 INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (250, 3, '网站配置', '', '', '', '_self', '', '', '', '1', 1, 0, 0, 0, '');
 INSERT INTO `phpcms_menu` (`menuid`, `parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES (251, 250, '基本信息', '', '?mod=phpcms&file=setting&tab=0', '', 'right', '', '', '', '1', 0, 0, 0, 0, '');
@@ -1020,6 +1025,7 @@ INSERT INTO `phpcms_status` (`status`, `name`, `description`, `issystem`) VALUES
 INSERT INTO `phpcms_status` (`status`, `name`, `description`, `issystem`) VALUES (5, '二审退稿', '二审退稿', 0);
 INSERT INTO `phpcms_status` (`status`, `name`, `description`, `issystem`) VALUES (6, '二审通过', '二审通过', 0);
 INSERT INTO `phpcms_status` (`status`, `name`, `description`, `issystem`) VALUES (7, '终审退稿', '终审退稿', 0);
+INSERT INTO `phpcms_status` (`status`, `name`, `description`, `issystem`) VALUES (98, '定时发布', '定时发布', 1);
 
 DROP TABLE IF EXISTS `phpcms_type`;
 CREATE TABLE IF NOT EXISTS `phpcms_type` (
@@ -1094,4 +1100,20 @@ CREATE TABLE `phpcms_editor_data` (
   `data` mediumtext NOT NULL,
   PRIMARY KEY  (`id`),
   KEY `userid` (`userid`,`editorid`,`created_time`,`id`)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS `phpcms_linkage`;
+CREATE TABLE `phpcms_linkage` (
+  `linkageid` smallint(5) unsigned NOT NULL auto_increment,
+  `name` varchar(30) NOT NULL,
+  `style` varchar(35) NOT NULL,
+  `parentid` smallint(5) unsigned NOT NULL default '0',
+  `arrparentid` varchar(255) NOT NULL default '',
+  `child` tinyint(1) unsigned NOT NULL default '0',
+  `arrchildid` mediumtext NOT NULL,
+  `keyid` smallint(5) unsigned NOT NULL default '0',
+  `listorder` smallint(5) unsigned NOT NULL default '0',
+  `description` varchar(255) default NULL,
+  PRIMARY KEY  (`linkageid`,`keyid`),
+  KEY `parentid` (`parentid`,`listorder`)
 ) TYPE=MyISAM;

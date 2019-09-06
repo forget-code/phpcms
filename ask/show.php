@@ -29,7 +29,7 @@ else if($dosubmit)
 		$posts['status'] = 3;
 	}
 	$posts['addtime'] = TIME;
-	$posts['message'] = $M['use_editor'] ? $posts['message'] : strip_tags($posts['message']);
+	$posts['message'] = $M['use_editor'] ? filter_xss($posts['message']) : strip_tags($posts['message']);
 	if($answer->add($id,$posts))
 	{
 		if($M['answer_check'])

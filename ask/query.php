@@ -40,7 +40,7 @@ switch($action)
 	if($dosubmit)
 	{
 		if(strlen($answertext) > 10000) showmessage('回答字数不能超过10000个字符');
-		$posts['message'] = $M['use_editor'] ? $answertext : strip_tags($answertext);
+		$posts['message'] = $M['use_editor'] ? filter_xss($answertext) : strip_tags($answertext);
 		$answer->edit($pid, $posts, $_userid);
 		showmessage($LANG['operation_success'], $forward);
 	}
@@ -51,7 +51,7 @@ switch($action)
 	{
 		$info['title'] = htmlspecialchars($title);
 		if(strlen($title)<2) showmessage($LANG['title_is_short']);
-		$posts['message'] = $M['use_editor'] ? $message : strip_tags($message);
+		$posts['message'] = $M['use_editor'] ? filter_xss($message) : strip_tags($message);
 		$ask->edit($id, $info, $posts, $_userid);
 		showmessage($LANG['operation_success'], $forward);
 	}

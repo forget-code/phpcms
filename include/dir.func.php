@@ -37,6 +37,32 @@ function dir_create($path, $mode = 0777)
 	return is_dir($path);
 }
 
+function ftp_dir_create($path, $mode = 0777)
+{
+	global $upload_ftp;
+	if(UPLOAD_FTP_ENABLE && extension_loaded('ftp') && !is_object($upload_ftp)) {
+		require_once 'ftp.class.php';
+		$upload_ftp = new ftp(UPLOAD_FTP_HOST, UPLOAD_FTP_PORT, UPLOAD_FTP_USER, UPLOAD_FTP_PW, UPLOAD_FTP_PATH);
+		if($upload_ftp->error) return false;
+	}
+	if($upload_ftp->chdir($path)) return TRUE;
+	$path = dir_path($path);
+	$temp = explode('/', $path);
+	$cur_dir = '';
+	$max = count($temp) - 1;
+	for($i=0; $i<$max; $i++) {
+		$cur_dir .= $temp[$i].'/';
+		if($upload_ftp->chdir($cur_dir)) {
+			$upload_ftp->chdir('/');
+			continue;
+		}
+		$dir = str_replace(PHPCMS_ROOT, '', $cur_dir);
+		$upload_ftp->mkdir($dir);
+		@$upload_ftp->chmod($mode, $dir);
+	}
+	return $upload_ftp->chdir($path);
+}
+
 function dir_copy($fromdir, $todir)
 {
 	$fromdir = dir_path($fromdir);

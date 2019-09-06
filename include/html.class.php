@@ -36,7 +36,17 @@ class html
 		$C = cache_read("category_$catid.php", '', 1);
 		if(!$C || $C['type'] > 1) return false;
 		extract($C);
-		if($type == 0) $ishtml = $MODEL[$modelid]['ishtml'];
+		if($type == 0)
+		{
+			if(isset($content_ishtml))
+			{
+				$ishtml = $content_ishtml;
+			}
+			else
+			{
+				$ishtml = $MODEL[$modelid]['ishtml'];
+			}
+		}
 		if(!$ishtml) return false;
 		$catlist = submodelcat($C['modelid']);
 		$arrparentid = explode(',', $CATEGORY[$catid]['arrparentid']);
@@ -86,7 +96,10 @@ class html
 			$maxcharperpage = $r['maxcharperpage'];
 		}
 		if($r['catid']) $catid = $r['catid'];
-		if(!$MODEL[$CATEGORY[$catid]['modelid']]['ishtml']) return false;
+		$CA = cache_read('category_'.$catid.'.php','',1);
+
+		if((!isset($CA['content_ishtml']) && !$MODEL[$CATEGORY[$catid]['modelid']]['ishtml']) || (isset($CA['content_ishtml']) && !$CA['content_ishtml'])) return false;
+		
 		if($is_update_related)
 		{
 			$this->index();

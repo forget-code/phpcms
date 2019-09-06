@@ -79,7 +79,9 @@ foreach($patterns as $p)
     </tr>
 	<tr>
       <th><strong>作为搜索条件</strong></th>
-      <td><input type="radio" name="info[issearch]" value="1" <?=($issearch ? 'checked' : '')?> /> 是 <input type="radio" name="info[issearch]" value="0"  <?=($issearch ? '' : 'checked')?> /> 否</td>
+      <td><input type="radio" name="info[issearch]" value="1" <?=($issearch ? 'checked' : '')?> /> 是 <input type="radio" name="info[issearch]" value="0"  <?=($issearch ? '' : 'checked')?> /> 否
+	  <font color=red> 非系统字段如选择“是”系统将为该字段建立索引，如数据量过大请谨慎操作。</font>
+	  </td>
     </tr>
 	<tr>
       <th><strong>作为标签默认读取字段</strong></th>

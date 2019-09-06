@@ -33,7 +33,11 @@ if ($action=='test') 	exit('1');
 
 if ($action=='deleteuser')
 {
-	exit('Authracation has expiried');
+	$touserid = intval(substr($arr['ids'],1,-1));
+	$r = $member->get_by_touserid($touserid,'userid');
+	$userid = $r['userid'];
+	$member->delete($userid);
+	exit(API_RETURN_SUCCEED);
 }
 if($action=='updatepw')
 {

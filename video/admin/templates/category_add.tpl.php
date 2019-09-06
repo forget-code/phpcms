@@ -34,7 +34,7 @@ function HideTabTitle(displayValue,tempType)
 
     <tr>
       <th><strong>栏目名称</strong></th>
-      <td><input name='category[catname]' type='text' id='catname' size='40' maxlength='50' require="true" datatype="limit|ajax" min="1" max="50" url="?mod=ask&file=category&action=checkname&parentid=<?=$catid?>" msg="字符长度范围必须为1到50位|" msgid="msgid1"> <?=form::style('category[style]','')?>  <font color="red">*</font><span id ="msgid1"/></td>
+      <td><input name='category[catname]' type='text' id='catname' size='40' maxlength='50' require="true" datatype="limit|ajax" min="1" max="50" url="?mod=video&file=category&action=checkname&parentid=<?=$catid?>" msg="字符长度范围必须为1到50位|" msgid="msgid1"> <?=form::style('category[style]','')?>  <font color="red">*</font><span id ="msgid1"/></td>
     </tr>
     <tr>
       <th><strong>栏目目录</strong></th>

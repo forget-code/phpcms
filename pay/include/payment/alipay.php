@@ -169,7 +169,7 @@ class alipay
 		TRADE_CLOSED 交易关闭
 		modify.tradeBase.totalFee 修改交易价格
 		*/
-        if ( $_GET['trade_status'] == "WAIT_SELLER_SEND_GOODS" )
+        if ( $_GET['trade_status'] == "WAIT_SELLER_SEND_GOODS" || $_GET['trade_status'] == "TRADE_FINISHED" )
         {
             $orderid = $_GET['out_trade_no'];
             $orderid = trim($orderid);

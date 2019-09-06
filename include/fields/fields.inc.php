@@ -25,5 +25,6 @@ $fields = array('text'=>'单行文本',
 				'islink'=>'转向链接',
 				'pages'=>'分页选择',
 				'flashupload'=>'视频',
+				'linkage'=>'联动菜单',
 				);
 ?>

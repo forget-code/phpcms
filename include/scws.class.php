@@ -5,13 +5,8 @@ class scws
 
 	function scws()
 	{
-		$this->__construct();
-	}
-
-	function __construct()
-	{
 		$this->sh = scws_open();
-    }
+	}
 
 	function set_charset($charset = 'gbk')
 	{

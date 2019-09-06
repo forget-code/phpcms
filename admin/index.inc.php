@@ -28,6 +28,21 @@ switch($action)
 		echo $_message ? 1 : 0;
 		break;
 
+	case 'show_admin_list':
+		require_once 'admin/admin.class.php';
+		$admin = new admin();
+		$data = $admin->listrole();
+		foreach ($data as $key=>$val)
+		{
+			if(strtolower(CHARSET)=='gbk') $data[$key]['name'] = addslashes(iconv('GBK','UTF-8',$val['name']));
+			$listbyrole = $admin->listbyrole($val['roleid']);
+			$data[$key]['users'] = $admin->list_online_admin($val['roleid']);
+			$data[$key]['count'] = $admin->count_admin("roleid='$val[roleid]'");
+			
+		}
+		exit(json_encode($data));
+		break;
+
 	default:
 		require_once 'menu.class.php';
 		$m = new menu();

@@ -34,6 +34,19 @@ class attachment
 		if((!UPLOAD_FRONT && $_groupid != 1) || !isset($_FILES[$field])) return false;
 		$this->field = $field;
 		$this->savepath = UPLOAD_ROOT.date('Y/md/');
+
+		/*判断上传附件方式是否为ftp方式*/
+		if(UPLOAD_FTP_ENABLE && extension_loaded('ftp'))
+		{
+			if(!is_object($upload_ftp)) {
+				require_once 'ftp.class.php';
+				$upload_ftp = new ftp(UPLOAD_FTP_HOST, UPLOAD_FTP_PORT, UPLOAD_FTP_USER, UPLOAD_FTP_PW, UPLOAD_FTP_PATH);
+				if($upload_ftp->error) showmessage($upload_ftp->error);
+			}
+			$upload_ftp_enable = 1;
+			$this->savepath = UPLOAD_FTP_ROOT.date('Y/md/');
+		}
+
 		$this->alowexts = $alowexts;
 		$this->maxsize = $maxsize;
 		$this->overwrite = $overwrite;
@@ -59,27 +72,49 @@ class attachment
 			if(!$description) $description = '';
 			$uploadfiles[0] = array('tmp_name' => $_FILES[$field]['tmp_name'], 'name' => $_FILES[$field]['name'], 'type' => $_FILES[$field]['type'], 'size' => $_FILES[$field]['size'], 'error' => $_FILES[$field]['error'], 'description'=>$description);
 		}
-		if(!dir_create($this->savepath))
-		{
-			$this->error = '8';
-			return false;
-		}
-		if(!is_dir($this->savepath))
-		{
-			$this->error = '8';
-			return false;
-		}
-		@chmod($this->savepath, 0777);
-		if(!is_writeable($this->savepath))
-		{
-			$this->error = '9';
-			return false;
-		}
 
-        if(!$this->is_allow_upload())
-		{
-			$this->error = '13';
-  			return false;
+		if($upload_ftp_enable) {
+			if(!ftp_dir_create($this->savepath))
+			{
+				echo '1243';
+				$this->error = '8';
+				return false;
+			}
+			if(!$upload_ftp->chdir($this->savepath))
+			{
+				$this->error = '8';
+				return false;
+			}
+			@$upload_ftp->chmod(0777, $this->savepath);
+
+			if(!$this->is_allow_upload())
+			{
+				$this->error = '13';
+				return false;
+			}
+		} else {
+			if(!dir_create($this->savepath))
+			{
+				$this->error = '8';
+				return false;
+			}
+			if(!is_dir($this->savepath))
+			{
+				$this->error = '8';
+				return false;
+			}
+			@chmod($this->savepath, 0777);
+			if(!is_writeable($this->savepath))
+			{
+				$this->error = '9';
+				return false;
+			}
+
+			if(!$this->is_allow_upload())
+			{
+				$this->error = '13';
+				return false;
+			}
 		}
 
 		$aids = array();
@@ -101,18 +136,32 @@ class attachment
 				$this->error = '12';
 				return false;
 			}
-			$savefile = $this->savepath.$this->getname($fileext);
+			$temp_filename = $this->getname($fileext);
+			$savefile = $this->savepath.$temp_filename;
 			$savefile = preg_replace("/(php|phtml|php3|php4|jsp|exe|dll|asp|cer|asa|shtml|shtm|aspx|asax|cgi|fcgi|pl)(\.|$)/i", "_\\1\\2", $savefile);
 			$filepath = preg_replace("|^".UPLOAD_ROOT."|", "", $savefile);
-			if(!$this->overwrite && file_exists($savefile)) continue;
-			$upload_func = UPLOAD_FUNC;
-			if(@$upload_func($file['tmp_name'], $savefile))
-			{
-				$this->uploadeds++;
-				@chmod($savefile, 0644);
-				@unlink($file['tmp_name']);
-				$uploadedfile = array('filename'=>$file['name'], 'filepath'=>$filepath, 'filetype'=>$file['type'], 'filesize'=>$file['size'], 'fileext'=>$fileext, 'description'=>$file['description']);
-				$aids[] = $this->add($uploadedfile);
+
+			if($upload_ftp_enable) {
+				if(!$this->overwrite && ($upload_ftp->size($savefile)>0)) continue;
+				if($upload_ftp->put($temp_filename, $file['tmp_name']))
+				{
+					$this->uploadeds++;
+					@$upload_ftp->chmod($savefile, 0644);
+					@unlink($file['tmp_name']);
+					$uploadedfile = array('filename'=>$file['name'], 'filepath'=>UPLOAD_FTP_DOMAIN.$filepath, 'filetype'=>$file['type'], 'filesize'=>$file['size'], 'fileext'=>$fileext, 'description'=>$file['description']);
+					$aids[] = $this->add($uploadedfile);
+				}
+			} else {
+				if(!$this->overwrite && file_exists($savefile)) continue;
+				$upload_func = UPLOAD_FUNC;
+				if(@$upload_func($file['tmp_name'], $savefile))
+				{
+					$this->uploadeds++;
+					@chmod($savefile, 0644);
+					@unlink($file['tmp_name']);
+					$uploadedfile = array('filename'=>$file['name'], 'filepath'=>$filepath, 'filetype'=>$file['type'], 'filesize'=>$file['size'], 'fileext'=>$fileext, 'description'=>$file['description']);
+					$aids[] = $this->add($uploadedfile);
+				}
 			}
 		}
 		return $aids;
@@ -238,8 +287,12 @@ class attachment
 		$result = $this->db->query("SELECT $fields FROM `$this->table` $where $order $limit");
 		while($r = $this->db->fetch_array($result))
 		{
-			$r['filepath'] = UPLOAD_URL.$r['filepath'];
-			$r['thumb'] = $this->get_thumb($r['filepath']);
+			if(strstr($r['filepath'], 'http://')) {
+				unset($r['isthumb']);
+			} else {
+				$r['filepath'] = UPLOAD_URL.$r['filepath'];
+				$r['thumb'] = $this->get_thumb($r['filepath']);
+			}
 			$array[$i] = $r;
 			$i++;
 		}

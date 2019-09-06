@@ -3,8 +3,9 @@ require './include/common.inc.php';
 require_once MOD_ROOT.'/include/company.class.php';
 $template = 'buy';
 $readproid = get_cookie('readproid');
-if(intval($readproid))$prowhere = $readproid;
+if(intval($readproid)) $prowhere = intval($readproid);
 $catid = intval($catid);
+$where = '';
 if($head['title'])$head['title'] .= '_';
 if($catid)
 {

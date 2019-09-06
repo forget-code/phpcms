@@ -3,7 +3,7 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <?=$menu?>
-<form method="post" name="search" action="?mod=<?=$mod?>&file=<?=$file?>">
+<form method="get" name="search" action="?mod=<?=$mod?>&file=<?=$file?>">
 <table cellpadding="0" cellspacing="1" class="table_list">
 <caption>答案查询</caption>  
   <tr>

@@ -2,7 +2,7 @@
 defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
-<body <?php if($type==1){ ?>onload="$('#div_category_urlruleid').load('?mod=<?=$mod?>&file=<?=$file?>&action=urlrule&ishtml=<?=$ishtml?>&category_urlruleid=<?=$category_urlruleid?>')"<?php } ?> >
+<body <?php if($type<2){ ?>onLoad="is_ie();$('#div_category_urlruleid').load('?mod=<?=$mod?>&file=<?=$file?>&action=urlrule&ishtml=<?=$ishtml?>&type=category&category_urlruleid=<?=$category_urlruleid?>');$('#div_show_urlruleid').load('?mod=<?=$mod?>&file=<?=$file?>&action=show_urlrule&ishtml=<?=$content_ishtml?>&type=show&show_urlruleid=<?=$show_urlruleid?>');"<?php } ?> >
 
 <?php if($type == 0){ ?>
 
@@ -14,6 +14,7 @@ include admin_tpl('header');
 		<li><a onClick="ShowTabs(2)" id="TabTitle2" href="###">权限设置</a></li>
 		<li><a onClick="ShowTabs(3)" id="TabTitle3" href="###">收费设置</a></li>
 		<li><a onClick="ShowTabs(4)" id="TabTitle4" href="###">扩展设置</a></li>
+		<li><a onClick="ShowTabs(5)" id="TabTitle5" href="###">生成HTML</a></li>
 	</ul>
 </div>
 <table cellpadding="2" cellspacing="1" class="table_form">
@@ -188,6 +189,34 @@ include admin_tpl('header');
 	<tr>
       <th width='30%'><strong>以上设置是否应用到子栏目及信息</strong></th>
       <td><label><input type="radio" name="createtype_application" value=1> 是</label> <label><input type="radio" name="createtype_application" value=0> 否</label> <span style="color:#ff0000">选择“是”权限、收费、扩展设置将应用到子栏目上，内容模板将应用到信息上。</span></td>
+    </tr>
+		
+  </tbody>
+   <tbody id='Tabs5' style='display:none'>
+	<tr>
+      <th width='30%'><strong>栏目生成Html</strong></th>
+      <td>
+	  <input type='radio' name='setting[ishtml]' value='1' <?php if($ishtml){ ?>checked <?php } ?> onClick="$('#div_category_urlruleid').load('?mod=<?=$mod?>&file=<?=$file?>&action=urlrule&ishtml=1&type=category&category_urlruleid=<?=$category_urlruleid?>');"> 是&nbsp;&nbsp;&nbsp;&nbsp;
+	  <input type='radio' name='setting[ishtml]' value='0' <?php if(!$ishtml){ ?>checked <?php } ?> onClick="$('#div_category_urlruleid').load('?mod=<?=$mod?>&file=<?=$file?>&action=urlrule&ishtml=0&type=category&category_urlruleid=<?=$category_urlruleid?>');"> 否
+	  </td>
+    </tr>
+	<tr>
+      <th width='30%'><strong>内容页生成Html</strong></th>
+      <td>
+	  <input type='radio' name='setting[content_ishtml]' value='1' <?php if(!isset($content_ishtml) || $content_ishtml){ ?>checked <?php } ?> onClick="$('#div_show_urlruleid').load('?mod=<?=$mod?>&file=<?=$file?>&action=show_urlrule&ishtml=1&type=show&show_urlruleid=<?=$show_urlruleid?>');"> 是&nbsp;&nbsp;&nbsp;&nbsp;
+	  <input type='radio' name='setting[content_ishtml]' value='0' <?php if(isset($content_ishtml) && !$content_ishtml){ ?>checked <?php } ?> onClick="$('#div_show_urlruleid').load('?mod=<?=$mod?>&file=<?=$file?>&action=show_urlrule&ishtml=0&type=show&show_urlruleid=<?=$show_urlruleid?>');"> 否
+	  </td>
+    </tr>
+	
+	<tr>
+      <th><strong>栏目页URL规则</strong><br />
+	  <a href="?mod=phpcms&file=urlrule&action=add&module=phpcms&filename=category&forward=<?=urlencode(URL)?>" style="color:red">点击新建URL规则</a></th>
+      <td><div id="div_category_urlruleid"></div></td>
+    </tr>
+	<tr>
+      <th><strong>内容页URL规则</strong><br />
+	  <a href="?mod=phpcms&file=urlrule&action=add&module=phpcms&filename=show&forward=<?=urlencode(URL)?>" style="color:red">点击新建URL规则</a></th>
+      <td><div id="div_show_urlruleid"></div></td>
     </tr>
   </tbody>
 </table>

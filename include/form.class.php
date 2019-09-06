@@ -417,6 +417,38 @@ class form
 		if(!$id) $id = $name;
 		return form::select($urlrules, $name, $id, $urlruleid, 1, '', $property);
 	}
+
+	function select_linkage($keyid = 0, $parentid = 0, $name = 'catid', $id ='', $alt = '', $linkageid = 0, $property = '')
+	{
+		global $tree, $db;
+		if(!is_object($tree))
+		{
+			require_once 'tree.class.php';
+			$tree = new tree;
+		}
+		if(!$id) $id = $name;
+
+		$sql = "SELECT * FROM `".DB_PRE."linkage` WHERE `keyid`='$keyid' ORDER BY `listorder` DESC,`linkageid`";
+		$result = $db->query($sql);
+		while($r = $db->fetch_array($result))
+		{
+			$infos[$r['linkageid']] = $r;
+		}
+		
+		$data = "<select name='$name' id='$id' $property>\n<option value='0'>$alt</option>\n";
+		if(!empty($infos))
+		{
+			$categorys = array();
+			foreach($infos as $id=>$cat)
+			{
+				$categorys[$id] = array('id'=>$id, 'parentid'=>$cat['parentid'], 'name'=>$cat['name']);
+			}
+			$tree->tree($categorys);
+			$data .= $tree->get_tree($parentid, "<option value='\$id' \$selected>\$spacer\$name</option>\n", $linkageid);
+		}
+		$data .= '</select>';
+		return $data;
+	}
 }
 
 ?>

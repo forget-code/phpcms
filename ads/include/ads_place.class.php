@@ -14,10 +14,7 @@ class ads_place
 		$this->adsid = $ads_placeid;
 		$this->table = DB_PRE.'ads_place';
 		$this->referer = HTTP_REFERER;
-	}
-
-	function __destruct()
-	{
+		$this->stat_table = DB_PRE.'ads_'.date('ym',TIME);
 	}
 
 	function get($ads_placeid, $fields = '*')
@@ -225,13 +222,14 @@ class ads_place
 		if(!$placeid) return FALSE;
 		$ip = IP;
 		$time = time();
+
 		$adses = $this->db->select("SELECT * FROM ".DB_PRE."ads a, $this->table p WHERE a.placeid=p.placeid AND p.placeid=$placeid AND a.fromdate<=UNIX_TIMESTAMP() AND a.todate>=UNIX_TIMESTAMP() AND a.passed=1 AND a.status=1 AND p.passed=1");
 		if($adses[0]['option'])
 		{
 			foreach($adses as $ads)
 			{
 				$contents[] = ads_content($ads, 1);
-				$this->db->query("INSERT INTO ".DB_PRE."ads_stat (`adsid`, `username`, `ip`, `referer`, `clicktime`, `type`) VALUES ('$ads[adsid]', '$_username', '$ip', '$this->referer', '$time', '0')");
+				$this->db->query("INSERT INTO $this->stat_table (`adsid`, `username`, `ip`, `referer`, `clicktime`, `type`) VALUES ('$ads[adsid]', '$_username', '$ip', '$this->referer', '$time', '0')");
 				$template = $ads['template'] ? $ads['template'] : 'ads';
 			}
 		}
@@ -239,7 +237,7 @@ class ads_place
 		{
 			$ads = $this->db->get_one("SELECT * FROM ".DB_PRE."ads a, $this->table p WHERE a.placeid=p.placeid AND p.placeid=$placeid AND a.fromdate<=UNIX_TIMESTAMP() AND a.todate>=UNIX_TIMESTAMP() AND a.passed=1 AND a.status=1 ORDER BY rand() LIMIT 1");
 			$contents[] = ads_content($ads, 1);
-			$this->db->query("INSERT INTO ".DB_PRE."ads_stat (`adsid`, `username`, `ip`, `referer`, `clicktime`, `type`) VALUES ('$ads[adsid]', '$_username', '$ip', '$this->referer', '$time', '0')");
+			$this->db->query("INSERT INTO $this->stat_table (`adsid`, `username`, `ip`, `referer`, `clicktime`, `type`) VALUES ('$ads[adsid]', '$_username', '$ip', '$this->referer', '$time', '0')");
 			$template = $ads['template'] ? $ads['template'] : 'ads';
 		}
 		include template('ads', $template);

@@ -3,10 +3,7 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
-<form name="myform" method="post" action="">
-<input type="hidden" name="mod" value="<?=$mod?>">
-<input type="hidden" name="file" value="<?=$file?>">
-<input type="hidden" name="action" value="listorder">
+<form name="myform" method="post" action="?mod=member&file=<?=$file?>&action=listorder">
 <table cellpadding="0" cellspacing="1" class="table_list">
   <caption>会员组管理</caption>
 <tr>
@@ -37,7 +34,7 @@ if(is_array($groups))
 <td><?=str_cut(strip_tags($group['description']), 50)?></td>
 <td class="align_c">
 <?php if($group['groupid'] > 6){ ?>
-<a href="?mod=member&file=extend&action=manage&groupid=<?=$group['groupid']?>"><?=cache_count("select count(*) as count from ".DB_PRE."member_group_extend where groupid=$group[groupid] and disabled=0 and enddate>'$today'")?></a>
+<a href="?mod=member&file=extend&action=manage&groupid=<?=$group['groupid']?>"><?=cache_count("select count(*) as count from ".DB_PRE."member_group_extend where groupid=$group[groupid] and disabled=0")?></a>
 <?php }else{ ?>
 <a href="?mod=member&file=member&action=manage&groupid=<?=$group['groupid']?>"><?=$member_admin->count_member("groupid=$group[groupid]")?></a>
 <?php } ?>

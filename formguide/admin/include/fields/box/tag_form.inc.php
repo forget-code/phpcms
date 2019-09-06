@@ -1,4 +1,3 @@
-
 	function box($field, $value, $fieldinfo)
 	{
 		extract($fieldinfo);
@@ -8,6 +7,7 @@
 		}
 		elseif($boxtype == 'checkbox')
 		{
+			if(is_array($value)) $value = implode(',',$value);
 			return form::checkbox($options, 'info['.$field.']', $field, $value, $cols, $css, $formattribute, $width);
 		}
 		elseif($boxtype == 'select')

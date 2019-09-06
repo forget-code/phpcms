@@ -82,7 +82,7 @@ switch($action)
         echo "</script>";
         break;
 
-        case 'stat':
+	case 'stat':
         $type = empty($type) ? 1 : intval($type);
         $states = array();
         $c_ads->updatearea($adsid);
@@ -98,6 +98,30 @@ switch($action)
         {
             $fromtime = date('Y-m-d H:i:s',mktime(0, 0, 0, $month, $day-$range, $year));
         }
+		/*历史数据按月份查询*/
+
+		$year = isset($_GET['year']) ? $_GET['year'] : '';
+		$diff1 = date('Y',TIME);/*当前年份*/
+		$diff2 = date('m',TIME);/*当前月份*/
+		$diff = ($diff1-2010)*12+$diff2;
+		$selectstr = "";
+		for($y=$diff;$y>0;$y--) {
+			$value = date("ym", mktime(0, 0, 0, $y, 1, 2010));
+			if($value<'1002') break;
+			$selected = $year==$value ? 'selected' : '';
+			$selectstr .= "<option value='$value' $selected>".date("Y-m", mktime(0, 0, 0, $y, 1, 2010));
+		}
+		if($year) {
+			$c_ads->stat_table = DB_PRE.'ads_'.$year;
+		} else {
+			$c_ads->stat_table = DB_PRE.'ads_'.date('ym',TIME);
+		}
+		//检查表是否存在，如果不存在，则创建表
+		$table_status = $db->table_status($c_ads->stat_table);
+		if(!$table_status) {
+			include MOD_ROOT.'include/create.table.php';
+		}
+
         $states = $c_ads->stat($adsid, $type, $fromtime, $totime);
         include admin_tpl('ads_stat');
 	break;

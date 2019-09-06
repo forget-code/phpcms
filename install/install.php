@@ -123,6 +123,15 @@ switch($step)
 		{
 			$no_writablefile = "网站根目录不可写<br>".$no_writablefile;
 		}
+		if(dir_create(PHPCMS_ROOT.'templates/test_create_dir',0777))
+		{
+			sleep(1);
+			dir_delete(PHPCMS_ROOT.'templates/test_create_dir');
+		}
+		else
+		{
+			$no_writablefile = "templates/ 文件夹不可写<br>".$no_writablefile;
+		}
 		include PHPCMS_ROOT."install/step".$step.".tpl.php";
 		break;
 
@@ -221,13 +230,7 @@ switch($step)
 				echo 2;//数据库文件不存在
 				exit;
 			}
-			if(file_exists(PHPCMS_ROOT.$module."/install/extention.inc.php"))
-			{
-				@extract($db->get_one("SELECT menuid AS member_0 FROM ".DB_PRE."menu WHERE keyid='member_0'"));
-				@extract($db->get_one("SELECT menuid AS member_1 FROM ".DB_PRE."menu WHERE keyid='member_1'"));
-				@include (PHPCMS_ROOT.$module."/install/extention.inc.php");
-			}
-
+					
 			if(file_exists(PHPCMS_ROOT.$module."/install/templates/"))
 			{
 				dir_copy(PHPCMS_ROOT.$module."/install/templates/", PHPCMS_ROOT.'templates/'.TPL_NAME.'/'.$module.'/');
@@ -242,6 +245,14 @@ switch($step)
 				$data = str_replace('phpcms2008_',DB_PRE,$data);
 				file_put_contents(PHPCMS_ROOT.'templates/'.TPL_NAME.'/'.$module.'/tag_config.inc.php',$data);
 			}
+
+			if(file_exists(PHPCMS_ROOT.$module."/install/extention.inc.php"))
+			{
+				@extract($db->get_one("SELECT menuid AS member_0 FROM ".DB_PRE."menu WHERE keyid='member_0'"));
+				@extract($db->get_one("SELECT menuid AS member_1 FROM ".DB_PRE."menu WHERE keyid='member_1'"));
+				@include (PHPCMS_ROOT.$module."/install/extention.inc.php");
+			}
+
 			if($module == 'member')
 			{
 				//建立管理员帐号

@@ -26,7 +26,7 @@ $db->query("INSERT INTO ".DB_PRE."menu(parentid,name,image,url,description,targe
 $db->query("INSERT INTO ".DB_PRE."menu(parentid,name,image,url,description,target,style,js,groupids,roleids,isfolder,isopen,listorder,userid,keyid) VALUES ($id, '权限配置', '', '?mod=vote&file=priv', '', 'right', '', '', '', '', 0, 0, 0, 0,'vote')");
 
 
-$db->query("INSERT INTO ".DB_PRE."menu(parentid,name,image,url,description,target,style,js,groupids,roleids,isfolder,isopen,listorder,userid,keyid) VALUES (7, '投票', '', '', '', 'right', '', '', '', '', 1, 0, 0, 0,'vote')");
+$db->query("INSERT INTO ".DB_PRE."menu(parentid,name,image,url,description,target,style,js,groupids,roleids,isfolder,isopen,listorder,userid,keyid) VALUES (7, '投票问卷', '', '', '', 'right', '', '', '', '', 1, 0, 0, 0,'vote')");
 
 $id=$db->insert_id();
 

@@ -1,0 +1,38 @@
+{template 'phpcms','header'}
+
+<!--begin main-->
+<div id="main">
+  <div id="main_l" class="bdr_1">
+    <!--位置导航-->
+    <div id="position"><a href="">首页</a>{if $catid}<a href="{$url}">{$catname}</a>{/if}最新更新 <font color="red">{$number}</font> 条 </div>
+		<div class="mar_10">
+		<ul class="text_list text_list_f14">
+		{loop $datas $r}
+		<li><span class="date">{if $r[updatetime]>$updatetime}<font color="red">{date('Y-m-d',$r[updatetime])}{else} {date('Y-m-d',$r[updatetime])}{/if}</span>
+		  <a href="{$CATEGORY[$r[catid]][url]}" target="_blank">[{$CATEGORY[$r[catid]][catname]}]</a> <a href="{$r[url]}" target="_blank" class="url">{$r[title]}</a>
+		</li>
+		{/if}
+		</ul>
+		</div>
+  </div>
+  <div id="main_r">
+    <!--广告位-->
+    <div class="ad_side"><script language="javascript" src="data/js.php?id=5"></script></div>
+    <h4>推荐图片文章</h4>
+    <div>
+      <ul class="pic_list">
+        {tag_栏目页图片文章}
+      </ul>
+    </div>
+	<!--{block("list_article", 1)}-->
+    <h4>热点文章</h4>
+    <div>
+      <ul class="text_list">
+       {tag_栏目页热点}
+      </ul>
+    </div>
+	<!--{block("list_$catid", 2)}-->
+  </div>
+</div>
+<!--end main-->
+{template 'phpcms','footer'}

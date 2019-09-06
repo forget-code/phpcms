@@ -61,18 +61,18 @@ if($_REQUEST)
 	{
 		$_REQUEST = new_stripslashes($_REQUEST);
 		if($_COOKIE) $_COOKIE = new_stripslashes($_COOKIE);
+		extract($db->escape($_REQUEST), EXTR_SKIP);
 	}
 	else
 	{
-		$_POST = new_addslashes($_POST);
-		$_GET = new_addslashes($_GET);
-		$_COOKIE = new_addslashes($_COOKIE);
-		@extract($_POST);
-		@extract($_GET);
-		@extract($_COOKIE);
+		$_POST = $db->escape($_POST);
+		$_GET = $db->escape($_GET);
+		$_COOKIE = $db->escape($_COOKIE);
+		@extract($_POST,EXTR_SKIP);
+		@extract($_GET,EXTR_SKIP);
+		@extract($_COOKIE,EXTR_SKIP);
 	}
 	if(!defined('IN_ADMIN')) $_REQUEST = filter_xss($_REQUEST, ALLOWED_HTMLTAGS);
-	extract($db->escape($_REQUEST), EXTR_SKIP);
 	if($_COOKIE) $db->escape($_COOKIE);
 }
 if(QUERY_STRING && strpos(QUERY_STRING, '=') === false && preg_match("/^(.*)\.(htm|html|shtm|shtml)$/", QUERY_STRING, $urlvar))
@@ -152,4 +152,28 @@ $G = cache_read('member_group_'.$_groupid.'.php');
 $priv_group = new priv_group();
 define('SKIN_PATH', 'templates/'.TPL_NAME.'/skins/'.TPL_CSS.'/');
 define('PASSPORT_ENABLE', ($PHPCMS['uc'] || $PHPCMS['enablepassport'] || $PHPCMS['enableserverpassport']) ? 1 : 0);
+
+if($PHPCMS['publish']) {
+	$content_publisharr = cache_read('publish.php');
+	if(is_array($content_publisharr)) {
+		foreach($content_publisharr as $k=>$v) {
+			if($v < TIME) {
+				$tmp_contentid[] = $k;
+				unset($content_publisharr[$k]);
+			}
+		}
+	}
+	if(isset($tmp_contentid)) {
+		require_once 'admin/content.class.php';
+		require_once 'attachment.class.php';
+		$attachment = new attachment($mod, 0);
+		$c = new content();
+		$res = $c->status($tmp_contentid, 99, 1);
+		cache_write('publish.php', $content_publisharr);	
+		unset($c);
+		unset($attachment);
+		unset($tmp_contentid);
+	}
+	unset($content_publisharr);
+}
 ?>

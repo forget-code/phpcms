@@ -34,7 +34,7 @@ $().ready(function() {
   <form name="myform" method="post" action="?" >
 <table cellpadding="0" cellspacing="1" class="table_form">
 <tbody>
-  <caption>修改标签</caption>
+  <caption>复制标签</caption>
    <input name="mod" type="hidden" value="<?=$mod?>">
    <input name="file" type="hidden" value="<?=$file?>">
    <input name="action" id="action" type="hidden" value="update">

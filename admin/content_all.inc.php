@@ -113,6 +113,10 @@ switch($action)
 		break;
 
 	case 'inspect':
+		foreach($_roleid AS $_roleid_key)
+		{
+			if($_roleid_key>2) showmessage("您没有操作权限！");
+		}
 		if($dosubmit)
 		{
 			if($contentid=='') showmessage('请选择要批准的内容');

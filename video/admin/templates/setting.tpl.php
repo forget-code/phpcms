@@ -7,7 +7,7 @@ include admin_tpl('header');
    <caption><?=$M['name']?>模块配置</caption>
    <tr>
       <th ><strong>身份识别码</strong></th>
-      <td><input name='setting[skey]' type='text' id='skey' value='<?=$skey?>' size='32' maxlength='50'> <a href="http://www.ku6vms.com/register.php">必填项：请到 www.ku6vms.com 申请开通帐号</a></td>
+      <td><input name='setting[skey]' type='text' id='skey' value='<?=$skey?>' size='32' maxlength='50'> <a href="http://www.ku6vms.com/register.php">必填项：请到 www.ku6vms.com 申请开通帐号</a> <a href="http://bbs.phpcms.cn/thread-137916-1-1.html" target="_blank"><font color="red">使用帮助</font></a></td>
     </tr>
     <tr>
       <th ><strong>加密密钥</strong></th>

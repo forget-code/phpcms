@@ -3,16 +3,11 @@ class stat
 {
 	var $db;
     
-    function __construct()
-    {
+	function stat()
+	{
 		global $db,$_userid;
 		$this->db = &$db;
 		$this->tables = $this->db->tables();
-    }
-
-	function stat()
-	{
-		$this->__construct();
 	}
 
 	function count($table, $field = '', $type = 'all', $where = '')

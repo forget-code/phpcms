@@ -13,6 +13,11 @@ include admin_tpl('header');
 <input name='range' type='radio' value='14' onclick="redirect('?mod=ads&file=ads&action=stat&adsid=<?=$adsid?>&type=<?=$type?>&range='+this.value)" <?php if($range=='14') echo "checked";?>> 两周
 <input name='range' type='radio' value='30' onclick="redirect('?mod=ads&file=ads&action=stat&adsid=<?=$adsid?>&type=<?=$type?>&range='+this.value)" <?php if($range=='30') echo "checked";?>> 一月
 </td>
+<td class="align_c">
+<font color="red">历史数据查询：</font><select name="year" onchange="if(this.value!=''){location='?mod=ads&file=ads&action=stat&adsid=<?=$adsid?>&year='+this.value;}">
+<?=$selectstr?>
+</select>
+</td>
 </tr>
 </table>
 <table cellpadding="0" cellspacing="1" class="table_list">

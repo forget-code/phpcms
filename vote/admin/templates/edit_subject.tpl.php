@@ -106,8 +106,6 @@ function uploadpic(obj){
 	openwinx('?mod=phpcms&file=upload&uploadtext=pic'+id,'upload','350','350');
 }
 
-<?php if(!empty($subjects)){ ?>$('tr[tag="hover"]').trhover();<?php } ?>
-
 $('#opt_template').hide();
 
 $('#add_new').checkForm(1);

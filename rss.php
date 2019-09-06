@@ -55,7 +55,7 @@ if(!empty($rssid))
         {
             $tags = '';
         }
-        $about          =  $link = SITE_URL.$r['url'];
+        $about          =  $link = preg_match('/^http:\/\//',$r['url']) ? $r['url'] : SITE_URL.$r['url'];
         $title          =  "<![CDATA[".$r['title']."]]>";
         $description    =  "<![CDATA[".$img.$r['description'].$tags."]]> ";
         $subject        =  '';
@@ -106,7 +106,7 @@ elseif($respond == output)
         {
             $tags = '';
         }
-        $about          =  $link = SITE_URL.$r['url'];
+        $about          =  $link = preg_match('/^http:\/\//',$r['url']) ? $r['url'] : SITE_URL.$r['url'];
         $title          =  "<![CDATA[".$r['title']."]]>";
         $description    =  "<![CDATA[".$img.$r['description'].$tags."]]> ";
         $subject        =  '';

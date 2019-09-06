@@ -37,6 +37,8 @@ switch($action)
 					$modelid = $CATEGORY[$catid]['modelid'];
 				}
 			}
+			/* 如果没有设置是否生成静态选项，那么则按照模型中的初始化 */
+			$ishtml = $MODEL[$modelid]['ishtml'];
 			$forward = '?mod='.$mod.'&file='.$file.'&action=manage';
 		    include admin_tpl('category_add');
 		}
@@ -64,6 +66,11 @@ switch($action)
 	    {
 			$category = $cat->get($catid);
             @extract(new_htmlspecialchars($category));
+			/* 如果没有设置是否生成静态选项，那么则按照模型中的初始化 */
+			if(!isset($ishtml))
+			{
+				$ishtml = $MODEL[$modelid]['ishtml'];
+			}
 			if($type == 1)
 			{
 				$priv_roleids = $priv_role->get_roleid('catid', $catid);
@@ -194,6 +201,11 @@ switch($action)
 		$ishtml = intval($ishtml);
 		$category_urlruleid = intval($category_urlruleid);
 		echo form::select_urlrule('phpcms', 'category', $ishtml, 'setting[category_urlruleid]', 'category_urlruleid', $category_urlruleid);
+		break;
+	case 'show_urlrule':
+		$ishtml = intval($ishtml);
+		$show_urlruleid = intval($show_urlruleid);
+		echo form::select_urlrule('phpcms', 'show', $ishtml, 'setting[show_urlruleid]', 'show_urlruleid', $show_urlruleid);
 		break;
 	case 'checkdir':
 		if(!preg_match("/[a-zA-Z0-9_-]+$/i",$value)) exit('栏目目录名称只能为字母、数字、下划线，中划线');

@@ -16,8 +16,8 @@ class content
 	var $s;
 	var $is_update_related = 1;
 
-    function __construct()
-    {
+	function content()
+	{
 		global $db, $log, $MODULE;
 		$this->db = &$db;
 		$this->table = DB_PRE.'content';
@@ -27,21 +27,15 @@ class content
 		$this->table_category = DB_PRE.'category';
 		$this->log = is_object($log) ? $log : load('log.class.php');
 		$this->url = load('url.class.php');
-    }
-
-	function content()
-	{
-		$this->__construct();
 	}
 
 	function set_catid($catid)
 	{
-		global $CATEGORY, $MODEL;
-		if(!isset($CATEGORY[$catid])) return false;
+		global $CATEGORY, $content_ishtml, $MODEL;
 		$modelid = $CATEGORY[$catid]['modelid'];
 		if(!isset($MODEL[$modelid])) return false;
 		$this->modelid = $modelid;
-		$this->ishtml = $MODEL[$modelid]['ishtml'];
+		$this->ishtml = isset($content_ishtml) ? $content_ishtml : $MODEL[$modelid]['ishtml'];
 		$this->model_table = DB_PRE.'c_'.$MODEL[$modelid]['tablename'];
 		return true;
 	}
@@ -282,6 +276,7 @@ class content
 	{
 		if($is_admin) $this->ishtml = 1;
 		if(!isset($islink)) $islink = 99;
+
 		if($this->ishtml && ($handle == '' || $handle == 99))
 		{
 			if(!is_object($this->html)) $this->html = load('html.class.php');
@@ -544,8 +539,11 @@ class content
 				$html->delete($contentid, $this->model_table);
 			}
 			$this->db->query("UPDATE `$this->table` SET `catid`='$targetcatid' WHERE `contentid`=$contentid");
-			$info = $this->url->show($contentid, 0, $targetcatid);
-			$this->db->query("UPDATE `$this->table` SET `url`='$info[1]' WHERE `contentid`=$contentid");
+			if(!$r['islink'])
+			{
+				$info = $this->url->show($contentid, 0, $targetcatid);
+				$this->db->query("UPDATE `$this->table` SET `url`='$info[1]' WHERE `contentid`=$contentid");
+			}
 			$this->db->query("UPDATE `$this->table_category` SET `items`=`items`+1 WHERE `catid`=$targetcatid");
 			$this->log_write($contentid);
 		}

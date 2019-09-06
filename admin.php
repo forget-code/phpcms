@@ -2,7 +2,7 @@
 define('IN_ADMIN', TRUE);
 require dirname(__FILE__).'/include/admin/global.func.php';
 require dirname(__FILE__).'/include/common.inc.php';
-require 'log.class.php';
+require_once 'log.class.php';
 require 'form.class.php';
 require 'priv_role.class.php';
 require_once 'cache.func.php';
@@ -35,7 +35,7 @@ elseif($file != 'login')
 }
 
 $log = new log();
-if(ADMIN_LOG && $file != 'database' && !in_array($action, array('get_menu_list', 'menu_pos')))
+if(ADMIN_LOG && !in_array($action, array('get_menu_list', 'menu_pos','get_msg')))
 {
 	$log->set('admin', 0);
 	$log->add();

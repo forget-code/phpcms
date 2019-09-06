@@ -22,6 +22,7 @@ switch($action)
 				if(trim($_value))
 				{
 					$usermenu_temp['linkurl'][] = $_value;
+					$usermenu_temp['use'][] = $usermenu['use'][$_key];
 					$usermenu_temp['catname'][] = $usermenu['catname'][$_key];
 				}
 			}

@@ -25,7 +25,7 @@ switch($action)
 			{
 				if(!in_array($key,array('title','catid','reward','anonymity'))) unset($info[$key]);
 			}
-			$posts['message'] = $M['use_editor'] ? $message : strip_tags($message);
+			$posts['message'] = $M['use_editor'] ? filter_xss($message) : strip_tags($message);
 			$info['addtime'] = $posts['addtime'] = TIME;
 			$info['endtime'] = TIME+1296000;
 			$info['userid'] = $posts['userid'] = $_userid;

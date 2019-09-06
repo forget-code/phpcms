@@ -38,6 +38,7 @@ switch ($action)
 	break;
 	case 'online':
 		if(!is_email($email) || $email == '')  $email = '';
+		
 		$order['email'] = $email;
         checkcode($checkcode,$M['ischeckcode']);
 		if(empty($amount))
@@ -83,6 +84,7 @@ switch ($action)
                 'quantity'    => $amount,
 				'telephone'   => $telephone,
 				'contactname' => $contactname,
+				'email' => $email,
 				'addtime'	  => TIME,
 				'type'		  => '1',
 				'payment'     => $payment['pay_name'],
@@ -93,6 +95,7 @@ switch ($action)
 		$order['orderid'] = $payinfo->set_offline( $surplus );
 		include_once('include/payment/' . $payment['pay_code'] . '.php');
         $pay_obj    = new $payment['pay_code'];
+		
 		$pay_online = $pay_obj->get_code($order, $payment['config']);
 		$order['pay_desc'] = $payment['pay_desc'];
 		include template('pay','showmessage');

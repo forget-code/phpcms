@@ -7,8 +7,6 @@ if($field == 'catid')
 	{
 		$CATEGORY = submodelcat($modelid);
 	}
-	$catid = intval($catid);
-	$CATEGORY = subcat('phpcms', $catid, 0);
 	$str = '<select onchange="$(\'#catid\').val(this.value);this.disabled=true;category_load(this.value);"><option value="0">'.$LANG['please_select'].'</option>';
 	$options = '';
 	foreach($CATEGORY as $i=>$v)

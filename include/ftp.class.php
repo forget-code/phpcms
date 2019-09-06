@@ -4,8 +4,8 @@ class ftp
 	var $conn_id;
 	var $error = '';
 
-    function __construct($ftp_server, $ftp_port, $ftp_user, $ftp_pass, $ftp_dir = '')
-    {
+	function ftp($ftp_server, $ftp_port, $ftp_user, $ftp_pass, $ftp_dir = '')
+	{
 		if(!function_exists('ftp_connect'))
 		{
 			$this->error = 'ftp_unloaded';
@@ -29,11 +29,6 @@ class ftp
 			return false;
 		}
 		register_shutdown_function(array(&$this, 'close'));
-    }
-
-	function ftp($ftp_server, $ftp_port, $ftp_user, $ftp_pass, $ftp_dir = '')
-	{
-		$this->__construct($ftp_server, $ftp_port, $ftp_user, $ftp_pass, $ftp_dir);
 	}
 
 	function mkdir($directory)

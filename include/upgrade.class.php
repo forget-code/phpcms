@@ -5,17 +5,12 @@ class upgrade
 	var $update_url;
 	var $http;
 
-    function __construct()
-    {
+	function upgrade()
+	{
 		global $db;
 		$this->db = &$db;
 		$this->update_url = 'http://update.phpcms.cn/';
 		$this->http = load('http.class.php');
-    }
-
-	function upgrade()
-	{
-		$this->__construct();
 	}
 
 	function check()
