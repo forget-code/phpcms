@@ -45,7 +45,7 @@ if($dosubmit)
 		$condition .= $tocredit ? " AND m.credit<='$tocredit'" : '';
 		$condition .= $modelid ? " AND m.modelid='$modelid'" : '';
 		$condition .= $areaid ? " AND m.areaid='$areaid'" : '';
-		$condition .= (isset($disabled) && ($disabled != -1) && !empty($disabled)) ? " AND m.disabled=$disabled" : '';
+		$condition .= (isset($disabled) && ($disabled != -1) && !empty($disabled)) ? " AND m.disabled='$disabled'" : '';
 		$order = 'm.userid ASC';
 		$pagesize = $PHPCMS['pagesize'] ? $PHPCMS['pagesize'] : 10;
 		$data = $member->listinfo($condition, $order, $page, $pagesize, 1);
