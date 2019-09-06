@@ -1221,7 +1221,7 @@ function sizecount($filesize)
 
 function phpcms_auth($string, $operation = 'ENCODE', $key = '', $expiry = 0) {
 	$key_length = 4;
-	$key = md5($key != '' ? $key : pc_base::load_config('system', 'auth_key'));
+	$key = md5($key != '' ? $key : $GLOBALS['phpcms_auth_key']);
 	$fixedkey = md5($key);
 	$egiskeys = md5(substr($fixedkey, 16, 16));
 	$runtokey = $key_length ? ($operation == 'ENCODE' ? substr(md5(microtime(true)), -$key_length) : substr($string, 0, $key_length)) : ''; 

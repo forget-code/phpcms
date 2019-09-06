@@ -3,7 +3,7 @@ require './include/common.inc.php';
 
 $types = $search->get_type();
 if(isset($q)) $q = $search->strip($q);
-if(!$G['allowsearch']) showmessage('您所在的会员组不允许搜索！');
+
 if($q)
 {
 	$order = isset($order) ? intval($order) : 0;

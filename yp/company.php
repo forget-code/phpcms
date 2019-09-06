@@ -48,9 +48,9 @@ switch($action)
 	$head['description'] .= '企业搜索结果'.'_'.$PHPCMS['sitename'];
 	$page = $page ? $page:1;
 	$catid = intval($catid);
-	$q = addslashes(htmlspecialchars(filter_xss($q)));
-	$genre = addslashes(htmlspecialchars(filter_xss($genre)));
-	$areaname = addslashes(htmlspecialchars(filter_xss($areaname)));
+	$q = addslashes(htmlspecialchars($q));
+	$genre = addslashes(htmlspecialchars($genre));
+	$areaname = addslashes(htmlspecialchars($areaname));
 	$where = '';
 	if($catid)
 	{

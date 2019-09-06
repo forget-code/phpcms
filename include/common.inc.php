@@ -102,7 +102,7 @@ if(!defined('IN_ADMIN'))
 		$cc->add();
 		unset($cc);
 	}
-    if(!isset($forward)) $forward = filter_xss(HTTP_REFERER);
+    if(!isset($forward)) $forward = HTTP_REFERER;
 }
 
 $M = $TEMP = array();

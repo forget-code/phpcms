@@ -193,7 +193,7 @@ switch($action)
 		$condition .= (isset($disabled) && ($disabled != -1) && !empty($disabled)) ? " AND m.disabled=$disabled" : '';
 		$r = $db->get_one("SELECT count(*) as num FROM ".DB_PRE."member_cache m WHERE 1 $condition");
 		$pages = pages($r['num'], $page, $pagesize);
-		$order = in_array($orderby,array('m.username ASC','m.username DESC','m.amount ASC','m.amount DESC','m.point ASC','m.point DESC','i.lastlogintime ASC','i.lastlogintime DESC')) ? $orderby : 'm.userid DESC';
+		$order = $orderby ? $orderby : 'm.userid DESC';
 		$members = $member->listinfo($condition, $order, $page, $pagesize);
 		$GROUP['0'] = '请选择';
 		ksort($GROUP);

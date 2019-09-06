@@ -229,7 +229,9 @@ class ads_place
 			foreach($adses as $ads)
 			{
 				$contents[] = ads_content($ads, 1);
-				$this->db->query("INSERT INTO $this->stat_table (`adsid`, `username`, `ip`, `referer`, `clicktime`, `type`) VALUES ('$ads[adsid]', '$_username', '$ip', '$this->referer', '$time', '0')");
+				//对数据进行过滤
+				$referer = safe_replace($this->referer);
+				$this->db->query("INSERT INTO $this->stat_table (`adsid`, `username`, `ip`, `referer`, `clicktime`, `type`) VALUES ('$ads[adsid]', '$_username', '$ip', '$referer', '$time', '0')");
 				$template = $ads['template'] ? $ads['template'] : 'ads';
 			}
 		}
@@ -237,7 +239,9 @@ class ads_place
 		{
 			$ads = $this->db->get_one("SELECT * FROM ".DB_PRE."ads a, $this->table p WHERE a.placeid=p.placeid AND p.placeid=$placeid AND a.fromdate<=UNIX_TIMESTAMP() AND a.todate>=UNIX_TIMESTAMP() AND a.passed=1 AND a.status=1 ORDER BY rand() LIMIT 1");
 			$contents[] = ads_content($ads, 1);
-			$this->db->query("INSERT INTO $this->stat_table (`adsid`, `username`, `ip`, `referer`, `clicktime`, `type`) VALUES ('$ads[adsid]', '$_username', '$ip', '$this->referer', '$time', '0')");
+			//对数据进行过滤
+			$referer = safe_replace($this->referer);
+			$this->db->query("INSERT INTO $this->stat_table (`adsid`, `username`, `ip`, `referer`, `clicktime`, `type`) VALUES ('$ads[adsid]', '$_username', '$ip', '$referer', '$time', '0')");
 			$template = $ads['template'] ? $ads['template'] : 'ads';
 		}
 		include template('ads', $template);

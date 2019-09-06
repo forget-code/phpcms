@@ -2,7 +2,7 @@
 require './include/common.inc.php';
 
 if(!$forward) $forward = HTTP_REFERER;
-$forward = htmlspecialchars(filter_xss($forward));
+$forward = htmlspecialchars($forward);
 if(!isset($action)) $action = '';
 if($_userid) showmessage($LANG['you_have_logined'], SITE_URL);
 

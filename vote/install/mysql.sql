@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS `phpcms_vote_subject` (
 
 
 INSERT INTO `phpcms_vote_subject` (`subjectid`, `subject`, `ismultiple`, `ischeckbox`, `credit`, `addtime`, `fromdate`, `todate`, `interval`, `enabled`, `template`, `parentid`, `description`, `userinfo`, `listorder`, `enablecheckcode`, `allowguest`, `groupidsvote`, `groupidsview`, `maxval`, `minval`, `userid`, `allowview`, `optionnumber`, `votenumber`) VALUES 
-(1, '你是如何得知本站的？', 0, 0, 0, 1224321200, '2011-10-17', '2030-10-17', 0, 1, 'vote_vote_submit', 0, '', 'array (\n)', 0, 0, 1, '', '', 0, 1, 0, 1, 9, 0);
+(1, '你是如何得知本站的？', 0, 0, 0, 1224321200, '2008-11-27', '2009-11-27', 0, 1, 'vote_vote_submit', 0, '', 'array (\n)', 0, 0, 1, '', '', 0, 1, 0, 1, 9, 0);
 
 
 DROP TABLE IF EXISTS `phpcms_vote_useroption`;

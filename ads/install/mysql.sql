@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `phpcms_ads_place` (
   `passed` tinyint(1) unsigned NOT NULL default '1',
   `option` tinyint(1) unsigned NOT NULL default '1',
   PRIMARY KEY  (`placeid`)
-) TYPE=MyISAM;
+) TYPE=MyISAM  ;
 
 -- 
 -- 导出表中的数据 `phpcms_ads_place`
@@ -54,15 +54,15 @@ CREATE TABLE `phpcms_ads` (
   KEY `fromdate` (`fromdate`,`todate`),
   KEY `placeid` (`placeid`,`passed`,`fromdate`,`todate`,`username`),
   KEY `username` (`username`,`passed`)
-) TYPE=MyISAM;
+) TYPE=MyISAM ;
 
 INSERT INTO `phpcms_ads` (`adsid`, `adsname`, `introduce`, `placeid`, `type`, `linkurl`, `imageurl`, `s_imageurl`, `alt`, `flashurl`, `wmode`, `text`, `code`, `fromdate`, `todate`, `username`, `addtime`, `views`, `clicks`, `passed`, `status`) VALUES 
-(1, '首页638x58图片广告', '', 1, 'image', 'www.phpcms.cn', 'uploadfile/2008/0831/20080831094526548.jpg', '', '广告', '', 'transparent', '', '', 1220025600, 1918809600, 'phpcms', 1220064717, 0, 10, 1, 1),
-(4, '新浪汽车频道', '', 3, 'image', 'www.google.cn', 'uploadfile/2008/0831/20080831100602900.jpg', '', 'www.google.cn', '', 'transparent', '', '', 1217865600, 1918809600, 'phpcms', 1220148362, 0, 1, 1, 1),
-(5, 'phpcms新产品广告', '', 4, 'image', 'www.phpcms.cn', 'uploadfile/2008/0831/20080831104206433.jpg', '', 'phpcms', '', 'transparent', '', '', 1220112000, 1918809600, 'phpcms', 1220150526, 0, 6, 1, 1),
-(6, '模型页面广告', '', 5, 'image', 'www.phpcms.cn', 'uploadfile/2008/0831/20080831021105267.jpg', '', '', '', 'transparent', '', '', 1220112000, 1918809600, 'phpcms', 1220163065, 0, 4, 1, 1),
-(7, '产品展示模型图片广告', '', 6, 'image', '', 'uploadfile/2008/0831/20081018020032914.gif', '', '', '', 'transparent', '', '', 1224259200, 1918809600, 'phpcms', 1224309632, 0, 0, 1, 1),
-(8, '首页横幅广告', '', 7, 'image', 'www.phpcms.cn', 'uploadfile/2008/0831/20080831094526548.jpg', '', '广告', '', 'transparent', '', '', 1220025600, 1918809600, 'phpcms', 1220064717, 0, 10, 1, 1);
+(1, '首页638x58图片广告', '', 1, 'image', 'www.phpcms.cn', 'uploadfile/2008/0831/20080831094526548.jpg', '', '广告', '', 'transparent', '', '', 1220025600, 1293811200, 'phpcms', 1220064717, 0, 10, 1, 1),
+(4, '新浪汽车频道', '', 3, 'image', 'www.google.cn', 'uploadfile/2008/0831/20080831100602900.jpg', '', 'www.google.cn', '', 'transparent', '', '', 1217865600, 1293811200, 'phpcms', 1220148362, 0, 1, 1, 1),
+(5, 'phpcms新产品广告', '', 4, 'image', 'www.phpcms.cn', 'uploadfile/2008/0831/20080831104206433.jpg', '', 'phpcms', '', 'transparent', '', '', 1220112000, 1293811200, 'phpcms', 1220150526, 0, 6, 1, 1),
+(6, '模型页面广告', '', 5, 'image', 'www.phpcms.cn', 'uploadfile/2008/0831/20080831021105267.jpg', '', '', '', 'transparent', '', '', 1220112000, 1293811200, 'phpcms', 1220163065, 0, 4, 1, 1),
+(7, '产品展示模型图片广告', '', 6, 'image', '', 'uploadfile/2008/0831/20081018020032914.gif', '', '', '', 'transparent', '', '', 1224259200, 1293811200, 'phpcms', 1224309632, 0, 0, 1, 1),
+(8, '首页横幅广告', '', 7, 'image', 'www.phpcms.cn', 'uploadfile/2008/0831/20080831094526548.jpg', '', '广告', '', 'transparent', '', '', 1220025600, 1293811200, 'phpcms', 1220064717, 0, 10, 1, 1);
 
 
 DROP TABLE IF EXISTS `phpcms_ads_stat`;

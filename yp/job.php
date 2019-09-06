@@ -29,10 +29,7 @@ switch($action)
 	$where = "j.updatetime >= '{$time}' ";
 	$genre = urldecode($genre);
 	$genre = str_replace(array('(', '$', ')', '{', '}', '<', '>'), '', $genre);
-	if($station) {
-		$station = filter_xss($station);
-		$where .= "AND j.station = '{$station}' ";
-	}
+	if($station)$where .= "AND j.station = '{$station}' ";
 	if($genre)$where .= "AND c.genre = '{$genre}' ";
 	if(!trim($where))$where = '1';
 	break;
@@ -41,8 +38,6 @@ switch($action)
 	$head['keywords'] .= '人才招聘搜索结果';
 	$head['description'] .= '人才招聘搜索结果'.'_'.$PHPCMS['sitename'];
 	$head['title'] .= '人才招聘搜索结果'.'_'.$PHPCMS['sitename'];
-	$experience = filter_xss($experience);
-	$inputtime = filter_xss($inputtime);
 	if($page<1)$page = 1;
 	if($stype)
 	{
@@ -75,20 +70,13 @@ switch($action)
 	$templateid = 'job_applylist';	
 	
 	if($inputtime)
-	$inputtime = filter_xss($inputtime);
 	$time = time() - 3600*$inputtime*24;
 	else $time = 0;
 	if($time < 0 )$time = 0;
 	$where = "edittime >= '{$time}' ";
 	$genre = urldecode($genre);
-	if($experience) {
-		$experience = filter_xss($experience);
-		$where .= "AND experience >= '{$experience}' ";
-	}
-	if($genre) {
-		$genre = filter_xss($genre);
-		$where .= "AND edulevel = '{$genre}' ";
-	}
+	if($experience)$where .= "AND experience >= '{$experience}' ";
+	if($genre)$where .= "AND edulevel = '{$genre}' ";
 	break;
 	
 	case 'show':

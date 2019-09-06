@@ -6,7 +6,6 @@ require_once MOD_ROOT.'include/answer.class.php';
 $answer = new answer();
 require_once PHPCMS_ROOT.'member/include/member.class.php';
 $member = new member();
-$id = intval($id);
 if($dosubmit && $action=='vote')
 {
 	if(!$_userid) showmessage($LANG['please_login'],$MODULE['member']['url'].'login.php?forward='.urlencode(URL));
