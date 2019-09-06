@@ -1,4 +1,0 @@
-{loop $data $n $r}
-<li><a href="{$r[url]}" target="{$target}">{if $r[style]}<span class="{$r[style]}">{str_cut($r[title], $titlelen)}</span>{else}{str_cut($r[title], $titlelen)}{/if}</a></li>
-{/loop}
-{if $pages}<div id="pages">{$pages}</div>{/if}

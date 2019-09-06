@@ -1,8 +1,0 @@
-{loop $data $n $r}
-<li>
-<a href="{$r[url]}" target="{$target}"><span></span>
-<img src="{thumb($r[thumb], $width, $height)}" alt="{$r[title]}" width="{$width}" height="{$height}"/></a><br/>
-<a href="{$r[url]}" target="{$target}">{str_cut($r[title],$titlelen)}</a>
-</li>
-{/loop}
-{if $pages}<div id="pages">{$pages}</div>{/if}

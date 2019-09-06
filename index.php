@@ -1,12 +1,17 @@
 <?php
-require dirname(__FILE__).'/include/common.inc.php';
-$head['title'] = $PHPCMS['sitename'].'_'.$PHPCMS['meta_title'];
-$head['keywords'] = $PHPCMS['meta_keywords'];
-$head['description'] = $PHPCMS['meta_description'];
-header('Last-Modified: '.gmdate('D, d M Y H:i:s', TIME).' GMT');
-header('Expires: '.gmdate('D, d M Y H:i:s', TIME+CACHE_PAGE_INDEX_TTL).' GMT');
-header('Cache-Control: max-age='.CACHE_PAGE_INDEX_TTL.', must-revalidate');
+/**
+ *  index.php PHPCMS 入口
+ *
+ * @copyright			(C) 2005-2010 PHPCMS
+ * @license				http://www.phpcms.cn/license/
+ * @lastmodify			2010-6-1
+ */
+ //PHPCMS根目录
 
-include template('phpcms', 'index');
-cache_page(CACHE_PAGE_INDEX_TTL);
+define('PHPCMS_PATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
+
+include PHPCMS_PATH.'/phpcms/base.php';
+
+pc_base::creat_app();
+
 ?>

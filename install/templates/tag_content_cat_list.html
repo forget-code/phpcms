@@ -1,7 +1,0 @@
-{loop $data $n $r}
-	<li>
-         <span class="date">{date('Y-m-d',$r[updatetime])}</span>
-         <a href="{$r[url]}" target="{$target}" class="{$class}">{str_cut($r[title], $titlelen)}</a>
-    </li>
-{/loop}
-{if $page}{$pages}{/if}

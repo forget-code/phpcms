@@ -1,4 +1,0 @@
-{loop $data $n $r}
-<li>{if $thumb}<img src="{$r['thumb']}" alt="" width="{$width}" height="{$height}"/>{/if}<a href=""><strong>{if $titlelen}{str_cut($r['title'],$titlelen)}{else}{$r['title']}{/if}</strong><span>{if $contentlen}{str_cut($r['content'], $contentlen)}{else}{$r['content']}{/if}</span></a></li>
-{/loop}
-{if $pages}<div id="pages">{$pages}</div>{/if}

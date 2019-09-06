@@ -1,7 +1,0 @@
-{template 'phpcms','header'}
-    <div id="main_full">
-    <div id="position"><a href="">首页</a><a href="{$MODULE[vote][url]}">投票首页</a>{$subject}</div><br />
-    {if $description}<div style="text-indent:2em;padding:8px;border:#CCC 1px dotted;margin-top:3px;">{$description}</div>{/if}
-    {vote_show($template,$voteid)}
-    </div>
-{template 'phpcms','footer'}

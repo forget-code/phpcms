@@ -1,4 +1,0 @@
-{loop $data $n $r}
-<li class="{$css}"><a href="{$r[url]}" target="{$target}">{$r[title]}</a> {if $dateformat}[{date($dateformat, $r[inputtime])}]{/if}</li>
-{/loop}
-{if $pages}<div class="pages">{$pages}</div>{/if}

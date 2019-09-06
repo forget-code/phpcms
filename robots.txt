@@ -1,12 +1,10 @@
+#
+# robots.txt for PHPCMS v9
+#
 User-agent: * 
-Disallow: /admin
-Disallow: /data
-Disallow: /templates
-Disallow: /include
-Disallow: /languages
-Disallow: /api
-Disallow: /fckeditor
+Disallow: /caches
+Disallow: /phpcms
 Disallow: /install
-Disallow: /count.php$
-Disallow: /admin.php$
-Disallow: /comment
+Disallow: /phpsso_server
+Disallow: /api
+Disallow: /admin.php

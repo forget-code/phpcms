@@ -1,5 +1,0 @@
-{loop $data $n $r}
-{if $n==1}<h2><a href="{video_show_url($r[vid],$r[url])}">{$r[title]}</a></h2><p>{else}
-<a href="{video_show_url($r[vid],$r[url])}">{str_cut($r[title],26,'..')}</a>{/if}
-{/loop}
-</p>

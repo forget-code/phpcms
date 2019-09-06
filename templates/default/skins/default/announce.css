@@ -1,8 +1,0 @@
-@import url("base.css");
-/*内容页*/
-.w_100{ width:100%;}
-#content { background-color:#fff;}
-#content h1 { text-align:center; font-family:"宋体"; font-size:20px; color:#000; margin-top:10px; color:#09c;}
-#text {	margin:10px auto; line-height:30px;	text-align:center; border-bottom:1px dotted #B9DFF9;}
-#endtext{ padding:0 10px; text-align:left; overflow:hidden; clear:both; word-wrap:break-word; word-break:break-all; margin-top:10px;}
-#endtext,#endtext p{ font-size:14px; margin:5px; text-indent:2em; line-height:1.8em;}

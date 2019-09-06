@@ -1,10 +1,5 @@
 index.html
-sitemaps.xml
-sitemap.html
-baidunews.xml
-include/config.inc.php
-about/*
-data/*
-templates/*
-uploadfile/
-languages/*
+caches/*
+uploadfile/*
+phpsso_server/caches/*
+phpsso_server/uploadfile/*

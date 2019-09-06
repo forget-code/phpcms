@@ -1,6 +1,0 @@
-{loop $data $n $r}
-<li>{if $showdate}<span class="date">{date('Y-m-d',$r[updatetime])}</span>{/if}
-{if $showcatname}<a href="{$CATEGORY[$r[catid]][url]}" class="catname">[{$CATEGORY[$r[catid]][catname]}]</a>{/if}
-<a href="{show_url($type,$r[id])}" target="{$target}">{if $r[style]}<span class="{$r[style]}">{str_cut($r[title], $titlelen)}</span>{else}{str_cut($r[title], $titlelen)}{/if}</a></li>
-{/loop}
-{if $pages}<div id="pages">{$pages}</div>{/if}

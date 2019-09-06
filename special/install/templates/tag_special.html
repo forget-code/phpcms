@@ -1,4 +1,0 @@
-{loop $data $n $r}
-<li><a href="{$r[url]}" target="{$target}"><span></span><img src="{thumb($r[thumb], $width, $height)}" alt="{$r[title]}" width="{$width}" height="{$height}"/></a><span><strong><a href="{$r[url]}" class="orange">{str_cut(strip_tags($r[title]),32)}</a></strong><br />
-  {str_cut(strip_tags($r[description]),60)}</span></li>
-{/loop}

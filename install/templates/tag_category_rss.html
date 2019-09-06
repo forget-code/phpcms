@@ -1,8 +1,0 @@
-{php $data = subcat($module,0,0);}
-<div class="rss_nav">
-  <ul>
-  {loop $data $n $r}
-    <li><a href="rss.php?catid={$r[catid]}" id="menu_{$r[catid]}" name="menu_{$r[catid]}"><span>{$r[catname]}</span></a></li>
-  {/loop}
-  </ul>
-</div>

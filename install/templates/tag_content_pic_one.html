@@ -1,6 +1,0 @@
-<ul class="pic_list">
-{loop $data $n $r}
-<li><a href="{$r[url]}" target="{$target}"><img src="{thumb($r[thumb], $width, $height)}" width="{$width}" height="{$height}" alt="{$r[title]}" /></a><br /><a href="{$r[url]}" >{str_cut($r[title], $titlelen)}</a></li>
-{/loop}
-</ul>
-{if $pages}<p id="pages">{$pages}</p>{/if}

@@ -1,451 +1,423 @@
 <?php
-error_reporting(E_ERROR);
 @set_time_limit(1000);
-set_magic_quotes_runtime(0);
-define('TIME', time());
-define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
-define('PHPCMS_ROOT', str_replace("\\", '/', dirname(__FILE__)).'/');
-if(file_exists(PHPCMS_ROOT.'data/install.lock')) exit('您已经安装过PHPCMS,如果需要重新安装，请删除 ./data/install.lock 文件！');
-define('IN_PHPCMS',true);
-set_include_path(PHPCMS_ROOT.'include/');
-
-require 'config.inc.php';
-require 'version.inc.php';
-require 'global.func.php';
-require 'admin/global.func.php';
-require 'dir.func.php';
-
-define('IP', ip());
-define('SCRIPT_NAME', isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : preg_replace("/(.*)\.php(.*)/i", "\\1.php", $_SERVER['PHP_SELF']));
-define('QUERY_STRING', $_SERVER['QUERY_STRING']);
-define('PATH_INFO', isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '');
-define('DOMAIN', isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : preg_replace("/([^:]*)[:0-9]*/i", "\\1", $_SERVER['HTTP_HOST']));
-define('SCHEME', $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://');
-define('SITE_URL', SCHEME.$_SERVER['HTTP_HOST'].PHPCMS_PATH);
-define('RELATE_URL', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : SCRIPT_NAME.(QUERY_STRING ? '?'.QUERY_STRING : PATH_INFO));
-define('URL', SCHEME.$_SERVER['HTTP_HOST'].RELATE_URL);
-define('SKIN_PATH', 'templates/default/skins/default/phpcms');
-
-$siteUrl = SCHEME.dirname($_SERVER['HTTP_HOST'].$_SERVER["SCRIPT_NAME"]);
-
-if($_REQUEST)
-{
-	if(!MAGIC_QUOTES_GPC)
-	{
-		$_REQUEST = new_addslashes($_REQUEST);
-		if($_COOKIE) $_COOKIE = new_addslashes($_COOKIE);
-	}
-	extract($_REQUEST, EXTR_SKIP);
-}
-
-header('Content-type: text/html; charset='.CHARSET);
-
-$steps = include PHPCMS_ROOT.'install/step.inc.php';
-if(!isset($step)) $step = '1';
-
-if(strrpos(strtolower(PHP_OS),"win") === FALSE)
-{
+if(phpversion() < '5.3.0') set_magic_quotes_runtime(0);
+if(phpversion() < '5.2.0') exit('您的php版本过低，不能安装本软件，请升级到5.2.0或更高版本再安装，谢谢！');
+include '../phpcms/base.php';
+define('INSTALL_MODULE',true);
+defined('IN_PHPCMS') or exit('No permission resources.');
+if(file_exists(CACHE_PATH.'install.lock')) exit('您已经安装过PHPCMS,如果需要重新安装，请删除 ./caches/install.lock 文件！');
+pc_base::load_sys_class('param','','','0');
+pc_base::load_sys_func('global');
+pc_base::load_sys_func('dir');
+$steps = include PHPCMS_PATH.'install/step.inc.php';
+$step = trim($_REQUEST['step']) ? trim($_REQUEST['step']) : 1;
+$pos = strpos(get_url(),'install/install.php');
+$siteurl = substr(get_url(),0,$pos);
+if(strrpos(strtolower(PHP_OS),"win") === FALSE) {
 	define('ISUNIX', TRUE);
-}
-else
-{
+} else {
 	define('ISUNIX', FALSE);
 }
+
 $mode = 0777;
 
 switch($step)
 {
-    case '1': //安装须知
-		include PHPCMS_ROOT."install/step".$step.".tpl.php";
+    case '1': //安装许可协议
+		param::set_cookie('reg_sso_succ','');
+		$license = file_get_contents(PHPCMS_PATH."install/license.txt");
+		include PHPCMS_PATH."install/step/step".$step.".tpl.php";
 
 		break;
-	case '2': //许可协议
-		$license = file_get_contents(PHPCMS_ROOT."install/license.txt");
-		include PHPCMS_ROOT."install/step".$step.".tpl.php";
-		break;
-
-	case '3': //环境检测 (FTP帐号设置）
-        $PHP_GD = '';
-		if(extension_loaded('gd'))
-	    {
+	
+	case '2':  //环境检测 (FTP帐号设置）
+        $PHP_GD  = '';
+		if(extension_loaded('gd')) {
 			if(function_exists('imagepng')) $PHP_GD .= 'png';
 			if(function_exists('imagejpeg')) $PHP_GD .= ' jpg';
 			if(function_exists('imagegif')) $PHP_GD .= ' gif';
 		}
+		$PHP_JSON = '0';
+		if(extension_loaded('json')) {
+			if(function_exists('json_decode') && function_exists('json_encode')) $PHP_JSON = '1';
+		}
         $PHP_DNS = preg_match("/^[0-9.]{7,15}$/", @gethostbyname('www.phpcms.cn')) ? 1 : 0;
 		//是否满足phpcms安装需求
-		$is_right = (phpversion() >= '4.3.0' && extension_loaded('mysql') && ini_get('short_open_tag')) ? 1 : 0;
-		include PHPCMS_ROOT."install/step".$step.".tpl.php";
+		$is_right = (phpversion() >= '5.2.0' && extension_loaded('mysql') && $PHP_JSON && $PHP_GD) ? 1 : 0;		
+		include PHPCMS_PATH."install/step/step".$step.".tpl.php";
 		break;
-	case '4': //选择安装模块
-		require PHPCMS_ROOT.'/install/modules.inc.php';
-
-		include PHPCMS_ROOT."install/step".$step.".tpl.php";
+	
+	case '3'://选择安装模块
+		require PHPCMS_PATH.'install/modules.inc.php';
+		include PHPCMS_PATH."install/step/step".$step.".tpl.php";
 		break;
-
-	case '5': //设置目录属性
+	
+	case '4': //检测目录属性
+		$selectmod = $_POST['selectmod'];
+		$testdata = $_POST['testdata'];
 		$selectmod = isset($selectmod) ? ','.implode(',', $selectmod) : '';
-		$selectmod = 'phpcms,member,pay'.$selectmod;
-		$selectmods = explode(',',$selectmod);
-		$selectmods = explode(',',$selectmod);
-		foreach($selectmods AS $dir)
-		{
-			if($dir == 'phpcms')
-			{
-				$files = file(PHPCMS_ROOT."install/chmod.txt");
+		$install_phpsso = (isset($_POST['install_phpsso']) && !empty($_POST['install_phpsso'])) ? intval($_POST['install_phpsso']) : showmessage('请选择sso安装类型');
+		$needmod = 'admin,phpsso';
+		$reg_sso_status = '';
+		$reg_sso_succ = param::get_cookie('reg_sso_succ');
+		if($install_phpsso === 2 && empty($reg_sso_succ)) {
+			$sso_url = $_POST[sso]['sso_url'];
+			$sso_info['username'] = $_POST[sso]['username'];
+			$sso_info['password'] = $_POST[sso]['password'];
+			$sso_info['authkey'] = $phpsso_auth_key = random(32, '1294567890abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ');
+			$sso_info['name'] = 'phpcms v9';
+			$sso_info['url'] = urlencode($siteurl);
+			$sso_info['apifilename'] = 'api.php?op=phpsso';
+			$sso_info['charset'] = strtolower(CHARSET);
+			$sso_info['type'] = 'phpcms_v9';
+			$data = http_build_query($sso_info);
+			$needmod = 'admin';
+			$remote_url = $sso_url.'api.php?op=install&'.$data;
+			$remote_var = $sso_url.'api.php';
+			if(remote_file_exists($remote_var)) {
+				$returnid = @file_get_contents($remote_url);
 			}
-			else
-			{
-				$files = file(PHPCMS_ROOT.$dir."/install/chmod.txt");
-			}
-			$files = array_filter($files);
-			foreach($files as $file)
-			{
-				$file = str_replace('*','',$file);
-				$file = trim($file);
-				if(is_dir($file))
-				{
-					$cname = '目录';
-				}
-				else
-				{
-					$cname = '文件';
-				}
-				if(!is_writable(PHPCMS_ROOT.$file)) $no_writablefile .= $file.' '.$cname."不可写<br>";
-			}
-		}
-		if(dir_create(PHPCMS_ROOT.'test_create_dir',0777))
-		{
-			sleep(1);
-			dir_delete(PHPCMS_ROOT.'test_create_dir');
-		}
-		else
-		{
-			$no_writablefile = "网站根目录不可写<br>".$no_writablefile;
-		}
-		if(dir_create(PHPCMS_ROOT.'templates/test_create_dir',0777))
-		{
-			sleep(1);
-			dir_delete(PHPCMS_ROOT.'templates/test_create_dir');
-		}
-		else
-		{
-			$no_writablefile = "templates/ 文件夹不可写<br>".$no_writablefile;
-		}
-		include PHPCMS_ROOT."install/step".$step.".tpl.php";
-		break;
-
-	case '6': //配置帐号 （MYSQL帐号、管理员帐号、）
-
-		include PHPCMS_ROOT."install/step".$step.".tpl.php";
-		break;
-
-	case '7': //安装详细信息-完成安装
-
-		include PHPCMS_ROOT."install/step".$step.".tpl.php";
-		break;
-
-	case 'installmodule': //执行SQL
-		if($module == 'phpcms')
-		{
-			$cookie_pre = random(10, 'abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ');
-			$auth_key = random(20, 'abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ');
-			$PHP_SELF = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : (isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : $_SERVER['ORIG_PATH_INFO']);
-			$rootpath = str_replace("\\","/",dirname($PHP_SELF));
-			$rootpath = strlen($rootpath)>1 ? $rootpath."/" : "/";
-			$config = array('DB_HOST'=>$dbhost,
-						'DB_USER'=>$dbuser,
-						'DB_PW'=>$dbpw,
-						'DB_NAME'=>$dbname,
-						'DB_PRE'=>$tablepre,
-						'PHPCMS_PATH'=>$rootpath,
-						'DB_PCONNECT'=>$pconnect,
-						'DB_CHARSET'=>$dbcharset,
-						'COOKIE_PRE'=>$cookie_pre,
-						'PHPCMS_PATH'=>$rootpath,
-						'AUTH_KEY'=>$auth_key,
-						'ADMIN_EMAIL'=>$email,
-						'PASSWORD_KEY'=>$password_key,
+			if($returnid == '-1') {
+				$reg_sso_status = 'PHPSSO缺少传递参数';
+			} elseif($returnid == '-2') {
+				$reg_sso_status = 'PHPSSO用户名不存在或者密码错误，请检查';
+			} elseif($returnid > 0){
+				$reg_sso = array('phpsso'=>'1',
+								'phpsso_appid'=>$returnid,
+								'phpsso_api_url'=>$sso_url,
+								'phpsso_auth_key'=>$sso_info['authkey'],
 						);
-			set_config($config);
-
-			$config_js = "var phpcms_path = '$rootpath';\nvar cookie_pre = '$cookie_pre';\nvar cookie_domain = '';\nvar cookie_path = '/';";
-
-			file_put_contents(PHPCMS_ROOT.'data/config.js', $config_js);
-			@chmod(PHPCMS_ROOT.'data/config.js', 0777);
-			$dbclass = 'db_'.DB_DATABASE;
-			require $dbclass.'.class.php';
-
-			$db = new $dbclass;
-			$connid = $db->connect($dbhost, $dbuser, $dbpw, '', $pconnect);
-			$version = mysql_get_server_info($connid);
-			if($version > '4.1' && $dbcharset)
-			{
-				mysql_query("SET NAMES '$dbcharset'" , $connid);
+				set_config($reg_sso,'system');
+				param::set_cookie('reg_sso_succ',$returnid);
+			} else {
+				$reg_sso_status = 'PHPSSO 的 URL 地址可能填写错误，请检查!';
 			}
-			if($version > '5.0')
-			{
-				mysql_query("SET sql_mode=''" , $connid);
+		}
+		
+		$chmod_file = ($install_phpsso == 1) ? 'chmod.txt' : 'chmod_unsso.txt';
+		$selectmod = $needmod.$selectmod;
+		$selectmods = explode(',',$selectmod);
+		$files = file(PHPCMS_PATH."install/".$chmod_file);		
+		foreach($files as $_k => $file) {
+			$file = str_replace('*','',$file);
+			$file = trim($file);
+			if(is_dir(PHPCMS_PATH.$file)) {
+				$is_dir = '1';
+				$cname = '目录';
+			} else {
+				$is_dir = '0';
+				$cname = '文件';
 			}
-			if(!@$db->select_db($dbname))
-			{
-				@$db->query("CREATE DATABASE $dbname");
-				if(@$db->error()) {
+			
+			if($is_dir =='0' && is_writable(PHPCMS_PATH.$file)) {
+					$is_writable = 1;
+			} elseif($is_dir =='1' && dir_writeable(PHPCMS_PATH.$file)){
+					$is_writable = 1;
+			} else {
+					$is_writable = 0;
+					$no_writablefile = 1;
+			}				
+			$filesmod[$_k]['file'] = $file;
+			$filesmod[$_k]['is_dir'] = $is_dir;
+			$filesmod[$_k]['cname'] = $cname;			
+			$filesmod[$_k]['is_writable'] = $is_writable;
+		}
+		if(dir_writeable(PHPCMS_PATH)) {
+			$is_writable = 1;
+		} else {
+			$is_writable = 0;
+		}
+		$filesmod[$_k+1]['file'] = '网站根目录';
+		$filesmod[$_k+1]['is_dir'] = '1';
+		$filesmod[$_k+1]['cname'] = '目录';			
+		$filesmod[$_k+1]['is_writable'] = $is_writable;						
+		include PHPCMS_PATH."install/step/step".$step.".tpl.php";
+		break;
+
+	case '5': //配置帐号 （MYSQL帐号、管理员帐号、）
+		$database = pc_base::load_config('database');
+		$testdata = $_POST['testdata'];
+		extract($database['default']);
+		$selectmod = $_POST['selectmod'];
+		$install_phpsso = $_POST['install_phpsso'];
+		include PHPCMS_PATH."install/step/step".$step.".tpl.php";
+		break;
+
+	case '6': //安装详细过程
+		extract($_POST);
+		$testdata = $_POST['testdata'];
+		include PHPCMS_PATH."install/step/step".$step.".tpl.php";
+		break;
+
+	case '7': //完成安装
+		$pos = strpos(get_url(),'install/install.php');
+		$url = substr(get_url(),0,$pos);
+		//设置cms与sso 报错信息
+		set_config(array('errorlog'=>'1'),'system');			
+		file_put_contents(CACHE_PATH.'install.lock','');
+		include PHPCMS_PATH."install/step/step".$step.".tpl.php";
+		break;
+	
+	case 'installmodule': //执行SQL
+		extract($_POST);
+		$GLOBALS['dbcharset'] = $dbcharset;
+		$PHP_SELF = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : (isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : $_SERVER['ORIG_PATH_INFO']);
+		$rootpath = str_replace('\\','/',dirname($PHP_SELF));	
+		$rootpath = substr($rootpath,0,-7);
+		$rootpath = strlen($rootpath)>1 ? $rootpath : "/";	
+
+		if($module == 'admin') {
+			$cookie_pre = random(5, 'abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ').'_';
+			$auth_key = random(20, '1294567890abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ');		
+			$sys_config = array('cookie_pre'=>$cookie_pre,
+						'auth_key'=>$auth_key,
+						'web_path'=>$rootpath,
+						'errorlog'=>'0',
+						'upload_url'=>$siteurl.'uploadfile/',
+						'js_path'=>$siteurl.'statics/js/',
+						'css_path'=>$siteurl.'statics/css/',
+						'img_path'=>$siteurl.'statics/images/',
+						'app_path'=>$siteurl,
+						);
+			$db_config = array('hostname'=>$dbhost,
+						'username'=>$dbuser,
+						'password'=>$dbpw,
+						'database'=>$dbname,
+						'tablepre'=>$tablepre,
+						'pconnect'=>$pconnect,
+						'charset'=>$dbcharset,
+						);
+			set_config($sys_config,'system');			
+			set_config($db_config,'database');
+			
+			$lnk = mysql_connect($dbhost, $dbuser, $dbpw) or die ('Not connected : ' . mysql_error());
+			$version = mysql_get_server_info();
+
+			if($version > '4.1' && $dbcharset) {
+				mysql_query("SET NAMES '$dbcharset'");
+			}
+			
+			if($version > '5.0') {
+				mysql_query("SET sql_mode=''");
+			}
+												
+			if(!@mysql_select_db($dbname)){
+				@mysql_query("CREATE DATABASE $dbname");
+				if(@mysql_error()) {
 					echo 1;exit;
 				} else {
-					$db->select_db($dbname);
+					mysql_select_db($dbname);
 				}
 			}
-			$dbfile = $dbsolution ? 'phpcms_speed.sql' : 'phpcms_db.sql';
-			if(file_exists(PHPCMS_ROOT."install/main/".$dbfile))
-			{
-				$sql = file_get_contents(PHPCMS_ROOT."install/main/".$dbfile);
+			$dbfile =  'phpcms_db.sql';	
+			if(file_exists(PHPCMS_PATH."install/main/".$dbfile)) {
+				$sql = file_get_contents(PHPCMS_PATH."install/main/".$dbfile);
 				_sql_execute($sql);
-
-			}
-			else
-			{
-				echo '2';//数据库文件不存在
-			}
-            dir_copy(PHPCMS_ROOT.'install/templates/', PHPCMS_ROOT.'templates/'.TPL_NAME.'/phpcms/');
-			$data = file_get_contents(PHPCMS_ROOT.'templates/'.TPL_NAME.'/phpcms/tag_config.inc.php');
-			$data = str_replace('phpcms2008_', $tablepre, $data);
-			file_put_contents(PHPCMS_ROOT.'templates/'.TPL_NAME.'/phpcms/tag_config.inc.php', $data);
-		}
-		else
-		{
-			$dbclass = 'db_'.DB_DATABASE;
-			require $dbclass.'.class.php';
-
-			$db = new $dbclass;
-			$db->connect(DB_HOST, DB_USER, DB_PW, DB_NAME, DB_PCONNECT, DB_CHARSET);
-			$db->query("DELETE FROM `".DB_PRE."module` WHERE module='$module'");
-			if(file_exists(PHPCMS_ROOT.$module."/install/mysql.sql"))
-			{
-				$sql = file_get_contents(PHPCMS_ROOT.$module."/install/mysql.sql");
-				sql_execute($sql);
-			}
-			else
-			{
-				echo 2;//数据库文件不存在
-				exit;
-			}
-					
-			if(file_exists(PHPCMS_ROOT.$module."/install/templates/"))
-			{
-				dir_copy(PHPCMS_ROOT.$module."/install/templates/", PHPCMS_ROOT.'templates/'.TPL_NAME.'/'.$module.'/');
-			}
-			if(file_exists(PHPCMS_ROOT.$module."/install/languages/"))
-			{
-				dir_copy(PHPCMS_ROOT.$module.'/install/languages/', PHPCMS_ROOT.'languages/'.LANG.'/');
-			}
-			if(file_exists(PHPCMS_ROOT.'templates/'.TPL_NAME.'/'.$module.'/tag_config.inc.php'))
-			{
-				$data = file_get_contents(PHPCMS_ROOT.'templates/'.TPL_NAME.'/'.$module.'/tag_config.inc.php');
-				$data = str_replace('phpcms2008_',DB_PRE,$data);
-				file_put_contents(PHPCMS_ROOT.'templates/'.TPL_NAME.'/'.$module.'/tag_config.inc.php',$data);
-			}
-
-			if(file_exists(PHPCMS_ROOT.$module."/install/extention.inc.php"))
-			{
-				@extract($db->get_one("SELECT menuid AS member_0 FROM ".DB_PRE."menu WHERE keyid='member_0'"));
-				@extract($db->get_one("SELECT menuid AS member_1 FROM ".DB_PRE."menu WHERE keyid='member_1'"));
-				@include (PHPCMS_ROOT.$module."/install/extention.inc.php");
-			}
-
-			if($module == 'member')
-			{
-				//建立管理员帐号
+				//创建网站创始人
 				if(CHARSET=='gbk') $username = iconv('UTF-8','GBK',$username);
-				$password = md5(PASSWORD_KEY.$password);
-				$db->query("INSERT INTO ".DB_PRE."admin (`userid`,`username`,`allowmultilogin`,`alloweditpassword`,`editpasswordnextlogin`,`disabled`) VALUES ('1','$username',1,1,0,0)");
-				$db->query("INSERT INTO ".DB_PRE."admin_role (`userid`, `roleid`) VALUES(1, 1)");
-				$db->query("INSERT INTO ".DB_PRE."member (`userid`,`username`,`password`,`email`,`groupid`,`modelid`) VALUES ('1','$username','$password','$email',1,10)");
-				$db->query("INSERT INTO ".DB_PRE."member_info (`userid`,`regip`,`regtime`) VALUES ('1','".IP."','".TIME."')");
+				$password_arr = password($password);
+				$password = $password_arr['password'];
+				$encrypt = $password_arr['encrypt'];
+				$email = trim($email);
+				_sql_execute("INSERT INTO ".$tablepre."admin (`userid`,`username`,`password`,`roleid`,`encrypt`,`lastloginip`,`lastlogintime`,`email`,`realname`,`card`) VALUES ('1','$username','$password',1,'$encrypt','','','$email','','')");
+				//设置默认站点1域名
+				_sql_execute("update ".$tablepre."site set `domain`='$siteurl' where `siteid`='1'");
+				
+			} else {
+				echo '2';//数据库文件不存在
+			}							
+		} elseif ($module == 'phpsso') {
+			//安装phpsso
+			
+			$ssourl = $siteurl.'phpsso_server/';
+			$cookie_pre = random(5, 'abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ').'_';
+			$auth_key = random(20, '1294567890abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ');
+			$phpsso_auth_key = random(32, '1294567890abcdefghigklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ');
+			$sso_tablepre = $tablepre.'sso_';
+			$sys_sso_config = array('phpsso'=>'1',
+						'phpsso_appid'=>'1',
+						'phpsso_api_url'=>substr($ssourl,0,-1),
+						'phpsso_auth_key'=>$phpsso_auth_key,
+						);			
+			$sso_config = array('cookie_pre'=>$cookie_pre,
+						'auth_key'=>$auth_key,
+						'web_path'=>$rootpath.'phpsso_server/',
+						'errorlog'=>'0',
+						'app_path'=>$ssourl,
+						'js_path'=>$ssourl.'statics/js/',
+						'css_path'=>$ssourl.'statics/css/',
+						'img_path'=>$ssourl.'statics/images/',			
+						);	
+			$sso_db_config = array('hostname'=>$dbhost,
+						'username'=>$dbuser,
+						'password'=>$dbpw,
+						'database'=>$dbname,
+						'tablepre'=>$sso_tablepre,
+						'pconnect'=>$pconnect,
+						'charset'=>$dbcharset,
+						);	
+			set_config($sys_sso_config,'system');	//更改cms中sso配置				
+			set_sso_config($sso_config,'system');   //写入sso中配置信息
+			set_sso_config($sso_db_config,'database'); //写入sso数据库配置信息
+			
+			$lnk = mysql_connect($dbhost, $dbuser, $dbpw) or die ('Not connected : ' . mysql_error());
+			$version = mysql_get_server_info();			
+			if($version > '4.1' && $dbcharset) {
+				mysql_query("SET NAMES '$dbcharset'");
+			}			
+			if($version > '5.0') {
+				mysql_query("SET sql_mode=''");
+			}												
+			mysql_select_db($dbname);			
+			$dbfile =  'phpsso_db.sql';	
+			if(file_exists(PHPCMS_PATH."install/main/".$dbfile)) {
+				$sql = file_get_contents(PHPCMS_PATH."install/main/".$dbfile);
+				_sql_execute($sql,$sso_tablepre,'ps_');				
+			}
+			//创建sso管理员信息
+			$username = iconv('UTF-8','GBK',$username);
+			$password_arr = password($password);
+			$password = $password_arr['password'];
+			$encrypt = $password_arr['encrypt'];
+			
+			_sql_execute("INSERT INTO ".$sso_tablepre."admin (`id`,`username`,`password`,`encrypt`,`issuper`,`lastlogin`,`ip`) VALUES ('1','$username','$password','$encrypt','1','','')");
+			//设置phpcms v9应用
+			_sql_execute("INSERT INTO ".$sso_tablepre."applications (`appid`,`type`,`name`,`url`,`authkey`,`ip`,`apifilename`,`charset`,`synlogin`) VALUES ('1','phpcms_v9','phpcms v9','$siteurl','$phpsso_auth_key','','api.php?op=phpsso','".CHARSET."','1')", $sso_tablepre, 'ps_');				
+			
+			$applist = array('1'
+						=>array (
+							    'appid' => '1',
+							    'type' => 'phpcms_v9',
+							    'name' => 'phpcms v9',
+							    'url' =>$siteurl,
+							    'authkey' => $phpsso_auth_key,
+							    'ip' => '',
+							    'apifilename' => 'api.php?op=phpsso',
+							    'charset' => CHARSET,
+							    'synlogin' => '1',
+							  ),				
+			);
+			$applist = "<?php\nreturn ".var_export($applist, true).";\n?>";
+			file_put_contents(PHPCMS_PATH.'phpsso_server/caches/caches_admin/caches_data/applist.cache.php', $applist);
+		} else {
+			//安装可选模块
+			if(in_array($module,array('announce','comment','link','vote','message','mood','poster'))) {
+				$install_module = pc_base::load_app_class('module_api','admin');
+				$install_module->install($module);
 			}
 		}
 		echo $module;
 		break;
-
-	case 'dbtest':
-		if(!mysql_connect($dbhost, $dbuser, $dbpw))
+		
+	//安装测试数据	
+	case 'testdata':
+		$default_db = pc_base::load_config('database','default');
+		$dbcharset = $default_db['charset'];
+		$tablepre = $default_db['tablepre'];
+		$lnk = mysql_connect($default_db['dbhost'], $default_db['username'], $default_db['password']) or die ('Not connected : ' . mysql_error());
+		$version = mysql_get_server_info();			
+		if($version > '4.1' && $dbcharset) {
+			mysql_query("SET NAMES '$dbcharset'");
+		}			
+		if($version > '5.0') {
+			mysql_query("SET sql_mode=''");
+		}			
+		mysql_select_db($default_db['database']);
+		if(file_exists(PHPCMS_PATH."install/main/testsql.sql"))
 		{
+			$sql = file_get_contents(PHPCMS_PATH."install/main/testsql.sql");
+			_sql_execute($sql);
+		}
+		break;	
+		
+	//数据库测试
+	case 'dbtest':
+		extract($_GET);
+		if(!@mysql_connect($dbhost, $dbuser, $dbpw)) {
 			exit('2');
 		}
 		$server_info = mysql_get_server_info();
 		if($server_info < '4.0') exit('6');
-		if(!mysql_select_db($dbname))
-	    {
+		if(!mysql_select_db($dbname)) {
 			if(!@mysql_query("CREATE DATABASE `$dbname`")) exit('3');
 			mysql_select_db($dbname);
 		}
 		$tables = array();
-		$query = mysql_list_tables($dbname);
-		while($r = mysql_fetch_row($query))
-		{
+		$query = mysql_query("SHOW TABLES FROM `$dbname`");
+		while($r = mysql_fetch_row($query)) {
 			$tables[] = $r[0];
 		}
-		if($tables && in_array($tablepre.'module', $tables))
-	    {
+		if($tables && in_array($tablepre.'module', $tables)) {
 			exit('0');
 		}
-		else
-		{
+		else {
 			exit('1');
 		}
 		break;
-
+		
 	case 'cache_all':
+		$cache = pc_base::load_app_class('cache_api','admin');
+		$cache->cache('category');
+		$cache->cache('cache_site');		 
+		$cache->cache('downservers');
+		$cache->cache('badword');
+		$cache->cache('ipbanned');
+		$cache->cache('keylink');
+		$cache->cache('linkage');
+		$cache->cache('position');
+		$cache->cache('admin_role');
+		$cache->cache('urlrule');
+		$cache->cache('module');
+		$cache->cache('sitemodel');
+		$cache->cache('workflow');
+		$cache->cache('dbsource');
+		$cache->cache('member_group');
+		$cache->cache('membermodel');
+		$cache->cache('type','search');
+		$cache->cache('special');
+		$cache->cache('setting');
+		$cache->cache('database');
+		$cache->cache('member_setting');
+		$cache->cache('member_model_field');
+		$cache->cache('search_setting');
 
-		$dbclass = 'db_'.DB_DATABASE;
-		require $dbclass.'.class.php';
-		$db = new $dbclass;
-		$db->connect(DB_HOST, DB_USER, DB_PW, DB_NAME, DB_PCONNECT, DB_CHARSET);
-
-		require 'cache.func.php';
-		cache_all();
-		$cache = cache_read('common.php');
-
-		tags_update(array_keys($cache['MODULE']));
-
-		require 'admin/model.class.php';
-        $model = new model();
-		$model->cache();
-		$model->cache_field(1);
-		$model->cache_field(2);
-		$model->cache_field(3);
-		$model->cache_field(4);
-		$model->cache_field(5);
-		$model->cache_field(6);
-		require 'member/admin/include/model_member.class.php';
-		$member_model = new member_model();
-		$member_model->cache();
-		$member_model->cache_field(10);
-
-        file_put_contents(PHPCMS_ROOT.'data/install.lock','');
-		copy(PHPCMS_ROOT."install/cms_index.html",PHPCMS_ROOT."index.html");
-		$head['title'] = '网站地图';
-		ob_start();
-		include template('phpcms', 'sitemap');
-		$file = PHPCMS_ROOT.'sitemap.html';
-		createhtml($file);
-		require 'session_'.SESSION_STORAGE.'.class.php';
-		$session = new session();
-		session_set_cookie_params(0, COOKIE_PATH, COOKIE_DOMAIN);
-		session_start();
-		$_SESSION['install_system'] = 1;
-		@unlink(PHPCMS_ROOT.'install.php');
-		break;
-	case 'testdata':
-		$dbclass = 'db_'.DB_DATABASE;
-		require $dbclass.'.class.php';
-
-		$db = new $dbclass;
-		$db->connect(DB_HOST, DB_USER, DB_PW, DB_NAME, DB_PCONNECT, DB_CHARSET);
-		if(file_exists(PHPCMS_ROOT."install/main/testsql.sql"))
-		{
-			$sql = file_get_contents(PHPCMS_ROOT."install/main/testsql.sql");
-			sql_execute($sql);
-		}
-		break;
-	case 'ftpset':
-		if(!$ftphost || !$ftpuser) exit("<script>alert('请填写ftp服务器和ftp帐号！');</script>");
-		$ftp = ftp_connect($ftphost, $ftpport, 90);
-		if(!$ftp) exit("<script>alert('设置错误！无法连接到FTP服务器 ');</script>");
-		$testlogin = ftp_login($ftp, $ftpuser, $ftppass);
-		if(!$testlogin) exit("<script>alert('帐号或密码错误 ');</script>");
-		if($ftpwebpath=='') $ftpwebpath = '/';
-		$testchdir = ftp_chdir($ftp, $ftpwebpath);
-		if(!$testchdir) exit("<script>alert('网站根目录相对FTP根目录".$ftpwebpath."的路径设置错误！');</script>");
-		$config = array('FTP_ENABLE'=>1,
-						'FTP_HOST'=>$ftphost,
-						'FTP_PORT'=>$ftpport,
-						'FTP_USER'=>$ftpuser,
-						'FTP_PW'=>$ftppass,
-						'FTP_PATH'=>$ftpwebpath
-						);
-
-		require 'ftp.class.php';
-		$f = new ftp($ftphost, $ftpport, $ftpuser, $ftppass, $ftpwebpath);
-		$selectmods = explode(',',$selectmod);
-
-		foreach($selectmods AS $dir)
-		{
-			if($dir == 'phpcms')
-			{
-				$files = file(PHPCMS_ROOT."install/chmod.txt");
-			}
-			else
-			{
-				$files = file(PHPCMS_ROOT.$dir."/install/chmod.txt");
-			}
-			$files = array_filter($files);
-			foreach($files as $file)
-			{
-				$file = trim($file);
-				$f->dir_chmod($file, $mode);
-			}
-		}
-		set_config($config);
-		exit("<script>alert('设置成功，请刷新重新检测！');parent.location.reload();</script>");
+		copy(PHPCMS_PATH."install/cms_index.html",PHPCMS_PATH."index.html");
 		break;
 
-	case 'ftpdir_list':
-		require_once 'ftp.class.php';
-		require_once 'form.class.php';
-		$ftp = new ftp($ftphost, $ftpport, $ftpuser, $ftppw, '');
-		if($ftp->error)
-	    {
-			exit($ftp->error);
-		}
-		else
-	    {
-			$dirs = $ftp->nlist($path);
-			if($dirs)
-			{
-				$options = $path == '/' ? array('/'=>'/') : array(''=>'请选择');
-				foreach($dirs as $k=>$v)
-				{
-					if(!str_exists($v, '.')) $options[$v] = $v;
-				}
-				if(count($options) > 1)
-				{
-					echo form::select($options, 'dirlist', 'dirlist', '', 1, '', 'onchange="$(\'#ftpwebpath\').val(this.value == \'/\' ? \'/\' : \''.$path.'\'+this.value+\'/\');ftpdir_list(\''.$path.'\'+this.value+\'/\')"');
-				}
-			}
-		}
-		break;
 }
 
-function _sql_execute($sql)
-{
-	global $db;
-    $sqls = _sql_split($sql);
+function format_textarea($string) {
+	return nl2br(str_replace(' ', '&nbsp;', htmlspecialchars($string)));
+}
+
+function _sql_execute($sql,$r_tablepre = '',$s_tablepre = 'phpcms_') {
+    $sqls = _sql_split($sql,$r_tablepre,$s_tablepre);
 	if(is_array($sqls))
     {
 		foreach($sqls as $sql)
 		{
 			if(trim($sql) != '')
 			{
-				$db->query($sql);
+				mysql_query($sql);
 			}
 		}
 	}
 	else
 	{
-		$db->query($sqls);
+		mysql_query($sqls);
 	}
 	return true;
 }
 
-function _sql_split($sql)
-{
-	global $db,$dbcharset,$tablepre;
-	if($db->version() > '4.1' && $dbcharset)
+function _sql_split($sql,$r_tablepre = '',$s_tablepre='phpcms_') {
+	global $dbcharset,$tablepre;
+	$r_tablepre = $r_tablepre ? $r_tablepre : $tablepre;
+	if(mysql_get_server_info > '4.1' && $dbcharset)
 	{
 		$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "TYPE=\\1 DEFAULT CHARSET=".$dbcharset,$sql);
 	}
-	if($tablepre != "phpcms_") $sql = str_replace("phpcms_", $tablepre, $sql);
+	
+	if($r_tablepre != $s_tablepre) $sql = str_replace($s_tablepre, $r_tablepre, $sql);
 	$sql = str_replace("\r", "\n", $sql);
 	$ret = array();
 	$num = 0;
@@ -464,5 +436,59 @@ function _sql_split($sql)
 		$num++;
 	}
 	return $ret;
+}
+
+function dir_writeable($dir) {
+	$writeable = 0;
+	if(is_dir($dir)) {  
+        if($fp = @fopen("$dir/chkdir.test", 'w')) {
+            @fclose($fp);      
+            @unlink("$dir/chkdir.test"); 
+            $writeable = 1;
+        } else {
+            $writeable = 0; 
+        } 
+	}
+	return $writeable;
+}
+
+function set_config($config,$cfgfile) {
+	if(!$config || !$cfgfile) return false;
+	$configfile = CACHE_PATH.'configs'.DIRECTORY_SEPARATOR.$cfgfile.'.php';
+	if(!is_writable($configfile)) showmessage('Please chmod '.$configfile.' to 0777 !');
+	$pattern = $replacement = array();
+	foreach($config as $k=>$v) {
+			$v = trim($v);
+			$configs[$k] = $v;
+			$pattern[$k] = "/'".$k."'\s*=>\s*([']?)[^']*([']?)(\s*),/is";
+        	$replacement[$k] = "'".$k."' => \${1}".$v."\${2}\${3},";							
+	}
+	$str = file_get_contents($configfile);
+	$str = preg_replace($pattern, $replacement, $str);
+	return file_put_contents($configfile, $str, LOCK_EX);		
+}
+
+function set_sso_config($config,$cfgfile) {
+	if(!$config || !$cfgfile) return false;
+	$configfile = PHPCMS_PATH.'phpsso_server'.DIRECTORY_SEPARATOR.'caches'.DIRECTORY_SEPARATOR.'configs'.DIRECTORY_SEPARATOR.$cfgfile.'.php';
+	if(!is_writable($configfile)) showmessage('Please chmod '.$configfile.' to 0777 !');
+	$pattern = $replacement = array();
+	foreach($config as $k=>$v) {
+			$v = trim($v);
+			$configs[$k] = $v;
+			$pattern[$k] = "/'".$k."'\s*=>\s*([']?)[^']*([']?)(\s*),/is";
+        	$replacement[$k] = "'".$k."' => \${1}".$v."\${2}\${3},";							
+	}
+	$str = file_get_contents($configfile);
+	$str = preg_replace($pattern, $replacement, $str);
+	return file_put_contents($configfile, $str, LOCK_EX);		
+}
+
+function remote_file_exists($url_file){
+	$headers = get_headers($url_file);
+	if (!preg_match("/200/", $headers[0])){
+		return false;
+	}
+	return true;
 }
 ?>
