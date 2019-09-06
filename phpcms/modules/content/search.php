@@ -61,9 +61,8 @@ class search {
 					$r['form'] = form::date("info[$field]");
 				} elseif($r['formtype']=='box') {
 					$options = explode("\n",$r['options']);
-					$option = array();
 					foreach($options as $_k) {
-						$v = explode("|",trim($_k));
+						$v = explode("|",$_k);
 						$option[$v[1]] = $v[0];
 					}
 					switch($r['boxtype']) {

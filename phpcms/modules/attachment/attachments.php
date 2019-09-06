@@ -14,13 +14,9 @@ class attachments {
 		$this->upload_url = pc_base::load_config('system','upload_url');
 		$this->upload_path = pc_base::load_config('system','upload_path');		
 		$this->imgext = array('jpg','gif','png','bmp','jpeg');
-		$this->userid = $_SESSION['userid'] ? $_SESSION['userid'] : (param::get_cookie('_userid') ? param::get_cookie('_userid') : sys_auth($_POST['userid_flash'],'DECODE'));
+		$this->userid = param::get_cookie('userid') ? param::get_cookie('userid') : param::get_cookie('_userid');
 		$this->isadmin = $this->admin_username = $_SESSION['roleid'] ? 1 : 0;
 		$this->groupid = param::get_cookie('_groupid') ? param::get_cookie('_groupid') : 8;
-		//判断是否登录
-		if(empty($this->userid)){
-			showmessage(L('please_login','','member'));
-		}
 	}
 	
 	/**
@@ -29,7 +25,6 @@ class attachments {
 	public function upload() {
 		$grouplist = getcache('grouplist','member');
 		if($this->isadmin==0 && !$grouplist[$this->groupid]['allowattachment']) return false;
-		if($this->isadmin==1) define('IN_ADMIN',true);
 		pc_base::load_sys_class('attachment','',0);
 		$module = trim($_GET['module']);
 		$catid = intval($_GET['catid']);
@@ -50,16 +45,26 @@ class attachments {
 	 * swfupload上传附件
 	 */
 	public function swfupload(){
-		$grouplist = getcache('grouplist','member');
+		$grouplist = getcache('grouplist','member');			
 		if(isset($_POST['dosubmit'])){
+			//判断是否登录
+			if(empty($this->userid)){
+				exit('0');
+			} 
+		
 			if( $_POST['swf_auth_key'] != md5(pc_base::load_config('system','auth_key').$_POST['SWFUPLOADSESSID']) || ($_POST['isadmin']==0 && !$grouplist[$_POST['groupid']]['allowattachment'])) exit();
 			pc_base::load_sys_class('attachment','',0);
 			$attachment = new attachment($_POST['module'],$_POST['catid'],$_POST['siteid']);
 			$attachment->set_userid($_POST['userid']);
+			$aids = $attachment->upload('Filedata',$_POST['filetype_post'],'','',array($_POST['thumb_width'],$_POST['thumb_height']),$_POST['watermark_enable']);
+			//验证上传文件格式是否合规
 			$siteid = get_siteid();
 			$site_setting = get_site_setting($siteid);
 			$site_allowext = $site_setting['upload_allowext'];
-			$aids = $attachment->upload('Filedata',$site_allowext,'','',array($_POST['thumb_width'],$_POST['thumb_height']),$_POST['watermark_enable']);
+			$allowext_array = explode('|',$site_allowext);
+			if(!in_array($attachment->uploadedfiles[0]['fileext'],$allowext_array)){
+				exit('0');
+			} 
 			if($aids[0]) {
 				$filename= (strtolower(CHARSET) != 'utf-8') ? iconv('gbk', 'utf-8', $attachment->uploadedfiles[0]['filename']) : $attachment->uploadedfiles[0]['filename'];
 				if($attachment->uploadedfiles[0]['isimage']) {
@@ -93,8 +98,7 @@ class attachments {
 			if(empty($att_not_used) || !isset($att_not_used)) $tab_status = ' class="on"';
 			if(!empty($att_not_used)) $div_status = ' hidden';
 			//获取临时未处理文件列表
-			$att = $this->att_not_used();
-			$userid_flash=sys_auth($this->userid, 'ENCODE');
+			$att = $this->att_not_used();					
 			include $this->admin_tpl('swfupload');
 		}
 	}

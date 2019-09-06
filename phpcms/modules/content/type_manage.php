@@ -30,9 +30,9 @@ class type_manage extends admin {
 			$_POST['info']['siteid'] = $this->siteid;
 			$_POST['info']['module'] = 'content';
 			if(empty($_POST['info']['name'])) showmessage(L("input").L('type_name'));
-			$names = explode("\n", trim($_POST['info']['name']));
+			$names = explode("\n", $_POST['info']['name']);
 			$ids = $_POST['ids'];
-
+			
 			foreach ($names as $name) {
 				$_POST['info']['name'] = $name;
 				$typeid = $this->db->insert($_POST['info'],true);
@@ -87,7 +87,7 @@ class type_manage extends admin {
 					$usable_type = array();
 					$usable_type_arr = explode(',', $r['usable_type']);
 					foreach ($usable_type_arr as $_usable_type_arr) {
-						if(!$_usable_type_arr || (!in_array($catid, $ids) && $typeid==$_usable_type_arr)) continue;
+						if(!$_usable_type_arr || !in_array($catid, $ids)) continue;
 						$usable_type[] = $_usable_type_arr;
 					}
 					if(!empty($usable_type)) {
@@ -112,24 +112,7 @@ class type_manage extends admin {
 		}
 	}
 	public function delete() {
-		$typeid = intval($_GET['typeid']);
-
-		$categorys = $this->public_getsite_categorys($typeid);
-		foreach ($this->catids_string as $catid) {
-			$r = $this->category_db->get_one(array('catid'=>$catid),'usable_type');
-			$usable_type = array();
-			$usable_type_arr = explode(',', $r['usable_type']);
-			foreach ($usable_type_arr as $_usable_type_arr) {
-				if(!$_usable_type_arr || $typeid==$_usable_type_arr) continue;
-				$usable_type[] = $_usable_type_arr;
-			}
-			if(!empty($usable_type)) {
-				$usable_type = ','.implode(',', $usable_type).',';
-			} else {
-				$usable_type = '';
-			}
-			$this->category_db->update(array('usable_type'=>$usable_type),array('catid'=>$catid,'siteid'=>$this->siteid));
-		}
+		$_GET['typeid'] = intval($_GET['typeid']);
 		$this->db->delete(array('typeid'=>$_GET['typeid']));
 		$this->cache();//更新类别缓存，按站点
 		exit('1');

@@ -24,7 +24,7 @@ include $this->admin_tpl('header', 'admin');
  if($code) {
 	 foreach ($code as $val) {
 	 	if($val) {
-	 		echo "<input type='button' onclick=\"fnSearch('".new_html_special_chars($val)."');\" value='".new_html_special_chars($val)."' class='button'> ";
+	 		echo "<input type='button' onclick=\"fnSearch('".new_htmlentities($val)."');\" value='".new_htmlentities($val)."' class='button'> ";
 	 	}
 	 }
  }

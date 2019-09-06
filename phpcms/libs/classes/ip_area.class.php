@@ -22,12 +22,9 @@ class ip_area {
 			$this->fp = @fopen(PC_PATH.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'ipdata'.DIRECTORY_SEPARATOR.'mini.Dat', 'rb');
 			$this->offset = unpack('Nlen', fread($this->fp, 4));
 			$this->index  = fread($this->fp, $this->offset['len'] - 4);
-		} elseif(@file_exists(PC_PATH.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'ipdata'.DIRECTORY_SEPARATOR.'QQWry.Dat')) {
+		} elseif(@file_existes(PC_PATH.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'ipdata'.DIRECTORY_SEPARATOR.'QQWry.Dat')) {
 			$this->func = 'data_full';
 			$this->fp = @fopen(PC_PATH.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'ipdata'.DIRECTORY_SEPARATOR.'QQWry.Dat', 'rb');
-		} elseif(@file_exists(PC_PATH.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'ipdata'.DIRECTORY_SEPARATOR.'qqwry.dat')) {
-			$this->func = 'data_full';
-			$this->fp = @fopen(PC_PATH.DIRECTORY_SEPARATOR.'libs'.DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.'ipdata'.DIRECTORY_SEPARATOR.'qqwry.dat', 'rb');
 		}
 	}
 

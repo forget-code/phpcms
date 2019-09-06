@@ -56,8 +56,6 @@ class index {
 		} else {
 			$mood_db = pc_base::load_model('mood_model');
 			$key = isset($_GET['k']) && intval($_GET['k']) ? intval($_GET['k']) : '';
-			if (!in_array($key, array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)))
-				$this->_show_result(0, L('illegal_parameters'));
 			$fields = 'n'.$key;
 			if ($data = $mood_db->get_one(array('catid'=>$this->catid, 'siteid'=>$this->siteid, 'contentid'=>$this->contentid))) {
 				$mood_db->update(array('total'=>'+=1', $fields=>'+=1', 'lastupdate'=>SYS_TIME), array('id'=>$data['id']));

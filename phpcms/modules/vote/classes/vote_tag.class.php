@@ -26,7 +26,7 @@ class vote_tag {
 	 * @param  $data 
 	 */
 	public function other_vote($data) {
-		$siteid = intval($_GET['siteid']);
+		$siteid = $_GET['siteid'];
 		$sql = array('siteid'=>$siteid); 
 		return $this->subject_db->select($sql, '*', $data['limit'], $data['order']);
 	} 

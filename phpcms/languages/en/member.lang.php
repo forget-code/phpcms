@@ -18,7 +18,6 @@ $LANG['between_2_to_20'] = 'Between 2-20';
 $LANG['between_6_to_20'] = 'Between 6-20';
 $LANG['between_1_to_20'] = 'Between 1-20';
 $LANG['between_2_to_32'] = 'Between 2-32';
-$LANG['between_7_to_32'] = 'Between 7-32';
 $LANG['already_exist'] = 'Already exist';
 $LANG['password_can_not_be_empty'] = 'Password is required';
 $LANG['cannot_empty'] = ' is Required';

@@ -77,11 +77,7 @@ class image {
 		$srcwidth  = $info['width'];
 		$srcheight = $info['height'];
 		$pathinfo = pathinfo($image);
-		if(function_exists('image_type_to_extension')){
-			$type =  image_type_to_extension($image);
-		}else{
-			$type =  $pathinfo['extension'];
-		}
+		$type =  $pathinfo['extension'];
 		if(!$type) $type = $info['type'];
 		$type = strtolower($type);
 		unset($info);

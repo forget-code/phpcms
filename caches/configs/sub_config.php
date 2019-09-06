@@ -48,6 +48,6 @@ return array(
 	'推荐-记录'=>'T-126000',
 	'推荐-科技'=>'T-127000',
 	'推荐-其他'=>'T-190000',
-	'member_add_dir'=>'http://juhe.phpcms.cn/api/',
+	'member_add_dir'=>'http://juhe.gcvideo.cn/api/',
 );
 ?>

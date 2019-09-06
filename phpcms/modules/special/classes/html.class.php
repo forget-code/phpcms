@@ -223,17 +223,14 @@ class html {
 	/**
 	 * 生成列表页
 	 */
-	public function create_list($page = 1) {
+	public function create_list() {
 		$siteid = get_siteid();
-		$site_info = $this->site->get_by_id($siteid);
-		define('URLRULE', $site_info['domain'].substr(pc_base::load_config('system', 'html_root'), 1).'/special/index.html~'.$site_info['domain'].substr(pc_base::load_config('system', 'html_root'), 1).'/special/index-{$page}.html');
 		//分站时计算路径
 		if ($siteid>1) {
-			if ($page==1) $file = pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/index.html';
-			else $file = pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/index-'.$page.'.html';
+			$site_info = $this->site->get_by_id($siteid);
+			$file = pc_base::load_config('system', 'html_root').'/'.$site_info['dirname'].'/special/index.html';
 		} else {
-			if ($page==1)  $file = pc_base::load_config('system', 'html_root').'/special/index.html';
-			else $file = pc_base::load_config('system', 'html_root').'/special/index-'.$page.'.html';
+			$file = pc_base::load_config('system', 'html_root').'/special/index.html';
 		}
 		$this->queue->add_queue('add', $file, $siteid);
 		$file  = PHPCMS_PATH.$file;

@@ -35,7 +35,6 @@ class special extends admin {
 					$site = pc_base::load_app_class('sites', 'admin');
 					$site_info = $site->get_by_id($special['siteid']);
 					if ($special['ishtml']) {
-						$special['filename'] = str_replace('..','',$special['filename']);
 						$url =  $site_info['domain'].'special/'.$special['filename'].'/';
 					} else {
 						$url = $site_info['domain'].'index.php?m=special&c=index&id='.$id;
@@ -87,7 +86,6 @@ class special extends admin {
 			$site = pc_base::load_app_class('sites', 'admin');
 			$site_info = $site->get_by_id($siteid);
 			if ($special['ishtml'] && $special['filename']) {
-				$special['filename'] = str_replace('..','',$special['filename']);
 				if ($siteid>1) {
 					$special['url'] =  $site_info['domain'].'special/'.$special['filename'].'/';
 				} else {
@@ -223,15 +221,8 @@ class special extends admin {
 	}
 	
 	public	function create_special_list() {
-		$siteid = get_siteid();
 		$html = pc_base::load_app_class('html');
-		$c = pc_base::load_model('special_model');
-		$result = $c->get_one(array('siteid'=>$siteid), 'COUNT(*) AS total');
-		$total = $result['total'];
-		$pages = ceil($total/20);
-		for ( $i=1; $i <= $pages ; $i++ ){ 
-			$size = $html->create_list($i);
-		}
+		$size = $html->create_list();
 		showmessage(L('index_create_finish',array('size'=>sizecount($size))));
 	}
 	

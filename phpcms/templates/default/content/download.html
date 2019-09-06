@@ -20,7 +20,7 @@ body,html{text-align:center}
 	<style type="text/css">
     	 body, html{ background:#FFF!important;}
     </style>
-    {if $allow_visitor=='1'}
+    {if $allow_visitor==1}
 	<a href="{$downurl}" class="xzs_btn"></a>
 	{else}
 	<CENTER><a href="{APP_PATH}index.php?m=content&c=readpoint&allow_visitor={$allow_visitor}"><font color="red">阅读此信息需要您支付 <B><I>{$readpoint} {if $paytype}元{else}点{/if}</I></B>，点击这里支付</font></a></CENTER>

@@ -56,13 +56,9 @@ class content extends foreground {
 			$fields = array_keys($fields);
 			$info = array();
 			foreach($_POST['info'] as $_k=>$_v) {
-				if($_k == 'content') {
-					$info[$_k] = remove_xss(strip_tags($_v, '<p><a><br><img><ul><li><div>'));
-				} elseif(in_array($_k, $fields)) {
-					$info[$_k] = new_html_special_chars(trim_script($_v));
-				}
+				if(in_array($_k, $fields)) $info[$_k] = new_html_special_chars(trim_script($_v));
 			}
-			$_POST['linkurl'] = str_replace(array('"','(',')',",",' ','%'),'',new_html_special_chars(strip_tags($_POST['linkurl'])));
+			$_POST['linkurl'] = str_replace(array('"','(',')',",",' '),'',new_html_special_chars($_POST['linkurl']));
 			$post_fields = array_keys($_POST['info']);
 			$post_fields = array_intersect_assoc($fields,$post_fields);
 			$setting = string2array($category['setting']);
@@ -226,13 +222,9 @@ class content extends foreground {
 				}
 				$info = array();
 				foreach($_POST['info'] as $_k=>$_v) {
-					if($_k == 'content') {
-						$_POST['info'][$_k] = strip_tags($_v, '<p><a><br><img><ul><li><div>');
-					} elseif(in_array($_k, $fields)) {
-						$_POST['info'][$_k] = new_html_special_chars(trim_script($_v));
-					}
+					if(in_array($_k, $fields)) $_POST['info'][$_k] = new_html_special_chars(trim_script($_v));
 				}
-				$_POST['linkurl'] = str_replace(array('"','(',')',",",' ','%'),'',new_html_special_chars(strip_tags($_POST['linkurl'])));
+				$_POST['linkurl'] = str_replace(array('"','(',')',",",' '),'',new_html_special_chars($_POST['linkurl']));
 				$this->content_db->edit_content($_POST['info'],$id);
 				$forward = $_POST['forward'];
 				showmessage(L('update_success'),$forward);

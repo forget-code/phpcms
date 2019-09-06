@@ -174,8 +174,9 @@ final class template_cache {
 							$str .= '$page = intval('.$page.') ? intval('.$page.') : 1;if($page<=0){$page=1;}';
 							$str .= '$offset = ($page - 1) * $pagesize;';
 							$limit = '$offset,$pagesize';
-							$sql = 'SELECT COUNT(*) as count FROM ('.$datas['sql'].') T';
-							$str .= '$r = $get_db->sql_query("'.$sql.'");$s = $get_db->fetch_next();$pages=pages($s[\'count\'], $page, $pagesize, $urlrule);';
+							if ($sql = preg_replace('/select([^from].*)from/i', "SELECT COUNT(*) as count FROM ", $datas['sql'])) {
+								$str .= '$r = $get_db->sql_query("'.$sql.'");$s = $get_db->fetch_next();$pages=pages($s[\'count\'], $page, $pagesize, $urlrule);';
+							}
 						}
 						
 						

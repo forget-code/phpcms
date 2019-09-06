@@ -77,21 +77,14 @@ class database extends admin {
 			}
 			$pdoname = $_GET['pdoname'] ? $_GET['pdoname'] : key($pdos);
 			$sqlfiles = glob(CACHE_PATH.'bakup/'.$pdoname.'/*.sql');
-			
 			if(is_array($sqlfiles)) {
 				asort($sqlfiles);
 				$prepre = '';
 				$info = $infos = $other = $others = array();
 				foreach($sqlfiles as $id=>$sqlfile) {
-					//老的数据库备份文件转换为新格式
-					if(preg_match("/([phpcmstables_|db_][0-9]{8}_[0-9a-z]{20}_)([0-9]+)\.sql/i",basename($sqlfile),$num)) {
-						list($tem_pre, $temp_date, $temp_string, $temp_end) = explode('_', basename($sqlfile));
-						rename($sqlfile, CACHE_PATH.'bakup/'.$pdoname.'/'.$temp_string.'_'.$tem_pre.'_'.$temp_date.'_'.$temp_end);
-					}
-					if(preg_match("/([0-9a-z]{20}_[phpcmstables_|db_]+[0-9]{8}_)([0-9]+)\.sql/i",basename($sqlfile),$num)) {
-
+					if(preg_match("/(phpcmstables_[0-9]{8}_[0-9a-z]{4}_)([0-9]+)\.sql/i",basename($sqlfile),$num)) {
 						$info['filename'] = basename($sqlfile);
-						$info['filesize'] = sizecount(filesize($sqlfile));
+						$info['filesize'] = round(filesize($sqlfile)/(1024*1024), 2);
 						$info['maketime'] = date('Y-m-d H:i:s', filemtime($sqlfile));
 						$info['pre'] = $num[1];
 						$info['number'] = $num[2];
@@ -106,7 +99,7 @@ class database extends admin {
 						$infos[] = $info;
 					} else {
 						$other['filename'] = basename($sqlfile);
-						$other['filesize'] = sizecount(filesize($sqlfile));
+						$other['filesize'] = round(filesize($sqlfile)/(1024*1024),2);
 						$other['maketime'] = date('Y-m-d H:i:s',filemtime($sqlfile));
 						$others[] = $other;
 					}
@@ -222,7 +215,7 @@ class database extends admin {
 		$fileid = ($fileid != '') ? $fileid : 1;		
 		if($fileid==1 && $tables) {
 			if(!isset($tables) || !is_array($tables)) showmessage(L('select_tbl'));
-			$random = random(20, 'abcdefghigklmzopqrstuvwxyz0123456789');
+			$random = mt_rand(1000, 9999);
 			setcache('bakup_tables',$tables,'commons');
 		} else {
 			if(!$tables = getcache('bakup_tables','commons')) showmessage(L('select_tbl'));
@@ -296,7 +289,7 @@ class database extends admin {
 		if(trim($tabledump)) {
 			$tabledump = "# phpcms bakfile\n# version:PHPCMS V9\n# time:".date('Y-m-d H:i:s')."\n# type:phpcms\n# phpcms:http://www.phpcms.cn\n# --------------------------------------------------------\n\n\n".$tabledump;
 			$tableid = $i;
-			$filename = $random.'_'.$tabletype.'_'.date('Ymd').'_'.$fileid.'.sql';
+			$filename = $tabletype.'_'.date('Ymd').'_'.$random.'_'.$fileid.'.sql';
 			$altid = $fileid;
 			$fileid++;
 			$bakfile_path = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.$this->pdo_name;

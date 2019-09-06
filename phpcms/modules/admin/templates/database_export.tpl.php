@@ -4,7 +4,7 @@ include $this->admin_tpl('header');?>
 <div class="pad_10">
 <div class="table-list">
 <form method="post" name="myform" id="myform" action="?m=admin&c=database&a=export">
-<input type="hidden" name="tabletype" value="db" id="phpcmstables">
+<input type="hidden" name="tabletype" value="phpcmstables" id="phpcmstables">
 <table width="100%" cellspacing="0">
 <thead>
   	<tr>

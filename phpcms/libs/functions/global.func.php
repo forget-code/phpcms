@@ -36,7 +36,7 @@ function new_stripslashes($string) {
  */
 function new_html_special_chars($string) {
 	$encoding = 'utf-8';
-	if(strtolower(CHARSET)=='gbk') $encoding = 'ISO-8859-15';
+	if(strtolower(CHARSET)=='gbk') $encoding = 'gb2312';
 	if(!is_array($string)) return htmlspecialchars($string,ENT_QUOTES,$encoding);
 	foreach($string as $key => $val) $string[$key] = new_html_special_chars($val);
 	return $string;
@@ -44,16 +44,9 @@ function new_html_special_chars($string) {
 
 function new_html_entity_decode($string) {
 	$encoding = 'utf-8';
-	if(strtolower(CHARSET)=='gbk') $encoding = 'ISO-8859-15';
+	if(strtolower(CHARSET)=='gbk') $encoding = 'gb2312';
 	return html_entity_decode($string,ENT_QUOTES,$encoding);
 }
-
-function new_htmlentities($string) {
-	$encoding = 'utf-8';
-	if(strtolower(CHARSET)=='gbk') $encoding = 'ISO-8859-15';
-	return htmlentities($string,ENT_QUOTES,$encoding);
-}
-
 /**
  * 安全过滤函数
  *
@@ -104,7 +97,7 @@ function remove_xss($string) {
 			$pattern .= $parm[$i][$j]; 
 		}
 		$pattern .= '/i';
-		$string = preg_replace($pattern, ' ', $string); 
+		$string = preg_replace($pattern, '', $string); 
 	}
 	return $string;
 }
@@ -333,50 +326,27 @@ function sizecount($filesize) {
 * @return	string
 */
 function sys_auth($string, $operation = 'ENCODE', $key = '', $expiry = 0) {
-	$ckey_length = 4;
+	$key_length = 4;
 	$key = md5($key != '' ? $key : pc_base::load_config('system', 'auth_key'));
-	$keya = md5(substr($key, 0, 16));
-	$keyb = md5(substr($key, 16, 16));
-	$keyc = $ckey_length ? ($operation == 'DECODE' ? substr($string, 0, $ckey_length): substr(md5(microtime()), -$ckey_length)) : '';
+	$fixedkey = md5($key);
+	$egiskeys = md5(substr($fixedkey, 16, 16));
+	$runtokey = $key_length ? ($operation == 'ENCODE' ? substr(md5(microtime(true)), -$key_length) : substr($string, 0, $key_length)) : '';
+	$keys = md5(substr($runtokey, 0, 16) . substr($fixedkey, 0, 16) . substr($runtokey, 16) . substr($fixedkey, 16));
+	$string = $operation == 'ENCODE' ? sprintf('%010d', $expiry ? $expiry + time() : 0).substr(md5($string.$egiskeys), 0, 16) . $string : base64_decode(substr($string, $key_length));
 
-	$cryptkey = $keya.md5($keya.$keyc);
-	$key_length = strlen($cryptkey);
-
-	$string = $operation == 'DECODE' ? base64_decode(strtr(substr($string, $ckey_length), '-_', '+/')) : sprintf('%010d', $expiry ? $expiry + time() : 0).substr(md5($string.$keyb), 0, 16).$string;
+	$i = 0; $result = '';
 	$string_length = strlen($string);
-
-	$result = '';
-	$box = range(0, 255);
-
-	$rndkey = array();
-	for($i = 0; $i <= 255; $i++) {
-		$rndkey[$i] = ord($cryptkey[$i % $key_length]);
+	for ($i = 0; $i < $string_length; $i++){
+		$result .= chr(ord($string{$i}) ^ ord($keys{$i % 32}));
 	}
-
-	for($j = $i = 0; $i < 256; $i++) {
-		$j = ($j + $box[$i] + $rndkey[$i]) % 256;
-		$tmp = $box[$i];
-		$box[$i] = $box[$j];
-		$box[$j] = $tmp;
-	}
-
-	for($a = $j = $i = 0; $i < $string_length; $i++) {
-		$a = ($a + 1) % 256;
-		$j = ($j + $box[$a]) % 256;
-		$tmp = $box[$a];
-		$box[$a] = $box[$j];
-		$box[$j] = $tmp;
-		$result .= chr(ord($string[$i]) ^ ($box[($box[$a] + $box[$j]) % 256]));
-	}
-
-	if($operation == 'DECODE') {
-		if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$keyb), 0, 16)) {
+	if($operation == 'ENCODE') {
+		return $runtokey . str_replace('=', '', base64_encode($result));
+	} else {
+		if((substr($result, 0, 10) == 0 || substr($result, 0, 10) - time() > 0) && substr($result, 10, 16) == substr(md5(substr($result, 26).$egiskeys), 0, 16)) {
 			return substr($result, 26);
 		} else {
 			return '';
 		}
-	} else {
-		return $keyc.rtrim(strtr(base64_encode($result), '+/', '-_'), '=');
 	}
 }
 /**
@@ -553,8 +523,6 @@ function tpl_cache($name,$times = 0) {
  * @param $timeout 过期时间
  */
 function setcache($name, $data, $filepath='', $type='file', $config='', $timeout=0) {
-	if(!preg_match("/^[a-zA-Z0-9_-]+$/", $name)) return false;
-	if($filepath!="" && !preg_match("/^[a-zA-Z0-9_-]+$/", $filepath)) return false;
 	pc_base::load_sys_class('cache_factory','',0);
 	if($config) {
 		$cacheconfig = pc_base::load_config('cache');
@@ -573,8 +541,6 @@ function setcache($name, $data, $filepath='', $type='file', $config='', $timeout
  * @param string $config 配置名称
  */
 function getcache($name, $filepath='', $type='file', $config='') {
-	if(!preg_match("/^[a-zA-Z0-9_-]+$/", $name)) return false;
-	if($filepath!="" && !preg_match("/^[a-zA-Z0-9_-]+$/", $filepath)) return false;
 	pc_base::load_sys_class('cache_factory','',0);
 	if($config) {
 		$cacheconfig = pc_base::load_config('cache');
@@ -593,8 +559,6 @@ function getcache($name, $filepath='', $type='file', $config='') {
  * @param $config 配置名称
  */
 function delcache($name, $filepath='', $type='file', $config='') {
-	if(!preg_match("/^[a-zA-Z0-9_-]+$/", $name)) return false;
-	if($filepath!="" && !preg_match("/^[a-zA-Z0-9_-]+$/", $filepath)) return false;
 	pc_base::load_sys_class('cache_factory','',0);
 	if($config) {
 		$cacheconfig = pc_base::load_config('cache');
@@ -612,8 +576,6 @@ function delcache($name, $filepath='', $type='file', $config='') {
  * @param string $config 配置名称
  */
 function getcacheinfo($name, $filepath='', $type='file', $config='') {
-	if(!preg_match("/^[a-zA-Z0-9_-]+$/", $name)) return false;
-	if($filepath!="" && !preg_match("/^[a-zA-Z0-9_-]+$/", $filepath)) return false;
 	pc_base::load_sys_class('cache_factory');
 	if($config) {
 		$cacheconfig = pc_base::load_config('cache');
@@ -1414,8 +1376,12 @@ function go($catid,$id, $allurl = 0) {
 	$r = $db->get_one(array('id'=>$id), '`url`');
 	if (!empty($allurl)) {
 		if (strpos($r['url'], '://')===false) {
-			$site = siteinfo($category[$catid]['siteid']);
-			$r['url'] = substr($site['domain'], 0, -1).$r['url'];
+			if (strpos($category[$catid]['url'], '://') === FALSE) {
+				$site = siteinfo($category[$catid]['siteid']);
+				$r['url'] = substr($site['domain'], 0, -1).$r['url'];
+			} else {
+				$r['url'] = $category[$catid]['url'].$r['url'];
+			}
 		}
 	}
 
@@ -1543,22 +1509,7 @@ function upload_key($args) {
 	$authkey = md5($args.$pc_auth_key);
 	return $authkey;
 }
-/**
- * 生成验证key
- * @param $prefix   参数
- * @param $suffix   参数
- */
-function get_auth_key($prefix,$suffix="") {
-	if($prefix=='login'){
-		$pc_auth_key = md5(pc_base::load_config('system','auth_key').ip());
-	}else if($prefix=='email'){
-		$pc_auth_key = md5(pc_base::load_config('system','auth_key'));
-	}else{
-		$pc_auth_key = md5(pc_base::load_config('system','auth_key').$suffix);
-	}
-	$authkey = md5($prefix.$pc_auth_key);
-	return $authkey;
-}
+
 /**
  * 文本转换为图片
  * @param string $txt 图形化文本内容

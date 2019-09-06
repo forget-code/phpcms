@@ -3,8 +3,7 @@
 return array (
 	'default' => array (
 		'hostname' => 'localhost',
-		'port' => 3306,
-		'database' => 'phpcmsv9',
+		'database' => 'phpcms',
 		'username' => '',
 		'password' => '',
 		'tablepre' => 'v9_',

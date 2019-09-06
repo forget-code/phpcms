@@ -32,23 +32,8 @@ class phpsso {
 		if(isset($_POST['data'])) {
 			parse_str(sys_auth($_POST['data'], 'DECODE', $this->applist[$this->appid]['authkey']), $this->data);
 					
-			if(empty($this->data) || !is_array($this->data)) {
+			if(!is_array($this->data)) {
 				exit('0');
-			}
-			if(!get_magic_quotes_gpc()) {
-				$this->data= new_addslashes($this->data);
-			}
-			if(isset($this->data['username']) && $this->data['username']!='' && is_username($this->data['username'])==false){
-				exit('-5');
-			}
-			if(isset($this->data['email']) && $this->data['username']!='' && is_email($this->data['email'])==false){
-				exit('-5');
-			}
-			if(isset($this->data['password']) && $this->data['password']!='' && (is_password($this->data['password'])==false || is_badword($this->data['password']))){
-				exit('-5');
-			}
-			if(isset($this->data['newpassword']) && $this->data['newpassword']!='' && (is_password($this->data['newpassword'])==false || is_badword($this->data['newpassword']))){
-				exit('-5');
 			}
 		} else {
 			exit('0');
@@ -56,10 +41,9 @@ class phpsso {
 		
 		if(isset($GLOBALS['HTTP_RAW_POST_DATA'])) {
 			$this->data['avatardata'] = $GLOBALS['HTTP_RAW_POST_DATA'];
-			//if($this->applist[$this->appid]['authkey'] != $this->data['ps_auth_key']) {
-			//	exit('0');
-			//}
-			
+			if($this->applist[$this->appid]['authkey'] != $this->data['ps_auth_key']) {
+				exit('0');
+			}
 		}
 
 	}

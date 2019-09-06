@@ -665,9 +665,7 @@ class video extends admin {
 			//如果传递uid,snid则为登录通行证成功，返回完善资料，没有传递则为自行填写资料申请开通视频应用
 			$uid = intval($_GET['uid']);
 			$snid = $_GET['snid'];
-			if(empty($this->setting['skey']) || empty($this->setting['sn'])){
-				if(!$snid) showmessage("请先登录盛大通行证");
-			}	
+			
 			//如果skey,sn存在，通过接口调取用户完善的资料，再提交为修改操作
 			$skey_sn_array = getcache('video');
 			if(!empty($skey_sn_array['skey']) && !empty($skey_sn_array['sn'])){ 

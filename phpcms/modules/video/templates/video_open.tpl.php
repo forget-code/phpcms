@@ -16,7 +16,7 @@
 <div class="title hideText">
 <?php echo L('login_to_snda');?>
 </div>
-<iframe id="ifrmLogin" scrolling="no" frameborder="0" src="http://login.sdo.com/sdo/Login/LoginFrame.php?CSSURL=http://juhe.phpcms.cn/skins/default/register/sdo.css&amp;returnURL=http%3A%2F%2Fjuhe.phpcms.cn%2Fregister%2Findex%2Flog_get_ticket%2Fuser_back%2F<?php echo $user_back;?>%2Fpc_hash%2F<?php echo $_GET['pc_hash'];?>%2F&amp;appId=329&amp;areaId=-1&target=iframe">
+<iframe id="ifrmLogin" scrolling="no" frameborder="0" src="http://login.sdo.com/sdo/Login/LoginFrame.php?CSSURL=http://juhe.gcvideo.cn/skins/default/register/sdo.css&amp;returnURL=http%3A%2F%2Fjuhe.gcvideo.cn%2Fregister%2Findex%2Flog_get_ticket%2Fuser_back%2F<?php echo $user_back;?>%2Fpc_hash%2F<?php echo $_GET['pc_hash'];?>%2F&amp;appId=329&amp;areaId=-1&target=iframe">
 </iframe>
 <div class="links">
 <a href="http://login.sdo.com/sdo/LoginEx/forget_pwd.php" target="_blank"><?php echo L('forget_password');?></a> &nbsp; | &nbsp; <a href="http://register.sdo.com" target="_blank"><?php echo L('reg_to_snda');?> &gt;</a>

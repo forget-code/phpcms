@@ -71,11 +71,7 @@ class down {
 		}
 		if(preg_match('/(php|phtml|php3|php4|jsp|dll|asp|cer|asa|shtml|shtm|aspx|asax|cgi|fcgi|pl)(\.|$)/i',$f) || strpos($f, ":\\")!==FALSE || strpos($f,'..')!==FALSE) showmessage(L('url_error'));
 		if(strpos($f, 'http://') !== FALSE || strpos($f, 'ftp://') !== FALSE || strpos($f, '://') === FALSE) {
-			if(empty($_SERVER['HTTP_USER_AGENT'])){
-				$pc_auth_key = md5(pc_base::load_config('system','auth_key').'down');
-			}else{
-				$pc_auth_key = md5(pc_base::load_config('system','auth_key').$_SERVER['HTTP_USER_AGENT']);
-			}
+			$pc_auth_key = md5(pc_base::load_config('system','auth_key').$_SERVER['HTTP_USER_AGENT']);
 			$a_k = urlencode(sys_auth("i=$i&d=$d&s=$s&t=".SYS_TIME."&ip=".ip()."&m=".$m."&f=$f&modelid=".$modelid, 'ENCODE', $pc_auth_key));
 			$downurl = '?m=content&c=down&a=download&a_k='.$a_k;
 		} else {
@@ -86,11 +82,7 @@ class down {
 	
 	public function download() {
 		$a_k = trim($_GET['a_k']);
-		if(empty($_SERVER['HTTP_USER_AGENT'])){
-			$pc_auth_key = md5(pc_base::load_config('system','auth_key').'down');
-		}else{
-			$pc_auth_key = md5(pc_base::load_config('system','auth_key').$_SERVER['HTTP_USER_AGENT']);
-		}
+		$pc_auth_key = md5(pc_base::load_config('system','auth_key').$_SERVER['HTTP_USER_AGENT']);
 		$a_k = sys_auth($a_k, 'DECODE', $pc_auth_key);
 		if(empty($a_k)) showmessage(L('illegal_parameters'));
 		unset($i,$m,$f,$t,$ip);

@@ -217,7 +217,6 @@ class special_api {
 		}
 		pc_base::load_sys_func('dir');
 		$this->db->delete(array('id'=>$id, 'siteid'=>get_siteid()));
-		$info['filename'] = str_replace('..','',$info['filename']);
 		if ($info['siteid']>1) {
 			if ($info['ishtml']) {
 				$queue = pc_base::load_model('queue_model');

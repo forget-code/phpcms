@@ -30,7 +30,7 @@ class form {
 			}
 			$toolbar .= "'-','Templates'],
 		    ['Cut','Copy','Paste','PasteText','PasteFromWord','-','Print'],
-		    ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],['ShowBlocks'],['Image','Capture','Flash','flashplayer','MyVideo'],['Maximize'],
+		    ['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],['ShowBlocks'],['Image','Capture','Flash','MyVideo'],['Maximize'],
 		    '/',
 		    ['Bold','Italic','Underline','Strike','-'],
 		    ['Subscript','Superscript','-'],
@@ -57,7 +57,7 @@ class form {
 			$authkey = upload_key("$allowuploadnum,$alowuploadexts,$allowbrowser");
 			$str .="flashupload:true,alowuploadexts:'".$alowuploadexts."',allowbrowser:'".$allowbrowser."',allowuploadnum:'".$allowuploadnum."',authkey:'".$authkey."',\r\n";
 		}
-        if($allowupload) $str .= "filebrowserUploadUrl : 'index.php?m=attachment&c=attachments&a=upload&module=".$module."&catid=".$catid."&dosubmit=1',\r\n";
+        if($allowupload) $str .= "filebrowserUploadUrl : '".APP_PATH."index.php?m=attachment&c=attachments&a=upload&module=".$module."&catid=".$catid."&dosubmit=1',\r\n";
 		if($color) {
 			$str .= "extraPlugins : 'uicolor',uiColor: '$color',";
 		}
@@ -108,7 +108,6 @@ class form {
 			$str = '<script type="text/javascript" src="'.JS_PATH.'swfupload/swf2ckeditor.js"></script>';
 			define('IMAGES_INIT', 1);
 		}
-		$value = new_html_special_chars($value);
 		$authkey = upload_key("1,$alowexts,1,$thumb_ext,$watermark_setting");
 		return $str."<input type=\"text\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $ext/>  <input type=\"button\" class=\"button\" onclick=\"javascript:flashupload('{$id}_images', '".L('attachmentupload')."','{$id}',submit_images,'1,{$alowexts},1,{$thumb_ext},{$watermark_setting}','{$moudle}','{$catid}','{$authkey}')\"/ value=\"".L('imagesupload')."\">";
 	}

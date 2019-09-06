@@ -59,7 +59,7 @@ function get_path(nodeid,returnid) {
 	$.getJSON(url+'&callback=?',function(data){
 		if(data) {
 			$.each(data, function(i,data){ 
-				show_path = data + " > " + show_path;
+				show_path += data+" > ";
 			})
 			$("#parent_"+returnid).siblings('span').html(show_path);
 		}

@@ -81,7 +81,7 @@ function addtext(data) {
 <div class="col-2 col-auto">
 	<h6><?php echo L('main_sysinfo')?></h6>
 	<div class="content">
-	<?php echo L('main_version')?>Phpcms <?php echo PC_VERSION?>  Release <?php echo PC_RELEASE?> [<a href="http://download.phpcms.cn/v9/" target="_blank"><?php echo L('main_latest_version')?></a>]<br />
+	<?php echo L('main_version')?>Phpcms <?php echo PC_VERSION?>  Release <?php echo PC_RELEASE?> [<a href="http://download.phpcms.cn" target="_blank"><?php echo L('main_latest_version')?></a>]<br />
 	<?php echo L('main_os')?><?php echo $sysinfo['os']?> <br />
 	<?php echo L('main_web_server')?><?php echo $sysinfo['web_server']?> <br />
 	<?php echo L('main_sql_version')?><?php echo $sysinfo['mysqlv']?><br />
@@ -93,12 +93,11 @@ function addtext(data) {
 	<h6><?php echo L('main_product_team')?></h6>
 	<div class="content">
 	<?php echo L('main_copyright')?><?php echo $product_copyright?><br />
+	<?php echo L('main_product_planning')?><?php echo $architecture?><br />
 	<?php echo L('main_product_dev')?><?php echo $programmer;?><br />
 	<?php echo L('main_product_ui')?><?php echo $designer;?><br />
 	<?php echo L('main_product_site')?><a href="http://www.phpcms.cn/" target="_blank">http://www.phpcms.cn/</a> <br />
-	<?php echo L('main_product_bbs')?><a href="http://bbs.phpcms.cn/" target="_blank">http://bbs.phpcms.cn/</a> <br />
-	<?php echo L('main_product_qq')?>7634000 <br />
-	<?php echo L('main_product_sales')?>1561683312
+	<?php echo L('main_product_bbs')?><a href="http://bbs.phpcms.cn/" target="_blank">http://bbs.phpcms.cn/</a> 
 	</div>
 </div>
 

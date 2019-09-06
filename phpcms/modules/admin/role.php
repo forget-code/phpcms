@@ -120,7 +120,7 @@ class role extends admin {
 				$menu->nbsp = '&nbsp;&nbsp;&nbsp;';
 				$result = $this->menu_db->select();
 				$priv_data = $this->priv_db->select(); //获取权限表数据
-				$modules = 'admin,system';
+				$modules = 'admin,announce,vote,system';
 				foreach ($result as $n=>$t) {
 					$result[$n]['cname'] = L($t['name'],'',$modules);
 					$result[$n]['checked'] = ($this->op->is_checked($t,$_GET['roleid'],$siteid, $priv_data))? ' checked' : '';

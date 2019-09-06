@@ -39,7 +39,7 @@ $(function(){
         <div class="box">
         		<h5>专题</h5>
 <div class="pad-lr-10">
-{pc:special action="lists" siteid="$siteid" listorder="3" page="$page" num="20"}
+{pc:special action="lists" siteid="$siteid" listorder="3" page="$_GET[page]" num="20"}
     <ul class="list row-2 f14 lh24">
 	{loop $data $r}
 		<li>·<a href="{$r['url']}" target="_blank">{str_cut($r['title'], 42)}</a></li>
