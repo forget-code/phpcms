@@ -58,7 +58,7 @@ body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; backgro
 
 	.tab-web-panel{ border:1px solid #b3cbe4;zoom:1; padding:1px; background:#fff}
 	.tab-web-panel li{background:#f0f5f6; margin-top:1px}
-	
+	.tab-web-panel ul.tab-scroll{overflow-y:auto; overflow-x:hidden;height:220px;width:150px}
 	.tab-web-panel li a{padding:3px 8px 3px 8px;display:block; padding-right:22px;height:18px;line-height:18px;white-space: nowrap;width:105px}
 	.tab-web-panel li a:hover,.tab-web-panel li.on a{ background-color:#d5e5f6;background-position:50px -52px;}
 	
@@ -85,9 +85,9 @@ body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; backgro
 	.left_menu ul li.on a{ height:29px; line-height:29px; background:none; padding:0; display:block}
 	.left_menu ul li.on a:hover{background:none}
 .left_menu ul li a:hover{background-position: left -38px}
-.left_menu a.open,.left_menu a.close{background: url(../images/admin_img/left_menu_openClose.png) no-repeat 3px center;width:8px; display:block; float:left;height:auto; right:-11px; top:0}
-.left_menu a.open:hover,.left_menu a.close:hover{ background-color:#d6e1e4}
-.left_menu a.close{background-position:right center; width:10px}
+.left_menu a.open,.left_menu a.close,.addContent a.r-open,.addContent a.r-close{background: url(../images/admin_img/left_menu_openClose.png) no-repeat 3px center;width:8px; display:block; float:left;height:auto; right:-11px; top:0}
+.left_menu a.open:hover,.left_menu a.close:hover,.addContent a.r-open:hover,.addContent a.r-close:hover{ background-color:#d6e1e4}
+.left_menu a.close,.addContent a.r-close{background-position:right center; width:10px}
 .left_menu h3 span{background-position: left -78px; display:block; float:right; height:14px; width:14px; margin-top:5px}
 .left_menu h3 span.on{background-position: -33px -78px;}
 .scroll{ position:absolute; left:10px; bottom:14px; width:120px; height:17px; overflow:hidden; display:none}
@@ -191,13 +191,14 @@ body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; backgro
 
 .addContent{width:960px; margin:0 auto; overflow:hidden;}
 .addContent .col-auto{}
-.addContent .col-right{ width:204px; overflow:hidden; margin-left:6px;}
+.addContent .col-right{width:204px; overflow:hidden;}
 .addContent .col-right .content h6{ border-bottom:1px solid #cfdce3; padding:8px 0 3px; margin-bottom:7px}
 .addContent .col-right .content input{max-width:182px}
 .addContent .col-right .content .upload-pic{width:180px;height:180px;text-align:center;overflow:hidden;}
 .addContent .col-right .content .upload-pic a{display:table-cell;vertical-align:middle;width:180px;height:145px;text-align:center;*display:block;*font-size:105px}
 .addContent .col-right .content .upload-pic{ background:#eef2f2; border:1px solid #dce6ea; zoom:1; padding:1px;}
 .addContent .col-right select#template{max-width:188px;*width:188px;_width:188px}
+.addContent a.r-close,.addContent a.r-open { float:right}
 
 .list-dot{ padding-bottom:10px}
 .list-dot li,.list-dot-othors li{padding:5px 0; border-bottom:1px dotted #c6dde0; font-family:"宋体"; color:#bbb; position:relative;_height:22px}

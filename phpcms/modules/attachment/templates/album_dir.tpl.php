@@ -1,8 +1,8 @@
 <?php
-defined('IN_ADMIN') or exit('No permission resources.');
 $show_header = $show_scroll = 1;
-include $this->admin_tpl('header','admin');
+include $this->admin_tpl('header','attachment');
 ?>
+
 <link href="<?php echo JS_PATH?>swfupload/swfupload.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript" src="<?php echo JS_PATH?>jquery.imgpreview.js"></script>
 <script type="text/javascript">

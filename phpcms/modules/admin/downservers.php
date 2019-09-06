@@ -64,7 +64,7 @@ class downservers extends admin {
 				$sitelist[$current_siteid] = $sitelists[$current_siteid]['name'];
 				$default = '';
 			}			
-			$info = $this->db->get_one(array('id'=>$_GET['id']));
+			$info = $this->db->get_one(array('id'=>intval($_GET['id'])));
 			extract($info);
 			$show_validator = true;
 			$show_header = true;

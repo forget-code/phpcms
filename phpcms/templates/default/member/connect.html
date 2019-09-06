@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=7" />
 <title>phpcmsV9 - {L('member','','member').L('manage_center')}</title>
 <link href="{CSS_PATH}reset.css" rel="stylesheet" type="text/css" />
@@ -90,6 +90,21 @@
 .exchange .avatar img.user{ padding:2px; border:1px solid #ebebeb;}
 .exchange .input{ padding:5px 0}
 .exchange .input label{ width:60px; text-align:right; color:#555}
+
+.submit button.hqyz{margin:0px; padding:0px; border:none; cursor:pointer; }
+.submit button.hqyz{
+    background-position: 100% 0%;
+    border: medium none;
+    font-size: 12px;
+    padding: 0 10px 0 7px;
+}
+.submit button.hqyz{
+    background: url("{IMG_PATH}member/but.png") no-repeat 100% 0px;
+    height: 29px;
+    width: auto;
+}
+
+#mobile_div input{*margin-bottom:12px;*_padding:0px 0px 6px 0px}
 </style>
 <script type="text/javascript" src="{JS_PATH}jquery.min.js"></script>
 <script type="text/javascript" src="{JS_PATH}member_common.js"></script>
@@ -110,6 +125,8 @@
 	<input type="hidden" name="siteid" value="{$siteid}" />
 	<input type="hidden" name="modelid" value="10" />
 	<div class="col-left form-login form-reg">
+	
+
 <div class="point">
     <div class="content">
         <strong class="title">提示</strong>
@@ -124,8 +141,12 @@
         <div class="input"><label>{L('cofirmpwd')}：</label><input type="password" name="pwdconfirm" id="pwdconfirm" size="36" class="input-text"></div>
         <div class="input"><label>{L('email')}：</label><input type="text" id="email" name="email" size="36" class="input-text"></div>
 		<div class="input"><label>{L('nickname')}：</label><input type="text" id="nickname" name="nickname" size="36" class="input-text" value="{$connect_username}"></div>
+	 
 
-
+			{loop $forminfos $k $v}
+				<div class="input"><label>{if $v['isbase']}<font color=red>*</font>{/if} {$v['name']}：{if $v['tips']}<br />({$v['tips']}){/if}</label><div class="form" style="width: 500px;">{$v['form']}</div></div>
+			{/loop} 
+			
         	<div class="reg">
                 <div class="submit"><input type="submit" name="dosubmit" value="{L('agree_protocol_post')}"></div><br />
                 <input type="checkbox" name="protocol" id="protocol" value=""><a href="javascript:void(0);" onclick="show_protocol();return false;" class="blue">{L('click_read_protocol')}</a>

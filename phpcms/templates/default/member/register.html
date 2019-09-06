@@ -34,7 +34,7 @@ $(function(){
 		onwait : "{L('connecting_please_wait')}"
 	});
 	$("#password").formValidator({onshow:"{L('input').L('password')}",onfocus:"{L('password').L('between_6_to_20')}"}).inputValidator({min:6,max:20,onerror:"{L('password').L('between_6_to_20')}"});
-	$("#pwdconfirm").formValidator({onshow:"{L('input').L('cofirmpwd')}",onfocus:"{L('input').L('passwords_not_match')}",oncorrect:"{L('passwords_match')}"}).compareValidator({desid:"password",operateor:"=",onerror:"{L('input').L('passwords_not_match')}"});
+	$("#pwdconfirm").formValidator({onshow:"{L('input').L('cofirmpwd')}",onfocus:"{L('passwords_not_match')}",oncorrect:"{L('passwords_match')}"}).compareValidator({desid:"password",operateor:"=",onerror:"{L('passwords_not_match')}"});
 	$("#email").formValidator({onshow:"{L('input').L('email')}",onfocus:"{L('email').L('format_incorrect')}",oncorrect:"{L('email').L('format_right')}"}).inputValidator({min:2,max:32,onerror:"{L('email').L('between_2_to_32')}"}).regexValidator({regexp:"email",datatype:"enum",onerror:"{L('email').L('format_incorrect')}"}).ajaxValidator({
 	    type : "get",
 		url : "",
@@ -132,7 +132,7 @@ function show_protocol() {
 .col-1 span.o1,
 	.col-1 span.o2,
 	.col-1 span.o3,
-	.col-1 span.o4{position:absolute;width:3px;height:3px;background: url(images/fillet.png) no-repeat}
+	.col-1 span.o4{position:absolute;width:3px;height:3px;background: url({IMG_PATH}fillet.png) no-repeat}
 	.col-1 span.o1{background-position: left -6px; top:-1px; left:-1px}
 	.col-1 span.o2{background-position: right -6px; top:-1px; right:-1px}
 	.col-1 span.o3{background-position: left bottom; bottom:-1px; left:-1px}
@@ -165,6 +165,21 @@ function show_protocol() {
 	.point span.o2{background-position: right top; top:-1px; right:-1px}
 	.point span.o3{background-position: left -3px; bottom:-1px; left:-1px}
 	.point span.o4{background-position: right -3px; bottom:-1px; right:-1px;}
+.submit button.hqyz{margin:0px; padding:0px; border:none; cursor:pointer; }
+.submit button.hqyz{
+    background-position: 100% 0%;
+    border: medium none;
+    font-size: 12px;
+    padding: 0 10px 0 7px;
+}
+.submit button.hqyz{
+    background: url("{IMG_PATH}member/but.png") no-repeat 100% 0px;
+    height: 29px;
+    width: auto;
+	
+}
+
+#mobile_div input{*margin-bottom:12px;*_padding:0px 0px 6px 0px}
 </style>
 </head>
 <body>
@@ -239,7 +254,21 @@ function show_protocol() {
 {elseif isset($_GET['t']) && $_GET['t']==2}
 <div class="col-left form-login form-reg">
 {php $emailurl = param::get_cookie('email') ? str_replace('@', '',strstr(param::get_cookie('email'), '@')) : '';}
-{param::get_cookie('_username')} {L('hellow')}，{L('login_email_authentication')} {if $emailurl} {L('please_click')}<a href="http://mail.{$emailurl}">{L('login_email')}</a>{/if}
+{param::get_cookie('_username')} {L('hellow')}，{L('login_email_authentication')} {if $emailurl} {L('please_click')}<a href="http://mail.{$emailurl}">{L('login_email')}</a><br><br>
+重新填写邮箱请点击<a onclick="$('#send_newemail').show()"><font color="red">这里</font></a><br><br>
+<div style="display:none" id="send_newemail">
+<input type="text" id="newemail" name="newemail" size="36" class="input-text"> 
+<div class="submit"><input type="submit" name="dosubmit" value="重新发送新邮箱验证" onclick="javascript:send_newmail();"></div></div>
+<script language="JavaScript">
+function send_newmail() {
+	//var mail_type = $('input[checkbox=mail_type][checked]').val();
+	var newemail = $('#newemail').val();
+ $.post('?m=member&c=index&a=send_newmail&newemail='+newemail,{},function(data){
+ 	if(data=='1'){alert('发送成功，请查看验证！');}else if(data=='-1'){alert('邮箱已被占用！');}else{alert('发送错误，请联系管理员！');}
+	});
+} 
+</script>
+{/if}
 </div>
 {elseif isset($_GET['t']) && $_GET['t']==3}
 <div class="col-left form-login form-reg">

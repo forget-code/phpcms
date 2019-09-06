@@ -13,9 +13,11 @@ class index extends admin {
 		$list = glob(PHPCMS_PATH.'*');
 		if (file_exists(CACHE_PATH.'caches_scan'.DIRECTORY_SEPARATOR.'caches_data')) {
 			$md5_file_list = glob(CACHE_PATH.'caches_scan'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR.'md5_*.php');
-			foreach ($md5_file_list as $k=>$v) {
-				$md5_file_list[$v] = basename($v);
-				unset($md5_file_list[$k]);
+			if(is_array($md5_file_list)) {
+				foreach ($md5_file_list as $k=>$v) {
+					$md5_file_list[$v] = basename($v);
+					unset($md5_file_list[$k]);
+				}
 			}
 		}
 		$scan = getcache('scan_config', 'scan');

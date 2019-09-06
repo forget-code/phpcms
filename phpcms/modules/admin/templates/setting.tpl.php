@@ -39,8 +39,10 @@ include $this->admin_tpl('header');?>
     <th width="120"><?php echo L('setting_admin_email')?></th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[admin_email]" id="admin_email" size="30" value="<?php echo $admin_email?>"/></td>
   </tr>
-</table>
-<table width="100%"  class="table_form">
+  <tr>
+    <th width="120"><?php echo L('setting_category_ajax')?></th>
+    <td class="y-bg"><input type="text" class="input-text" name="setting[category_ajax]" id="category_ajax" size="5" value="<?php echo $category_ajax?>"/>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo L('setting_category_ajax_desc')?></td>
+  </tr>
   <tr>
     <th width="120"><?php echo L('setting_gzip')?></th>
     <td class="y-bg">
@@ -100,6 +102,15 @@ include $this->admin_tpl('header');?>
   <tr>
     <th><?php echo L('setting_minrefreshtime')?></th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[minrefreshtime]" id="minrefreshtime" size="10" value="<?php echo $minrefreshtime?>"/> <?php echo L('miao')?></td>
+  </tr>
+  <tr>
+    <th><?php echo L('admin_url')?></th>
+    <td class="y-bg"><TABLE>
+    <TR>
+		<TD width="270"><?php echo SITE_PROTOCOL;?><input type="text" class="input-text" name="setconfig[admin_url]" id="admin_url" size="30" value="<?php echo $admin_url?>"/> </TD>
+		<TD><?php echo L('admin_url_tips')?></TD>
+    </TR>
+    </TABLE> </td>
   </tr> 
 </table>
 </div>

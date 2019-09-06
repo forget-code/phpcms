@@ -9,6 +9,7 @@
 <link href="<?php echo CSS_PATH.SYS_STYLE;?>-system.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo CSS_PATH?>table_form.css" rel="stylesheet" type="text/css" />
 <?php
+if(!$this->get_siteid()) showmessage(L('admin_login'),'?m=admin&c=index&a=login');
 if(isset($show_dialog)) {
 ?>
 <link href="<?php echo CSS_PATH?>dialog.css" rel="stylesheet" type="text/css" />

@@ -14,10 +14,14 @@ class template_bak extends admin {
 		}
 		$this->filepath = PC_PATH.'templates'.DIRECTORY_SEPARATOR.$this->style.DIRECTORY_SEPARATOR.$this->dir.DIRECTORY_SEPARATOR.$this->filename;
 		$this->fileid = $this->style.'_'.$this->dir.'_'.$this->filename;
+		$this->tpl_edit = pc_base::load_config('system', 'tpl_edit');
 		$this->db = pc_base::load_model('template_bak_model');
 	}
 	
 	public function init() {
+		if($this->tpl_edit == '0'){
+			showmessage(L('tpl_edit'), HTTP_REFERER);
+		}
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		$list = $this->db->listinfo(array('fileid'=>$this->fileid), 'creat_at desc', $page, 20);
 		if (!$list) {

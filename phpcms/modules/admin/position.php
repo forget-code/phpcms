@@ -73,7 +73,7 @@ class position extends admin {
 			$this->_set_cache();
 			showmessage(L('operation_success'), '', '', 'edit');
 		} else {
-			$info = $this->db->get_one(array('posid'=>$_GET['posid']));
+			$info = $this->db->get_one(array('posid'=>intval($_GET['posid'])));
 			extract($info);
 			pc_base::load_sys_class('form');
 			$this->sitemodel_db = pc_base::load_model('sitemodel_model');

@@ -17,7 +17,7 @@ class special extends admin {
 	 */
 	public function init() {
 		$page = max(intval($_GET['page']), 1);
-		$infos = $this->db->listinfo(array('siteid'=>$this->get_siteid(), 'disabled'=>0), '`listorder` DESC, `id` DESC', $page, 6);
+		$infos = $this->db->listinfo(array('siteid'=>$this->get_siteid()), '`listorder` DESC, `id` DESC', $page, 6);
 		pc_base::load_sys_class('format', '', 0);
 		include $this->admin_tpl('special_list');
 	}

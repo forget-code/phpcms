@@ -1,14 +1,14 @@
 {template "content","header"}
 <link href="{CSS_PATH}table_form.css" rel="stylesheet" type="text/css" />
 <link href="{CSS_PATH}dialog.css" rel="stylesheet" type="text/css" />
-
+<script type="text/javascript" src="{JS_PATH}dialog.js"></script>
 <div class="main">
 	<div class="col-left">
-    	<div class="crumbs"><a href="{siteurl($siteid)}">首页</a><span> &gt; </span><a href="{APP_PATH}index.php?m=formguide&c=index&a=index">表单向导</a> <span> &gt; </span> {$name}</div>
+    	<div class="crumbs"><a href="{siteurl($siteid)}">首页</a><span> &gt; </span><a href="{APP_PATH}index.php?m=formguide&c=index&a=index&siteid={$siteid}">表单向导</a> <span> &gt; </span> {$name}</div>
         <div id="Article">
         	<h1>{$name}</h1>
 			<div class="content">
-				<form method="post" action="?m=formguide&c=index&a=show&formid={$formid}" name="myform" id="myform">
+				<form method="post" action="?m=formguide&c=index&a=show&formid={$formid}&siteid=<?php echo $this->siteid;?>" name="myform" id="myform">
 <table class="table_form" width="100%" cellspacing="0">
 <tbody>
  {loop $forminfos_data $field $info}

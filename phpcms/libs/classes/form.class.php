@@ -21,7 +21,7 @@ class form {
 		}
 		if($toolbar == 'basic') {
 			$toolbar = defined('IN_ADMIN') ? "['Source']," : '';
-			$toolbar .= "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],\r\n";
+			$toolbar .= "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink' ],['Maximize'],\r\n";
 		} elseif($toolbar == 'full') {
 			if(defined('IN_ADMIN')) {
 				$toolbar = "['Source',";
@@ -43,7 +43,7 @@ class form {
 		    ['TextColor','BGColor'],
 		    ['attachment'],\r\n";
 		} elseif($toolbar == 'desc') {
-			$toolbar = "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Image', '-','Source'],\r\n";
+			$toolbar = "['Bold', 'Italic', '-', 'NumberedList', 'BulletedList', '-', 'Link', 'Unlink', '-', 'Image', '-','Source'],['Maximize'],\r\n";
 		} else {
 			$toolbar = '';
 		}
@@ -148,13 +148,18 @@ class form {
 	 * @param $loadjs 是否重复加载js，防止页面程序加载不规则导致的控件无法显示
 	 * @param $showweek 是否显示周，使用，true | false
 	 */
-	public static function date($name, $value = '', $isdatetime = 0, $loadjs = 0, $showweek = 'true') {
+	public static function date($name, $value = '', $isdatetime = 0, $loadjs = 0, $showweek = 'true', $timesystem = 1) {
 		if($value == '0000-00-00 00:00:00') $value = '';
 		$id = preg_match("/\[(.*)\]/", $name, $m) ? $m[1] : $name;
 		if($isdatetime) {
 			$size = 21;
 			$format = '%Y-%m-%d %H:%M:%S';
-			$showsTime = 12;
+			if($timesystem){
+				$showsTime = 'true';
+			} else {
+				$showsTime = '12';
+			}
+			
 		} else {
 			$size = 10;
 			$format = '%Y-%m-%d';
@@ -195,7 +200,7 @@ class form {
 	 * @param intval $onlysub 只可选择子栏目
 	 * @param intval $siteid 如果设置了siteid 那么则按照siteid取
 	 */
-	public static function select_category($file = '',$catid = 0, $str = '', $default_option = '', $modelid = 0, $type = -1, $onlysub = 0,$siteid = 0) {
+	public static function select_category($file = '',$catid = 0, $str = '', $default_option = '', $modelid = 0, $type = -1, $onlysub = 0,$siteid = 0,$is_push = 0) {
 		$tree = pc_base::load_sys_class('tree');
 		if(!$siteid) $siteid = param::get_cookie('siteid');
 		if (!$file) {
@@ -204,8 +209,21 @@ class form {
 		$result = getcache($file,'commons');
 		$string = '<select '.$str.'>';
 		if($default_option) $string .= "<option value='0'>$default_option</option>";
+		//加载权限表模型 ,获取会员组ID值,以备下面投入判断用
+		if($is_push=='1'){
+			$priv = pc_base::load_model('category_priv_model');
+			$user_groupid = param::get_cookie('_groupid') ? param::get_cookie('_groupid') : 8;
+		}
 		if (is_array($result)) {
 			foreach($result as $r) {
+ 				//检查当前会员组，在该栏目处是否允许投稿？
+				if($is_push=='1' and $r['child']=='0'){
+					$sql = array('catid'=>$r['catid'],'roleid'=>$user_groupid,'action'=>'add');
+					$array = $priv->get_one($sql);
+					if(!$array){
+						continue;	
+					}
+				}
 				if($siteid != $r['siteid'] || ($type >= 0 && $r['type'] != $type)) continue;
 				$r['selected'] = '';
 				if(is_array($catid)) {

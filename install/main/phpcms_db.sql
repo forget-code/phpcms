@@ -435,6 +435,7 @@ CREATE TABLE `phpcms_linkage` (
   `keyid` smallint(5) unsigned NOT NULL default '0',
   `listorder` smallint(5) unsigned NOT NULL default '0',
   `description` varchar(255) default NULL,
+  `setting` varchar(255) default NULL,
   `siteid` smallint(5) NOT NULL default '0',
   PRIMARY KEY  (`linkageid`,`keyid`),
   KEY `parentid` (`parentid`,`listorder`)
@@ -489,7 +490,7 @@ CREATE TABLE `phpcms_member` (
   `vip` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `overduedate` int(10) unsigned NOT NULL DEFAULT '0',
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '1',
-  `connectid` char(30) NOT NULL DEFAULT '',
+  `connectid` char(15) NOT NULL DEFAULT '',
   `from` char(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`userid`),
   UNIQUE KEY `username` (`username`),
@@ -4691,6 +4692,7 @@ INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `lis
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(54, 'admin_manage', 49, 'admin', 'admin_manage', 'init', '', 0, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(43, 'category_manage', 975, 'admin', 'category', 'init', 'module=admin', 4, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(42, 'add_category', 43, 'admin', 'category', 'add', 's=0', 1, '1');
+INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(44, 'edit_category', 43, 'admin', 'category', 'edit', '', 0, '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(45, 'badword_manage', 977, 'admin', 'badword', 'init', '', 10, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(46, 'posid_add', 32, 'admin', 'position', 'add', '', 0, '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(49, 'admin_setting', 1, 'admin', '', '', '', 0, '1');

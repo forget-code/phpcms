@@ -101,11 +101,13 @@ var pc_hash = '<?php echo $_SESSION['pc_hash']?>'
         </div>
     </div>
 </div>
-<ul class="tab-web-panel hidden" style="position:absolute; z-index:999; background:#fff">
+<div class="tab-web-panel hidden" style="position:absolute; z-index:999; background:#fff">
+<ul>
 <?php foreach ($sitelist as $key=>$v):?>
 	<li style="margin:0"><a href="javascript:site_select(<?php echo $v['siteid']?>, '<?php echo new_addslashes($v['name'])?>', '<?php echo $v['domain']?>', '<?php echo $v['siteid']?>')"><?php echo $v['name']?></a></li>
 <?php endforeach;?>
 </ul>
+</div>
 <div class="scroll"><a href="javascript:;" class="per" title="使用鼠标滚轴滚动侧栏" onclick="menuScroll(1);"></a><a href="javascript:;" class="next" title="使用鼠标滚轴滚动侧栏" onclick="menuScroll(2);"></a></div>
 <script type="text/javascript"> 
 if(!Array.prototype.map)
@@ -173,9 +175,13 @@ windowW();
 //站点下拉菜单
 $(function(){
 	var offset = $(".tab_web").offset();
+	var tab_web_panel = $(".tab-web-panel");
 	$(".tab_web").mouseover(function(){
-			$(".tab-web-panel").css({ "left": +offset.left+4, "top": +offset.top+$('.tab_web').height()+2});
-			$(".tab-web-panel").show();
+			tab_web_panel.css({ "left": +offset.left+4, "top": +offset.top+$('.tab_web').height()+2});
+			tab_web_panel.show();
+			if(tab_web_panel.height() > 200){
+				tab_web_panel.children("ul").addClass("tab-scroll");
+			}
 		});
 	$(".tab_web span").mouseout(function(){hidden_site_list_1()});
 	$(".tab-web-panel").mouseover(function(){clearh();$('.tab_web a').addClass('on')}).mouseout(function(){hidden_site_list_1();$('.tab_web a').removeClass('on')});

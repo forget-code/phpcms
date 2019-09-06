@@ -46,7 +46,7 @@
 		$grouplist = getcache('grouplist','member');
 		if($isadmin==0 && !$grouplist[$groupid]['allowattachment']) return false;
 		extract(getswfinit($args));
-		$siteid = get_siteid();
+		$siteid = param::get_cookie('siteid');
 		$site_setting = get_site_setting($siteid);
 		$file_size_limit = $site_setting['upload_maxsize'];
 		$sess_id = SYS_TIME;

@@ -5,8 +5,30 @@ include $this->admin_tpl('header','admin');?>
 <link rel="stylesheet" href="<?php echo CSS_PATH;?>jquery.treeview.css" type="text/css" />
 <script type="text/javascript" src="<?php echo JS_PATH;?>jquery.cookie.js"></script>
 <script type="text/javascript" src="<?php echo JS_PATH;?>jquery.treeview.js"></script>
+<?php if($ajax_show) {?>
+<script type="text/javascript" src="<?php echo JS_PATH;?>jquery.treeview.async.js"></script>
+<?php }?>
 <SCRIPT LANGUAGE="JavaScript">
 <!--
+<?php if($ajax_show) {?>
+$(document).ready(function(){
+    $("#category_tree").treeview({
+			control: "#treecontrol",
+			url: "index.php?m=content&c=content&a=public_sub_categorys&menuid=<?php echo $_GET['menuid']?>",
+			ajax: {
+				data: {
+					"additional": function() {
+						return "time: " + new Date;
+					},
+					"modelid": function() {
+						return "<?php echo $modelid?>";
+					}
+				},
+				type: "post"
+			}
+	});
+});
+<?php } else {?>
 $(document).ready(function(){
     $("#category_tree").treeview({
 			control: "#treecontrol",
@@ -14,6 +36,7 @@ $(document).ready(function(){
 			cookieId: "treeview-black"
 	});
 });
+<?php }?>
 function open_list(obj) {
 
 	window.top.$("#current_pos_attr").html($(obj).html());

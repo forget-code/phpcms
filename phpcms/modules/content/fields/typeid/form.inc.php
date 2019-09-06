@@ -10,7 +10,13 @@
 		$usable_array = array();
 		if($usable_type) $usable_array = explode(',',$usable_type);
 		
-		$type_data = getcache('type_content','commons');
+		//获取站点ID
+		if(intval($_GET['siteid'])){
+			$siteid = intval($_GET['siteid']);
+		}else{
+			$siteid = $this->siteid;
+		}
+		$type_data = getcache('type_content_'.$siteid,'commons');
 		foreach($type_data as $_key=>$_value) {
 			if(in_array($_key,$usable_array)) $data[$_key] = $_value['name'];
 		}

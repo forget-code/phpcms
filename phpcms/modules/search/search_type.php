@@ -52,10 +52,13 @@ class search_type extends admin {
 				if($_value['siteid']!=$this->siteid) continue;
 				$model_data[$_key] = $_value['name'];
 			}
-			foreach($this->yp_model as $_key=>$_value) {
-				if($_value['siteid']!=$this->siteid) continue;
-				$yp_model_data[$_key] = $_value['name'];
-			}			
+			if(is_array($this->yp_model)){
+				foreach($this->yp_model as $_key=>$_value) {
+					if($_value['siteid']!=$this->siteid) continue;
+					$yp_model_data[$_key] = $_value['name'];
+				}	
+			}
+					
 
 			$module_data = array('special' => L('special'),'content' => L('content').L('module'),'yp'=>L('yp'));
 

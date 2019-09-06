@@ -1,9 +1,20 @@
 <?php 
 defined('IN_ADMIN') or exit('No permission resources.');
-$show_header = $show_validator = $show_scroll = 1; 
+//$show_header = $show_validator = $show_scroll = 1;
+$show_dialog = $show_header = 1; 
 include $this->admin_tpl('header', 'admin');
 $authkey = upload_key('1,'.$this->M['ext'].',1');
 ?>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH;?>formvalidator.js" charset="UTF-8"></script>
+<script language="javascript" type="text/javascript" src="<?php echo JS_PATH;?>formvalidatorregex.js" charset="UTF-8"></script>
+
+<div class="subnav">
+    <div class="content-menu ib-a blue line-x">
+    <?php if(isset($big_menu)) echo '<a class="add fb" href="'.$big_menu[0].'"><em>'.$big_menu[1].'</em></a>　';?>
+    <?php echo admin::submenu($_GET['menuid'],$big_menu); ?><span>|</span><a href="javascript:window.top.art.dialog({id:'setting',iframe:'?m=poster&c=space&a=setting', title:'<?php echo L('module_setting')?>', width:'540', height:'320'}, function(){var d = window.top.art.dialog({id:'setting'}).data.iframe;var form = d.document.getElementById('dosubmit');form.click();return false;}, function(){window.top.art.dialog({id:'setting'}).close()});void(0);"><em><?php echo L('module_setting')?></em></a>
+    </div>
+</div>
+
 <form method="post" action="?m=poster&c=poster&a=add" id="myform">
 <table class="table_form" width="100%" cellspacing="0">
 <tbody>
@@ -111,8 +122,8 @@ $authkey = upload_key('1,'.$this->M['ext'].',1');
   </tbody>
 </table>
 </fieldset></div><?php }?>
-<div class="bk15"></div>
-<input type="submit" name="dosubmit" id="dosubmit" value=" <?php echo L('ok')?> " class="dialog">&nbsp;<input type="reset" value=" <?php echo L('clear')?> " class="dialog">
+<div class="bk15" style="margin-left:10px; line-height:30px;"><input type="submit" name="dosubmit" id="dosubmit" value=" <?php echo L('ok')?> " class="button">&nbsp;<input type="reset" value=" <?php echo L('goback')?> " class="button" onclick="history.go(-1)"></div>
+
 	
 </form>
 </body>

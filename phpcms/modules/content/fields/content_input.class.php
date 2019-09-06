@@ -18,7 +18,7 @@ class content_input {
     }
 
 	function get($data,$isimport = 0) {
-		$this->data = $data;
+		$this->data = $data = trim_script($data);
 		$info = array();
 		foreach($data as $field=>$value) {
 			//if(!isset($this->fields[$field]) || check_in($_roleid, $this->fields[$field]['unsetroleids']) || check_in($_groupid, $this->fields[$field]['unsetgroupids'])) continue;
@@ -28,7 +28,7 @@ class content_input {
 			$pattern = $this->fields[$field]['pattern'];
 			$errortips = $this->fields[$field]['errortips'];
 			if(empty($errortips)) $errortips = $name.' '.L('not_meet_the_conditions');
-			$length = strlen($value);
+			$length = empty($value) ? 0 : is_string($value) ? strlen($value) : count($value);
 
 			if($minlength && $length < $minlength) {
 				if($isimport) {

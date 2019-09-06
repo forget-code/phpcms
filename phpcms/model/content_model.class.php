@@ -47,6 +47,16 @@ class content_model extends model {
 		} else {
 			$systeminfo['inputtime'] = $data['inputtime'];
 		}
+		
+		//读取模型字段配置中，关于日期配置格式，来组合日期数据
+		$this->fields = getcache('model_field_'.$modelid,'model');
+		$setting = string2array($this->fields['inputtime']['setting']);
+		extract($setting);
+		if($fieldtype=='date') {
+			$systeminfo['inputtime'] = date('Y-m-d');
+		}elseif($fieldtype=='datetime'){
+ 			$systeminfo['inputtime'] = date('Y-m-d H:i:s');
+		}
 
 		if($data['updatetime'] && !is_numeric($data['updatetime'])) {
 			$systeminfo['updatetime'] = strtotime($data['updatetime']);
@@ -307,6 +317,7 @@ class content_model extends model {
 	public function status($ids = array(), $status = 99) {
 		$this->content_check_db = pc_base::load_model('content_check_model');
 		$this->message_db = pc_base::load_model('message_model');
+		$this->set_model($this->modelid);
 		if(is_array($ids) && !empty($ids)) {
 			foreach($ids as $id) {
 				$this->update(array('status'=>$status),array('id'=>$id));

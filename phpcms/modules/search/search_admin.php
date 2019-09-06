@@ -26,8 +26,10 @@ class search_admin extends admin {
 		} else {
 			$r = $this->module_db->get_one(array('module'=>'search'));
 			$setting = string2array($r['setting']);
-
-			extract($setting[$siteid]);
+			if($setting[$siteid]){
+				extract($setting[$siteid]);
+			}
+			
 			$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=search&c=search_type&a=add\', title:\''.L('add_search_type').'\', width:\'580\', height:\'240\', lock:true}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('add_search_type'));
 			include $this->admin_tpl('setting');
 		}
