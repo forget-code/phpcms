@@ -98,10 +98,11 @@ class import extends admin {
 					
 					$content_data[$fieldname] = 1;
 					$content_data['catid'] = $select_category;
-					$content_data['title'] = str_cut($data['title'],80,false); 
+					$content_data['title'] = str_cut($data['title'],80,' '); 
 					$content_data['content'] = $data['desc']; 
-					$content_data['description'] = str_cut($data['desc'],200); 
-					$content_data['keywords'] = str_cut($data['tag'],36); 
+					$content_data['description'] = str_cut($data['desc'],198,' '); 
+					$content_data['keywords'] = str_cut($data['tag'],38,' ');
+					$content_data = array_filter($content_data,rtrim());
 					$content_data['thumb'] = $data['picpath']; 
 					$content_data['status'] = 99;  
 					//组合POST数据,入库时会自动对应关系 
@@ -143,7 +144,9 @@ class import extends admin {
 				}
 				 
   			}
-     		showmessage('KU6视频导入成功，正在返回！',HTTP_REFERER);
+			$page = intval($_POST['page']) + 1;
+			$forward = "?m=video&c=video&a=import_ku6video&menuid=".$_POST['menuid']."&fenlei=".$_POST['fenlei']."&srctype=".$_POST['srctype']."&videotime=".$_POST['videotime']."&keyword=".$_POST['keyword']."&dosubmit=%CB%D1%CB%&page=".$page;
+     		showmessage('KU6视频导入成功，正在返回！',$forward);
 		}else{
  			showmessage('请选择要导入的视频！',HTTP_REFERER);
 		}

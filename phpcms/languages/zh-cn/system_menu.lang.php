@@ -531,4 +531,5 @@ $LANG['sub_delete'] = '删除订阅';
 $LANG['album_import'] = '视频专辑导入';
 $LANG['sys_setting'] = '设置';
 $LANG['module'] = '模块';
+$LANG['a_clean_data'] = '一键清理数据';
 ?>

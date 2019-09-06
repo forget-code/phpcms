@@ -647,6 +647,7 @@ CREATE TABLE IF NOT EXISTS `phpcms_model` (
   `js_template` varchar(30) NOT NULL ,
   `admin_list_template` char(30) NOT NULL,
   `member_add_template` varchar(30) NOT NULL ,
+  `member_list_template` varchar(30) NOT NULL ,
   `sort` tinyint(3) NOT NULL,
   `type` tinyint(1) NOT NULL,
   PRIMARY KEY (`modelid`),
@@ -854,7 +855,7 @@ CREATE TABLE `phpcms_position` (
   `extention` char(100) DEFAULT NULL,
   `listorder` smallint(5) unsigned NOT NULL DEFAULT '0',
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
-  `thumb` varchar(200) NOT NULL DEFAULT '',
+  `thumb` varchar(150) NOT NULL DEFAULT '',
   PRIMARY KEY (`posid`)
 ) TYPE=MyISAM;
 
@@ -4742,21 +4743,21 @@ INSERT INTO `phpcms_linkage` (`linkageid`, `name`, `style`, `parentid`, `keyid`,
 -- 转存表中的数据 `phpcms_menu`
 --
 
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1, 'sys_setting', 0, 'admin', 'setting', 'init', '', 1, '1');
+INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`, `project1`) VALUES(1, 'sys_setting', 0, 'admin', 'setting', 'init', '', 1, '1', '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(2, 'module', 0, 'admin', 'module', 'init', '', 2, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(872, 'sync_release_point', 873, 'release', 'index', 'init', '', 3, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(4, 'content', 0, 'content', 'content', 'init', '', 4, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(5, 'members', 0, 'member', 'member', 'init', '', 5, '1');
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(6, 'userinterface', 0, 'template', 'style', 'init', '', 6, '1');
+INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`, `project1`) VALUES(6, 'userinterface', 0, 'template', 'style', 'init', '', 6, '1', '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(30, 'correlative_setting', 1, 'admin', 'admin', 'admin', '', 0, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(31, 'menu_manage', 977, 'admin', 'menu', 'init', '', 8, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(32, 'posid_manage', 975, 'admin', 'position', 'init', '', 7, '1');
 
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(29, 'module_manage', 2, 'admin', 'module', '', '', 0, '1');
 
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(9, 'plugin', 0, 'admin', 'plugin', 'init', '', 8, '1');
+INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`, `project1`) VALUES(9, 'plugin', 0, 'admin', 'plugin', 'init', '', 8, '1', '0');
 
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(10, 'panel', 0, 'admin', 'index', 'public_main', '', 0, '1');
+INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`, `project1`) VALUES(10, 'panel', 0, 'admin', 'index', 'public_main', '', 0, '1', '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(35, 'menu_add', 31, 'admin', 'menu', 'add', '', 0, '1');
 
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(826, 'template_manager', 6, '', '', '', '', 0, '1');
@@ -4925,7 +4926,7 @@ INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `lis
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(973, 'keylink', 977, 'admin', 'keylink', 'init', '', 12, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(974, 'add_keylink', 973, 'admin', 'keylink', 'add', '', 0, '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(975, 'content_settings', 4, 'content', 'content_settings', 'init', '', 0, '1');
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(7, 'extend', 0, 'admin', 'extend', 'init_extend', '', 7, '1');
+INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`, `project1`) VALUES(7, 'extend', 0, 'admin', 'extend', 'init_extend', '', 7, '1', '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(977, 'extend_all', 7, 'admin', 'extend_all', 'init', '', 0, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(980, 'sso_config', 30, 'admin', 'setting', 'init', '&tab=3', 12, '1');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(981, 'email_config', 30, 'admin', 'setting', 'init', '&tab=4', 13, '1');
@@ -4952,7 +4953,7 @@ INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `lis
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1007, 'md5_creat', 1005, 'scan', 'index', 'md5_creat', '', 0, '1');
 
 
-INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(8, 'phpsso', 0, 'admin', 'phpsso', 'menu', '', 7, '1');
+INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`, `project1`) VALUES(8, 'phpsso', 0, 'admin', 'phpsso', 'menu', '', 7, '1', '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1011, 'edit_content', 822, 'content', 'content', 'edit', '', 0, '0');
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1012, 'push_to_special', 822, 'content', 'push', 'init', '', 0, '0');
 
@@ -5040,7 +5041,7 @@ INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `lis
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1368, 'uninstall_plugin', 1364, 'admin', 'plugin', 'delete', '', 0, '0');
 
 INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `listorder`, `display`) VALUES(1500, 'listorder', 822, 'content', 'content', 'listorder', '', 0, '0');
-
+INSERT INTO `phpcms_menu` (`name` ,`parentid` ,`m` ,`c` ,`a` ,`data` ,`listorder` ,`display` ,`project1` ,`project2` ,`project3` ,`project4` ,`project5`) VALUES ('a_clean_data',  '873',  'content',  'content',  'clear_data',  '',  '0',  '1',  '0',  '0',  '0',  '0',  '0');
 -- ----------------------------
 -- Records of phpcms_module
 -- ----------------------------

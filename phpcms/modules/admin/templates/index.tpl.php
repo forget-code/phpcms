@@ -201,7 +201,7 @@ $(function(){
 	var offset = $(".tab_web").offset();
 	var tab_web_panel = $(".tab-web-panel");
 	$(".tab_web").mouseover(function(){
-			tab_web_panel.css({ "left": +offset.left+4, "top": +offset.top+$('.tab_web').height()+2});
+			tab_web_panel.css({ "left": +$(this).offset().left+4, "top": +offset.top+$('.tab_web').height()});
 			tab_web_panel.show();
 			if(tab_web_panel.height() > 200){
 				tab_web_panel.children("ul").addClass("tab-scroll");

@@ -33,12 +33,16 @@ function copy_text(matter){
     </div>
     </div>
     	<div class="plbox">   
-		
-{if $video[vid]!=""}
-<embed id="video_player" name="video_player" src="{pc_base::load_config('ku6server', 'player_url')}{$video['vid']}/style/{$video_cache['style_projectid']}/" height="460" width="622" quality="high" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1&api=1&adss=0" type="application/x-shockwave-flash"></embed>
+{if $allow_visitor==1}
+	{if $video[vid]!=""}
+	<embed id="video_player" name="video_player" src="{pc_base::load_config('ku6server', 'player_url')}{$video['vid']}/style/{$video_cache['style_projectid']}/" height="460" width="622" quality="high" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1&api=1&adss=0" type="application/x-shockwave-flash"></embed>
+	{else}
+	该视频不存在，请返回！
+	{/if} 		
 {else}
-该视频不存在，请返回！
-{/if} 
+		<CENTER><a href="{APP_PATH}index.php?m=content&c=readpoint&allow_visitor={$allow_visitor}"><font color="red">阅读此信息需要您支付 <B><I>{$readpoint} {if $paytype}元{else}点{/if}</I></B>，点击这里支付</font></a></CENTER>
+{/if}
+
 
 		</div>
         <div class="sr"> 

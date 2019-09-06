@@ -31,7 +31,7 @@
 					foreach ($new_result as $_k => $r) {
 						$key = $_k+1;
 						$picpath = $r['picpath'] ? $r['picpath'] : IMG_PATH.'nopic.gif';
-						$list_str .= "<li class=\"ac\" id=\"video_{$field}_{$key}\"><div class=\"r1\"><img src=\"{$r['picpath']}\" onerror=\"".IMG_PATH."nopic.jpg\" width=\"132\" height=\"75\"><input type='text' name='{$field}_video[$key][title]' value='".$r['title']."' class=\"input-text ipt_box\"><input type='hidden' name='{$field}_video[{$key}][videoid]' value='{$r[videoid]}'><div class=\"r2\"><span class=\"l\"><label>".L('listorder')."</label><input type='text' name='{$field}_video[$key][listorder]' value='".$videos[$r['videoid']]['listorder']."' class=\"input-text\"></span><span class=\"r\"> <a href=\"javascript:remove_div('video_{$field}_{$key}')\">".L('delete')."</a></span></li>";
+						$list_str .= "<li class=\"ac\" id=\"video_{$field}_{$key}\"><div class=\"r1\"><img src=\"{$r['picpath']}\" onerror=\"".IMG_PATH."nopic.jpg\" width=\"132\" height=\"75\"><input type='text' name='{$field}_video[{$key}][title]' value='".$r['title']."' class=\"input-text ipt_box\"><input type='hidden' name='{$field}_video[{$key}][videoid]' value='{$r[videoid]}'><div class=\"r2\"><span class=\"l\"><label>".L('listorder')."</label><input type='text' name='{$field}_video[$key][listorder]' value='".$videos[$r['videoid']]['listorder']."' class=\"input-text\"></span><span class=\"r\"> <a href=\"javascript:remove_div('video_{$field}_{$key}')\">".L('delete')."</a></span></li>";
 					}
 				}
 			}
@@ -134,7 +134,7 @@ $("#vid").val(evt.vid);
 var video_num = parseInt($("#key").val()) + 1;
 var title = $("#video_title").val();
 var vid = $("#vid").val();
-var html = "<li id=\"video_'.$field.'_"+video_num+"\"><div class=\"r1\"><img src=\"'.IMG_PATH.'nopic.jpg\" width=\"132\" height=\"75\"><input type=\"text\" name=\"'.$field.'_video["+video_num+"][title]\" value=\""+title+"\" class=\"input-text\"><input type=\"hidden\" name=\"'.$field.'_video["+video_num+"][title]\" value=\""+title+"\"><input type=\"hidden\" name=\"'.$field.'_video["+video_num+"][vid]\" value=\""+vid+"\"><div class=\"r2\"><span class=\"l\"><label>'.L('listorder').'</label><input type=\"text\" class=\"input-text\" name=\"'.$field.'_video["+video_num+"][listorder]\" value=\""+video_num+"\" ></span><span class=\"r\"> <a href=\"javascript:remove_div(\'video_'.$field.'_"+video_num+"\')\">'.L('delete').'</a></span></li>";
+var html = "<li id=\"video_'.$field.'_"+video_num+"\"><div class=\"r1\"><img src=\"'.IMG_PATH.'nopic.jpg\" width=\"132\" height=\"75\"><input type=\"text\" name=\"'.$field.'_video["+video_num+"][title]\" value=\""+title+"\" class=\"input-text\"><input type=\"hidden\" name=\"'.$field.'_video["+video_num+"][vid]\" value=\""+vid+"\"><div class=\"r2\"><span class=\"l\"><label>'.L('listorder').'</label><input type=\"text\" class=\"input-text\" name=\"'.$field.'_video["+video_num+"][listorder]\" value=\""+video_num+"\" ></span><span class=\"r\"> <a href=\"javascript:remove_div(\'video_'.$field.'_"+video_num+"\')\">'.L('delete').'</a></span></li>";
 
 $("#video_'.$field.'_list").append(html);
 $("#key").val(video_num);

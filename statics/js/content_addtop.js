@@ -61,7 +61,7 @@ function change_videoes(uploadid, returnid) {
 		var ids = parseInt(Math.random() * 10000 + 10*i); 
 		video_num = video_num + 1;
 		var filename = filenames[i];
-		str += "<li id=\"video_"+field+"_"+video_num+"\"><div class=\"r1\"><img src=\""+contents[i]+"\" width=\"132\" height=\"75\"><h6>"+filename+"</h6><input type='hidden' name='"+field+"_video["+video_num+"][videoid]' value='"+vids[i]+"'><div class=\"r2\"><span class=\"l\"><label>排序</label><input type='text' name='"+field+"_video["+video_num+"][listorder]' value='"+video_num+"' class=\"input-text\"></span><span class=\"r\"> <a href=\"javascript:remove_div('video_"+field+"_"+video_num+"')\">移除</a></span></li>";
+		str += "<li id=\"video_"+field+"_"+video_num+"\"><div class=\"r1\"><img src=\""+contents[i]+"\" width=\"132\" height=\"75\"><input type=\"text\" name=\""+field+"_video["+video_num+"][title]\" value=\""+filename+"\" class=\"input-text\"><input type='hidden' name='"+field+"_video["+video_num+"][videoid]' value='"+vids[i]+"'><div class=\"r2\"><span class=\"l\"><label>排序</label><input type='text' name='"+field+"_video["+video_num+"][listorder]' value='"+video_num+"' class=\"input-text\"></span><span class=\"r\"> <a href=\"javascript:remove_div('video_"+field+"_"+video_num+"')\">移除</a></span></li>";
 		});
 	$('#key').val(video_num);
 	$('#'+returnid).html(str);

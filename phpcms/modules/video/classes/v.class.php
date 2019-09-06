@@ -30,7 +30,8 @@ class v {
 	public function add($data = array()) {
 		if (is_array($data) && !empty($data)) {
 			$data['status'] = 1;
-			$data['userid'] = defined('IN_ADMIN') ? 0 : param::get_cookie('_userid');
+			$data['userid'] = defined('IN_ADMIN') ? 0 : intval(param::get_cookie('_userid'));
+			$data['vid'] = safe_replace($data['vid']);
 			$vid = $this->db->insert($data, true);
 			return $vid ? $vid : false; 
 		} else {

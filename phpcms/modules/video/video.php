@@ -82,7 +82,7 @@ class video extends admin {
 	public function add() {
 		if ($_POST['dosubmit']) {
 			//首先处理，提交过来的数据
-			$data['vid'] = $_POST['vid'];
+			$data['vid'] = safe_replace($_POST['vid']);
 			if (!$data['vid']) showmessage(L('failed_you_video_uploading'), 'index.php?m=video&c=video&a=add');
 			$data['title'] = isset($_POST['title']) && trim($_POST['title']) ? trim($_POST['title']) : showmessage(L('video_title_not_empty'), 'index.php?m=video&c=video&a=add&meunid='.$_GET['meunid']);
 			$data['description'] = trim($_POST['description']);
@@ -151,6 +151,28 @@ class video extends admin {
 		if (!$this->ku6api->delete_v($r['vid'])) showmessage(L('operation_failure'), 'index.php?m=video&c=video&a=init&meunid='.$_GET['meunid']);
 		$this->v->del_video($vid);	
 		showmessage(L('success_next_update_content'), 'index.php?m=video&c=video&a=public_update_content&vid='.$vid.'&meunid='.$_GET['meunid']);
+	}
+
+	/**
+	 * function delete_all
+	 * 批量删除视频
+	 * @删除视频时，注意同时删除视频库内容对应关系表中的相关数据，因为操作时间限制，无法同时更新相关的内容。删除完成时需要提醒用户
+	 */
+	public function delete_all() {
+		if (isset($_GET['dosubmit'])) {
+			$ids = $_POST['ids'];
+			if (is_array($ids)) {
+				$video_content_db = pc_base::load_model('video_content_model');
+				foreach ($ids as $videoid) {
+					$videoid = intval($videoid);
+					$r = $this->db->get_one(array('videoid'=>$videoid), 'vid');
+					if (!$this->ku6api->delete_v($r['vid'])) continue;
+					$this->v->del_video($videoid);
+					$video_content_db->delete(array('videoid'=>$videoid));
+				}
+			}
+			showmessage(L('succfull_create_index'));
+		}
 	}
 	
 	/**
@@ -312,7 +334,7 @@ class video extends admin {
 	 */
 	public function video2content () {
 		$page = max(intval($_GET['page']), 1);
-		$pagesize = 8;
+		$pagesize = isset($_GET['pagesize']) ? intval($_GET['pagesize']) : 8;
 		$where = '`status` = 21';
 		if (isset($_GET['name']) && !empty($_GET['name'])) {
 			$title = safe_replace($_GET['name']);
@@ -340,7 +362,7 @@ class video extends admin {
 	 * 设置swfupload上传的json格式cookie
 	 */
 	public function swfupload_json() {
-		$arr['id'] = intval($_GET['id']);
+		$arr['id'] = $_GET['id'];
 		$arr['src'] = trim($_GET['src']);
 		$arr['title'] = urlencode($_GET['title']);
 		$json_str = json_encode($arr);
@@ -383,7 +405,7 @@ class video extends admin {
 		$srctype = isset($_GET['srctype']) ? $_GET['srctype'] : '*:*';//视频质量 
 		$videotime = isset($_GET['videotime']) ? $_GET['videotime'] : '*:*';//视频质量 
  		$page = isset($_GET['page']) ? $_GET['page'] : '1';
-		$pagesize = 7;
+		$pagesize = 20;
  		$list = array();
 		$fq = '';
 		

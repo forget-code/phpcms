@@ -113,6 +113,12 @@
      </table>
     <div class="btn"><label for="check_box"><?php echo L('selected_all');?>/<?php echo L('cancel');?></label>
 		<input type="hidden" value="<?php echo $pc_hash;?>" name="pc_hash">
+		<input type="hidden" value="<?php echo $_GET['fenlei'];?>" name="fenlei">
+		<input type="hidden" value="<?php echo $_GET['srctype'];?>" name="srctype">
+		<input type="hidden" value="<?php echo $_GET['videotime'];?>" name="videotime">
+		<input type="hidden" value="<?php echo $_GET['keyword'];?>" name="keyword">
+		<input type="hidden" value="<?php echo $_GET['menuid'];?>" name="menuid">
+		<input type="hidden" value="<?php echo $_GET['page'];?>" name="page">
 		
 		<input type="radio" name="is_category" value="0" checked="1" id="no_category" onclick="$('#show_category').css('display','none');">只入库
  		<input type="radio" name="is_category" value="1" id="yes_category" onclick="$('#show_category').css('display','');">

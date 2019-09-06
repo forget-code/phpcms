@@ -116,7 +116,7 @@ class index {
 		$area = $ip_area->get($ip);
 		$username = param::get_cookie('username') ? param::get_cookie('username') : '';
 		$this->db->update(array('hits'=>'+=1'), array('id'=>$id));
-		$this->s_db->insert(array('pid'=>$id, 'siteid'=>$siteid, 'spaceid'=>$spaceid, 'username'=>$username, 'area'=>$area, 'ip'=>$ip, 'referer'=>HTTP_REFERER, 'clicktime'=>SYS_TIME, 'type'=>0));
+		$this->s_db->insert(array('pid'=>$id, 'siteid'=>$siteid, 'spaceid'=>$spaceid, 'username'=>$username, 'area'=>$area, 'ip'=>$ip, 'referer'=>safe_replace(HTTP_REFERER), 'clicktime'=>SYS_TIME, 'type'=>0));
 		return true;
 	}
 }

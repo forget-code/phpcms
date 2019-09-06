@@ -1,4 +1,5 @@
 <?php
+defined('IN_ADMIN') or exit('No permission resources.');
 $show_header = $show_scroll = 1;
 include $this->admin_tpl('header','attachment');
 ?>

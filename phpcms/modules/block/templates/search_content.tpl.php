@@ -10,7 +10,7 @@ include $this->admin_tpl('header', 'admin');
 <table width="100%" class="table_form">
 		<tr>
 			<td width="80"><?php echo L('category')?>:</td> 
-			<td><?php if(isset($_GET['dosubmit'])){?><div class="rt"><a href="javascript:void(0)" onclick="$('#search').toggle()"><?php echo L('folded_up_in_search_of')?></a></div><?php } echo form::select_category('category_content', $catid, 'name="catid" id="catid"', '', '', '0', 1)?> </td>
+			<td><?php if(isset($_GET['dosubmit'])){?><div class="rt"><a href="javascript:void(0)" onclick="$('#search').toggle()"><?php echo L('folded_up_in_search_of')?></a></div><?php } echo form::select_category('category_content_'.$this->siteid, $catid, 'name="catid" id="catid"', '', '', '0', 1)?> </td>
 		</tr>
 		<tbody id="search" <?php if(isset($_GET['dosubmit'])) echo 'style="display:none"';?>>
 		<tr>
