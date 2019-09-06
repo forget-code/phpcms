@@ -7,8 +7,18 @@ if(!isset($CATEGORY[$catid])) showmessage('访问的栏目不存在！');
 $C = cache_read('category_'.$catid.'.php');
 extract($C);
 
-if(!$priv_group->check('catid', $catid, 'browse', $_groupid)) showmessage('您没有浏览权限');
-
+if($db->get_one("SELECT * FROM `".DB_PRE."member_group_priv` WHERE `field`='catid' AND `value`='$catid' AND `priv`='view'"))
+{
+	$allow_priv = false;
+	$group_extend_result = $db->query("SELECT * FROM `".DB_PRE."member_group_extend` WHERE `userid`=$_userid");
+	while($e_rs = $db->fetch_array($group_extend_result)) {
+		if($priv_group->check('catid', $catid, 'browse', $e_rs['groupid'])) {
+			$allow_priv = true;
+			break;
+		}
+	}
+	if(!$allow_priv && !$priv_group->check('catid', $catid, 'browse', $_groupid)) showmessage('您没有浏览权限');
+}
 if($type == 0)
 {
 	$page = max(intval($page), 1);

@@ -27,6 +27,7 @@ if ($dosubmit)
 else
 {
 	$title = htmlspecialchars(stripslashes($title));
+	$contentid= intval($contentid);
     $radio = '';
 	$types = subtype('error_report');
     foreach($types AS $k => $v)

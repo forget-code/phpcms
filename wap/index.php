@@ -7,9 +7,9 @@ if(preg_match('/(mozilla|m3gate|winwap|openwave)/i', $_SERVER['HTTP_USER_AGENT']
 	header('location:../');
 }
 wmlHeader($PHPCMS['sitename']);
-
+if(preg_match('/([^a-z_]+)/i',$action)) exit;
 $action = isset($action) && !empty($action) ? $action : 'index';
-if($action) 
+if($action)
 {
 	include './include/'.$action.'.inc.php';
 }

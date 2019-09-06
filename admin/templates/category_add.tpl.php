@@ -122,7 +122,7 @@ include admin_tpl('header');
 		  <table cellpadding="0" cellspacing="1" class="table_list">
 		      <caption>会员组权限</caption>
 			  <tr>
-				  <th>会员组名</th><th>浏览</th><th>查看</th><th>录入</th>
+				  <th>会员组名</th><th>浏览列表</th><th>查看内容</th><th>录入</th>
 			  </tr>
 		  <?php foreach($GROUP as $groupid=>$name)
 		  {

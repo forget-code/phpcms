@@ -11,14 +11,35 @@ $c = new content();
 $r = $c->get($contentid);
 if(!$r || $r['status'] != 99) showmessage('您要查看的信息不存在或者还未通过审批！');
 $allow_priv = true;
-
 if($r['groupids_view'])
 {
-	if(!$priv_group->check('contentid', $contentid, 'view', $_groupid)) $allow_priv = false;
+	if(!$priv_group->check('contentid', $contentid, 'view', $_groupid)) {
+		$allow_priv = false;
+	}
+	if(!$allow_priv) {
+		$group_extend_result = $db->query("SELECT * FROM `".DB_PRE."member_group_extend` WHERE `userid`=$_userid");
+		while($e_rs = $db->fetch_array($group_extend_result)) {
+			if($priv_group->check('contentid', $contentid, 'view', $e_rs['groupid'])) {
+				$allow_priv = true;
+				break;
+			}
+		}
+	}
+} else {
+	$allow_priv = false;
+	$group_extend_result = $db->query("SELECT * FROM `".DB_PRE."member_group_extend` WHERE `userid`=$_userid");
+	while($e_rs = $db->fetch_array($group_extend_result)) {
+		$e_groupid = $e_rs['groupid'];
+		if($priv_group->check('catid', $r['catid'], 'view', $e_groupid)) {
+			$allow_priv = true;
+			break;
+		}
+	}
+	if(!$allow_priv && !$priv_group->check('catid', $r['catid'], 'view', $_groupid)) showmessage('您没有浏览该栏目的权限');
 }
 $C = cache_read('category_'.$r['catid'].'.php');
 $attachment = new attachment($mod, $r['catid']);
-if(!$priv_group->check('catid', $r['catid'], 'view', $_groupid)) showmessage('您没有浏览权限');
+
 $out = new content_output();
 $data = $out->get($r);
 extract($data);
