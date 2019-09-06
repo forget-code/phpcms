@@ -21,7 +21,7 @@ class content_input {
 		$this->data = $data = trim_script($data);
 		$info = array();
 		foreach($data as $field=>$value) {
-			if(!isset($this->fields[$field])) continue;
+			if(!isset($this->fields[$field]) && !check_in($field,'paytype,paginationtype,maxcharperpage,id')) continue;
 			if(defined('IN_ADMIN')) {
 				if(check_in($_SESSION['roleid'], $this->fields[$field]['unsetroleids'])) continue;
 			} else {
