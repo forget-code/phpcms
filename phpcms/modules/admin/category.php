@@ -206,6 +206,10 @@ class category extends admin {
 			$catid = 0;
 			$catid = intval($_POST['catid']);
 			$setting = $_POST['setting'];
+			//上级栏目不能是自身
+			if($_POST['info']['parentid']==$catid){
+				showmessage(L('operation_failure'),'?m=admin&c=category&a=init&module=admin&menuid=43');
+			}
 			//栏目生成静态配置
 			if($_POST['type'] != 2) {
 				if($setting['ishtml']) {

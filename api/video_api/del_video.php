@@ -7,7 +7,7 @@ defined('IN_PHPCMS') or exit('No permission resources.');
  * 
  * @author				chenxuewang
  * @link				http://www.phpcms.cn http://www.ku6.cn
- * @copyright			CopyRight (c) 2006-2012 上海盛大网络发展有限公司
+ * @copyright			CopyRight (c) 2006-2012 酷溜网（北京）科技有限公司
  * @license				http://www.phpcms.cn/license/
  * 
  * 

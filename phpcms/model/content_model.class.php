@@ -93,6 +93,8 @@ class content_model extends model {
 		//更新URL地址
 		if($data['islink']==1) {
 			$urls[0] = trim_script($_POST['linkurl']);
+			$urls[0] = remove_xss($urls[0]);
+			
 			$urls[0] = str_replace(array('select ',')','\\','#',"'"),' ',$urls[0]);
 		} else {
 			$urls = $this->url->show($id, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix'],$inputinfo,'add');
@@ -440,7 +442,7 @@ class content_model extends model {
 	public function set_catid($catid) {
 		$catid = intval($catid);
 		if(!$catid) return false;
-		if(empty($this->category)) {
+		if(empty($this->category) || empty($this->category[$catid])) {
 			$siteids = getcache('category_content','commons');
 			$siteid = $siteids[$catid];
 			$this->category = getcache('category_content_'.$siteid,'commons');

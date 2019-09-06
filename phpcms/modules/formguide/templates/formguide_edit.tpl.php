@@ -24,11 +24,11 @@ include $this->admin_tpl('header', 'admin');
 	</tr>
 	<tr id="time_start" style="<?php if ($data['setting']['enabletime']==0) {?>display:none;<?php }?>">
   		<th><strong><?php echo L('start_time')?>：</strong></th>
-        <td><?php echo form::date('setting[starttime]', date('Y-m-d', $data['setting']['starttime']))?></td>
+        <td><?php echo form::date('setting[starttime]', $data['setting']['starttime']?date('Y-m-d', $data['setting']['starttime']):0)?></td>
 	</tr>
 	<tr id="time_end" style="<?php if ($data['setting']['enabletime']==0) {?>display:none;<?php }?>">
 		<th><strong><?php echo L('end_time')?>：</strong></th>
-		<td><?php echo form::date('setting[endtime]', date('Y-m-d', $data['setting']['endtime']))?></td>
+		<td><?php echo form::date('setting[endtime]', $data['setting']['endtime']?date('Y-m-d', $data['setting']['endtime']):0)?></td>
 	</tr>
 	<tr>
 		<th><strong><?php echo L('allowed_send_mail')?>：</strong></th>

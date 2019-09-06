@@ -220,7 +220,7 @@ class index {
 			$typeid = intval($_POST['typeid']);		
 			$contentid = intval($_POST['id']);		
 			$msg = trim($_POST['msg']);
-			$commentid = trim($_POST['commentid']);
+			$commentid = remove_xss(safe_replace(trim($_POST['commentid'])));
 			$title = $_POST['title'];
 			$url = $_POST['url'];	
 			

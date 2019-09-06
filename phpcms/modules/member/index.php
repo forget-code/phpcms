@@ -65,7 +65,7 @@ class index extends foreground {
 			$userinfo['nickname'] = (isset($_POST['nickname']) && is_username($_POST['nickname'])) ? $_POST['nickname'] : '';
 			
 			$userinfo['email'] = (isset($_POST['email']) && is_email($_POST['email'])) ? $_POST['email'] : exit('0');
-			$userinfo['password'] = isset($_POST['password']) ? $_POST['password'] : exit('0');
+			$userinfo['password'] = (isset($_POST['password']) && is_badword($_POST['password'])==false) ? $_POST['password'] : exit('0');
 			
 			$userinfo['email'] = (isset($_POST['email']) && is_email($_POST['email'])) ? $_POST['email'] : exit('0');
 
@@ -161,8 +161,7 @@ class index extends foreground {
 							param::set_cookie('_username', $userinfo['username'], $cookietime);
 							param::set_cookie('email', $userinfo['email'], $cookietime);							
 						} else {
-							$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-							$phpcms_auth = sys_auth($userid."\t".$userinfo['password'], 'ENCODE', $phpcms_auth_key);
+							$phpcms_auth = sys_auth($userid."\t".$userinfo['password'], 'ENCODE', get_auth_key('login'));
 							
 							param::set_cookie('auth', $phpcms_auth, $cookietime);
 							param::set_cookie('_userid', $userid, $cookietime);
@@ -175,8 +174,7 @@ class index extends foreground {
 					//如果需要邮箱认证
 					if($member_setting['enablemailcheck']) {
 						pc_base::load_sys_func('mail');
-						$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
-						$code = sys_auth($userid.'|'.$phpcms_auth_key, 'ENCODE', $phpcms_auth_key);
+						$code = sys_auth($userid.'|'.microtime(true), 'ENCODE', get_auth_key('email'));
 						$url = APP_PATH."index.php?m=member&c=index&a=register&code=$code&verify=1";
 						$message = $member_setting['registerverifymessage'];
 						$message = str_replace(array('{click}','{url}','{username}','{email}','{password}'), array('<a href="'.$url.'">'.L('please_click').'</a>',$url,$userinfo['username'],$userinfo['email'],$password), $message);
@@ -204,8 +202,7 @@ class index extends foreground {
 			
 			if(!empty($_GET['verify'])) {
 				$code = isset($_GET['code']) ? trim($_GET['code']) : showmessage(L('operation_failure'), 'index.php?m=member&c=index');
-				$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
-				$code_res = sys_auth($code, 'DECODE', $phpcms_auth_key);
+				$code_res = sys_auth($code, 'DECODE', get_auth_key('email'));
 				$code_arr = explode('|', $code_res);
 				$userid = isset($code_arr[0]) ? $code_arr[0] : '';
 				$userid = is_numeric($userid) ? $userid : showmessage(L('operation_failure'), 'index.php?m=member&c=index');
@@ -295,8 +292,7 @@ class index extends foreground {
 		}
 		//验证邮箱格式
 		pc_base::load_sys_func('mail');
-		$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
-		$code = sys_auth($_userid.'|'.$phpcms_auth_key, 'ENCODE', $phpcms_auth_key);
+		$code = sys_auth($_userid.'|'.microtime(true), 'ENCODE', get_auth_key('email'));
 		$url = APP_PATH."index.php?m=member&c=index&a=register&code=$code&verify=1";
 		
 		//读取配置获取验证信息
@@ -382,7 +378,7 @@ class index extends foreground {
 		//初始化phpsso
 		$phpsso_api_url = $this->_init_phpsso();
 		$ps_auth_key = pc_base::load_config('system', 'phpsso_auth_key');
-		$auth_data = $this->client->auth_data(array('uid'=>$this->memberinfo['phpssouid'], 'ps_auth_key'=>$ps_auth_key), '', $ps_auth_key);
+		$auth_data = $this->client->auth_data(array('uid'=>$this->memberinfo['phpssouid'],'sys_auth_time'=>microtime(true)), '', $ps_auth_key);
 		$upurl = base64_encode($phpsso_api_url.'/index.php?m=phpsso&c=index&a=uploadavatar&auth_data='.$auth_data);
 		//获取头像数组
 		$avatar = $this->client->ps_getavatar($this->memberinfo['phpssouid']);
@@ -602,11 +598,13 @@ class index extends foreground {
 				//判断验证码
 				$code = isset($_POST['code']) && trim($_POST['code']) ? trim($_POST['code']) : showmessage(L('input_code'), HTTP_REFERER);
 				if ($_SESSION['code'] != strtolower($code)) {
+					$_SESSION['code'] = '';
 					showmessage(L('code_error'), HTTP_REFERER);
 				}
+				$_SESSION['code'] = '';
 			}
 			
-			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : showmessage(L('username_empty'), HTTP_REFERER);
+			$username = isset($_POST['username']) && is_username($_POST['username']) ? trim($_POST['username']) : showmessage(L('username_empty'), HTTP_REFERER);
 			$password = isset($_POST['password']) && trim($_POST['password']) ? trim($_POST['password']) : showmessage(L('password_empty'), HTTP_REFERER);
 			$cookietime = intval($_POST['cookietime']);
 			$synloginstr = ''; //同步登陆js代码
@@ -735,8 +733,7 @@ class index extends foreground {
 			$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 			$cookietime = $_cookietime ? SYS_TIME + $_cookietime : 0;
 			
-			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-			$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+			$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 			
 			param::set_cookie('auth', $phpcms_auth, $cookietime);
 			param::set_cookie('_userid', $userid, $cookietime);
@@ -1141,8 +1138,7 @@ class index extends foreground {
 					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 					$cookietime = $_cookietime ? TIME + $_cookietime : 0;
 					
-					$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 					
 					param::set_cookie('auth', $phpcms_auth, $cookietime);
 					param::set_cookie('_userid', $userid, $cookietime);
@@ -1260,8 +1256,7 @@ class index extends foreground {
 					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 					$cookietime = $_cookietime ? TIME + $_cookietime : 0;
 					
-					$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 					
 					param::set_cookie('auth', $phpcms_auth, $cookietime);
 					param::set_cookie('_userid', $userid, $cookietime);
@@ -1324,8 +1319,7 @@ class index extends foreground {
 								if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
 								$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 								$cookietime = $_cookietime ? TIME + $_cookietime : 0;
-								$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-								$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+								$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 								param::set_cookie('auth', $phpcms_auth, $cookietime);
 								param::set_cookie('_userid', $userid, $cookietime);
 								param::set_cookie('_username', $username, $cookietime);
@@ -1340,9 +1334,9 @@ class index extends foreground {
  								$_SESSION['connectid'] = $openid;
 								$_SESSION['from'] = 'qq';
 								if(CHARSET != 'utf-8') {//转编码
-									$connect_username = iconv('utf-8', CHARSET, $user['nickname']); 
+									$connect_username = iconv('utf-8', CHARSET, $user);
 								} else {
-									 $connect_username = $user['nickname']; 
+									 $connect_username = $user;
 								}
  								include template('member', 'connect');
 						}
@@ -1382,8 +1376,7 @@ class index extends foreground {
 					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 					$cookietime = $_cookietime ? TIME + $_cookietime : 0;
 					
-					$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 					
 					param::set_cookie('auth', $phpcms_auth, $cookietime);
 					param::set_cookie('_userid', $userid, $cookietime);
@@ -1499,9 +1492,8 @@ class index extends foreground {
 			}
 			
 			pc_base::load_sys_func('mail');
-			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
 
-			$code = sys_auth($memberinfo['userid']."\t".SYS_TIME, 'ENCODE', $phpcms_auth_key);
+			$code = sys_auth($memberinfo['userid']."\t".microtime(true), 'ENCODE', get_auth_key('email'));
 
 			$url = APP_PATH."index.php?m=member&c=index&a=public_forget_password&code=$code";
 			$message = $member_setting['forgetpassword'];
@@ -1517,9 +1509,8 @@ class index extends foreground {
 			sendmail($email, L('forgetpassword'), $message, '', '', $sitename);
 			showmessage(L('operation_success'), 'index.php?m=member&c=index&a=login');
 		} elseif($_GET['code']) {
-			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
 			$hour = date('y-m-d h', SYS_TIME);
-			$code = sys_auth($_GET['code'], 'DECODE', $phpcms_auth_key);
+			$code = sys_auth($_GET['code'], 'DECODE', get_auth_key('email'));
 			$code = explode("\t", $code);
 
 			if(is_array($code) && is_numeric($code[0]) && date('y-m-d h', SYS_TIME) == date('y-m-d h', $code[1])) {
@@ -1719,6 +1710,10 @@ class index extends foreground {
 			$email = $_SESSION['email'];
 			if($email){
 				if(!preg_match('/^([a-z0-9_]+)@([a-z0-9_]+).([a-z]{2,6})$/',$email)) exit('check email error');
+				if($_SESSION['emc_times']=='' || $_SESSION['emc_times']<=0){
+					showmessage("验证次数超过5次,验证码失效，请重新获取邮箱验证码！",HTTP_REFERER,3000);
+				}
+				$_SESSION['emc_times'] = $_SESSION['emc_times']-1;
 				if($_SESSION['emc']!='' && $_POST['email_verify']==$_SESSION['emc']) {
 					
 					$userid = $_SESSION['userid'];
@@ -1758,7 +1753,8 @@ class index extends foreground {
 	public function public_get_email_verify() {
 		pc_base::load_sys_func('mail');
 		$this->_session_start();
-		$code = $_SESSION['emc'] = random(6);
+		$code = $_SESSION['emc'] = random(8,"23456789abcdefghkmnrstwxy");
+		$_SESSION['emc_times']=5;
 		$message = '您的验证码为：'.$code;
 
 		sendmail($_SESSION['email'], '邮箱找回密码验证', $message);

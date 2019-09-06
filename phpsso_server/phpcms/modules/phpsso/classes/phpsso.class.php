@@ -32,7 +32,7 @@ class phpsso {
 		if(isset($_POST['data'])) {
 			parse_str(sys_auth($_POST['data'], 'DECODE', $this->applist[$this->appid]['authkey']), $this->data);
 					
-			if(!is_array($this->data)) {
+			if(empty($this->data) || !is_array($this->data)) {
 				exit('0');
 			}
 		} else {
@@ -41,9 +41,10 @@ class phpsso {
 		
 		if(isset($GLOBALS['HTTP_RAW_POST_DATA'])) {
 			$this->data['avatardata'] = $GLOBALS['HTTP_RAW_POST_DATA'];
-			if($this->applist[$this->appid]['authkey'] != $this->data['ps_auth_key']) {
-				exit('0');
-			}
+			//if($this->applist[$this->appid]['authkey'] != $this->data['ps_auth_key']) {
+			//	exit('0');
+			//}
+			
 		}
 
 	}

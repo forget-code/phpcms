@@ -18,6 +18,7 @@ $LANG['between_2_to_20'] = '应该为2-20位之间';
 $LANG['between_6_to_20'] = '应该为6-20位之间';
 $LANG['between_1_to_20'] = '应该为1-20位之间';
 $LANG['between_2_to_32'] = '应该为2-32位之间';
+$LANG['between_7_to_32'] = '应该为7-32位之间';
 $LANG['already_exist'] = '已经存在';
 $LANG['password_can_not_be_empty'] = '密码不能为空。';
 $LANG['cannot_empty'] = '不能为空。';

@@ -75,10 +75,13 @@ $(function(){
 					<input type="checkbox" name="info[allowsendmessage]">
 					<?php echo L('member_group_sendmessage')?> 
 				</span>	
+				<?php
+				if($groupinfo['groupid']!=8) {?>
 				<span class="ik lf" style="width:120px;">
 					<input type="checkbox" name="info[allowattachment]">
 					<?php echo L('allowattachment')?> 
 				</span>
+				<?php }?>
 				<span class="ik lf" style="width:120px;">
 					<input type="checkbox" name="info[allowsearch]">
 					<?php echo L('allowsearch')?> 

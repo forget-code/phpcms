@@ -124,7 +124,7 @@ class content_tag {
 			$sql = " `id` IN ($relations)";
 			$key_array = $this->db->select($sql, '*', $limit, $order,'','id');
 		} elseif($data['keywords']) {
-			$keywords = str_replace('%', '',$data['keywords']);
+			$keywords = str_replace(array('%',"'"), '',$data['keywords']);
 			$keywords_arr = explode(' ',$keywords);
 			$key_array = array();
 			$number = 0;

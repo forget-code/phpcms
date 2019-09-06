@@ -217,7 +217,7 @@ class collection {
 	protected static function get_html($url, &$config) {
 		if (!empty($url) && $html = @file_get_contents($url)) {
 			if ($syscharset != $config['sourcecharset'] && $config['sourcetype'] != 4) {
-				$html = iconv($config['sourcecharset'], CHARSET.'//IGNORE', $html);
+				$html = iconv($config['sourcecharset'], CHARSET.'//TRANSLIT', $html);
 			}
 			return $html;
 		} else {

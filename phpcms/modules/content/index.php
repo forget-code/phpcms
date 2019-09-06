@@ -191,7 +191,7 @@ class index {
 		//上一页
 		$previous_page = $this->db->get_one("`catid` = '$catid' AND `id`<'$id' AND `status`=99",'*','id DESC');
 		//下一页
-		$next_page = $this->db->get_one("`catid`= '$catid' AND `id`>'$id' AND `status`=99");
+		$next_page = $this->db->get_one("`catid`= '$catid' AND `id`>'$id' AND `status`=99",'*','id ASC');
 
 		if(empty($previous_page)) {
 			$previous_page = array('title'=>L('first_page'), 'thumb'=>IMG_PATH.'nopic_small.gif', 'url'=>'javascript:alert(\''.L('first_page').'\');');

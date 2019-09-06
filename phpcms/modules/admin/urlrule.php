@@ -21,6 +21,10 @@ class urlrule extends admin {
 	function add() {
 		if(isset($_POST['dosubmit'])) {
 			$_POST['info']['urlrule'] = rtrim(trim($_POST['info']['urlrule']),'.php');
+			$_POST['info']['urlrule'] = $this->url_replace($_POST['info']['urlrule']);
+			if($this->url_ifok($_POST['info']['urlrule'])==false){
+				showmessage('url规则里含有非法php字符');
+			}
 			$this->db->insert($_POST['info']);
 			$this->public_cache_urlrule();
 			showmessage(L('add_success'),'','','add');
@@ -47,6 +51,10 @@ class urlrule extends admin {
 		if(isset($_POST['dosubmit'])) {
 			$urlruleid = intval($_POST['urlruleid']);
 			$_POST['info']['urlrule'] = rtrim(trim($_POST['info']['urlrule']),'.php');
+			$_POST['info']['urlrule'] = $this->url_replace($_POST['info']['urlrule']);
+			if($this->url_ifok($_POST['info']['urlrule'])==false){
+				showmessage('url规则里含有非法php字符');
+			}			
 			$this->db->update($_POST['info'],array('urlruleid'=>$urlruleid));
 			$this->public_cache_urlrule();
 			showmessage(L('update_success'),'','','edit');
@@ -75,6 +83,38 @@ class urlrule extends admin {
 		}
 		setcache('urlrules_detail',$datas,'commons');
 		setcache('urlrules',$basic_data,'commons');
+	}
+	/*
+	*url规则替换
+	**/
+	public function url_replace($url){
+		$urldb = explode("|",$url);
+		foreach($urldb as $key=>$value){
+			if(strpos($value, "index.php") === 0){
+				$value = str_replace('index.php','',$value);
+				$value = str_replace('.php','',$value);
+				$value = "index.php".$value;
+			}else{
+				$value = str_replace('.php','',$value);
+			}
+			$urldb[$key]=$value;
+		}
+		return implode("|",$urldb);
+	}
+	/*
+	*url规则 判断。
+	**/
+	public function url_ifok($url){
+		$urldb = explode("|",$url);
+		foreach($urldb as $key=>$value){
+			if(strpos($value, "index.php") === 0){
+				$value = substr($value,'9');
+			}
+			if( stripos($value, "php") !== false){
+				return false;
+			}
+		}
+		return true;
 	}
 }
 ?>

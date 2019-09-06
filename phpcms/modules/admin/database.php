@@ -83,7 +83,12 @@ class database extends admin {
 				$prepre = '';
 				$info = $infos = $other = $others = array();
 				foreach($sqlfiles as $id=>$sqlfile) {
+					//老的数据库备份文件转换为新格式
 					if(preg_match("/([phpcmstables_|db_][0-9]{8}_[0-9a-z]{20}_)([0-9]+)\.sql/i",basename($sqlfile),$num)) {
+						list($tem_pre, $temp_date, $temp_string, $temp_end) = explode('_', basename($sqlfile));
+						rename($sqlfile, CACHE_PATH.'bakup/'.$pdoname.'/'.$temp_string.'_'.$tem_pre.'_'.$temp_date.'_'.$temp_end);
+					}
+					if(preg_match("/([0-9a-z]{20}_[phpcmstables_|db_]+[0-9]{8}_)([0-9]+)\.sql/i",basename($sqlfile),$num)) {
 
 						$info['filename'] = basename($sqlfile);
 						$info['filesize'] = sizecount(filesize($sqlfile));
@@ -291,7 +296,7 @@ class database extends admin {
 		if(trim($tabledump)) {
 			$tabledump = "# phpcms bakfile\n# version:PHPCMS V9\n# time:".date('Y-m-d H:i:s')."\n# type:phpcms\n# phpcms:http://www.phpcms.cn\n# --------------------------------------------------------\n\n\n".$tabledump;
 			$tableid = $i;
-			$filename = $tabletype.'_'.date('Ymd').'_'.$random.'_'.$fileid.'.sql';
+			$filename = $random.'_'.$tabletype.'_'.date('Ymd').'_'.$fileid.'.sql';
 			$altid = $fileid;
 			$fileid++;
 			$bakfile_path = CACHE_PATH.'bakup'.DIRECTORY_SEPARATOR.$this->pdo_name;

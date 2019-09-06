@@ -59,7 +59,8 @@ function ajax_getlist() {
  * @param $infos
  */
 function ajax_getpath($parentid,$keyid,$callback,$path = 'commons',$result = array(),$infos = array()) {
-	$keyid = $keyid;
+	$path = str_replace(array('/', '//'), '', $path);
+	$keyid = str_replace(array('/', '//'), '', $keyid);
 	$parentid = intval($parentid);
 	if(!$infos) {
 		$infos = getcache($keyid,$path);
@@ -90,7 +91,8 @@ function ajax_getpath($parentid,$keyid,$callback,$path = 'commons',$result = arr
  * @param  $infos 递归返回结果数组
  */
 function ajax_gettopparent($id,$keyid,$callback,$path,$infos = array()) {
-	$keyid = $keyid;	
+	$path = str_replace(array('/', '//'), '', $path);
+	$keyid = str_replace(array('/', '//'), '', $keyid);
 	$id = intval($id);
 	if(!$infos) {
 		$infos = getcache($keyid,$path);

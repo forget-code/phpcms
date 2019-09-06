@@ -1,4 +1,5 @@
 <?php
+set_time_limit(300);
 defined('IN_PHPCMS') or exit('No permission resources.');
 //模型缓存路径
 define('CACHE_MODEL_PATH',CACHE_PATH.'caches_model'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR);
@@ -304,7 +305,7 @@ class content extends admin {
 					$len = -strlen($lasttext);
 					$path = substr($fileurl,0,$len);
 					$path = ltrim($path,'/');
-					$filelist = glob(PHPCMS_PATH.$path.'*');
+					$filelist = glob(PHPCMS_PATH.$path.'{_,-,.}*',GLOB_BRACE);
 					foreach ($filelist as $delfile) {
 						$lasttext = strrchr($delfile,'.');
 						if(!in_array($lasttext, array('.htm','.html','.shtml'))) continue;
@@ -707,11 +708,17 @@ class content extends admin {
 				$this->url = pc_base::load_app_class('url', 'content');
 				$contents = array_filter(explode('[page]', $content));
 				$pagenumber = count($contents);
+				if (strpos($content, '[/page]')!==false && ($CONTENT_POS<7)) {
+					$pagenumber--;
+				}
 				for($i=1; $i<=$pagenumber; $i++) {
-					$pageurls[$i] = $this->url->show($id, $i, $catid, $rs['inputtime']);
+					$pageurls[$i][0] = 'index.php?m=content&c=content&a=public_preview&steps='.intval($_GET['steps']).'&catid='.$catid.'&id='.$id.'&page='.$i;
 				}
 				$END_POS = strpos($content, '[/page]');
 				if($END_POS !== false) {
+					if($CONTENT_POS>7) {
+						$content = '[page]'.$title.'[/page]'.$content;
+					}
 					if(preg_match_all("|\[page\](.*)\[/page\]|U", $content, $m, PREG_PATTERN_ORDER)) {
 						foreach($m[1] as $k=>$v) {
 							$p = $k+1;
@@ -719,15 +726,18 @@ class content extends admin {
 							$titles[$p]['url'] = $pageurls[$p][0];
 						}
 					}
-				} else {
-					//当不存在 [/page]时，则使用下面分页
-					$pages = content_pages($pagenumber,$page, $pageurls);
 				}
+				//当不存在 [/page]时，则使用下面分页
+				$pages = content_pages($pagenumber,$page, $pageurls);
 				//判断[page]出现的位置是否在第一位 
 				if($CONTENT_POS<7) {
 					$content = $contents[$page];
 				} else {
-					$content = $contents[$page-1];
+					if ($page==1 && !empty($titles)) {
+						$content = $title.'[/page]'.$contents[$page-1];
+					} else {
+						$content = $contents[$page-1];
+					}
 				}
 				if($titles) {
 					list($title, $content) = explode('[/page]', $content);
@@ -833,6 +843,7 @@ class content extends admin {
 	public function remove() {
 		if(isset($_POST['dosubmit'])) {
 			$this->content_check_db = pc_base::load_model('content_check_model');
+			$this->hits_db = pc_base::load_model('hits_model');
 			if($_POST['fromtype']==0) {
 				if($_POST['ids']=='') showmessage(L('please_input_move_source'));
 				if(!$_POST['tocatid']) showmessage(L('please_select_target_category'));
@@ -843,6 +854,8 @@ class content extends admin {
 				foreach ($ids as $id) {
 					$checkid = 'c-'.$id.'-'.$this->siteid;
 					$this->content_check_db->update(array('catid'=>$tocatid), array('checkid'=>$checkid));
+					$hitsid = 'c-'.$modelid.'-'.$id;
+					$this->hits_db->update(array('catid'=>$tocatid),array('hitsid'=>$hitsid));
 				}
 				$ids = implode(',', $ids);
 				$this->db->set_model($modelid);
@@ -857,6 +870,7 @@ class content extends admin {
 				$fromid = implode(',', $fromid);
 				$this->db->set_model($modelid);
 				$this->db->update(array('catid'=>$tocatid),"catid IN($fromid)");
+				$this->hits_db->update(array('catid'=>$tocatid),"catid IN($fromid)");
 			}
 			showmessage(L('operation_success'),HTTP_REFERER);
 			//ids

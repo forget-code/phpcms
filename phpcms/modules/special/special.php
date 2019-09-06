@@ -223,8 +223,15 @@ class special extends admin {
 	}
 	
 	public	function create_special_list() {
+		$siteid = get_siteid();
 		$html = pc_base::load_app_class('html');
-		$size = $html->create_list();
+		$c = pc_base::load_model('special_model');
+		$result = $c->get_one(array('siteid'=>$siteid), 'COUNT(*) AS total');
+		$total = $result['total'];
+		$pages = ceil($total/20);
+		for ( $i=1; $i <= $pages ; $i++ ){ 
+			$size = $html->create_list($i);
+		}
 		showmessage(L('index_create_finish',array('size'=>sizecount($size))));
 	}
 	

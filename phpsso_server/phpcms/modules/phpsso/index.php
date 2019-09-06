@@ -382,7 +382,7 @@ class index extends phpsso {
 				if (!$v['synlogin']) continue;
 				if($v['appid'] != $this->appid) {
 					$tmp_s = strstr($v['url'].$v['apifilename'], '?') ? '&' : '?';
-					$res .= '<script type="text/javascript" src="'.$v['url'].$v['apifilename'].$tmp_s.'time='.SYS_TIME.'&code='.urlencode(sys_auth('action=synlogin&username='.$this->username.'&uid='.$this->uid.'&password='.$this->password."&time=".SYS_TIME, 'ENCODE', $v['authkey'])).'" reload="1"></script>';
+					$res .= '<script type="text/javascript" src="'.$v['url'].$v['apifilename'].$tmp_s.'time='.SYS_TIME.'&code='.urlencode(sys_auth('action=synlogin&username='.$this->username.'&uid='.$this->uid.'&password='.$this->password."&sys_auth_time=".microtime(true), 'ENCODE', $v['authkey'])).'" reload="1"></script>';
 				}
 			}
 			exit($res);
@@ -408,7 +408,7 @@ class index extends phpsso {
 				if (!$v['synlogin']) continue;
 				if($v['appid'] != $this->appid) {
 					$tmp_s = strstr($v['url'].$v['apifilename'], '?') ? '&' : '?';
-					$res .= '<script type="text/javascript" src="'.$v['url'].$v['apifilename'].$tmp_s.'time='.SYS_TIME.'&code='.urlencode(sys_auth('action=synlogout&time='.SYS_TIME, 'ENCODE', $v['authkey'])).'" reload="1"></script>';
+					$res .= '<script type="text/javascript" src="'.$v['url'].$v['apifilename'].$tmp_s.'time='.SYS_TIME.'&code='.urlencode(sys_auth('action=synlogout&sys_auth_time='.microtime(true), 'ENCODE', $v['authkey'])).'" reload="1"></script>';
 				}
 			}
 			exit($res);
@@ -422,6 +422,9 @@ class index extends phpsso {
 	 */
 	public function getapplist() {
 		$applist = getcache('applist', 'admin');
+		foreach($applist as $key=>$value){
+			unset($applist[$key]['authkey']);
+		}
 		exit(serialize($applist));
 	}
 	
@@ -573,7 +576,7 @@ class index extends phpsso {
 		
 		//根据用户id创建文件夹
 		if(isset($this->data['uid']) && isset($this->data['avatardata'])) {
-			$this->uid = $this->data['uid'];
+			$this->uid = intval($this->data['uid']);
 			$this->avatardata = $this->data['avatardata'];
 		} else {
 			exit('0');

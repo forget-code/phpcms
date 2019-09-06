@@ -2,12 +2,6 @@
 defined('IN_ADMIN') or exit('No permission resources.');
 $show_dialog = 1;
 include $this->admin_tpl('header','admin');
-
-function new_htmlentities($string) {
-	$encoding = 'utf-8';
-	if(strtolower(CHARSET)=='gbk') $encoding = 'gb2312';
-	return htmlentities($string,ENT_QUOTES,$encoding);
-}
 ?>
 <div class="pad-lr-10">
 <form name="searchform" action="?m=message&c=message&a=search_message&menuid=<?php echo $_GET['menuid'];?>" method="post" >
@@ -44,8 +38,8 @@ if(is_array($infos)){
 			name="messageid[]" value="<?php echo $info['messageid']?>"></td>
 		<td><?php echo $info['subject']?></td>
 		<td align="" widht="35%"><?php echo $info['content'];?></td>
-		<td align="center" width="10%"><?php echo new_htmlentities($info['send_from_id']);?></td>
-		<td align="center" width="10%"><?php echo new_htmlentities($info['send_to_id']);?></td>
+		<td align="center" width="10%"><?php echo new_html_special_chars($info['send_from_id']);?></td>
+		<td align="center" width="10%"><?php echo new_html_special_chars($info['send_to_id']);?></td>
 		<td align="center" width="15%"> <a
 			href='?m=message&c=message&a=delete&messageid=<?php echo $info['messageid']?>'
 			onClick="return confirm('<?php echo L('confirm', array('message' => new_addslashes($info['subject'])))?>')"><?php echo L('delete')?></a>

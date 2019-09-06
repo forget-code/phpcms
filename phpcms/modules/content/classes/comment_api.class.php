@@ -18,6 +18,19 @@ class comment_api {
 		if (empty($contentid) || empty($catid)) {
 			return false;
 		}
+		//判断栏目是否存在 s
+		$CATEGORYS = getcache('category_content_'.$siteid,'commons');
+ 		if(!$CATEGORYS[$catid]){
+ 			return false;
+		}
+		
+		//判断模型是否存在
+		$this_modelid = $CATEGORYS[$catid]['modelid'];
+		$MODEL = getcache('model','commons'); 
+		if(!$MODEL[$this_modelid]){
+			return false;
+		}
+		
 		$this->db->set_catid($catid);
 		$r = $this->db->get_one(array('catid'=>$catid, 'id'=>$contentid), '`title`');
 		$category = getcache('category_content_'.$siteid, 'commons');

@@ -42,7 +42,7 @@
 	 * @param $groupid 用户组id
 	 * @param $isadmin 是否为管理员模式
 	 */
-	function initupload($module, $catid,$args, $userid, $groupid = '8', $isadmin = '0'){
+	function initupload($module, $catid,$args, $userid, $groupid = '8', $isadmin = '0',$userid_flash='0'){
 		$grouplist = getcache('grouplist','member');
 		if($isadmin==0 && !$grouplist[$groupid]['allowattachment']) return false;
 		extract(getswfinit($args));
@@ -50,14 +50,16 @@
 		$site_setting = get_site_setting($siteid);
 		$file_size_limit = $site_setting['upload_maxsize'];
 		$sess_id = SYS_TIME;
+		$admin_url = pc_base::load_config('system','admin_url');
+		$upload_path = empty($admin_url) ? APP_PATH : 'http://'.$admin_url.'/';
 		$swf_auth_key = md5(pc_base::load_config('system','auth_key').$sess_id);
 		$init =  'var swfu = \'\';
 		$(document).ready(function(){
 		swfu = new SWFUpload({
 			flash_url:"'.JS_PATH.'swfupload/swfupload.swf?"+Math.random(),
-			upload_url:"'.APP_PATH.'index.php?m=attachment&c=attachments&a=swfupload&dosubmit=1",
+			upload_url:"'.$upload_path.'index.php?m=attachment&c=attachments&a=swfupload&dosubmit=1",
 			file_post_name : "Filedata",
-			post_params:{"SWFUPLOADSESSID":"'.$sess_id.'","module":"'.$module.'","catid":"'.$_GET['catid'].'","userid":"'.$userid.'","siteid":"'.$siteid.'","dosubmit":"1","thumb_width":"'.$thumb_width.'","thumb_height":"'.$thumb_height.'","watermark_enable":"'.$watermark_enable.'","filetype_post":"'.$file_types_post.'","swf_auth_key":"'.$swf_auth_key.'","isadmin":"'.$isadmin.'","groupid":"'.$groupid.'"},
+			post_params:{"SWFUPLOADSESSID":"'.$sess_id.'","module":"'.$module.'","catid":"'.$_GET['catid'].'","userid":"'.$userid.'","siteid":"'.$siteid.'","dosubmit":"1","thumb_width":"'.$thumb_width.'","thumb_height":"'.$thumb_height.'","watermark_enable":"'.$watermark_enable.'","filetype_post":"'.$file_types_post.'","swf_auth_key":"'.$swf_auth_key.'","isadmin":"'.$isadmin.'","groupid":"'.$groupid.'","userid_flash":"'.$userid_flash.'"},
 			file_size_limit:"'.$file_size_limit.'",
 			file_types:"'.$file_types.'",
 			file_types_description:"All Files",
