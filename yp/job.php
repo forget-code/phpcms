@@ -28,6 +28,7 @@ switch($action)
 	if($time < 0 )$time = 0;
 	$where = "j.updatetime >= '{$time}' ";
 	$genre = urldecode($genre);
+	$genre = str_replace(array('(', '$', ')', '{', '}', '<', '>'), '', $genre);
 	if($station)$where .= "AND j.station = '{$station}' ";
 	if($genre)$where .= "AND c.genre = '{$genre}' ";
 	if(!trim($where))$where = '1';

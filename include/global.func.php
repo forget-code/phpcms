@@ -31,6 +31,25 @@ function filter_xss($string, $allowedtags = '', $disabledattributes = array('ona
 	return $string;
 }
 
+function safe_replace($string)
+{
+	$string = str_replace('%20','',$string);
+	$string = str_replace('%27','',$string);
+	$string = str_replace('*','',$string);
+	$string = str_replace('"','&quot;',$string);
+	$string = str_replace("'",'',$string);
+	$string = str_replace("\"",'',$string);
+	$string = str_replace('//','',$string);
+	$string = str_replace(';','',$string);
+	$string = str_replace('<','&lt;',$string);
+	$string = str_replace('>','&gt;',$string);
+	$string = str_replace('(','',$string);
+	$string = str_replace(')','',$string);
+	$string = str_replace("{",'',$string);
+	$string = str_replace('}','',$string);
+	return $string;
+}
+
 function filter_word($data = '')
 {
 	global $PHPCMS;
@@ -486,7 +505,7 @@ function str_cut($string, $length, $dot = '...')
 {
 	$strlen = strlen($string);
 	if($strlen <= $length) return $string;
-	$string = str_replace(array('&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;'), array(' ', '&', '"', "'", 'â€œ', 'â€', 'â€”', '<', '>', 'Â·', 'â€¦'), $string);
+	$string = str_replace(array('&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;'), array(' ', '&', '"', "'", '¡°', '¡±', '¡ª', '<', '>', '¡¤', '¡­'), $string);
 	$strcut = '';
 	if(strtolower(CHARSET) == 'utf-8')
 	{
@@ -917,7 +936,7 @@ function get_sql_in($string, $s = ' ')
 	return "'".implode("','", $array)."'";
 }
 
-function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(), $catid = 0) 
+function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(), $catid = 0)
 {
 	global $PHPCMS;
 	if($PHPCMS['pagemode'] && $num > $perpage)
@@ -942,22 +961,22 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 				{
 					$to = $page-1;
 					$from = 2;
-				} 
+				}
 				elseif($to >= $pages)
-				{ 
-					$from = $pages-($page-2);  
-					$to = $pages-1;  
+				{
+					$from = $pages-($page-2);
+					$to = $pages-1;
 				}
 				$more = 1;
-			} 
+			}
 			if($urlrule == '') $urlrule = url_par('page={$page}');
 			if(is_object($url)) $url = load('url.class.php');
 
-			$multipage .= 'æ€»æ•°ï¼š<b>'.$num.'</b>&nbsp;&nbsp;';
-			
+			$multipage .= '×ÜÊý£º<b>'.$num.'</b>&nbsp;&nbsp;';
+
 			if($curr_page>0)
 			{
-				$multipage .= $catid ? '<a href="'.$url->category($catid, $curr_page-1, 1, 1).'">ä¸Šä¸€é¡µ</a>' : '<a href="'.pageurl($urlrule, $curr_page-1, $array).'">ä¸Šä¸€é¡µ</a>';
+				$multipage .= $catid ? '<a href="'.$url->category($catid, $curr_page-1, 1, 1).'">ÉÏÒ»Ò³</a>' : '<a href="'.pageurl($urlrule, $curr_page-1, $array).'">ÉÏÒ»Ò³</a>';
 				if($curr_page==1)
 				{
 					$multipage .= '<u><b>1</b></u> ';
@@ -971,33 +990,33 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 					$multipage .= $catid ? '<a href="'.$url->category($catid, 1, 1, 1).'">1</a>' : '<a href="'.pageurl($urlrule, 1, $array).'">1</a> ';
 				}
 			}
-			for($i = $from; $i <= $to; $i++) 
-			{ 
-				if($i != $curr_page) 
-				{ 
-					$multipage .= $catid ? '<a href="'.$url->category($catid, $i, 1, 1).'">'.$i.'</a> ' : '<a href="'.pageurl($urlrule, $i, $array).'">'.$i.'</a> '; 
+			for($i = $from; $i <= $to; $i++)
+			{
+				if($i != $curr_page)
+				{
+					$multipage .= $catid ? '<a href="'.$url->category($catid, $i, 1, 1).'">'.$i.'</a> ' : '<a href="'.pageurl($urlrule, $i, $array).'">'.$i.'</a> ';
 				}
 				else
-				{ 
-					$multipage .= ' <u><b>'.$i.'</b></u> '; 
-				} 
-			} 
+				{
+					$multipage .= ' <u><b>'.$i.'</b></u> ';
+				}
+			}
 			if($curr_page<$pages)
 			{
 				if($curr_page<$pages-5 && $more)
 				{
-					$multipage .= $catid ? '..<a href="'.$url->category($catid, $pages, 1, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1).'">ä¸‹ä¸€é¡µ</a>' : '..<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">ä¸‹ä¸€é¡µ</a>';
+					$multipage .= $catid ? '..<a href="'.$url->category($catid, $pages, 1, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1).'">ÏÂÒ»Ò³</a>' : '..<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">ÏÂÒ»Ò³</a>';
 				}
 				else
 				{
-					$multipage .= $catid ? '<a href="'.$url->category($catid, $pages, 1, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1, 1).'">ä¸‹ä¸€é¡µ</a>' : '<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">ä¸‹ä¸€é¡µ</a>';
+					$multipage .= $catid ? '<a href="'.$url->category($catid, $pages, 1, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1, 1).'">ÏÂÒ»Ò³</a>' : '<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">ÏÂÒ»Ò³</a>';
 				}
 			}
 			elseif($curr_page==$pages)
 			{
-				$multipage .= ' <u><b>'.$pages.'</b></u><a href="'.pageurl($urlrule, $curr_page, $array).'">ä¸‹ä¸€é¡µ</a>';
+				$multipage .= ' <u><b>'.$pages.'</b></u><a href="'.pageurl($urlrule, $curr_page, $array).'">ÏÂÒ»Ò³</a>';
 			}
-		} 
+		}
 		return $multipage;
 	}
 	else
@@ -1007,7 +1026,7 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 		if($num < 1) return '';
 		if($urlrule == '') $urlrule = url_par('page={$page}');
 		$pages = ceil($total/$perpage);
-		
+
 		$page = min($pages, $page);
 		$prepage = $page - 1;
 		$prepage = max($prepage, 1);
