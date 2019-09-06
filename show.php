@@ -26,7 +26,7 @@ if($r['groupids_view'])
 		}
 	}
 } else {
-	$allow_priv = false;
+	$allow_priv = $hava_checked = false;
 	$group_extend_result = $db->query("SELECT * FROM `".DB_PRE."member_group_extend` WHERE `userid`=$_userid");
 	while($e_rs = $db->fetch_array($group_extend_result)) {
 		$e_groupid = $e_rs['groupid'];
@@ -34,8 +34,10 @@ if($r['groupids_view'])
 			$allow_priv = true;
 			break;
 		}
+		$hava_checked = true;
 	}
-	if(!$allow_priv && !$priv_group->check('catid', $r['catid'], 'view', $_groupid)) showmessage('您没有浏览该栏目的权限');
+	if(!$hava_checked) $allow_priv = true;
+	if(!$priv_group->check('catid', $r['catid'], 'view', $_groupid)) showmessage('您没有浏览该栏目的权限');
 }
 $C = cache_read('category_'.$r['catid'].'.php');
 $attachment = new attachment($mod, $r['catid']);
