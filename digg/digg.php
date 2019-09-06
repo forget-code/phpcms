@@ -1,6 +1,6 @@
 <?php
 require './include/common.inc.php';
-
+$contentid = intval($contentid);
 if(isset($flag))
 {
 	$data = $digg->update($contentid, $flag);

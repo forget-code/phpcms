@@ -19,6 +19,9 @@ if(isset($_GET['dosubmit']))
 else
 {
 	$referer = urlencode($_GET['referer']);
+	$_GET['title'] = filter_xss($_GET['title']);
+	$_GET['callback_js'] = filter_xss($_GET['callback_js']);
+	$_GET['userid'] = intval($_GET['userid']);
 ?>
 function favorite(title,referer,returnid,callback_js,userid)
 {

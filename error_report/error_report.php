@@ -4,6 +4,7 @@ require_once PHPCMS_ROOT.'include/form.class.php';
 require_once 'output.class.php';
 
 require_once MOD_ROOT.'/admin/include/error.class.php';
+$contentid= intval($contentid);
 if ($dosubmit)
 {
     checkcode($checkcode, $M['enablecheckcode']);
@@ -27,7 +28,6 @@ if ($dosubmit)
 else
 {
 	$title = htmlspecialchars(stripslashes($title));
-	$contentid= intval($contentid);
     $radio = '';
 	$types = subtype('error_report');
     foreach($types AS $k => $v)

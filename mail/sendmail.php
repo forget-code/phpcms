@@ -38,13 +38,14 @@ switch ($action)
 			if(empty($mailto)) showmessage($LANG['input_addressee'],"goback");
 			if(empty($title)) showmessage($LANG['input_mail_subject'],"goback");
 			if(empty($content)) showmessage($LANG['input_mail_content'],"goback");
-			$content = stripslashes($content);
+			$content = stripslashes(filter_xss($content));
+			$mailto = filter_xss($mailto);
 			if( $mail->send($mailto, $title, $content, $PHPCMS['mail_user'])) showmessage('发送成功');
             else showmessage('发送失败,检查你的邮件设置');
 		}
 		else
 		{
-           	$mailto = isset($mailto) ? $mailto : '';
+           	$mailto = isset($mailto) ? filter_xss($mailto) : '';
 			$title = isset($title) ? $title : '';
 			$content = isset($content) ? stripslashes($content) : '';
 			$title = htmlspecialchars(stripslashes($title));

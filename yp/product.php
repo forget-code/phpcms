@@ -92,7 +92,7 @@ switch($action)
 		}
 		$view_type = max(intval($view_type), 1);
 		$page = $page ? $page : 1;
-		$pagesize = $pagesize ? $pagesize : 20;
+		$pagesize = $pagesize ? intval($pagesize) : 20;
 		$where = " WHERE p.userid=c.userid AND p.status=99";
 		if($catid)
 		{
@@ -103,7 +103,7 @@ switch($action)
 		}
 		if($areaname)
 		{
-			$areaname = htmlspecialchars($areaname);
+			$areaname = htmlspecialchars(filter_xss($areaname));
 			if(strpos(',',$areaname)===false)
 			{
 				$where .= " AND c.areaname='$areaname'";

@@ -101,7 +101,7 @@ switch($action)
 	if(!$page) $page = 1;
 	if($areaname)
 	{
-		$areaname = addslashes(htmlspecialchars(urldecode($areaname)));
+		$areaname = addslashes(htmlspecialchars(urldecode(filter_xss($areaname))));
 		$where .= " AND c.areaname = '{$areaname}'";
 	}
 	$pagesize = intval($pagesize);
@@ -132,8 +132,12 @@ switch($action)
 		break;
 	}
 	if($tid) $where .= " AND tid = '{$tid}'";
-	if($order) $where .= " ORDER BY b.price ASC";
-	else $where .= " ORDER BY b.price DESC";
+	if($order) {
+		$order = filter_xss($order);
+		$where .= " ORDER BY b.price ASC";
+	}  else {
+		$where .= " ORDER BY b.price DESC";
+	}
 	$templateid = 'buy';
 	break;
 }
