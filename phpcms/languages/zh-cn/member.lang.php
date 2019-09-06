@@ -18,6 +18,7 @@ $LANG['between_2_to_20'] = '应该为2-20位之间';
 $LANG['between_6_to_20'] = '应该为6-20位之间';
 $LANG['between_1_to_20'] = '应该为1-20位之间';
 $LANG['between_2_to_32'] = '应该为2-32位之间';
+$LANG['between_7_to_32'] = '应该为7-32位之间';
 $LANG['already_exist'] = '已经存在';
 $LANG['password_can_not_be_empty'] = '密码不能为空。';
 $LANG['cannot_empty'] = '不能为空。';
@@ -408,5 +409,13 @@ $LANG['get_verify'] = '获取验证码验证';
 $LANG['no_checksms'] = '不验证';
 $LANG['user_sendsms_title'] = '用户自发短信提示语';
 $LANG['param_error'] = '参数格式错误';
+$LANG['change_mobile'] = '更换手机';
+$LANG['soulbound'] = '已绑定';
+$LANG['new_mobile'] = '新手机号';
+$LANG['use_email_get_password'] = '通过电子邮箱找回密码';
+$LANG['use_mobile_get_password'] = '通过手机校验码找回密码';
+$LANG['use_username_get_password'] = '通过用户名找回密码';
+
+$LANG['select_find_password_type'] = '请选择密码找回方式';
 
 ?>

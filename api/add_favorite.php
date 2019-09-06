@@ -25,8 +25,8 @@ $_GET['callback'] = safe_replace($_GET['callback']);
 //判断是否登录	
 $phpcms_auth = param::get_cookie('auth');
 if($phpcms_auth) {
-	$auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
-	list($userid, $password) = explode("\t", sys_auth($phpcms_auth, 'DECODE', $auth_key));
+	list($userid, $password) = explode("\t", sys_auth($phpcms_auth, 'DECODE', get_auth_key('login')));
+	$userid = intval($userid);
 	if($userid >0) {
 
 	} else {

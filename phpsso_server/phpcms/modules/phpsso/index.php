@@ -192,10 +192,10 @@ class index extends phpsso {
 			$noticedata = $data;
 			$noticedata['uid'] = $userinfo['uid'];
 			messagequeue::add('member_edit', $noticedata);
-			if($this->username) {
-				$res = $this->db->update($data, array('username'=>$this->username));
-			} else {
+			if($this->uid > 0) {
 				$res = $this->db->update($data, array('uid'=>$this->uid));
+			} else if($this->username) {
+				$res = $this->db->update($data, array('username'=>$this->username));
 			}
 			exit("$res");
 		} else {
@@ -382,7 +382,7 @@ class index extends phpsso {
 				if (!$v['synlogin']) continue;
 				if($v['appid'] != $this->appid) {
 					$tmp_s = strstr($v['url'].$v['apifilename'], '?') ? '&' : '?';
-					$res .= '<script type="text/javascript" src="'.$v['url'].$v['apifilename'].$tmp_s.'time='.SYS_TIME.'&code='.urlencode(sys_auth('action=synlogin&username='.$this->username.'&uid='.$this->uid.'&password='.$this->password."&time=".SYS_TIME, 'ENCODE', $v['authkey'])).'" reload="1"></script>';
+					$res .= '<script type="text/javascript" src="'.$v['url'].$v['apifilename'].$tmp_s.'time='.SYS_TIME.'&code='.urlencode(sys_auth('action=synlogin&username='.$this->username.'&uid='.$this->uid.'&password='.$this->password."&sys_auth_time=".microtime(true), 'ENCODE', $v['authkey'])).'" reload="1"></script>';
 				}
 			}
 			exit($res);
@@ -408,7 +408,7 @@ class index extends phpsso {
 				if (!$v['synlogin']) continue;
 				if($v['appid'] != $this->appid) {
 					$tmp_s = strstr($v['url'].$v['apifilename'], '?') ? '&' : '?';
-					$res .= '<script type="text/javascript" src="'.$v['url'].$v['apifilename'].$tmp_s.'time='.SYS_TIME.'&code='.urlencode(sys_auth('action=synlogout&time='.SYS_TIME, 'ENCODE', $v['authkey'])).'" reload="1"></script>';
+					$res .= '<script type="text/javascript" src="'.$v['url'].$v['apifilename'].$tmp_s.'time='.SYS_TIME.'&code='.urlencode(sys_auth('action=synlogout&sys_auth_time='.microtime(true), 'ENCODE', $v['authkey'])).'" reload="1"></script>';
 				}
 			}
 			exit($res);
@@ -422,6 +422,9 @@ class index extends phpsso {
 	 */
 	public function getapplist() {
 		$applist = getcache('applist', 'admin');
+		foreach($applist as $key=>$value){
+			unset($applist[$key]['authkey']);
+		}
 		exit(serialize($applist));
 	}
 	
@@ -573,7 +576,7 @@ class index extends phpsso {
 		
 		//根据用户id创建文件夹
 		if(isset($this->data['uid']) && isset($this->data['avatardata'])) {
-			$this->uid = $this->data['uid'];
+			$this->uid = intval($this->data['uid']);
 			$this->avatardata = $this->data['avatardata'];
 		} else {
 			exit('0');
@@ -588,24 +591,19 @@ class index extends phpsso {
 		if(!file_exists($dir)) {
 			mkdir($dir, 0777, true);
 		}
-		
 		//存储flashpost图片
-		$filename = $dir.$this->uid.'.zip';
-		file_put_contents($filename, $this->avatardata);
-		
-		//解压缩文件
-		pc_base::load_app_class('pclzip', 'phpsso', 0);
-		$archive = new PclZip($filename);
-		if ($archive->extract(PCLZIP_OPT_PATH, $dir) == 0) {
-			die("Error : ".$archive->errorInfo(true));
-		}
-		//判断文件安全，删除压缩包和非jpg图片
+		$filename = $dir.'180x180.jpg';
+
+		$fp = fopen($filename, 'w');
+		fwrite($fp, $this->avatardata);
+		fclose($fp);
+
 		$avatararr = array('180x180.jpg', '30x30.jpg', '45x45.jpg', '90x90.jpg');
 		$files = glob($dir."*");
 		foreach($files as $_files) {
+			if(is_dir($_files)) dir_delete($_files);
 			if(!in_array(basename($_files), $avatararr)) @unlink($_files);
 		}
-		
 		if($handle = opendir($dir)) {
 		    while(false !== ($file = readdir($handle))) {
 				if($file !== '.' && $file !== '..') {
@@ -621,6 +619,13 @@ class index extends phpsso {
 		    }
 		    closedir($handle);    
 		}
+
+		pc_base::load_sys_class('image','','0');
+		$image = new image(1,0);
+		$image->thumb($filename, $dir.'30x30.jpg', 30, 30);
+		$image->thumb($filename, $dir.'45x45.jpg', 45, 45);
+		$image->thumb($filename, $dir.'90x90.jpg', 90, 90);
+		
 		$this->db->update(array('avatar'=>1), array('uid'=>$this->uid));
 		exit('1');
 	}

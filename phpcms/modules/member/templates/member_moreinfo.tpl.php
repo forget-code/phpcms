@@ -28,6 +28,12 @@
 			</td>
 		</tr>
 		<tr>
+			<td><?php echo L('mp')?></td>
+			<td>
+			<?php echo $memberinfo['mobile'];?>
+			</td>
+		</tr>
+		<tr>
 			<td><?php echo L('member_group')?></td>
 			<td>
 			<?php echo $grouplist[$memberinfo['groupid']]['name'];?>

@@ -986,6 +986,8 @@ artDialog.fn = artDialog.prototype = {
 				iframe.setAttribute("id", iframrId);
 				iframe.src = url;
 				that.DOM.content.css('padding', "5px 0px");
+				var _width = parseInt(that.config.width)+5;
+				that.DOM.content.css('width', _width);
 				that.DOM.content.css('height', that.config.height);
 				
 				msg = iframe;

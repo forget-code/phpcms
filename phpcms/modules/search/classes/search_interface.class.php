@@ -38,7 +38,7 @@ class search_interface {
 	public function search($q, $siteids=array(1), $typeids='', $adddate='', $offset=0, $limit=20, $orderby='@id desc') {
 
 		if(CHARSET != 'utf-8') {
-			$utf8_q = iconv(CHARSET, 'utf-8', $q);
+			$q = iconv(CHARSET, 'utf-8', $q);
 		}
 		
 		if($orderby) {
@@ -64,7 +64,7 @@ class search_interface {
 			$this->cl->SetFilterRange('adddate', $adddate[0], $adddate[1], false);
 		}
 		
-		$res = $this->cl->Query($utf8_q, 'main, delta');
+		$res = $this->cl->Query($q, 'main, delta');
 
 		return $res;
 	}

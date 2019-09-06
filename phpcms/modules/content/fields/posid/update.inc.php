@@ -14,7 +14,7 @@
 							$textcontent = array2string($textcontent);
 						}
 						$thumb = $this->data['thumb'] ? 1 : 0;
-						$position_data_db->insert(array('id'=>$this->id,'catid'=>$this->data['catid'],'posid'=>$r,'thumb'=>$thumb,'module'=>'content','modelid'=>$this->modelid,'data'=>$textcontent,'listorder'=>$this->id));
+						$position_data_db->insert(array('id'=>$this->id,'catid'=>$this->data['catid'],'posid'=>$r,'thumb'=>$thumb,'module'=>'content','modelid'=>$this->modelid,'data'=>$textcontent,'listorder'=>$this->id,'siteid'=>get_siteid()));
 					}
 				}
 			} else {

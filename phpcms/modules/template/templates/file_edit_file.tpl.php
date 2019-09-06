@@ -28,7 +28,7 @@ include $this->admin_tpl('header', 'admin');
  <?php } }?>
 </div>
 <div class="col-auto">
-<form action="?m=template&c=file&a=edit_file&style=<?php echo $this->style?>&dir=<?php echo $dir?>&file=<?php echo $file?>" method="post" name="myform" id="myform">
+<form action="?m=template&c=file&a=edit_file&style=<?php echo $this->style?>&dir=<?php echo $dir?>&file=<?php echo $file?>" method="post" name="myform" id="myform" onsubmit="return check_form();">
 <textarea name="code" id="code" style="height: 280px;width:96%; visibility:inherit"><?php echo $data?></textarea>
 <div class="bk10"></div>
 <input type="text" id="text" value="" /><input type="button" class="button" onClick="fnSearch()" value="<?php echo L('find_code')?>" /> <?php if ($is_write==0){echo '<font color="red">'.L("file_does_not_writable").'</font>';}?> <?php if (module_exists('tag')) {?><input type="button" class="button" onClick="create_tag()" value="<?php echo L('create_tag')?>" /> <input type="button" class="button" onClick="select_tag()" value="<?php echo L('select_tag')?>" /> <?php }?>
@@ -45,17 +45,7 @@ function fnSearch() {
 	var strBeReplaced; 
 	var strReplace; 
 	strBeReplaced = $('#text').val(); 
-	fnNext(); 
-	$('#code').focus(); 
-	oRange = document.getElementById('code').createTextRange(); 
-	for (i=1; oRange.findText(strBeReplaced)!=false; i++) { 
-		if(i==intCount){ 
-			oRange.select(); 
-			oRange.scrollIntoView(); 
-			break; 
-		} 
-		oRange.collapse(false); 
-	} 
+	findInPage(strBeReplaced);
 } 
 
 function create_tag() {
@@ -101,8 +91,66 @@ function fnNext(){
 		intCount = 1 ; 
 	} 
 } 
+
+function check_form() {
+	if(findInPage("{php")) {
+		alert("在线模板编辑禁止提交含有{php 的标签。");
+		return false;
+	} else if(findInPage("<\?php")) {
+		alert('在线模板编辑禁止提交含有<\?php 的标签。');
+		return false;
+	} else {
+		myform.submit();
+	}
+}
+var isie = false;
+if(navigator.userAgent.indexOf("MSIE")>0) { 
+   isie = true;
+}
+   
+var win = window;    // window to search. 
+var n   = 0; 
+
+function findInPage(str) { 
+  var txt, i, found;
+  if (str == "") 
+    return false; 
+  if (isie) { 
+	 txt = win.document.body.createTextRange();
+		for (i = 0; i <= n && (found = txt.findText(str)) != false; i++) { 
+		  txt.moveStart("character", 1); 
+		  txt.moveEnd("textedit"); 
+		} 
+		if (found) {
+		  txt.moveStart("character", -1); 
+		  txt.findText(str); 
+		  txt.select(); 
+		  txt.scrollIntoView();
+		  n++;
+		  return true;
+		} else {
+		  if (n > 0) {
+			n = 0; 
+			findInPage(str);
+			return true;
+		  }
+	  }
+	  return false; 
+  } else {
+		 if (!win.find(str)) 
+      while(win.find(str, true)) 
+        n++; 
+    else
+      n++;
+    if (n == 0) {
+      return false
+	 } else {
+		 return true;
+	 }
+  }
+}
 //--> 
-</SCRIPT> 
 </script>
+
 </body>
 </html>

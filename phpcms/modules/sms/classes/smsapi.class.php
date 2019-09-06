@@ -89,7 +89,7 @@ class smsapi {
 	 * @param string $charset 短信字符类型 gbk / utf-8
 	 * @param string $id_code 唯一值 、可用于验证码
 	 */
-	public function send_sms($mobile='', $content='', $send_time='', $charset='gbk',$id_code = '',$tplid = '') {
+	public function send_sms($mobile='', $content='', $send_time='', $charset='gbk',$id_code = '',$tplid = '',$return_code = 0) {
 		//短信发送状态
 		$status = $this->_sms_status();
 		if(is_array($mobile)){
@@ -127,16 +127,7 @@ class smsapi {
 		$send_userid = param::get_cookie('_userid') ? intval(param::get_cookie('_userid')) : 0;
 		$ip = ip();
 		
-		//替换为真正的短信内容
-		$tpl_case = $this->show_tpl($tplid,'1');
-		preg_match_all("/\[.*?\]/s",$tpl_case,$match,PREG_OFFSET_CAPTURE);
-		$match = $match[0]; 
-		$new_array  = array(); 
-		foreach($match as $m){
-			$new_array[] = $m[0];
-		}
-		$content_array = explode("||", $content);
-		$new_content = preg_replace($new_array,$content_array,$tpl_case); 
+		$new_content = $content;
 		if(isset($this->statuscode)) {
  			$sms_report_db->insert(array('mobile'=>$mobile,'posttime'=>SYS_TIME,'id_code'=>$id_code,'send_userid'=>$send_userid,'status'=>$this->statuscode,'msg'=>$new_content,'return_id'=>$return,'ip'=>$ip));
 		} else {
@@ -149,7 +140,11 @@ class smsapi {
 			}
 		}
 		//end
-		return isset($status[$arr[0]]) ? $status[$arr[0]] : $arr[0];
+		if($return_code) {
+			return $arr[0];
+		} else {
+			return isset($status[$arr[0]]) ? $status[$arr[0]] : $arr[0];
+		}
 	}
 		
 	/**

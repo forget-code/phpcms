@@ -314,6 +314,7 @@ class member extends admin {
 			$basicinfo['groupid'] = $_POST['info']['groupid'];
 			$basicinfo['modelid'] = $_POST['info']['modelid'];
 			$basicinfo['vip'] = $_POST['info']['vip'];
+			$basicinfo['mobile'] = $_POST['info']['mobile'];
 			$basicinfo['overduedate'] = strtotime($_POST['info']['overduedate']);
 
 			//会员基本信息

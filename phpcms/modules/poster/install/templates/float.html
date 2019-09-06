@@ -51,7 +51,7 @@ function showADContent() {
 	  str += "<embed wmode='opaque' src='"+this.UploadFilePath+AD.Images[0].ImgPath+"' quality='autohigh' name='flashad' swliveconnect='TRUE' pluginspage='http://www.macromedia.com/go/getflashplayer' type='application/x-shockwave-flash' width='"+this.Width+"' height='"+this.Height+"'></embed>";
       str += "</object>";	  
   }
-  str += "<div style='text-align:right;'><a href='#;' onclick='javascript:document.getElementById(\"ZCMSAD_"+this.PosID+"\").style.display=\"none\"'>关闭</a></div>";
+  str += "<div style='text-align:right;'><a href='#;' onclick='javascript:document.getElementById(\"PCMSAD_"+this.PosID+"\").style.display=\"none\"'>关闭</a></div>";
   str += "</div>";
   document.write(str);
 }

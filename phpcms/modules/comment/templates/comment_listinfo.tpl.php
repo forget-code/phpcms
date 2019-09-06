@@ -67,7 +67,7 @@ include $this->admin_tpl('header', 'admin');
 		<td width="130"><?php echo $v['username']?><br /><?php echo $v['ip']?></td>
 		<td><font color="#888888"><?php echo L('chez')?> <?php echo format::date($v['creat_at'], 1)?> <?php echo L('release')?></font><br /><?php echo $v['content']?></td>
 		<td width="230"><a href="?m=comment&c=comment_admin&a=listinfo&search=1&searchtype=0&keyword=<?php echo urlencode($comment_info['title'])?>&pc_hash=<?php echo $_SESSION['pc_hash']?>&tableid=<?php echo $tableid?>"><?php echo $comment_info['title']?></td>
-		<td align='center' width="72"><a href="?m=comment&c=comment_admin&a=del&ids=<?php echo $v['id']?>&tableid=<?php echo $tableid?>&dosubmit=1" onclick="return check(<?php echo $v['id']?>, -1, '<?php echo $v['commentid']?>')"><?php echo L('delete');?></a> </td>
+		<td align='center' width="72"><a href="?m=comment&c=comment_admin&a=del&ids=<?php echo $v['id']?>&tableid=<?php echo $tableid?>&dosubmit=1" onclick="return check(<?php echo $v['id']?>, -1, '<?php echo new_html_special_chars($v['commentid']);?>')"><?php echo L('delete');?></a> </td>
 	</tr>
      <?php }
 	}

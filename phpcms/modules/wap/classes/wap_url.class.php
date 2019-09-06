@@ -11,7 +11,7 @@ class wap_url{
 	public function show($id, $page = 0, $catid = 0, $typeid = 0, $prefix = '',$data = '',$action = 'edit') {
 		$page = max($page,1);
 		$urls = '';
-		$urlrules = 'index.php?m=wap&c=index&a=show&catid={$catid}&typeid={$typeid}&id={$id}|index.php?m=wap&c=index&a=show&catid={$catid}&typeid={$typeid}&id={$id}&page={$page}';
+		$urlrules = 'c=index&a=show&catid={$catid}&typeid={$typeid}&id={$id}|c=index&a=show&catid={$catid}&typeid={$typeid}&id={$id}&page={$page}';
 		$urlrules_arr = explode('|',$urlrules);
 		if($page==1) {
 			$urlrule = $urlrules_arr[0];
@@ -19,7 +19,12 @@ class wap_url{
 			$urlrule = $urlrules_arr[1];
 		}				
 		$urls = str_replace(array('{$catid}','{$typeid}','{$id}','{$page}'),array($catid,$typeid,$id,$page),$urlrule);		
-		$url_arr[0] = $url_arr[1] = APP_PATH.$urls;		
+		$laststr = substr(trim(WAP_SITEURL), -1);
+		if($laststr=='?'){
+			$url_arr[0] = $url_arr[1] = WAP_SITEURL.$urls;
+		}else{
+			$url_arr[0] = $url_arr[1] = WAP_SITEURL.'&'.$urls;
+		}	
 		return $url_arr;
 	}
 	/**

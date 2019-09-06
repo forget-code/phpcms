@@ -48,7 +48,7 @@ class log extends admin {
 	 */
 	public function search_log() {
  		$where = '';
-		extract($_GET['search']);
+		extract($_GET['search'],EXTR_SKIP);
 		if($username){
 			$where .= $where ?  " AND username='$username'" : " username='$username'";
 		}

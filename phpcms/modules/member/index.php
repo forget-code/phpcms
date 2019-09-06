@@ -51,7 +51,7 @@ class index extends foreground {
 		header("Cache-control: private");
 		if(isset($_POST['dosubmit'])) {
 			if($member_setting['enablcodecheck']=='1'){//开启验证码
-				if ((empty($_SESSION['connectid']) && $_SESSION['code'] != strtolower($_POST['code'])) || empty($_SESSION['code'])) {
+				if ((empty($_SESSION['connectid']) && $_SESSION['code'] != strtolower($_POST['code']) && $_POST['code']!==NULL) || empty($_SESSION['code'])) {
 					showmessage(L('code_error'));
 				} else {
 					$_SESSION['code'] = '';
@@ -65,7 +65,7 @@ class index extends foreground {
 			$userinfo['nickname'] = (isset($_POST['nickname']) && is_username($_POST['nickname'])) ? $_POST['nickname'] : '';
 			
 			$userinfo['email'] = (isset($_POST['email']) && is_email($_POST['email'])) ? $_POST['email'] : exit('0');
-			$userinfo['password'] = isset($_POST['password']) ? $_POST['password'] : exit('0');
+			$userinfo['password'] = (isset($_POST['password']) && is_badword($_POST['password'])==false) ? $_POST['password'] : exit('0');
 			
 			$userinfo['email'] = (isset($_POST['email']) && is_email($_POST['email'])) ? $_POST['email'] : exit('0');
 
@@ -161,8 +161,7 @@ class index extends foreground {
 							param::set_cookie('_username', $userinfo['username'], $cookietime);
 							param::set_cookie('email', $userinfo['email'], $cookietime);							
 						} else {
-							$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-							$phpcms_auth = sys_auth($userid."\t".$userinfo['password'], 'ENCODE', $phpcms_auth_key);
+							$phpcms_auth = sys_auth($userid."\t".$userinfo['password'], 'ENCODE', get_auth_key('login'));
 							
 							param::set_cookie('auth', $phpcms_auth, $cookietime);
 							param::set_cookie('_userid', $userid, $cookietime);
@@ -175,8 +174,7 @@ class index extends foreground {
 					//如果需要邮箱认证
 					if($member_setting['enablemailcheck']) {
 						pc_base::load_sys_func('mail');
-						$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
-						$code = sys_auth($userid.'|'.$phpcms_auth_key, 'ENCODE', $phpcms_auth_key);
+						$code = sys_auth($userid.'|'.microtime(true), 'ENCODE', get_auth_key('email'));
 						$url = APP_PATH."index.php?m=member&c=index&a=register&code=$code&verify=1";
 						$message = $member_setting['registerverifymessage'];
 						$message = str_replace(array('{click}','{url}','{username}','{email}','{password}'), array('<a href="'.$url.'">'.L('please_click').'</a>',$url,$userinfo['username'],$userinfo['email'],$password), $message);
@@ -204,8 +202,7 @@ class index extends foreground {
 			
 			if(!empty($_GET['verify'])) {
 				$code = isset($_GET['code']) ? trim($_GET['code']) : showmessage(L('operation_failure'), 'index.php?m=member&c=index');
-				$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
-				$code_res = sys_auth($code, 'DECODE', $phpcms_auth_key);
+				$code_res = sys_auth($code, 'DECODE', get_auth_key('email'));
 				$code_arr = explode('|', $code_res);
 				$userid = isset($code_arr[0]) ? $code_arr[0] : '';
 				$userid = is_numeric($userid) ? $userid : showmessage(L('operation_failure'), 'index.php?m=member&c=index');
@@ -295,8 +292,7 @@ class index extends foreground {
 		}
 		//验证邮箱格式
 		pc_base::load_sys_func('mail');
-		$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
-		$code = sys_auth($_userid.'|'.$phpcms_auth_key, 'ENCODE', $phpcms_auth_key);
+		$code = sys_auth($_userid.'|'.microtime(true), 'ENCODE', get_auth_key('email'));
 		$url = APP_PATH."index.php?m=member&c=index&a=register&code=$code&verify=1";
 		
 		//读取配置获取验证信息
@@ -382,7 +378,7 @@ class index extends foreground {
 		//初始化phpsso
 		$phpsso_api_url = $this->_init_phpsso();
 		$ps_auth_key = pc_base::load_config('system', 'phpsso_auth_key');
-		$auth_data = $this->client->auth_data(array('uid'=>$this->memberinfo['phpssouid'], 'ps_auth_key'=>$ps_auth_key), '', $ps_auth_key);
+		$auth_data = $this->client->auth_data(array('uid'=>$this->memberinfo['phpssouid'],'sys_auth_time'=>microtime(true)), '', $ps_auth_key);
 		$upurl = base64_encode($phpsso_api_url.'/index.php?m=phpsso&c=index&a=uploadavatar&auth_data='.$auth_data);
 		//获取头像数组
 		$avatar = $this->client->ps_getavatar($this->memberinfo['phpssouid']);
@@ -399,6 +395,7 @@ class index extends foreground {
 		if(isset($_POST['dosubmit'])) {
 			//更新用户昵称
 			$nickname = isset($_POST['nickname']) && is_username(trim($_POST['nickname'])) ? trim($_POST['nickname']) : '';
+			$nickname = safe_replace($nickname);
 			if($nickname) {
 				$this->db->update(array('nickname'=>$nickname), array('userid'=>$this->memberinfo['userid']));
 				if(!isset($cookietime)) {
@@ -464,12 +461,16 @@ class index extends foreground {
 			if($this->memberinfo['password'] != password($_POST['info']['password'], $this->memberinfo['encrypt'])) {
 				showmessage(L('old_password_incorrect'), HTTP_REFERER);
 			}
+			
 			//修改会员邮箱
 			if($this->memberinfo['email'] != $_POST['info']['email'] && is_email($_POST['info']['email'])) {
 				$email = $_POST['info']['email'];
 				$updateinfo['email'] = $_POST['info']['email'];
 			} else {
 				$email = '';
+			}
+			if(!is_password($_POST['info']['newpassword'])) {
+				showmessage(L('password_format_incorrect'), HTTP_REFERER);
 			}
 			$newpassword = password($_POST['info']['newpassword'], $this->memberinfo['encrypt']);
 			$updateinfo['password'] = $newpassword;
@@ -480,7 +481,7 @@ class index extends foreground {
 				$this->_init_phpsso();
 				$res = $this->client->ps_member_edit('', $email, $_POST['info']['password'], $_POST['info']['newpassword'], $this->memberinfo['phpssouid'], $this->memberinfo['encrypt']);
 				$message_error = array('-1'=>L('user_not_exist'), '-2'=>L('old_password_incorrect'), '-3'=>L('email_already_exist'), '-4'=>L('email_error'), '-5'=>L('param_error'));
-				if ($res) showmessage($message_error[$res]);
+				if ($res < 0) showmessage($message_error[$res]);
 			}
 
 			showmessage(L('operation_success'), HTTP_REFERER);
@@ -491,7 +492,45 @@ class index extends foreground {
 			include template('member', 'account_manage_password');
 		}
 	}
-	
+	//更换手机号码
+	public function account_change_mobile() {
+		$memberinfo = $this->memberinfo;
+		if(isset($_POST['dosubmit'])) {
+			if(!is_password($_POST['password'])) {
+				showmessage(L('password_format_incorrect'), HTTP_REFERER);
+			}
+			if($this->memberinfo['password'] != password($_POST['password'], $this->memberinfo['encrypt'])) {
+				showmessage(L('old_password_incorrect'));
+			}
+			$sms_report_db = pc_base::load_model('sms_report_model');
+			$mobile_verify = $_POST['mobile_verify'];
+			$mobile = $_POST['mobile'];
+			if($mobile){
+				if(!preg_match('/^1([0-9]{10})$/',$mobile)) exit('check phone error');
+				$posttime = SYS_TIME-600;
+				$where = "`mobile`='$mobile' AND `send_userid`='".$memberinfo['userid']."' AND `posttime`>'$posttime'";
+				$r = $sms_report_db->get_one($where,'id,id_code','id DESC');
+				if($r && $r['id_code']==$mobile_verify) {
+					$sms_report_db->update(array('id_code'=>''),$where);
+					$this->db->update(array('mobile'=>$mobile),array('userid'=>$memberinfo['userid']));
+					showmessage("手机号码更新成功！",'?m=member&c=index&a=account_change_mobile&t=1');
+				} else {
+					showmessage("短信验证码错误！请重新获取！");
+				}
+			}else{
+				showmessage("短信验证码已过期！请重新获取！");
+			}
+		} else {
+			include template('member', 'account_change_mobile');
+		}
+	}
+
+	//选择密码找回方式
+	public function public_get_password_type() {
+		$siteid = intval($_GET['siteid']);
+		include template('member', 'get_password_type');
+	}
+
 	public function account_manage_upgrade() {
 		$memberinfo = $this->memberinfo;
 		$grouplist = getcache('grouplist');
@@ -562,12 +601,15 @@ class index extends foreground {
 				//判断验证码
 				$code = isset($_POST['code']) && trim($_POST['code']) ? trim($_POST['code']) : showmessage(L('input_code'), HTTP_REFERER);
 				if ($_SESSION['code'] != strtolower($code)) {
+					$_SESSION['code'] = '';
 					showmessage(L('code_error'), HTTP_REFERER);
 				}
+				$_SESSION['code'] = '';
 			}
 			
-			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : showmessage(L('username_empty'), HTTP_REFERER);
+			$username = isset($_POST['username']) && is_username($_POST['username']) ? trim($_POST['username']) : showmessage(L('username_empty'), HTTP_REFERER);
 			$password = isset($_POST['password']) && trim($_POST['password']) ? trim($_POST['password']) : showmessage(L('password_empty'), HTTP_REFERER);
+			is_password($_POST['password']) && is_badword($_POST['password'])==false ? trim($_POST['password']) : showmessage(L('password_format_incorrect'), HTTP_REFERER);
 			$cookietime = intval($_POST['cookietime']);
 			$synloginstr = ''; //同步登陆js代码
 			
@@ -695,8 +737,7 @@ class index extends foreground {
 			$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 			$cookietime = $_cookietime ? SYS_TIME + $_cookietime : 0;
 			
-			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-			$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+			$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 			
 			param::set_cookie('auth', $phpcms_auth, $cookietime);
 			param::set_cookie('_userid', $userid, $cookietime);
@@ -950,7 +991,7 @@ class index extends foreground {
 	 * @return $status {-4：用户名禁止注册;-1:用户名已经存在 ;1:成功}
 	 */
 	public function public_checkname_ajax() {
-		$username = isset($_GET['username']) && trim($_GET['username']) ? trim($_GET['username']) : exit(0);
+		$username = isset($_GET['username']) && trim($_GET['username']) && is_username(trim($_GET['username'])) ? trim($_GET['username']) : exit(0);
 		if(CHARSET != 'utf-8') {
 			$username = iconv('utf-8', CHARSET, $username);
 			$username = addslashes($username);
@@ -978,7 +1019,7 @@ class index extends foreground {
 	 * @return $status {0:已存在;1:成功}
 	 */
 	public function public_checknickname_ajax() {
-		$nickname = isset($_GET['nickname']) && trim($_GET['nickname']) ? trim($_GET['nickname']) : exit('0');
+		$nickname = isset($_GET['nickname']) && trim($_GET['nickname']) && is_username(trim($_GET['nickname'])) ? trim($_GET['nickname']) : exit('0');
 		if(CHARSET != 'utf-8') {
 			$nickname = iconv('utf-8', CHARSET, $nickname);
 			$nickname = addslashes($nickname);
@@ -1021,7 +1062,7 @@ class index extends foreground {
 	 */
 	public function public_checkemail_ajax() {
 		$this->_init_phpsso();
-		$email = isset($_GET['email']) && trim($_GET['email']) ? trim($_GET['email']) : exit(0);
+		$email = isset($_GET['email']) && trim($_GET['email']) && is_email(trim($_GET['email']))  ? trim($_GET['email']) : exit(0);
 		
 		$status = $this->client->ps_checkemail($email);
 		if($status == -5) {	//禁止注册
@@ -1050,15 +1091,29 @@ class index extends foreground {
 	public function public_sina_login() {
 		define('WB_AKEY', pc_base::load_config('system', 'sina_akey'));
 		define('WB_SKEY', pc_base::load_config('system', 'sina_skey'));
-		pc_base::load_app_class('weibooauth', '' ,0);
+		define('WEB_CALLBACK', APP_PATH.'index.php?m=member&c=index&a=public_sina_login&callback=1');
+		pc_base::load_app_class('saetv2.ex', '' ,0);
 		$this->_session_start();
 					
 		if(isset($_GET['callback']) && trim($_GET['callback'])) {
-			$o = new WeiboOAuth(WB_AKEY, WB_SKEY, $_SESSION['keys']['oauth_token'], $_SESSION['keys']['oauth_token_secret']);
-			$_SESSION['last_key'] = $o->getAccessToken($_REQUEST['oauth_verifier']);
-			$c = new WeiboClient(WB_AKEY, WB_SKEY, $_SESSION['last_key']['oauth_token'], $_SESSION['last_key']['oauth_token_secret']);
-			//获取用户信息
-			$me = $c->verify_credentials();
+			$o = new SaeTOAuthV2(WB_AKEY, WB_SKEY);
+			if (isset($_REQUEST['code'])) {
+				$keys = array();
+				$keys['code'] = $_REQUEST['code'];
+				$keys['redirect_uri'] = WEB_CALLBACK;
+				try {
+					$token = $o->getAccessToken('code', $keys);
+				} catch (OAuthException $e) {
+				}
+			}
+			if ($token) {
+				$_SESSION['token'] = $token;
+			}
+			$c = new SaeTClientV2(WB_AKEY, WB_SKEY, $_SESSION['token']['access_token'] );
+			$ms  = $c->home_timeline(); // done
+			$uid_get = $c->get_uid();
+			$uid = $uid_get['uid'];
+			$me = $c->show_user_by_id( $uid);//根据ID获取用户等基本信息
 			if(CHARSET != 'utf-8') {
 				$me['name'] = iconv('utf-8', CHARSET, $me['name']);
 				$me['location'] = iconv('utf-8', CHARSET, $me['location']);
@@ -1087,8 +1142,7 @@ class index extends foreground {
 					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 					$cookietime = $_cookietime ? TIME + $_cookietime : 0;
 					
-					$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 					
 					param::set_cookie('auth', $phpcms_auth, $cookietime);
 					param::set_cookie('_userid', $userid, $cookietime);
@@ -1157,12 +1211,8 @@ class index extends foreground {
 				showmessage(L('login_failure'), 'index.php?m=member&c=index&a=login');
 			}
 		} else {
-			$o = new WeiboOAuth(WB_AKEY, WB_SKEY);
-			$keys = $o->getRequestToken();
-			$aurl = $o->getAuthorizeURL($keys['oauth_token'] ,false , APP_PATH.'index.php?m=member&c=index&a=public_sina_login&callback=1');
-			$_SESSION['keys'] = $keys;
-			
-			
+			$o = new SaeTOAuthV2(WB_AKEY, WB_SKEY);
+			$aurl = $o->getAuthorizeURL(WEB_CALLBACK);
 			include template('member', 'connect_sina');
 		}
 	}
@@ -1210,8 +1260,7 @@ class index extends foreground {
 					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 					$cookietime = $_cookietime ? TIME + $_cookietime : 0;
 					
-					$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 					
 					param::set_cookie('auth', $phpcms_auth, $cookietime);
 					param::set_cookie('_userid', $userid, $cookietime);
@@ -1274,8 +1323,7 @@ class index extends foreground {
 								if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
 								$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 								$cookietime = $_cookietime ? TIME + $_cookietime : 0;
-								$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-								$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+								$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 								param::set_cookie('auth', $phpcms_auth, $cookietime);
 								param::set_cookie('_userid', $userid, $cookietime);
 								param::set_cookie('_username', $username, $cookietime);
@@ -1290,9 +1338,9 @@ class index extends foreground {
  								$_SESSION['connectid'] = $openid;
 								$_SESSION['from'] = 'qq';
 								if(CHARSET != 'utf-8') {//转编码
-									$connect_username = iconv('utf-8', CHARSET, $user['nickname']); 
+									$connect_username = iconv('utf-8', CHARSET, $user);
 								} else {
-									 $connect_username = $user['nickname']; 
+									 $connect_username = $user;
 								}
  								include template('member', 'connect');
 						}
@@ -1332,8 +1380,7 @@ class index extends foreground {
 					$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 					$cookietime = $_cookietime ? TIME + $_cookietime : 0;
 					
-					$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
+					$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', get_auth_key('login'));
 					
 					param::set_cookie('auth', $phpcms_auth, $cookietime);
 					param::set_cookie('_userid', $userid, $cookietime);
@@ -1449,9 +1496,8 @@ class index extends foreground {
 			}
 			
 			pc_base::load_sys_func('mail');
-			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
 
-			$code = sys_auth($memberinfo['userid']."\t".SYS_TIME, 'ENCODE', $phpcms_auth_key);
+			$code = sys_auth($memberinfo['userid']."\t".microtime(true), 'ENCODE', get_auth_key('email'));
 
 			$url = APP_PATH."index.php?m=member&c=index&a=public_forget_password&code=$code";
 			$message = $member_setting['forgetpassword'];
@@ -1467,9 +1513,8 @@ class index extends foreground {
 			sendmail($email, L('forgetpassword'), $message, '', '', $sitename);
 			showmessage(L('operation_success'), 'index.php?m=member&c=index&a=login');
 		} elseif($_GET['code']) {
-			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
 			$hour = date('y-m-d h', SYS_TIME);
-			$code = sys_auth($_GET['code'], 'DECODE', $phpcms_auth_key);
+			$code = sys_auth($_GET['code'], 'DECODE', get_auth_key('email'));
 			$code = explode("\t", $code);
 
 			if(is_array($code) && is_numeric($code[0]) && date('y-m-d h', SYS_TIME) == date('y-m-d h', $code[1])) {
@@ -1574,69 +1619,150 @@ class index extends foreground {
 	 * 手机短信方式找回密码
 	 */
 	public function public_forget_password_mobile () {
- 		$email_config = getcache('common', 'commons'); 
+		$step = intval($_POST['step']);
+		$step = max($step,1);
 		$this->_session_start();
-		$member_setting = getcache('member_setting');
-		if(isset($_POST['dosubmit'])) {
+		
+		if(isset($_POST['dosubmit']) && $step==2) {
 		//处理提交申请，以手机号为准
 			if ($_SESSION['code'] != strtolower($_POST['code'])) {
 				showmessage(L('code_error'), HTTP_REFERER);
 			}
-			$mobile = $_POST['mobile'];
-			$mobile_verify = intval($_POST['mobile_verify']);
-			$password = $_POST['password'];
-			$pwdconfirm = $_POST['pwdconfirm'];
-			if($password != $pwdconfirm){
-				showmessage(L('passwords_not_match'), HTTP_REFERER);
+			$username = safe_replace($_POST['username']);
+
+			$r = $this->db->get_one(array('username'=>$username),'userid,mobile');
+			if($r['mobile']=='') {
+				$_SESSION['mobile'] = '';
+				$_SESSION['userid'] = '';
+				$_SESSION['code'] = '';
+				showmessage("该账号没有绑定手机号码，请选择其他方式找回！");
 			}
-			//验证手机号和传递的验证码是否匹配
+			$_SESSION['mobile'] = $r['mobile'];
+			$_SESSION['userid'] = $r['userid'];
+			include template('member', 'forget_password_mobile');
+		} elseif(isset($_POST['dosubmit']) && $step==3) {
 			$sms_report_db = pc_base::load_model('sms_report_model');
-			$sms_report_array = $sms_report_db->get_one(array("mobile">$mobile,'in_code'=>$mobile_verify));
-			if(empty($sms_report_array)){
-				showmessage("手机和验证码不对应，请通过正常渠道修改密码！", HTTP_REFERER);
+			$mobile_verify = $_POST['mobile_verify'];
+			$mobile = $_SESSION['mobile'];
+			if($mobile){
+				if(!preg_match('/^1([0-9]{10})$/',$mobile)) exit('check phone error');
+				pc_base::load_app_func('global','sms');
+				$posttime = SYS_TIME-600;
+				$where = "`mobile`='$mobile' AND `posttime`>'$posttime'";
+				$r = $sms_report_db->get_one($where,'id,id_code','id DESC');
+				if($r && $r['id_code']==$mobile_verify) {
+					$sms_report_db->update(array('id_code'=>''),$where);
+					$userid = $_SESSION['userid'];
+					$updateinfo = array();
+					$password = random(8,"23456789abcdefghkmnrstwxy");
+					$encrypt = random(6,"23456789abcdefghkmnrstwxyABCDEFGHKMNRSTWXY");
+					$updateinfo['encrypt'] = $encrypt;
+					$updateinfo['password'] = password($password, $encrypt);
+					
+					$this->db->update($updateinfo, array('userid'=>$userid));
+					$rs = $this->db->get_one(array('userid'=>$userid),'phpssouid');
+					if(pc_base::load_config('system', 'phpsso')) {
+						//初始化phpsso
+						$this->_init_phpsso();
+						$this->client->ps_member_edit('', '', '', $password, $rs['phpssouid'], $encrypt);
+					}
+					$status = sendsms($mobile, $password, 5);
+					if($status!==0) showmessage($status);
+					$_SESSION['mobile'] = '';
+					$_SESSION['userid'] = '';
+					$_SESSION['code'] = '';
+					showmessage("密码已重置成功！请查收手机",'?m=member&c=index&a=login');
+				} else {
+					showmessage("短信验证码错误！请重新获取！");
+				}
+			}else{
+				showmessage("短信验证码已过期！请重新获取！");
 			}
-			//更新密码
-			$updateinfo = array();
-			$updateinfo['password'] = $password;
- 			$this->db->update($updateinfo, array('userid'=>$this->memberinfo['userid']));
-			if(pc_base::load_config('system', 'phpsso')) {
-				//初始化phpsso
-				$this->_init_phpsso();
-				$res = $this->client->ps_member_edit('', $email, $_POST['info']['password'], $_POST['info']['newpassword'], $this->memberinfo['phpssouid'], $this->memberinfo['encrypt']);
-			}
-			
-			
-			
-			$memberinfo = $this->db->get_one(array('email'=>$_POST['email']));
-			if(!empty($memberinfo['email'])) {
-				$email = $memberinfo['email'];
-			} else {
-				showmessage(L('email_error'), HTTP_REFERER);
-			}
-			
-			pc_base::load_sys_func('mail');
-			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-
-			$code = sys_auth($memberinfo['userid']."\t".SYS_TIME, 'ENCODE', $phpcms_auth_key);
-
-			$url = APP_PATH."index.php?m=member&c=index&a=public_forget_password&code=$code";
-			$message = $member_setting['forgetpassword'];
-			$message = str_replace(array('{click}','{url}'), array('<a href="'.$url.'">'.L('please_click').'</a>',$url), $message);
-			//获取站点名称
-			$sitelist = getcache('sitelist', 'commons');
-			
-			if(isset($sitelist[$memberinfo['siteid']]['name'])) {
-				$sitename = $sitelist[$memberinfo['siteid']]['name'];
-			} else {
-				$sitename = 'PHPCMS_V9_MAIL';
-			}
-			sendmail($email, L('forgetpassword'), $message, '', '', $sitename);
-			showmessage(L('operation_success'), 'index.php?m=member&c=index&a=login');
 		} else {
 			$siteid = isset($_REQUEST['siteid']) && trim($_REQUEST['siteid']) ? intval($_REQUEST['siteid']) : 1;
 			$siteinfo = siteinfo($siteid);
  			include template('member', 'forget_password_mobile');
 		}
+	}
+	//通过用户名找回密码
+	public function public_forget_password_username() {
+		$step = intval($_POST['step']);
+		$step = max($step,1);
+		$this->_session_start();
+		
+		if(isset($_POST['dosubmit']) && $step==2) {
+		//处理提交申请，以手机号为准
+			if ($_SESSION['code'] != strtolower($_POST['code'])) {
+				showmessage(L('code_error'), HTTP_REFERER);
+			}
+			$username = safe_replace($_POST['username']);
+
+			$r = $this->db->get_one(array('username'=>$username),'userid,email');
+			if($r['email']=='') {
+				$_SESSION['userid'] = '';
+				$_SESSION['code'] = '';
+				showmessage("该账号没有绑定手机号码，请选择其他方式找回！");
+			} else {
+				$_SESSION['userid'] = $r['userid'];
+				$_SESSION['email'] = $r['email'];
+			}
+			$email_arr = explode('@',$r['email']);
+			include template('member', 'forget_password_username');
+		} elseif(isset($_POST['dosubmit']) && $step==3) {
+			$sms_report_db = pc_base::load_model('sms_report_model');
+			$mobile_verify = $_POST['mobile_verify'];
+			$email = $_SESSION['email'];
+			if($email){
+				if(!preg_match('/^([a-z0-9_]+)@([a-z0-9_]+).([a-z]{2,6})$/',$email)) exit('check email error');
+				if($_SESSION['emc_times']=='' || $_SESSION['emc_times']<=0){
+					showmessage("验证次数超过5次,验证码失效，请重新获取邮箱验证码！",HTTP_REFERER,3000);
+				}
+				$_SESSION['emc_times'] = $_SESSION['emc_times']-1;
+				if($_SESSION['emc']!='' && $_POST['email_verify']==$_SESSION['emc']) {
+					
+					$userid = $_SESSION['userid'];
+					$updateinfo = array();
+					$password = random(8,"23456789abcdefghkmnrstwxy");
+					$encrypt = random(6,"23456789abcdefghkmnrstwxyABCDEFGHKMNRSTWXY");
+					$updateinfo['encrypt'] = $encrypt;
+					$updateinfo['password'] = password($password, $encrypt);
+					
+					$this->db->update($updateinfo, array('userid'=>$userid));
+					$rs = $this->db->get_one(array('userid'=>$userid),'phpssouid');
+					if(pc_base::load_config('system', 'phpsso')) {
+						//初始化phpsso
+						$this->_init_phpsso();
+						$this->client->ps_member_edit('', '', '', $password, $rs['phpssouid'], $encrypt);
+					}
+					$_SESSION['email'] = '';
+					$_SESSION['userid'] = '';
+					$_SESSION['emc'] = '';
+					$_SESSION['code'] = '';
+					pc_base::load_sys_func('mail');
+					sendmail($email, '密码重置通知', "您在".date('Y-m-d H:i:s')."通过密码找回功能，重置了本站密码。");
+					include template('member', 'forget_password_username');
+					exit;
+				} else {
+					showmessage("验证码错误！请重新获取！",HTTP_REFERER,3000);
+				}
+			} else {
+				showmessage("非法请求！");
+			}
+		} else {
+ 			include template('member', 'forget_password_username');
+		}
+	}
+
+	//邮箱获取验证码
+	public function public_get_email_verify() {
+		pc_base::load_sys_func('mail');
+		$this->_session_start();
+		$code = $_SESSION['emc'] = random(8,"23456789abcdefghkmnrstwxy");
+		$_SESSION['emc_times']=5;
+		$message = '您的验证码为：'.$code;
+
+		sendmail($_SESSION['email'], '邮箱找回密码验证', $message);
+		echo '1';
 	}
 }
 ?>

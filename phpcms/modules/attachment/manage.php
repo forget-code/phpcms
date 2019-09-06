@@ -62,9 +62,17 @@ class manage extends admin {
 	
 	public function pulic_dirmode_del() {
 		$filename = urldecode($_GET['filename']);
-		$dir = urldecode($_GET['dir']);
+		$tmpdir = $dir = urldecode($_GET['dir']);
+		$tmpdir = str_replace('\\','/',$tmpdir);
+		$tmpdirs = explode('/',$tmpdir);
+		$tmpdir = PHPCMS_PATH.$tmpdirs[0].'/';
+		if($tmpdir!=$this->upload_path) {
+			showmessage(L('illegal_operation'));
+		}
 		$file = PHPCMS_PATH.$dir.DIRECTORY_SEPARATOR.$filename;
 		$file = str_replace(array('/','\\'), DIRECTORY_SEPARATOR, $file);
+		$file = str_replace('..', '', $file);
+
 		if(@unlink($file)) {
 			echo '1';
 		} else {
@@ -122,10 +130,11 @@ class manage extends admin {
 	
 	public function pullic_delthumbs() {
 		$filepath = urldecode($_GET['filepath']);
+		$ext = fileext($filepath);
+		if(!in_array(strtoupper($ext),array('JPG','GIF','BMP','PNG','JPEG')))  exit('0');
 		$reslut = @unlink($filepath);
 		if($reslut) exit('1');
 		 exit('0');
 	}
-
 }
 ?>

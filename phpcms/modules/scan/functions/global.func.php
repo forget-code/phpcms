@@ -34,9 +34,3 @@ function scan_file_lists($filepath, $subdir = 1, $ex = '', $isdir = 0, $md5 = 0,
 	}
 	return $file_list;
 }
-
-function new_htmlentities($string) {
-	$encoding = 'utf-8';
-	if(strtolower(CHARSET)=='gbk') $encoding = 'gb2312';
-	return htmlentities($string,ENT_COMPAT,$encoding);
-}

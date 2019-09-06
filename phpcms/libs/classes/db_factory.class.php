@@ -2,9 +2,9 @@
 /**
  *  db_factory.class.php 数据库工厂类
  *
- * @copyright			(C) 2005-2010 PHPCMS
+ * @copyright			(C) 2005-2015 PHPCMS
  * @license				http://www.phpcms.cn/license/
- * @lastmodify			2010-6-1
+ * @lastmodify			2015-02-10
  */
 
 final class db_factory {
@@ -70,7 +70,7 @@ final class db_factory {
 				$object = new mysql();
 				break;
 			case 'mysqli' :
-				$object = pc_base::load_sys_class('mysqli');
+				$object = pc_base::load_sys_class('db_mysqli');
 				break;
 			case 'access' :
 				$object = pc_base::load_sys_class('db_access');

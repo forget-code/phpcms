@@ -23,13 +23,8 @@ switch($_GET['act']) {
  * 获取地区列表
  */
 function ajax_getlist() {
-
-	$cachefile = $_GET['cachefile'];
-	$cachefile = str_replace(array('/', '//'), '', $cachefile);
-	//$cachefile = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S', '', $cachefile);
-	$path = $_GET['path'];
-	$path = str_replace(array('/', '//'), '', $path);
-	//$path = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S', '', $path);
+	$cachefile = safe_getcache($_GET['cachefile']);
+	$path = safe_getcache($_GET['path']);
 	$title = $_GET['title'];
 	$key = $_GET['key'];
 	$infos = getcache($cachefile,$path);
@@ -59,7 +54,8 @@ function ajax_getlist() {
  * @param $infos
  */
 function ajax_getpath($parentid,$keyid,$callback,$path = 'commons',$result = array(),$infos = array()) {
-	$keyid = $keyid;
+	$path = safe_getcache($path);
+	$keyid = safe_getcache($keyid);
 	$parentid = intval($parentid);
 	if(!$infos) {
 		$infos = getcache($keyid,$path);
@@ -90,7 +86,8 @@ function ajax_getpath($parentid,$keyid,$callback,$path = 'commons',$result = arr
  * @param  $infos 递归返回结果数组
  */
 function ajax_gettopparent($id,$keyid,$callback,$path,$infos = array()) {
-	$keyid = $keyid;	
+	$path = str_replace(array('/', '//'), '', $path);
+	$keyid = str_replace(array('/', '//'), '', $keyid);
 	$id = intval($id);
 	if(!$infos) {
 		$infos = getcache($keyid,$path);
@@ -101,5 +98,10 @@ function ajax_gettopparent($id,$keyid,$callback,$path,$infos = array()) {
 		echo trim_script($callback).'(',$id,')';
 		exit;		
 	}
+}
+function safe_getcache($str) {
+	$str = str_replace(array("'",'#','=','`','$','%','&',';','..'), '', $str);
+	$str = preg_replace('/(\/){1,}|(\\\){1,}/', '', $str);
+	return $str;
 }
 ?>

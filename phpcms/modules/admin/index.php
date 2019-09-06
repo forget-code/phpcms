@@ -35,6 +35,7 @@ class index extends admin {
 					$_SESSION['code'] = '';
 					showmessage(L('code_error'), HTTP_REFERER);
 				}
+				$_SESSION['code'] = '';
 			} else { //口令卡验证
 				if (!isset($_SESSION['card_verif']) || $_SESSION['card_verif'] != 1) {
 					showmessage(L('your_password_card_is_not_validate'), '?m=admin&c=index&a=public_card');
@@ -215,10 +216,9 @@ class index extends admin {
 		$common_cache = getcache('common','commons');
 		$logsize_warning = errorlog_size() > $common_cache['errorlog_size'] ? '1' : '0';
 		$adminpanel = $this->panel_db->select(array('userid'=>$userid), '*',20 , 'datetime');
-		$product_copyright = base64_decode('5LiK5rW355ub5aSn572R57uc5Y+R5bGV5pyJ6ZmQ5YWs5Y+4');
-		$architecture = base64_decode('546L5Y+C5Yqg');
-		$programmer = base64_decode('546L5Y+C5Yqg44CB6ZmI5a2m5pe644CB546L5a6Y5bqG44CB5byg5LqM5by644CB6YOd5Zu95paw44CB6YOd5bed44CB6LW15a6P5Lyf');
- 		$designer = base64_decode('5byg5LqM5by6');
+		$product_copyright = '酷溜网(北京)科技有限公司';
+		$programmer = '马玉辉、张明雪、李天会、潘兆志';
+ 		$designer = '张二强';
 		ob_start();
 		include $this->admin_tpl('main');
 		$data = ob_get_contents();

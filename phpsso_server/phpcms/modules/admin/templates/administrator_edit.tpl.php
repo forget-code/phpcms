@@ -33,6 +33,7 @@ $(function(){
 </tr>
 </table>
 <div class="bk15"></div>
+	<input type="hidden" name="admin_manage_code" value="<?php echo $admin_manage_code?>" id="admin_manage_code"></input>
     <input type="submit" class="button" name="dosubmit" value="<?php echo L('submit')?>" />
 </form>
 </div>

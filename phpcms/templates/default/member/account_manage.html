@@ -54,6 +54,10 @@
 						<th width="120">{L('lastip')}：</th>        
 						<td>{$memberinfo['lastip']}</td>
 					</tr>
+					<tr>
+						<th width="120">{L('mp')}：</th>        
+						<td style="color:#ff6600;"><strong>{if $memberinfo['mobile']}{substr($memberinfo['mobile'],0,3)}****{substr($memberinfo['mobile'],-4)}{/if}</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="更换手机" class="button" onclick="redirect('?m=member&c=index&a=account_change_mobile&t=1')"></td>
+					</tr>
 					{loop $member_modelinfo $k $v}
 					<tr>
 						<th width="120">{$k}：</th>        

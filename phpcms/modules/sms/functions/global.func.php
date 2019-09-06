@@ -19,7 +19,7 @@ function sms_status($status = 0,$return_array = 0) {
 			'-1'=>'每分钟发给该手机号的短信数不能超过3条',
 			'-2'=>'手机号码错误',
 			'-11'=>'帐号验证失败',
-			'-10'=>'SNDA接口没有返回结果',
+			'-10'=>'接口没有返回结果',
 		);
 	return $return_array ? $array : $array[$status];
 }
@@ -53,4 +53,23 @@ function get_smsnotice($type = '') {
 		}
 	}
 	return '<font color="red">短信通服务器无法访问！您将无法使用短信通服务！</font>';
+}
+
+function sendsms($mobile, $send_txt, $tplid = 1, $id_code = '', $siteid=1) {
+
+	pc_base::load_app_class('smsapi', 'sms', 0); //引入smsapi类
+	$sms_setting = getcache('sms','sms');
+	$sms_uid = $sms_setting[$siteid]['userid'];//短信接口用户ID
+	$sms_pid = $sms_setting[$siteid]['productid'];//产品ID
+	$sms_passwd = $sms_setting[$siteid]['sms_key'];//32位密码
+
+	$smsapi = new smsapi($sms_uid, $sms_pid, $sms_passwd); //初始化接口类
+	$mobile = explode(',',$mobile);
+	
+	$code = $smsapi->send_sms($mobile, $send_txt, 0, CHARSET,$id_code,$tplid,1); //发送短信
+	if($code==0) {
+		return 0;
+	} else {
+		return sms_status($code,1);
+	}
 }

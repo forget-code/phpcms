@@ -103,6 +103,7 @@ class member_menu extends admin {
 				file_put_contents($file,$data);
 			} elseif(isset($LANG[$key]) && $LANG[$key]!=$_POST['language']) {
 				$content = file_get_contents($file);
+				$LANG[$key] = safe_replace($LANG[$key]);
 				$content = str_replace($LANG[$key],$_POST['language'],$content);
 				file_put_contents($file,$content);
 			}

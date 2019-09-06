@@ -34,7 +34,7 @@ class content extends foreground {
 		$siteids = getcache('category_content', 'commons');
 		header("Cache-control: private");
 		if(isset($_POST['dosubmit'])) {
-		
+			
 			$catid = intval($_POST['info']['catid']);
 			//判断此类型用户是否有权限在此栏目下提交投稿
 			if (!$priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member'); 
@@ -56,9 +56,13 @@ class content extends foreground {
 			$fields = array_keys($fields);
 			$info = array();
 			foreach($_POST['info'] as $_k=>$_v) {
-				if(in_array($_k, $fields)) $info[$_k] = trim_script($_v);
+				if($_k == 'content') {
+					$info[$_k] = remove_xss(strip_tags($_v, '<p><a><br><img><ul><li><div>'));
+				} elseif(in_array($_k, $fields)) {
+					$info[$_k] = new_html_special_chars(trim_script($_v));
+				}
 			}
-			
+			$_POST['linkurl'] = str_replace(array('"','(',')',",",' ','%'),'',new_html_special_chars(strip_tags($_POST['linkurl'])));
 			$post_fields = array_keys($_POST['info']);
 			$post_fields = array_intersect_assoc($fields,$post_fields);
 			$setting = string2array($category['setting']);
@@ -220,7 +224,15 @@ class content extends foreground {
 				if(!$grouplist[$memberinfo['groupid']]['allowpostverify'] || $setting['workflowid']) {
 					$_POST['info']['status'] = 1;
 				}
-				//echo $_POST['info']['status'];exit;
+				$info = array();
+				foreach($_POST['info'] as $_k=>$_v) {
+					if($_k == 'content') {
+						$_POST['info'][$_k] = strip_tags($_v, '<p><a><br><img><ul><li><div>');
+					} elseif(in_array($_k, $fields)) {
+						$_POST['info'][$_k] = new_html_special_chars(trim_script($_v));
+					}
+				}
+				$_POST['linkurl'] = str_replace(array('"','(',')',",",' ','%'),'',new_html_special_chars(strip_tags($_POST['linkurl'])));
 				$this->content_db->edit_content($_POST['info'],$id);
 				$forward = $_POST['forward'];
 				showmessage(L('update_success'),$forward);

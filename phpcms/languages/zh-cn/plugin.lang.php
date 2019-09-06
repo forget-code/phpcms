@@ -62,7 +62,7 @@ $LANG['plugin_pub'] = '插件发布页面';
 $LANG['plugin_click_download'] = '点击下载';
 $LANG['plugin_reg_time'] = '注册时间：';
 $LANG['plugin_copyright'] = '版权归属：';
-$LANG['plugin_copyright_info'] = '&copy; CopyRight 2005-2011 上海盛大网络发展有限公司 B2-20040053';
+$LANG['plugin_copyright_info'] = '&copy; CopyRight 2005-2014 酷溜网（北京）科技有限公司 B2-20040053';
 
 $LANG['download_fail'] = '下载失败，请手动下载';
 $LANG['download_success'] = '下载成功，正在安装请稍候';

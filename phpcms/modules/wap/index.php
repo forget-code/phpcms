@@ -220,7 +220,7 @@ class index {
 			$typeid = intval($_POST['typeid']);		
 			$contentid = intval($_POST['id']);		
 			$msg = trim($_POST['msg']);
-			$commentid = trim($_POST['commentid']);
+			$commentid = remove_xss(safe_replace(trim($_POST['commentid'])));
 			$title = $_POST['title'];
 			$url = $_POST['url'];	
 			
@@ -282,6 +282,8 @@ class index {
 		$WAP_SETTING = string2array($WAP['setting']);
 		$GLOBALS['siteid'] = max($this->siteid,1);		
 		$url=base64_decode(trim($_GET['url']));
+		$url = str_replace(array('"',"'",'(',')',' '),'',$url);
+		if(!preg_match('/(jpg|png|gif|bmp)$/i',fileext($url))) exit('img src error');
 		$width = $_GET['w'] ?  trim(intval($_GET['w'])) : 320 ;
 		$new_url = thumb($url,$width,0);
 		include template('wap', 'big_image');

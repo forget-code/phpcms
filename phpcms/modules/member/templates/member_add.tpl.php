@@ -93,6 +93,12 @@ $(function(){
 			</td>
 		</tr>
 		<tr>
+			<td><?php echo L('mp')?></td>
+			<td>
+			<input type="text" name="info[mobile]" value="<?php echo $memberinfo['mobile']?>" class="input-text" id="mobile" size="15"></input>
+			</td>
+		</tr>
+		<tr>
 			<td><?php echo L('member_group')?></td>
 			<td>
 			<?php echo form::select($grouplist, '2', 'name="info[groupid]"', '');?>

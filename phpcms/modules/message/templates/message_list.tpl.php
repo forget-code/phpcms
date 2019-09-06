@@ -38,8 +38,8 @@ if(is_array($infos)){
 			name="messageid[]" value="<?php echo $info['messageid']?>"></td>
 		<td><?php echo $info['subject']?></td>
 		<td align="" widht="35%"><?php echo $info['content'];?></td>
-		<td align="center" width="10%"><?php echo $info['send_from_id'];?></td>
-		<td align="center" width="10%"><?php echo $info['send_to_id'];?></td>
+		<td align="center" width="10%"><?php echo new_html_special_chars($info['send_from_id']);?></td>
+		<td align="center" width="10%"><?php echo new_html_special_chars($info['send_to_id']);?></td>
 		<td align="center" width="15%"> <a
 			href='?m=message&c=message&a=delete&messageid=<?php echo $info['messageid']?>'
 			onClick="return confirm('<?php echo L('confirm', array('message' => new_addslashes($info['subject'])))?>')"><?php echo L('delete')?></a>

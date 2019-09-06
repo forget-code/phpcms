@@ -19,6 +19,9 @@ class style extends admin {
 	
 	public function disable() {
 		$style = isset($_GET['style']) && trim($_GET['style']) ? trim($_GET['style']) : showmessage(L('illegal_operation'), HTTP_REFERER);
+		if (!preg_match('/([a-z0-9_\-]+)/i',$style)) {
+			showmessage(L('illegal_parameters'), HTTP_REFERER);
+		}
 		$filepath = $this->filepath.$style.DIRECTORY_SEPARATOR.'config.php';
 		if (file_exists($filepath)) {
 			$arr = include $filepath;
@@ -45,6 +48,9 @@ class style extends admin {
 	
 	public function export() {
 		$style = isset($_GET['style']) && trim($_GET['style']) ? trim($_GET['style']) : showmessage(L('illegal_operation'), HTTP_REFERER);
+		if (!preg_match('/([a-z0-9_\-]+)/i',$style)) {
+			showmessage(L('illegal_parameters'), HTTP_REFERER);
+		}
 		$filepath = $this->filepath.$style.DIRECTORY_SEPARATOR.'config.php';
 		if (file_exists($filepath)) {
 			$arr = include $filepath;
@@ -69,10 +75,13 @@ class style extends admin {
 					showmessage(L('only_allowed_to_upload_txt_files'), HTTP_REFERER);
 				}
 				$code = json_decode(base64_decode(file_get_contents($filename)), true);
+				if (!preg_match('/([a-z0-9_\-]+)/i',$code['dirname'])) {
+					showmessage(L('illegal_parameters'), HTTP_REFERER);
+				}
 				@unlink($filename);
 			} elseif ($type == 2) {
 				$code = isset($_POST['code']) && trim($_POST['code']) ? json_decode(base64_decode(trim($_POST['code'])),true) : showmessage(L('illegal_operation'), HTTP_REFERER);
-				if (!isset($code['dirname'])) {
+				if (!isset($code['dirname']) && !preg_match('/([a-z0-9_\-]+)/i',$code['dirname'])) {
 					showmessage(L('illegal_parameters'), HTTP_REFERER);
 				}
 			}
@@ -81,12 +90,12 @@ class style extends admin {
 			}
 			//echo $this->filepath.$code['dirname'].DIRECTORY_SEPARATOR.'config.php';
 			if (!file_exists($this->filepath.$code['dirname'].DIRECTORY_SEPARATOR.'config.php')) {
+				@mkdir($this->filepath.$code['dirname'].DIRECTORY_SEPARATOR, 0755, true);
 				if (@is_writable($this->filepath.$code['dirname'].DIRECTORY_SEPARATOR)) {
-					@mkdir($this->filepath.$code['dirname'].DIRECTORY_SEPARATOR, 0755, true);
 					@file_put_contents($this->filepath.$code['dirname'].DIRECTORY_SEPARATOR.'config.php', '<?php return '.var_export($code, true).';?>');
 					showmessage(L('operation_success'), HTTP_REFERER, '', 'import');
 				} else {
-					showemssage(L('template_directory_not_write'), HTTP_REFERER);
+					showmessage(L('template_directory_not_write'), HTTP_REFERER);
 				}
 			} else {
 				showmessage(L('file_exists'), HTTP_REFERER);

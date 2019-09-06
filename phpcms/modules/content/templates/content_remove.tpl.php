@@ -3,7 +3,7 @@ defined('IN_ADMIN') or exit('No permission resources.');
 include $this->admin_tpl('header','admin');?>
 <div class="pad-10">
 
-<div class="content-menu ib-a blue line-x"><a href="?m=content&c=content&a=init&catid=46" class=on><em><?php echo L('remove');?></em></a> 
+<div class="content-menu ib-a blue line-x"><a href="javascript:;" class=on><em><?php echo L('remove');?></em></a> 
 </div>
 <div class="bk10"></div>
 <form action="?m=content&c=content&a=remove" method="post" name="myform">

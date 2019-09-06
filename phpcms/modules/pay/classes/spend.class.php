@@ -6,7 +6,7 @@ defined('IN_PHPCMS') or exit('No permission resources.');
  * 
  * 直接使用pc_base::load_app_class('spend', 'pay', 0);
  * 进行加载。
- * 使用spend::amonut()进行金钱的消费
+ * 使用spend::amount()进行金钱的消费
  * spend::point()进行积分消费
  * 当函数返回的结果为false是，可使用spend::get_msg()获取错误原因
  * 

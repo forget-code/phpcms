@@ -88,6 +88,7 @@ class member_verify extends admin {
 					$info['amount'] = $v['amount'];
 					$info['encrypt'] = $v['encrypt'];
 					$info['modelid'] = $v['modelid'] ? $v['modelid'] : 10;
+					if($v['mobile']) $info['mobile'] = $v['mobile'];
 					$userid = $this->member_db->insert($info, 1);
 
 					if($v['modelinfo']) {	//如果数据模型不为空

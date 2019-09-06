@@ -26,7 +26,7 @@ if(is_array($infos)){
 			name="linkid[]" value="<?php echo $info['linkid']?>"></td>
  		<td><a href="<?php echo $info['url'];?>" title="<?php echo L('go_website')?>" target="_blank"><?php echo $info['name']?></a></td>
 		<th width="20%" align="center"><a href="<?php echo $info['url']?>" target="_blank"><?php echo $info['url']?></a></th>
-		<td align="center" width="12%"><?php if($info['linktype']==1){?><img src="<?php echo $info['logo'];?>" width=83 height=31><?php }?></td>
+		<td align="center" width="12%"><?php if($info['linktype']==1){?><?php if($info['passed']=='1'){?><img src="<?php echo $info['logo'];?>" width=83 height=31><?php } else echo $info['logo'];}?></td>
 		 <td align="center" width="20%"><a href="###"
 			onclick="edit(<?php echo $info['linkid']?>, '<?php echo new_addslashes($info['name'])?>')"
 			title="<?php echo L('edit')?>"><?php echo L('edit')?></a> |  <a

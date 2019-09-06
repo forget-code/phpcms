@@ -76,10 +76,13 @@ $(function(){
 					<input type="checkbox" name="info[allowsendmessage]" <?php if($groupinfo['allowsendmessage']){?>checked<?php }?>>
 					<?php echo L('member_group_sendmessage')?> 
 				</span>
+				<?php
+				if($groupinfo['groupid']!=8) {?>
 				<span class="ik lf" style="width:120px;">
 					<input type="checkbox" name="info[allowattachment]" <?php if($groupinfo['allowattachment']){?>checked<?php }?>>
 					<?php echo L('allowattachment')?> 
 				</span>
+				<?php }?>
 				<span class="ik lf" style="width:120px;">
 					<input type="checkbox" name="info[allowsearch]" <?php if($groupinfo['allowsearch']){?>checked<?php }?>>
 					<?php echo L('allowsearch')?> 

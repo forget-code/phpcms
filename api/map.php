@@ -271,6 +271,7 @@ function removeMarker() {
 } elseif(!empty($_GET['city']) && $maptype==1) {
 	if(!$_GET['city'])  showmessage(L('error'));
 	$city = urldecode(trim($_GET['city']));
+	$city = str_replace(array('<','>','"',"'",'/','(',')','&',';'),'',$city);
 	echo $city;
 }
 ?>

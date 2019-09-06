@@ -13,7 +13,7 @@ $synlogin = isset($_GET['synlogin']) && trim($_GET['synlogin']) ? trim($_GET['sy
 if(file_exists(CACHE_PATH.'phpsso_install.lock')) {
 	exit('-4');
 } else {
-	file_put_contents(CACHE_PATH.'phpsso_install.lock', '1');
+	@file_put_contents(CACHE_PATH.'phpsso_install.lock', '1');
 }
 
 $db = pc_base::load_model('admin_model');

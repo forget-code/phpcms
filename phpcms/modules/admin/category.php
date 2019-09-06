@@ -98,6 +98,7 @@ class category extends admin {
 			if(isset($_POST['batch_add']) && empty($_POST['batch_add'])) {
 				if($_POST['info']['catname']=='') showmessage(L('input_catname'));
 				$_POST['info']['catname'] = safe_replace($_POST['info']['catname']);
+				$_POST['info']['catname'] = str_replace(array('%'),'',$_POST['info']['catname']);
 				if($_POST['info']['type']!=2) {
 					if($_POST['info']['catdir']=='') showmessage(L('input_dirname'));
 					if(!$this->public_check_catdir(0,$_POST['info']['catdir'])) showmessage(L('catname_have_exists'));
@@ -205,6 +206,10 @@ class category extends admin {
 			$catid = 0;
 			$catid = intval($_POST['catid']);
 			$setting = $_POST['setting'];
+			//上级栏目不能是自身
+			if($_POST['info']['parentid']==$catid){
+				showmessage(L('operation_failure'),'?m=admin&c=category&a=init&module=admin&menuid=43');
+			}
 			//栏目生成静态配置
 			if($_POST['type'] != 2) {
 				if($setting['ishtml']) {
@@ -225,6 +230,7 @@ class category extends admin {
 			$_POST['info']['setting'] = array2string($setting);
 			$_POST['info']['module'] = 'content';
 			$catname = CHARSET == 'gbk' ? safe_replace($_POST['info']['catname']) : iconv('utf-8','gbk',safe_replace($_POST['info']['catname']));
+			$catname = str_replace(array('%'),'',$catname);
 			$letters = gbk_to_pinyin($catname);
 			$_POST['info']['letter'] = strtolower(implode('', $letters));
 			

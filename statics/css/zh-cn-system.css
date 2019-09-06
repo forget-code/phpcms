@@ -136,10 +136,10 @@ body fieldset.blue legend{padding:3px 8px;font-weight:700;color:#347add; backgro
 .fav-nav a.panel-delete:hover{background-position: center -46px;}
 .fav-nav a.panel-delete em,.fav-nav a.panel-add em{ display:none}
 
-.fav-help{display:none;height:26px; line-height:26px; float:none; background:#fff url(../images/icon/info.png) no-repeat 3px 6px; padding:0 10px 0 24px; position:absolute; top:2px; right:14px}
-.fav-help a{ background:none; height:auto; padding:0; margin:0 20px 0 0}
+.fav-help{display:none;height:26px; line-height:26px; float:none; background:#fff url(../images/icon/system-help.png) no-repeat 3px 6px; padding:0 10px 0 24px; position:absolute; top:2px; right:14px}
+.fav-help a{color:#339900;background:none; height:auto; padding:0; margin:0 20px 0 0}
 .fav-help a.panel-delete{right:2px; top:5px; margin:0}
-.fav-help a:hover {color:#CC3300;}
+.fav-help a:hover {color:#FF3300;}
 
 /*内容菜单*/
 .content-menu{ padding:0 0 6px}

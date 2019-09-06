@@ -14,8 +14,9 @@ defined('IN_PHPCMS') or exit('No permission resources.');
 		$where = "`mobile`='$mobile' AND `posttime`>'$posttime'";
 		$r = $sms_report_db->get_one($where,'id,id_code','id DESC');
 		if($r && $r['id_code']==$mobile_verify) {
-			//验证通过后，将验证码置为空，防止重复利用！
-			$sms_report_db->update(array('id_code'=>''),$where);
+			if($_GET['jscheck']!=1) {//验证通过后，将验证码置为空，防止重复利用！
+				$sms_report_db->update(array('id_code'=>''),$where);
+			}
 			exit('1');
 		} else {
 			exit('0');

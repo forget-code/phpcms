@@ -115,7 +115,7 @@ class search_type extends admin {
 	public function listorder() {
 		if(isset($_POST['dosubmit'])) {
 			foreach($_POST['listorders'] as $id => $listorder) {
-				$this->db->update(array('listorder'=>$listorder),array('typeid'=>$id));
+				$this->db->update(array('listorder'=>$listorder),array('typeid'=>intval($id)));
 			}
 			showmessage(L('operation_success'));
 		} else {
