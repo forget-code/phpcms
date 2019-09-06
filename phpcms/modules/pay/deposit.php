@@ -101,6 +101,7 @@ class deposit extends foreground {
 			}
 			$pay_id = $_POST['pay_type'];
 			if(!$pay_id) showmessage(L('illegal_pay_method'));
+			$_POST['info']['name'] = safe_replace($_POST['info']['name']);
 			$payment = $this->handle->get_payment($pay_id);
 			$cfg = unserialize_config($payment['config']);
 			$pay_name = ucwords($payment['pay_code']);

@@ -84,8 +84,8 @@ class index {
  		$vote_data['total'] = $total ;
  		
  		
-		//取出投票结束时间，如果小于当前时间，则选项变灰不可选
-		if(date("Y-m-d",SYS_TIME)>$todate){
+		//取出投票时间，如果当前时间不在投票时间范围内，则选项变灰不可选
+		if(date("Y-m-d",SYS_TIME)>$todate || date("Y-m-d",SYS_TIME)<$fromdate){
 			$check_status = 'disabled';
 			$display = 'display:none;';
  		}else {

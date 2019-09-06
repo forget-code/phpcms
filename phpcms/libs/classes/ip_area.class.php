@@ -61,7 +61,7 @@ class ip_area {
 		$api_url = 'http://ipquery.sdo.com/getipinfo.php?ip='.$ip;
 		$data = $xml->xml_unserialize(@file_get_contents($api_url));
 		if (CHARSET == 'gbk') {
-			$data = array_iconv($data, 'utf-8', 'gbk');
+			$data = !empty($data) ? array_iconv($data, 'utf-8', 'gbk') : array();
 		}		
 		if($data['ip']['result']) {
 			$localinfo['province'] = $data['ip']['country'];

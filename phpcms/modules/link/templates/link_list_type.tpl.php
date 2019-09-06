@@ -55,8 +55,8 @@ if(is_array($infos)){
 <input name="submit" type="submit" class="button"
 	value="<?php echo L('remove_all_selected')?>"
 	onClick="return confirm('<?php echo L('confirm', array('message' => L('selected')))?>')">&nbsp;&nbsp;</div>
-<div id="pages"><?php echo $this->pages?></div>
 </form>
+<div id="pages" class="text-c"><?php echo $pages;?></div>
 </div>
 </body>
 </html>

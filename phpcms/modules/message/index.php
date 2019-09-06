@@ -33,6 +33,8 @@ class index extends foreground {
 	 * 发送消息 
 	 */
 	public function send() {
+		//判断当前会员，是否可发，短消息．
+		$this->message_db->messagecheck($this->_userid);
 		if(isset($_POST['dosubmit'])) {
 			$username = $this->_username;
 			$tousername = $_POST['info']['send_to_id'];
@@ -41,8 +43,6 @@ class index extends foreground {
 			$this->message_db->add_message($tousername,$username,$subject,$content,true);
 			showmessage(L('operation_success'),HTTP_REFERER);
 		} else {
-			//判断当前会员，是否可发，短消息．
-			$this->message_db->messagecheck($this->_userid);
 			$show_validator = $show_scroll = $show_header = true;
 			include template('message', 'send');
 		}
@@ -255,6 +255,8 @@ class index extends foreground {
 			$_POST['info']['message_time'] = SYS_TIME;
 			$_POST['info']['status'] = '1';
 			$_POST['info']['folder'] = 'inbox';
+			$_POST['info']['content'] = safe_replace($_POST['info']['content']);
+			$_POST['info']['subject'] = safe_replace($_POST['info']['subject']);
 			if(empty($_POST['info']['send_to_id'])) {
 				showmessage(L('user_noempty'),HTTP_REFERER);
 			}

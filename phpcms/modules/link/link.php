@@ -177,8 +177,10 @@ class link extends admin {
 	//:分类管理
  	public function list_type() {
 		$this->db2 = pc_base::load_model('type_model');
+		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
 		$infos = $this->db2->listinfo(array('module'=> ROUTE_M,'siteid'=>$this->get_siteid()),$order = 'listorder DESC',$page, $pages = '10');
 		$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=link&c=link&a=add\', title:\''.L('link_add').'\', width:\'700\', height:\'450\'}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('link_add'));
+		$pages = $this->db2->pages;
 		include $this->admin_tpl('link_list_type');
 	}
  
@@ -199,7 +201,7 @@ class link extends admin {
 		}else{
  			$show_validator = $show_scroll = $show_header = true;
 			pc_base::load_sys_class('form', '', 0);
-			$types = $this->db2->listinfo(array('module'=> ROUTE_M,'siteid'=>$this->get_siteid()),$order = 'typeid DESC',$page, $pages = '10');
+			$types = $this->db2->listinfo(array('module'=> ROUTE_M,'siteid'=>$this->get_siteid()),$order = 'typeid DESC');
  			$type_arr = array ();
 			foreach($types as $typeid=>$type){
 				$type_arr[$type['typeid']] = $type['name'];

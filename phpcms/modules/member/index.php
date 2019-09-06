@@ -473,6 +473,8 @@ class index extends foreground {
 				//初始化phpsso
 				$this->_init_phpsso();
 				$res = $this->client->ps_member_edit('', $email, $_POST['info']['password'], $_POST['info']['newpassword'], $this->memberinfo['phpssouid'], $this->memberinfo['encrypt']);
+				$message_error = array('-1'=>L('user_not_exist'), '-2'=>L('old_password_incorrect'), '-3'=>L('email_already_exist'), '-4'=>L('email_error'), '-5'=>L('param_error'));
+				if ($res) showmessage($message_error[$res]);
 			}
 
 			showmessage(L('operation_success'), HTTP_REFERER);

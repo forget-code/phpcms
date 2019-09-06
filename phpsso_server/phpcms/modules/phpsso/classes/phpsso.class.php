@@ -31,9 +31,6 @@ class phpsso {
 
 		if(isset($_POST['data'])) {
 			parse_str(sys_auth($_POST['data'], 'DECODE', $this->applist[$this->appid]['authkey']), $this->data);
-			if(get_magic_quotes_gpc()) {
-				$this->data = new_stripslashes($this->data);
-			}
 					
 			if(!is_array($this->data)) {
 				exit('0');

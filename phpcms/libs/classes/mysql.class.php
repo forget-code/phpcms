@@ -426,6 +426,9 @@ final class mysql {
 		} else {
 			$value = '`'.trim($value).'`';
 		}
+		if (preg_match("/\b(select|insert|update|delete)\b/i", $value)) {
+			$value = preg_replace("/\b(select|insert|update|delete)\b/i", '', $value);
+		}
 		return $value;
 	}
 	

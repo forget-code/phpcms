@@ -407,5 +407,6 @@ $LANG['user_sendsms'] = '用户自发短信验证 ';
 $LANG['get_verify'] = '获取验证码验证';
 $LANG['no_checksms'] = '不验证';
 $LANG['user_sendsms_title'] = '用户自发短信提示语';
+$LANG['param_error'] = '参数格式错误';
 
 ?>

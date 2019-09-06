@@ -76,11 +76,14 @@ class client {
 	 * @param string $newpassword	新密码
 	 * @param int $uid				phpsso用户uid
 	 * @param string $random	 	密码随机数
-	 * @return int {-1:用户不存在;-2:旧密码错误;-3:email已经存在 ;-4:email格式错误;1:成功;0:未作修改}
+	 * @return int {-1:用户不存在;-2:旧密码错误;-3:email已经存在 ;-4:email格式错误;1:成功;0:未作修改,-5:参数格式错误}
 	 */
 	public function ps_member_edit($username, $email, $password='', $newpassword='', $uid='', $random='') {
 		if($email && !$this->_is_email($email)) {
 			return -4;
+		}
+		if ((!empty($username) && !is_string($username)) || (!empty($email) && !is_string($email)) || (!empty($password) && !is_string($password)) || (!empty($newpassword) && !is_string($newpassword))) {
+			return -5;
 		}
 		return $this->_ps_send('edit', array('username'=>$username, 'password'=>$password, 'newpassword'=>$newpassword, 'email'=>$email, 'uid'=>$uid, 'random'=>$random));
 	}

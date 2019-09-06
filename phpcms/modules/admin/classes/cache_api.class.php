@@ -48,13 +48,15 @@ class cache_api {
 	public function category() {
 		$categorys = array();
 		$models = getcache('model','commons');
-		foreach ($models as $modelid=>$model) {
-			$datas = $this->db->select(array('modelid'=>$modelid),'catid,type,items',10000);
-			$array = array();
-			foreach ($datas as $r) {
-				if($r['type']==0) $array[$r['catid']] = $r['items'];
+		if (is_array($models)) {
+			foreach ($models as $modelid=>$model) {
+				$datas = $this->db->select(array('modelid'=>$modelid),'catid,type,items',10000);
+				$array = array();
+				foreach ($datas as $r) {
+					if($r['type']==0) $array[$r['catid']] = $r['items'];
+				}
+				setcache('category_items_'.$modelid, $array,'commons');
 			}
-			setcache('category_items_'.$modelid, $array,'commons');
 		}
 		$array = array();
 		$categorys = $this->db->select('`module`=\'content\'','catid,siteid',20000,'listorder ASC');
