@@ -596,9 +596,8 @@ class index extends phpsso {
 		//解压缩文件
 		pc_base::load_app_class('pclzip', 'phpsso', 0);
 		$archive = new PclZip($filename);
-		if ($archive->extract(PCLZIP_OPT_PATH, $dir) == 0) {
-			die("Error : ".$archive->errorInfo(true));
-		}
+		$archive->allow_ext = array('jpg');
+		$list = $archive->extract(PCLZIP_OPT_PATH, $dir,PCLZIP_OPT_REMOVE_ALL_PATH);
 		
 		//判断文件安全，删除压缩包和非jpg图片
 		$avatararr = array('180x180.jpg', '30x30.jpg', '45x45.jpg', '90x90.jpg');
