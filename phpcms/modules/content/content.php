@@ -576,6 +576,7 @@ class content extends admin {
 
 		if($r['relation']) {
 			$relation = str_replace('|', ',', $r['relation']);
+			$relation = trim($relation,',');
 			$where = "id IN($relation)";
 			$infos = array();
 			$this->db->table_name = $tablename;

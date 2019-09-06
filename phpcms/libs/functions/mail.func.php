@@ -84,7 +84,7 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 		return false;
 	}
 
-	fputs($fp, ($mail['auth'] ? 'EHLO' : 'HELO')." uchome\r\n");
+	fputs($fp, ($mail['auth'] ? 'EHLO' : 'HELO')." phpcms\r\n");
 	$lastmessage = fgets($fp, 512);
 	if(substr($lastmessage, 0, 3) != 220 && substr($lastmessage, 0, 3) != 250) {
 		runlog('SMTP', "($mail[server]:$mail[port]) HELO/EHLO - $lastmessage", 0);

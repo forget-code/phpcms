@@ -200,7 +200,7 @@ class content_model extends model {
 					}
 				}
 				$hitsid = 'c-'.$mid.'-'.$newid;
-				$this->hits_db->insert(array('hitsid'=>$hitsid,'updatetime'=>SYS_TIME));
+				$this->hits_db->insert(array('hitsid'=>$hitsid,'catid'=>$cid,'updatetime'=>SYS_TIME));
 			}
 		}
 		//END 发布到其他栏目

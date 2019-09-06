@@ -70,7 +70,7 @@ include $this->admin_tpl('header');?>
   <tr>
     <th width="120"><?php echo L('setting_upload_url')?></th>
     <td class="y-bg"><input type="text" class="input-text" name="setconfig[upload_url]" id="upload_url" size="50" value="<?php echo $upload_url?>" /></td>
-  </tr>       
+  </tr>
 </table>
 </div>
 <div id="div_setting_2" class="contentList pad-10 hidden">
@@ -245,7 +245,8 @@ function showsmtp(obj,hiddenid){
 }
 function test_mail() {
 	var mail_type = $('input[checkbox=mail_type][checked]').val();
-    $.post('?m=admin&c=setting&a=public_test_mail&mail_to='+$('#mail_to').val(),{mail_type:mail_type,mail_server:$('#mail_server').val(),mail_port:$('#mail_port').val(),mail_user:$('#mail_user').val(),mail_password:$('#mail_password').val(),mail_auth:$('#mail_auth').val(),mail_auth:$('#mail_auth').val(),mail_from:$('#mail_from').val()}, function(data){
+	var mail_auth = $('input[checkbox=mail_auth][checked]').val();
+    $.post('?m=admin&c=setting&a=public_test_mail&mail_to='+$('#mail_to').val(),{mail_type:mail_type,mail_server:$('#mail_server').val(),mail_port:$('#mail_port').val(),mail_user:$('#mail_user').val(),mail_password:$('#mail_password').val(),mail_auth:mail_auth,mail_from:$('#mail_from').val()}, function(data){
 	alert(data);
 	});
 }

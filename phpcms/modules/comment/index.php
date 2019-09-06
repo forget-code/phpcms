@@ -6,7 +6,7 @@ class index {
 		pc_base::load_app_func('global');
 		pc_base::load_sys_class('format', '', 0);
 		$this->commentid = isset($_GET['commentid']) && trim(urldecode($_GET['commentid'])) ? trim(urldecode($_GET['commentid'])) : $this->_show_msg(L('illegal_parameters'));
-		if(!preg_match("/^([a-z0-9_\-]+)$/i",$this->commentid)) $this->_show_msg(L('illegal_parameters'));
+		if(!preg_match("/^[a-z0-9_\-]+$/i",$this->commentid)) $this->_show_msg(L('illegal_parameters'));
 		$this->format = isset($_GET['format']) ? $_GET['format'] : '';
 		list($this->modules, $this->contentid, $this->siteid) = decode_commentid($this->commentid);
 		define('SITEID', $this->siteid);

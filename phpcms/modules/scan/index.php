@@ -127,12 +127,20 @@ class index extends admin {
 		include $this->admin_tpl('scan_report');
 	}
 	
-	public function public_view() {
+	public function view() {
 		$url = isset($_GET['url']) && trim($_GET['url']) ? new_stripslashes(urldecode(trim($_GET['url']))) : showmessage(L('illegal_action'), HTTP_REFERER);
+		$url = str_replace("..","",$url);
+		
 		if (!file_exists(PHPCMS_PATH.$url)) {
 			showmessage(L('file_not_exists'));
 		}
 		$html = file_get_contents(PHPCMS_PATH.$url);
+		//判断文件名，如果是database.php 对里面的关键字符进行替换
+		$basename = basename($url);
+		if($basename == "database.php"){
+			//$html = str_replace();
+			showmessage(L('重要文件，不允许在线查看！'));
+		}
 		$file_list = getcache('scan_bad_file', 'scan');
 		if (isset($file_list[$url]['func']) && is_array($file_list[$url]['func']) && !empty($file_list[$url]['func'])) foreach ($file_list[$url]['func'] as $key=>$val)
 		{
@@ -145,7 +153,7 @@ class index extends admin {
 		if (isset($func)) $func = array_unique($func);
 		if (isset($code)) $code = array_unique($code);
 		$show_header = true;
-		include $this->admin_tpl('public_view');
+ 		include $this->admin_tpl('public_view');
 	}
 	
 	public function md5_creat() {

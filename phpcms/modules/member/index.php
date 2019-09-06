@@ -569,7 +569,7 @@ class index extends foreground {
 					}
 					$password = $r['password'];
 					$synloginstr = $this->client->ps_member_synlogin($r['phpssouid']);
-				} else {
+ 				} else {
 					if($status == -1) {	//用户不存在
 						showmessage(L('user_not_exist'), 'index.php?m=member&c=index&a=login');
 					} elseif($status == -2) { //密码错误
@@ -662,7 +662,7 @@ class index extends foreground {
 			param::set_cookie('_username', $username, $cookietime);
 			param::set_cookie('_groupid', $groupid, $cookietime);
 			param::set_cookie('_nickname', $nickname, $cookietime);
-			param::set_cookie('cookietime', $_cookietime, $cookietime);
+			//param::set_cookie('cookietime', $_cookietime, $cookietime);
 			$forward = isset($_POST['forward']) && !empty($_POST['forward']) ? urldecode($_POST['forward']) : 'index.php?m=member&c=index';
 			showmessage(L('login_success').$synloginstr, $forward);
 		} else {

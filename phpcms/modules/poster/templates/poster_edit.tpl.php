@@ -61,7 +61,7 @@ $authkey = upload_key('1,'.$this->M['ext'].',1');
   <tr>
     <th width="80"><?php echo L('linkurl')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[images][1][linkurl]" id="linkurl3" size="30" value="<?php echo $info['setting'][1]['linkurl']?>" /></td>
-    <td rowspan="2"><a href="javascript:flashupload('imgurl_images', '<?php echo L('flash_upload')?>','imgurl',preview,'1,<?php echo $this->M['ext']?>,1','poster', '', '<?php echo $authkey?>');void(0);"><img src="<?php echo $info['setting'][1]['imageurl']?>" id="imgurl_s" width="105" height="88" onerror="this.src='<?php echo IMG_PATH;?>nopic.gif'"></a><input type="hidden" id="imgurl" name="setting[images][1][imageurl]" value="<?php echo $info['setting'][1]['imageurl']?>"></td>
+    <td rowspan="2"><a href="javascript:flashupload('imgurl_images', '<?php echo L('upload_photo')?>','imgurl',preview,'1,<?php echo $this->M['ext']?>,1','poster', '', '<?php echo $authkey?>');void(0);"><img src="<?php echo $info['setting'][1]['imageurl']?>" id="imgurl_s" width="105" height="88" onerror="this.src='<?php echo IMG_PATH;?>nopic.gif'"></a><input type="hidden" id="imgurl" name="setting[images][1][imageurl]" value="<?php echo $info['setting'][1]['imageurl']?>"></td>
   </tr>
   <tr>
     <th><?php echo L('alt')?>：</th>
