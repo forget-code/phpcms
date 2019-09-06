@@ -1,15 +1,14 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
 <body>
 <?=$menu?>
-<table cellpadding="2" cellspacing="1" class="tableborder">
+<table cellpadding="0" cellspacing="1" class="table_info">
   <tr>
-    <th><?=$name?> 模块使用帮助</th>
-  </tr>
+    <caption><?=$name?> 模块使用帮助</caption>
 	<tr> 
-      <td class="tablerow"><?=$faq?></td>
+      <td><?=$faq?></td>
     </tr>
 </table>
 </body>

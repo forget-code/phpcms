@@ -1,0 +1,3 @@
+<!--{loop $data $i $link}-->
+<a href="{$link[url]}" target="_blank" title="{$link[introduce]}" onclick="$.get('{$MODULE[link][url]}count.php?linkid={$link[linkid]}')" >{$link[name]}</a> {if $link[showhits]}[{$link[hits]}]{/if}
+<!--{/loop}-->

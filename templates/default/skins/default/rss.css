@@ -1,0 +1,17 @@
+#main{ background-image:none;}
+#mian_l_1{ width:200px; float:left;}
+#mian_r_1{ width:760px; float:right}
+
+.rss_nav_top{ background:url(images/bg_rss.gif) no-repeat 0 0; height:33px; line-height:26px; text-align:center; color:#fff; font-weight:bold; font-size:14px;}
+.rss_nav{ border-left:5px solid #87D7F4; border-right:5px solid #87D7F4;}
+.rss_nav p{ color:#444; padding:0 5px; text-indent:2em; overflow:hidden; word-wrap:break-word; word-break:break-all;}
+.rss_nav ul li{ border-bottom:1px dashed #eee; text-align:left; height:28px; line-height:28px; padding-left:10px;}
+.rss_nav ul li a{ color:#06c; background:url(images/list_bg.gif) no-repeat 5px 5px; padding-left:18px;}
+.rss_nav_btm{ background:url(images/bg_rss.gif) no-repeat 0 -33px; height:11px;}
+.cat_title{ border:1px solid #99D3FB; background:url(images/bg_2.jpg) repeat-x 0 -64px; height:27px; overflow:hidden; line-height:27px; padding:0 10px; margin:10px 0 5px 0; font-size:14px; font-weight:bold;color:#1589c8;}
+.cat_rss{ border:1px solid #99D3FB; margin:5px 10px 5px 0; width:366px; padding:1px; float:left;}
+.cat_rss img{ float:right; margin: 5px 8px 0 0;}
+.cat_rss h3{ font-size:12px; color:#1589c8; padding-left:1em; height:28px; line-height:28px; background:#E4F3FC;}
+.cat_rss ul{ margin:0 auto; padding:5px;}
+.cat_rss ul li a:link,.cat_rss ul li a:visited,.cat_rss ul li a:hover,.cat_rss ul li a:active{ padding-left:1.2em; background:url(images/list_bg.gif) no-repeat 5px 5px; font-size:14px; line-height:200%; color:#06c;}
+.main_r h4 a span{ font-size:12px;width:80px;}

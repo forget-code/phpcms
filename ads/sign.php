@@ -1,28 +1,17 @@
 <?php
 require './include/common.inc.php';
+require 'form.class.php';
 
-if(!$_userid) showmessage($LANG['please_login_or_register'] , $MODULE['member']['linkurl'].'login.php?forward='.urlencode($PHP_URL));
-
+if(!$_userid) showmessage('请登陆!',$MODULE['member']['url'].'login.php?forward='.urlencode(URL));
 $placeid = intval($placeid);
-
-$query ="SELECT max(todate) as todate,p.* ".
-      "FROM ".TABLE_ADS." as a right join ".TABLE_ADS_PLACE." as p on (a.placeid=p.placeid) ".
-      "where p.placeid=".$placeid." and p.passed=1 GROUP BY p.placeid";
-
-$result = $db->get_one($query);
-if (empty($result)) 
-{
-  showmessage($LANG['opration_failure_or_advertisement _not_exists']);
-}
-$place = $result;
-
-$fromdate = ($place['todate'] && $PHP_TIME < $place['todate']) ? date('Y-m-d', $place['todate']) : date('Y-m-d');
-$_month = "<SELECT NAME='ads[longtime]'>";		
-for ($i=1;$i<=12;$i++)
-{
-  $_month .= "<option value='$i'>$i {$LANG['month']}</option>";
-}
-$_month .= "</SELECT>";
-
+if(!$priv_group->check('p_adsid', $placeid, 'input', $_groupid)) showmessage($LANG['not_add'], 'goback');
+$places = array();
+$places = $place->get_info($placeid);
+$fromdate = form::date('ads[fromdate]', date('Y-n-j'));
+$thumb = form::file("thumb", 'thumb');
+$thumb1 = form::file("thumb1", 'thumb1');
+$flash = form::file("flash", 'flash');
+$code = form::editor('code');
+$todate = form::date('ads[todate]', date('Y-n-j', mktime(0, 0, 0, date('n')+1, date('j'), date('Y'))));
 include template($mod, 'sign');
 ?>

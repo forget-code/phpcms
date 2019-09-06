@@ -1,31 +1,32 @@
 <?php
-define('SHOWJS', 1);
 require './include/common.inc.php';
 
-if(!isset($forward)) $forward = $PHP_REFERER;
+if(!$forward) $forward = HTTP_REFERER;
 if(!isset($action)) $action = '';
+if($_userid) showmessage($LANG['you_have_logined'], SITE_URL);
+
+$check = new times();
+$check->set('checkcode', 3600, 1);
 
 switch($action)
 {
-    case 'js':
-		if($_userid)
+ 	case 'ajax':
+
+		$username = iconv('utf-8', CHARSET, $username);
+		$password = iconv('utf-8', CHARSET, $password);
+
+		$info = $member->login($username, $password, $cookietime);
+		if(!$info)
 		{
-			include template('member', 'login_show');
+            $check->add();
+			echo '0';
+			exit;
 		}
 		else
 		{
-			$select = array();
-			$cookietime = intval(getcookie('cookietime'));
-			$cookietimes = array(0, 86400, 2592000, 31536000);
-			foreach($cookietimes as $v)
-			{
-				$select[$v] = $v == $cookietime ? 'selected' : '';
-			}
-			$templateid = $PHPCMS['enableserverpassport'] ? 'login_form-passport' : 'login_form';
-			include template('member', $templateid);
+			echo 1;
+			exit;
 		}
-		$CONFIG['phpcache'] = 0;
-        phpcache(1);
 		break;
 
     default:
@@ -33,7 +34,7 @@ switch($action)
 		if($PHPCMS['enableserverpassport'])
 		{
 			$loginurl = $PHPCMS['passport_serverurl'].$PHPCMS['passport_loginurl'];
-			if($PHP_QUERYSTRING) $loginurl .= strpos($loginurl, '?') ? '&'.$PHP_QUERYSTRING : '?'.$PHP_QUERYSTRING;
+			if(QUERY_STRING) $loginurl .= strpos($loginurl, '?') ? '&'.QUERY_STRING : '?'.QUERY_STRING;
 			elseif($username && $password && $dosubmit) $loginurl .= "?username=$username&password=$password&cookietime=$cookietime&dosubmit=1";
 			header('location:'.$loginurl);
 			exit;
@@ -41,41 +42,52 @@ switch($action)
 
 		if($dosubmit)
 		{
-        	checkcode($checkcodestr, $MOD['enablecheckcodeoflogin'], $PHP_REFERER);
-
-		    $info = $member->login($password, $cookietime);
+			if($check->check()) checkcode($checkcodestr, 1, HTTP_REFERER);
+			if($PHPCMS['uc'])
+			{
+				$action = 'login';
+				require MOD_ROOT.'api/passport_server_ucenter.php';
+			}
+		    $info = $member->login($username, $password, $cookietime);
 		    if(!$info)
 			{
-				showmessage($member->errormsg(), $PHP_REFERER);
+				$check->add();
+				showmessage($member->msg(), HTTP_REFERER);
 			}
 			else
 			{
-				$forward = isset($forward) ? linkurl($forward, 1) : $PHP_SITEURL;
+				$check->clear();
+				$forward = isset($forward) ? url($forward, 1) : SITE_URL;
 				if($PHPCMS['enablepassport'])
 	            {
 			        $action = 'login';
-					if($PHPCMS['passport_charset'] && $PHPCMS['passport_charset'] != $CONFIG['charset'])
+					if($PHPCMS['passport_charset'] && $PHPCMS['passport_charset'] != CHARSET)
 					{
-						require_once PHPCMS_ROOT.'/include/charset.func.php';
-						$info = convert_encoding($CONFIG['charset'], $PHPCMS['passport_charset'], $info);
+						$info = iconv(CHARSET, $PHPCMS['passport_charset'], $info);
 					}
+					$info['password'] = md5($password);
 					extract($info);
-					require MOD_ROOT.'/passport/'.$PHPCMS['passport_file'].'.php';
+					require MOD_ROOT.'api/passport_server_'.$PHPCMS['passport_file'].'.php';
 					header('location:'.$url);
                     exit;
 				}
-                showmessage($LANG['login_success'], $forward);
+				$script = "<script language='javascript'>";
+				$script .= "setcookie('username', '".$username."', 0);";
+				$script .= "</script>";
+                showmessage($LANG['login_success'].$code.$script,$forward);
 			}
 		}
 		else
 		{
 			$select = array();
-			$cookietime = intval(getcookie('cookietime'));
+			$cookietime = intval(get_cookie('cookietime'));
 			$cookietimes = array(0, 86400, 2592000, 31536000);
 			foreach($cookietimes as $v)
 			{
 				$select[$v] = $v == $cookietime ? 'selected' : '';
 			}
+			$cok_username = get_cookie('username');
+			$cok_auth = get_cookie('auth');
 			include template('member', 'login');
 		}
 }

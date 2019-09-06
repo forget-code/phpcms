@@ -1,0 +1,48 @@
+{template 'phpcms','header'}
+<div id="main">
+  <!--位置导航-->
+  <div id="position"><a href="">首页</a>留言板</div>
+  <!--留言按钮，搜索-->
+  <div class="search_box"><form method="get" name="search" action="{$M[url]}index.php">
+    关键字：
+		<input name='keyword' type='text' size='30' value='{$keyword}'>&nbsp;
+		<input type="radio" name="srchtype" value="0" {if (!$srchtype)} checked {/if}> 标题 	
+		<input type="radio" name="srchtype" value="1" {if ($srchtype==1)} checked {/if}> 内容	
+		<input type="radio" name="srchtype" value="2" {if ($srchtype==2)} checked {/if}> 会员
+		<input name='submit' type='submit' value='留言搜索'></form>
+  </div>
+  <div class="tag_menu">
+    <ul>
+      <li class="selected"><a href="{$M[url]}index.php">留言板首页</a></li>
+      <li><a href="{$M[url]}post.php">签写留言</a></li>
+    </ul>
+  </div>
+  <!--begin 留言列表-->
+  <!--{loop $data $n $r}-->
+  <div class="guestbook_list">
+    <h3><sup class="f_r"></sup><span>{$r['title']}</span><span class="date">—{$r[addtime]}</span></h3>
+    <ul>
+      <li class="guestbook_person">
+        <ol>
+          <li><img src="images/nophoto.gif" alt="" width="108" height="108" /><br />
+            {$r[username]}</li>
+          <li><a class="mysite" href="{$r[homepage]}" title="访问主页">主页</a>&nbsp;<a class="email" href="mailto:{$r[email]}" title="登录邮箱">信箱</a>&nbsp;<a class="qq" href="http://wpa.qq.com/msgrd?V=1&Uin={$r['qq']}&Site={$_SERVER[HTTP_HOST]}&Menu=yes" title="点击对话">QQ</a></li>
+        </ol>
+      </li>
+	  <!--{if !$r['hidden'] || $_groupid==1 || ($_userid && $_userid == $r['userid'])}-->
+      <li class="guestbook_text">{$r[content]}</li>
+	  <li class="guestbook_text">
+	  <!--{if $r['reply']}--><b>管理员 [ <font color="red">{$r[replyer]}</font> ] 于 <font color="red">{$r[replytime]}</font> <br>回复：</b>{$r[reply]}
+	  <!--{/if}--></li>
+	  <!--{else}-->
+		<li class="guestbook_text" style="color:red">此信息管理员可见</li>
+	<!--{/if}-->
+    </ul>
+  </div>
+  <!--{/loop}-->
+
+
+<!--{if $pages}-->
+<div id="pages">{$pages}</div>
+<!--{/if}-->
+{template 'phpcms','footer'}

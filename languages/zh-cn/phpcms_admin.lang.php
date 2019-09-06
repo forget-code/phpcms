@@ -22,7 +22,7 @@ $LANG['category_data_repair'] = '栏目数据修复';
 $LANG['category_manage'] = '栏目管理';
 $LANG['category_name_not_null'] = '栏目名称不能为空！';
 $LANG['category_dir_not_null'] = '栏目目录不能为空！';
-$LANG['external_category_linkurl_not_null'] = '外部栏目连接地址不能为空！';
+$LANG['external_category_url_not_null'] = '外部栏目连接地址不能为空！';
 $LANG['category_dir_same_in_one_channel'] = '同一频道中栏目目录不能重复！';
 $LANG['no_as_top_category'] = '无（作为一级栏目）';
 $LANG['parameters_error'] = '参数错误！';
@@ -96,7 +96,7 @@ $LANG['channel_admin'] = '频道管理';
 $LANG['add_channel'] = '添加频道';
 $LANG['channel_name_not_null'] = '频道名称不能为空！';
 $LANG['channel_dir_not_null'] = '频道目录不能为空！';
-$LANG['external_linkurl_not_null'] = '外部频道连接地址不能为空！';
+$LANG['external_url_not_null'] = '外部频道连接地址不能为空！';
 $LANG['catdir_num_alpha'] = '栏目目录只能由数字、字母、中划线和下划线组成！';
 $LANG['channel_dir_num_alpha'] = '频道目录只能由数字、字母、中划线和下划线组成！';
 $LANG['channel_dir_not_repeat'] = '频道目录不能重复！';
@@ -333,8 +333,37 @@ $LANG['belong_area'] = '所属地区';
 $LANG['import_area'] = '导入省市数据';
 $LANG['share_area'] = '地区分类复制';
 $LANG['no_area'] = '省市数据不存在';
-$LANG['files_mirror_success'] = '新的镜像生成完毕!';
-$LANG['files_begin'] = '准备开始... ...';
-$LANG['files_check_ok'] = '文件全部正常';
-$LANG['view_file_checktime'] = '查看上次记录时间:';
+
+
+
+$LANG['add_record'] = '添加财务';
+$LANG['finance_waste_book'] = '财务流水';
+
+$LANG['null_ip'] = 'IP地址不能为空';
+$LANG['null_expiration'] = '解封日期不能为空';
+$LANG['expiration_early'] = '解封日期要迟于当前日期';
+
+$LANG['can_not_connect_mysql_server'] = '无法连接mysql服务器';
+$LANG['can_note_find_database'] = '数据库不存在';
+$LANG['invalid_tablepre'] = '不正确的数据表前缀';
+
+//import.inc.php begin
+$LANG['manage_article_data_config']='管理文章数据导入配置';
+$LANG['add_article_data_config']='添加文章数据导入配置';
+$LANG['manage_article_data']='文章数据导入管理';
+$LANG['load_data_config']='导入配置文件';
+$LANG['mssql_extension_do_not_loaded']='MSSQL 扩展没有加载，无法从MSSQL导入数据！';
+$LANG['total_import']='总需导入:';
+$LANG['record']='条数据';
+$LANG['load_data_success']='导入数据成功';
+$LANG['invalid_name']='配置名称不能为空！必须由字母和数字组成且首字符必须是字母！请返回！';
+$LANG['config_file_load_success']='配置文件导入成功';
+$LANG['data_config_load_success']='数据导入配置成功！';
+$LANG['data_config_load_save_success']='数据导入配置保存成功！';
+$LANG['error_parameters']='参数错误！';
+$LANG['delete_data_success']='配置文件删除成功！';
+$LANG['please_upload_file']='对不起，没有上传文件！';
+$LANG['the_keyid_not_exists']='主键ID不得为空';
+$LANG['select_delete_bak_file'] = '请选择要删除的文件';
+//import.inc.php end
 ?>

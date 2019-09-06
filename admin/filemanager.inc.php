@@ -1,8 +1,14 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
-if($_grade>0) showmessage($LANG['you_have_no_permission']);
-include_once PHPCMS_ROOT.'/images/ext/ext.php';
-include PHPCMS_ROOT.'/admin/filemanager.func.php';
+if(!FILE_MANAGER)
+{
+    $message = "<font color=\"blue\">出于系统安全考虑，管理员关闭了此功能。<br />如需要打开，请修改配置文件 config.inc.php，把 <font color=\"red\">define('FILE_MANAGER', '0')</font> 修改为 <font color=\"red\">define('FILE_MANAGER', '1')</font>。</font>";
+    include admin_tpl('message');
+    exit;
+}
+include_once PHPCMS_ROOT.'images/ext/ext.php';
+require 'admin/filemanager.func.php';
+require 'upload.class.php';
 @set_time_limit(0);
 
 $submenu = array
@@ -10,11 +16,11 @@ $submenu = array
 	array($LANG['return_main_dir'], '?mod='.$mod.'&file='.$file.'&action=main'),
 	array('PHPINFO()', '?mod='.$mod.'&file='.$file.'&action=phpinfo'),
 );
-$menu = adminmenu($LANG['online_filemanager'], $submenu);
+$menu = admin_menu($LANG['online_filemanager'], $submenu);
 if(!isset($forward)) $forward = '?mod=phpcms&file=database&action=main';
 $action = $action ? $action : 'main';
 
-$rootpath = str_replace("\\","/",PHPCMS_ROOT);
+$rootpath = PHPCMS_ROOT;
 
 if(isset($newchangedir) && !empty($newchangedir))
 {
@@ -22,7 +28,7 @@ if(isset($newchangedir) && !empty($newchangedir))
 	if($newchangedir[0] == '/'|| $newchangedir[0] == '.')
 	{
 		$dir = $newchangedir;
-	}	
+	}
 	else if(strlen($newchangedir)<strlen($rootpath))
 	{
 		$newchangedir = './';
@@ -39,12 +45,16 @@ if (!isset($dir) or empty($dir))
 	$dir = "./";
 	$currentdir = getRelativePath($rootpath, $dir);
 }
-else $currentdir = getRelativePath($rootpath, $dir);
+else
+{
+	$currentdir = getRelativePath($rootpath, $dir);
+}
 if(strlen($currentdir) < strlen($rootpath))
 {
 	$currentdir = $rootpath;
 	$dir = './';
 }
+
 switch($action)
 {
 	case 'main':
@@ -62,20 +72,20 @@ switch($action)
 						if (filectime($fpath) < filemtime($fpath))
 						{
 							$createtime = date("Y-m-d H:i:s",filectime($fpath));
-							$modifytime = "<font color=\"red\">".date("Y-m-d H:i:s",filemtime($fpath))."</font>";					
+							$modifytime = "<font color=\"red\">".date("Y-m-d H:i:s",filemtime($fpath))."</font>";
 						}
 						else
 						{
 							$createtime = date("Y-m-d H:i:s",@filectime($fpath));
-							$modifytime = date("Y-m-d H:i:s",@filemtime($fpath));					
-						}			
-						
+							$modifytime = date("Y-m-d H:i:s",@filemtime($fpath));
+						}
+
 						$dirperm = substr(base_convert(fileperms($fpath),10,8),-4);
-						
+
 						$r['createtime'] = $createtime;
 						$r['modifytime'] = $modifytime;
 						$r['dirperm'] = $dirperm;
-						$r['size'] = '<目录>';
+						$r['size'] = '<??>';
 						$r['name'] = $f;
 						$r['dir'] = $dir;
 						$dirs[] = $r;
@@ -87,8 +97,8 @@ switch($action)
 				}
 			}
 		}
-		@closedir($dirhandle); 
-		
+		@closedir($dirhandle);
+
 		$dirhandle = @opendir($dir);
 		$fnum = 0;
 		$files = array();
@@ -105,29 +115,29 @@ switch($action)
 			$fpath= "$dir/$f";
 			$a = @is_dir($fpath);
 			$r = array();
-			if($a=="0"){		
+			if($a=="0"){
 				$size = filesize($fpath);
 				$size = $size/1024 ;
 				$size = number_format($size, 3);
 				if (filectime($fpath) < filemtime($fpath)) {
 					$createtime = date("Y-m-d H:i:s",filectime($fpath));
 					$modifytime = "<font color=\"red\">".date("Y-m-d H:i:s",filemtime($fpath))."</font>";
-					
+
 				} else {
 					$createtime = date("Y-m-d H:i:s",@filectime($fpath));
-					$modifytime = date("Y-m-d H:i:s",@filemtime($fpath));					
+					$modifytime = date("Y-m-d H:i:s",@filemtime($fpath));
 				}
 				$fileperm = substr(base_convert(fileperms($fpath),10,8),-4);
-							
+
 				$r['createtime'] = $createtime;
 				$r['modifytime'] = $modifytime;
 				$r['fileperm'] = $fileperm;
 				$r['size'] = $size;
 				$r['name'] = $f;
 				$r['dir'] = $dir;
-				
-				
-				$r['filepath'] = PHPCMS_PATH.$basedir.$f;
+
+
+				$r['filepath'] = $basedir.$f;
 				$r['fileext'] = fileext($fpath);
 				if(!key_exists($r['fileext'],$filetype)) $r['fileext'] = 'other';
 				$r['preview'] = in_array($r['fileext'],array('gif','jpg','jpeg','png','bmp')) ? "<img src=".$r['filepath']." border=0>" : "&nbsp;".$LANG['not_picture_flash']."&nbsp;";
@@ -135,12 +145,12 @@ switch($action)
 				$fnum++;
 			}
 		}
-		@closedir($dirhandle); 
-	
-		include admintpl('filemanager_main');
+		@closedir($dirhandle);
+
+		include admin_tpl('filemanager_main');
 	break;
-	
-	
+
+
 	case 'chmod':
 		if ($dosubmit)
 		{
@@ -155,9 +165,9 @@ switch($action)
 			}
 		}
 		$currentperm = substr(base_convert(@fileperms($fname),10,8),-4);
-		include admintpl('filemanager_chmod');
+		include admin_tpl('filemanager_chmod');
 	break;
-	
+
 	case 'newdir':
 		if (!isset($newdir) || empty($newdir)) showmessage($LANG['input_new_file']);
 		$mkdir = "$currentdir/$newdir";
@@ -175,7 +185,7 @@ switch($action)
 			else showmessage($LANG['dir_create_fail'],"?mod=$mod&file=$file&action=main&dir=".urlencode($dir));
 		}
 	break;
-	
+
 	case 'zipdir':
 		if(!isset($fname)) showmessage($LANG['illegal_request_return'],'goback');
 		if(!file_exists($fname)) showmessage($LANG['file_not_exist'],'goback');
@@ -191,8 +201,8 @@ switch($action)
 		}
 		break;
 	break;
-	
-	
+
+
 	case 'newfile':
 		if (!isset($newfile)) showmessage($LANG['input_new_file']);
 		$mkfile = "$currentdir/$newfile";
@@ -210,7 +220,7 @@ switch($action)
 			else showmessage($newfile.$LANG['file_create_fail'],"?mod=$mod&file=$file&action=main&dir=".urlencode($dir));
 		}
 	break;
-	
+
 	case 'rename':
 		if($dosubmit)
 		{
@@ -235,7 +245,7 @@ switch($action)
 					$newpath = substr($newpath,0,strrpos($newpath, '/')+1);
 
 					$newpath = $newpath.$newname;
-					
+
 					if (file_exists($newpath))
 					{
 						showmessage($newpath.$LANG['exist_refill']);
@@ -251,57 +261,53 @@ switch($action)
 				showmessage($LANG['please_input_new_directory_file_name']);
 			}
 		}
-		include admintpl('filemanager_rename');
+		include admin_tpl('filemanager_rename');
 	break;
-	
-	
+
+
 	case 'edit':
 		if(!is_writeable($fname)) showmessage($LANG['file'].' '.$fname.' '.$LANG['cannot_write_edit_online']);
 		if($dosubmit)
 		{
-			file_put_contents($fname,stripslashes($content));
+			if($content) $content = str_replace(array('\n', '\r'), array(chr(10), chr(13)), $content);
+			file_put_contents($fname, stripslashes($content));
 	        showmessage($LANG['operation_success'], "?mod=$mod&file=$file&action=main&dir=".urlencode($dir));
 		}
 		else
 	    {
 			$content = file_get_contents($fname);
 			$filemtime = date("Y-m-d H:i:s",filemtime($fname));
-			include admintpl('filemanager_edit');
+			include admin_tpl('filemanager_edit');
 		}
-		
+
 	break;
-	
+
 	case 'uploadfile':
-		require_once PHPCMS_ROOT.'/admin/include/allupload.class.php';
 		if($dosubmit)
 		{
-			$upfile_size='4000000';
+			$upfile_size = '4000000';
+			$savepath = str_replace(str_replace("\\","/",PHPCMS_ROOT),'',$currentdir)."/";
 			$fileArr = array(
-				'file'=>$_FILES['uploadfile']['tmp_name'],
-				'name'=>$_FILES['uploadfile']['name'],
-				'size'=>$_FILES['uploadfile']['size'],
-				'type'=>$_FILES['uploadfile']['type'],
-				'error'=>$_FILES['uploadfile']['error']
-				);
-			$tmpext = strtolower(fileext($fileArr['name']));		
-			$savepath = str_replace(str_replace("\\","/",PHPCMS_ROOT),"",$currentdir)."/";
-			if(file_exists(PHPCMS_ROOT.'/'.$savepath.$fileArr['name']) && !isset($overfile) &&($newname==''||$newname==$fileArr['name']))
-			{
-				showmessage($LANG['find_same_file'],"?mod=$mod&file=$file&action=main&dir=".urlencode($dir));
-			}
-			$upload = new upload($fileArr,$newname,$savepath,'',1,$upfile_size);
+					'file'=>$_FILES['uploadfile']['tmp_name'],
+					'name'=>$_FILES['uploadfile']['name'],
+					'size'=>$_FILES['uploadfile']['size'],
+					'type'=>$_FILES['uploadfile']['type'],
+					'error'=>$_FILES['uploadfile']['error']
+			);
+			if(file_exists(PHPCMS_ROOT.'/'.$savepath.$fileArr['name']) && !isset($overfile)) showmessage($LANG['find_same_file']);
+			$savepath = str_replace(str_replace("\\", "/", PHPCMS_ROOT), "", $currentdir)."/";
+			$newname = $newname ? $newname : $_FILES['uploadfile']['name'] ;
+			$upload = new upload('uploadfile', $savepath, $newname, UPLOAD_ALLOWEXT, $upfile_size, $overfile);
 			if($upload->up())
 				showmessage($LANG['file']." <a href=\"".$savepath.$upload->savename."\" >{$upload->savename}</a> ".$LANG['upload_success'],"?mod=$mod&file=$file&action=main&dir=".urlencode($dir));
 			else
-				showmessage($LANG['cannot_upload_error'].$upload->errmsg());
+				showmessage($LANG['cannot_upload_error'].$upload->error());
 		}
 	break;
-	
+
 	case 'multiupload':
 		if($dosubmit)
 		{
-			require_once PHPCMS_ROOT.'/admin/include/allupload.class.php';
-			
 			$upfile_size='4000000';
 			$savepath = str_replace(str_replace("\\","/",PHPCMS_ROOT),'',$currentdir)."/";
 			$filecount = count($_FILES['uploadfiles']['tmp_name']);
@@ -317,25 +323,21 @@ switch($action)
 									'type'=>$_FILES['uploadfiles']['type'][$i],
 									'error'=>$_FILES['uploadfiles']['error'][$i]
 									);
-				
-					if(file_exists(PHPCMS_ROOT.'/'.$savepath.$fileArr['name']) && !isset($overfile)) continue;
 
-					$upload = new upload($fileArr,'',$savepath,'',1,$upfile_size);
-					$upload->up();
+					if(file_exists(PHPCMS_ROOT.'/'.$savepath.$fileArr['name']) && !isset($overfile)) continue;
 				}
 			}
+			$upload = new upload('uploadfiles', $savepath, $newname, UPLOAD_ALLOWEXT, $upfile_size, $overfile);
+			$upload->up();
 			showmessage($LANG['all_file_uploaded'],"?mod=$mod&file=$file&action=main&dir=".urlencode($dir));
 		}
-		include admintpl('filemanager_multiupload');
+		include admin_tpl('filemanager_multiupload');
 		break;
-	
+
 	case 'down':
-		if(!isset($fname)) showmessage($LANG['illegal_request_return'],'goback');
-		include_once PHPCMS_ROOT.'/include/filedown.class.php';
-		$down = new filedown();
-		$down->down($fname);
-		break;	
-		
+		file_down($fname);
+		break;
+
 	case 'delete':
 		if(!isset($fname)) showmessage($LANG['illegal_request_return'],'goback');
 		if(!file_exists($fname)) showmessage($LANG['file_not_exist'],'goback');
@@ -354,22 +356,22 @@ switch($action)
 		}
 		break;
 	break;
-	
+
 	case 'phpinfo':
 		ob_start();
 		phpinfo();
 		$info = ob_get_contents();
 		ob_clean();
-		if(preg_match("/<body><div class=\"center\">([\s\S]*?)<\/div><\/body>/",$info,$m))		
+		if(preg_match("/<body><div class=\"center\">([\s\S]*?)<\/div><\/body>/",$info,$m))
 			 $phpinfo = $m[1];
 		else $phpinfo = $info;
-		$phpinfo = str_replace("class=\"e\"","class=\"tablerow\"",$phpinfo);
-		$phpinfo = str_replace("class=\"v\"","class=\"tablerow\"",$phpinfo);
-		$phpinfo = str_replace("<table","<table class=\"tableborder\"",$phpinfo);
-		
-		$phpinfo = preg_replace("/<a href=\"http:\/\/www.php.net\/\"><img(.*)alt=\"PHP Logo\" \/><\/a><h1 class=\"p\">(.*)<\/h1>/","<h1 style=\"text-align:center;font-family:Arial;color=red;\">\\2<h3>&nbsp;&nbsp;provide impetus for phpcms!</h3></h1>",$phpinfo);	
-		
-		include admintpl('filemanager_phpinfo');
+		$phpinfo = str_replace("class=\"e\"","",$phpinfo);
+		$phpinfo = str_replace("class=\"v\"","",$phpinfo);
+		$phpinfo = str_replace("<table","<table class=\"table_list\"",$phpinfo);
+
+		$phpinfo = preg_replace("/<a href=\"http:\/\/www.php.net\/\"><img(.*)alt=\"PHP Logo\" \/><\/a><h1 class=\"p\">(.*)<\/h1>/","<h1 style=\"text-align:center;font-family:Arial;color=red;\">\\2<h3>&nbsp;&nbsp;provide impetus for phpcms!</h3></h1>",$phpinfo);
+
+		include admin_tpl('filemanager_phpinfo');
 	break;
 }
 ?>

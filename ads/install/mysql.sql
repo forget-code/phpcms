@@ -1,54 +1,80 @@
-INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('广告', 'ads', 'ads', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn/', 'phpcms@163.com', '功能说明', '许可协议', '使用帮助', '', 0, '0000-00-00', '0000-00-00', '0000-00-00');
-
-DROP TABLE IF EXISTS `phpcms_ads`;
-CREATE TABLE IF NOT EXISTS `phpcms_ads` (
-  `adsid` int(11) NOT NULL auto_increment,
-  `adsname` varchar(50) NOT NULL default '',
-  `introduce` varchar(255) NOT NULL default '',
-  `placeid` int(11) NOT NULL default '0',
-  `type` varchar(10) NOT NULL default '',
-  `linkurl` varchar(255) NOT NULL default '',
-  `imageurl` varchar(255) NOT NULL default '',
-  `alt` varchar(255) NOT NULL default '',
-  `flashurl` varchar(255) NOT NULL default '',
-  `wmode` varchar(20) NOT NULL default '',
-  `text` mediumtext NOT NULL,
-  `code` mediumtext NOT NULL,
-  `fromdate` int(11) unsigned NOT NULL default '0',
-  `todate` int(11) unsigned NOT NULL default '0',
-  `username` varchar(30) NOT NULL default '',
-  `addtime` int(11) unsigned NOT NULL default '0',
-  `views` int(11) NOT NULL default '0',
-  `hits` int(11) NOT NULL default '0',
-  `checked` tinyint(1) unsigned NOT NULL default '0',
-  `passed` tinyint(1) NOT NULL default '0',
-  PRIMARY KEY  (`adsid`)
-) TYPE=MyISAM;
-
-INSERT INTO `phpcms_ads` (`adsname`, `introduce`, `placeid`, `type`, `linkurl`, `imageurl`, `alt`, `flashurl`, `wmode`, `text`, `code`, `fromdate`, `todate`, `username`, `addtime`, `views`, `hits`, `checked`, `passed`) VALUES('phpcms 2007 旗帜广告', 'phpcms 2007 广告', 1, 'flash', 'http://www.phpcms.cn/', '', '欢迎体验 phpcms 2007 ！', 'images/phpcms2007sp6.swf', '', '', ' ', 1168790400, 1262188800, 'phpcms', 1168837934, 32776, 14, 1, 1);
-INSERT INTO `phpcms_ads` (`adsname`, `introduce`, `placeid`, `type`, `linkurl`, `imageurl`, `alt`, `flashurl`, `wmode`, `text`, `code`, `fromdate`, `todate`, `username`, `addtime`, `views`, `hits`, `checked`, `passed`) VALUES('广告2', '', 6, 'image', 'http://www.phpcms.cn', 'images/phpcmssoft.gif', '', '', '', '', '', 1200412800, 1203091200, '', 1200414959, 0, 0, 1, 1);
+INSERT INTO `phpcms_module` (`module`, `name`, `path`, `url`, `iscore`, `version`, `author`, `site`, `email`, `description`, `license`, `faq`, `tagtypes`, `setting`, `listorder`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('ads', '广告管理', 'ads/', '', 0, '1.0.0.0', 'Phpcm Team', 'http://www.phpcms.cn', 'phpcms@163.com', '', '', '', '', 'array (\r\n  ''enableadsclick'' => ''1'',\r\n  ''pagesize'' => ''15'',\r\n  ''ext'' => ''jpg|jpeg|gif|bmp|png|swf'',\r\n  ''maxsize'' => ''307200'',\r\n  ''htmldir'' => ''js'',\r\n)', 0, 0, '2008-10-28', '2008-10-28', '2008-10-28');
 
 DROP TABLE IF EXISTS `phpcms_ads_place`;
 CREATE TABLE IF NOT EXISTS `phpcms_ads_place` (
-  `placeid` int(11) NOT NULL auto_increment,
-  `placename` varchar(50) NOT NULL default '',
-  `templateid` varchar(20) NOT NULL default '0',
-  `introduce` varchar(255) NOT NULL default '',
-  `channelid` smallint(5) unsigned NOT NULL default '0',
-  `price` int(11) NOT NULL default '0',
-  `width` int(11) NOT NULL default '0',
-  `height` int(11) NOT NULL default '0',
-  `passed` tinyint(1) NOT NULL default '0',
+  `placeid` mediumint(8) unsigned NOT NULL auto_increment,
+  `placename` char(50) NOT NULL,
+  `template` char(30) NOT NULL default '0',
+  `introduce` char(100) NOT NULL,
+  `price` mediumint(8) unsigned NOT NULL default '0',
+  `items` smallint(4) unsigned NOT NULL default '0',
+  `width` smallint(4) unsigned NOT NULL default '0',
+  `height` smallint(4) unsigned NOT NULL default '0',
+  `passed` tinyint(1) unsigned NOT NULL default '1',
+  `option` tinyint(1) unsigned NOT NULL default '1',
   PRIMARY KEY  (`placeid`)
-) TYPE=MyISAM;
+) TYPE=MyISAM  ;
 
-INSERT INTO `phpcms_ads_place` (`placeid`, `placename`, `templateid`, `introduce`, `channelid`, `price`, `width`, `height`, `passed`) VALUES(1, '顶部banner', 'ads', '顶部banner广告', 0, 0, 600, 80, 1);
-INSERT INTO `phpcms_ads_place` (`placeid`, `placename`, `templateid`, `introduce`, `channelid`, `price`, `width`, `height`, `passed`) VALUES(2, '首页横幅', 'ads', '', 0, 0, 665, 137, 1);
-INSERT INTO `phpcms_ads_place` (`placeid`, `placename`, `templateid`, `introduce`, `channelid`, `price`, `width`, `height`, `passed`) VALUES(3, '左边广告', 'ads', '', 0, 0, 304, 95, 1);
-INSERT INTO `phpcms_ads_place` (`placeid`, `placename`, `templateid`, `introduce`, `channelid`, `price`, `width`, `height`, `passed`) VALUES(4, '企业黄页频道宽661高89广告', 'ads', '', 0, 0, 661, 89, 1);
-INSERT INTO `phpcms_ads_place` (`placeid`, `placename`, `templateid`, `introduce`, `channelid`, `price`, `width`, `height`, `passed`) VALUES(5, '分类信息宽300高80广告', 'ads', '按地区浏览广告下面', 0, 0, 300, 80, 1);
-INSERT INTO `phpcms_ads_place` (`placeid`, `placename`, `templateid`, `introduce`, `channelid`, `price`, `width`, `height`, `passed`) VALUES(6, '文章频道宽305高95广告', 'ads', '文章频道宽305高95广告', 0, 0, 305, 95, 1);
-INSERT INTO `phpcms_ads_place` (`placeid`, `placename`, `templateid`, `introduce`, `channelid`, `price`, `width`, `height`, `passed`) VALUES(7, '下载频道宽305高95广告', 'ads', '下载频道宽305高95广告', 0, 0, 305, 95, 1);
-INSERT INTO `phpcms_ads_place` (`placeid`, `placename`, `templateid`, `introduce`, `channelid`, `price`, `width`, `height`, `passed`) VALUES(8, '图片频道宽305高95广告', 'ads', '图片频道宽305高95广告', 0, 0, 305, 95, 1);
-INSERT INTO `phpcms_ads_place` (`placeid`, `placename`, `templateid`, `introduce`, `channelid`, `price`, `width`, `height`, `passed`) VALUES(9, '影视频道宽722高64广告', 'ads', '', 0, 0, 722, 64, 1);
-INSERT INTO `phpcms_ads_place` (`placeid`, `placename`, `templateid`, `introduce`, `channelid`, `price`, `width`, `height`, `passed`) VALUES(10, '商城频道宽208高74广告', 'ads', '', 0, 0, 208, 74, 1);
+-- 
+-- 导出表中的数据 `phpcms_ads_place`
+-- 
+
+INSERT INTO `phpcms_ads_place` (`placeid`, `placename`, `template`, `introduce`, `price`, `items`, `width`, `height`, `passed`, `option`) VALUES 
+(1, '网站首页广告', 'ads', '', 10, 1, 638, 58, 1, 0),
+(3, '评论页310x210图片广告', 'ads', '', 10, 1, 310, 210, 1, 0),
+(4, '问吧416x60图片广告', 'ads', '', 10, 1, 416, 60, 1, 0),
+(5, '模型310x210图片广告', 'ads', '', 50, 1, 310, 210, 1, 0),
+(6, '产品展示模型首页广告', 'ads', '', 0, 1, 750, 50, 1, 0),
+(7, '网站首页横幅', 'ads', '', 10, 1, 638, 58, 1, 0);
+
+DROP TABLE IF EXISTS `phpcms_ads`;
+CREATE TABLE `phpcms_ads` (
+  `adsid` mediumint(8) unsigned NOT NULL auto_increment,
+  `adsname` varchar(40) NOT NULL,
+  `introduce` varchar(255) NOT NULL,
+  `placeid` mediumint(8) unsigned NOT NULL default '0',
+  `type` varchar(10) NOT NULL,
+  `linkurl` varchar(100) NOT NULL,
+  `imageurl` varchar(100) NOT NULL,
+  `s_imageurl` varchar(100) NOT NULL,
+  `alt` varchar(20) NOT NULL,
+  `flashurl` varchar(100) NOT NULL,
+  `wmode` varchar(20) NOT NULL,
+  `text` text NOT NULL,
+  `code` text NOT NULL,
+  `fromdate` int(10) unsigned NOT NULL default '0',
+  `todate` int(10) unsigned NOT NULL default '0',
+  `username` char(20) NOT NULL,
+  `addtime` int(10) unsigned NOT NULL default '0',
+  `views` int(10) unsigned NOT NULL default '0',
+  `clicks` mediumint(8) unsigned NOT NULL default '0',
+  `passed` tinyint(1) unsigned NOT NULL default '0',
+  `status` tinyint(1) unsigned NOT NULL default '1',
+  PRIMARY KEY  (`adsid`),
+  KEY `fromdate` (`fromdate`,`todate`),
+  KEY `placeid` (`placeid`,`passed`,`fromdate`,`todate`,`username`),
+  KEY `username` (`username`,`passed`)
+) TYPE=MyISAM ;
+
+INSERT INTO `phpcms_ads` (`adsid`, `adsname`, `introduce`, `placeid`, `type`, `linkurl`, `imageurl`, `s_imageurl`, `alt`, `flashurl`, `wmode`, `text`, `code`, `fromdate`, `todate`, `username`, `addtime`, `views`, `clicks`, `passed`, `status`) VALUES 
+(1, '首页638x58图片广告', '', 1, 'image', 'www.phpcms.cn', 'uploadfile/2008/0831/20080831094526548.jpg', '', '广告', '', 'transparent', '', '', 1220025600, 1293811200, 'phpcms', 1220064717, 0, 10, 1, 1),
+(4, '新浪汽车频道', '', 3, 'image', 'www.google.cn', 'uploadfile/2008/0831/20080831100602900.jpg', '', 'www.google.cn', '', 'transparent', '', '', 1217865600, 1293811200, 'phpcms', 1220148362, 0, 1, 1, 1),
+(5, 'phpcms新产品广告', '', 4, 'image', 'www.phpcms.cn', 'uploadfile/2008/0831/20080831104206433.jpg', '', 'phpcms', '', 'transparent', '', '', 1220112000, 1293811200, 'phpcms', 1220150526, 0, 6, 1, 1),
+(6, '模型页面广告', '', 5, 'image', 'www.phpcms.cn', 'uploadfile/2008/0831/20080831021105267.jpg', '', '', '', 'transparent', '', '', 1220112000, 1293811200, 'phpcms', 1220163065, 0, 4, 1, 1),
+(7, '产品展示模型图片广告', '', 6, 'image', '', 'uploadfile/2008/0831/20081018020032914.gif', '', '', '', 'transparent', '', '', 1224259200, 1293811200, 'phpcms', 1224309632, 0, 0, 1, 1),
+(8, '首页横幅广告', '', 7, 'image', 'www.phpcms.cn', 'uploadfile/2008/0831/20080831094526548.jpg', '', '广告', '', 'transparent', '', '', 1220025600, 1293811200, 'phpcms', 1220064717, 0, 10, 1, 1);
+
+
+DROP TABLE IF EXISTS `phpcms_ads_stat`;
+CREATE TABLE IF NOT EXISTS `phpcms_ads_stat` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `adsid` mediumint(8) unsigned NOT NULL default '0',
+  `username` char(20) NOT NULL,
+  `area` char(40) NOT NULL,
+  `ip` char(15) NOT NULL,
+  `referer` char(120) NOT NULL,
+  `clicktime` int(10) unsigned NOT NULL default '0',
+  `type` tinyint(1) unsigned NOT NULL default '1',
+  PRIMARY KEY  (`id`),
+  KEY `adsid` (`adsid`,`type`,`ip`)
+) TYPE=MyISAM;

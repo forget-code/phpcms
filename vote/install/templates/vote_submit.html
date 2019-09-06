@@ -1,0 +1,108 @@
+<form action="{$M[url]}vote.php?voteid={$voteid}" method="post" id="voteform{$voteid}"  style="border:none;">
+  <dl>
+    {if !$embed}
+    <dt>{$subject}</dt>
+        {if $detail}
+        <dd>{$detail}</dd>
+        {/if}
+    {else}
+    <dt>{$subject}</dt>
+    {/if}
+  </dl>
+  {if $description}
+  <div style="text-indent:2em;padding:6px;border-bottom:#CCC 1px dashed">{$description}</div>
+  {/if}
+  
+  {php $i=0;}
+  {loop $subject_lists $sid $data}
+  {php $type=$data['ischeckbox']?'checkbox':'radio';$msg=$data[ischeckbox]?"请选择 $data[minval] - $data[maxval] 个选项":"请选择一个选项"}
+  <dl>
+    {if count($subject_lists)>1}
+    <dt>
+      <?=++$i?>. {$data['subject']}&nbsp;&nbsp; <span id="err<?=$sid?>" class="errtip">({$msg})</span></dt>
+    {/if}    
+    {php $r=0;}
+    {loop $data['options'] $optionid $option}
+    {if !$option['image']}
+    <dd sn="{$optionid}"> &nbsp;&nbsp;
+      <input type="{$type}" id="{$optionid}" name="votedata[{$sid}][]" value="{$optionid}" {if $r==0}  require="true" datatype="group" msgid="err{$sid}" msg="{$msg}" min="{$data[minval]}" max="{$data[maxval]}"  {/if}/>
+      {$option['option']} {php echo $embed?'<br />':'';} </dd>
+    {else}
+    <dd class="optionpic" sn="{$optionid}"> <img src="{$option['pic']}" title="{$option['option']}" onerror="this.src='{SITE_URL}images/nopic.gif'" />
+      <input type="{$type}" id="{$optionid}" name="votedata[{$sid}][]" value="{$optionid}" {if $r==0} require="true" datatype="group" msgid="err{$sid}" msg="{$msg}" min="{$data[minval]}" max="{$data[maxval]}"  {/if}/>
+      {$option['option']} </dd>
+    {/if}
+    {php $r=1;}
+    {/loop}    
+    {/loop}
+  </dl>
+  {if ($userinfo  || $enablecheckcode)}
+  <table cellpadding="0" cellspacing="1" class="table_form">
+    <caption>
+    投票人信息
+    </caption>
+    {if isset($userinfo['sex'])}
+    <tr>
+      <td width="18%">&nbsp;您的性别&nbsp;</td>
+      <td><input type="radio" value="1" name="userinfo[sex]" checked="checked" />
+        先生&nbsp;
+        <input type="radio" value="2" name="userinfo[sex]" />
+        女士&nbsp; </td>
+    </tr>
+    {/if}
+    {loop $userinfo $key $val}
+    {php if ($key=='comment' || $key=='extra' || $key=='sex') continue ;}
+    <tr>
+      <td width="18%">&nbsp;{$LANG[$key]}&nbsp;</td>
+      <td align="left"><input type="text" name="userinfo[{$key}]" value=""  class="auto_input" {if $val} require="true" datatype="require" msg="不能为空" msgid="{$key}" {/if} />
+        {if $val}<span id="{$key}" style="color:#ff0000">*</span>{/if}<span>{php echo $LANG['tip_'.$key] ;}</span> </td>
+    </tr>
+    {/if}
+    <!--end userinfo -->
+    {if isset($userinfo['comment'])}
+    <tr>
+      <td width="18%">&nbsp;意见 </td>
+      <td><textarea name="userinfo[comment]" rows="4" style="width:60%" {if $userinfo['comment']} require="true" datatype="require" msg="不能为空" msgid="comment" {/if}></textarea>
+        {if $userinfo['comment']} <span id="comment" style="color:#ff0000">*</span>{/if} 限500个字符以内</td>
+    </tr>
+    {/if}
+    
+    {if isset($userinfo['extra'])}
+    <tr>
+      <td width="18%">&nbsp;补充信息 </td>
+      <td><textarea name="userinfo[extra]" rows="4" style="width:60%"  {if $userinfo['extra']} require="true" datatype="require" msg="不能为空" msgid="{$key}" {/if}></textarea>
+        {if $userinfo['extra']} <span id="{$key}" style="color:#ff0000">*</span>{/if} 限500个字符以内</td>
+    </tr>
+    {/if}
+    
+    {if $enablecheckcode}
+    <tr>
+      <td width="18%">&nbsp;请输入验证码&nbsp;</td>
+      <td> {form::checkcode('checkcode',4,'require="true" datatype="require" msgid="checkcodetip" msg="请输入验证码"')} <span class="errtip" id="checkcodetip"></span> </td>
+    </tr>
+    {/if}
+  </table>
+  {/if}
+  <p class="mar_10"> &nbsp;&nbsp;
+    <input type="submit" value="提交" name="dosubmit" />
+    &nbsp;&nbsp; <a href="{$M[url]}show.php?voteid={$voteid}">查看结果</a> </p>
+</form>
+<script>
+
+var sn;
+var name;
+var color="#B9DFF9" ; 
+
+$(".optionpic").click(function(){
+	sn=$(this).attr("sn");
+	$("#"+sn).click();
+	var s=$(this).find("input[type=radio]").attr("name");
+	$("input[name="+s+"]").parent().css({"background-color":""});
+	$(this).css({"background-color":color});
+});
+mode =0 ;
+$("#voteform{$voteid}").checkForm(0);
+$('tr td:even').css({'text-align':'right', 'padding-right':'10px'});
+//用来控制一行显示多个选项, 如果一行显示一个选项, 则可以删除掉  ,float:'left'
+$('span[sn]').css({width:'160px',display:'block',float:'left'});
+</script>

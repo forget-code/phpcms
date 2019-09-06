@@ -1,43 +1,82 @@
-<?php 
+<?php
 require './include/common.inc.php';
-if(isset($auth))
+require MOD_ROOT.'/include/mails.class.php';
+$m = new mails();
+$auth = trim($auth);
+$tm = trim($tm);
+$checktime = $tm+72*60*60;
+if(empty($auth) || empty($tm)) showmessage('验证失败!');
+$newtime = (TIME - $checktime);
+if($newtime > 0 ) showmessage('验证失败!');
+$action = array('check','del','activate');
+if(!in_array($ac, $action)) showmessage('非法的参数！');
+switch($ac)
 {
-	$type=1;
-	$code = $auth;
-}
-else if(isset($drawback))
-{
-	$type=2;
-	$code = $drawback;
-}
-else
-{
-	showmessage($LANG['illegal_parameters'],"goback");
+    case 'check':
+        if($auth)
+        {
+            $md5 = AUTH_KEY.$em.'1'.$tp.$tm;
+            if($auth == md5($md5) && is_email($em))
+            {
+                $m->checkMailType($em,$tp);
+                    showmessage('订阅成功!');
+            }
+            else
+            {
+                showmessage('验证失败!');
+            }
+        }
+        else
+        {
+            showmessage('参数非法!');
+        }
+    break;
+    case 'del':
+        if($auth)
+        {
+           $md5 = AUTH_KEY.$em.'0'.$tp;
+            if($ui)
+            {
+                $md5 .= $ui;
+            }
+            if( $auth == md5($md5) && is_email($em))
+            {
+                if($ui)
+                {}
+                else
+                {
+                    $m->delTpyeMail($em,$tp);
+                    showmessage('退订成功!');
+                }
+            }
+            else
+            {
+                showmessage('验证失败!');
+            }
+        }
+        else
+        {
+            showmessage('参数非法!');
+        }
+        break;
+        case 'activate':
+            $em = trim($em); $om = trim($om);
+            if(is_email($em) && is_email($om))
+            {
+                if($m->setActivation($em, $om, $auth))
+                {
+                    showmessage('验证成功!');
+                }
+                else
+                {
+                    showmessage($m->error());
+                }
+            }
+            else
+            {
+                showmessage('验证失败!');
+            }
+        break;
 }
 
-$authkey = $PHPCMS['authkey'] ? $PHPCMS['authkey'] : 'PHPCMS';
-$code = phpcms_auth($code, 'DECODE', $authkey);
-$email_time = explode('|',$code);
-if(count($email_time)!=2) showmessage($LANG['illegal_parameters'],"goback");
-else 
-{
-	$email = $email_time[0];
-	$time = $email_time[1];
-	if(comparetime($time)) showmessage($LANG['out_of_30_days'],"goback");
-	else 
-	{
-		if($type == 1) //激活
-		{
-			$query = "UPDATE ".TABLE_MAIL_EMAIL." SET authcode='' WHERE email='$email'";
-			$db->query($query);
-			showmessage($LANG['operation_success_email_activation'],"goback");
-		}
-		else if($type==2) //退订
-		{
-			$query = "DELETE FROM ".TABLE_MAIL_EMAIL." WHERE email='$email'";
-			$db->query($query);
-			showmessage($LANG['peration_success_email_out'],"goback");
-		}
-	}	
-}
 ?>

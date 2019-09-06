@@ -1,0 +1,137 @@
+{template 'phpcms','header'}
+<div id="main">
+  <!--begin left-->
+  <div id="main_l">
+    <!--位置导航-->
+    <div id="position"><a href="">首页</a><a href="{$M[url]}">专题</a><a href="{$M[url]}{$TYPE[$typeid][url]}">{$TYPE[$typeid][name]}</a>{str_cut($title,65)}</div>
+  {if $banner}<div style="margin:10px 0 10px 0;"><img src="{$banner}" height="120" width="650" style="border:1px solid #CCCCCC;padding:1px;"/></div>{/if}
+    <div class="special_txt">
+        <h1><span class="c_orange">{$title}</span></h1>
+        <img src="{$thumb}" height="185" width="300" style="border:1px solid #CCCCCC;padding:1px;"/><p>{$description}</p>
+      <div class="clear"></div>
+    </div>
+    <!--{block("specialid_$specialid", 1)}-->
+    <!--{block("specialid_$specialid", 2)}-->
+<!--专题文章start-->
+<div class="cat_index clear">
+      <div class="cat_title"><a href="{$MODULE[special][url]}special.php?specialid={$specialid}"><img alt="更多" src="images/more.gif"/></a>
+        <h3>最新信息</h3>
+      </div>
+      <div class="cat_left">
+        <ul class="pic_list">
+          {get sql="SELECT * FROM `phpcms_special_content` AS a, `phpcms_content` AS b WHERE a.contentid = b.contentid AND b.thumb != '' AND a.specialid =$specialid ORDER BY  b.contentid DESC" rows="8" }
+          <li><a target="_blank" href="{$r[url]}"><img height="62" width="90" alt="{$r[title]}" src="{$r[thumb]}"/></a><br/>
+          <a target="_blank" href="{$r[url]}"><span class="c13 b">{str_cut($r[title],13)}</span></a>
+         </li>
+         {/get}
+        </ul>
+      </div>
+      <div class="cat_right">
+        <ul class="text_list">
+        {get sql="SELECT * FROM `phpcms_special_content` AS a, `phpcms_content` AS b WHERE a.contentid = b.contentid AND a.specialid =$specialid ORDER BY  b.contentid DESC" rows="16"}
+           <li><span class="date">{date('Y-m-d',$r[inputtime])}</span><a target="_blank" href="{$r[url]}">{str_cut($r[title],40)}</a></li>
+        {/get}
+        </ul>
+      </div>
+</div>
+<!--专题文章end-->
+<!--begin comment-->
+{if isset($MODULE[comment])}
+{php list($keyid, $verify) = keyid_make('special', 'special', 'title', $specialid);}
+<div id="commnent_tag">
+     <a href="{$MODULE[comment][url]}?keyid={$keyid}&verify={$verify}">
+     <img src="images/comment.gif" />
+        已有<strong class="c_red"><span id="comments">0</span></strong>位网友发表了看法</a>
+</div>
+<div class="commenttext" style="text-align:center;margin-top:2%">
+   <form action="{$MODULE[comment][url]}?action=addpost" method="post" onSubmit="return checkForm();">
+			<input type="hidden" name="keyid" value="{$keyid}"/>
+			<input type="hidden" name="verify" value="{$verify}"/>
+		<ul>
+          <li>
+            <textarea cols="100" rows="8" name="comment" id="comment" onfocus="reply_clearfield()" onblur="reply_restoration()"></textarea>
+          </li>
+          <li style="text-align:left;margin-left:2%;margin-top:1%;">
+            <span id="checker"></span>
+            <input id="dosubmit" name="dosubmit" type="submit" value="发表评论" />
+          </li>
+        </ul>
+        </form>
+      </div>
+      <script type="text/javascript" src="data/js/comment_setting.js"></script>
+      <script type="text/javascript">
+      <!--
+        $().ready(function() {
+            if(setting.ischecklogin == 0 && getcookie('auth') === null)
+            {
+                $('#comment').val("请您登陆后发表评论！");
+                $('#comment').attr("disabled","disabled");
+                $('#dosubmit').attr("disabled","disabled");
+            }
+            else 
+            {
+                $('#comment').val("我也来说两句！");
+            }
+        });
+        function reply_restoration()
+        {
+            if($('#comment').val() == '')
+            {
+                $('#comment').val("我也来说两句！");
+            }
+        }
+        function reply_clearfield()
+        {
+            if ($('#comment').val() == "我也来说两句！") 
+            {
+                $('#comment').val("");   
+            }            
+            $.ajax({
+                 type: "POST",
+                 url: "{$MODULE[comment][url]}?action=ajaxcheckcode",
+                 data:   "",
+                 dataType: "html",
+                 success: function(msg)
+                 {
+                    if(msg)
+                    {
+                        $('#checker').html("验证码："+msg+"&nbsp;");
+                    }                    
+                 } 
+             });
+        }
+        function checkForm()
+        {
+            if($('#comment').val() == '' || $('#comment').val() == "我也来说两句！")
+            {
+                alert("内容不能为空");
+                $('#comment').focus();
+                return false;
+            }
+            if($('#checkcode').val() == '' )
+            {
+                alert("验证码不能为空");
+                $('#checkcode').focus();
+                return false;
+            }
+            if ($('#comment').val().length > 1000) 
+            {
+                alert("内容太长，最多 1000 个文字");
+                return false;
+            }
+        }
+      //-->
+      </script>
+      <script language="JavaScript" src="count.php?specialid={$specialid}"></script>
+    {/if} 
+
+  </div>
+  <!--begin right-->
+  <div id="main_r">
+    <!--{block("specialid_$specialid", 3)}-->
+  </div>
+  <!--end right-->
+
+  <!--end comment-->
+</div>
+{template 'phpcms','footer'}

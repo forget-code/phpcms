@@ -1,6 +1,6 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
 <script type="text/javascript">
 function doCheck()
@@ -11,10 +11,10 @@ foreach($vars as $var)
 	$varname = str_replace('$','',$var);
 	$varname = str_replace("'",'',$varname);
 ?>
-	if($F('var_<?=$varname?>')=='')
+	if($('#var_<?=$varname?>').val()=='')
 	{
 		alert('<?=$var?> 的值不能为空！');
-		$('var_<?=$varname?>').focus();
+		$('#var_<?=$varname?>').focus();
 		return false;
 	}
 <?php } ?>
@@ -23,53 +23,40 @@ foreach($vars as $var)
 </script>
 
 <body>
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
-	<tr>
-		<td></td>
-	</tr>
-</table>
-<form name="myform" method="get" action="?" onsubmit="javascript:return doCheck();">
+<form name="myform" method="get" action="?" onSubmit="javascript:return doCheck();">
 <?php 
 foreach($hiddens as $k=>$v)
 {
 	echo "<input type='hidden' name='$k' value='$v'>\n";
 }
 ?>
-<table cellpadding="2" cellspacing="1" border="0" class="tableBorder">
+<table cellpadding="0" cellspacing="1" class="table_form">
+  <caption>{tag_<?=$tagname?>} 标签变量赋值</caption>
   <tr>
-    <th colspan=2>{tag_<?=$tagname?>} 标签变量赋值</th>
+    <th width="30%"><strong>变量名</strong></th>
+    <td width="60%">变量值</td>
   </tr>
-  <tr>
-    <td align="right" class="tablerowhighlight" width="30%">变量名</td>
-    <td align="left" class="tablerowhighlight" width="60%">变量值</td>
+ <input type="hidden" name="tagname" value="<?=$tagname?>">
+ <input type="hidden" name="mod" value="<?=$mod?>">
+ <input type="hidden" name="file" value="<?=$file?>">
+ <input type="hidden" name="action" value="<?=$action?>">
+ <input name="ajax" type="hidden" value="<?=$ajax?>">
+    <th><strong><?=$var?>：</strong></th>
+    <td><input type="text" name="<?=$varname?>" id="var_<?=$varname?>" size="20"></td>
   </tr>
-<?php 
-foreach($vars as $var)
-{
-	$varname = str_replace('$','',$var);
-	$varname = str_replace("'",'',$varname);
-?>
-  <tr>
-    <td class="tablerow" align="right"><?=$var?>：</td>
-    <td class="tablerow"><input type="text" name="<?=$varname?>" id="var_<?=$varname?>" size="20"></td>
-  </tr>
-<?php } ?>
 <tr>
-<td class="tablerow"></td>
-<td class="tablerow"><input type="submit" name="dosubmit" value=" 预览 ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="返回上一步" onclick="javascript:history.back();"></td>
+<th></th>
+<td><input type="submit" name="dosubmit" value=" 预览 ">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="返回上一步" onClick="javascript:history.back();"></td>
 </tr>
 </table>
 </form>
 <br/>
-<table cellpadding="2" cellspacing="1" border="0" class="tableBorder" >
+<table cellpadding="0" cellspacing="1" class="table_info" >
+  <caption>提示信息</caption>
   <tr>
-    <td class="submenu" align="center">提示信息</td>
-  </tr>
-  <tr>
-    <td class="tablerow">
+    <td>
 如果标签中存在变量，预览的时候必须先给这些变量赋值才能预览，可以根据实际情况临时赋值。<p>
 <font color="red">常用标签变量：</font><br />
-<font color="blue">$channelid</font> ：一般用来表示频道ID （不得为 0）<br />
 <font color="blue">$catid</font> ：一般用来表示栏目ID （0 表示不限栏目）<br />
 <font color="blue">$specialid</font> ：一般用来表示专题ID （0 表示不限专题）<br />
 <font color="blue">$typeid</font> ：一般用来表示类别ID （0 表示不限类别）<br />

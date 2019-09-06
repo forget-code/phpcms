@@ -1,17 +1,20 @@
 <?php
 require dirname(__FILE__).'/include/common.inc.php';
-$session = new phpcms_session();
+
+session_start();
 
 $enablegd = 1;
 $funcs = array('imagecreatetruecolor','imagecolorallocate','imagefill','imagestring','imageline','imagerotate','imagedestroy','imagecolorallocatealpha','imageellipse','imagepng');
 foreach($funcs as $func)
 {
-	if(!function_exists($func)) 
+	if(!function_exists($func))
 	{
 		$enablegd = 0;
 		break;
 	}
 }
+
+ob_clean();
 
 if($enablegd)
 {
@@ -36,7 +39,7 @@ if($enablegd)
 						   imagecolorallocate($im, rand(0, 20), rand(0, 10), rand(245, 255)),
 						   imagecolorallocate($im, rand(245, 255), rand(0, 20), rand(0, 10)),
 						   imagecolorallocate($im, rand(245, 255), rand(0, 20), rand(245, 255)));
-	$foreground2 = imagecolorallocatealpha($im, rand(20, 100), rand(20, 100), rand(20, 100),80);		
+	$foreground2 = imagecolorallocatealpha($im, rand(20, 100), rand(20, 100), rand(20, 100),80);
 	$middleground = imagecolorallocate($im, rand(200, 160), rand(200, 160), rand(200, 160));
 	$middleground2 = imagecolorallocatealpha($im, rand(180, 140), rand(180, 140), rand(180, 140),80);
 
@@ -90,7 +93,7 @@ if($enablegd)
 }
 else
 {
-	$files = glob(PHPCMS_ROOT.'/images/checkcode/*.jpg');
+	$files = glob(PHPCMS_ROOT.'images/checkcode/*.jpg');
 	if(!is_array($files)) exit($LANG['please_check_dir_images_checkcode']);
 
 	$checkcodefile = $files[rand(0, count($files)-1)];

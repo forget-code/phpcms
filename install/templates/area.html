@@ -1,0 +1,37 @@
+{template 'phpcms','header'}
+<!--begin main-->
+<div id="main">
+  <div id="main_l" class="bdr_1">
+    <!--位置导航-->
+    <div id="position"><a href="">首页</a><a href="{URL}">{$A[name]}</a></div>
+    <div class="bdr_2">
+      <ul class="pic_list">
+		{tag_信息地区页面图文列表}
+      </ul>
+    </div>
+		{tag_信息地区页面文字列表}
+  </div>
+  <div id="main_r">
+    <h4>按子地区浏览</h4>
+    <div id="area">
+	{loop $areas $a}<a href="area.php?areaid={$a[areaid]}&catid={$catid}">{$a[name]}</a>{/loop}
+	</div>
+   <h4>信息分类</h4>
+    <div id="info_nav">
+	{loop $catlist $c}
+      <dl>{php $cols=1;}
+        {if $c[parentid]==$catid}<dt><a href="{$c[url]}">{$c[catname]}</a></dt>
+			<dd>{loop $catlist $cat}
+			{if $cols<4 && $cat[parentid]==$c[catid]}<a href="{$c[url]}">{$c[catname]}</a>{/if}
+			{php $cols++;}
+			{/loop}<a href="{$c[url]}">>></a></dd>
+		{/if}
+      </dl>
+	{/loop}
+    </div>
+    
+  </div>
+</div>
+<!--end main-->
+
+{template 'phpcms','footer'}

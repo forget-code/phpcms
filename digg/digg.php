@@ -1,23 +1,14 @@
 <?php
-require_once './include/common.inc.php';
-defined('IN_PHPCMS') or exit('Access Denied');
-$digg_setting = cache_read('digg_setting.php');
-@extract($digg_setting);
-if ($digg_mod && $channelid && $id && $con)
+require './include/common.inc.php';
+
+if(isset($flag))
 {
-    if ($hits_on == 1)
-    {
-        if ($con == 6) echo getDiggCount($digg_mod, $channelid, $id , '', '1');
-        if ($con == 7) echo abs(getDiggCount($digg_mod, $channelid, $id , '', '-1'));
-    } 
-    else
-    {
-        echo getDiggCount($digg_mod, $channelid, $id , '', '');
-    } 
-} 
+	$data = $digg->update($contentid, $flag);
+	echo $data ? $data : 0;
+}
 else
 {
-    echo '0';
-} 
-
+	$r = $digg->get($contentid);
+	echo $r ? ($digg->is_done($contentid) ? 1 : 0).','.$r['supports'].','.$r['againsts'] : '0,0,0';
+}
 ?>

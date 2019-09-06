@@ -1,6 +1,0 @@
-<!--{loop $question $i $g}-->
-<li>
-{if $datetype} <span class="f_r">{$g[adddate]}</span>{/if}
-{if $showcatname}&nbsp;[<a href="{$MODULE['wenba']['linkurl']}browse.php?catid={$g['catid']}" class="lgy">{$g['catname']}</a>]{/if}&nbsp;<a class="lq" href="{$MODULE['wenba']['linkurl']}question.php?qid={$g['qid']}" {$target}>{$g['title']}</a>
-</li>
-<!--{/loop}-->

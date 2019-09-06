@@ -1,16 +1,13 @@
 <?php
 require './include/common.inc.php';
-
-if(!$_userid) showmessage($LANG['please_login'], $MODULE['member']['linkurl'].'login.php?forward='.urlencode($PHP_URL));
-
-if($dosubmit)
-{
-	$payurl = $paytype.'?amount='.$amount.'&forward='.$forward;
-	header("location:".$payurl);
-}
-else
-{
-    if(!isset($amount)) $amount = '';
-	include template($mod, 'pay');
-}
+require_once MOD_ROOT.'/include/exchange.class.php';
+$exchange = new exchange();
+$condition = array();
+if(empty($type)) $condition[] = " `type` = 'amount'" ; else $condition[] = " `type` = '$type'";
+if(!empty($module)) $condition['module']  = '$module' ;
+$page = isset($page) ? intval($page) : 1;
+$pagesize	= $PHPCMS['pagesize'] ? $PHPCMS['pagesize'] : 20;
+$exchanges = $exchange->get_list( $condition, $page, $pagesize);
+$pages = $exchanges['pages'];
+include template('pay', 'exchange_view');
 ?>

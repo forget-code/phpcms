@@ -1,6 +1,0 @@
-{loop $products $i $product}
-<li>{if $showcatname}<a href="{$product[catlinkurl]}"{$target}><em>[{$product[catname]}]</em></a>{/if}{if $datetype}<span>{$product[adddate]}</span>{/if}·<a href="{$product[linkurl]}" title="{$product[title]}" {$target}>{$product[stitle]}</a></li>
-{if $pages}
-<div class="pages">{$pages}</div>
-{/if}
-{/loop}

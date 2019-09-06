@@ -1,0 +1,175 @@
+{template 'phpcms','header'}
+<link href="{SKIN_PATH}modal.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="images/js/jqModal.js"></script>
+<script language="javascript" type="text/javascript">
+$().ready(function() {
+	  $('#comment').val("我也来说两句！");
+	});
+
+function reply_clearfield()
+{
+    if ($('#comment').val() == "我也来说两句！") 
+    {
+        $('#comment').val("");
+    }
+}
+function reply_restoration()
+{
+    if($('#comment').val() == '')
+    {
+        $('#comment').val("我也来说两句！");
+    }
+}
+function ajaxload(commentid) 
+{
+    //var title = {$title}; 
+    var data = "&commentid="+commentid+"&keyid={$keyid}&verify={$verify}" ;
+    var url =  "{$MODULE[comment][url]}?action=ajaxpost";
+    $.ajax({
+         type: "POST",
+         url: url,
+         data: data,
+         success: function(msg){
+            $('#repley_layer').html(msg);
+         }
+    }); 
+}
+
+function voteFor(id)
+{
+		this.id = id;
+		var url = "comment/?action=vote";
+		var data = '&id='+id + '&field=support';
+		$.ajax({
+			url: url,
+			data: data,
+			type: 'post',
+			success :function (msg){
+				$('#count_'+ id+'_1').text(msg);
+			}
+		});
+	}
+/**
+* 反对
+**/
+function voteAgainst (id )
+{
+	this.id = id;
+	var url  = "comment/?action=vote";
+	var data = '&id='+id + '&field=against';
+	$.ajax({
+		url: url,
+		data: data,
+		type: 'post',
+		success :function (msg){
+			$('#count_'+ id +'_0').text(msg);
+		}
+	});
+}
+
+function checkForm()
+{
+	if($('#comment').val() == '' || $('#comment').val() == "我也来说两句！")
+	{
+		alert("内容不能为空");
+		$('#comment').focus();
+		return false;
+	}
+    if($('#checkcode').val() == '' )
+	{
+		alert("验证码不能为空");
+		$('#checkcode').focus();
+		return false;
+	}
+    if ($('#comment').val().length > 1000)
+    {
+        alert("内容太长，最多 1000 个文字");
+        return false;
+    } 
+    /*if( getcookie('{$keyid}') )
+    {
+        alert("请不要灌水");
+		return false;
+    }*/
+    
+    
+}
+function close() 
+{
+    $("#repley_layer").html("");
+}
+</script>
+
+<!--begin main-->
+<div id="main">
+  <div id="main_l">
+    <!--begin 面包屑导航-->
+    <div id="position"><a href="">首页</a>评论</div>
+    <!--begin 评论主题-->
+    <h1><span style="color:#077AC7;">话题：</span><a href="{$url}">{$title}</a></h1>
+    <!--begin 评论列表-->
+    {loop $comments['info'] $comment}
+	<div class="commentbox">
+      <div class="commenthead"><span class="f_r">{$comment['addtime']} 发表</span><strong>{$comment['ip_area']}&nbsp;IP：{$comment['ip']}</strong><span>{$comment['url']}</span></div>
+      <div class="commenttext">
+		{$comment['content']}
+	  </div>
+      <div class="commentfunction">
+         <a href="javascript:ajaxload({$comment[commentid]});" >回复</a>|<span id="count_{$comment[commentid]}_1">
+         <a id="votefor_{$comment[commentid]}" href="javascript:voteFor({$comment[commentid]});">支持({$comment[support]})</a></span>|<span id="count_{$comment[commentid]}_0">
+         <a href="javascript:voteAgainst({$comment[commentid]});">反对({$comment[against]})</a></span>
+      </div>
+    </div>
+	{/loop}
+ <div id="pages">{$pages}</div>
+    <!--end 评论列表-->
+    <!--begin 发表评论-->
+    <div class="commentbox">
+      <div class="commenthead">
+      <span class="f_r">        
+        </span>　
+        <strong>用户评论</strong>　
+      </div>
+      <div class="commenttext">
+        <form action="{$MODULE[comment][url]}?action=addpost" method="post" onSubmit="return checkForm();" >
+			<input type="hidden" name="keyid" value="{$keyid}"/>
+			<input type="hidden" name="verify" value="{$verify}"/>
+		<ul>
+          <li>
+            <textarea cols="85" rows="8" name="comment" id="comment" onfocus="reply_clearfield()" onblur="reply_restoration()"></textarea>
+          </li>         
+          <li>
+           {if $M[enablecheckcode]}
+            <span>
+            &nbsp;验证码：&nbsp;{form::checkcode('checkcode',4)}
+            </span>
+            {/if}    
+            <input name="dosubmit" type="submit" value="提交评论" />
+          </li>
+        </ul>
+        </form>
+      </div>
+    </div>
+    <!--end 发表评论-->
+  </div>
+  <!--begin 右侧边栏-->
+  <div id="main_r">
+   <!--begin 广告位-->
+  <div>
+    <script language="javascript" src="data/js.php?id=5"></script>
+  </div>
+  <!--end 广告位-->
+  
+  <h4 class="bdr_t_0">最新文章</h4>
+  <div>
+	<ul class="text_list_1">
+        {tag_专题首页最新文章}
+      </ul>
+  </div>
+  <!--end 右侧边栏-->
+</div></div>
+<!--end　主体-->
+<!--begin　尾部-->
+<div id="repley_layer">
+</div>
+{template 'phpcms','footer'}

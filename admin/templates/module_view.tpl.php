@@ -1,64 +1,58 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
 <body>
 <?=$menu?>
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <tr>
-    <th colspan=2><?=$name?> 模块</th>
-  </tr>
+<table cellpadding="0" cellspacing="1" class="table_form">
+    <caption><?=$name?> 模块</caption>
 	<tr> 
-      <td width="15%" class="tablerow">模块名称</td>
-      <td class="tablerow"><?=$name?></td>
+      <th width="15%"><strong>模块名称</strong></th>
+      <td><?=$name?></td>
     </tr>
 	<tr> 
-      <td class="tablerow">模块目录</td>
-      <td class="tablerow"><?=$module?></td>
+      <th><strong>模块目录</strong></th>
+      <td><?=$module?></td>
     </tr>
 	<tr> 
-      <td class="tablerow">是复制</td>
-      <td class="tablerow"><?=$iscopy?></td>
+      <th><strong>核心模块</strong></th>
+      <td><?=$iscore ? '是' : '否'?></td>
     </tr>
 	<tr> 
-      <td class="tablerow">是共享</td>
-      <td class="tablerow"><?=$isshare?></td>
+      <th><strong>版本号</strong></th>
+      <td><?=$version?></td>
     </tr>
 	<tr> 
-      <td class="tablerow">版本号</td>
-      <td class="tablerow"><?=$version?></td>
+      <th><strong>作者</strong></th>
+      <td><?=$author?></td>
     </tr>
 	<tr> 
-      <td class="tablerow">作者</td>
-      <td class="tablerow"><?=$author?></td>
+      <th><strong>E-mail</strong></th>
+      <td><a href="?mod=mail&file=send&email=<?=$email?>"><?=$email?></a></td>
     </tr>
 	<tr> 
-      <td class="tablerow">E-mail</td>
-      <td class="tablerow"><?=$email?></td>
+      <th><strong>网站地址</strong></th>
+      <td><a href="<?=$site?>" target="_blank"><?=$site?></a></td>
     </tr>
 	<tr> 
-      <td class="tablerow">网站地址</td>
-      <td class="tablerow"><?=$site?></td>
+      <th><strong>功能说明</strong></th>
+      <td><?=$introduce?></td>
     </tr>
 	<tr> 
-      <td class="tablerow">功能说明</td>
-      <td class="tablerow"><?=$introduce?></td>
+      <th><strong>许可协议</strong></th>
+      <td><?=$license?></td>
     </tr>
 	<tr> 
-      <td class="tablerow">许可协议</td>
-      <td class="tablerow"><?=$license?></td>
+      <th><strong>发布日期</strong></th>
+      <td><?=$publishdate?></td>
     </tr>
 	<tr> 
-      <td class="tablerow">发布日期</td>
-      <td class="tablerow"><?=$publishdate?></td>
+      <th><strong>安装日期</strong></th>
+      <td><?=$installdate?></td>
     </tr>
 	<tr> 
-      <td class="tablerow">安装日期</td>
-      <td class="tablerow"><?=$installdate?></td>
-    </tr>
-	<tr> 
-      <td class="tablerow">更新日期</td>
-      <td class="tablerow"><?=$updatedate?></td>
+      <th><strong>更新日期</strong></th>
+      <td><?=$updatedate?></td>
     </tr>
 </table>
 </body>

@@ -1,26 +1,9 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
-require PHPCMS_ROOT.'/images/ext/ext.php';
-$realdir = isset($realdir) ? $realdir : '';
-if(isset($channelid) && $channelid)
-{
-	$CHA = cache_read('channel_'.$channelid.'.php');
-    $rootdir = $realdir ? $CHA['channeldir'].'/'.$realdir.'/' : $CHA['channeldir'].'/'.$CHA['uploaddir'].'/';
-	$rootdir = $PHPCMS['uploaddir'].'/'.$rootdir;
-}
-elseif(isset($mod) && $mod)
-{
-	if($mod == 'phpcms')
-	{
-		$rootdir = $realdir ? $PHPCMS['uploaddir'].'/'.$realdir.'/' : $PHPCMS['uploaddir'].'/';
-	}
-	else
-	{
-		$MOD = cache_read($mod.'_setting.php');
-		$rootdir = $realdir ? $mod.'/'.$realdir.'/' : $mod.'/'.$MOD['uploaddir'].'/';
-	}
-}
 
+require PHPCMS_ROOT.'images/ext/ext.php';
+
+$rootdir = UPLOAD_ROOT;
 $type = isset($type) ? $type : 'thumb';
 $currentdir = isset($currentdir) ? $currentdir : '';
 $parentdir = isset($parentdir) ? $parentdir : '';
@@ -41,7 +24,7 @@ if(is_array($dirs))
 	foreach($dirs as $k=>$v)
 	{
 		$ldir['name'] = basename($v);
-		$ldir['path'] = ($currentdir ? dir_path($currentdir) : "").$ldir['name'];
+		$ldir['path'] = ($currentdir ? dir_path($currentdir) : '').$ldir['name'];
 		$ldir['type'] = "文件夹";
 		$ldir['size'] = "<目录>";
 		$ldir['mtime'] = date("Y-m-d H:i:s",filemtime($v));
@@ -56,14 +39,18 @@ if(is_array($files))
 		$ext = fileext($v);
 		$lfile['ext'] = array_key_exists($ext,$filetype) ? $ext : "other";
 		$lfile['type'] = $filetype[$lfile['ext']];
-	    $lfile['name'] = $type=="thumb" ? "<img src='".$v."' width='50' border='0'><br/><img src='".PHPCMS_PATH."images/ext/".$lfile['ext'].".gif' width='24' height='24' border='0'>".basename($v) : basename($v);
-		$lfile['preview'] = in_array($lfile['ext'],array('gif','jpg','jpeg','png','bmp')) ? "<img src=".$v." border=0>" : "&nbsp;此文件非图片或动画，无预览&nbsp;";
-		$lfile['path'] = $v;
+		$lfile['isimage'] = in_array($lfile['ext'],array('gif','jpg','jpeg','png','bmp')) ? 1 : 0;
+		if($isimage && !$lfile['isimage']) continue;
+		$lfile['path'] = str_replace(UPLOAD_ROOT, UPLOAD_URL, $v);
+	    $lfile['name'] = "<img src='images/ext/".$lfile['ext'].".gif' width='24' height='24' border='0'>".basename($v).(($lfile['isimage'] && $type=='thumb') ? "<br /><img src='".$lfile['path']."' width='50' border='0'>" : '');
+		$lfile['preview'] = $lfile['isimage'] ? "<img src=".$lfile['path']." border=0>" : "&nbsp;此文件非图片或动画，无预览&nbsp;";
 		$lfile['size'] = round(filesize($v)/1000);
+		$imagesize = getimagesize($lfile['path']);
+		$lfile['imagesize'] = $imagesize[0].'*'.$imagesize[1];
 		$lfile['mtime'] = date("Y-m-d H:i:s",filemtime($v));
 		$listfiles[] = $lfile;
 	}
 }
-$backparentdir = dirname($parentdir)=="." ? "" : dirname($parentdir);
-include admintpl('file_select','phpcms');
+$backparentdir = dirname($parentdir) == '.' ? '' : dirname($parentdir);
+include admin_tpl('file_select','phpcms');
 ?>

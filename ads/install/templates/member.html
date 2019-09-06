@@ -1,0 +1,46 @@
+{template "member","header"}
+<div id="main"> 
+{template "ads","left"}
+  <div id="right">
+   <p id="position"><strong>当前位置：</strong><a href="">首页</a><a href="{$M[url]}member.php">我的广告</a>广告管理</p>
+    <table cellpadding="0" cellspacing="1" class="table_list">
+      <form method="post" name="myform">
+      <caption>
+      广告管理
+      </caption>
+      <tr>
+        <th width="5%">选中</th>
+        <th width="*">广告名称</th>
+        <th width="10%">起始日期</th>
+        <th width="10%">结束日期</th>
+        <th width="6%">审核</th>
+        <th width="7%">状态</th>
+        <th width="9%">操作</th>
+        <th width="9%">统计</th>
+      </tr>
+      {loop $adses $i $ads}
+      <tr>
+        <td><input type="checkbox" name="adsid[]" id="adsid[]" value="{$ads[adsid]}"></td>
+        <td class="align_left">&nbsp;<a href="{$M[url]}member.php?action=view&adsid={$ads[adsid]}" target="_blank">{$ads[adsname]}</a></td>
+        <td class="align_c">{date('Y-m-d', $ads[fromdate])}</td>
+        <td class="align_c">{date('Y-m-d', $ads[todate])}</td>
+        <td class="align_c">{if $ads['passed']}<font color="#00ee00">通过</font>{else}<font color="#ee0000">未通过</font>{/if}</td>
+        <td class="align_c">{if $ads['status']}<font color="#00ee00">正常</font>{else}<font color="#ee0000">关闭</font>{/if}</td>
+        <td class="align_c"><a href="{$M[url]}member.php?action=edit&adsid={$ads[adsid]}">修改</a> </td>
+        <td class="align_c"><a href="{$M[url]}stat.php?adsid={$ads[adsid]}">统计</a> </td>
+      </tr>
+      {/loop}
+    </table>
+	<div class="button_box">
+          <span style="cursor:pointer;" onclick="javascript:$('input[type=checkbox]').attr('checked', true);" >全选</span>/<span style="cursor:pointer;" onclick="javascript:$('input[type=checkbox]').attr('checked', false)" >取消</span>&nbsp;&nbsp;
+          <input type="submit" name="submit" value="批量关闭" onClick="myform.action='{$M[url]}member.php?action=status&val=0'">
+          &nbsp;&nbsp;
+          <input type="submit" name="submit" value="批量取消关闭" onClick="myform.action='{$M[url]}member.php?action=status&val=1'">
+          &nbsp;&nbsp;
+          <input type="submit" name="submit" value="批量删除" onClick="myform.action='{$M[url]}member.php?action=delete'">
+	</div>
+    </form>
+    <div id="pages">{$pages}</div>
+  </div>
+</div>
+{template 'phpcms','footer'}

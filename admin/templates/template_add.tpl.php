@@ -1,7 +1,9 @@
-<?php 
+<?php
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
+<script type="text/javascript" src="images/js/jqModal.js"></script>
+<script type="text/javascript" src="images/js/jqDnR.js"></script>
 <script type="text/javascript">
 function insertText(text)
 {
@@ -13,13 +15,20 @@ function insertText(text)
 function tag_pop(mod, action, func)
 {
 	var tagname = document.selection.createRange().text;
-	if(func == '')
+	if(action == 'preview')
 	{
-		url = '?mod='+mod+'&file=tag&action=quickoperate&operate='+action+'&job=edittemplate&tagname='+tagname;
+		url = '?mod='+mod+'&file=tag&action='+action+'&tagname='+tagname;
 	}
 	else
 	{
-		url = '?mod='+mod+'&file=tag&action='+action+'&function='+func+'&job=edittemplate&tagname='+tagname;
+		if(func == '')
+		{
+			url = '?mod=phpcms&file=template&action=gettag&operate='+action+'&job=edittemplate&tagname='+tagname;
+		}
+		else
+		{
+			url = '?mod=phpcms&file=template&action=gettag&function='+action+'&job=edittemplate&tagname='+tagname;
+		}
 	}
 	window.open(url,'tag','height=500,width=700,,top=0,left=0,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no');
 }
@@ -60,341 +69,74 @@ function docheck()
 }
 </script>
 
-<body onload="myform.content.focus();">
-<?=$menu?>
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="20">
-  <tr>
-    <td>当前位置：<a href="?mod=phpcms&file=templateproject&action=manage">模板方案管理</a> > <a href="?mod=phpcms&file=template&action=manage&project=<?=$project?>&module=<?=$module?>"><?=$projectname?> - <?=$MODULE[$module]['name']?> 模板管理</a> > 添加模板</td>
-  </tr>
+<body onLoad="myform.content.focus();">
+<form name="myform" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>" enctype="multipart/form-data" onSubmit="return docheck()">
+<table cellpadding="0" cellspacing="1" class="table_form">
+  <caption>添加模板</caption>
+	<tr>
+		<th width="10%"><strong>所属方案</strong></th>
+		<td>
+			<input type="hidden" name="project" value="<?=$project?>">
+			<?=$projectname?>
+		</td>
+	</tr>
+	<tr>
+		<th><strong>所属模块</strong></td>
+		<td>
+		<input type="hidden" name="module" value="<?=$module?>">
+		<?=$MODULE[$module]['name']?>
+		</td>
+	</tr>
+		<?php if($templatetype){ ?>
+	<tr>
+		<th><strong>模板类型</strong></td>
+		<td><?=$templatename?>(<?=$templatetype?>)</td>
+	</tr>
+	<?php } ?>
+	<tr>
+		<th><strong>模板名称</strong></th>
+		<td><input type="text" name="templatename" size=25> 可以是中文</td>
+	</tr>
+	<tr>
+		<th><strong>模板路径</strong></th>
+		<td><font color="blue">./templates/<?=$project?>/<?=$module?>/<input type="text" name="template" <?php if($templatetype){ ?>value="<?=$templatetype?>_"<?php } ?> size="25"> .html</font><font color="red">*</font>&nbsp;&nbsp;(命名规则：<font color="blue">模板类型_</font><font color="red">特征名</font>，同类型模板特征名不同)</td>
+	</tr>
+	<tr>
+		<th><strong>模板语法</strong></th>
+		<td>
+			<input type="button" value="get" title="插入数据调用" style="width:40px;color:#ff0000;"  class="jqModal" onClick="get_db_source();$('.jqmWindow').show();"/>
+			<input type="button" value="block" title="插入碎片" style="width:55px" onClick='javascript:insertText("<!--{block(\"pageid\", 1)}-->\n")' />
+			<input type="button" value="loop" style="width:50px" onClick="javascript:if(this.value != '') insertText('<!--{loop $array $key $val}-->\n{$key}:{$val}\n<!--{/loop}-->\n')" />
+			<input type="button" value="if" style="width:40px" onClick="javascript:if(this.value != '') insertText('<!--{if $var1 == $var2}-->\n\n<!--{/if}-->\n')" />
+			<input type="button" value="else" style="width:50px" onClick="javascript:if(this.value != '') insertText('<!--{else}-->\n')" />
+			<input type="button" value="elseif" style="width:60px" onClick="javascript:if(this.value != '') insertText('<!--{elseif $a == $b}-->\n')" />
+			<input type="button" value="template" style="width:70px" onClick="javascript:if(this.value != '') insertText('<!--{template \'phpcms\',\'header\'}-->\n')" />
+			<input type="button" value="include" style="width:65px" onClick="javascript:if(this.value != '') insertText('<!--{include PHPCMS_ROOT.\'*.php\'}-->\n')" />
+		</td>
+	</tr>
+	<tr>
+		<th><strong>标签操作</strong></th>
+		<td>
+<?php
+array_unshift($tagtype, "新建标签");
+?>
+			<?=form::select($tagtype, 'addtag', 'addtag')?>&nbsp;&nbsp;
+            <input type="text" name="tagname" value="请输入标签名" size="15" onClick="if(this.value == '请输入标签名') this.value=''">&nbsp;<input name="dosubmit" type="button" value="编辑标签" onClick="window.open('?mod=phpcms&file=template&action=gettag&operate=edit&job=edittemplate&tagname='+myform.tagname.value,'tag','height=500,width=700,,top=0,left=0,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no')">&nbsp;&nbsp;
+			<input type="button" name="tagpreview" value="预览选中的标签" style="background:blue;color:#ffffff;width:110px" onClick="javascript:if(document.selection.createRange().text != '') tag_pop('phpcms','preview','')">
+			<input type="button" name="tagedit" value="编辑选中的标签" style="background:blue;color:#ffffff;width:110px" onClick="javascript:if(document.selection.createRange().text != '') tag_pop('phpcms','edit','')">
+			<input type="button" name="listtag" value="列出模板中的标签" style="background:blue;color:#ffffff;width:110px" onClick="window.open('?mod=phpcms&file=tag&action=listtag&job=edittemplate&module='+myform.module.value+'&templatename='+myform.templatename.value+'&template='+myform.template.value,'tag','height=500,width=700,,top=0,left=0,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no')">
+		</td>
+	</tr>
+	<tr>
+		<th><strong>创建方式</strong></th>
+		<td><input type="radio" name="createtype" value="0" checked onClick="$('#createtype1').show();$('#createtype2').hide()"> 在线创建 <input type="radio" name="createtype" value="1"  onclick="$('#createtype2').show();$('#createtype1').hide()"> 本地上传 </td>
+	</tr>
 </table>
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <tr>
-    <th colspan=2>添加模板</th>
-  </tr>
-<form name="myform" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>" enctype="multipart/form-data" onsubmit="return docheck()">
-<tr>
-<td class="tablerow" width="8%">所属方案</td>
-<td class="tablerow">
-<input type="hidden" name="project" value="<?=$project?>">
-<?=$projectname?>
-</td>
-</tr>
-<tr>
-<td class="tablerow">所属模块</td>
-<td class="tablerow">
-<input type="hidden" name="module" value="<?=$module?>">
-<?=$MODULE[$module]['name']?>
-</td>
-</tr>
-<?php if($templatetype){ ?>
-<tr>
-<td class="tablerow">模板类型</td>
-<td class="tablerow"><?=$templatename?>(<?=$templatetype?>)</td>
-</tr>
-<?php } ?>
-<tr>
-<td class="tablerow">模板名称</td>
-<td class="tablerow"><input type="text" name="templatename" size=25> 可以是中文</td>
-</tr>
-<tr>
-<td class="tablerow">模板路径</td>
-<td class="tablerow"><font color="blue">./templates/<?=$project?>/<?=$module?>/<input type="text" name="template" <?php if($templatetype){ ?>value="<?=$templatetype?>-"<?php } ?> size="25"> .html</font><font color="red">*</font>&nbsp;&nbsp;(命名规则：<font color="blue">模板类型-</font><font color="red">特征名</font>，同类型模板特征名不同)</td>
-</tr>
-<tr>
-<td class="tablerow">模板语法</td>
-<td class="tablerow">
-<input type="button" value="{template 'phpcms','header'}" style="width:190px" onclick="javascript:if(this.value != '') insertText('\n{template \'phpcms\',\'header\'}')">
-<input type="button" value="{include '*.php'}" style="width:115px" onclick="javascript:if(this.value != '') insertText('\n{include PHPCMS_ROOT.\'/*.php\'}')">
-<input type="button" value="{loop $a $k $v}*{/loop}" style="width:160px" onclick="javascript:if(this.value != '') insertText('\n<!--{loop $array $key $val}-->\n{$key}:{$val}\n<!--{/loop}-->')">
-<input type="button" value="{if *}*{/if}" style="width:100px" onclick="javascript:if(this.value != '') insertText('\n<!--{if $var1 == $var2}-->\n\n<!--{/if}-->')">
-<input type="button" value="{else}" style="width:50px" onclick="javascript:if(this.value != '') insertText('\n<!--{else}-->')">
-<input type="button" value="{elseif *}" style="width:70px" onclick="javascript:if(this.value != '') insertText('\n<!--{elseif $a = $b}-->')">
-</td>
-</tr>
-<?php if(strpos($filename, 'tag_') === FALSE && strpos($filename, 'admin_') === FALSE){ ?>
-<tr>
-<td class="tablerow">新建标签</td>
-<td class="tablerow">
-<select name="phpcms_tag_list" style="font-family:arial;width:100" onchange="javascript:if(this.value != '') tag_pop('phpcms', 'add', this.value)">
-<option value="">栏目/类别/专题</option>
-<option value="phpcms_cat">栏目标签</option>
-<option value="phpcms_type">类别标签</option>
-<option value="phpcms_special_list">专题列表</option>
-<option value="phpcms_special_slide">专题幻灯片</option>
-</select>
- &nbsp; 
-<select name="other_tag_list" style="font-family:arial;width:100" onchange="javascript:if(this.value != ''){s = this.value.split('_'); tag_pop(s[0], 'add', this.value);}">
-<option value="">公告/投票/链接</option>
-<option value="announce_list">公告标签</option>
-<option value="vote_list">投票标签</option>
-<option value="link_list">链接标签</option>
-</select>
- &nbsp; 
-<?php foreach($MODULE as $m){
-	if(!$m['iscopy']) continue;
-	?>
-<select name="<?=$m['module']?>_tag_list" style="font-family:arial;width:100" onchange="javascript:if(this.value != '') tag_pop('<?=$m['module']?>', 'add', this.value)">
-<option value=""><?=$m['name']?>标签</option>
-<option value="<?=$m['module']?>_list"><?=$m['name']?>标题列表</option>
-<option value="<?=$m['module']?>_thumb"><?=$m['name']?>图片列表</option>
-<option value="<?=$m['module']?>_slide"><?=$m['name']?>幻灯片</option>
-<option value="<?=$m['module']?>_related">相关<?=$m['name']?></option>
-</select>
- &nbsp; 
-<?php } ?>
-</tr>
-<tr>
-<td class="tablerow">插入标签</td>
-<td class="tablerow" style="LINE-HEIGHT:200%;">
-<div style="height:25px">
-<select name="phpcms_tag_list" style="font-family:arial;width:140"  onchange="javascript:if(this.value != '') insertText(this.value)">
-<option value="">栏目/类别/专题/自定义</option>
-<?php foreach($taglist['phpcms'] as $tagname) {?>
-<option value="{tag_<?=$tagname?>}"><?=$tagname?></option>
-<?php } ?>
-</select>
- &nbsp; 
-<?php 
-    foreach($taglist1 as $tagmod => $tag){
-	?>
-<select name="<?=$tagmod?>_tag_list" style="font-family:arial;width:100" onchange="javascript:if(this.value != '') insertText(this.value)">
-<option value=""><?=$MODULE[$tagmod]['name']?>公共标签</option>
-<?php foreach($tag as $tagname) {?>
-<option value="{tag_<?=$tagname?>}"><?=$tagname?></option>
-<?php } ?>
-</select>
- &nbsp; 
-<?php } ?>
-</div>
-<div style="height:25px">
-<?php 
-    $i = 0;
-	$num = count($channels);
-    foreach($channels as $channelid => $c){
-    $i++;
-	$end = $i < $num ? 0 : 1;
-	?>
-<select name="<?=$c['module']?>_<?=$c['channelid']?>_tag_list" style="font-family:arial;width:100" onchange="javascript:if(this.value != '') insertText(this.value)">
-<option value=""><?=$c['channelname']?>频道标签</option>
-<?php foreach($taglist2[$channelid] as $tagname) {?>
-<option value="{tag_<?=$tagname?>}"><?=$tagname?></option>
-<?php } ?>
-</select>
- &nbsp; 
-<?php 
-if(!$end && $i%6==0) echo '</div><div style="height:25px">';
-}
-?>
-</div>
-<div style="height:25px">
-<?php 
-    $i = 0;
-	$num = count($taglist3);
-    foreach($taglist3 as $tagmod => $tag){
-    $i++;
-	$end = $i < $num ? 0 : 1;
-	?>
-<select name="<?=$tagmod?>_tag_list" style="font-family:arial;width:100"  onchange="javascript:if(this.value != '') insertText(this.value)">
-<option value=""><?=$MODULE[$tagmod]['name']?>标签</option>
-<?php foreach($tag as $tagname) {?>
-<option value="{tag_<?=$tagname?>}"><?=$tagname?></option>
-<?php } ?>
-</select>
- &nbsp; 
-<?php 
-if(!$end && $i%6==0) echo '</div><div style="height:25px">';
-}
-?>
-</div>
-</td>
-</tr>
-<tr>
-<td class="tablerow">插入变量</td>
-<td class="tablerow">
-<select name="CHA_list" style="font-family:arial;width:90"  onchange="javascript:if(this.value != '') insertText(this.value)">
-<option value="">用户变量</option>
-<option value="{$_userid}">$_userid</option>
-<option value="{$_username}">$_username</option>
-<option value="{$_groupid}">$_groupid</option>
-<option value="{$_arrgroupid}">$_arrgroupid</option>
-<option value="{$_email}">$_email</option>
-<option value="{$_chargetype}">$_chargetype</option>
-<option value="{$_money}">$_money</option>
-<option value="{$_point}">$_point</option>
-<option value="{$_credit}">$_credit</option>
-<option value="{$_begindate}">$_begindate</option>
-<option value="{$_enddate}">$_enddate</option>
-<option value="{$_newmessages}">$_newmessages</option>
-</select>
-&nbsp;
-<select name="PHPCMS_list" style="font-family:arial;width:110" onchange="javascript:if(this.value != '') insertText(this.value)">
-<option value="">$PHPCMS</option>
-<?php foreach($PHPCMS as $k=>$v){ ?>
-<option value="{$PHPCMS[<?=$k?>]}"><?=$k?></option>
-<?php } ?>
-</select>
-&nbsp;
-<select name="CHANNEL_list" style="font-family:arial;width:110" onchange="javascript:if(this.value != '') insertText(this.value)">
-<option value="">$CHANNEL</option>
-<?php foreach($CHANNEL[1] as $k=>$v){ ?>
-<option value="{$CHANNEL[$channelid][<?=$k?>]}"><?=$k?></option>
-<?php } ?>
-</select>
-&nbsp;
-<select name="CHA_list" style="font-family:arial;width:110" onchange="javascript:if(this.value != '') insertText(this.value)">
-<option value="">$CHA</option>
-<option value="{$CHA[channelid]}">channelid</option>
-<option value="{$CHA[module]}">module</option>
-<option value="{$CHA[channelname]}">channelname</option>
-<option value="{$CHA[style]}">style</option>
-<option value="{$CHA[channelpic]}">channelpic</option>
-<option value="{$CHA[introduce]}">introduce</option>
-<option value="{$CHA[seo_title]}">seo_title</option>
-<option value="{$CHA[seo_keywords]}">seo_keywords</option>
-<option value="{$CHA[seo_description]}">seo_description</option>
-<option value="{$CHA[listorder]}">listorder</option>
-<option value="{$CHA[islink]}">islink</option>
-<option value="{$CHA[channeldir]}">channeldir</option>
-<option value="{$CHA[channeldomain]}">channeldomain</option>
-<option value="{$CHA[disabled]}">disabled</option>
-<option value="{$CHA[templateid]}">templateid</option>
-<option value="{$CHA[skinid]}">skinid</option>
-<option value="{$CHA[items]}">items</option>
-<option value="{$CHA[comments]}">comments</option>
-<option value="{$CHA[categorys]}">categorys</option>
-<option value="{$CHA[specials]}">specials</option>
-<option value="{$CHA[hits]}">hits</option>
-<option value="{$CHA[enablepurview]}">enablepurview</option>
-<option value="{$CHA[arrgroupid_browse]}">arrgroupid_browse</option>
-<option value="{$CHA[purview_message]}">purview_message</option>
-<option value="{$CHA[point_message]}">point_message</option>
-<option value="{$CHA[enablecontribute]}">enablecontribute</option>
-<option value="{$CHA[enablecheck]}">enablecheck</option>
-<option value="{$CHA[emailofreject]}">emailofreject</option>
-<option value="{$CHA[emailofpassed]}">emailofpassed</option>
-<option value="{$CHA[enableupload]}">enableupload</option>
-<option value="{$CHA[uploaddir]}">uploaddir</option>
-<option value="{$CHA[maxfilesize]}">maxfilesize</option>
-<option value="{$CHA[uploadfiletype]}">uploadfiletype</option>
-<option value="{$CHA[linkurl]}">linkurl</option>
-<option value="{$CHA[setting]}">setting</option>
-<option value="{$CHA[ishtml]}">ishtml</option>
-<option value="{$CHA[cat_html_urlruleid]}">cat_html_urlruleid</option>
-<option value="{$CHA[item_html_urlruleid]}">item_html_urlruleid</option>
-<option value="{$CHA[special_html_urlruleid]}">special_html_urlruleid</option>
-<option value="{$CHA[cat_php_urlruleid]}">cat_php_urlruleid</option>
-<option value="{$CHA[item_php_urlruleid]}">item_php_urlruleid</option>
-<option value="{$CHA[special_php_urlruleid]}">special_php_urlruleid</option>
-</select>
-&nbsp;
-<select name="CATEGORY_list" style="font-family:arial;width:110" onchange="javascript:if(this.value != '') insertText(this.value)">
-<option value="">$CATEGORY</option>
-<option value="{$CATEGORY[$catid][module]}">module</option>
-<option value="{$CATEGORY[$catid][channelid]}">channelid</option>
-<option value="{$CATEGORY[$catid][catid]}">catid</option>
-<option value="{$CATEGORY[$catid][catname]}">catname</option>
-<option value="{$CATEGORY[$catid][style]}">style</option>
-<option value="{$CATEGORY[$catid][introduce]}">introduce</option>
-<option value="{$CATEGORY[$catid][catpic]}">catpic</option>
-<option value="{$CATEGORY[$catid][islink]}">islink</option>
-<option value="{$CATEGORY[$catid][catdir]}">catdir</option>
-<option value="{$CATEGORY[$catid][linkurl]}">linkurl</option>
-<option value="{$CATEGORY[$catid][parentid]}">parentid</option>
-<option value="{$CATEGORY[$catid][arrparentid]}">arrparentid</option>
-<option value="{$CATEGORY[$catid][parentdir]}">parentdir</option>
-<option value="{$CATEGORY[$catid][child]}">child</option>
-<option value="{$CATEGORY[$catid][arrchildid]}">arrchildid</option>
-<option value="{$CATEGORY[$catid][itemordertype]}">itemordertype</option>
-<option value="{$CATEGORY[$catid][itemtarget]}">itemtarget</option>
-<option value="{$CATEGORY[$catid][ismenu]}">ismenu</option>
-<option value="{$CATEGORY[$catid][islist]}">islist</option>
-<option value="{$CATEGORY[$catid][ishtml]}">ishtml</option>
-<option value="{$CATEGORY[$catid][htmldir]}">htmldir</option>
-<option value="{$CATEGORY[$catid][prefix]}">prefix</option>
-<option value="{$CATEGORY[$catid][urlruleid]}">urlruleid</option>
-<option value="{$CATEGORY[$catid][item_prefix]}">item_prefix</option>
-<option value="{$CATEGORY[$catid][item_html_urlruleid]}">item_html_urlruleid</option>
-<option value="{$CATEGORY[$catid][item_php_urlruleid]}">item_php_urlruleid</option>
-</select>
-&nbsp;
-<select name="CAT_list" style="font-family:arial;width:110" onchange="javascript:if(this.value != '') insertText(this.value)">
-<option value="">$CAT</option>
-<option value="{$CAT[catid]}">catid</option>
-<option value="{$CAT[module]}">module</option>
-<option value="{$CAT[channelid]}">channelid</option>
-<option value="{$CAT[catname]}">catname</option>
-<option value="{$CAT[catpic]}">catpic</option>
-<option value="{$CAT[style]}">style</option>
-<option value="{$CAT[introduce]}">introduce</option>
-<option value="{$CAT[islink]}">islink</option>
-<option value="{$CAT[catdir]}">catdir</option>
-<option value="{$CAT[parentid]}">parentid</option>
-<option value="{$CAT[arrparentid]}">arrparentid</option>
-<option value="{$CAT[parentdir]}">parentdir</option>
-<option value="{$CAT[child]}">child</option>
-<option value="{$CAT[arrchildid]}">arrchildid</option>
-<option value="{$CAT[itemtarget]}">itemtarget</option>
-<option value="{$CAT[itemordertype]}">itemordertype</option>
-<option value="{$CAT[listorder]}">listorder</option>
-<option value="{$CAT[ismenu]}">ismenu</option>
-<option value="{$CAT[islist]}">islist</option>
-<option value="{$CAT[ishtml]}">ishtml</option>
-<option value="{$CAT[htmldir]}">htmldir</option>
-<option value="{$CAT[prefix]}">prefix</option>
-<option value="{$CAT[urlruleid]}">urlruleid</option>
-<option value="{$CAT[item_htmldir]}">item_htmldir</option>
-<option value="{$CAT[item_prefix]}">item_prefix</option>
-<option value="{$CAT[item_html_urlruleid]}">item_html_urlruleid</option>
-<option value="{$CAT[item_php_urlruleid]}">item_php_urlruleid</option>
-<option value="{$CAT[linkurl]}">linkurl</option>
-<option value="{$CAT[items]}">items</option>
-<option value="{$CAT[hits]}">hits</option>
-<option value="{$CAT[disabled]}">disabled</option>
-<option value="{$CAT[seo_title]}">seo_title</option>
-<option value="{$CAT[seo_keywords]}">seo_keywords</option>
-<option value="{$CAT[seo_description]}">seo_description</option>
-<option value="{$CAT[skinid]}">skinid</option>
-<option value="{$CAT[templateid]}">templateid</option>
-<option value="{$CAT[listtemplateid]}">listtemplateid</option>
-<option value="{$CAT[defaultitemskin]}">defaultitemskin</option>
-<option value="{$CAT[defaultitemtemplate]}">defaultitemtemplate</option>
-<option value="{$CAT[enableadd]}">enableadd</option>
-<option value="{$CAT[enableprotect]}">enableprotect</option>
-<option value="{$CAT[showchilditems]}">showchilditems</option>
-<option value="{$CAT[maxperpage]}">maxperpage</option>
-<option value="{$CAT[enablepurview]}">enablepurview</option>
-<option value="{$CAT[creditget]}">creditget</option>
-<option value="{$CAT[defaultpoint]}">defaultpoint</option>
-<option value="{$CAT[chargedays]}">chargedays</option>
-<option value="{$CAT[arrgroupid_browse]}">arrgroupid_browse</option>
-<option value="{$CAT[arrgroupid_view]}">arrgroupid_view</option>
-<option value="{$CAT[arrgroupid_add]}">arrgroupid_add</option>
-</select>
-</td>
-</tr>
-<tr>
-<td class="tablerow">标签操作</td>
-<td class="tablerow">
-<input type="text" name="tagname" value="请输入标签名" size="15" onclick="if(this.value == '请输入标签名') this.value=''"> <input name="dosubmit" type="button" value="编辑标签" onclick="window.open('?mod=phpcms&file=tag&action=quickoperate&operate=edit&job=edittemplate&tagname='+myform.tagname.value,'tag','height=500,width=700,,top=0,left=0,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no')">
-&nbsp;&nbsp;
-<input type="button" name="tagpreview" value="预览被选中的标签" style="background:blue;color:#ffffff;width:120px" onclick="javascript:if(document.selection.createRange().text != '') tag_pop('phpcms','preview','')">
-&nbsp;&nbsp;
-<input type="button" name="tagedit" value="编辑被选中的标签" style="background:blue;color:#ffffff;width:120px" onclick="javascript:if(document.selection.createRange().text != '') tag_pop('phpcms','edit','')">
-&nbsp;&nbsp;
-<input type="button" name="tagcopy" value="复制被选中的标签" style="background:blue;color:#ffffff;width:120px" onclick="javascript:if(document.selection.createRange().text != '') tag_pop('phpcms','copy','')">
-&nbsp;&nbsp;
-<input type="button" name="listtag" value="列出模板中的标签" style="background:blue;color:#ffffff;width:120px" onclick="window.open('?mod=phpcms&file=tag&action=listtag&job=edittemplate&module='+myform.module.value+'&templatename='+myform.templatename.value+'&template='+myform.template.value,'tag','height=500,width=700,,top=0,left=0,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no')">
-</td>
-</tr>
-<?php } ?>
-<tr>
-<td class="tablerow">创建方式</td>
-<td class="tablerow"><input type="radio" name="createtype" value="0" checked onclick="createtype0.style.display='';createtype1.style.display='none'"> 在线创建 <input type="radio" name="createtype" value="1"  onclick="createtype0.style.display='none';createtype1.style.display=''"> 本地上传 </td>
-</tr>
-<tbody id='createtype0' style="display:">
-<tr>
-<td class="tablerow" colspan=2 align="left">
-<textarea id='txt_ln' rows='30' cols='4' align='left' style='overflow:hidden;border-right:0px;padding-right:0px;text-align:right;scrolling:no;height:320px;font-family:Fixedsys,verdana,宋体;font-size:12px;background-color:#eeeeee;color:#0000FF;' readonly>
+<table cellpadding="0" cellspacing="1" class="table_form">
+<tbody id="createtype1" style="disply:">
+	<tr>
+		<td>
+<textarea id='txt_ln' rows='30' cols='4' align="left" style='overflow:hidden;border-right:0px;padding-right:0px;text-align:right;scrolling:no;height:360px;font-family:Fixedsys,verdana,宋体;font-size:12px;color:#0000FF;background-color:#eeeeee;' readonly>
 1
 2
 3
@@ -1895,202 +1637,8 @@ if(!$end && $i%6==0) echo '</div><div style="height:25px">';
 1498
 1499
 1500
-1501
-1502
-1503
-1504
-1505
-1506
-1507
-1508
-1509
-1510
-1511
-1512
-1513
-1514
-1515
-1516
-1517
-1518
-1519
-1520
-1521
-1522
-1523
-1524
-1525
-1526
-1527
-1528
-1529
-1530
-1531
-1532
-1533
-1534
-1535
-1536
-1537
-1538
-1539
-1540
-1541
-1542
-1543
-1544
-1545
-1546
-1547
-1548
-1549
-1550
-1551
-1552
-1553
-1554
-1555
-1556
-1557
-1558
-1559
-1560
-1561
-1562
-1563
-1564
-1565
-1566
-1567
-1568
-1569
-1570
-1571
-1572
-1573
-1574
-1575
-1576
-1577
-1578
-1579
-1580
-1581
-1582
-1583
-1584
-1585
-1586
-1587
-1588
-1589
-1590
-1591
-1592
-1593
-1594
-1595
-1596
-1597
-1598
-1599
-1600
-1601
-1602
-1603
-1604
-1605
-1606
-1607
-1608
-1609
-1610
-1611
-1612
-1613
-1614
-1615
-1616
-1617
-1618
-1619
-1620
-1621
-1622
-1623
-1624
-1625
-1626
-1627
-1628
-1629
-1630
-1631
-1632
-1633
-1634
-1635
-1636
-1637
-1638
-1639
-1640
-1641
-1642
-1643
-1644
-1645
-1646
-1647
-1648
-1649
-1650
-1651
-1652
-1653
-1654
-1655
-1656
-1657
-1658
-1659
-1660
-1661
-1662
-1663
-1664
-1665
-1666
-1667
-1668
-1669
-1670
-1671
-1672
-1673
-1674
-1675
-1676
-1677
-1678
-1679
-1680
-1681
-1682
-1683
-1684
-1685
-1686
-1687
-1688
-1689
-1690
-1691
-1692
-1693
 </textarea>
-<textarea id='txt_main' name='content'  onscroll='show_ln()' wrap='off' style='width:720px;height:320px;overflow:auto;scrolling:yes;border-left:0px;font-family:Fixedsys,verdana,宋体;font-size:12px;'>
-</textarea> <font color="red">*</font>
+<textarea id='txt_main' name='content' id='content' onscroll='show_ln()' align="left" wrap='off' style='width:90%;height:360px;overflow:auto;scrolling:yes;border-left:0px;font-family:Fixedsys,verdana,宋体;font-size:12px;'><?=htmlspecialchars($content)?></textarea>
 <script>
 var i=1694;
 function show_ln()
@@ -2098,33 +1646,486 @@ function show_ln()
  var txt_ln  = document.getElementById('txt_ln');
  var txt_main  = document.getElementById('txt_main');
  txt_ln.scrollTop = txt_main.scrollTop;
- while(txt_ln.scrollTop != txt_main.scrollTop) 
+ while(txt_ln.scrollTop != txt_main.scrollTop)
  {
   txt_ln.value += (i++) + '\n';
   txt_ln.scrollTop = txt_main.scrollTop;
  }
  return;
 }
+
+function ShowTab(id)
+{
+	var select = '';
+	var tab = '#tab' + id;
+	var menu_tab = '#menu_tab' + id;
+	for(i = 0; i < 2; i++)
+	{
+		var utab = '#tab' + i;
+		var umenu_tab = '#menu_tab' + i;
+		$(utab).hide();
+		$(umenu_tab).removeClass('selected');
+	}
+	if(tab == '#tab1')
+	{
+		$('#tag').hide();
+		var select = '';
+		$.get('?mod=<?=$mod?>&file=<?=$file?>', {action:'showvar', strvar:'phpcms'}, function(data){
+			if(data == 'null')
+			{
+				$('#var').hide();
+				return false;
+			}
+			else
+			{
+				var arr_var = data.split(',');
+				$.each(arr_var, function(n){
+					var val = '{' + arr_var[n] + '}';
+					select += "<option value='"+ val + "'>" + arr_var[n] + "</option>";
+				});
+				$('#var').show();
+				$('#var').html(select);
+			}
+		});
+	}
+	else if(tab == '#tab0')
+	{
+		$('#var').hide();
+		$.get('?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>', {action:'showtags', module:'phpcms'}, function(data){
+			if(data == 'null')
+			{
+				$('#tag').hide();
+				return false;
+			}
+			else
+			{
+				var arr_tag = data.split(',');
+				$.each(arr_tag, function(n){
+					var val = '{tag_' + arr_tag[n] + '}';
+					select += "<option value='" + val + "'>" + arr_tag[n] + "</option>";
+				});
+				$('#tag').show();
+				$('#tag').html(select);
+			}
+		});
+	}
+	$(tab).show();
+	$(menu_tab).addClass('selected');
+}
 </script>
 </td>
-</tr>
-</tbody>
-<tbody id='createtype1' style="display:none">
-<tr>
-<td class="tablerow">模板文件</td>
-<td class="tablerow"><input type="file" name="uploadfile" size="20"> <font color="red">*</font></td>
-</tr>
-</tbody>
+<td width="10%" valign="top">
+<div class="tag_menu">
+	<ul>
+	  <li><a href="#" class="selected" onClick="ShowTab(0)" id="menu_tab0">插入标签</a></li>
+	  <li><a href="#" onClick="ShowTab(1)" id="menu_tab1">插入变量</a></li>
+     </ul>
+</div>
+<table cellspacing="1" cellpadding="0" class="table_list">
+    <tr>
+    	<td style="">
+        	<span id="tab0">
+				<?=form::select($modname, 'moduleid', 'module', 'phpcms', 1, '', 'style="width:150px; margin:5px 0;"')?><br />
+            	<select name="tag" id="tag" tabindex="1" size="19" style="display:none; width:150px; margin:5px 0;"></select>
+            </span>
+            <span id="tab1" style="display:none;">
+				<?=form::select($variable, 'variable', 'variable', 'PHPCMS', '', '', 'style="width:150px; margin:5px 0;"')?><br />
+            	<select name="var" id="var" tabindex="1" size="19" style="display:none; width:150px; margin:5px 0;"></select>
+            </span></td>
+	</tr>
 </table>
-<table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">
-  <tr>
-    <td align="center">
+</td>
+</tr>
+</tbody>
+<tbody id="createtype2" style="display:none;">
+<tr>
+	<th width="10%"><strong>模板文件</strong></td>
+	<td><input type="file" name="uploadfile" size="20"> <font color="red">*</font></td>
+</tr>
+</tbody>
+<tr>
+    	<td align="center" colspan="2">
  <input type="submit" name="dosubmit" value=" 保存 ">&nbsp;&nbsp;&nbsp;&nbsp;
  <input type="reset" name="submit" value=" 重置 ">&nbsp;&nbsp;&nbsp;&nbsp;
- <input type="button" name="bt" value=" 预览 " style="background:blue;color:#ffffff;" onclick="window.open('?mod=phpcms&file=template&action=preview')">
-</td>
+	</td>
   </tr>
 </table>
 </form>
+<br/>
+<table cellpadding="0" cellspacing="1" class="table_info">
+  <caption>get 标签用法介绍</caption>
+  <tr>
+    <td>
+<span style="color:red">get 标签可调用本系统和外部数据，适合熟悉SQL语句的人使用。</span>注意：get标签属性值必须用双引号括起来<br />
+<span style="color:blue">1、调用本系统单条数据，示例（调用ID为1的信息，标题长度不超过25个汉字，显示更新日期）：</span><br />
+{get sql="select * from phpcms_content where contentid=1" /}<br />
+标题：{str_cut($r[title], 50)} URL：{$r[url]} 更新日期：{date('Y-m-d', $r[updatetime])} <br />
+
+<span style="color:blue">2、调用本系统多条数据，示例（调用栏目ID为1通过审核的10条信息，标题长度不超过25个汉字，显示更新日期）：</span><br />
+{get sql="select * from phpcms_content where catid=1 and status=99 order by updatetime desc" rows="10"}<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;标题：{str_cut($r[title], 50)} URL：{$r[url]} 更新日期：{date('Y-m-d', $r[updatetime])} <br />
+{/get}<br />
+
+<span style="color:blue">3、带分页，示例（调用栏目ID为1通过审核的10条信息，标题长度不超过25个汉字，显示更新日期，带分页）：</span><br />
+{get sql="select * from phpcms_content where catid=1 and status=99 order by updatetime desc" rows="10" page="$page"}<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;标题：{str_cut($r[title], 50)} URL：{$r[url]} 更新日期：{date('Y-m-d', $r[updatetime])} <br />
+{/get}<br />
+分页：{$pages}<br />
+
+<span style="color:blue">4、自定义返回变量，示例（调用栏目ID为1通过审核的10条信息，标题长度不超过25个汉字，显示更新日期，返回变量为 $v）：</span><br />
+{get sql="select * from phpcms_content where catid=1 and status=99 order by updatetime desc" rows="10" return="v"}<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;标题：{str_cut($v[title], 50)} URL：{$v[url]} 更新日期：{date('Y-m-d', $v[updatetime])} <br />
+{/get}<br />
+
+<span style="color:blue">5、调用同一帐号下的其他数据库，示例（调用数据库为bbs，分类ID为1的10个最新主题，主题长度不超过25个汉字，显示更新日期）：</span><br />
+{get dbname="bbs" sql="select * from cdb_threads where fid=1 order by dateline desc" rows="10"}<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;主题：{str_cut($r[subject], 50)} URL：http://bbs.phpcms.cn/viewthread.php?tid={$r[tid]} 更新日期：{date('Y-m-d', $r[dateline])} <br />
+{/get}<br />
+
+<span style="color:blue">6、调用外部数据，示例（调用数据源为bbs，分类ID为1的10个最新主题，主题长度不超过25个汉字，显示更新日期）：</span><br />
+{get dbsource="bbs" sql="select * from cdb_threads where fid=1 order by dateline desc" rows="10"}<br />
+ &nbsp;&nbsp;&nbsp;&nbsp;主题：{str_cut($r[subject], 50)} URL：http://bbs.phpcms.cn/viewthread.php?tid={$r[tid]} 更新日期：{date('Y-m-d', $r[dateline])} <br />
+{/get}	</td>
+  </tr>
+</table>
+
+<div class="jqmWindow">
+<h5 class="title" style="cursor:move"><a href="#" class="jqmClose"><img src="images/close.gif" alt="" height="16px" width="16px" /></a>创建 GET 标签调用</h5>
+<div id="protocol" style="height:400px;overflow:auto;">
+<table cellpadding="0" cellspacing="0">
+  <tr>
+    <th width="30%">数据源：</th>
+    <td><select id="db_table" onChange="select_db_table(this.value)">
+     <option value="">请选择</option>
+     <option value="MM_LOCALHOST">本系统</option>
+    </select></td>
+  </tr>
+<tbody id="db_tables" style="display:none">
+  <tr>
+    <th width="30%">数据表：</th>
+    <td><select id="dbase" onChange="get_fields(this.value)">
+    <option value="">请选择</option>
+    </select></td>
+  </tr>
+</tbody>
+<tbody id="where" style="display:none">
+  <tr>
+  <td colspan="2">
+    <table cellpadding="1" cellspacing="1" width="150" class="table_list">
+    <caption>数据调用条件设置</caption>
+    <tr>
+    <th class="align_c">字段名</th>
+    <th class="align_c">类型</th>
+    <th class="align_c">显示</th>
+    <th class="align_c">条件</th>
+    <th class="align_c">值</th>
+    <th class="align_c">排序</th>
+    </tr>
+    <tbody id="where_sql"></tbody>
+    </table>
+  </td>
+  </tr>
+  <tr>
+  <th width="30%">是否分页：</th>
+  <td style="text-align:left"><input type="checkbox" id="pages" value="1" style="width:20px"></td>
+  </tr>
+  <tr>
+  <th width="30%">每页显示：</th>
+  <td style="text-align:left"><input type="text" id="pages_rows" value="10" size="5" maxlength="3"> 条</td>
+  </tr>
+  <tr><td></td>
+  <td><input type="button" value="插 入" id="ok" onClick="go_ok()" style="width:60px"></td>
+  </tr>
+</tbody>
+</table>
+</div>
+</div>
+
 </body>
 </html>
+<script language="javascript" >
+var db_source;
+var db_tables;
+var select_type = ['IS NULL','IS NOT NULL'];
+function go_ok()
+{
+	var sql = '{get';
+	if(db_source!='MM_LOCALHOST')sql += ' dbsource="'+db_source+'"';
+	var a ='*';
+	var fd = '';
+	$("input:checked").each(function(){
+		if(isNaN($(this).val()))
+		{
+			if(a!='*')
+			{
+				a += ',`'+$(this).val()+'`';
+			}
+			else
+			{
+				a = '`'+$(this).val()+'`';
+			}
+			fd += "{$r["+$(this).val()+"]}\n";
+		}
+	});
+	sql += ' sql="SELECT '+a+' FROM `'+db_tables+'`';
+	var where = '';
+	$("select[name='func']").each(function(){
+		var val = $(this).val();
+		var id = $(this).attr('d');
+		if($.inArray(val,select_type)<0)
+		{
+			var field_val = $("#fields_"+id).val();
+			if(field_val!='')
+			{
+				if(val != 'LIKE %*%' && val != 'LIKE *%' && val != 'LIKE %*')
+				{
+					if(where!='')
+					{
+						where += ' AND `'+id+'` '+val+' \''+field_val+'\'';
+					}
+					else
+					{
+						where += '`'+id+'` '+val+' \''+field_val+'\'';
+					}
+				}
+				else
+				{
+					if(where!='')
+					{
+						if(val == 'LIKE %*%')
+						{
+							where += " AND `"+id+"` "+val.replace('%*%',"'%"+field_val+"%'");
+						}
+						if(val == 'LIKE *%')
+						{
+							where += " AND `"+id+"` "+val.replace('*%',"'"+field_val+"%'");
+						}
+						if(val == 'LIKE %*')
+						{
+							where += " AND `"+id+"` "+val.replace('%*',"'%"+field_val+"'");
+						}
+					}
+					else
+					{
+						if(val == 'LIKE %*%')
+						{
+							where += "`"+id+"` "+val.replace('%*%',"'%"+field_val+"%'");
+						}
+						if(val == 'LIKE *%')
+						{
+							where += "`"+id+"` "+val.replace('*%',"'"+field_val+"%'");
+						}
+						if(val == 'LIKE %*')
+						{
+							where += "`"+id+"` "+val.replace('%*',"'%"+field_val+"'");
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			if(where!='')
+			{
+				where += ' AND `'+id+'` '+val;
+			}
+			else
+			{
+				where += '`'+id+'` '+val;
+			}
+		}
+	});
+	if(where!='')sql += ' WHERE '+where;
+	var order = '';
+	$("select[name='order']").each(function(){
+		var selected = $(this).val();
+		var d = $(this).attr('d');
+		if(selected!='')
+		{
+			if(order!='')
+			{
+				order += ", `"+d+"` "+selected;
+			}
+			else
+			{
+				order += " `"+d+"` "+selected;
+			}
+		}
+	});
+	if(order!='')
+	{
+		sql += ' ORDER BY '+order+'"';
+	}
+	else
+	{
+		sql += '"';
+	}
+	if($('#pages_rows').val()!='')sql += ' rows="'+$('#pages_rows').val()+'" ';
+	if($("#pages").attr('checked')==true)sql += ' page="$page" ';
+	sql += "}\n"+fd+"\n{/get}";
+	if($("#pages").attr('checked')==true)sql += '\n{$pages}';
+	insertText(sql);
+	$('.jqmWindow').hide();
+}
+
+function get_db_source()
+{
+	$("#db_table").html(' <option value="">请选择</option><option value="MM_LOCALHOST">本系统</option>');
+	$.getJSON('?mod=phpcms&file=template&action=get_db_source',function(data){
+		if(data)
+		{
+			$.each(data,function(i,n){
+				if(n.name)
+				{
+					$("#db_table").append('<option value="'+n.name+'">'+n.name+'</option>');
+				}
+			});
+
+		}
+		document.getElementById('db_table').selectedIndex=1;
+		select_db_table('MM_LOCALHOST');
+	});
+}
+
+function select_db_table(obj)
+{
+	db_source = obj;
+	$("#dbase").html('<option value="">请选择</option>');
+	if(obj!='')
+	{
+		$.getJSON('?mod=phpcms&file=template&action=get_ajax_db_table&name='+obj,function(data){
+			if(data)
+			{
+				$.each(data,function(i,n){
+                    var selected = '';
+					if(n.tablename=='<?=DB_PRE?>content')
+					{
+						selected = 'selected';
+						get_fields(n.tablename);
+					}
+					$("#dbase").append('<option value="'+n.tablename+'" '+selected+'>'+(n.nickname ? n.nickname : n.tablename)+'</option>');
+				});
+				$("#db_tables").show();
+			}
+			else
+			{
+				alert('没有找到数据表');
+			}
+		})
+	}
+}
+var types = ['int','tinyint','smallint','mediumint','bigint'];
+function get_fields(val)
+{
+	db_tables = val;
+	$('#fields').html('');
+					$("#where_sql").html('<tr></tr>');
+	if(val!='')
+	{
+		$.getJSON('?mod=phpcms&file=template&action=get_fields&name='+db_source+'&tables='+val,function(data){
+			if(data)
+			{
+				$.each(data,function(i,n){
+					var str = '<tr><td>'+(n.nickname ? n.nickname : n.field)+'</td><td>'+n.type+(n.num ? '('+n.num+')' : '')+'</td><td class="align_c"><input type="checkbox" value="'+n.field+'" id="checkbox_'+n.field+'" style="border:0px"></td><td class="align_c"><select name="func" d="'+n.field+'"><option value="="';
+					if($.inArray(n.type,types)>=0){str += ' selected';}
+					str += '>=</option><option value=">">></option><option value=">=">>=</option> <option value="<"><</option><option value="<="><=</option><option value="!=">!=</option><option value="LIKE"';
+					if($.inArray(n.type,types)<0){str += ' selected';}
+					str += '>LIKE</option><option value="LIKE %*%">LIKE % * %</option><option value="LIKE *%">LIKE * %</option><option value="LIKE %*">LIKE % *</option><option value="NOT LIKE">NOT LIKE</option><option value="IS NULL">IS NULL</option><option value="IS NOT NULL">IS NOT NULL</option> </select></td><td class="align_c"><input type="text" id="fields_'+n.field+'" size="15"></td><td class="align_c"><select name="order" d="'+n.field+'" id="order_'+n.field+'"><option value=""></option><option value="ASC">升序</option><option value="DESC">降序</option></select></td></tr>';
+					$("#where_sql").append(str);
+				});
+				$('#rows').show();
+				$('#where').show();
+			}
+			else
+			{
+				alert('没有找到数据表');
+			}
+		});
+	}
+}
+
+	$('#module').change(function(){
+		var select = '';
+		$('#var').hide();
+		$.get('?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>', {action:'showtags', module:$('#module').val()}, function(data){
+			if(data == 'null')
+			{
+				$('#tag').hide();
+				return false;
+			}
+			else
+			{
+				var arr_tag = data.split(',');
+				$.each(arr_tag, function(n){
+					var val = '{tag_' + arr_tag[n] + '}';
+					select += "<option value='" + val + "'>" + arr_tag[n] + "</option>";
+				});
+				$('#tag').show();
+				$('#tag').html(select);
+			}
+		});
+	});
+
+	$().ready(function(){
+		$('.jqmWindow').jqm({overlay: 0	}).jqDrag('.title');
+		var select = '';
+		$('#var').hide();
+		$.get('?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>', {action:'showtags', module:$('#module').val()}, function(data){
+			if(data == 'null')
+			{
+				$('#tag').hide();
+				return false;
+			}
+			else
+			{
+				var arr_tag = data.split(',');
+				$.each(arr_tag, function(n){
+					var val = '{tag_' + arr_tag[n] + '}';
+					select += "<option value='" + val + "'>" + arr_tag[n] + "</option>";
+				});
+				$('#tag').show();
+				$('#tag').html(select);
+			}
+		});
+	});
+
+	$('#variable').change(function(){
+		$('#tag').hide();
+		var select = '';
+		$.get('?mod=<?=$mod?>&file=<?=$file?>', {action:'showvar', strvar:$('#variable').val()}, function(data){
+			if(data == 'null')
+			{
+				$('#var').hide();
+				return false;
+			}
+			else
+			{
+				var arr_var = data.split(',');
+				$.each(arr_var, function(n){
+					var val = '{' + arr_var[n] + '}';
+					select += "<option value='"+ val + "'>" + arr_var[n] + "</option>";
+				});
+				$('#var').show();
+				$('#var').html(select);
+			}
+		});
+	});
+
+	$('#var').click(function() {
+		insertText(this.value);
+	});
+
+	$('#tag').click(function() {
+		insertText(this.value);
+	});
+
+	$('#addtag').change(function() {
+		var str = $('#addtag').val();
+		if(str != '' && str != '0')
+		{
+			var arr_val = str.split('-');
+			window.open("?mod="+arr_val[0]+"&file=tag&action=add&operate=add&type="+arr_val[1],'tag','height=500,width=700,,top=0,left=0,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no"');
+		}
+	});
+	is_ie();
+</script>

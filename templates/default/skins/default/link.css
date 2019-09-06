@@ -1,0 +1,33 @@
+@import url("base.css");
+@import url("table.css");
+/*侧边搜索*/
+.sidesearch{ height:30px; line-height:30px;}
+
+/*栏目标题*/
+.cat,.cat_1{ border:1px solid #99D3FB; background:url(images/bg_2.jpg) repeat-x 0 -64px; height:27px; overflow:hidden; line-height:27px; padding:0 10px; margin-top:10px; clear:both;}
+.cat_1{ background-position:0 24px; border:0; margin:0 5px;}
+/*more*/
+.cat img,.cat_1 img{ float:right;}
+.cat h3,.cat_1 h3{ font-size:14px; color:#069;background:url(images/bg_model.gif) no-repeat -7px 3px; padding-left:1em;}
+.cat_left{ width:214px; float:left; border:1px solid #99D3FB; text-align:center; padding:5px 0; overflow:hidden;}
+.cat_left p{text-indent:2em; width:204px; text-align:left; line-height:200%; margin:0 auto;}
+.cat_left p a{ font-size:12px;}
+.cat_left ul{ margin:0 auto;}
+.cat_right{ width:410px; float:right;}
+.cat_right a{ font-size:14px;}
+
+/*内容页*/
+.w_100{ width:100%;}
+
+/*图片logo列表*/
+.logo_list,.textlogo_list{ margin:10px 0; width:100%; overflow:hidden; clear:both;}
+.logo_list a,.textlogo_list a{ margin:5px 8px; display:block; float:left;}
+/*文字logo列表*/
+.textlogo_list{}
+.textlogo_list a{ margin:5px; display:block; float:left; width:116px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+/*链接分类*/
+#link_cat{}
+#link_cat a{ border:1px solid #99D3FB; background-color:#fff; padding:5px 10px 3px; text-decoration:none; margin:8px; display:block;}
+#link_cat a:hover{ background-color:#99D3FB; color:#fff;}
+/*申请链接*/
+#link_apply{ height:40px; line-height:40px; padding-top:20px; text-align:center; margin-top:10px;}

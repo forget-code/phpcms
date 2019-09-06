@@ -1,29 +1,26 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
 <body>
-<?=$menu?>
 <form method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=update">
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <tr>
-    <th colspan=6>PHP 错误日志</th>
-  </tr>
-<tr align="center">
-<td width="4%" class="tablerowhighlight">ID</td>
-<td width="40%" class="tablerowhighlight">路径</td>
-<td width="6%" class="tablerowhighlight">行数</td>
-<td width="30%" class="tablerowhighlight">提示</td>
-<td width="8%" class="tablerowhighlight">级别</td>
-<td width="12%" class="tablerowhighlight">时间</td>
+<table cellpadding="0" cellspacing="1" class="table_list">
+    <caption>PHP 错误日志</caption>
+<tr>
+<th>ID</th>
+<th>路径</th>
+<th>行数</th>
+<th>提示</th>
+<th>级别</th>
+<th>时间</th>
 </tr>
 <?php 
 if(is_array($logarr)){
 	foreach($logarr as $log){
 ?>
-<tr align="center" onmouseout="this.style.backgroundColor='#F1F3F5'" onmouseover="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5'>
+<tr>
 <td><?=$log['errornum']?></td>
-<td align="left"><?=$log['scriptname']?></td>
+<td align="left"><?=str_replace(PHPCMS_ROOT,'',$log['scriptname'])?></td>
 <td><?=$log['scriptlinenum']?></td>
 <td align="left"><?=$log['errormsg']?></td>
 <td><?=$log['errortype']?></td>

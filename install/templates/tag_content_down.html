@@ -1,0 +1,8 @@
+{loop $data $n $r}
+<dl class="down_list">
+  <dt><a href="{$r[url]}" target="{$target}">{if $r[style]}<span class="{$r[style]}">{$r[title]}</span>{else}{$r[title]}{/if}</a></dt>
+  <dd class="down_txt">{str_cut(strip_tags($r[content]),300)}</dd>
+  <dd class="down_attribute align_r"><span class="icon_1">软件大小：{$r[filesize]}</span><span class="icon_3">星级：{$r[stars]}</span><span class="icon_4">更新时间：{date('Y-m-d',$r[updatetime])}</span></dd>
+</dl>
+{/loop}
+{if $pages}<div id="pages">{$pages}</div>{/if}

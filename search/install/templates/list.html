@@ -1,0 +1,64 @@
+{template 'phpcms','header'} 
+<script type="text/javascript">
+function set_type(type)
+{
+	$('#type').val(type);
+	q = $('#q').val();
+    if(q)
+	{
+	    $('#search').submit();
+	}
+	else
+	{
+		$('#search_form>span').removeClass('selected');
+		$('#type_'+type).addClass('selected');
+	}
+}
+$(function(){
+	$('#type_{$type}').addClass('selected');
+});
+</script>
+<!--begin main-->
+<div id="main">
+  <!--位置导航-->
+  <div id="position"><a href="">首页</a><a href="{$M[url]}">搜索</a></div>
+  <!--搜索条件-->
+<div class="search_box">
+    <form name="search" id="search">
+	  <ul>
+		<li id="search_form">
+	    <span id="type_all" onclick="set_type('all')">全部</span>
+		{loop $types $k $name}
+		<span id="type_{$k}" onclick="set_type('{$k}')">{$name}</span>
+		{/loop}
+		</li>
+		<li>
+		  <input type="hidden" name="type" value="{$type}" id="type"/>
+		  <input type="text" name="q" size="48" value="{$q}" id="q"/>
+		  <input type="submit" name="s" id="button" value="搜索" />
+		</li>
+	  </ul>
+    </form>
+</div>
+  <!--搜索结果-->
+<div class="search_res">
+<span class="f_r">
+{if $order}
+<a href="{$M[url]}?q={urlencode($q)}&type={$type}&page={$page}&order=0">按相似度排序</a> | 按更新时间排序
+{else}
+按相似度排序 | <a href="{$M[url]}?q={urlencode($q)}&type={$type}&page={$page}&order=1">按更新时间排序</a>
+{/if}
+</span>
+找到相关网页约<span style="color:red">{$total}</span>篇，用时<span style="color:red">{$usedtime}</span>秒</div>
+{loop $data $i $r}
+  <dl class="search_list">
+    <dt><a href="{$r[url]}">{$r[title]}</a></dt>
+    <dd class="search_txt">{$r[content]}</dd>
+    <dd class="search_attribute">{url($r[url], 1)}　{$r[date]}</dd>
+  </dl>
+{/loop}
+  <!--分页-->
+  <div id="pages">{$pages}</div>
+</div>
+<!--end main-->
+{template 'phpcms','footer'}

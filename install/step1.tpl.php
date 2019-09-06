@@ -1,58 +1,35 @@
-<?php include PHPCMS_ROOT."/install/header.tpl.php";?>
-<table  border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
-  <tr>
-    <td>
-	
-	  <table  border="0" cellpadding="0" cellspacing="0" class="ttable" align="center">
-        <tr>
-          <td><table  border="0" align="center" cellpadding="2" cellspacing="0"  class="ttable">
-              <tr>
-                <td width="5" height="5" class="td-left-top"></td>
-                <td class="td-l-top"></td>
-                <td class="td-l-top"></td>
-                <td width="5" height="5" class="td-right-top"></td>
-              </tr>
-              <tr class="tr-l-bottom">
-			   <td></td>
-                <td class="txttitle"><img src="install/images/ico.jpg" width="14" height="14" align="absmiddle"/>&nbsp;PHPCMS 程序安装向导</td>
-			    <td align="right" valign="top">
-				<img src="install/images/minimum.gif"  style="cursor:pointer;" onClick="MiniWindow();" title="最小化到状态栏"><img src="install/images/maxmum.gif"><img src="install/images/close.gif" style="cursor:pointer;" onClick="CloseWindow();" title="退出安装程序"></td>
-			    <td></td>
-              </tr>
-          </table></td>
-        </tr>
-      </table>
-	  <table  border="0" cellpadding="0" cellspacing="0" class="btable"  align="center">
-  <tr>
-    <td><table  border="0" align="center" cellpadding="1" cellspacing="0" class="ltable">
-      <tr>
-        <td width="163" height="283" rowspan="2" valign="top"><img src="install/images/install_logo.gif" width="163" height="283"></td>
-        <td width="32" rowspan="2">&nbsp;</td>
-        <td width="573"><h3>欢迎使用<?php echo $PHPCMS_VERSION_NAME; if($PHPCMS_VERSION_BUILD_TIME) echo '(build '.$PHPCMS_VERSION_BUILD_TIME.')';?>安装向导</h3></td>
-      </tr>
-      <tr>
-        <td valign="top" class="tdtxt">该向导将帮助您完成PHPCMS的安装，
-          <br>
-          强烈建议您在继续安装之前关闭其他所有正在运行的程序,以避免安装
-过程中可能产生的相互冲突。<br>
-<br>
-<br>
-单击&nbsp;[下一步(N)]&nbsp;继续,取消退出安装程序. <br></td>
-      </tr>
-	  <tr>
-        <td height="2" colspan="3" class="tr-bottom-bg"></td>
-      </tr>
-      <tr class="tr-bottom">
-        <td colspan="2" valign="top"><img src="install/images/installsystem.gif" width="183" height="12" align="top">&nbsp;&nbsp;</td>
-        <td align="right">
-        <input type="reset" onClick="location='install.php?step=<?=++$step?>'"  value="下一步(N)" name="reset" class="btn">
-
-        <input  type="reset" onClick="CloseWindow();"  value="取消(C)" name="res"  class="btn"></td>
-      </tr>
-    </table></td>
-  </tr>
-</table></td>
-  </tr>
-</table>
-<script type="text/javascript" src="http://www.phpcms.cn/update/check_version.php?version=<?=PHPCMS_VERSION?>&release=<?=PHPCMS_RELEASE?>"></script>
-<?php include PHPCMS_ROOT."/install/footer.tpl.php";?>
+<?php include PHPCMS_ROOT.'install/header.tpl.php';?>
+	<div class="content">
+		<div id="installdiv">
+		  <h3>（一）运行环境需求</h3>
+		  <ul>
+			<li>可用的 httpd 服务器（如 Apache，Zeus，IIS 等）</li>
+			<li>PHP 4.3.0 及以上 </li>
+			<li>Mysql 4.0.x 及以上</li>
+		  </ul>
+          <br />
+		  <h3>（二）程序安装步骤</h3>
+		  <?php if(substr(PHP_OS, 0, 3) == 'WIN'){ ?>
+		  <ul>
+			<li>第一步：使用ftp工具中的二进制模式将本软件包里的 phpcms 目录上传至服务器，假设上传后目录仍为 phpcms；</li>
+			<li>第二步：访问 http://yourwebsite/phpcms/install.php 进入安装程序，根据安装向导提示完成安装！</li>
+		  </ul>
+		  <?php }else{ ?>
+		  <ul>
+			<li>第一步：使用ftp工具，将该软件包里的 upload 目录及其文件上传到您的空间，假设上传后目录仍旧为 upload。</li>
+			<li>第二步：先确认以下目录或文件属性为 (777) 可写模式。index.html,sitemaps.xml,sitemap.html,baidunews.xml,include/config.inc.php,about/*,data/*,templates/*,uploadfile/,languages/*</li>
+			<li>第三步：运行 http://yourwebsite/upload/install.php 安装程序，填入安装相关信息与资料，完成安装！</li>
+		  </ul>
+		  <?php } ?>
+		</div>
+		<br />
+		<a class="btn" onClick="$('#install').submit();">开始安装 Phpcms2008</a>
+	</div>
+	<form id="install" action="install.php?" method="post">
+	<input type="hidden" name="step" value="2">
+	</form>
+  </div>
+</div>
+<script type="text/javaScript" src="http://update.phpcms.cn/?action=phpcms_install&charset=<?php echo CHARSET;?>&phpcms_version=<?php echo PHPCMS_VERSION;?>&phpcms_release=<?php echo PHPCMS_RELEASE;?>&url=<?php echo urlencode(URL);?>"></script>
+</body>
+</html>

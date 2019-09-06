@@ -1,0 +1,14 @@
+{template 'phpcms','header'}
+<div id="main">
+  <div id="position"><a href="">首页</a><a href="{$M[url]}">投票</a></div>
+  <div id="content">
+    <ul class="text_list_f14">
+	  <!--{get sql="select subjectid, subject,addtime from phpcms_vote_subject where parentid=0 order by listorder DESC,subjectid DESC" rows="20" page="$page"}-->
+        <li>·<a href="{$MODULE[vote][url]}vote.php?voteid={$r[subjectid]}">{if !$title} {$r[subject]} {else} {$r[title]} {/if}</a> [{date('Y-m-d', $r['addtime'])}]</li>
+	  <!--{/get}-->
+    </ul>
+	<div id="pages">{$pages}</div>
+    <div class="clear"></div>
+  </div>
+</div>
+{template 'phpcms','footer'}

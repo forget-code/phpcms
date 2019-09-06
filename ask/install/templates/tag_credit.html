@@ -1,0 +1,4 @@
+{loop $data $n $r}
+<li><a href="{$MODULE[member][url]}view.php?userid={$r[userid]}">{$r[username]}</a> ({$r[point]}分) {actor($r[actortype],$r[point])} 回答数:{$r[answercount]}</li>
+{/loop}
+{if $pages}<p id="pages">{$pages}</p>{/if}

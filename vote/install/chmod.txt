@@ -1,1 +1,1 @@
-vote/data/
+vote/data/*

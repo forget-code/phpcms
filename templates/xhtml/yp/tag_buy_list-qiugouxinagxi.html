@@ -1,7 +1,0 @@
-{loop $products $i $product}	
-<div class="leadnr" style="margin-bottom:10px"><strong><a href="{$product[linkurl]}" title="{$product[title]}" {$target} class="tag_title_link">{$product[stitle]}</a></strong><br />{if $introducelen}&nbsp;&nbsp;&nbsp;&nbsp;{$product[introduce]}{/if}<br />
-采购单位：<em>{$product[unit]}</em>{if $showauthor}联系人：<em>{$product[linkman]}</em>{/if}电话：<em>{$product[phone]}</em></div>
-{/loop}	
-{if $pages}
-<div class="pages">{$pages}</div>
-{/if}

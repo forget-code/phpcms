@@ -1,0 +1,351 @@
+{template 'phpcms','header'}
+<link href="{SKIN_PATH}modal.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="images/js/jqModal.js"></script>
+<div id="main">
+  <!--begin left-->
+  <div id="main_l">
+    <!--导航-->
+    <div id="position"><a href="">首页</a><a href="{$M[url]}">问吧</a>{catpos($catid)}</div>
+    <div class="cat">
+      <h3 class="now">{if $status==5}<span class="j_1">已解决</span>{elseif $status==6}<span class="j_1">已关闭</span>{else}<span class="j_2">未解决</span>{/if}</h3>
+      <div class="question">{$title}</div>
+      <div class="question_attribute">
+	  {if !$isask && $status==3 && !$have_answer}<a href="{if !$_userid}{$MODULE[member][url]}login.php?forward={urlencode(URL)}{else}{URL}#answerdiv{/if}"><img src="{$M[url]}images/btn_answer.gif" alt="我要回答"/></a>&nbsp;{/if}
+	  {if $reward}悬赏：<span class="gold">{$reward}</span>{/if}　{if $status==5} 解决时间：{date('Y-m-d H:i',$solvetime)} {elseif $status==3}离问题结束还有　<span class="time">{$day}天{$hour}小时{$minute}分</span>{/if}</div>
+      <div class="question_add" >
+        <p><span id="askmessage">{$message}</span></p>
+      </div>
+	  <div class="answer_list">
+       <ul><li class="align_r">{if $anonymity}匿名提问 {else}<span class="c_gray">提问者：</span><a href="{space_url($userid)}" target="_blank">{$username}</a> {$actor} {/if}<span class="c_gray">{date('Y-m-d H:i',$addtime)}<span></li>
+       </ul>
+      </div>
+{if $isask && $status==3}
+	  <h3 class="tag_box"><span class="tag_menu_1">
+	  <a href="javascript:show_edit_ask()" onMouseOver="showContentlabel('0')" id="navlabel0"  class="selected" title="点击修改问题补充">问题补充</a>
+	  <a href="javascript:show_ques_addscore()" onMouseOver="showContentlabel('1')" id="navlabel1" title="点击提高悬赏">提高悬赏</a>
+	   <a href="javascript:redirect('{$M[url]}query.php?action=over&id={$id}')" onMouseOver="showContentlabel('2')" id="navlabel2" title="点击结束问题">结束问题</a>
+	   <samp id="navlabel3">
+	   {if $answercount>1 && $flag!=1}
+	  <a href="javascript:redirect('{$M[url]}show.php?action=vote&id={$id}')" onMouseOver="showContentlabel('3')" >发起投票</a>{/if}</samp>
+	 </span></h3>
+
+      <div class="box_1" id="contentlabel0">可以对您的提问补充细节，以得到更准确的答案 
+			<div id="edit_ask" style="display:none">
+			<form name="handleform3" action="{$M[url]}query.php?action=edit_ask&id={$id}" method="post">
+			<input name="title" id="title" size="35" value='{$title}'>
+			<textarea name="message" id="message" cols="100" rows="10"></textarea>
+			{if $M[use_editor]}{form::editor('message','introduce','100%',200,0)}{/if}
+			<input type="submit" name="dosubmit" value="好了，提交问题补充"/>
+			<input type="button" name="submit" value="关闭问题补充" onClick="show_edit_ask(1);"/>
+			</form>
+			</div>
+	  </div>
+      <div class="box_1" id="contentlabel1" style="display:none;">提高悬赏分，以提高问题的关注度，并获得额外5天问题有效期
+			<div id="ques_addscore" style="display:none">
+			<form name="handleform2" action="{$M[url]}query.php" method="post" onsubmit="return ck_addscore(this)">
+			<select name="point" id="addscore" onchange="ck_addscore();"> 
+			<option value="5">5</option>
+			<option value="10">10</option>
+			<option value="15">15</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="50">50</option>
+			<option value="80">80</option>
+			<option value="100">100</option>
+			<option value="200">200</option>
+			</select>
+			您目前的总积分<strong>{$_point}</strong><span id="addscore_msg"></span><br />
+			<input type="hidden" name="action" value="addscore" />
+			<input type="hidden" name="id" value="{$id}" />
+			<input type="submit" name="dosubmit" value="好了，提交追加悬赏" />
+			<input type="button" name="submit" value="关闭追加悬赏" onClick="show_ques_addscore(1);"/>
+			</form>
+			</div>
+		</div>
+      <div class="box_1" id="contentlabel2" style="display:none;">没有满意的回答，还可直接结束提问，关闭问题 </div>
+      <div class="box_1" id="contentlabel3" style="display:none;">不知道哪个回答最好时，可让网友投票来选出最佳答案 </div>
+	  {/if}
+    </div>
+
+    <!--最佳答案-->
+	{if $status==5}
+    <div class="cat">
+      <h3 class="good">最佳答案　<span>回答者： {$optimail_username}   {$optimal_actor}     回复时间：{date('Y-m-d H:i',$answertime)}</span></h3>
+      <div class="answer">
+        <p>{$answer}</p>
+      </div>
+    </div>
+	{/if}
+    <!--其他答案-->
+   <div class="cat">
+<h3>其他回答<span>({$answercount})</span></h3>
+	  {loop $infos $info}
+      <div class="answer_list">
+        <ul>
+          <li><span id="answermessage{$info[pid]}">{$info[message]}</span></li>
+          <li>
+		{if $status==3 && $userid==$_userid && $flag==0}
+			<input type="submit" value="采纳答案" onclick="redirect('{$M[url]}query.php?action=accept_answer&id={$id}&pid={$info[pid]}');"/>
+		{elseif $status==3 && $_userid==$info[userid] && $flag==0}
+<input type="button" value="修复答案" onclick="show_edit_answer(0,{$info[pid]})" id="button_edit"/>
+<div id="edit_answer" style="display:none">
+<p>
+<form name="editanswerForm" action="{$M[url]}query.php" method="post" onsubmit="return check_answerform(this);">
+<span id="user_msg"></span>
+<textarea name="answertext" id="answertext" type="text" rows="10" cols="100"></textarea>
+{if $M[use_editor]}{form::editor('answertext','introduce','100%',200,0)}{/if}<br>回答字数在10000字以内
+<input type="hidden" name="pid" value="{$info[pid]}">
+<input type="hidden" name="action" value="edit_answer">
+<input type="submit" name="dosubmit" value="好了，提交修复答案" class="bnsrh" />
+<input type="button" name="submit" value="关闭修复答案" class="bnsrh" onClick="show_edit_answer(1);"/>
+</form>
+</p>
+      </div>
+		{elseif $flag==1}
+		<input type="submit" value="投他一票" onclick="vote({$id},{$info[pid]})"/>
+		{/if}
+          </li>
+          <li class="align_r">{if $info[anonymity]}匿名回复{else}回答者：<a href="{$MODULE[member][url]}view.php?userid={$info[userid]}">{$info[username]}</a> {$info[actor]}{/if} 回复时间：{date('Y-m-d H:i',$info[addtime])}</li>
+        </ul>
+      </div>
+	  {/loop}
+</div>
+<!--其他答案结束-->
+{if $flag==1}
+ <div class="cat">
+      <div class="answer">
+        <p><a href="{$M[url]}vote.php?id={$id}" class="blockcontrol">查看投票结果</a></p>
+      </div>
+</div>
+{/if}
+
+{if !$isask && $status==3 && !$have_answer}
+      <div class="myanswer">
+      <h3><a name="answerdiv" id="answerdiv"></a>我要回答　<span>(回答字数请控制在10000字以内)</span></h3>
+      <div class="answer">
+	  <form action="" method="post" name="answerform">
+        <textarea name="posts[message]" cols="90" rows="10" id="content" style="margin-bottom:10px;" ></textarea>
+		{if $M[use_editor]}{form::editor('content','introduce','100%',200,0)}{/if}
+		<br> 回答即可得{$M[answer_give_credit]}分，回答被采纳则获得悬赏分以及奖励{$M[answer_bounty_credit]}分，回答字数在10000字以内。<br>
+		匿名设定：<input type="checkbox" name="posts[anonymity]" value="1"><br>
+		{if !$M[use_editor]}剩余字数:<input name=remLen id="remLen" value="10000" readonly type=text size="4" maxlength="3" align="absmiddle">{/if}<br />
+		{if $M[answer_code]}<div>验证码：<input name="checkcodestr" type="text" size="6" align="absmiddle" style="margin:2px;"/> <img src="checkcode.php" id="checkcode" onClick="this.src='checkcode.php?id='+Math.random()*5;" width="48" align="absmiddle" height="19" alt="验证码,看不清楚?请点击刷新验证码"  /></div>&nbsp;{/if}
+        <input name="dosubmit" type="submit" value="提交我的回答" class="mar_10">
+		</form>
+      </div>
+    </div>
+{/if}  
+  </div>
+  <!--end left-->
+  <!--begin right-->
+  <div id="main_r">
+    <h4>热点问题</h4>
+    <div>
+      <ul class="text_list">
+       {tag_侧栏热点问题}
+      </ul>
+    </div>
+    <h4>推荐问题</h4>
+    <div class="text_list">
+      <ul>
+        {tag_栏目页推荐问题}
+      </ul>
+    </div>
+    <h4 class="tag_box">积分排行<span class="tag_menu_1"><a href="{$M[url]}creditlist.php?action=week" onMouseOver="showContent('0')" id="nav0">上周</a><a href="{$M[url]}creditlist.php?action=month" onMouseOver="showContent('1')" id="nav1">上月</a><a href="{$M[url]}creditlist.php?action=all" onMouseOver="showContent('2')" id="nav2" class="selected">总排行</a></span></h4>
+    <div id="content0" style="display:none;">
+      <ul class="text_list_1">
+	  {tag_上周积分排行榜}
+      </ul>
+    </div>
+	<div id="content1" style="display:none;">
+      <ul class="text_list_1">
+	  {tag_上月积分排行榜}
+      </ul>
+    </div>
+	<div id="content2">
+      <ul class="text_list_1">
+	  {tag_总积分排行榜}
+      </ul>
+    </div>
+  </div>
+  <!--end right-->
+</div>
+
+<div id="toggle_pannel"></div>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function killerrors() { 
+return true; 
+}
+$().ready(function() {
+		window.onerror = killerrors;
+		$('#toggle_pannel').jqm({ajax: "{$M[url]}vote.php?id={$id}", modal: true, trigger: 'a.blockcontrol'});
+});
+var maxlimit=10000;
+$('#content').keyup(function() {
+	{if !$_userid}redirect('{$MODULE[member][url]}login.php?forward={urlencode(URL)}');{/if}
+	data = document.getElementById("content").value.length;
+	if (data > maxlimit)
+	{
+		document.getElementById("content").value = document.getElementById("content").value.substring(0, maxlimit);
+	}
+	else
+	{
+		var len_rem = maxlimit - data;
+		$('#remLen').val(len_rem);
+	}
+});
+
+{if $_userid}
+function vote(id,pid) {
+		 $.ajax({
+		   type: "POST",
+		   url: '{$M[url]}query.php',
+		   data: "action=vote&id="+id+"&pid="+pid,
+		   success: function(msg){
+			 alert(msg);
+		}	
+		}); 
+	}
+
+function ck_addscore()
+{
+	if($('#addscore').val() > {$_point})
+	{
+		$('#addscore_msg').html("<font color='red'><strong>抱歉,追加悬赏不能高于您目前的总积分.</strong></font>");
+		return false;
+	}
+	else
+	{
+		$('#addscore_msg').html();
+		return true;
+	}
+}
+function ck_superadditionscore(obj,id)
+{
+	if(obj.value>30)
+	{
+		$('#superadditionscore_msg_'+id).html("<font color='red'><strong>抱歉,追加悬赏不能高于您目前的总积分.</strong></font>");
+		obj.options[0].selected=true;
+		return false;
+	}
+	else
+	{
+		$('#superadditionscore_msg_'+id).html("");
+		return true;
+	}
+}
+
+function show_ques_addscore(id)
+{
+if(id)
+{
+	$("#ques_addscore").css("display","none");
+}
+else
+{
+	$("#ques_addscore").css("display","block");
+
+}
+}
+function show_edit_answer(id,pid)
+{
+
+		if(id)
+		{
+			$('#edit_answer').css("display","none");
+			$('#button_edit').css("display","block");
+			$("#answertext").val('');
+		}
+		else
+		{
+			{if $M['use_editor']}
+			$('#edit_answer').css("display","block");
+			$('#button_edit').css("display","none");
+			var temp = '#answermessage'+pid;
+			var s1 = $(temp).html();
+			FCKeditorAPI.GetInstance('answertext').InsertHtml(s1);
+			{else}
+			$('#edit_answer').css("display","block");
+			$('#button_edit').css("display","none");
+			var temp = '#answermessage'+pid;
+			var s1 = $(temp).html();
+			s1 = s1.replace(/<br>/g,"\n");
+			s1 = s1.replace(/<BR>/g,"\n");
+			s1 = s1.replace(/&nbsp;/g,"");
+			$('#answertext').val(s1);
+			{/if}
+		}
+
+}
+function show_edit_ask(id)
+{
+
+
+	if(id)
+	{
+		$('#edit_ask').css("display","none");
+		$("#message").val('');
+	}
+	else
+	{
+	    {if $M['use_editor']}
+		$('#edit_ask').css("display","block");
+		var s2 = $("#askmessage").html();
+		FCKeditorAPI.GetInstance('message').InsertHtml(s2);
+		{else}
+		$('#edit_ask').css("display","block");
+		var s2 = $("#askmessage").html();
+		s2 = s2.replace(/<br>/g,"\n");
+		s2 = s2.replace(/<BR>/g,"\n");
+		s2 = s2.replace(/&nbsp;/g,"");
+		$('#message').val(s2);
+		{/if}
+	}
+}
+{/if}
+//-->
+</SCRIPT>
+<script language="JavaScript">
+<!--
+	function showContent(id)
+	{
+		for (var i = 0;i < 3;i++)
+		{
+		var nav = document.getElementById("nav" + i);
+		var content = document.getElementById("content" + i);
+			if (i == id)
+			{
+			nav.className = 'selected';
+			content.style.display = "";
+			}
+			else
+			{
+			nav.className = '';        
+			content.style.display = "none";
+			}
+		}
+	}
+	function showContentlabel(id)
+	{
+		for (var i = 0;i < 4;i++)
+		{
+		var navlabel = document.getElementById("navlabel" + i);
+		var contentlabel = document.getElementById("contentlabel" + i);
+			if (i == id)
+			{
+			navlabel.className = 'selected';
+			contentlabel.style.display = "";
+			}
+			else
+			{
+			navlabel.className = '';        
+			contentlabel.style.display = "none";
+			}
+		}
+	}
+ //-->
+</script>
+<!--end main-->
+<!--begin foot-->
+{template 'phpcms','footer'}

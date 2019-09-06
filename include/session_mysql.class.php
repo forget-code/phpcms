@@ -1,59 +1,58 @@
 <?php 
-class phpcms_session
+class session
 {
 	var $lifetime = 1800;
+	var $db;
+	var $table;
 
     function __construct()
     {
+		global $db;
+	    $this->lifetime = SESSION_TTL;
+		$this->db = &$db;
+		$this->table = '`'.DB_NAME.'`.`'.DB_PRE.'session`';
     	session_set_save_handler(array(&$this,'open'), array(&$this,'close'), array(&$this,'read'), array(&$this,'write'), array(&$this,'destroy'), array(&$this,'gc'));
-		session_start();
     }
 
-    function phpcms_session()
+    function session()
     {
 		$this->__construct();
     }
 
     function open($save_path, $session_name)
 	{
-		global $db,$CONFIG,$PHP_TIME;
-	    $this->lifetime = 1800;
-	    $this->time = $PHP_TIME;
-		$this->pre = $CONFIG['tablepre'];
-		$this->sess = &$db;
 		return true;
     }
 
     function close()
 	{
-		$this->gc($this->lifetime);
-        return $this->sess->close();
+        return $this->gc($this->lifetime);
     } 
 
     function read($id)
 	{
-		$r = $this->sess->get_one("SELECT data FROM `{$this->pre}sessions` WHERE sessionid='$id'");
+		$r = $this->db->get_one("SELECT `data` FROM $this->table WHERE `sessionid`='$id'");
 		return $r ? $r['data'] : '';
     } 
 
-    function write($id, $sess_data)
+    function write($id, $data)
 	{
-		global $PHP_TIME;
-        $this->sess->query("REPLACE INTO `{$this->pre}sessions` (sessionid, data, lastvisit) VALUES('$id', '".addslashes($sess_data)."', '".$PHP_TIME."')");
-		return true;
+		global $_userid, $_groupid, $mod, $catid, $contentid;
+		if(strlen($data) > 255) $data = '';
+		$catid = intval($catid);
+		$contentid = intval($contentid);
+		return $this->db->query("REPLACE INTO $this->table (`sessionid`, `userid`, `ip`, `lastvisit`, `groupid`, `module`, `catid`, `contentid`, `data`) VALUES('$id', '$_userid', '".IP."', '".TIME."', '$_groupid', '$mod', '$catid', '$contentid', '".addslashes($data)."')");
     } 
 
     function destroy($id)
-	{ 
-		$this->sess->query("DELETE FROM `{$this->pre}sessions` WHERE sessionid='$id'");
-		return true;
+	{
+		return $this->db->query("DELETE FROM $this->table WHERE `sessionid`='$id'");
     } 
 
     function gc($maxlifetime)
 	{
-		$expiretime = $this->time-$maxlifetime;
-		$this->sess->query("DELETE FROM `{$this->pre}sessions` WHERE lastvisit<$expiretime");
-		return true;
+		$expiretime = TIME - $maxlifetime;
+		return $this->db->query("DELETE FROM $this->table WHERE `lastvisit`<$expiretime"); 
     }
 }
 ?>

@@ -1,103 +1,88 @@
-<?php 
+<?php
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
 <body>
-<?=$menu?>
-
-<SCRIPT LANGUAGE="JavaScript">
-<!--
-function _submitform(formname,actionurl) {
-  var f=$(formname);	
-	if (!checkhased(f))	 {
-		alert("您未选择记录。");
-		return false;
-	}
-	if (!confirm('确认操作?'))	{
-		return false;
-	}
-  f.action = actionurl;
-  f.submit();
-}
-
-function checkhased(form) {
-  for(var i = 0;i < form.elements.length; i++) {
-    var e = form.elements[i];
-    if (e.type == 'checkbox' && e.disabled != true) {
-			if (e.checked)	{
-				return true;
-			}
-    }
-  }
-	return false;
-}
-//-->
-</SCRIPT>
-
-<div style="width:100%;text-align:right;margin-bottom: 5px;">
-广告位选择:&nbsp;<?php echo $adsplaces_select;?>
-<?php echo $ads_expired_select; ?>
-</div>
-
-<table cellpadding="2" cellspacing="1" class="tableborder"><form method="post" name="myform">
-  <tr>
-    <th colspan=13><a href="?mod=<?=$mod?>&file=<?=$file?>&action=manage&adsplaceid=<?=$adsplaceid?>"><font color="white"><?=($adsplaceid ? '['.$adsplaces[$adsplaceid]['placename'].'] ' : '')?>广告管理</font></a></th>
-  </tr>
-<tr align="center">
-<td width="5%" class="tablerowhighlight">选中</td>
-<td width="*" class="tablerowhighlight">广告名称</td>
-<td width="15%" class="tablerowhighlight">所属广告位</td>
-<td width="10%" class="tablerowhighlight">当前客户</td>
-<td width="10%" class="tablerowhighlight">起始日期</td>
-<td width="10%" class="tablerowhighlight">结束日期</td>
-<td width="8%" class="tablerowhighlight">点击数</td>
-<td width="5%" class="tablerowhighlight">状态</td>
-<td width="5%" class="tablerowhighlight">审核</td>
-<td width="10%" class="tablerowhighlight">管理操作</td>
+<form action="?" method="get">
+<input name="mod" type="hidden" value="<?=$mod?>">
+<input name="file" type="hidden" value="<?=$file?>">
+<input name="action" type="hidden" value="manage">
+<table cellpadding="0" cellspacing="1" class="table_list">
+<caption>广告搜索</caption>
+<tr>
+<th width="10%">广告位</th>
+<th width="35%">广告状态</th>
+<th width="15%">审核状态</th>
+<th width="15%">客户状态</th>
+<th width="15%">客户名</th>
+<th>操作</th>
 </tr>
-<?php 
+<tr>
+	<td class="align_c">
+	<?=form::select($place, 'adsplaceid', 'adsplaceid', $adsplaceid, 1, '', "onchange='location.href=\"?mod=ads&file=ads&action=manage&expired=$expired&adsplaceid=\"+this.value'")?>
+	</td><td class="align_c">
+    <?=form::radio($expireds, 'expired', 'expired', $expired, 5, '', "onclick='location.href=\"?mod=ads&file=ads&action=manage&adsplaceid=$adsplaceid&expired=\"+this.value'")?>
+	</td>
+    <td class="align_c">
+    <span style="width: 100px;">
+    <input type="radio" <?php if($passid == '1'){?> checked=""<? }?> value="1" id="" name="passid" />审核</span>
+    <span style="width: 100px;">
+    <input type="radio" <?php if($passid == '0' && isset($passid)){?> checked=""<? }?> value="0" id="" name="passid" />未审核</span>
+    </td>
+    <td class="align_c">
+     <span style="width: 100px;">
+    <input type="radio" <?php if($status == '1'){?> checked=""<? }?> value="1" name="status" />正常</span>
+    <span style="width: 100px;">
+    <input type="radio" <?php if($status == '0' && isset($status)){?> checked=""<? }?> value="0" name="status" />关闭</span>
+    </td>
+    <td class="align_c"> <input type="text" value="<?=$username?>" id="username" name="username" /></td>
+    <td class="align_c"><input type="submit" value="搜索"/></td>
+</tr>
+</table>
+</form>
+<table cellpadding="3" cellspacing="1" class="table_list"><form method="post" name="myform">
+  <caption>管理广告</caption>
+<tr>
+	<th width="5%">选中</th>
+	<th>广告名称</th>
+	<th>所属广告位</th>
+	<th width="10%">当前客户</th>
+	<th width="10%">起始日期</th>
+	<th width="10%">结束日期</th>
+	<th width="5%">审核</th>
+	<th width="7%">客户状态</th>
+	<th width="60">管理操作</th>
+</tr>
+<?php
 if(is_array($adssigns)){
 	foreach($adssigns as $value){
 ?>
-<tr align="center" onmouseout="this.style.backgroundColor='#F1F3F5'" onmouseover="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5'>
-<td><input type="checkbox" name="adsid[]"  id="adsid[]" value="<?=$value['adsid']?>"></td>
-<td align="left">&nbsp;<A HREF="?mod=ads&file=<?php echo $file?>&action=view&adsid=<?=$value['adsid']?>" target="_blank"><?=$value['adsname']?></A></td>
-<td><?=$value['placename']?></td>
-<td><?=$value['username']?></td>
-<td><?php echo date("Y.m.d",$value['fromdate'])?></td>
-<td><?php echo date("Y.m.d",$value['todate'])?></td>
-<td><?php echo $value['hits'];?></td>
-<td><?php echo $value['status'];?></td>
-<td><?php echo $value['checked'];?></td>
+<tr>
+<td class="align_c"><input type="checkbox" name="adsid[]"  id="checkbox" value="<?=$value['adsid']?>"></td>
+<td class="align_left">&nbsp;<a href="?mod=ads&file=<?php echo $file?>&action=view&adsid=<?=$value['adsid']?>" target="_blank" title="点击预览"><?=$value['adsname']?></a></td>
+<td class="align_c"><?=$place[$value['placeid']]?></td>
+<td class="align_c"><?=$value['username']?></td>
+<td class="align_c"><?php echo date("Y.m.d",$value['fromdate'])?></td>
+<td class="align_c"><?php echo date("Y.m.d",$value['todate'])?></td>
+<td class="align_c" ><?php if($value['passed']) { ?><font color="#00ee00">通过</font><?php } else { ?><font color="#ee0000">未通过</font><?php }?></td>
+<td class="align_c"><?php if($value['status']) { ?><font color="#00ee00">正常</font><?php } else { ?><font color="#ee0000">关闭</font><?php }?></td>
 <td>
-<A HREF="?mod=ads&file=<?=$file?>&action=edit&adsid=<?=$value['adsid']?>">修改</A>
+<A HREF="?mod=ads&file=<?=$file?>&action=edit&adsid=<?=$value['adsid']?>">修改</A>|<A HREF="?mod=ads&file=<?=$file?>&action=stat&adsid=<?=$value['adsid']?>">统计</A>
 </td>
 </tr>
-<?php 
+<?php
 	}
 }
 ?>
 </table>
-<table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">
-  <tr>
-    <td width="10%"><input name='chkall' type='checkbox' id='chkall' onclick='checkall(this.form)' value='checkbox'>全选/反选</td>
-    <td>
-<INPUT TYPE="hidden" name="referer" value="<?php echo $referer;?>">
-<input type="submit" name="submit" value="批量锁定" onClick="_submitform('myform','?mod=<?=$mod?>&file=<?=$file?>&action=lock&val=0');">&nbsp;&nbsp;
-<input type="submit" name="submit" value="批量解锁" onClick="_submitform('myform','?mod=<?=$mod?>&file=<?=$file?>&action=lock&val=1');">&nbsp;&nbsp;
-<input type="submit" name="submit" value="批量审核通过" onClick="_submitform('myform','?mod=<?=$mod?>&file=<?=$file?>&action=checked&val=1');">&nbsp;&nbsp;
-<input type="submit" name="submit" value="批量取消审核" onClick="_submitform('myform','?mod=<?=$mod?>&file=<?=$file?>&action=checked&val=0');">&nbsp;&nbsp;
-<input type="submit" name="submit" value="批量删除" onClick="_submitform('myform','?mod=<?=$mod?>&file=<?=$file?>&action=delete');">&nbsp;&nbsp;</td>
-  </tr></form>
-</table>
-<table width="100%" height="30" border="0" cellpadding="0" cellspacing="0">
-  <tr>
-    <td align=center><?=$pages?></td>
-  </tr>
-</table>
-
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
-  <tr>
-    <td></td>
-  </tr>
-</table>
+<div class="button_box">
+	<input type="button" value="全选" onClick="checkall()">
+	<input TYPE="hidden" name="referer" value="<?=$referer?>">
+	<input type="submit" name="submit" value="批量审核通过" onClick="myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=passed&val=1';return confirm('您确定要审核吗？');">
+	<input type="submit" name="submit" value="批量取消审核" onClick="myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=passed&val=0';return confirm('您确定要取消审核吗？');">
+	<input type="submit" name="submit" value="批量删除" onClick="myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=delete';return confirm('您确定要删除吗？');">
+</div>
+</form>
+<div id="pages"><?=$pages?></div>
+</body>
+</html>

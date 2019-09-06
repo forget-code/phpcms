@@ -1,0 +1,31 @@
+{template "member","header"}
+<div id="main">
+ {template 'ads' , 'left'}
+   <div id="right">
+<!--面包屑导航-->
+    <p id="position"><strong>当前位置：</strong><a href="">首页</a>广告预订</p>
+<table cellpadding="0" cellspacing="1" class="table_list">
+    <caption>广告预订</caption>
+    <tr>
+      <th >广告位</th>
+      <th width="15%">广告尺寸</th>
+      <th width="15%">广告价格</th>
+      <th width="15%">到期日期</th>
+      <th width="10%">租出</th>
+      <th width="10%">预订</th>
+    </tr>
+    {loop $places $place}
+    <tr>
+      <td class="align_left">{$place['placename']}</td>
+      <td>{$place['width']}x{$place['height']}</td>
+      <td>{$place['price']}元</td>
+      <td>{$place['todate']}</td>
+      <td>{if $place['todate']}<font color="red">√</font>{else}×{/if}</td>
+      <td><a href="{$M[url]}sign.php?placeid={$place['placeid']}">我要预订</A> </td>
+    </tr>
+    {/loop}
+  </table>
+  </div>
+  <div id="pages">{$pages}</div>
+</div>
+{template 'phpcms','footer'}

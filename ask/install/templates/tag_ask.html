@@ -1,0 +1,4 @@
+{loop $data $n $r}
+<li> <a href="{ask_url($r[askid])}" target="{$target}" title="{$r[title]}">{str_cut($r[title],$titlelen,'..')}</a> {if $showcatname} <a href="{$CATEGORY[$r[catid]][url]}" style="color:gray">[{$CATEGORY[$r[catid]][catname]}]</a>{/if}</li>
+{/loop}
+{if $pages}<p id="pages">{$pages}</p>{/if}

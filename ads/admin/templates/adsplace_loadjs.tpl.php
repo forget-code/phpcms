@@ -1,14 +1,13 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
-<?=$menu?>
-<table cellpadding="2" cellspacing="1" class="tableborder"><form method="post" name="myform">
+<table cellpadding="0" cellspacing="0" class="table_form"><form method="post" name="myform">
 <tr>
-<th><?php echo $loadadsplace['placename']; ?>&nbsp;广告位代码调用</th>
+<caption><?php echo $loadadsplace['placename']; ?>&nbsp;广告位代码调用</caption>
 </tr>
 <tr>
-<td class="tablerow" height="60">
+<td height="60">
 <b>调用说明：</b><br />
 1、调用方式一对服务器环境无特殊要求，可统计广告展示次数和自动判断广告是否过期，但是消耗服务器资源，访问速度慢，不支持Google等JS类代码广告；<br />
 2、调用方式二对服务器环境无特殊要求，消耗服务器资源少，访问速度快，但是不能统计广告展示次数和自动判断广告有效期，不支持Google等JS类代码广告；<br />
@@ -17,33 +16,33 @@ include admintpl('header');
 </td>
 </tr>
 <tr>
-<td class="tablerowhighlight">调用方式一：JS调用代码（PHP动态调用）</td>
+<td>调用方式一：JS调用代码（PHP动态调用）<font color='red'>此方式可以统计展示次数,以下两种不可以!</font></td>
 </tr>
 <tr>
-<td class="tablerow" height="60" align="center"><input name="jscode1" id="jscode1" value='<script language="javascript" src="<?=$PHP_SITEURL?>data/<?=$MOD['htmldir']?>.php?id=<?=$placeid?>"></script>' size="100">
-<br><input type="button" onclick="document.all.jscode1.select();document.execCommand('Copy');" value=" 复制代码至剪贴板 ">
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="window.open('?mod=ads&file=adsplace&action=view&placeid=<?=$placeid?>');" value="预览广告位"></td>
+<td  height="60" align="center"><input name="jscode1" id="jscode1" value='<script language="javascript" src="<?=SITE_URL?>data/<?=$M['htmldir']?>.php?id=<?=$placeid?>"></script>' size="100">
+<br><input type="button" onclick="$('#jscode1').select();document.execCommand('Copy');" value=" 复制代码至剪贴板 ">
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="window.open('?mod=ads&file=ads_place&action=view&placeid=<?=$placeid?>');" value="预览广告位"></td>
 </tr>
 <tr>
-<td class="tablerowhighlight">调用方式二：JS调用代码（JS静态调用）</td>
+<td>调用方式二：JS调用代码（JS静态调用）</td>
 </tr>
 <tr>
-<td class="tablerow" height="60" align="center"><input name="jscode2" id="jscode2" value='<script language="javascript" src="<?=$PHP_SITEURL?>data/<?=$MOD['htmldir']?>/<?=$placeid?>.js"></script>' size="100">
-<br><input type="button" onclick="document.all.jscode2.select();document.execCommand('Copy');" value=" 复制代码至剪贴板 ">
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="window.open('?mod=ads&file=adsplace&action=view&placeid=<?=$placeid?>');" value="预览广告位"></td>
+<td height="60" align="center"><input name="jscode2" id="jscode2" value='<script language="javascript" src="<?=SITE_URL?>data/<?=$M['htmldir']?>/<?=$placeid?>.js"></script>' size="100">
+<br><input type="button" onclick="$('#jscode2').select();$('#jscode2').val().execCommand('Copy');" value=" 复制代码至剪贴板 ">
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="window.open('?mod=ads&file=ads_place&action=view&placeid=<?=$placeid?>');" value="预览广告位"></td>
 </tr>
 <tr>
-<td class="tablerowhighlight">调用方式三：shtml嵌入代码</td>
+<td class="tablerowhighlight">调用方式三：shtml嵌入代码 </td>
 </tr>
 <tr>
-<td class="tablerow" height="100" align="center">
+<td  height="100" align="center">
 <textarea name="shtmlcode" cols="100" rows="5">{if defined('CREATEHTML')}
-<!--#include file="<?=PHPCMS_PATH?>data/<?=$MOD['htmldir']?>/<?=$placeid?>.html"-->
+<!--#include virtual="<?=PHPCMS_PATH?>data/<?=$M['htmldir']?>/<?=$placeid?>.html"-->
 {else}
-{include PHPCMS_ROOT.'/data/<?=$MOD['htmldir']?>/<?=$placeid?>.html'}
+{include PHPCMS_ROOT.'/data/<?=$M['htmldir']?>/<?=$placeid?>.html'}
 {/if}</textarea>
 <br><input type="button" onclick="document.all.shtmlcode.select();document.execCommand('Copy');" value=" 复制代码至剪贴板 ">
-&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="window.open('?mod=ads&file=adsplace&action=view&placeid=<?=$placeid?>');" value="预览广告位"></td>
+&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" onclick="window.open('?mod=ads&file=ads_place&action=view&placeid=<?=$placeid?>');" value="预览广告位"></td>
 </tr>
 </table>
 </body>

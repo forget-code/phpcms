@@ -1,52 +1,22 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
+require_once MOD_ROOT.'/include/guestbook.class.php';
+$g = new guestbook;
+$pagesize  = $M['pagesize'] && $M['pagesize']<500 ? $M['pagesize'] : 20 ;
+$page      = $page ? $page : 1;
+$action    = $action ? $action : 'manage';
+$keyword   = $keyword ? $keyword : '';
+$passed    = isset($passed) ? $passed : 1;
+$ip		   = isset($ip) ? $condition = " and ip='$ip' " : '';
 
-$pagesize = isset($pagesize) && $pagesize<500 ? intval($pagesize) : $PHPCMS['pagesize'];
-$action = $action ? $action : 'manage';
-$keyid = isset($keyid) ? $keyid : 'phpcms';
-$submenu=array(
-	array('<font color="#FF0000">'.$LANG['guestbook_manage'].'</font>','?mod='.$mod.'&file='.$file.'&action=manage&passed=1&keyid='.$keyid),
-	array('<font color="#0000FF">'.$LANG['guestbook_label_manage'].'</font>','?mod='.$mod.'&file=tag&keyid='.$keyid)
-);
-$menu = adminmenu($LANG['guestbook_manage'],$submenu);
-
-if($keyid && $keyid != 'phpcms')
+$srchtype  = $srchtype ? $srchtype : 0;
+$condition .= " and passed=$passed ";
+if($keyword)
 {
-	$condition = " keyid='$keyid' ";
-}
-else
-{
-	$condition = 1;
-}
-switch($action)
-{	
-	case 'manage':
-	$keyword = isset($keyword) ? $keyword : '';
-	$passed = isset($passed) ? $passed : 1;
-	$srchtype = isset($srchtype) ? $srchtype : 0;
-
-	require PHPCMS_ROOT."/include/ip.class.php";
-	$getip = new Ip;
-	$passed = isset($passed) ? $passed : "1";
-	if(!isset($page))
+	$keyword=str_replace(' ','%',$keyword);
+	$keyword=str_replace('*','%',$keyword);
+	switch($srchtype)
 	{
-		$page=1;
-		$offset=0;
-	}
-	else
-	{
-		$offset=($page-1)*$pagesize;
-	}
-	$forward = urlencode("?mod=guestbook&file=guestbook&action=manage&passed=".$passed."&keyid=".$keyid."&page=".$page);
-	
-	
-	$condition .= " AND passed=$passed ";
-	if(!empty($keyword))
-	{
-		$keyword=str_replace(' ','%',$keyword);
-		$keyword=str_replace('*','%',$keyword);
-		switch($srchtype)
-		{
 		case '0':
 			$condition .=" AND title like '%$keyword%' ";
 			break;
@@ -58,99 +28,45 @@ switch($action)
 			break;
 		default :
 			$condition .=" AND title like '%$keyword%' ";
-		}
 	}
-	$condition .= isset($ip) ? " AND ip='$ip' " : "";
+}
 
-	$query="SELECT COUNT(*) AS num FROM ".TABLE_GUESTBOOK." WHERE $condition";
-	$result=$db->query($query);
-	$r=$db->fetch_array($result);
-	$number=$r['num'];
-	$pages=phppages($number,$page,$pagesize);
-
-	$query="SELECT * FROM ".TABLE_GUESTBOOK." WHERE $condition ORDER BY gid DESC LIMIT $offset,$pagesize";
-	$guestbooks = array();
-	$result=$db->query($query);
-	while($r=$db->fetch_array($result))
-	{
-		$r['adddate']=date("Y-m-d",$r['addtime']);
-		$r['addtime']=date("Y-m-d H:i:s",$r['addtime']);
-		$r['gip']=$getip->getlocation($r['ip']);
-		$guestbooks[]=$r;
-	}
-
-
-	include admintpl('guestbook_manage');
+switch($action)
+{	
+	case 'manage':
+		$guestbooks = $g->listinfo($condition,$page,$pagesize);
+		include admin_tpl('guestbook_manage');
 	break;
 
 	case 'delete':
-
-	if(empty($gid))
-	{
-		showmessage($LANG['illegal_parameters']);
-	}
-	$gids=is_array($gid) ? implode(',',$gid) : $gid;
-	$db->query("DELETE FROM ".TABLE_GUESTBOOK." WHERE $condition AND gid IN ($gids)");
-	if($db->affected_rows()>0)
-	{
-		showmessage($LANG['operation_success'],$forward);
-	}
-	else
-	{
-		showmessage($LANG['operation_failure']);
-	}
+		if(empty($gid)) showmessage($LANG['illegal_parameters'],$forward);
+		if($g->delete($gid)) 
+		{	
+			showmessage($LANG['operation_success'],"?mod=$mod&file=$file&action=manage");
+		}
 	break;
 
 	case 'pass':
-
-	if(empty($gid))
-	{
-		showmessage($LANG['illegal_parameters'],$forward);
-	}
-	if(!ereg('^[0-1]+$',$passed))
-	{
-		showmessage($LANG['illegal_parameters'],$forward);
-	}
-	$gids=is_array($gid) ? implode(',',$gid) : $gid;
-	$db->query("UPDATE ".TABLE_GUESTBOOK." SET passed=$passed WHERE $condition AND gid IN ($gids)");
-	if($db->affected_rows()>0)
-	{
-		showmessage($LANG['operation_success'],$forward);
-	}
-	else
-	{
-		showmessage($LANG['operation_failure']);
-	}
+		if(empty($gid)) showmessage($LANG['illegal_parameters'],$forward);
+		if($g->pass($gid,$passed)) 
+		{
+			showmessage($LANG['operation_success'],"?mod=$mod&file=$file&action=manage&passed=$passed");
+		}
 	break;
 
 	case 'reply':
-	$keyword = isset($keyword) ? $keyword : '';
-	$passed = isset($passed) ? $passed : 1;
-	$srchtype = isset($srchtype) ? $srchtype : 0;
-	if(empty($gid))
-	{
-		showmessage($LANG['illegal_parameters']);
-	}
-	if(isset($submit))
-	{
-		$db->query("UPDATE ".TABLE_GUESTBOOK." SET reply='$reply',passed='$passed',hidden='$hidden',replyer='$_username',replytime='$PHP_TIME' WHERE gid=$gid ");
-		showmessage($LANG['operation_success'],$forward);
-	}
-	else
-	{
-		require PHPCMS_ROOT."/include/ip.class.php";
-		$getip = new Ip;
-		$referer = urlencode($forward);
-		$query = "SELECT * FROM ".TABLE_GUESTBOOK." WHERE gid='$gid'";
-		$result = $db->query($query);
-		$guestbook = $db->fetch_array($result);
-		$gip = $getip->getlocation($guestbook['ip']);
-		$guestbook['addtime'] = date("Y-m-d H:i:s",$guestbook['addtime']);
-		$guestbook['replytime'] = date("Y-m-d H:i:s",$guestbook['replytime']);
-		$guestbook['head'] = $guestbook['head']<10 ? "0".$guestbook['head'] : $guestbook['head'];
-		include admintpl('guestbook_reply');
-	}
-
+		if(isset($submit))	
+		{
+			if($g->reply($gid,$reply,$passed,$hidden,$_username)) 
+			{	
+				showmessage($LANG['operation_success'],"?mod=$mod&file=$file&action=manage");
+			}
+		}
+		else
+		{
+			$guestbook = $g->getone($gid);
+			include admin_tpl('guestbook_reply');
+		}
 	break;
 
 }

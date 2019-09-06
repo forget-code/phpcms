@@ -1,0 +1,4 @@
+{loop $data $n $r}
+<li><a href="{$r[url]}" target="{$target}"><img src="{thumb($r[thumb], $width, $height)}" width="{$width}" height="{$height}" alt="{$r[title]}" />{if $r[style]}<span class="{$r[style]}">{str_cut($r[title], $titlelen,'')}</span>{else}{str_cut($r[title], $titlelen,'')}{/if}<span><strong>￥<em>{$r[price]}</em>元/{$r[unit]}</strong></span></a></li>
+{/loop}
+{if $pages}<p id="pages">{$pages}</p>{/if}

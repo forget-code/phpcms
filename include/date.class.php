@@ -1,10 +1,8 @@
 <?php
-defined('IN_PHPCMS') or exit('Access Denied');
-
 /**
 * 可对日期进行加减计算
 */
-class phpcms_date
+class date
 {
 	/**
 	* 年份，合法的年份是1970至2100年
@@ -26,7 +24,7 @@ class phpcms_date
 	* 构造函数，初始化日期
 	* @param string
 	*/
-	function phpcms_date($date="") 
+	function date($date = '') 
 	{
 		$this->set_date($date);
 	}
@@ -35,13 +33,14 @@ class phpcms_date
 	* 设置日期
 	* @param string
 	*/
-	function set_date($date="")
+	function set_date($date = '')
 	{
-		if(preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/i',$date,$t))
+		if(is_date($date))
 		{
-			$this->set_year($t[1]);
-			$this->set_month($t[2]);
-			$this->set_day($t[3]);
+			list($y, $m, $d) = explode('-', $date);
+			$this->set_year($y);
+			$this->set_month($m);
+			$this->set_day($d);
 		}
 		else
 		{
@@ -57,7 +56,7 @@ class phpcms_date
 	*/
 	function set_year($year)
 	{
-		$year = intval($year);
+		$year = ltrim(intval($year), '0');
 		$this->year = ($year<=2100 && $year>=1970) ? $year : date('Y');
 	}
 
@@ -67,8 +66,8 @@ class phpcms_date
 	*/
 	function set_month($month) 
 	{
-		$month = intval($month);
-		$this->month = ($month<13 && $month>0) ? $month : date('m');
+		$month = ltrim(intval($month), '0');
+		$this->month = ($month < 13 && $month > 0) ? $month : date('m');
 	}
 
 	/**
@@ -77,8 +76,8 @@ class phpcms_date
 	*/
 	function set_day($day)
 	{
-		$day = intval($day);
-		$this->day = ($day<=$this->get_lastday() && $day>0) ? $day : date('d');
+		$day = ltrim(intval($day), '0');
+		$this->day = ($this->year && $this->month && checkdate($this->month, $day, $this->year)) ? $day : date('d');
 	}
 
 	/**
@@ -115,45 +114,46 @@ class phpcms_date
 	* 判断当前年份是否为闰年
 	* @return bool
 	*/
-	function is_leapyear($year=0)
+	function is_leapyear($year)
 	{
-        $year = $year ? $year : $this->year;
-		return ($year%400 == 0 || ($year%4 == 0 && $year%100 != 0)) ? 1 : 0 ;
+		return date('L', $year);
 	}
 
 	/**
 	* 天增加
 	* @param int
 	*/
-	function dayadd($step=1)
+	function dayadd($step = 1)
 	{
 		$step = intval($step)*86400;
 		$time = $this->get_time()+$step;
-		$this->year = date('Y',$time);
-		$this->month = date('m',$time);
-		$this->day = date('d',$time);
+		$this->year = date('Y', $time);
+		$this->month = date('m', $time);
+		$this->day = date('d', $time);
 	}
 
 	/**
 	* 月份增加
 	* @param int
 	*/
-	function monthadd($step=1){
+	function monthadd($step = 1)
+	{
 		$step = intval($step);
 		$totalmonth = $this->month + $step;
-		$this->month = $totalmonth%12==0 ? 12 : $totalmonth%12 ;
-		$this->year = $this->year + floor($totalmonth/12);
-		$this->day = $this->day > $this->get_lastday() ? $this->get_lastday() : $this->day ;
+		$this->month = $totalmonth%12 == 0 ? 12 : $totalmonth%12 ;
+		if($totalmonth > 12) $this->year += floor($totalmonth/12);
+		if($this->day > $this->get_lastday()) $this->day = $this->get_lastday();
 	}
 
 	/**
 	* 年份增加
 	* @param int
 	*/
-	function yearadd($step=1){
+	function yearadd($step = 1)
+	{
 		$step = intval($step);
-		$this->year = $this->year + $step;
-		$this->day = $this->day > $this->get_lastday() ? $this->get_lastday() : $this->day ;
+		$this->year += $step;
+		if($this->day > $this->get_lastday()) $this->day = $this->get_lastday();
 	}
 
 	/**
@@ -198,7 +198,7 @@ class phpcms_date
 	*/
 	function get_time() 
 	{
-		return strtotime($this->get_date());
+		return strtotime($this->get_date().' 23:59:59');
 	}
 
 	/**
@@ -207,14 +207,14 @@ class phpcms_date
 	*/
 	function get_week()
 	{
-		return date('w',$this->get_time());;
+		return date('w', $this->get_time());
 	}
 
 	/**
 	* 计算两个日期之间相差的天数
 	* @return int
 	*/
-	function get_diff($date1,$date2)
+	function get_diff($date1, $date2)
 	{
 		$time1 = strtotime($date1);
 		$time2 = strtotime($date2);

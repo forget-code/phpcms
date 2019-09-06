@@ -1,0 +1,25 @@
+<?php
+return array (
+  'browse.html' => '浏览',
+  'category.html' => '大栏目页',
+  'category_list.html' => '最终栏目页',
+  'center_actor.html' => '[会员中心]角色',
+  'center_answer.html' => '[会员中心]答案',
+  'center_ask.html' => '[会员中心]问题',
+  'center_credit.html' => '[会员中心]积分',
+  'center_edit.html' => '[会员中心]编辑问题',
+  'credit_list.html' => '积分列表页',
+  'header.html' => '问吧头部',
+  'index.html' => '问吧首页',
+  'left.html' => '[会员中心]左侧导航',
+  'question.html' => '提问页',
+  'search.html' => '搜索页',
+  'show.html' => '内容页',
+  'tag_ask.html' => '[标签]问题列表',
+  'tag_ask_list.html' => '[标签]问题栏目列表',
+  'tag_credit.html' => '[标签]积分列表',
+  'tag_credit_list.html' => '[标签]积分栏目列表',
+  'view_vote.html' => '投票结果',
+  'vote.html' => '问题转换为投票页',
+);
+?>

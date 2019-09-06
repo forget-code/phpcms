@@ -1,76 +1,61 @@
 <?php
-require './include/common.inc.php';
+require_once './include/common.inc.php';
+require 'form.class.php';
+require_once './include/link.class.php';
 
-if(!$_userid) showmessage($LANG['not_login'], $MODULE['member']['linkurl'].'login.php?forward='.urlencode($PHP_URL));
-
-switch($action)
+$datas = subtype('link');
+$link = new link();
+if($dosubmit)
 {
-	case 'reg':
-	if($MOD['enablecheckcode'])	
+	if($M['enablecheckcode'])	
 	{
 		checkcode($checkcodestr,1,$forward);
 	}
-	if($MOD['ischeck'])	
+	if(empty($typeid))
+	{
+		showmessage('请选择分类',$forward);
+	}
+	if(empty($name))
+	{
+		showmessage('请填写网站名称',$forward);
+	}
+	if(empty($url))
+	{
+		showmessage('请填写网站地址',$forward);
+	}
+	if(!preg_match('/\b((?#protocol)https?|ftp):\/\/((?#domain)[-A-Z0-9.]+)((?#file)\/[-A-Z0-9+&@#\/%=~_|!:,.;]*)?((?#parameters)\?[-A-Z0-9+&@#\/%=~_|!:,.;]*)?/i', $url))
+	{
+		showmessage('请填写正确的网站地址',$forward);
+	}
+	if($linktype && empty($logo))
+	{
+		showmessage('请填写网站的logo',$forward);
+	}
+	if($M['ischeck'])	
 	{
 		$passed = 0;
-		$m = $LANG['wait_check'];
+		$m = '请等待管理员审核该链接';
 	}
 	else
 	{
 		$passed = 1;
 		$m = '';
 	}
-	if(isset($submit))
+	$arr = array('typeid'=>$typeid,'linktype'=>$linktype,'name'=>$name,'url'=>$url,'logo'=>$logo,'username'=>$username,'passed'=>$passed,'addtime'=>TIME);
+	if($link->add($arr))
 	{
-		if(!ereg('^[01]+$',$linktype))
-		{
-			showmessage($LANG['illegal_parameters']); 
-		}
-		if(empty($name))
-		{
-			showmessage($LANG['input_sitename'],"goback");
-		}
-		if(empty($url) || $url=='http://')
-		{
-			showmessage($LANG['inout_url'],"goback");
-		}
-		$typeid = intval($typeid);
-		$db->query("INSERT INTO ".TABLE_LINK." (`typeid` , `linktype` , `name` , `url` , `logo` , `introduce` , `username` , `passed` , `addtime` )  VALUES('$typeid','$linktype','".htmlspecialchars($name)."','".htmlspecialchars($url)."','".htmlspecialchars($logo)."','".htmlspecialchars($introduce)."','$_username','$passed','$PHP_TIME')");
 		if($passed)
 		{
-			require_once PHPCMS_ROOT."/link/include/tag.func.php";
-			createhtml("index");
-			createhtml("category_list");
+			showmessage($LANG['operation_success'].$m,"link/index.php");
 		}
-		showmessage($LANG['operation_success'].$m,$forward);
+		showmessage($LANG['operation_success'].$m,"link/index.php");
 	}
-
-	break;
-	case 'edit':
-	
-	if(isset($submit))
-	{
-		if(!ereg('^[01]+$',$linktype))
-		{
-			showmessage($LANG['illegal_parameters']); 
-		}   
-		if(empty($name))
-		{
-			showmessage($LANG['input_sitename'],"goback");
-		}
-		if(empty($url) || $url=='http://')
-		{
-			showmessage($LANG['inout_url'],"goback");
-		}
-		$typeid = intval($typeid);
-
-		$db->query("UPDATE ".TABLE_LINK." SET typeid = $typeid,name = '".htmlspecialchars($name)."',logo = '".htmlspecialchars($logo)."' ,introduce ='".htmlspecialchars($introduce)."' WHERE username='$_username' AND url='$url'");
-		if($db->affected_rows()>0)
-		showmessage($LANG['operation_success'],$forward);
-		else
-		showmessage($LANG['error_url'],'goback');
-	}
-
-	break;
+	else
+		showmessage($LANG['operation_failure'],$forward);
 }
+else
+{
+	include template($mod, 'register');
+}
+
 ?>

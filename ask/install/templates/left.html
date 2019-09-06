@@ -1,0 +1,20 @@
+  <div id="left">
+    <div id="treemenu">
+      <h5>问吧</h5>
+      <ul>
+	    <li><a href="{$MODULE['ask']['url']}question.php">我要提问</a></li>
+        <li {if $status==-1}class="centermenu"{/if}><a href="{$MODULE['ask']['url']}center.php?action=ask&status=-1">全部提问</a></li>
+        <li {if $status==3}class="centermenu"{/if}><a href="{$MODULE['ask']['url']}center.php?action=ask&status=3">待解决提问</a></li>
+        <li {if $status==5}class="centermenu"{/if}><a href="{$MODULE['ask']['url']}center.php?action=ask&status=5">已解决提问</a></li>
+		<li {if $flag==1}class="centermenu"{/if}><a href="{$MODULE['ask']['url']}center.php?action=ask&flag=1">投票中的提问</a></li>
+        <li {if $flag==-1}class="centermenu"{/if}><a href="{$MODULE['ask']['url']}center.php?action=ask&flag=-1">过期提问</a></li>
+        <li {if $action=='answer'}class="centermenu"{/if}><a href="{$MODULE['ask']['url']}center.php?action=answer">我的回答</a></li>
+	    <li {if $action=='credit'}class="centermenu"{/if}><a href="{$MODULE['ask']['url']}center.php?action=credit">查看积分</a></li>
+	    <li {if $action=='actor'}class="centermenu"{/if}><a href="{$MODULE['ask']['url']}center.php?action=actor">修改头衔</a></li>
+      </ul>
+    </div>
+    <ol>
+      <li class="local"><a href="">返回网站首页</a></li>
+      <li class="exit"><a href="{$MODULE['member']['url']}logout.php">退出登录</a></li>
+    </ol>
+  </div>

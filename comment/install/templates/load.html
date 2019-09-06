@@ -1,0 +1,36 @@
+<script language="javascript" type="text/javascript">
+function ajaxpost()
+{
+	if (!$('#contenttext').val())
+	{   
+		alert("内容不能为空");
+		$('#contenttext').focus();
+		return false;
+	}
+    if ($('#contenttext').val().length > 500) {
+        alert("内容太长，最多 1000 个文字");
+        return false;
+    }
+}
+</script>
+<div class="window" style="width:600px;" id="repley_layer">
+<h4>
+<a href="javascript:close();" class="jqmClose">
+<img src="images/close.gif" alt="" height="16px" width="16px"/></a>用户评论</h4>    
+<div class="commenttext">
+    <form onsubmit="return ajaxpost();" method="post" name="replay" action="{$MODULE[comment][url]}?action=add">
+    <input type="hidden" id = "commentid" name="commentid" value="{$commentid}" />
+    <input type="hidden" value="{$keyid}" name="keyid" id="keyid"/>
+    <input type="hidden" value="{$verify}" name="verify" id="verify"  />
+    <ul>
+      <li><strong>回复标题:{$title}</strong></li>
+      <li><textarea id="contenttext" name="contenttext" rows="8" cols="85" class="textarea_style"></textarea></li>
+      <li>
+        <!--input type="checkbox" value="" name="" class="checkbox_style" checked="checked" onclick="" />
+        匿名发布-->
+        <input type="submit" value="回复评论" name="dosubmit" class="button_style" />
+      </li>
+    </ul>
+    </form>
+  </div>
+</div>

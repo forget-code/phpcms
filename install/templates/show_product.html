@@ -1,0 +1,58 @@
+{template 'phpcms','header'}
+<link href="{SKIN_PATH}product.css" rel="stylesheet" type="text/css" />
+<!--begin main-->
+<div id="main">
+  <!--begin left-->
+  <div id="mian_l_1">
+    <div class="product_nav_top">
+      <h3>推荐产品</h3>
+    </div>
+    <div class="product_nav">
+	<ul class="pic_list">
+       {tag_产品内容页推荐}
+	  </ul>
+	</div>
+    <div class="product_nav_btm"></div>
+	<!--{block("list_$catid", 1)}-->
+    <div class="product_nav_top mar_10">
+      <h3>产品搜索</h3>
+    </div>
+    <div class="product_nav">
+{template 'phpcms','product_search_table'}
+    </div>
+    <div class="product_nav_btm"></div>
+  </div>
+  <div id="mian_r_1">
+    <div class="bdr_1">
+      <p id="position"><a href="">首页</a>{catpos($r['catid'])}产品详情</p>
+      <dl class="product_show">
+        <dt><font color="#FF0000">{$title}</font></dt>
+        <dd class="product_pic_s"><a href="more_pic.php?contentid={$contentid}"><img src="{thumb($r[thumb],200,136)}" alt="" width="200" height="136" /><br />
+          <a href="more_pic.php?contentid={$contentid}">查看更多图片</a></dd>
+        <dd class="product_attribute_s">编号：{$contentid}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;浏览次数：<span id="hits">0</span>次</dd>
+        <dd class="product_attribute_s">库存：{$stock}{$unit}</dd>
+        <dd class="product_attribute_s">价格：<font color="#FF0000">{$price}元/{$unit}</font></dd>
+        <dd class="product_attribute_s"><a href="{$MODULE[order][url]}order.php?number=1&goodsid=content_{$contentid}&goodsname={urlencode($title)}&goodsurl={urlencode($url)}&unit={urlencode($unit)}&price={$price}&carriage={$carriage}&stock={$stock}&verify={md5(AUTH_KEY.'content_'.$contentid.$title.$url.$unit.$price.$carriage.$stock)}"><img src="images/buy.gif" alt="订购产品" width="130" height="40" style="margin:8px"/></a></dd>
+      </dl>
+      <h4>产品描述</h4>
+      <div class="product_txt_1">{$description}</div>
+        <h4>产品参数</h4>
+        <table align="center" cellpadding="0" cellspacing="1" class="diy_attribute">
+          <tr>
+            <th>产品型号</th><td>{$size}</td>
+          </tr>
+          <tr>
+            <th>推荐等级</th><td>{$stars}</td>
+          </tr>
+        </table>
+        <h4>产品介绍</h4>
+        <div class="product_txt_1">
+        {$content}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--end main-->
+<script language="JavaScript" src="count.php?contentid={$contentid}"></script>
+{template 'phpcms','footer'}

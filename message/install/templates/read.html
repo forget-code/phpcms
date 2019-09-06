@@ -1,0 +1,50 @@
+{template "member","header"}
+<div id="main">
+{template "message","left"}
+	<div id="right">
+		<p id="position"><strong>当前位置：</strong><a href="{$M[url]}{if $out}outbox.php{else}inbox.php{/if}">{if $out}发件箱{else}收件箱{/if}</a>阅读</p>
+    	 <table width="98%" cellpadding="0" cellspacing="1" class="message">
+         <caption>
+      		{$subject}
+      	 </caption>
+        <tr>
+		<td width="40" class="align_center"><img src="{$avatar}" width="40" height="40" alt="主题" /></td>
+        	<td width="100">
+            	<a href="{space_url($send_from_id)}" target="_blank"><strong>{$msgfromname}</strong></a><br />{$date}
+            </td>
+        	<td width="*" class="align_left">
+            	{$content}
+            </td>
+        </tr>
+        {loop $reply_message $reply}
+        <tr>
+		<td width="40" class="align_center"><img src="{$reply['avatar']}" width="40" height="40" alt="回复" /></td>
+        	<td>
+        		<a href="{space_url($reply[send_from_id])}" target="_blank"><strong>{$reply['msgfromname']}</strong></a><br />{$reply['date']}
+        	</td>
+            <td class="align_left">
+            	{$reply['content']}
+            </td>
+        </tr>
+        {/loop}
+     	</table>
+        <form action="{$M[url]}read.php" method="post" name="myform" >
+    	 <table width="98%" cellpadding="0" cellspacing="0" class="table_form">
+         <caption>回复短消息</caption>
+        	<tr>
+                <td width="*"><textarea name="content" id="content" tabindex="100" cols="60"></textarea><?=form::editor('content', 'introduce', '100%', 200)?></td>
+            </tr>
+			<tr>
+			    <td>
+		<input type="submit" name="dosubmit" id="button" value=" 确定 " />
+        <input type="hidden" name="replyid" value="{$messageid}" />
+        <input type="hidden" name="msgtoid" value="{$msgtoid}" />
+        <input type="hidden" name="forward" value="{$M[url]}inbox.php" />
+				</td>
+			</tr>
+        </table>        
+      </form>
+	</div>
+   </div>
+ <div class="clear"></div>
+{template "member","footer"}

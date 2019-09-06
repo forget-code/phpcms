@@ -1,0 +1,38 @@
+{template 'phpcms','header'}
+<div id="main" class="bdr_1" style="background-image:none">
+  <p id="position"><strong>当前位置：</strong><a href="">首页</a>{$catpos($catid)}发布信息</p></div>
+  <form action="contribute.php?catid={$catid}&modelid={$modelid}" method="post" name="myform"  enctype="multipart/form-data">
+    <table cellpadding="0" cellspacing="1" class="table_form" style="width:980px;">
+      <caption>
+      发布信息
+      </caption>
+      {loop $forminfos $field $info}
+      <tr>
+        <th width="25%"> {if $info['star']} <font color="red">*</font>{/if} <strong>{$info[name]}：</strong><br />
+        {$info[tips]} </th>
+        <td>{$info[form]} </td>
+      </tr>
+      {/loop}
+      <tr>
+        <th width="25%"><strong>验证码：</strong></th>
+        <td><input type="text" name="checkcodestr" size="6" />
+          &nbsp;&nbsp;<img src="checkcode.php" id="checkcode" onClick="this.src='checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" width="48" height="22" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle" class="color_1" /></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+		<input type="hidden" name="contribute" value="1"><input type="hidden" name="forward" value="{$forward}">
+          <input type="submit" name="dosubmit" value=" 确定 ">
+          <input type="reset" name="reset" value=" 清除 ">
+        </td>
+      </tr>
+    </table>
+  </form>
+<script LANGUAGE="javascript">
+<!--
+$().ready(function() {
+	  $('form').checkForm(1);
+	});
+//-->
+</script>
+{template 'phpcms','footer'}

@@ -1,0 +1,9 @@
+<?php
+defined('IN_PHPCMS') or exit('Access Denied');
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(5, '表单向导', '', '', '', '_self', '', '', '', '', 1, 0, 0, 0, 'formguide');");
+$parentid = $db->insert_id();
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$parentid.", '添加表单', '', '?mod=formguide&file=manage&action=add', '', 'right', '', '', '', '', 0, 0, 0, 0, 'formguide');");
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$parentid.", '管理表单', '', '?mod=formguide&file=manage&action=manage', '', 'right', '', '', '', '', 0, 0, 0, 0, 'formguide');");
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$parentid.", '模块设置', '', '?mod=formguide&file=setting', '', 'right', '', '', '', '', 0, 0, 0, 0, 'formguide');");
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$parentid.", '权限设置', '', '?mod=formguide&file=priv', '', 'right', '', '', '', '', 0, 0, 0, 0, 'formguide');");
+?>

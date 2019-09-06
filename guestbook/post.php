@@ -1,19 +1,14 @@
 <?php
 require './include/common.inc.php';
-
-$keyid = isset($keyid) ? $keyid : 'phpcms';
-if(is_numeric($keyid))
-{
-	$channelid = $keyid;
-	$CHA = cache_read('channel_'.$channelid.'.php');
-}
+require_once './include/guestbook.class.php';
+$g = new guestbook;
 if($dosubmit)
 {
-	if(!$MOD['enableTourist'] && !$_username)
+	if(!$M['enableTourist'] && !$_username)
 	{
 		showmessage($LANG['dis_guest'],'goback');
 	}
-	if($MOD['enablecheckcode'])	
+	if($M['enablecheckcode'])	
 	{
 		checkcode($checkcodestr,1,$forward);
 	}
@@ -25,19 +20,19 @@ if($dosubmit)
 	{
 		showmessage($LANG['illegal_parameters'],'goback');
 	}
-	if(strlen($content)>$MOD['maxcontent'])
+	if(strlen($guestbook['content'])>$M['maxcontent'])
 	{
-		showmessage($LANG['message_more'].$MOD['maxcontent'].$LANG['message_characters'],'goback'); 
+		showmessage($LANG['message_more'].$M['maxcontent'].$LANG['message_characters'],'goback'); 
 	}
-	if(empty($username))
+	if(empty($guestbook[username]))
 	{
 		showmessage($LANG['message_input_username'],'goback');
 	}
-	if(empty($title))
+	if(empty($guestbook[title]))
 	{
 		showmessage($LANG['message_input_subject'],'goback');
 	}
-	if(empty($content))
+	if(empty($guestbook[content]))
 	{
 		showmessage($LANG['message_input_content']);
 	}
@@ -50,8 +45,8 @@ if($dosubmit)
 	$inputstring=array('title'=>$title,'username'=>$username,'gender'=>$gender,'head'=>$headimg,'email'=>$email,'homepage'=>$homepage,'hidden'=>$hidden);
 	extract($inputstring,EXTR_OVERWRITE);
 	$title = strip_tags($title);
-	$content = $MOD['usehtml'] ? str_safe($content) : htmlspecialchars($content);
-	if($MOD['checkpass'])
+	//$content = $M['usehtml'] ? str_safe($content) : htmlspecialchars($content);
+	if($M['checkpass'])
 	{
 		$passed = 0;
 		$showmessage = $LANG['message_publishes_waite'];
@@ -61,26 +56,18 @@ if($dosubmit)
 		$passed = 1;
 		$showmessage = $LANG['message_publishes_successfully'];
 	}
-
-	$query = "INSERT INTO ".TABLE_GUESTBOOK."(keyid,title,content,username,gender,head,email,qq,homepage,hidden,addtime,passed,ip) VALUES('$keyid','$title','$content','$username','$gender','$head','$email','$qq','$homepage','$hidden','$PHP_TIME','$passed','$PHP_IP')";
-	$db->query($query);
-	if($db->affected_rows()>0)
-	{
-		showmessage($showmessage, $MOD['linkurl'].'index.php?keyid='.$keyid);
-	}
-	else
-	{
-		showmessage($LANG['message_publishes_flase'], 'goback');
-	}
+	$guestbook['passed'] = $passed;
+	$guestbook['ip'] = IP;
+	$guestbook['userid'] =$_userid;
+	$guestbook['addtime'] = TIME;
+	if($g->add($guestbook)) showmessage($showmessage,"$mod/index.php");
 }
 else
 {
-	$head['title'] = $LANG['message_head_title'];
-	$head['keywords'] = $LANG['message_head_keywords'];
-	$head['description'] = $LANG['message_head_description'];
+	require 'form.class.php';
 	$srchtype = isset($srchtype) ? $srchtype : 0;
 	$keyword = isset($keyword) ? $keyword : '';
-	$position = $MOD['name'];
+	$position = $M['name'];
 	include template('guestbook', 'post'); 
 }
 ?>

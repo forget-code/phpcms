@@ -1,116 +1,64 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
-
+require_once MOD_ROOT.'admin/include/useramount.class.php';
+$onlines = new useramount('1');
 $submenu = array
 (
-	array($LANG['parameter_setting'], "?mod=$mod&file=$file&action=setting"),
-	array($LANG['all_payment_record'], "?mod=$mod&file=$file"),
-	array($LANG['success_record'], "?mod=$mod&file=$file&status=1"),
-	array($LANG['fail_record'], "?mod=$mod&file=$file&status=2"),
-	array($LANG['unknown_record'], "?mod=$mod&file=$file&status=0"),
-	array($LANG['today_payment_record'], "?mod=$mod&file=$file&date=".date('Y-m-d'))
+	array($LANG['all_payment_record'], "?mod=$mod&file=$file&action=list"),
+	array($LANG['success_record'], "?mod=$mod&file=$file&action=list&ispay=0"),
+	array($LANG['fail_record'], "?mod=$mod&file=$file&action=list&ispay=1"),
+	array($LANG['today_payment_record'], "?mod=$mod&file=$file&action=list&sendtime=day")
 );
-$menu = adminmenu($LANG['online_payment_manage'], $submenu);
+$menu = admin_menu($LANG['online_payment_manage'], $submenu);
 
-$STATUS = array(0=>'<font color="blue">'.$LANG['unknown_record'].'</font>', 1=>'<font color="red">'.$LANG['pay_success'].'</font>', 2=>$LANG['pay_fail']);
-
-$today = date('Y-m-d');
-
-if($action == 'setting')
+switch ($action)
 {
-	if($dosubmit)
-	{
-		function cache_payonline()
+	case 'list':
+		$page = max(intval($page), 1);
+		$pagesize = $PHPCMS['pagesize'] ? $PHPCMS['pagesize'] : 30;
+		$time = TIME;
+		$paytypes = get_payType(1);
+		if (!empty($payment))		$condition[] = " payment='$payment'";
+		if ( intval($status) )		$condition[] = " `status`   = '$status'" ;
+		if ( 'day' == $sendtime)	$condition[] = " `addtime` = '$time'" ;
+		if ( !empty($username))		$condition[] = " `username` like '%$username%'" ;
+		if (!empty($inputer))		$condition[] = " `inputer`  like '%$inputer%'";
+		if ($ispay >= '0')			$condition[] = " `ispay`	= '$ispay'";
+		if ($addtimebe)				{ $addtimebe = strtotime($addtimebe); $condition[] = " `addtime` >= '$addtimebe' " ;}
+		if ($addtimeend)			{ $addtimeend = strtotime($addtimeend); $condition[] = "`addtime` <= '$addtimeend' " ;}
+		if ($paytimebe)			{ $paidtimebe = strtotime($paidtimebe); $condition[] = "`paytime` >= '$paidtimebe' " ;}
+		if ($paidtimeend)			{ $paidtimeend = strtotime($paidtimeend); $condition[] = "`paytime` <= '$paidtimeend' " ;}
+		$lists = $onlines->get_list( $condition , $page , $pagesize);
+		$pages = $lists['pages'];
+		include admin_tpl('payonline_view');
+	break;
+
+	case 'view':
+		$r = $onlines->view($payid);
+		if(!$r) showmessage($LANG['order_not_exist']);
+		extract($r);
+		$sendtime = date('Y-m-d', $sendtime);
+		$receivetime = $receivetime ? date('Y-m-d', $receivetime) : '';
+		include admin_tpl('payonline_detail');
+	break;
+	case 'check'://审核支付订单
+		$payid = intval($id);
+		$data['ispay'] = '1';
+		if($onlines->check($payid, $data))
 		{
-			global $db;
-			$data = array();
-			$result = $db->query("SELECT * FROM ".TABLE_PAY_SETTING." WHERE enable=1 ORDER BY id");
-			while($r = $db->fetch_array($result))
-			{
-				$data[$r['paycenter']] = $r;
-			}
-			return cache_write('payonline_setting.php', $data);
+			showmessage($LANG['order_verify_success'], $forward);
 		}
-
-		foreach($name as $id=>$v)
+		else
 		{
-			$db->query("UPDATE ".TABLE_PAY_SETTING." SET enable='$enable[$id]',name='$name[$id]',logo='$logo[$id]',sendurl='$sendurl[$id]',receiveurl='$receiveurl[$id]',partnerid='$partnerid[$id]',keycode='$keycode[$id]',percent='$percent[$id]' where id='$id'");
+			showmessage($payonline_list->error());
 		}
-		cache_payonline();
-		showmessage($LANG['operation_success'],$PHP_REFERER);
-	}
-	else
-	{
+	break;
 
-		$settings = array();
-		$result = $db->query("SELECT * FROM ".TABLE_PAY_SETTING." ORDER BY id");
-		while($r = $db->fetch_array($result))
+	case 'delete':
+		if($onlines->drop($amountid))
 		{
-			$receiveurl = linkurl($MOD['linkurl'], 1).$r['paycenter'].".php";
-			if($r['receiveurl'] == '') $r['receiveurl'] = $receiveurl;
-			$settings[] = $r;
+			showmessage('删除成功', '?mod=pay&file=payonline&action=list');
 		}
-		include admintpl('payonline_setting');
-	}
-}
-elseif($action == 'check')
-{
-	$payid = intval($payid);
-	$r = $db->get_one("SELECT * FROM ".TABLE_PAY_ONLINE." WHERE payid=$payid");
-	if(!$r) showmessage($LANG['order_not_exist']);
-	if($r['status'] == 1) showmessage($LANG['order_pay_success_no_need_verify']);
-	$amount = $r['amount'];
-	$username = $r['username'];
-	$db->query("UPDATE ".TABLE_PAY_ONLINE." SET status=1, receivetime='$PHP_TIME', bank='".$LANG['manual_work_verify']."' WHERE payid=$payid");
-	money_add($username, $amount, 'onlinepay check');
-
-	$r = $db->get_one("SELECT money FROM ".TABLE_MEMBER." WHERE username='$username'");
-	$money = $r['money'];
-	$year = date('Y', $PHP_TIME);
-	$month = date('m', $PHP_TIME);
-	$date = date('Y-m-d', $PHP_TIME);
-	$db->query("INSERT INTO ".TABLE_PAY."(typeid,note,paytype,amount,balance,username,year,month,date,inputtime,inputer,ip) VALUES('1','".$LANG['payment_for_charge']."','".$LANG['online_payment']."','$amount','$money','$username','$year','$month','$date','$PHP_TIME','$_username','$PHP_IP')");
-	showmessage($LANG['order_verify_success'], $forward);
-}
-elseif($action == 'delete')
-{
-	$payid = is_array($payid) ? implode(',', $payid) : intval($payid);
-	$db->query("DELETE FROM ".TABLE_PAY_ONLINE." WHERE payid IN($payid)");
-	showmessage($LANG['order_delete_success'], $forward);
-}
-elseif($action == 'view')
-{
-	$payid = intval($payid);
-	$r = $db->get_one("SELECT * FROM ".TABLE_PAY_ONLINE." WHERE payid=$payid");
-	if(!$r) showmessage($LANG['order_not_exist']);
-    extract($r);
-	$sendtime = date('Y-m-d h:i:s', $sendtime);
-	$receivetime = $receivetime ? date('Y-m-d h:i:s', $receivetime) : '';
-	include admintpl('payonline_view');
-}
-else
-{
-	$page = isset($page) ? intval($page) : 1;
-	$pagesize = $PHPCMS['pagesize'] ? $PHPCMS['pagesize'] : 30;
-	$offset = ($page-1)*$pagesize;
-
-	$sql = isset($status) ? ($status ? " WHERE status=$status " : " WHERE status=0 ") : '';
-	if(isset($date))
-	{
-		$todaytime = strtotime($date.' 00:00:00');
-		$tomorrowtime = strtotime($date.' 23:59:59');
-	    $sql .= $sql ? " and sendtime>=$todaytime and sendtime<=$tomorrowtime" : " where sendtime>=$todaytime and sendtime<=$tomorrowtime";
-	}
-
-	$r = $db->get_one("SELECT count(*) as number FROM ".TABLE_PAY_ONLINE." $sql");
-	$pages = phppages($r['number'], $page, $pagesize);
-
-	$pays = array();
-	$result = $db->query("SELECT * FROM ".TABLE_PAY_ONLINE." $sql ORDER BY payid DESC LIMIT $offset,$pagesize");
-	while($r = $db->fetch_array($result))
-	{
-		$pays[] = $r;
-	}
-	include admintpl('payonline');
+	break;
 }
 ?>

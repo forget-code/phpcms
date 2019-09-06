@@ -1,0 +1,48 @@
+{template 'phpcms','header'}
+<style type="text/css" > 
+  optgroup {
+  font-size: 12px;
+  font-style: normal;
+  font-weight: normal;
+  background-color: #F9FDFB;   
+  } 
+</style>
+<div id="main" class="bdr_1" style="background-image:none">
+  <p id="position"><strong>当前位置：</strong><a href="">首页</a>{$catpos($catid)}发布信息</p></div>
+  <form action="contribute.php" method="post" name="myform"  enctype="multipart/form-data">
+    <table cellpadding="0" cellspacing="1" class="table_form" style="width:980px;">
+      <caption>
+      发布信息
+      </caption>
+      <tr>
+        <td width="38%">
+1. 请选择要投递的栏目.<BR>
+2. 如消息为转载,请尽量注明文章来源.无主稿件可能会被暂缓发表. <BR>
+3. 欢迎原创. 您的独家报料与独特视角是编辑与访客的宝贵财富.<BR>
+4. 如果您是本站的忠实支持者，请注册为本站会员<BR>
+5. 会员可以拥有自己的空间，所有您发布的信息将会在这里显示<BR><BR>
+
+还不是会员？<a href="{$MODULE[member][url]}register.php">点击这里注册</a><BR> 已经是会员，<a href="{$MODULE[member][url]}login.php">点击这里登陆</a>
+
+</td>
+        <td>
+		{$categorys}
+		</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+          <input type="hidden" name="contribute" value="1">
+          <input type="submit" name="next" value=" 下一步 ">
+        </td>
+      </tr>
+    </table>
+  </form>
+<script LANGUAGE="javascript">
+<!--
+$().ready(function() {
+	  $('form').checkForm(1);
+	});
+//-->
+</script>
+{template 'phpcms','footer'}

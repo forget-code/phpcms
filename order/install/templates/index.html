@@ -1,0 +1,42 @@
+{template 'member','header'}
+<div id="main">
+  {template 'order' , 'left'}
+  <div id="right">
+    <p id="position"> <strong>当前位置：</strong><a href="">首页</a><a href="{$MODULE[member][url]}">会员中心</a><a href="{$M[url]}">订单</a>我的订单</p>
+    <div class="clear"></div>
+    <div class="clear"></div>
+    <table cellpadding="0" cellspacing="1" class="table_list">
+      <caption>{if isset($status)}{$statusname}{else}全部{/if}订单</caption>
+      <tr>
+        <th>产品</th>
+		<th width="50">数量</th>
+		<th width="80">总金额</th>
+        <th width="105">下单时间</th>
+        <th width="70">状态</th>
+		<th width="120">操作</th>
+      </tr>
+	  {if $data}
+	  {loop $data $r}
+      <tr>
+        <td class="align_l"><a href="{$r[goodsurl]}" target="_blank">{$r[goodsname]}</a></td>
+        <td>{$r[number]}{$r[unit]}</td>
+        <td><b>{$r[amount]}元</b></td>
+        <td style="color:gray">{date('Y-m-d H:i', $r[time])}</td>
+		<td>
+		{$r[statusname]}
+		{if $r['status']==0}<br /><a href="{$M[url]}index.php?action=pay&orderid={$r[orderid]}"><span style="color:red">立即付款</span></a>{elseif $r['status']==2}<br /><a href="{$M[url]}index.php?action=receive&orderid={$r[orderid]}"><span style="color:red">确认收货</span></a>{/if}
+		</td>
+		<td class="align_c">
+		<a href="{$M[url]}index.php?action=view&orderid={$r[orderid]}">查看</a> | <a href="#" href="{$M[url]}index.php?action=memo&orderid={$r[orderid]}">备注</a> | {if $r[status] == 0}<a href="javascript:confirmurl('{url($M[url], 1)}index.php?action=cancel&orderid={$r[orderid]}', '取消该订单')" title="取消订单">取消</a>{else}<font color="#cccccc">取消</font>{/if}
+        </td>
+      </tr>
+      {/loop}
+	  {else}
+		<tr><td colspan="6">暂无记录</td></tr>
+	  {/if}
+    </table>
+    <div id="pages">{$pages}</div>
+  </div>
+</div>
+<div class="clear"></div>
+{template 'member','footer'}

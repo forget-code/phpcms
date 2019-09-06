@@ -1,9 +1,0 @@
-{loop $specials $i $special}
-       <ul id="digg"><li id="img"><a href='{$special[linkurl]}' target='_blank'><img src="{$special[specialpic]}" width="{$imgwidth}" height="{$imgheight}" /></a>
-              <strong><a href='{$special[linkurl]}'>{$special[specialname]}</a></strong>
-             <span>{$special[introduce]}</span></li>
-{/loop}
-<div style="clear:both"></div></ul>
-{if $pages}
-<div class="pages">{$pages}</div>
-{/if}

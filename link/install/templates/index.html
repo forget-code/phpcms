@@ -1,0 +1,50 @@
+{template 'phpcms','header'}
+<style>
+.logo_list a{
+	width:88px;
+	height:31px;
+	display:block;
+	float:left;
+	overflow:hidden;
+	border:3px solid #FFF;
+	margin:10px 12px 2px 8px;
+}
+.logo_list a:hover{
+	border:3px solid #535353;
+}
+.logo_list a img{
+	width:88px;
+	height:31px;
+}
+</style>
+<!--begin main-->
+<div id="main">
+  <div id="main_l" class="bdr_1">
+    <!--位置导航-->
+    <div id="position"><a href="">首页</a><a href="{$M[url]}index.php">友情链接</a></div>
+    {loop $datas $i $type}
+    <div class="cat_1"><a href="{$MODULE[link][url]}index.php?typeid={$type[typeid]}"><img alt="更多" src="images/more.gif"/></a>
+      <h3>{$type[name]}</h3>
+    </div>
+    <div class="logo_list">
+    {loop $link_logos[$type[typeid]] $k $logo}
+    <a href="{$logo[url]}" target="_blank" title="{$logo[introduce]}" onclick="$.get('{$M[url]}count.php?linkid={$logo[linkid]}')" ><img src="{$logo[logo]}" width="88" height="31" alt="{$logo[name]}">{$logo[name]}</a>
+    {/loop}
+    </div>
+    <div class="textlogo_list">
+    {loop $link_words[$type[typeid]] $k $word}
+    <a href="{$word[url]}" target="_blank" title="{$word[introduce]}" onclick="$.get('{$M[url]}count.php?linkid={$word[linkid]}')" >{$word[name]}</a>
+    {/loop}
+    </div>
+    {/loop}
+  </div>
+  <div id="main_r">
+    <h4>友情链接分类</h4>
+    <div id="link_cat"> {loop $datas $i $type} <a href="{$M[url]}index.php?typeid={$type[typeid]}">{$type[name]}</a> {/loop} </div>
+    <div id="link_apply">
+      <input type="submit" value="我要申请链接" onclick="redirect('{$M[url]}register.php')"/>
+    </div>
+  </div>
+</div>
+<!--end main-->
+{template 'phpcms','footer'}

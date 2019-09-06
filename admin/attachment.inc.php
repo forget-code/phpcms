@@ -1,60 +1,79 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
 
-include PHPCMS_ROOT.'/include/attachment.class.php';
+require_once 'attachment.class.php';
+require_once PHPCMS_ROOT.'member/include/member.class.php';
+require_once 'admin/category.class.php';
+$m = new member();
+$a = new attachment();
+$c = new category();
 
-function catname($catid)
+function isimage($fileext)
 {
-	global $db;
-	return $db->get_one("SELECT catname,linkurl FROM ".TABLE_CATEGORY." WHERE catid=$catid");
+	global $a;
+	return in_array($fileext, $a->imageexts);
 }
 
-if($action == 'delete')
+function itemurl($module,$catid,$contentid)
 {
-	if(!isset($aid) || empty($aid)) showmessage($LANG['illegal_operation']);
-	$aid = is_array($aid) ? implode(',', $aid) : $aid;
-	$result = $db->query("SELECT fileurl FROM ".TABLE_ATTACHMENT." WHERE aid IN($aid)");
-	while($r = $db->fetch_array($result))
-	{
-		@unlink(PHPCMS_ROOT.'/'.$r['fileurl']);
-    }
-	$db->query("DELETE FROM ".TABLE_ATTACHMENT." WHERE aid IN($aid)");
-	showmessage($LANG['operation_success'], $forward);
+	return "content.php?module=$module&catid=$catid&contentid=$contentid";
 }
-else
+
+if(!$action) $action = 'manage';
+
+switch($action)
 {
-	$pagesize = $PHPCMS['pagesize'];
-	$page = isset($page) ? intval($page) : 1;
-	$offset = $page == 1 ? 0 : ($page-1)*$pagesize;
+	case 'manage':
+			$where = '1';
+			if(!empty($username))
+			{
+				$userid = $m->get_userid($username);
+				$where = $where . " AND `userid` = '$userid'";
+			}
+			if(!empty($module)){
+				$where .= " AND `module` = '$module'";
+			}
+			if(!empty($catid) && $catid != 0)
+			{
+				$where .= " AND `catid` = '$catid'";
+			}
+			if(!empty($contentid))
+			{
+				$where .= " AND `contentid` = '$contentid'";
+			}
+			if(!empty($field))
+			{
+				$where .= " AND `field` = '$field'";
+			}
+			if(!empty($fileext)){
+				$where .= " AND `fileext` = '$fileext'";
+			}
+			$listorderby = $listorderby ? $listorderby : 'aid DESC';
+			$atts = $a->listinfo($where, '*', $listorderby, $page, 20);
+			include admin_tpl('attachment');
+			break;
+	case 'delete':
+			if(is_array($aid))
+			{
+				$where = "aid in (".implode(',',$aid).")";
+			}
+			else
+			{
+				$aid = intval($aid);
+				if($aid < 1) return false;
+				$where = "aid = $aid";
+			}
 
-    $sql = $keyname = '';
-    if(isset($keyid))
-	{
-		$sql = " WHERE keyid='$keyid' ";
-		$keyname = is_numeric($keyid) ? $CHANNEL[$keyid]['channelname'] : $MODULE[$keyid]['name'];
-
-		$sql .= isset($itemid) ? " AND itemid='$itemid' " : '';
-	}
-	$r = $db->get_one("SELECT count(*) as number FROM ".TABLE_ATTACHMENT." $sql");
-	$pages = phppages($r['number'], $page, $PHPCMS['pagesize']);
-
-	$atts = array();
-	$result = $db->query("SELECT * FROM ".TABLE_ATTACHMENT." $sql ORDER BY aid DESC LIMIT $offset,$pagesize");
-	while($r = $db->fetch_array($result))
-	{
-		if(is_numeric($r['keyid']))
-		{
-			$r['keyname'] = $CHANNEL[$r['keyid']]['channelname'];
-			$r['keyurl'] = $CHANNEL[$r['keyid']]['linkurl'];
-		}
-		else
-		{
-            $r['keyname'] = $MODULE[$r['keyid']]['name'];
-			$r['keyurl'] = $MODULE[$r['keyid']]['linkurl'];
-		}
-		$r['cat'] = catname($r['catid']);
-		$atts[$r['aid']] = $r;
-	}
-	include admintpl('attachment');
+			if($a->delete($where))
+			{
+				showmessage("删除成功！");
+			}
+			else
+			{
+				showmessage("发生错误，未删除成功！");
+			}
+			break;
+	default:
 }
+
 ?>

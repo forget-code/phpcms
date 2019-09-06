@@ -1,5 +1,0 @@
-down/
-down/uploadfile/
-down/pos/
-down/special/
-down/config.inc.php

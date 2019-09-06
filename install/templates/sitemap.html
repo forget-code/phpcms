@@ -1,0 +1,26 @@
+{template 'phpcms','header'}
+<div id="main_full">
+<div id="position"><a href="">首页</a>网站地图</div>
+  <div id="sitemap">
+{loop $CATEGORY $catid $cat}
+	{if $cat[module]=='phpcms' && !$cat[parentid] && !strpos($cat[url], 'ask')}  
+    <h3><a href="{$cat[url]}">{$cat[catname]}</a></h3>
+    <p>
+	{loop $CATEGORY $childid $c}
+	{php $arrcats = explode(',',$c[arrparentid]);}
+	{if in_array($catid,$arrcats)}<span style="width:100px"><a href="{$c[url]}">{$c[catname]}</a></span>{/if}
+	{/loop}
+	</p>
+	{/if}
+{/loop}
+{if isset($MODULE[ask])}
+<h3><a href="{$cat[url]}">问吧</a></h3>
+<p>
+{loop $CATEGORY $catid $cat}
+{if $cat[module]=='ask'}<span style="width:100px"><a href="{$cat[url]}">{$cat[catname]}</a></span>{/if}
+{/loop}
+</p>
+{/if}
+  </div>
+</div>
+{template 'phpcms','footer'}

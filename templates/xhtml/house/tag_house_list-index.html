@@ -1,8 +1,0 @@
-{loop $houses $i $house}
-<div class="fwzsynr"><ul>
-<li class="mcy1"><strong><a href="{$house[linkurl]}" title="{$house[name]}" {$target}>{$house[cut_name]}</a></strong>({$house[isinter]})</li><!--名称 -->
-<!--<li class="mcy2">{$house[areaid]}</li>--><!--区域 -->
-<li class="mcy3">{$house[infocatname]}{$house[housetype]}</li><!--户型 -->
-<li class="mcy2">{if $house['price']}{$house[price]}{$PARS[unit][$house[unit]]}{else}面议{/if}</li><!--价格 -->
-<li class="mcy4" style="text-align: center">{$house[addtime]}</li><!--时间 -->
-</ul><div style="clear:both"></div></div>{/loop}

@@ -1,5 +1,4 @@
 <?php
-
 defined('IN_PHPCMS') or exit('Access Denied');
 
 if($dosubmit)
@@ -9,7 +8,7 @@ if($dosubmit)
 }
 else
 {	
-	@extract(new_htmlspecialchars($MOD));	
-    include admintpl('setting');
+	@extract(new_htmlspecialchars($M));	
+    include admin_tpl('setting');
 }
 ?>

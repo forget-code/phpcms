@@ -1,0 +1,8 @@
+<div class="box_r">
+	<h1>网站公告</h1>
+    <ul>
+		{loop $data $r}
+		<li><a href="{$MODULE[announce][url]}?announceid={$r[announceid]}" {if $target}target="_blank"{/if}>{$r[title]}</a></li>
+		{/loop}
+    </ul>
+</div>

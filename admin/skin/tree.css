@@ -1,0 +1,60 @@
+.p_a{ position:absolute;}
+.p_r{ position:relative; margin-left:2px;}
+#tree_box{width:209px; text-align:left; }
+#tree{ z-index:400; width:209px;}
+#tree_bg{ z-index:200;background-color: #fff;border:#006599 solid 1px;border-right:none}
+#tree_click{z-index:300;background-color: #fff;border:#006599 solid 1px;border-right:none}
+#tree_bg,#tree_click{ height:16px;line-height:16px; overflow:hidden; display:none; width:209px; *width:205px;}
+#tree_bg {background:#eee;}
+.tree_line{background: url(images/elbow-line.gif) repeat-y;  padding-left:16px;}
+.end{padding-left:16px;}
+.s{background-repeat: no-repeat}
+.ss{background-color: #fff}
+.tree_div{font-size:12px;height:18px;line-height:18px;overflow:hidden; *overflow:auto; zoom:1;  margin:0px; cursor:pointer; width:100%; *height:23px; *margin:-4px 0;}
+.tree_img{float:left; margin-right:2px; height:18px; overflow:hidden;}
+.tree_img img{ padding:0 0 0 0; }
+.tree_text{float:left;height:18px; line-height:18px;overflow:hidden; padding-top:3px;}
+
+.help_line_top{height:5px;width:100%;background-color: #B0E1FB;cursor:pointer;border-bottom:#006699 solid 1px; line-height:5px; font-size:5px;}
+.help_line_bottom{height:5px;width:100%;background-color: #B0E1FB;cursor:pointer;border-top:#006699 solid 1px; line-height:5px; font-size:5px;}
+
+.div{position:absolute;z-index:600;right:0px;top:29px;border:#006699 solid 1px;border-top:none;padding:10px;border-right:none;background-color:#fff;display:none; text-align:left;}
+#new_msg{position:absolute;z-index:6000; right:204px; top:12px; background:url(images/bg_newmsg.gif) no-repeat 0 0; width:93px; height:25px; text-align:right;  line-height:25px; display:none;}
+#new_msg img{cursor:pointer;}
+.btn_menu{width:208px;position:absolute;right:0px; top:3px;z-index:999999}
+.btn_menu a{width:22px; height:22px; display:block;float:left; margin-left:2px;}
+.btn_menu_hover,.btn_menu a:hover{ background-color:#f4f4f4; border:1px solid #ccc;}
+.menu_line{text-align: left;margin-top:5px;}
+
+.floor{ overflow: hidden; height: 100px; top:28px; text-align:left;}
+.unselected_s{ background-color: white; cursor:pointer; width:127px;}
+.selected_s{ background-color:#F6FCFF; cursor:pointer; width:127px; }
+/*MSG*/
+#msg_div{width:173px;background-color: #B0E1FB; padding:4px;}
+#msg_div ul{padding-left:4px; height:400px; overflow:auto}
+#msg_div ul li{padding-left:20px;cursor:pointer;}
+#msg_div ul .group{padding-left:0px;}
+#msg_div ul .group div{width:16px; height:16px; float:left;}
+#msg_div ul .group_1{height:24px; background:url(images/icon_j.jpg) no-repeat 0% 42%;}
+#msg_div ul .group_2{height:24px; background:url(images/icon_jj.jpg) no-repeat 0% 42%;}
+.footer{ background:url(images/footer_bg_c.jpg) repeat-x left bottom; height:34px; overflow:hidden; clear:both;}
+.footer_left{ background:url(images/footer_bg_l.jpg) no-repeat; width:5px; height:34px; float:left;}
+.footer_right{ background:url(images/footer_bg_r.jpg) no-repeat; width:5px; height:34px; float:right;}
+.btn{float:left;margin-top:8px;text-align:left;margin-left:20px; _margin-left:10px;}
+.content_i{ border:1px solid #bfd3ef;background-color: #FFFFFF;padding:1px;}
+#adminlist{border:1px solid #BFD3EF;}
+#menu_menu{}
+/*弹出框*/
+input, textarea, select, button, file { font-size:12px; padding-left:2px;}
+.window_1{width:750px; border:2px solid #99d3fb; overflow:hidden;position:absolute; top:93px; z-index:30000; background: #fff; margin-left: -326px; display:none;}
+.window_2{ padding:5px 5px 0; width:740px; height:400px; overflow:auto}
+.window_title { background:#99d3fb; height:22px; line-height:22px; border:0; text-align:left; padding-left:8px; font-size:14px; color:#fff; cursor:move;}
+a.jqmClose{height:16px; width:16px; display:block; float:right; padding-right:10px;}　
+a.jqmClose:link,a.jqmClose:visited{}
+a.jqmClose:hover,a.jqmClose:active{}
+#protocol { line-height:180%; overflow:auto; padding:0px;}
+.window_2 dl{ width:110px; float:left; margin:0 4px; display:block; text-align:left;}
+.window_2 dt{ font-weight:bold; color:#077AC7; font-size:14px; font-weight:bold;}
+.window_2 dd{color:orange;line-height:16px; text-align:left;}
+.window_2 dd a{color:#3399CC;font-size:12px;}
+.c_111{ color:#ccc;}

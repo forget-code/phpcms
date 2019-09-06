@@ -1,68 +1,76 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
 <body>
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
-  <tr>
-    <td ></td>
-  </tr>
-</table>
-<?=$menu?>
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
-  <tr>
-    <td ></td>
-  </tr>
-</table>
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <tr>
-    <th colspan=2>作者添加</th>
-  </tr>
-   <form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&id=<?=$id?>&channelid=<?=$channelid?>" method="post" name="myform">
-    <tr> 
-      <td class="tablerow">作者名称</td>
-      <td class="tablerow">
-<input size=50 name="name" type=text value="<?=$author['name']?>">
-</td>
+<table cellpadding="0" cellspacing="1" class="table_form">
+<form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>" method="post" name="myform">
+    <caption>添加作者</caption>
+ 	<tr> 
+      <th width="20%"><strong>用户名</strong></th>
+      <td><input type="text" name="info[username]" value="<?=$username?>" size="20"> <font color="red">*</font></td>
     </tr>
-	    <tr> 
-      <td class="tablerow">所属栏目</td>
-      <td class="tablerow">
-	  <select name='catid'>
-	  <option value='0'>本频道作者</option>
-	  <?=$cat_option?>
-	  </select>
-</td>
-    </tr>
-<?if($action=='edit') { ?>
 	<tr> 
-	<td class="tablerow">文章总数</td>
-	<td class="tablerow">
-	<input size=50 name="articlenum" type=text value="<?=$author['articlenum']?>">
-	</td>
-	</tr>
-<? } ?>
-
+      <th><strong>姓名</strong></th>
+      <td><input type="text" name="info[name]" value="<?=$name?>" size="15"> <font color="red">*</font></td>
+    </tr>
 	<tr> 
-      <td class="tablerow">作者图片</td>
-      <td class="tablerow">
-	  <input size=50 name="face" type=text value="<?=$author['face']?>"> <input type="button" value="上传图片" onclick="javascript:openwinx('?mod=phpcms&file=uppic&channelid=<?=$channelid?>&uploadtext=face&action=thumb&width=150&height=150','upload','350','350')">
-    </td>
+      <th><strong>照片</strong></th>
+      <td><?=form::upload_image('info[photo]', 'photo', $photo, 40)?></td>
+    </tr>
+	<tr> 
+      <th><strong>性别</strong></th>
+      <td><input type="radio" name="info[gender]" value="1" checked> 男 <input type="radio" name="info[gender]" value="0"> 女</td>
+    </tr>
+	<tr> 
+      <th><strong>生日</strong></th>
+      <td><?=form::date('info[birthday]', $birthday)?></td>
+    </tr>
+	<tr> 
+      <th><strong>E-mail</strong></th>
+      <td><input type="text" name="info[email]" value="<?=$email?>" size="30"></td>
+    </tr>
+	<tr> 
+      <th><strong>QQ</strong></th>
+      <td><input type="text" name="info[qq]" value="<?=$qq?>" size="20"></td>
+    </tr>
+	<tr> 
+      <th><strong>MSN</strong></th>
+      <td><input type="text" name="info[msn]" value="<?=$msn?>" size="30"></td>
+    </tr>
+	<tr> 
+      <th><strong>主页</strong></th>
+      <td><input type="text" name="info[homepage]" value="<?=$homepage?>" size="50"></td>
+    </tr>
+	<tr> 
+      <th><strong>电话</strong></th>
+      <td><input type="text" name="info[telephone]" value="<?=$telephone?>" size="20"></td>
+    </tr>
+	<tr> 
+      <th><strong>地址</strong></th>
+      <td><input type="text" name="info[address]" value="<?=$address?>" size="50"></td>
+    </tr>
+	<tr> 
+      <th><strong>邮编</strong></th>
+      <td><input type="text" name="info[postcode]" value="<?=$postcode?>" size="6"></td>
+    </tr>
+	<tr> 
+      <th><strong>个人简介</strong></th>
+      <td><textarea name="info[introduce]" id="introduce"><?=$introduce?></textarea><?=form::editor('introduce', 'basic', '100%', 350)?></td>
+    </tr>
+	<tr> 
+      <th><strong>禁用</strong></th>
+      <td><input type="radio" name="info[disabled]" value="1"> 是 <input type="radio" name="info[disabled]" value="0" checked> 否</td>
     </tr>
     <tr> 
-      <td class="tablerow">作者简介</td>
-      <td class="tablerow"><textarea name='introduction' cols='60' rows='5'><?=$author['introduction']?></textarea></td>
+      <td></td>
+      <td> 
+	  <input type="hidden" name="forward" value="?mod=<?=$mod?>&file=<?=$file?>&action=manage"> 
+	  <input type="submit" name="dosubmit" value=" 确定 "> 
+      &nbsp; <input type="reset" name="reset" value=" 清除 ">
+	  </td>
     </tr>
-     <tr>
-         <td class="tablerow">推荐</td>
-         <td class="tablerow"><input type='radio' name='elite' value='1' <?if($author['elite']) {?>checked<?}?>> 是 <input type='radio' name='elite' value='0' <?if(!$author['elite']) {?>checked<?}?>> 否</td>
-   </tr>
-    <tr> 
-      <td class="tablerow"></td>
-      <td class="tablerow"> <input type="submit" name="submit" value=" 确定 "> 
-        &nbsp; <input type="reset" name="reset" value=" 清除 "> </td>
-    </tr>
-  </form>
+	</form>
 </table>
 </body>
 </html>

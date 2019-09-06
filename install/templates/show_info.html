@@ -1,0 +1,114 @@
+{template 'phpcms','header'}
+<style type="text/css">
+<!--
+#info_nav{ margin-top:-5px;}
+#info_nav dl{ margin:5px 5px 0;border-bottom:1px dashed #dcdcdc;}
+#info_nav dt{ font-size:14px; font-weight:bold; color:#06c;}
+#info_nav dd a{ margin-right:6px; height:28px; line-height:28px; color:#06c;}
+/*地区*/
+#area{ padding:8px 8px;}
+#area a{margin:0 6px; line-height:180%;}
+a.catname:link,a.catname:visited,a.catname:hover,a.catname:active{color:#f90;}
+#content {width:100%; margin:0 auto;}
+#content_head { height:80px; text-align:center; overflow:hidden; border-bottom:1px solid #B9DFF9; }
+#content_head h1 { font-family:"宋体"; font-size:20px; color:#09c;}
+#text {line-height:24px; border-bottom:1px dotted #B9DFF9; padding-left:20px;}
+#text span{ margin:0 5px;}
+#text a{ float:right; padding-right:10px;}
+#digest { margin:10px; border:1px dashed #ccc;	padding:10px; line-height:200%;}
+#digest strong { color:#f00;}
+#endtext{ text-align:left; overflow:hidden; clear:both; word-wrap:break-word; word-break:break-all; margin-top:10px;}
+#endtext,#endtext p,#endtext li,#down_intro,#content li,.contact li{ font-size:14px; margin:5px; text-indent:2em; line-height:1.8em;}
+#endtext h2 { font-size:18px;}
+#endtext ul{ margin-bottom:20px;}
+#endtext li{ color:#787878;}
+#endtext .icon { border:0; margin:3px 0 0;}
+#endtext img { border:1px solid #ccc;}
+#endtext table { table-layout:fixed;}
+#endtext a { text-decoration:underline;	color:#00c;}
+#endtext a:hover { color:#bc2931;}
+#content h3{ font-size:12px; background-color:#E4F3FC; color:#077ac7; line-height:24px;  padding:0 8px;}
+.contact li{font-size:12px;}
+#commnent_tag{ font-size:14px; padding:10px;}
+#commnent_tag img{ float:right;}
+.align_c { text-align:center;}
+-->
+</style>
+<!--begin main-->
+<div id="main">
+  <!--begin left-->
+  <div id="main_l" class="bdr_1">
+    <div id="position"><a href="">首页</a>{catpos($r[catid])}</div>
+    <div id="content">
+    <h1>{$title}</h1>
+    <div id="text"><a href="javascript:myAddPanel('{$title}',window.location.href)" class="icon_1">收藏本信息</a><span>编号：{$contentid}</span> <span>发布时间：{date('Y-m-d',$r[inputtime])}</span> <span>截止日期：{if $endtime=='0000-00-00'}长期有效{else}{$endtime}{/if}</span> <span>地区：{areaname($r[areaid])}</span></div>
+    <div id="endtext">
+    <p>{$content}</p>
+</div>
+<h3>发布人信息</h3>
+{if $allow_priv}<!--判断阅读权限-->
+	{if $allow_readpoint}<!--判断是否已经扣点-->
+		<ul class="contact">
+		  <li>联系人：{$userid} <a href="{$MODULE[space][url]}?{$r[userid]}" class="red icon_3">查看该用户发布的所有信息</a></li>
+		  <li>电话：{magic_image($telephone)}</li>
+		  <li>邮箱：{magic_image($email)}</li>
+		  <li>地址：{$address}</li>
+		</ul>
+	{else}
+		<span style='padding-left:200px;font-size:14px;'><a href='readpoint.php?contentid={$contentid}'><font color="#0000FF">查看发布人信息需要消耗<font color='red'>{$readpoint}</font>点，您确认查看吗？</font></a></span>
+	{/if}
+{else}
+	<font color="#FF0000">您没有权限阅读</font>
+{/if}
+ </div>
+ {if isset($MODULE[mood])}
+      <div id="moodrank_div"></div>
+      <script  type="text/javascript">var contentid = {$contentid};</script>
+      <script type="text/javascript" id="callback_js"></script>
+      <script type="text/javascript" src="data/moodrank/1.js"></script>
+      {/if}
+      {if isset($MODULE[digg])}
+      {template 'digg','show'}
+      {/if}
+      <div class="clear"></div>
+      {if isset($MODULE[mail])}
+      <form action="{$MODULE[mail][url]}sendmail.php" name="sendmail" id="sendmail">
+        <input type="hidden" name="title" value="推荐：{$title}" />
+        <input type="hidden" name="url" value="'{SITE_URL}{$url}" />
+      </form>
+      {/if}
+        {if isset($MODULE[error_report])}
+      <form action="{$MODULE[error_report][url]}error_report.php" name="errors" id="errors">
+        <input type="hidden" name="title" value="{$title}" />
+      </form>
+      {/if}
+      <p id="text_1">{if isset($MODULE[error_report])}<a href="javascript:$('#errors').submit();">[错误报告]</a>{/if} {if isset($MODULE[mail])}<a href="javascript:$('#sendmail').submit();">[推荐]</a>{/if} <a href="javascript:myAddPanel('{$title}',window.location.href)">[收藏]</a> <a href="javascript:window.print();">[打印]</a> <a href="javascript:window.close();">[关闭]</a> <a href="{SITE_URL}{$url}#top">[返回顶部]</a> </p>
+      <!--评论-->
+      {if isset($MODULE[comment])}
+      {php list($keyid, $verify) = keyid_make('phpcms', 'content', 'title', $contentid);}
+      <div id="commnent_tag"><a href="{$MODULE[comment][url]}?keyid={$keyid}&verify={$verify}"><img src="images/comment.gif" alt=""/></a> 当前共有<strong class="c_red"><span id="comments">0</span></strong>人发表了评论.</div>
+      {/if}
+  </div>
+  <!--end left-->
+  <!--begin right-->
+  <div id="main_r">
+    <div class="align_c"><a href="contribute.php?catid={$r[catid]}"><img src="images/btn_free.jpg" alt="免费发布信息" /></a></div>
+    <h4>推荐信息</h4>
+    <div>
+      <ul class="text_list">
+        {tag_信息模型内容页推荐}
+      </ul>
+    </div>
+	<h4>最新信息</h4>
+    <div>
+      <ul class="text_list">
+        {tag_信息模型内容页最新列表}
+      </ul>
+    </div>
+	<!--{block("list_info", 1)}-->
+  </div>
+  <!--end right-->
+</div>
+<!--end main-->
+<script language="JavaScript" src="count.php?contentid={$contentid}"></script>
+{template 'phpcms','footer'}

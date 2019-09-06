@@ -1,175 +1,139 @@
 <?php
-$mtime = explode(' ', microtime());
-$phpcms_starttime = $mtime[1] + $mtime[0];
-unset($LANG, $HTTP_ENV_VARS, $HTTP_POST_VARS, $HTTP_GET_VARS, $HTTP_POST_FILES, $HTTP_COOKIE_VARS);
-set_magic_quotes_runtime(0);
+define('PHPCMS_ROOT', str_replace("\\", '/', substr(dirname(__FILE__), 0, -7)));
+define('MICROTIME_START', microtime());
 define('IN_PHPCMS', TRUE);
-define('PHPCMS_ROOT', str_replace("\\", '/', substr(dirname(__FILE__), 0, -8)));
-require PHPCMS_ROOT.'/include/global.func.php';
+define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
+define('TIME', time());
+set_include_path(PHPCMS_ROOT.'include/');
+set_magic_quotes_runtime(0);
+unset($LANG, $HTTP_ENV_VARS, $HTTP_POST_VARS, $HTTP_GET_VARS, $HTTP_POST_FILES, $HTTP_COOKIE_VARS);
 
+require 'config.inc.php';
+require 'global.func.php';
+require 'dir.func.php';
+require 'url.func.php';
+require 'output.class.php';
+require 'priv_group.class.php';
+require 'times.class.php';
+require PHPCMS_ROOT.'languages/'.LANG.'/phpcms.lang.php';
 
-require PHPCMS_ROOT.'/config.inc.php';
-require PHPCMS_ROOT.'/languages/'.$CONFIG['language'].'/phpcms.lang.php';
+ERRORLOG ? set_error_handler('phpcms_error') : error_reporting(E_ERROR | E_WARNING | E_PARSE);
 
-define('PHPCMS_PATH', $CONFIG['rootpath']);
-define('PHPCMS_CACHEDIR', $CONFIG['cachedir']);
-define('ALLOWED_HTMLTAGS', '<a><p><br><hr><h1><h2><h3><h4><h5><h6><font><u><i><b><strong><div><span><ol><ul><li><img><table><tr><td><map>');
+define('IP', ip());
+define('HTTP_REFERER', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
+define('SCRIPT_NAME', isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : preg_replace("/(.*)\.php(.*)/i", "\\1.php", $_SERVER['PHP_SELF']));
+define('QUERY_STRING', $_SERVER['QUERY_STRING']);
+define('PATH_INFO', isset($_SERVER['PATH_INFO']) ? $_SERVER['PATH_INFO'] : '');
+define('DOMAIN', isset($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : preg_replace("/([^:]*)[:0-9]*/i", "\\1", $_SERVER['HTTP_HOST']));
+define('SCHEME', $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://');
+define('SITE_URL', SCHEME.$_SERVER['HTTP_HOST'].PHPCMS_PATH);
+define('RELATE_URL', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : SCRIPT_NAME.(QUERY_STRING ? '?'.QUERY_STRING : PATH_INFO));
+define('URL', SCHEME.$_SERVER['HTTP_HOST'].RELATE_URL);
+define('RELATE_REFERER',urlencode(RELATE_URL));
 
-$CONFIG['enablephplog'] ? set_error_handler('phpcms_error') : error_reporting(E_ERROR | E_WARNING | E_PARSE);
+if(function_exists('date_default_timezone_set')) date_default_timezone_set(TIMEZONE);
+header('Content-type: text/html; charset='.CHARSET);
 
-if(function_exists('date_default_timezone_set')) date_default_timezone_set($CONFIG['timezone']);
-header('Content-type: text/html; charset='.$CONFIG['charset']);
-if(getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown'))
-{
-	$PHP_IP = getenv('HTTP_CLIENT_IP');
-}
-elseif(getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), 'unknown'))
-{
-	$PHP_IP = getenv('HTTP_X_FORWARDED_FOR');
-}
-elseif(getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), 'unknown'))
-{
-	$PHP_IP = getenv('REMOTE_ADDR');
-}
-elseif(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown'))
-{
-	$PHP_IP = $_SERVER['REMOTE_ADDR'];
-}
-preg_match("/[\d\.]{7,15}/", $PHP_IP, $ipmatches);
-$PHP_IP = $ipmatches[0] ? $ipmatches[0] : 'unknown';
-$PHP_TIME = time();
-$PHP_SELF = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : (isset($_SERVER['SCRIPT_NAME']) ? $_SERVER['SCRIPT_NAME'] : $_SERVER['ORIG_PATH_INFO']);
-$PHP_QUERYSTRING = $_SERVER['QUERY_STRING'];
-$PHP_DOMAIN = $_SERVER['SERVER_NAME'];
-$PHP_REFERER = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
-$PHP_SCHEME = $_SERVER['SERVER_PORT'] == '443' ? 'https://' : 'http://';
-$PHP_PORT = $_SERVER['SERVER_PORT'] == '80' ? '' : ':'.$_SERVER['SERVER_PORT'];
-$PHP_SITEURL = $PHP_SCHEME.$PHP_DOMAIN.$PHP_PORT.PHPCMS_PATH;
-$PHP_URL = $PHP_SCHEME.$PHP_DOMAIN.$PHP_PORT.$PHP_SELF.($PHP_QUERYSTRING ? '?'.$PHP_QUERYSTRING : '');
-$db_file = $db_class = 'db_'.$CONFIG['database'];
+if(CACHE_PAGE && !defined('IN_ADMIN')) cache_page_start();
+if(GZIP && extension_loaded('zlib')) ini_set('zlib.output_compression', 'On');
+ob_start();
 
-require PHPCMS_ROOT.'/include/'.$db_file.'.class.php';
-require PHPCMS_ROOT.'/include/tag.func.php';
-require PHPCMS_ROOT.'/include/extension.inc.php';
+$dbclass = 'db_'.DB_DATABASE;
+require $dbclass.'.class.php';
 
+$db = new $dbclass;
+$db->connect(DB_HOST, DB_USER, DB_PW, DB_NAME, DB_PCONNECT, DB_CHARSET);
 
-if(!@include PHPCMS_ROOT.'/include/session_'.$CONFIG['database'].'.class.php')
-{
-	if($CONFIG['sessionsavepath']) session_save_path($CONFIG['sessionsavepath']);
-	session_start();
-}
-
-$db = new $db_class;
-$db->connect($CONFIG['dbhost'], $CONFIG['dbuser'], $CONFIG['dbpw'], $CONFIG['dbname'], $CONFIG['pconnect']);
-$db->iscache = $CONFIG['dbiscache'];
-$db->expires = $CONFIG['dbexpires'];
-
-$magic_quotes_gpc = get_magic_quotes_gpc();
+require 'session_'.SESSION_STORAGE.'.class.php';
+$session = new session();
+session_set_cookie_params(0, COOKIE_PATH, COOKIE_DOMAIN);
 
 if($_REQUEST)
 {
-	if($magic_quotes_gpc)
+	if(MAGIC_QUOTES_GPC)
 	{
-		$_REQUEST = new_stripslashes($_REQUEST);	
+		$_REQUEST = new_stripslashes($_REQUEST);
 		if($_COOKIE) $_COOKIE = new_stripslashes($_COOKIE);
 	}
 	if(!defined('IN_ADMIN')) $_REQUEST = filter_xss($_REQUEST, ALLOWED_HTMLTAGS);
-	@extract($db->escape($_REQUEST), EXTR_SKIP);	
+	extract($db->escape($_REQUEST), EXTR_SKIP);
 	if($_COOKIE) $db->escape($_COOKIE);
-	unset($_REQUEST);
+}
+if(QUERY_STRING && strpos(QUERY_STRING, '=') === false && preg_match("/^(.*)\.(htm|html|shtm|shtml)$/", QUERY_STRING, $urlvar))
+{
+	parse_str(str_replace(array('/', '-', ' '), array('&', '=', ''), $urlvar[1]));
 }
 
+$CACHE = cache_read('common.php');
+if(!$CACHE)
+{
+	require_once 'cache.func.php';
+	cache_all();
+	$CACHE = cache_read('common.php');
+}
+extract($CACHE);
+unset($CACHE);
+
+if($PHPCMS['enable_ipbanned'] && ip_banned(IP)) showmessage($LANG['administrator_banned_this_IP']);
 if(!defined('IN_ADMIN'))
 {
-	if($CONFIG['dbiscache']) $db_file .= '_cache';
-	if($CONFIG['phpcache'] == '2')
+	if(FILTER_ENABLE && filter_word()) showmessage('The content including illegal information: '.ILLEGAL_WORD.' .');
+    if($PHPCMS['minrefreshtime'])
 	{
-		$cachefileid = md5($PHP_SELF.'?'.$PHP_QUERYSTRING);
-		$cachefiledir = PHPCMS_ROOT.'/data/phpcache/'.substr($cachefileid, 0, 2).'/';
-		$cachefile = $cachefiledir.$cachefileid.'.html';
-		if(file_exists($cachefile) && ($PHP_TIME < @filemtime($cachefile) + $CONFIG['phpcacheexpires']))
-		{
-			require $cachefile;
-			exit;
-		}
+		$cc = new times();
+		$cc->set('cc', $PHPCMS['minrefreshtime'], 1);
+		if($cc->check()) showmessage('Do not refresh the page in '.$PHPCMS['minrefreshtime'].' seconds!');
+		$cc->add();
+		unset($cc);
 	}
-	if($PHP_QUERYSTRING && preg_match("/^(.*)\.(htm|html|shtm|shtml)$/", $PHP_QUERYSTRING, $urlvar))
-	{
-		parse_str(str_replace(array('/', '-', ' '), array('&', '=', ''), $urlvar[1]));
-	}	
+    if(!isset($forward)) $forward = HTTP_REFERER;
 }
 
-if(!cache_read('table.php'))
-{
-	require_once PHPCMS_ROOT.'/include/cache.func.php';
-    cache_all();
-}
-$CACHE = cache_read('common.php');
-$MODULE = $CACHE['module'];
-$CHANNEL = $CACHE['channel'];
-$PHPCMS = $CACHE['phpcms'];
-$FIELD = $CACHE['field'];
-unset($CACHE, $ipmatches, $CONFIG['timezone'], $CONFIG['cachedir'], $CONFIG['dbhost'], $CONFIG['dbuser'], $CONFIG['dbpw'], $CONFIG['pconnect'], $CONFIG['dbiscache'], $CONFIG['dbexpires']);
-
-if($PHPCMS['enablebanip'] && ip_banned($PHP_IP)) showmessage($LANG['administrator_banned_this_IP']);
-
-$TEMP = $MOD = $CHA = $CATEGORY = $CAT = array();
-$ftp = $enableftp = $tags = $html = 0;
-if(!isset($mod))
-{
-	$mod = 'phpcms';
-}
-elseif($mod != 'phpcms')
+$M = $TEMP = array();
+if(!isset($mod)) $mod = 'phpcms';
+if($mod != 'phpcms')
 {
 	isset($MODULE[$mod]) or exit($LANG['module_not_exists']);
-	$MOD = cache_read($mod.'_setting.php');
-	@include PHPCMS_ROOT.'/languages/'.(defined('IN_ADMIN') ? $CONFIG['adminlanguage'].'/'.$mod.'_admin.lang.php' : $CONFIG['language'].'/'.$mod.'.lang.php');
-}
-if(!isset($forward)) $forward = $PHP_REFERER;
-$dosubmit = isset($dosubmit) ? 1 : 0;
-$channelid = isset($channelid) ? intval($channelid) : 0;
-$skindir = PHPCMS_PATH.'templates/'.$CONFIG['defaulttemplate'].'/skins/'.$CONFIG['defaultskin'];
-if($PHPCMS['enablegzip'] && function_exists('ob_gzhandler'))
-{
-	($CONFIG['phpcache'] || defined('SHOWJS')) ? ob_start() : ob_start('ob_gzhandler');
-}
-else
-{
-	$PHPCMS['enablegzip'] = 0;
-	ob_start();
+	$langfile = defined('IN_ADMIN') ? $mod.'_admin' : $mod;
+	@include PHPCMS_ROOT.'languages/'.LANG.'/'.$langfile.'.lang.php';
+	$M = cache_read('module_'.$mod.'.php');
 }
 
 $_userid = 0;
 $_username = '';
 $_groupid = 3;
-$_arrgroupid = array();
-$phpcms_auth = getcookie('auth');
+$phpcms_auth = get_cookie('auth');
 if($phpcms_auth)
 {
-	$phpcms_auth_key = md5($PHPCMS['authkey'].$_SERVER['HTTP_USER_AGENT']);
-	list($_userid, $_password, $_answer) = $phpcms_auth ? explode("\t", phpcms_auth($phpcms_auth, 'DECODE')) : array(0, '', '');
+	$auth_key = md5(AUTH_KEY.$_SERVER['HTTP_USER_AGENT']);
+	list($_userid, $_password) = explode("\t", phpcms_auth($phpcms_auth, 'DECODE', $auth_key));
 	$_userid = intval($_userid);
-	if($_userid < 0) $_userid = 0;
-	if($_userid)
+	$sql_member = "SELECT * FROM `".DB_PRE."member_cache` WHERE `userid`=$_userid";
+	$r = $db->get_one($sql_member);
+	if(!$r && cache_member())
 	{
-		$memberinfo = $db->get_one("SELECT username,password,groupid,arrgroupid,email,chargetype,begindate,enddate,money,point,credit,newmessages FROM ".TABLE_MEMBER." WHERE userid=$_userid LIMIT 0,1");
-		if($memberinfo && $memberinfo['password'] == $_password)
-		{
-			if($memberinfo['groupid'] == 2)
-			{
-                mkcookie('auth', '');
-				showmessage($LANG['userid_banned_by_administrator']);
-			}
-			@extract($memberinfo, EXTR_PREFIX_ALL, '');
-			unset($memberinfo, $_password, $_answer);
-			$_arrgroupid = $_arrgroupid ? array_filter(explode(',', $_arrgroupid)) : array(); 
-		}
-		else
-		{
-			mkcookie('auth', '');
-		}
+		$r = $db->get_one($sql_member);
 	}
+	if($r && $r['password'] === $_password)
+	{
+		if($r['groupid'] == 2)
+		{
+			set_cookie('auth', '');
+			showmessage($LANG['userid_banned_by_administrator']);
+		}
+		@extract($r, EXTR_PREFIX_ALL, '');
+	}
+	else
+	{
+		$_userid = 0;
+		$_username = '';
+		$_groupid = 3;
+		set_cookie('auth', '');
+	}
+	unset($r, $phpcms_auth, $phpcms_auth_key, $_password, $sql_member);
 }
-if(isset($page)) $page = max(intval($page), 1);
-unset($db_class, $db_file, $phpcms_auth, $phpcms_auth_key, $memberinfo);
+$G = cache_read('member_group_'.$_groupid.'.php');
+$priv_group = new priv_group();
+define('SKIN_PATH', 'templates/'.TPL_NAME.'/skins/'.TPL_CSS.'/');
+define('PASSPORT_ENABLE', ($PHPCMS['uc'] || $PHPCMS['enablepassport'] || $PHPCMS['enableserverpassport']) ? 1 : 0);
 ?>

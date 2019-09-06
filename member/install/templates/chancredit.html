@@ -1,0 +1,89 @@
+{template 'member','header'}
+<link href="{SKIN_PATH}modal.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="images/js/jqModal.js"></script>
+<script language="javascript" src="images/js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="images/js/validator.js"></script>
+<div id="main">
+{template "member","left"}
+<div id="right">
+<p id="position"> <strong>当前位置：</strong><a href="{$M[url]}index.php">会员中心</a>积分兑换</p>
+<form name="myform" method="post" action="{$M[url]}changecredit.php">
+<input type="hidden" name="toappid" id="toappid" />
+<input type="hidden" name="tocreditid" id="tocreditid" require="true" datatype="require" msg="请选择需要兑换的对象" msgid="toid" />
+<table cellpadding="0" cellspacing="1" class="table_form">
+	<caption>积分兑换</caption>
+    <tr id="point">
+    	<th width="20%"><strong>目前您的积分数：</strong></th>
+        <td>{$_point}</td>
+    </tr>
+    <tr id="amount" style="display:none;">
+    	<th width="20%"><strong>目前您的金钱数：</strong></th>
+        <td>{$_amount}</td>
+    </tr>
+    <tr>
+    	<th width="20%"><strong>支出：</strong></th>
+    	<td>
+        	<input type="text" name="fromcredit" id="fromcredit" require="true" datatype="require|currency|ajax" url="{$M[url]}changecredit.php?action=checkcredit" param="" msg="支出不能为空！|支出格式必须为数字|" msgid="err" /> 
+        	<select name="fromcreditid" id="fromcreditid">
+            	<option value="1" title="点数">点数</option>
+                <option value="2" title="金钱">金钱</option>
+            </select>
+            <span id="err"></span>
+        </td>
+    </tr>
+    <tr>
+    	<th><strong>兑换为：</strong></th>
+        <td>
+            <?=form::select($arr_select, 'tocreditname', 'tocreditname')?><span id="toid"></span>
+        </td>
+    </tr>
+    <tr>
+    	<th><strong>登录密码：</strong></th>
+        <td><input type="password" name="password" require="true" datatype="limit" min="6" max="16" msg="密码不得少于6个字符或超过16个字符！" /></td>
+    </tr>
+    <tr>
+    	<th></th>
+        <td>
+        	<input type="submit" name="dosubmit" value="确定" />
+            <input type="reset" name="reset" value=" 重置 " />
+        </td>
+    </tr>
+</table>
+</form>
+</div>
+</div>
+{template 'member','footer'}
+<script language="javascript">
+$().ready(function() {
+	$('form').checkForm(1);
+});
+
+$('#fromcreditid').change(function(){
+	if($('#fromcreditid').val() == 1)
+	{
+		$('#point').show();
+		$('#amount').hide();
+	}
+	else if($('#fromcreditid').val() == 2)
+	{
+		$('#point').hide();
+		$('#amount').show();
+	}
+});
+
+$('#fromcredit').blur(function() {
+	var fromcreditid = $('#fromcreditid').val();
+	var param = 'fromcreditid=' + fromcreditid;
+	$('#fromcredit').attr('param', param);
+});
+
+$('#tocreditname').change(function() {
+	var value = $('#tocreditname').val();
+	var arr = value.split('|');
+	if(arr[1] != 'undefined')
+	{
+		$('#toappid').val(arr[0]);
+		$('#tocreditid').val(arr[1]);
+	}
+});
+</script>

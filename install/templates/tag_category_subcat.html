@@ -1,0 +1,4 @@
+{php $data = subcat($module, $catid);}
+{loop $data $n $r}
+{if $r[ismenu]}<a href="{$r[url]}" target="{$target}"><span>{$r[catname]}</span></a>{/if}
+{/loop}

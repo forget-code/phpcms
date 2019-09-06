@@ -1,17 +1,21 @@
-INSERT INTO `phpcms_module` ( `name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('评论', 'comment', 'comment', '', 0, 0, 1, '1.0.0', 'phpcms', 'www.phpcms.cn', 'phpcms@163.com', 'comment', '', '', '', 0, '0000-00-00', '0000-00-00', '0000-00-00');
+INSERT INTO `phpcms_module` (`module`, `name`, `path`, `url`, `iscore`, `version`, `author`, `site`, `email`, `description`, `license`, `faq`, `tagtypes`, `setting`, `listorder`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('comment', '评论', 'comment/', '', 0, '1.0.0.0', 'Phpcms Team', 'http://www.phpcms.cn/', 'phpcms@163.com', '', '', '', '', 'array (\n  ''ischecklogin'' => ''1'',\n  ''ischeckcomment'' => ''0'',\n  ''enablecheckcode'' => ''1'',\n  ''maxnum'' => ''10'',\n  ''enabledkey'' => '','',\n)', 0, 0, '2008-10-28', '2008-10-28', '2008-10-28');
+
 DROP TABLE IF EXISTS `phpcms_comment`;
 CREATE TABLE `phpcms_comment` (
-  `cid` int(10) unsigned NOT NULL auto_increment,
-  `keyid` varchar(20) NOT NULL default '0',
-  `itemid` int(10) unsigned NOT NULL default '0',
-  `username` varchar(30) NOT NULL default '',
+  `commentid` int(10) unsigned NOT NULL auto_increment,
+  `keyid` varchar(50) NOT NULL,
+  `userid` mediumint(8) unsigned NOT NULL default '0',
+  `username` varchar(20) NOT NULL,
   `score` tinyint(1) unsigned NOT NULL default '0',
-  `support` int(8) NOT NULL default '0',
-  `against` int(8) NOT NULL default '0',
+  `support` smallint(5) unsigned NOT NULL default '0',
+  `against` smallint(5) unsigned NOT NULL default '0',
   `content` text NOT NULL,
-  `ip` varchar(15) NOT NULL default '',
+  `ip` varchar(15) NOT NULL default '0.0.0.0',
   `addtime` int(10) unsigned NOT NULL default '0',
-  `passed` tinyint(1) unsigned NOT NULL default '0',
-  PRIMARY KEY  (`cid`),
-  KEY `comment` (`keyid`,`itemid`,`passed`,`cid`)
-) TYPE=MyISAM ;
+  `status` tinyint(1) unsigned NOT NULL default '0',
+  PRIMARY KEY  (`commentid`),
+  KEY `keyid` (`keyid`,`status`,`commentid`),
+  KEY `userid` (`userid`,`status`,`commentid`),
+  KEY `ip` (`ip`,`status`,`commentid`),
+  KEY `status` (`status`,`commentid`)
+) TYPE=MyISAM;

@@ -1,50 +1,47 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
 ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8>" />
+<title>Phpcms2008 网站管理系统后台登录</title>
+<script language="javascript" src="data/config.js"></script>
+<script language="javascript" src="images/js/jquery.min.js"></script>
+<script language="javascript" src="images/js/common.js"></script>
+<script language="JavaScript" src="images/js/login.js"></script>
+<style type="text/css">
+<!--
+*{margin:0; padding:0;}
+body {font-family: Arial, Helvetica, sans-serif,"宋体"; font-size: 12px;line-height: 210%;font-weight: normal;color: #333333;text-decoration: none;background: #0cf url(images/03.jpg) repeat-x 0 0 ;}
+li{ list-style:none;}
+input {	font-family:"宋体";	font-size:12px;	border:1px solid #dcdcdc;height:18px;line-height:18px; padding-left:2px;}
+#main{ background:url(images/01.jpg) no-repeat 300px 0; width:930px; min-height:600px; height:600px; overflow:hidden; margin:0 auto; position:relative;}
+#login_box{	width:278px; height:138px; background:url(images/02.jpg) no-repeat 0 0;	position:absolute; top:228px; left:380px; padding-left:50px; padding-top:50px;line-height:138px;}
+#login_box ul li{ line-height:32px; height:32px;}
+.btn{ background:url(images/05.gif) no-repeat 0 0; height:20px; width:58px; border:0; cursor:pointer; color:#fff; line-height:20px;}
+-->
+</style>
+</head>
 <body onload="javascript:document.myform.username.focus();">
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="50">
-  <tr>
-    <td ></td>
-  </tr>
-</table>
-<table cellpadding="0" cellspacing="0" border="0" width="500" align='center'>
-  <tr>
-    <td >
-<table border='0' cellpadding='1' cellspacing='1' align='center' class="tableborder">
-  <tr>
-    <th colspan=2>PHPCMS <?=PHPCMS_VERSION?> 网站管理登录</th>
-  </tr>
-  <form name="myform" method="post" action="?mod=phpcms&file=login" onsubmit="document.myform.phpcms_user.value = escape(document.myform.username.value);return true;">
-    <tr> 
-      <td align="right"  class="tablerow" width="40%">帐号</td>
-      <td class="tablerow">
-	  <input name="username" type="text" size="15" value="<?=$username?>">
-	  <input type="hidden" name="phpcms_user" id="phpcms_user" />
-	  </td>
-    </tr>
-    <tr> 
-      <td align="right"  class="tablerow">密码</td>
-      <td  class="tablerow"><input name="password" type="password" size="15" value="<?=$password?>"></td>
-    </tr>
-<?php if($PHPCMS['enableadmincheckcode']){?>
-    <tr> 
-      <td align="right" class="tablerow">验证码</td>
-      <td class="tablerow" height="29"><input name="checkcodestr" type="text" size="15">
-	  <img src="<?=PHPCMS_PATH?>checkcode.php" id="checkcode" onclick="this.src='<?=PHPCMS_PATH?>checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/>
-	  </td>
-    </tr>
+<div id="main">
+  <div id="login_box">
+    <ul>
+    <form name="myform" method="post" action="?mod=phpcms&file=login" onsubmit="return loginCheck(this);">
+      <li>用户名：<input name="username" type="text" size="20" value="<?=$username?>" maxlength="20"></li>
+	  <li>密　码：<input name="password" type="password" size="20" value="<?=$password?>" maxlength="32"></li>
+<?php if($code->check()){?>
+      <li>验证码：<?=form::checkcode('checkcodestr', 8)?></li>
 <?php } ?>
-    <tr> 
-      <td align="center"  class="tablerow"></td>
-      <td  class="tablerow">
-	  <input type="hidden" name="forward" value="<?=$forward?>">
-	  <input type="submit" name="dosubmit" value=" 登录 "> 
-	  <input type="reset" name="Reset" value=" 清除 "></td>
-    </tr>
-</table>
-</td>
-  </tr>
-</table>
+      <li style=" padding-left:48px;">
+	    <input type="hidden" name="cookietime" value="0" />
+	    <input type="hidden" name="forward" value="<?=$forward?>">
+	    <input type="submit" name="dosubmit" value=" 登录 " class="btn"> 
+	    <input type="reset" name="reset" value=" 清除 " class="btn">
+      </li>
+    </form>
+    </ul>
+  </div>
+</div>
 </body>
 </html>

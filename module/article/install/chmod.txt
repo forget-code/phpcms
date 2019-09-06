@@ -1,5 +1,0 @@
-article/
-article/uploadfile/
-article/pos/
-article/special/
-article/config.inc.php

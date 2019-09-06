@@ -1,4 +1,0 @@
-<!--{loop $products $k $product}-->
-<li class="cpnnn"><a href="{$product[linkurl]}" title="{$product[pdt_name]}" {$target}><img src="{$product[pdt_thumb]}" width="{$imgwidth}" height="{$imgheight}" border="0" {if $showalt} alt="{$product[alt]}" {/if} hspace="5" /></a>
-<!--{if $showtitle}--><a href="{$product[linkurl]}" title="{$product[pdt_name]}" {$target}><strong>{$product[cut_pdt_name]}</strong></a><br/><!--{/if}-->
-<!--{if $showprice}-->&yen;：{$product[price]}<!--{/if}--></li><!--{/loop}-->

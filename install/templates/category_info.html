@@ -1,0 +1,59 @@
+{template 'phpcms','header'}
+<div id="submenu">{tag_栏目页子菜单}</div>
+<!--begin main-->
+<div id="main">
+  <!--begin left-->
+  <div id="main_l">
+    <!--begin 焦点图片,信息-->
+    <div class="cribox_top"></div>
+    <div class="cribox_bdr">
+      <!--幻灯片-->
+      <div id="slide">{tag_信息栏目幻灯片}</div>
+      <!--热点文章-->
+      <div class="f_r w_310">
+        <ul class="text_list">
+		{tag_信息栏目推荐列表}
+        </ul>
+      </div>
+    </div>
+    <div class="cribox_btm"></div>
+    <div class="ad mar_10" id="topbanner"><script language="javascript" src="data/js.php?id=1"></script></div>
+<!--{loop $arrchildid $cid $c}-->
+    <div class="cat_info">
+      <div class="cat_title"><a href="{$c[url]}"><img src="images/more.gif" alt="更多" /></a>
+        <h3>{$c[catname]}</h3>
+      </div>
+      <ul class="text_list">
+        {tag_信息栏目页循环列表}
+      </ul>
+    </div>
+<!--{/loop}-->
+  </div>
+  <!--end left-->
+  <!--begin right-->
+  <div id="main_r">
+    <div style="text-align:center;"><a href="contribute.php?catid={$catid}"><img src="images/btn_free.jpg" alt="免费发布信息" /></a></div>
+	<h4>信息分类</h4>
+    <div id="info_nav">
+	{loop $catlist $c}
+      <dl>{php $cols=1;}
+        {if $c[parentid]==$catid}<dt><a href="{$c[url]}">{$c[catname]}</a></dt>
+			<dd>{loop $catlist $cat}
+			{if $cols<4 && $cat[parentid]==$c[catid]}<a href="{$c[url]}">{$c[catname]}</a>{/if}
+			{php $cols++;}
+			{/loop}<a href="{$c[url]}">>></a></dd>
+		{/if}
+      </dl>
+	{/loop}
+    </div>
+    <h4>按地区浏览</h4>
+    <div id="area">
+	{loop $AREA $a}
+	{php if($a[parentid]==1) break;}
+	<a href="area.php?areaid={$a[areaid]}&catid={$catid}">{$a[name]}</a>{/loop}
+	</div>
+  </div>
+  <!--end right-->
+</div>
+<!--end main-->
+{template 'phpcms','footer'}

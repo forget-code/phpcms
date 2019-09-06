@@ -210,8 +210,8 @@
 			{
 				var imagesrc = transport.responseText.replace(/^url:/i,'');
 				$('processlayer').style.display="";				
-				$('processid').src=$('phpcms_path').value+imagesrc;
 				$('fished').innerHTML = "<input type=\"button\" value=\"完成\" onclick=\"completeImage();window.returnValue='"+imagesrc+"';\" />";
+				$('processid').src=$('phpcms_path').value+imagesrc;
 				ImageRelUrl = imagesrc;
 				ImageAbsUrl = $('processid').src;
 				$('processcompleteid').style.display="";

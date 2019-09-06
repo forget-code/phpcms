@@ -1,0 +1,14 @@
+<div class="titles" id="xinqing">
+ <h3>投票结果：</h3>
+  <ul id="column">
+{loop $infos $info}
+<li>
+{if $info['number']}{$info[number]}{else}0{/if}人
+   <div>
+           <img src="images/moodrank.gif" height="{$info[height]}" title="{$info[number]}人" >
+   </div>
+{$info[title]}
+</li>
+{/loop}
+  </ul>
+</div>

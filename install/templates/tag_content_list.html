@@ -1,0 +1,10 @@
+<div class="mar_10">
+<ul class="text_list text_list_f14">
+{loop $data $n $r}
+<li><span class="date">{date('Y-m-d', $r[inputtime])}</span>
+ {if $showcatname}<a href="{$CATEGORY[$r[catid]][url]}" class="catname">[{$CATEGORY[$r[catid]][catname]}]</a>{/if} <a href="{$r[url]}" target="{$target}" class="{$class}">{str_cut($r[title], $titlelen)}</a>
+</li>
+{/loop}
+</ul>
+</div>
+{if $pages}<p id="pages">{$pages}</p>{/if}

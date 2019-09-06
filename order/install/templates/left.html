@@ -1,0 +1,16 @@
+<div id="left">
+    <div id="treemenu">
+      <h5>订单管理</h5>
+      <ul>
+        <li><a href="{$M[url]}index.php?action=manage">全部订单</a></li>
+		{loop $order->STATUS $k $v}
+        <li class="centermenu"><a href="{$M[url]}index.php?action=manage&status={$k}">{$v}订单</a></li>
+		{/loop}
+        <li><a href="{$M[url]}deliver.php">收货地址</a></li>
+      </ul>
+    </div>
+    <ol>
+      <li class="local"><a href="{SITE_URL}">返回网站首页</a></li>
+      <li class="exit"><a href="{$MODULE['member']['url']}logout.php">退出登录</a></li>
+    </ol>
+</div>

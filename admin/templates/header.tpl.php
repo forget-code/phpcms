@@ -1,8 +1,13 @@
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?=$CONFIG['charset']?>">
-<title><?=$PHPCMS['sitename']?>网站管理 - Power by PHPCMS <?=PHPCMS_VERSION?></title>
-<link href="<?=PHPCMS_PATH?>admin/skin/style.css" rel="stylesheet" type="text/css">
-<script type="text/javaScript" src="<?=PHPCMS_PATH?>include/js/common.js"></script>
-<script type="text/javaScript" src="<?=PHPCMS_PATH?>include/js/prototype.js"></script>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8>">
+<title><?=$pagetitle?></title>
+<link href="admin/skin/system.css" rel="stylesheet" type="text/css">
+<script type="text/javaScript" src="data/config.js"></script>
+<script type="text/javaScript" src="images/js/jquery.min.js"></script>
+<script type="text/javaScript" src="images/js/css.js"></script>
+<script type="text/javaScript" src="images/js/common.js"></script>
+<script type="text/javaScript" src="images/js/admin.js"></script>
+<script type="text/javascript" src="images/js/validator.js"></script>
+<script type="text/javascript" src="images/js/form.js"></script>
 </head>

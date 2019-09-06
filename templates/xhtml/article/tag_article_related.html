@@ -1,6 +1,0 @@
-{loop $articles $article}
-<li>{if $datetype}<span class="datetime f_r">{$article[adddate]}</span>{/if}
-· <a href="{$article[linkurl]}" class="tag_title_link">{$article[title]}</a>
-{if $article['showcommentlink']}&nbsp;<a href="{$MODULE['comment']['linkurl']}index.php?keyid={$channelid}&itemid={$article[articleid]}&itemurl={$urlencode($article[linkurl])}&title={$urlencode($article[title])}" target="_blank"><span class="font_red">评</span></a> {/if}
-</li>
-{/loop}

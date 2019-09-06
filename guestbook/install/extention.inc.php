@@ -1,0 +1,15 @@
+<?php
+defined('IN_PHPCMS') or exit('Access Denied');
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(5, '留言板', '', '', '', '_self', '', '', '', '', 1, 0, 0, 0, 'guestbook');");
+$parentid = $db->insert_id();
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$parentid.", '管理留言板', '', '?mod=guestbook&file=guestbook&action=manage', '', 'right', '', '', '', '', 0, 0, 0, 0, 'guestbook');");
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$parentid.", '模块配置', '', '?mod=guestbook&file=setting', '', 'right', '', '', '', '', 0, 0, 0, 0, 'guestbook');");
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$parentid.", '权限设置', '', '?mod=guestbook&file=priv', '', 'right', '', '', '', '', 0, 0, 0, 0, 'guestbook');");
+
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(7, '留言板', '', '', '', '_self', '', '', '', '', 1, 0, 0, 0, 'guestbook');");
+$parentid = $db->insert_id();
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$parentid.", '新建模板', '', '?mod=phpcms&file=template&action=add&module=guestbook', '', 'right', '', '', '', '', 0, 0, 0, 0, 'guestbook');");
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$parentid.", '管理模板', '', '?mod=phpcms&file=template&action=manage&module=guestbook', '', 'right', '', '', '', '', 0, 0, 0, 0, 'guestbook');");
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$parentid.", '添加标签', '', '?mod=guestbook&file=tag&action=add', '', 'right', '', '', '', '', 0, 0, 0, 0, 'guestbook');");
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$parentid.", '管理标签', '', '?mod=guestbook&file=tag&action=manage', '', 'right', '', '', '', '', 0, 0, 0, 0, 'guestbook');");
+?>

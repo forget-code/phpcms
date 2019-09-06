@@ -1,307 +1,210 @@
-<?php 
+<?php
 defined('IN_PHPCMS') or exit('Access Denied');
+require_once MOD_ROOT.'admin/include/member_admin.class.php';
+$member = new member_admin();
 
-require_once MOD_ROOT.'/include/member.class.php';
-require_once MOD_ROOT.'/admin/include/member_admin.class.php';
+require_once MOD_ROOT.'admin/include/model_member.class.php';
+$model = new member_model;
 
-if(!isset($username)) $username = '';
-$member = new member_admin($username);
+require_once MOD_ROOT.'admin/include/model_member_field.class.php';
+require_once 'attachment.class.php';
+$attachment = new attachment($mod);
 
-require_once PHPCMS_ROOT.'/include/field.class.php';
-$field = new field($CONFIG['tablepre'].'member_info');
+require_once MOD_ROOT.'admin/include/group_admin.class.php';
+$group_admin = new group_admin();
 
-$GROUP = cache_read('member_group.php');
-
-$submenu = array
-(
-	array($LANG['approval_new_member'], '?mod='.$mod.'&file='.$file.'&action=check'),
-	array($LANG['member_manage'], '?mod='.$mod.'&file='.$file.'&action=manage'),
-	array($LANG['search_member'], '?mod='.$mod.'&file='.$file.'&action=search'),
-	array($LANG['add_member'], '?mod='.$mod.'&file='.$file.'&action=add'),
-);
-
-$menu = adminmenu($LANG['member_manage'], $submenu);
+if(!$forward) $forward = "?mod=$mod&file=$file&action=manage";
+$ext_group = cache_read('member_group_extend.php');
 
 switch($action)
 {
     case 'add':
 		if($dosubmit)
 		{
-			if(is_badword($username)) showmessage($LANG['username_non_compliant']);
-			if(strlen($password)<2 || strlen($password)>20) showmessage($LANG['password_not_less_than_2char_greater_than_20char']);
-			if(!is_email($email)) showmessage($LANG['input_valid_email']);
-			if(empty($question) || strlen($question)>50) showmessage($LANG['input_password_clue_question']);
-			if(empty($answer) || strlen($answer)>50) showmessage($LANG['input_password_clue_answer']);
-			$gender = $gender==1 ? 1 : 0;
-			$showemail = isset($showemail) ? 1 : 0;
-			$byear = intval($byear);
-			$byear = $byear==19 ? '0000' : $byear;
-			$bmonth = intval($bmonth);
-			$bday = intval($bday);
-
-			$birthday = $byear."-".$bmonth."-".$bday;
-			if(!preg_match("/[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}/", $birthday)) $birthday = "0000-00-00";
-
-			if($msn && !is_email($msn)) showmessage($LANG['input_valid_msn']);
-			if(!empty($qq) && (!is_numeric($qq) || strlen($qq)>20 || strlen($qq)<5)) showmessage($LANG['input_correct_qq']);
-			if(!empty($postid) && (!is_numeric($postid) || strlen($postid)!=6)) showmessage($LANG['input_correct_zipcode']);
-			if(strlen($truename)>50 || strlen($telephone)>50 || strlen($address)>255 || strlen($homepage)>100) showmessage($LANG['truename_telephoe_etc_not_too_long']);
-			
-			if($member->exists()) showmessage("$username ".$LANG['have_registered']);
-
-			if($MOD['enablemultiregperemail'] == 0 && $member->email_exists($email)) showmessage("$email ".$LANG['have_used_change_one_email']);
-
-            $arrgroupid = isset($arrgroupid) ? ','.implode(',', $arrgroupid).',' : '';
-
-			@extract($member->group($groupid));
-
-			$begindate = date('Y-m-d');
-			$date->dayadd($defaultvalidday);
-			$enddate = $defaultvalidday == -1 ? '0000-00-00' : $date->get_date();
-
-	        $field->check_form();
-
-			$memberinfo = array('username'=>$username, 'password'=>$password, 'question'=>$question, 'answer'=>$answer,'email'=>$email,'showemail'=>$showemail,'groupid'=>$groupid,'arrgroupid'=>$arrgroupid,'chargetype'=>$chargetype,'point'=>$defaultpoint,'begindate'=>$begindate,'enddate'=>$enddate,
-								'truename'=>$truename,'gender'=>$gender,'birthday'=>$birthday,'idtype'=>$idtype,'idcard'=>$idcard,'province'=>$province,'city'=>$city,'area'=>$area,'industry'=>$industry,'edulevel'=>$edulevel,'occupation'=>$occupation,'income'=>$income,'telephone'=>$telephone,'mobile'=>$mobile,'address'=>$address,'postid'=>$postid,'homepage'=>$homepage,'qq'=>$qq,'msn'=>$msn,'icq'=>$icq,'skype'=>$skype,'alipay'=>$alipay,'paypal'=>$paypal,'userface'=>$userface,'facewidth'=>$facewidth,'faceheight'=>$faceheight,'sign'=>$sign);
-
-			if($userid = $member->register($memberinfo))
-			{
-				$field->update("userid=$userid");
-				showmessage($LANG['member_add_success'], $forward);
-			}
-			else
-			{
-				showmessage($LANG['register_fail']);
-			}
+			if(!$member->add($info)) showmessage($member->msg());
+			showmessage('添加成功', $forward);
 		}
 		else
 		{
-			$begindate = date('Y-m-d', $PHP_TIME);
-
-            $groups = $arrgroups = array();
-            foreach($GROUP as $id=>$g)
-            {
-				$groups[] = $g;
-				if($g['grouptype'] != 'system')
-				{
-					$arrgroups[] = $g;
-				}
-            }
-	        $fields = $field->get_form('<tr><td class="tablerow">$title:</td><td class="tablerow">$input $tool $note</td></tr>');
-
-			include admintpl('member_add');
+			if($PHPCMS['uc']) showmessage('已经开启Ucenter整合，请到Ucenter处添加用户', $PHPCMS['uc_api']);
+			unset($GROUP['1']);
+			include admin_tpl('member_add');
 		}
 		break;
 
     case 'edit':
+		if(!class_exists('member_input'))
+		{
+			require CACHE_MODEL_PATH.'member_input.class.php';
+		}
+		if(!class_exists('member_update'))
+		{
+			require CACHE_MODEL_PATH.'member_update.class.php';
+    	}
 		if($dosubmit)
 		{
-			if(!is_email($email)) showmessage($LANG['input_valid_email'],"goback");
-			$gender = $gender==1 ? 1 : 0;
-			$showemail = (isset($showemail) && $showemail == 1) ? 1 : 0;
-			$byear = intval($byear);
-			$byear = $byear==19 ? '0000' : $byear;
-			$bmonth = intval($bmonth);
-			$bday = intval($bday);
-
-			$birthday = $byear."-".$bmonth."-".$bday;
-			if(!preg_match("/[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}/", $birthday)) $birthday = "0000-00-00";
-
-			if($msn && !is_email($msn)) showmessage($LANG['input_valid_msn']);
-			if(!empty($qq) && (!is_numeric($qq) || strlen($qq)>20 || strlen($qq)<5)) showmessage($LANG['input_correct_qq'],"goback");
-			if(!empty($postid) && (!is_numeric($postid) || strlen($postid)!=6)) showmessage($LANG['input_correct_zipcode'],"goback");
-			if(strlen($truename)>50 || strlen($telephone)>50 || strlen($address)>255 || strlen($homepage)>100) showmessage($LANG['truename_telephoe_etc_not_too_long'],"goback");
-
-            $arrgroupid = isset($arrgroupid) ? ','.implode(',', $arrgroupid).',' : '';
-            
-			if($ischargebynewgroup)
-			{
-				@extract($member->group($groupid));
-				$begindate = date('Y-m-d');
-				$date->dayadd($defaultvalidday);
-				$enddate = $defaultvalidday == -1 ? '0000-00-00' : $date->get_date();
-				$point = $defaultpoint;
+			$member_input = new member_input($info['modelid']);
+			if(!$info['groupid']) $info['groupid'] = $groupid;
+			$inputinfo = $member_input->get($info);
+			$userid = $member->edit_user($info);
+			if(!$userid) showmessage($member->msg(), $forward);
+			$modelinfo = $inputinfo['model'];
+			if($modelinfo)
+			{	
+				$modelinfo['userid'] = $info['userid'];
+				$member_update = new member_update($info['modelid'], $info['userid']);
+    			$member_update->update($modelinfo);
+				$member->edit_model($info['modelid'], $modelinfo);
 			}
-
-			$sql = $password ? "password='".md5($password)."'," : "";
-			$sql .= $answer ? "answer='".md5($answer)."'," : "";
-
-	        $field->check_form();
-
-			$db->query("UPDATE ".TABLE_MEMBER." SET $sql email='$email',showemail='$showemail',groupid='$groupid',arrgroupid='$arrgroupid',question='$question',point='$point',chargetype='$chargetype',begindate='$begindate',enddate='$enddate' WHERE userid='$userid'");
-			$db->query("UPDATE ".TABLE_MEMBER_INFO." SET truename='$truename',gender='$gender',birthday='$birthday',idtype='$idtype',idcard='$idcard',province='$province',city='$city',area='$area',industry='$industry',edulevel='$edulevel',occupation='$occupation',income='$income',telephone='$telephone',mobile='$mobile',address='$address',postid='$postid',homepage='$homepage',qq='$qq',msn='$msn',icq='$icq',skype='$skype',alipay='$alipay',paypal='$paypal',userface='$userface',facewidth='$facewidth',faceheight='$faceheight',sign='$sign' WHERE userid=$userid");
-		    
-			$field->update("userid=$userid");
-
 			showmessage($LANG['operation_success'], $forward);
 		}
 		else
 		{
-			$memberinfo = $member->view('m.userid='.$userid);
-			if(!$memberinfo) showmessage($LANG['account_not_exist_or_delete'], $forward);
-
-			extract(new_htmlspecialchars($memberinfo));
-
-			$birthday = explode('-', $birthday);
-
-			$byear = $birthday[0];
-			$bmonth = $birthday[1];
-			$bday = $birthday[2];
-
-            $groups = $arrgroups = array();
-            foreach($GROUP as $id=>$g)
-            {
-				$groups[] = $g;
-				if($g['grouptype'] != 'system')
-				{
-					$arrgroups[] = $g;
-				}
-            }
-
-			$arrgroupid = $arrgroupid ? array_filter(explode(',', $arrgroupid)) : array();
-
-	        $fields = $field->get_form('<tr><td class="tablerow">$title:</td><td class="tablerow">$input $tool $note</td></tr>');
-
-			include admintpl('member_edit');
+			require CACHE_MODEL_PATH.'member_form.class.php';
+			$GROUP['0'] = '请选择';
+			unset($GROUP['1']);
+			ksort($GROUP);
+			$memberinfo = $member->get($userid, '*', 1);
+			@extract(new_htmlspecialchars($memberinfo));
+			$data = $member->get_model_info($userid, $modelid, $fields = '*');
+			$member_form = new member_form($modelid);
+			$forminfos = $member_form->get($data);
+			include admin_tpl('member_edit');
 		}
 		break;
 
-    case 'view':
-	    if(isset($userid))
-	    {
-			$condition = "m.userid=".intval($userid);
-		}
-		elseif(isset($username))
+    case 'model_edit':
+    	if ($dosubmit)
     	{
- 			$condition = "m.username='$username'";
+			if(!$tomodelid) showmessage('请选择要移至的会员模型', $forward);
+			if(!$info['modelid']) $info['modelid'] = $tomodelid;
+			if($exmodeild == $info['modelid']) showmessage('选择模型与原模型一致，不用修改', $forward);
+			if(!$member->edit_user($info))
+			{
+				showmessage($member->msg, $forward);
+			}
+    		showmessage($LANG['operation_success'], $forward);
+    	}
+    	else
+    	{
+			$memberinfo = $member->get($userid, '*');
+			@extract($memberinfo);
+    		include admin_tpl('member_model_edit');
+    	}
+    	break;
+
+    case 'view':
+    	$array = array();
+        if(trim($username))
+        {
+            $userid = $member->get_userid($username);
         }
-		else
-	    {
-			showmessage($LANG['select_account'], $forward);
-		}
-
-		$memberinfo = $member->view($condition);
-        if(!$memberinfo) showmessage($LANG['account_not_exist_or_delete'], $forward);
-
-		@extract($memberinfo);
-
-		require_once PHPCMS_ROOT.'/include/ip.class.php';
-		$ipinfo = new ip;
-
-		$regiparea = $ipinfo->getlocation($regip);
-        $regiparea = $regiparea['area'];
-
-		$lastloginiparea = '';
-		if($lastloginip)
-	    {
-			$lastloginiparea = $ipinfo->getlocation($lastloginip);
-			$lastloginiparea = $lastloginiparea['area'];
-		}
-
-        $old = '';
-		if($birthday > '0000-00-00')
+		$arr_ext_group = $group_admin->extend_list($userid);
+		$memberinfo = $member->get($userid, '*', 1);
+        if($memberinfo['regtime']) $memberinfo['regtime'] = date('Y-m-d H:i:s', $memberinfo['regtime']);
+		if($memberinfo['lastlogintime']) $memberinfo['lastlogintime'] = date('Y-m-d H:i:s', $memberinfo['lastlogintime']);
+		@extract(new_htmlspecialchars($memberinfo));
+		$data = $member->get_model_info($userid, $modelid);
+		if(!class_exists('member_output'))
 		{
-			$date->set_date($birthday);
-			$old = date('Y') - $date->get_year();
+			require CACHE_MODEL_PATH.'member_output.class.php';
 		}
-
-		$arrgroupname = array();
-		$arrgroupid = $arrgroupid ? array_filter(explode(',', $arrgroupid)) : array();
-		foreach($arrgroupid as $id)
-		{
-			$arrgroupname[] = $GROUP[$id]['groupname'];
-		}
-		$arrgroupname = $arrgroupname ? implode(' | ', $arrgroupname) : '';
-
-        $fields = $field->show_list('<tr><td class="tablerowhighlight" align="right">$title :</td><td class="tablerow" colspan=3> $value </td></tr>');
-
-		include admintpl('member_view');
+		$member_output = new member_output($modelid, $userid);
+		$forminfos = $member_output->get($data);
+		$avatar = avatar($userid);
+		$arr_menu = $member->memeber_view_menu($userid);
+		$ip_area = load('ip_area.class.php');
+		$regarea = $ip_area->get($regip);
+		$loginarea = $ip_area->get($lastloginip);
+		include admin_tpl('member_view');
 
 		break;
 
     case 'delete':
-
-		if(!isset($userid)) showmessage($LANG['select_account'], $forward);
-
+		if(!isset($userid)) showmessage($LANG['select_member_id']);
+		if(is_array($userid))
+		{
+			if(in_array($_userid, $userid))
+			{
+				showmessage('非法操作', $forward);
+			}
+			$result = array_intersect($userid, $arr_founder);
+			if(!empty($result))
+			{
+				showmessage('非法操作', $forward);
+			}
+		}
+		elseif($userid == $_userid || in_array($userid, $arr_founder))
+		{
+			showmessage('非法操作', $forward);
+		}
 		$member->delete($userid);
 		showmessage($LANG['operation_success'], $forward);
 
 		break;
 
     case 'manage':
-
-		$page = isset($page) ? intval($page) : 1;
+		$page = max(intval($page), 1);
 		$pagesize = $PHPCMS['pagesize'] ? $PHPCMS['pagesize'] : 30;
 		$offset = ($page-1)*$pagesize;
 		$frommoney = isset($frommoney) ? intval($frommoney) : 0;
 		$tomoney = isset($tomoney) ? intval($tomoney) : 0;
-		$frompayment = isset($frompayment) ? intval($frompayment) : 0;
-		$topayment = isset($topayment) ? intval($topayment) : 0;
 		$frompoint = isset($frompoint) ? intval($frompoint) : 0;
 		$topoint = isset($topoint) ? intval($topoint) : 0;
-		$fromcredit = isset($fromcredit) ? intval($fromcredit) : 0;
-		$tocredit = isset($tocredit) ? intval($tocredit) : 0;
         $groupid = isset($groupid) ? intval($groupid) : 0;
-
+		$disabled = isset($disabled) ? intval($disabled) : '';
+		$modelid = isset($modelid) ? intval($modelid) : 0;
+		if($modelid && $issearch)
+		{
+			if(!class_exists('member_search'))
+			{
+				require	CACHE_MODEL_PATH.'member_search.class.php';
+			}
+			$member_search = new member_search($modelid);
+			$data = $member_search->data($page, $PHPCMS['search_pagesize']);
+			foreach($data as $v)
+			{
+				$arr_userid[] = $v['userid'];
+			}
+			$userids = implode(',', $arr_userid);
+			unset($arr_userid);
+		}
+		if($extgroup)
+		{
+			$result = $group_admin->extend_group_list($extgroup, 0);
+			foreach($result as $v)
+			{
+				$arr_userid[] = $v['userid'];
+			}
+			$ext_userid = implode(',', $arr_userid);
+			unset($arr_userid);
+		}
         if(!isset($username)) $username = '';
-        if(!isset($industry)) $industry = '';
-        if(!isset($edulevel)) $edulevel = '';
-        if(!isset($income)) $income = '';
-        if(!isset($occupation)) $occupation = '';
-        if(!isset($province)) $province = '';
-        if(!isset($city)) $city = '';
-
-        if(!isset($truename)) $truename = '';
-        if(!isset($address)) $address = '';
-        if(!isset($qq)) $qq = '';
-        if(!isset($email)) $email = '';
-        if(!isset($msn)) $msn = '';
-        if(!isset($skype)) $skype = '';
-        if(!isset($icq)) $icq = '';
-        if(!isset($homepage)) $homepage = '';
-
-		$condition = '';
-		$condition .= $username ? " and m.username like '%$username%'" : '';
-		$condition .= $groupid ? " and (m.groupid=$groupid or m.arrgroupid like '%,$groupid,%')" : '';
-		$condition .= $email ? " and m.email='$email'" : '';
-		$condition .= $truename ? " and i.truename like '%$truename%'" : '';
-		$condition .= $province ? " and i.province='$province'" : '';
-		$condition .= $qq ? " and i.qq='$qq'" : '';
-		$condition .= $msn ? " and i.msn='$msn'" : '';
-		$condition .= $icq ? " and i.icq='$icq'" : '';
-		$condition .= $skype ? " and i.skype='$skype'" : '';
-		$condition .= $industry ? " and i.industry='$industry'" : '';
-		$condition .= $edulevel ? " and i.edulevel='$edulevel'" : '';
-		$condition .= $income ? " and i.income='$income'" : '';
-		$condition .= $occupation ? " and i.occupation='$occupation'" : '';
-		$condition .= $frommoney ? " and m.money>=$frommoney" : '';
-		$condition .= $tomoney ? " and m.money<=$tomoney" : '';
-		$condition .= $frompayment ? " and m.payment>=$frompayment" : '';
-		$condition .= $topayment ? " and m.payment<=$topayment" : '';
-		$condition .= $frompoint ? " and m.point>=$frompoint" : '';
-		$condition .= $topoint ? " and m.point<=$topoint" : '';
-		$condition .= $fromcredit ? " and m.credit>=$fromcredit" : '';
-		$condition .= $tocredit ? " and m.credit<=$tocredit" : '';
-		$condition .= $city ? " and i.city like '%$city%'" : '';
-		$condition .= $homepage ? " and i.homepage like '%$homepage%'" : '';
-		$condition .= $address ? " and i.address like '%$address%'" : '';
-
-		$r = $db->get_one("SELECT count(*) as num FROM ".TABLE_MEMBER." m,".TABLE_MEMBER_INFO." i WHERE m.userid=i.userid $condition");
-		$pages = phppages($r['num'], $page, $pagesize);
-
-		$members = $member->get_list($condition, $page, $pagesize);
-
-		$groupids = showgroup('select', 'groupid', $groupid);
-
-		require PHPCMS_ROOT.'/include/area.func.php';
-        $provinces = province();
-
-		include admintpl('member_manage');
-
+        $condition = '';
+		$condition .= ($modelid && $issearch) ? " AND m.userid IN ('$userids')" : '';
+		$condition .= ($extgroup) ? " AND m.userid IN ('$ext_userid')" : '';
+		$condition .= $username ? " AND m.username like '%$username%'" : '';
+		$condition .= $groupid ? " AND m.groupid='$groupid'" : '';
+		$condition .= $email ? " AND m.email='$email'" : '';
+		$condition .= $frommoney ? " and m.amount>='$frommoney'" : '';
+		$condition .= $tomoney ? " AND m.amount<='$tomoney'" : '';
+		$condition .= $frompoint ? " AND m.point>='$frompoint'" : '';
+		$condition .= $topoint ? " AND m.point<='$topoint'" : '';
+		$condition .= $fromcredit ? " AND m.credit>='$fromcredit'" : '';
+		$condition .= $tocredit ? " AND m.credit<='$tocredit'" : '';
+		$condition .= $modelid ? " AND m.modelid='$modelid'" : '';
+		$condition .= $areaid ? " AND m.areaid='$areaid'" : '';
+		$condition .= (isset($disabled) && ($disabled != -1) && !empty($disabled)) ? " AND m.disabled=$disabled" : '';
+		$r = $db->get_one("SELECT count(*) as num FROM ".DB_PRE."member_cache m WHERE 1 $condition");
+		$pages = pages($r['num'], $page, $pagesize);
+		$order = $orderby ? $orderby : 'm.userid ASC';
+		$members = $member->listinfo($condition, $order, $page, $pagesize);
+		$GROUP['0'] = '请选择';
+		ksort($GROUP);
+		include admin_tpl('member_manage');
 		break;
 
-		case 'check':
-
+	case 'check':
         if($dosubmit)
 	    {
             $member->check($userid);
@@ -309,116 +212,264 @@ switch($action)
 		}
 		else
 	    {
-			$page = isset($page) ? intval($page) : 1;
 			$pagesize = $PHPCMS['pagesize'] ? $PHPCMS['pagesize'] : 30;
+			$page = max(intval($page), 1);
 			$offset = ($page-1)*$pagesize;
-
-			$condition = " AND m.groupid=5";
-
-			$r = $db->get_one("SELECT count(*) as num FROM ".TABLE_MEMBER." m,".TABLE_MEMBER_INFO." i WHERE m.userid=i.userid $condition");
-			$pages = phppages($r['num'], $page, $pagesize);
-
-			$members = $member->get_list($condition, $page, $pagesize);
-
-			include admintpl('member_check');
+			$condition .= " AND m.groupid=5";
+			$r = $db->get_one("SELECT count(*) as num FROM ".DB_PRE."member_cache m,".DB_PRE."member_info i WHERE m.userid=i.userid $condition ");
+			$pages = pages($r['num'], $page, $pagesize);
+			$order = $orderby ? $orderby : 'm.userid ASC';
+			$members = $member->listinfo($condition, $order, $page, $pagesize);
+			include admin_tpl('member_check');
 		}
-
 		break;
 
     case 'lock':
-
 		if(!isset($userid)) showmessage($LANG['select_account'], $forward);
-
-		$member->lock($userid, $val);
-		showmessage($LANG['operation_success'], $forward);
-
+		if(is_array($userid))
+		{
+			if(in_array($_userid, $userid))
+			{
+				showmessage('非法操作', $forward);
+			}
+			$result = array_intersect($userid, $arr_founder);
+			if(!empty($result))
+			{
+				showmessage('非法操作', $forward);
+			}
+		}
+		elseif($userid == $_userid || in_array($userid, $arr_founder))
+		{
+			showmessage('非法操作', $forward);
+		}
+		if(is_array($userid))
+		{
+			foreach($userid as $id)
+			{
+				$member->lock($id, $val);
+			}
+			showmessage($LANG['operation_success'], $forward);
+		}
+		else
+		{
+			if($member->lock($userid, $val)) showmessage($LANG['operation_success'], $forward);
+		}
 		break;
 
     case 'note':
 		if($dosubmit)
 		{
-			$db->query("UPDATE ".TABLE_MEMBER_INFO." SET note='$note' WHERE userid=$userid");
+			$db->query("UPDATE ".DB_PRE."member_info SET note='$note' WHERE userid=$userid");
 			showmessage($LANG['operation_success'], $forward);
 		}
 		else
 		{
-			$r = $db->get_one("SELECT m.username,i.note FROM ".TABLE_MEMBER." m,".TABLE_MEMBER_INFO." i WHERE m.userid=i.userid	AND m.userid=$userid");
+			$r = $member->get($userid, 'm.username, i.note', 1);
 			@extract($r);
-			include admintpl('member_note');
+			include admin_tpl('member_note');
 		}
 	break;
 
 	case 'checkuser':
-		if(strtolower($CONFIG['charset']) != 'utf-8' && preg_match("/^([\s\S]*?)([\x81-\xfe][\x40-\xfe])([\s\S]*?)/", $username))
+		if(!$member->is_username($value) || !$member->username_exists($value, $userid))
 		{
-			include PHPCMS_ROOT.'/include/charset.func.php';
-			$username = convert_encoding('utf-8', $CONFIG['charset'], $username);
-			$member->set_username($username);
-		}
-		if(strlen($username) < 2 || strlen($username) > 20)
-		{
-			echo 1;
-		}
-		elseif($member->is_badword($username))
-		{
-			echo 2;
-		}
-		elseif($member->get_info())
-		{
-			echo 3;
-		}
-		elseif($member->get_info())
-		{
-			echo 4;
+			exit($member->msg());
 		}
 		else
 		{
-			echo 0;
+			exit('success');
 		}
 	break;
-	case 'search':
-		$groupids = showgroup('select', 'groupid', $groupid);
 
-		require PHPCMS_ROOT.'/include/area.func.php';
-        $provinces = province();
-        include admintpl('member_search');
+	case 'checkemail':
+		if(!is_email($value))
+		  {
+				exit($LANG['input_valid_email']);
+		  }
+		  elseif(!$M['allowemailduplicate'] && $member->email_exists($value, $userid))
+		  {
+				exit($member->msg());
+		  }
+		  else
+		  {
+				exit('success');
+		  }
+	break;
+
+	case 'search':
+		if($modelid)
+		{
+			require CACHE_MODEL_PATH.'member_search_form.class.php';
+			if(!$modelid) $modelid = 10;
+			$modelname = $MODEL[$modelid]['name'];
+			$form = new member_search_form($modelid);
+			$where = $form->get_where();
+		}
+		$GROUP[0] = $ext_group[0] = '请选择';
+		ksort($ext_group);
+		ksort($GROUP);
+		include admin_tpl('member_search');
 		break;
 
 	case 'move':
 		$userids = is_array($userid) ? implode(',', $userid) : $userid;
-	    if(!$userids) showmessage($LANG['select_account'], $PHP_REFERER);
+	    if(!$userids) showmessage($LANG['select_account'], $forward);
 
 		if($dosubmit)
 	    {
 			$groupid = intval($groupid);
-	        if(!$groupid) showmessage($LANG['select_group'], $PHP_REFERER);
-
-		    $sql = '';
-		    if($ischargebynewgroup)
-			{
-				@extract($member->group($groupid));
-				$begindate = date('Y-m-d');
-				$date->dayadd($defaultvalidday);
-				$enddate = $defaultvalidday == -1 ? '0000-00-00' : $date->get_date();
-				$point = $defaultpoint;
-				$sql = ",point='$point',chargetype='$chargetype',begindate='$begindate',enddate='$enddate'";
-			}
-            $db->query("UPDATE ".TABLE_MEMBER." SET groupid=$groupid $sql WHERE userid IN($userids)");
+	        if(!$groupid) showmessage($LANG['select_group'], $forward);
+	        $member->move($userids, $groupid);
 			showmessage($LANG['operation_success'], $forward);
 		}
 		else
 	    {
-			$member = array();
-			$result = $db->query("SELECT userid,username FROM ".TABLE_MEMBER." WHERE userid IN($userids)");
+			$arr_member = array();
+			unset($GROUP['1']);
+			$result = $db->query("SELECT userid,username FROM ".DB_PRE."member_cache WHERE userid IN($userids)");
 			while($r = $db->fetch_array($result))
 			{
-				$member[$r['userid']] = $r['username'];
+				$arr_member[$r['userid']] = $r['username'];
 			}
-			$groupids = showgroup('select', 'groupid', $groupid);
-			include admintpl('member_move');
+			include admin_tpl('member_move');
 		}
 		break;
-
-    default :
+	case 'model_move':
+		if($dosubmit)
+		{
+			$touserid = $member->model_move($frommodelid, $tomodelid);
+			showmessage('操作成功');
+		}
+		else
+		{
+			unset($member->MODEL[$frommodelid]);
+			foreach($member->MODEL as $k_model=>$v_model)
+			{
+				$arr_model[$k_model] = $v_model['name'];
+			}
+			include admin_tpl('move_model_member');
+		}
+		break;
+	case 'compare_uc':
+		$sameserver = 0;
+		if($uc_dbhost == DB_HOST && $uc_dbuser == DB_USER && $uc_dbpwd == DB_PW)
+		{
+			$sameserver = 1;
+			$sqldb = &$db;
+			if ($uc_dbname != DB_NAME)
+			{
+				$sqldb->select_db($uc_dbname);
+			}
+		}
+		else
+		{
+			$sqldb = new db_mysql();
+			if(!$sqldb->connect($uc_dbhost, $uc_dbuser, $uc_dbpwd, $uc_dbname, 0, $uc_charset))
+			{
+				exit('链接不上服务器');
+			}
+		}
+		$dbpre = $uc_dbpre;
+		$sql = "SELECT count(uid) as num_ucmember FROM ".$dbpre."members";
+		$arr_num = $sqldb->get_one($sql);
+		$uc_num = $arr_num['num_ucmember'];
+		if($sameserver) $sqldb->select_db(DB_NAME);
+		unset($sqldb);
+		$r = $db->get_one("SELECT count(*) as num FROM ".DB_PRE."member_cache m");
+		$mem_num = $r['num'];
+		if($uc_num < $mem_num)
+		{
+			echo 'not_compare';
+		}
+		else
+		{
+			exit('ok');
+		}
+		break;
+	case 'import_uc':
+		if($dosubmit)
+		{
+			if(!$total)
+			{
+				$r = $db->get_one("SELECT count(*) as num FROM ".DB_PRE."member_cache m");
+				$total = $r['num'];
+			}
+			$sameserver = 0;
+			$finished = 0;
+			$offset = max(intval($offset), 1);
+			$query = $db->query("SELECT * FROM ".DB_PRE."member_cache m, ".DB_PRE."member_info i WHERE m.userid=i.userid LIMIT $offset, 100");
+			$exportnum = $db->num_rows($query);
+			while($r = $db->fetch_array($query)) 
+			{
+				$data['salt'] = rand(100000, 999999);
+				$data['password'] = md5($r['password'].$salt);
+				$data['username'] = addslashes($r['username']);
+				$data['email'] = $r['email'];
+				$data['regtime'] = $r['regtime'];
+				$s[] = $data;
+			}
+			if($uc_dbhost == DB_HOST && $uc_dbuser == DB_USER && $uc_dbpwd == DB_PW && $uc_charset == DB_CHARSET)
+			{
+				$sameserver = 1;
+				$sqldb = &$db;
+				if ($uc_dbname != DB_NAME)
+				{
+					$sqldb->select_db($uc_dbname);
+				}
+			}
+			else
+			{
+				$sqldb = new db_mysql();
+				if(!$sqldb->connect($uc_dbhost, $uc_dbuser, $uc_dbpwd, $uc_dbname, 0, $uc_charset))
+				{
+					showmessage('连接不上服务器', '?mod=phpcms&file=setting&tab=7');
+				}
+			}
+			$dbpre = $uc_dbpre;
+			$maxuid = getmaxuid();
+			foreach($s as $val)
+			{
+				$queryuc = $sqldb->query("SELECT count(*) FROM ".$dbpre."members WHERE username='$val[username]'");
+				$userexist = $sqldb->result($queryuc, 0);
+				if(!$userexist) 
+				{
+					$sqldb->query("INSERT LOW_PRIORITY INTO ".$dbpre."members SET uid='$val[userid]', username='$val[username]', password='$val[password]', email='$val[email]', regip='$val[regip]', regdate='$val[regtime]', salt='$val[salt]'", 'SILENT');
+					$sqldb->query("INSERT LOW_PRIORITY INTO ".$dbpre."memberfields SET uid='$val[userid]'",'SILENT');
+				}
+				else 
+				{
+					$sqldb->query("REPLACE INTO ".$dbpre."mergemembers SET appid='".$uc_apiid."', username='$val[username]'", 'SILENT');
+				}
+				$lastuid = $val['userid'] += $maxuid;
+			}
+			$sqldb->query("ALTER TABLE ".$dbpre."members AUTO_INCREMENT=".($lastuid + 1));
+			if($sameserver) $sqldb->select_db(DB_NAME);
+			if(!$sameserver) $sqldb->close();
+			$newoffset = $offset + 100;
+			if($exportnum < 100) $finished = 1;
+			$start = $offset + 1;
+			$end = $finished ? ($offset + $exportnum) : $newoffset;
+			$forward = $finished ? "?mod=phpcms&file=setting&tab=7" : "?mod=$mod&file=$file&action=$action&name=$name&type=$type&offset=$newoffset&total=$total&uc_dbhost=$uc_dbhost&uc_dbuser=$uc_dbuser&uc_dbpwd=$uc_dbpwd&uc_charset=$uc_charset&uc_dbpre=$uc_dbpre&uc_dbname=$uc_dbname&uc_apiid=$uc_appid&dosubmit=1";
+			showmessage($LANG['total_import'].$total.$LANG['record'].'<br />'.$LANG['from'].$start.$LANG['to'].$end.$LANG['load_data_success'], $forward);
+		}
+		else
+		{
+				include admin_tpl('member_export_uc');
+		}
+	default :
 }
+
+function getmaxuid() 
+{
+	global $sqldb, $dbpre;
+	$query = $sqldb->query("SHOW CREATE TABLE ".$dbpre."members");
+	$data = $sqldb->fetch_array($query);
+	$data = $data['Create Table'];
+	if(preg_match('/AUTO_INCREMENT=(\d+?)[\s|$]/i', $data, $a)) {
+		return $a[1] - 1;
+	} else {
+		return 0;
+	}
+}
+
 ?>

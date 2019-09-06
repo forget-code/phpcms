@@ -1,0 +1,46 @@
+{template "member","header"}
+<div id="main">
+{template "message","left"}
+	<div id="right">
+    	<p id="position"><strong>当前位置：</strong><a href="{$M[url]}index.php">短消息</a>发送短消息</p>
+        <div class="clear"></div>
+        <form action="{$M[url]}send.php" name="form" method="post">
+        <table cellpadding="0" cellspacing="1" class="table_form">
+        <caption>
+      	发送短消息
+      	</caption> 
+        <tr>
+        	<th width="15%">标题：</th>
+            <td width="80%"><input type="text" name="subject" size="50" require="true" datatype="require|limit" min="1" max="80" msg="标题不能空|标题长度必须在1到80个字符之间"/></td>
+        </tr>
+        <tr>
+        	<th>收件人：</th>
+            <td><input type="text" name="msgto" size="50" value="{$username}" require="true" datatype="require|ajax" url="{$M[url]}send.php?action=checkuser" msg="收件人不能空"/>(多个会员请用逗号隔开)</td>
+        </tr>
+        <tr>
+        	<th>内容：</th>
+            <td>
+            	<textarea name="content" id="content" tabindex="100" cols="60"></textarea><?=form::editor('content', 'introduce', '100%', 200)?>
+            </td>
+        </tr>
+        <tr>
+        	<th>保存到发件箱：</th>
+            <td><input type="checkbox" name="savetooutbox" value="1"  /></td>
+        </tr>
+        <tr>
+        <th></th>
+        <td colspan="2"><label>
+          <input type="submit" name="dosubmit" id="button" value="确 定" />&nbsp;<input type="reset" name="button2" id="button2" value="取 消" />
+          </label></td>
+      	</tr>        
+        </table></form>
+    </div>
+</div>
+<div class="clear"></div>
+{template "member","footer"}
+<script language="javascript" src="images/js/validator.js"></script>
+<script language="javascript" type="text/javascript">
+$().ready(function() {
+	  $('form').checkForm(1);
+	});
+</script>

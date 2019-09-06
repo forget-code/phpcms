@@ -1,0 +1,59 @@
+{template 'phpcms','header'}
+<div id="submenu">{tag_栏目页子菜单}</div>
+<!--begin main-->
+<div id="main">
+  <!--begin left-->
+  <div id="main_l" class="bdr_1">
+      <!--位置导航-->
+    <div id="position"><a href="">首页</a>{catpos($catid)}</div>
+    <!--图文混排一-->
+<!--{loop $arrchildid $cid $c}-->
+    <div class="cat">
+      <div class="cat_title_1"><a href="{$c[url]}"><img src="images/more.gif" alt="更多" /></a>
+        <h3>{$c[catname]}</h3>
+      </div>
+      <div class="cat_left">
+	  {tag_图片子栏目循环推荐标签}
+      </div>
+      <div class="cat_right">
+        <ul class="pic_list">
+        {tag_图片子栏目循环列表}
+        </ul>
+      </div>
+    </div>
+<!--{/loop}-->
+    <!--图文混排一-->
+    <!--end 栏目列表-->
+  </div>
+  <!--end left-->
+  <!--begin right-->
+  <div id="main_r">
+     <div class="ad_side">
+      <script language="javascript" src="data/js.php?id=5"></script>
+    </div>
+    <h4>最新图片</h4>
+    <div>
+      <ul class="pic_list">
+       {tag_栏目页最新图片列表}
+      </ul>
+    </div>
+    <h4>今日图片DIGG排行</h4>
+    <div>
+      <ul class="digg_text_list">
+		{php $cats = get_sql_catid($catid);}
+        <!--{get sql="select d.contentid,d.supports,c.title,c.style,c.url from phpcms_digg d left join phpcms_content c on d.contentid=c.contentid where c.status=99 $cats order by d.supports_week desc" rows="10"}-->
+				<li><span>{$r[supports]}</span><a href="{$r[url]}" target="_blank" class="{$r[style]}">{str_cut($r[title], 44)}</a></li>
+		<!--{/get}-->
+      </ul>
+    </div>
+	<div>
+      <ul class="pic_list">
+      <!--{block('picture', 1)}-->
+      </ul>
+    </div>
+	
+  </div>
+  <!--end right-->
+</div>
+<!--end main-->
+{template 'phpcms','footer'}

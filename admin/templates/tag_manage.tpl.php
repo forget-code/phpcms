@@ -1,108 +1,83 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
 <body>
-<?=$menu?>
-<form method="get" name="myform">
-<table cellpadding="2" cellspacing="1" class="tableborder">
+<table cellpadding="0" cellspacing="1" class="table_form">
+    <caption>中文标签快速操作</caption>
 	<tr>
-	  <td class="tablerow" align="center"  height="30">
-	  <input type="hidden" name="mod" value="phpcms">
-	  <input type="hidden" name="file" value="tag">
-	  <input type="hidden" name="action" value="quickoperate">
-	  <input type="hidden" name="operate" value="preview">
-	  <input type="hidden" name="channelid" value="<?=$channelid?>">
-	  <font color="red">标签快速操作：</font><input name="tagname" type="text" value="请输入标签名" size="30" onclick="if(this.value == '请输入标签名') this.value=''"> 
-	  <input name="preview" type="button" value=" 预览 " onclick="$('operate').value='preview';myform.submit();"> &nbsp;&nbsp;
-	  <input name="edit" type="button" value=" 编辑 " onclick="$('operate').value='edit';myform.submit();"> &nbsp;&nbsp;
-	  <input name="copy" type="button" value=" 复制 " onclick="$('operate').value='copy';myform.submit();"> &nbsp;&nbsp;
-	  <input name="delete" type="button" value=" 删除 " onclick="$('operate').value='delete';myform.submit();">
+	  <td class="align_c"  height="30">
+	  <input name="tagname" id="tagname" type="text" value="请输入标签名" size="30" onclick="if(this.value == '请输入标签名') this.value=''"> 
+	  <input name="preview" id="preview" type="button" value=" 预览 "> &nbsp;&nbsp;
+	  <input name="edit" id="edit" type="button" value=" 编辑 "> &nbsp;&nbsp;
+	  <input name="copy" id="copy" type="button" value=" 复制 "> &nbsp;&nbsp;
+	  <input name="delete" id="delete" type="button" value=" 删除 ">
 	  </td>
 	</tr>
 </table>
-</form>
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
-	<tr>
-		<td></td>
-	</tr>
-</table>
-<table cellpadding="2" cellspacing="1" border="0" class="tableBorder" >
-  <tr>
-    <td class="submenu" align="center">[<?=$functions[$function]?>] 标签管理</td>
-  </tr>
-  <tr>
-    <td class="tablerow"><b>管理选项：</b><a href="?mod=<?=$mod?>&file=<?=$file?>&action=add&function=<?=$function?>&channelid=<?=$channelid?>"><font color="red">添加标签</font></a> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=manage&function=<?=$function?>&channelid=<?=$channelid?>">管理标签</a></td>
-  </tr>
-<?php if($MODULE[$mod]['iscopy']){ ?>
-  <tr>
-    <td class="tablerow"><b>各频道标签：</b>
-     <a href="?mod=<?=$mod?>&file=tag&action=manage&channelid=<?=$channelid?>&list_channelid=0&function=<?=$function?>">频道公用标签</a>
-<?php
-$i = 1;
-foreach($CHANNEL as $cid=>$cha)
-{
-	if($cha['module'] != $mod || $cha['islink']) continue;
-    echo ' | ';
-?>
-     <a href="?mod=<?=$cha['module']?>&file=tag&action=manage&channelid=<?=$channelid?>&list_channelid=<?=$cid?>&function=<?=$function?>"><?=$cha['channelname']?></a>
-<?php 
-if($i%5==0) echo '<br/>';
-$i++;
-}
-?></td>
-  </tr>
-<?php } ?>
-</table>
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
-	<tr>
-		<td></td>
-	</tr>
-</table>
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <tr>
-    <th colspan=6><?=$functions[$function]?>标签管理</th>
-  </tr>
-<tr align="center">
-<td class="tablerowhighlight" width="22%">标签名称</td>
-<td class="tablerowhighlight" width="23%">站内标签调用</td>
-<td class="tablerowhighlight" width="35%">跨站JS调用</td>
-<td class="tablerowhighlight" width="20%">管理操作</td>
+<table cellpadding="0" cellspacing="1" class="table_list">
+    <caption>管理<?=$types[$type]?>标签</caption>
+<tr>
+<th>标签名称</th>
+<th>中文标签</th>
+<th>GET 调用代码</th>
+<th>JS 调用代码</th>
+<th>管理操作</th>
 </tr>
 <?php 
 foreach($tags AS $tagname=>$tag)
 {
-	if($MODULE[$mod]['iscopy'])
+	$sql = $tag['sql'];
+	eval("\$sql = \"$sql\";");
+	$getcode = '';
+	if(strpos($sql, '"') === false)
 	{
-		if(isset($list_channelid) && $list_channelid == 0 && $tag['channelid'] != '$channelid') continue; 
-		elseif($list_channelid > 0 && $list_channelid != $tag['channelid']) continue;
-		elseif($channelid && ($channelid != $tag['channelid'] && $tag['channelid'] != '$channelid')) continue;
+		$page = $pages = $showvars = '';
+		if($tag['page'] == '$page')
+		{
+			$page = ' page="$page"';
+			$pages = '{$pages}';
+		}
+		if(isset($tag['selectfields']))
+		{
+			foreach($tag['selectfields'] as $field)
+			{
+				$showvars .= '{$r['.$field.']}<br />';
+			}
+		}
+		$getcode = '<font color="red">{get sql="'.$sql.'" rows="'.$tag['number'].'"'.$page.'}</font><br />'.$showvars.'<font color="red">{/get}</font><br />'.$pages;
 	}
-	$jscode = strpos($tag['longtag'], '$') ? '无' : '&lt;script type=&#34;text/javascript&#34; src=&#34;'.$PHP_SITEURL.'js.php?tag='.urlencode($tagname).'&#34;>&lt;/script&gt;';
 ?>
-<tr align="center" onMouseOut="this.style.backgroundColor='#F1F3F5'" onMouseOver="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5' title="提示：双击鼠标复制标签内容至剪贴板...">
-<td align="center">
-<a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&channelid=<?=$channelid?>&function=<?=$tag['func']?>&tagname=<?=urlencode($tagname)?>"><?=$tagname?></a>
+<tr>
+<td><a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&tagname=<?=urlencode($tagname)?>"><?=$tagname?></a></td>
+<td class="align_c" title="提示：双击鼠标复制标签内容至剪贴板...">
+<input type='text' value="{tag_<?=$tagname?>}" size='25' name='tag_<?=$tagname?>' onDblClick="clipboardData.setData('text',this.value); alert(this.value +'已复制到剪贴板');"><br/>
 </td>
-<td align="left">
-<input type='text' value="{tag_<?=$tagname?>}" size='25' name='tag<?=$tagname?>a' onDblClick="clipboardData.setData('text',this.value); alert(this.value +'已复制到剪贴板');"><br/>
+<td class="align_c">
+<?php if($getcode){ ?>
+<span onmouseover="$('#show_getcode').html($('#<?=$tagname?>').html());$('#show_getcode').show();" style="cursor:pointer" class="click">查看</span> | <span style="cursor:pointer" onClick="clipboardData.setData('text', $('#<?=$tagname?>_code').val()); alert('GET调用代码已复制到剪贴板');">复制</span>
+<div id="<?=$tagname?>" style="display:none;"><?=$getcode?></div>
+<textarea id="<?=$tagname?>_code" style="display:none;"><?=str_replace("}", "}\r\n", strip_tags($getcode))?></textarea>
+<?php }else{ ?>
+<font color="#cccccc">查看 | 复制</font>
+<?php } ?>
 </td>
-<td align="left">
-<input type='text' value="<?=$jscode?>" size='45' onDblClick="clipboardData.setData('text',this.value); alert(this.value +'已复制到剪贴板');">
+<td class="align_c">
+<input type='text' value="<script type='text/javascript' src='<?=SITE_URL?>api/js.php?tagname=<?=urlencode($tagname)?>'></script>" size='30' onDblClick="clipboardData.setData('text',this.value); alert(this.value +'已复制到剪贴板');">
 </td>
-<td><a href="?mod=<?=$mod?>&file=tag&action=preview&channelid=<?=$channelid?>&tagname=<?=urlencode($tagname)?>">预览</a> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&function=<?=$tag['func']?>&channelid=<?=$channelid?>&tagname=<?=urlencode($tagname)?>">修改</a> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=copy&function=<?=$tag['func']?>&channelid=<?=$channelid?>&tagname=<?=urlencode($tagname)?>">复制</a> | <a href="###" onClick="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=delete&channelid=<?=$channelid?>&tagname=<?=urlencode($tagname)?>&function=<?=$tag['func']?>','确认删除此标签吗？如果您在模板中使用了此标签或JS调用，则请不要删除！')">删除</a></td>
+<td class="align_c"><a href="?mod=<?=$mod?>&file=tag&action=preview&module=<?=$module?>&tagname=<?=urlencode($tagname)?>">预览</a> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&module=<?=$module?>&modelid=<?=$tag[modelid]?>&tagname=<?=urlencode($tagname)?>">修改</a> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=copy&module=<?=$module?>&type=<?=$type?>&tagname=<?=urlencode($tagname)?>">复制</a> | <a href="###" onClick="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=delete&module=<?=$module?>&tagname=<?=urlencode($tagname)?>','确认删除标签 {tag_<?=$tagname?>} 吗？如果您在模板中使用了此标签或JS调用，则请不要删除！')">删除</a></td>
 </tr>
 <?php 
 }
 ?>
 </table>
+<div id="pages"><?=$t->pages?></div>
+<div id="show_getcode" style="display:none;position:absolute; width:500px; border:1px solid #fc9; background-color:#ffc;word-wrap:break-word; word-break:break-all;z-index:9999999; padding:5px; text-align:left"></div>
 <br/>
-<table cellpadding="2" cellspacing="1" border="0" class="tableborder">
+<table cellpadding="0" cellspacing="1" border="0" class="table_info">
+    <caption>提示信息</caption>
   <tr>
-    <td class="submenu" align="center">提示信息</td>
-  </tr>
-  <tr>
-    <td class="tablerow">
+    <td>
 <strong>PHPCMS 模板制作与标签设置的基本流程：</strong>
 <br/>
 1、通过Deamweaver、Fireworks、Flash 和 Photoshop 等软件设计好 html 页面；<br/>
@@ -116,3 +91,63 @@ foreach($tags AS $tagname=>$tag)
 </table>
 </body>
 </html>
+<script language="javascript">
+
+hide = setInterval("hideshow();",3000);
+
+$(".click").mouseover(function(e)
+{
+	var divoffset = 2;
+	mouse = new MouseEvent(e);
+    leftpos = mouse.x + divoffset;
+    toppos = mouse.y + divoffset;
+	$("#show_getcode").css('left', leftpos);
+	$("#show_getcode").css('top', toppos);
+	clearInterval(hide);
+});
+$(".click").mouseout(function(){hide = setInterval("hideshow();",3000);})
+$("#show_getcode").mouseover(function(){clearInterval(hide);})
+$("#show_getcode").mouseout(function(){hideshow();})
+
+function hideshow()
+{
+	$('#show_getcode').hide();
+	clearInterval(hide);
+}
+
+       //获取鼠标坐标函数
+var MouseEvent = function(e) {
+            this.x = e.pageX
+            this.y = e.pageY
+        }
+
+
+
+$('#edit').click(function(){
+	var tagname = $('#tagname').val();
+	window.open('?mod=phpcms&file=template&action=gettag&operate=edit&job=edittemplate&tagname='+tagname,'tag','height=500,width=700,,top=0,left=0,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no');
+});
+
+$('#preview').click(function(){
+	var tagname = $('#tagname').val();
+	var url = '?mod=phpcms&file=tag&action=preview&tagname='+tagname;
+	window.open(url,'tag','height=500,width=700,,top=0,left=0,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no');
+});
+
+$('#delete').click(function(){
+	var mod = "<?=$mod?>";
+	var file = "<?=$file?>";
+	var module = "<?=$module?>";
+	var tagname = $('#tagname').val();
+	confirmurl('?mod='+mod+'&file='+file+'&action=delete&module='+module+'&tagname='+tagname,'确认删除此标签吗？如果您在模板中使用了此标签或JS调用，则请不要删除！');
+});
+
+$('#copy').click(function(){
+	var mod = "<?=$mod?>";
+	var file = "<?=$file?>";
+	var module = "<?=$module?>";
+	var tagname = $('#tagname').val();
+	var url = '?mod='+mod+'&file='+file+'&action=copy&type=content&module='+module+'&tagname='+tagname;
+	window.open(url,'tag','height=500,width=700,,top=0,left=0,toolbar=no,menubar=no,scrollbars=yes,resizable=no,location=no,status=no');
+});
+</script>

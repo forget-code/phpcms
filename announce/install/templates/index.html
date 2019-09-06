@@ -1,0 +1,40 @@
+{template 'phpcms','header'}
+<!--begin main-->
+<div id="main">
+  <div id="main_l" class="bdr_1">
+    <!--位置导航-->
+    <div id="position"><a href="">网站首页</a>公告内容页</div>
+    <div id="content">
+      <!--文章标题-->
+	  {if $announces}
+      <h1>{$title}</h1>
+      <!--基本属性-->
+      <div id="text">发布人:{$username}&nbsp;有效期:
+		{if ($todate=='0000-00-00')}不限{else}{$fromdate}至{$todate}{/if}
+		&nbsp;浏览次数:{$hits}</div>
+	  {else}
+      <div id="text">暂无公告信息</div>
+	  {/if}
+
+      <!--正文-->
+      <div id="endtext">
+        <p>{$content}</p>
+      </div>
+      <div class="clear"></div>
+      <!--评论-->
+    </div>
+    <div class="clear"></div>
+    </div>
+  <div id="main_r">
+    <h4>最新公告</h4>
+    <div>
+      <ul class="text_list">
+	  {loop $announces $i $announce}
+		<li><a href="{$MODULE[announce][url]}?announceid={$announce[announceid]}">{$announce[title]}</a> </li>
+	  {/loop}
+      </ul>
+    </div>
+  </div>
+</div>
+<!--end main-->
+{template 'phpcms','footer'}

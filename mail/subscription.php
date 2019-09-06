@@ -1,83 +1,108 @@
-<?php 
+<?php
 require './include/common.inc.php';
-
-$logo = preg_match("/http:\/\//",$PHPCMS['logo']) ? $PHPCMS['logo'] : "http://".$PHP_DOMAIN."/".$PHPCMS['logo'];
-
-$head['title'] = $LANG['mailsubscription'];
-$head['keywords'] = $LANG['mail_email_subscription'];
-$head['description'] = $LANG['mailsubscription_system'];
-
-$TYPE = cache_read('type_'.$mod.'.php');
-$useremail = $_userid ? $_email : '@';
-
-if($dosubmit)
+if( !$_userid) showmessage('请登陆', $MODULE['member']['url'].'login.php?forward='.urlencode(URL));
+require MOD_ROOT.'/include/mails.class.php';
+$mails = new mails();
+$action = $action ? $action:'do';
+switch ($action)
 {
-	if(!$cktypeid)
-	{
-		$cktypeid = $TYPE;
-	}
-	if(!is_email($email))
-	{
-		showmessage($LANG['input_valid_email'],"goback");
-	}
-	if($db->get_one("SELECT email FROM ".TABLE_MAIL_EMAIL." WHERE email='$email' limit 1"))
-	{
-		showmessage($LANG['have_subscription'],"goback");
-	}
-	$typeids = ',';
-	foreach($cktypeid as $k=>$typeid)
-	{
-		$typeids.=$k.',';
-	}
-	$authkey = $PHPCMS['authkey'] ? $PHPCMS['authkey'] : 'PHPCMS';
-	$auth = urlencode(phpcms_auth("$email|$PHP_TIME", 'ENCODE', $authkey));
-	$authurl = $PHP_SITEURL.'/mail/auth.php?auth='.$auth;
-	ob_start();
-	include template($mod,'mailtpl');
-	$data = ob_get_contents();
-	ob_clean();
-	
-	if(sendmail($email,$PHPCMS['sitename'].$LANG['mailsubscription_active'],stripslashes($data)))
-	{
-		$query = "insert into ".TABLE_MAIL_EMAIL." (email,username,typeids,ip,addtime,disabled,authcode)".
-				" VALUES('$email','$_username','$typeids','$PHP_IP','$PHP_TIME','0','$auth')";
-		$db->query($query);
-		showmessage($LANG['subscription_success_send_a_mail_to'].$email.$LANG['30_days_active_this_subscription'],'goback');
-	}
-	else 
-	{
-		showmessage($LANG['send_active_mail_fail'],'goback');
-	}
-}
-else if(isset($dologout))
-{
-	if(!is_email($email))
-	{
-		showmessage($LANG['input_valid_email'],"goback");
-	}
-	if(!$db->get_one("SELECT email FROM ".TABLE_MAIL_EMAIL." WHERE email='$email' limit 1"))
-	{
-		showmessage($LANG['not_exist_mail_in_our_maillist'],"goback");
-	}
-	$authkey = $PHPCMS['authkey'] ? $PHPCMS['authkey'] : 'PHPCMS';
-	$auth = urlencode(phpcms_auth("$email|$PHP_TIME", 'ENCODE', $authkey));
-	$authurl = $PHP_SITEURL.'/mail/auth.php?drawback='.$auth;
-	ob_start();
-	include template($mod,'mailtpl');
-	$data = ob_get_contents();
-	ob_clean();
-	
-	if(sendmail($email,$PHPCMS['sitename'].$LANG['mail_subscription_checkcode'],stripslashes($data)))
-	{
-		showmessage($LANG['send_countermand_mail_success'].$email.$LANG['30_day_cancel_subscription'],'goback');
-	}
-	else 
-	{
-		showmessage($LANG['mailsubscription_cancel_mail_fail'],'goback');
-	}	
-	
-}
+	case 'add':
+		if(!$mails->addTypeMail($mail, $newmail, $typeid))
+		{
+			showmessage($mails->error(),"mail/");
+		}
+		else
+		{
+			if(empty($typeid))
+			{
+				showmessage('请选择订阅类型！','mail/subscription.php?action=send&state=1');
+			}
+			showmessage("订阅成功！","mail/subscription.php?action=do");
+		}
+	break;
+	case 'send':
+        $title = '我要订阅';
+        if($_userid)
+        {
+            $mail = $mails->get_mail();
+            if(!empty($em) && is_email($em))
+            {
+                $mail['newemail'] = $em;
+            }
+            elseif(empty($mail['email']))
+            {
+                $mail['newemail'] = $_email;
+            }
+            else
+            {
+                $mail['newemail'] = $mail['email'];
+            }
 
-
-include template($mod,"subscription");
+            if (empty($mail['email']) )
+            {
+                $mail['email'] = $_email;
+            }
+        }
+        $box = $mails->creatInput();
+		include template($mod,"subscription_view");
+	break;
+	case 'do'://我的订阅
+        $title = '我的订阅';
+		$stuts = 'no';
+        //用户没有订阅的类别
+        $mail = $mails->get_mail();
+        $typeids = $mails->getTypeMail();
+        if(empty($typeids))
+        {
+            if(!empty($em) && is_email($em))
+            {
+                header("Location: subscription.php?action=send&state=1&em=$em");
+                $state = 1;
+            }
+            else
+            {
+                header("Location: subscription.php?action=send&state=1");
+            }
+        }
+        else
+        {
+            if(!empty($em) && is_email($em))
+            {
+                $mail['newemail'] = $em;
+            }
+            else
+            {
+                $mail['newemail'] = $mail['email'];
+            }
+            if (empty($mail['email']) )
+            {
+                $mail['email'] = $_email;
+            }
+        }
+        $box = $mails->creatInput();
+        include template($mod,"subscription_view");
+	break;
+    case 'delall':
+        if($dosubmit)
+        {
+            if( !$mails->dropAll($email) )
+            {
+                showmessage($mails->error());
+            }
+            showmessage("退订成功","mail/");
+        }
+        else
+        {
+            $mail = $mails->get_mail();
+            $data = $mails->myType();
+            include template($mod,"subscription_del");
+        }
+    break;
+    case 'activation':
+        if(is_email($newemail))
+        {
+            $mails->sendActivation($newemail);
+        }
+    break;
+}
 ?>

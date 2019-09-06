@@ -1,305 +1,223 @@
 <?php 
-defined('IN_PHPCMS') or exit('Access Denied');
-
 function cache_all()
 {
-	cache_table();
-	require_once PHPCMS_CACHEDIR.'table.php'; 
+	@set_time_limit(600);
 	cache_common();
+	cache_module();
+	cache_model();
+	cache_category();
+	cache_area();
+	cache_type();
 	cache_member_group();
-	$modules = cache_module();
-	$channelids = cache_channel(0);
-	$keyids = array_merge($modules, $channelids);
-	foreach($keyids as $keyid)
-	{
-		$catids = cache_categorys($keyid);
-		if(is_array($catids))
-		{
-			foreach($catids as $catid)
-			{
-				cache_category($catid);
-			}
-		}
-	}	
-	cache_type(0);
+    cache_role();
+	cache_author();
+	cache_keyword();
+	cache_copyfrom();
+	cache_pos();
+    cache_status();
+	cache_workflow();
+	tags_update();
 	return TRUE;
 }
 
 function cache_common()
 {
 	global $db;
-	$query = $db->query("SELECT module,name,iscore,iscopy,isshare,moduledir,moduledomain FROM ".TABLE_MODULE." WHERE disabled=0");
-	while($r = $db->fetch_array($query))
-	{
-		$r['linkurl'] = '';
-		if($r['module'] != 'phpcms' && $r['iscopy'] == 0) $r['linkurl'] = linkurl($r['moduledomain'] ? dir_path($r['moduledomain']) : $r['moduledir'].'/');
-		unset($r['moduledomain']);
-		$key = $r['module'];
-		$data[$key] = $r;
-	}
-	$CACHE['module'] = $data;
-
 	$data = array();
-	$query = $db->query("SELECT channelid,module,channelname,channeldir,channeldomain,channelpic,introduce,style,islink,linkurl,cat_html_urlruleid,item_html_urlruleid,special_html_urlruleid,cat_php_urlruleid,item_php_urlruleid,special_php_urlruleid FROM ".TABLE_CHANNEL." WHERE disabled=0 ORDER by listorder");
-	while($r = $db->fetch_array($query))
+	$result = $db->query("SELECT `module`,`name`,`path`,`url`,`iscore`,`version` FROM `".DB_PRE."module` WHERE `disabled`=0");
+	while($r = $db->fetch_array($result))
 	{
-		$r['linkurl'] = linkurl($r['linkurl']);
-		$key = $r['channelid'];
-		$data[$key] = $r;
+		if(!$r['path']) $r['path'] = $r['module'] == 'phpcms' ? '' : $r['module'].'/';
+		if(!$r['url']) $r['url'] = $r['module'] == 'phpcms' ? '' : $r['module'].'/';
+		$data[$r['module']] = $r;
 	}
-	$CACHE['channel'] = $data;
-
+	$db->free_result($result);
+	$CACHE['MODULE'] = $data;
 	$data = array();
-    $r = $db->get_one("SELECT setting FROM ".TABLE_MODULE." WHERE module='phpcms'");
-	$CACHE['phpcms'] = unserialize($r['setting']);
-
-	$fields = array();
-	$result = $db->query("SELECT * FROM ".TABLE_FIELD." ORDER BY fieldid");
-    while($r = $db->fetch_array($result))
+	$result = $db->query("SELECT * FROM `".DB_PRE."model` WHERE `disabled`=0");
+	while($r = $db->fetch_array($result))
 	{
-		$tablename = $r['tablename'];
-		$fields[$tablename] .= ','.$r['name'];
+		$data[$r['modelid']] = $r;
 	}
-	$CACHE['field'] = $fields;
+	$db->free_result($result);
+	$CACHE['MODEL'] = $data;
+	$data = array();
+	$result = $db->query("SELECT `catid`,`module`,`type`,`modelid`,`catname`,`style`,`image`,`catdir`,`url`,`parentid`,`arrparentid`,`parentdir`,`child`,`arrchildid`,`items`,`ismenu` FROM `".DB_PRE."category` WHERE 1 ORDER BY `listorder`,`catid`");
+	while($r = $db->fetch_array($result))
+	{
+		$r['url'] = url($r['url']);
+		$data[$r['catid']] = $r;
+	}
+	$db->free_result($result);
+	$CACHE['CATEGORY'] = $data;
+	$data = array();
+	$result = $db->query("SELECT `typeid`,`module`,`name`,`style`,`typedir`,`url` FROM `".DB_PRE."type` WHERE 1 ORDER BY `listorder`,`typeid`");
+	while($r = $db->fetch_array($result))
+	{
+		$data[$r['typeid']] = $r;
+	}
+	$db->free_result($result);
+	$CACHE['TYPE'] = $data;
+	$data = array();
+	$result = $db->query("SELECT `areaid`,`name`,`style`,`parentid`,`arrparentid`,`child`,`arrchildid` FROM `".DB_PRE."area` WHERE 1 ORDER BY `listorder`,`areaid`");
+	while($r = $db->fetch_array($result))
+	{
+		$data[$r['areaid']] = $r;
+	}
+	$db->free_result($result);
+	$CACHE['AREA'] = $data;
+	$data = array();
+	$result = $db->query("SELECT `urlruleid`,`urlrule` FROM `".DB_PRE."urlrule` WHERE 1 ORDER BY `urlruleid`");
+	while($r = $db->fetch_array($result))
+	{
+		$data[$r['urlruleid']] = $r['urlrule'];
+	}
+	$db->free_result($result);
+	$CACHE['URLRULE'] = $data;
+	$data = array();
+    $r = $db->get_one("SELECT `setting` FROM `".DB_PRE."module` WHERE `module`='phpcms'");
+	$setting = $r['setting'];
+	eval("\$PHPCMS = $setting;");
+	if($PHPCMS['siteurl'] =='') $PHPCMS['siteurl'] = SITE_URL;
+	$CACHE['PHPCMS'] = $PHPCMS;
 	cache_write('common.php', $CACHE);
     return $CACHE;
 }
 
-function cache_update($action='')
+function cache_module()
 {
 	global $db;
-
-	$data=array();
-
-	switch($action)
+	$data = array();
+	$result = $db->query("SELECT `module`,`name`,`path`,`url`,`iscore`,`version`,`publishdate`,`installdate`,`updatedate`,`setting` FROM `".DB_PRE."module` WHERE `disabled`=0");
+	while($r = $db->fetch_array($result))
 	{
-		case 'keylink';
-			$query=$db->query("SELECT linktext,linkurl FROM ".TABLE_KEYLINK." where passed=1");
-			while($r=$db->fetch_array($query)){
-				  $data[]=$r;
-			}
-		break;
-
-		case 'reword';
-			$query = $db->query("SELECT word,replacement FROM ".TABLE_REWORD." where passed=1");
-			while($r = $db->fetch_array($query))
-			{
-				$data[]=$r;
-			}
-		break;
-
-		default:
-			$actions = array('keylink','reword');
-			array_map('cache_update', $actions);
-			return TRUE;
-	}
-	cache_write('cache_'.$action.'.php', $data);
-	return $data;
-}
-
-function cache_table()
-{
-	global $db,$CONFIG;
-	$query = $db->query("SHOW TABLES FROM `".$CONFIG['dbname']."`");
-	while($r = $db->fetch_row($query))
-	{
-		$table = $r[0];
-		if(preg_match("/^".$CONFIG['tablepre']."/i", $table))
+		if(!$r['path']) $r['path'] = $r['module'] == 'phpcms' ? '' : $r['module'].'/';
+		if(!$r['url'])
 		{
-			$tablename = str_replace($CONFIG['tablepre'], 'table_', $table);
-			$data[$tablename] = $table;         
+			$r['url'] = $r['module'] == 'phpcms' ? '' : $r['module'].'/';
+			$db->query("UPDATE `".DB_PRE."module` SET `url`='$r[url]' WHERE module='$r[module]' LIMIT 1");
 		}
-	}
-	$db->free_result($query);
-	if(!is_dir(PHPCMS_CACHEDIR))
-	{
-		dir_create(PHPCMS_CACHEDIR);
-		dir_create($CONFIG['templatescachedir']);
-	}
-	cache_write('table.php', $data , 'constant');
-	return $data;
-}
 
-function cache_module($module = '')
-{
-	global $db;
-	if($module)
-	{
-		$r = $db->get_one("SELECT setting,module,name,iscopy,moduledir,moduledomain FROM ".TABLE_MODULE." WHERE module='$module'");
 		if($r['setting'])
 		{
-			$setting = unserialize($r['setting']);
-		}
-		$setting['name'] = $r['name'];
-		$setting['moduledir'] = $r['moduledir'];
-		$setting['moduledomain'] = $r['moduledomain'];
-		$setting['linkurl'] = '';
-		if($r['module'] != 'phpcms' && $r['iscopy'] == 0)
-		{
-			$setting['linkurl'] = linkurl($r['moduledomain'] ? dir_path($r['moduledomain']) : $r['moduledir'].'/');
-            cache_categorys($module);
-		}
-		unset($r['moduledomain']);
-		cache_write($module.'_setting.php', $setting);
-		return $setting;
-	}
-	else
-	{
-		$query = $db->query("SELECT module FROM ".TABLE_MODULE." WHERE disabled=0 ORDER by moduleid");
-		while($r = $db->fetch_array($query))
-		{
-			cache_module($r['module']);
-			$modules[] = $r['module'];
+			$setting = $r['setting'];
+			eval("\$setting = $setting;"); 
+			unset($r['setting']);
+			if(is_array($setting)) $r = array_merge($r, $setting);
         }
-		return $modules;
+		cache_write('module_'.$r['module'].'.php', $r);
 	}
+	$db->free_result($result);
 }
 
-function cache_channel($channelid=0)
+function cache_model()
 {
-	global $db;
-	if($channelid)
-	{
-		$data = $db->get_one("SELECT * FROM ".TABLE_CHANNEL." WHERE channelid=$channelid");
-		if($data && !$data['islink'])
-		{
-			if($data['setting'])
-			{
-		        $setting = unserialize($data['setting']);
-				unset($data['setting']);
-				$data = is_array($setting) ? array_merge($data, $setting) : $data;
-			}
-			$data['linkurl'] = linkurl($data['linkurl']);
-			cache_write('channel_'.$channelid.'.php', $data);
-			cache_categorys($channelid);
-			return $data;
-		}
-    }
-	else
-	{
-		$query = $db->query("SELECT channelid FROM ".TABLE_CHANNEL." WHERE islink=0 AND disabled=0 ORDER by channelid");
-		while($r = $db->fetch_array($query))
-		{
-			cache_channel($r['channelid']);
-			$channelids[] = $r['channelid'];
-		}
-		return $channelids;
-	}
+	cache_table(DB_PRE.'model', '*', '', '', 'modelid', 1);
 }
 
-function cache_categorys($keyid)
+function cache_category()
 {
-	global $db,$PHPCMS,$CHANNEL;
-	$urlpre = '';
-	if(is_numeric($keyid)) 
-	{
-		$keyid = intval($keyid);
-		$module = $CHANNEL[$keyid]['module'];
-        $sql = " channelid=$keyid ";
-	}
-	else
-	{
-        $sql = " module='$keyid' ";
-	}
-	$catids = $data = array();
-    $query = $db->query("SELECT module,channelid,catid,catname,style,introduce,catpic,islink,catdir,linkurl,parentid,arrparentid,parentdir,child,arrchildid,items,itemordertype,itemtarget,ismenu,islist,ishtml,htmldir,prefix,urlruleid,item_prefix,item_html_urlruleid,item_php_urlruleid FROM ".TABLE_CATEGORY." WHERE $sql ORDER by listorder,catid");
-    while($r = $db->fetch_array($query))
-	{
-		$r['linkurl'] = str_replace($PHPCMS['index'].'.'.$PHPCMS['fileext'], '', $r['linkurl']);
-	    $r['linkurl'] = $urlpre ? preg_replace("|^".$urlpre."|", '', $r['linkurl']) : linkurl($r['linkurl']);
-		$catid = $r['catid'];
-        $data[$catid] = $r;
-		$catids[] = $catid;
-    }
-	if($data) cache_write('categorys_'.$keyid.'.php', $data);
-	return $catids;
+	cache_table(DB_PRE.'category', '*', '', '', 'listorder,catid', 1);
 }
 
-function cache_category($catid)
+function cache_type()
 {
-	global $db,$PHPCMS;
-	if(!$catid) return FALSE;
-    $data = $db->get_one("SELECT * FROM ".TABLE_CATEGORY." WHERE catid=$catid");
-	$setting = unserialize($data['setting']);
-	unset($data['setting']);
-	$data = is_array($setting) ? array_merge($data, $setting) : $data;
-	$data['linkurl'] = linkurl(str_replace($PHPCMS['index'].'.'.$PHPCMS['fileext'], '', $data['linkurl']));
-	cache_write('category_'.$catid.'.php', $data);
-	return $data;
+	cache_table(DB_PRE.'type', '*', '', '', 'listorder,typeid', 1);
 }
 
-function cache_type($keyid=0)
+function cache_area()
 {
-	global $db;
-	if($keyid)
-	{
-	    $result = $db->query("SELECT * FROM ".TABLE_TYPE." WHERE keyid='$keyid'");
-	    $data = array();
-	    while($r = $db->fetch_array($result))
-	    {
-			$r['introduce'] = $r['introduce']? $r['introduce']:'&nbsp;';
-	    	$data[$r['typeid']] = $r;
-	    }
-	    if($data)
-	    {
-			cache_write('type_'.$keyid.'.php', $data);
-	    }
-		return $data;
-	}
-	else 
-	{
-		$modules = array();
-		$query = $db->query("SELECT module FROM ".TABLE_MODULE." WHERE disabled=0 ORDER by moduleid");
-		while($r = $db->fetch_array($query))
-		{
-			$modules[] = $r['module'];
-        }		
-		$channelids = array();
-		$query = $db->query("SELECT channelid FROM ".TABLE_CHANNEL." WHERE islink=0 AND disabled=0 ORDER by channelid");
-		while($r = $db->fetch_array($query))
-		{
-			$channelids[] = $r['channelid'];
-		}
-		$modulechannels = array_merge($modules,$channelids);
-		foreach($modulechannels as $m)
-		{
-			$result = $db->query("SELECT * FROM ".TABLE_TYPE." WHERE keyid='$m'");
-			$TYPE = array();
-			while($r = $db->fetch_array($result))
-			{
-				$r['introduce'] = $r['introduce']? $r['introduce']:'&nbsp;';
-				$TYPE[$r['typeid']] = $r;
-			}
-			cache_write('type_'.$m.'.php',$TYPE);
-		}
-		return $modulechannels;		
-	}
+	cache_table(DB_PRE.'area', '*', '', '', 'listorder,areaid', 1);
 }
 
 function cache_member_group()
 {
-	global $db;
-	$query = $db->query("SELECT * FROM ".TABLE_MEMBER_GROUP." ORDER BY groupid");
-	while($r = $db->fetch_array($query))
-	{
-		$groupid = $r['groupid'];
-		cache_write('member_group_'.$groupid.'.php', $r);
-		$data[$groupid] = $r;
-	}
-	cache_write('member_group.php', $data);
-	return $data;
+	cache_table(DB_PRE.'member_group', '*', '', '', 'groupid', 1);
+	cache_table(DB_PRE.'member_group', '*', 'name', '', 'groupid', 0);
 }
 
-function cache_banip()
+function cache_role()
 {
-	global $db,$PHP_TIME;
-	$result = $db->query("SELECT ip,overtime FROM ".TABLE_BANIP." WHERE ifban=1 and overtime>=$PHP_TIME order by id desc ");
+	cache_table(DB_PRE.'role', '*', 'name', '', 'listorder,roleid');
+}
+
+function cache_author()
+{
+	cache_table(DB_PRE.'author', '*', 'name', '', 'listorder,authorid', 0, 100);
+}
+
+function cache_keyword()
+{
+	cache_table(DB_PRE.'keyword', '*', 'tag', '', 'listorder,usetimes', 0, 100);
+}
+
+function cache_copyfrom()
+{
+	cache_table(DB_PRE.'copyfrom', '*', '', '', 'listorder,usetimes', 0, 100);
+}
+
+function cache_pos()
+{
+	cache_table(DB_PRE.'position', '*', 'name', '', 'listorder,posid', 0);
+}
+
+function cache_status()
+{
+	global $db;
+	$array = array();
+	$result = $db->query("SELECT * FROM `".DB_PRE."status` ORDER BY `status` ASC");
 	while($r = $db->fetch_array($result))
 	{
-		$data[] = array('ip'=>$r['ip'],'overtime'=>$r['overtime']);
+		$array[$r['status']] = $r['name'];
+	}
+	cache_write('status.php', $array);
+	return $array;
+}
+
+function cache_workflow()
+{
+	global $db;
+	$array = array();
+	$result = $db->query("SELECT * FROM `".DB_PRE."workflow` ORDER BY `workflowid` ASC");
+	while($r = $db->fetch_array($result))
+	{
+		$array[$r['workflowid']] = $r['name'];
+	}
+	cache_write('workflow.php', $array);
+	return $array;
+}
+
+function cache_formguid()
+{
+	cache_table(DB_PRE.'formguide', '*', '', '', 0);
+}
+
+function cache_table($table, $fields = '*', $valfield = '', $where = '', $order = '', $iscacheline = 0, $number = 0)
+{
+	global $db;
+	$keyfield = $db->get_primary($table);
+	$data = array();
+	if($where) $where = " WHERE $where";
+	if(!$order) $order = $keyfield;
+	$limit = $number ? "LIMIT 0,$number" : '';
+	$result = $db->query("SELECT $fields FROM `$table` $where ORDER BY $order $limit");
+	$table = preg_replace("/^".DB_PRE."(.*)$/", "\\1", $table);
+	while($r = $db->fetch_array($result))
+	{
+		if(isset($r['setting']) && !empty($r['setting']))
+		{
+			$setting = $r['setting'];
+			eval("\$setting = $setting;"); 
+			unset($r['setting']);
+			if(is_array($setting)) $r = array_merge($r, $setting);
+        }
+		$key = $r[$keyfield];
+		$value = $valfield ? $r[$valfield] : $r;
+		$data[$key] = $value;
+		if($iscacheline) cache_write($table.'_'.$key.'.php', $value);
 	}
 	$db->free_result($result);
-	cache_write('banip.php', $data);
-	return $data;
+	cache_write($table.'.php', $data);
 }
+
 ?>

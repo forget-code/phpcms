@@ -1,28 +1,29 @@
-<?php 
-require './include/common.inc.php';
-require './include/tag.func.php';
-$head['title'] = $MOD['name'];
-$head['keywords'] = $MOD['seo_keywords'];
-$head['description'] = $MOD['seo_description'];
-$enablecheckcode = $MOD['enablecheckcode'];
-$logo = $PHP_SITEURL.$PHPCMS['logo'];
-$sitename = $PHPCMS['sitename'];
-$sql = "SELECT * FROM ".TABLE_TYPE." WHERE keyid = 'link' ORDER BY listorder ASC ";
-$query = $db->query($sql);
-$TYPE = array();
-while($r = $db->fetch_array($query))
+<?php
+require_once './include/common.inc.php';
+require_once 'form.class.php';
+require_once MOD_ROOT.'include/link.class.php';
+$link = new link();
+if(isset($typeid))
 {
-	$TYPE[] = $r;
+	$datas = subtype('link');
+    $link_name = $TYPE[$typeid][name];
+	$tid = intval($typeid) ? intval($typeid) : 0;
+	if($tid)
+	{
+		$link_logo = $link->listinfo("where typeid=$tid and linktype=1 and passed =1");
+		$link_word = $link->listinfo("where typeid=$tid and linktype=0 and passed =1");
+	}
+	include template('link', 'list');
 }
-$linktype_select = '';
-$linktype_select .= '<option value="0" >'.$LANG['choose_type'].'</option>';
-$tname = array();
-foreach($TYPE as $typeid=>$v)
+else
 {
-	$linktype_select.="<option value=\"".$v['typeid']."\" >".$v['name']."</option>";
-	$tname[] = $v;
+    $datas = subtype('link');
+    foreach($datas AS $data)
+    {
+        $link_logos[$data[typeid]] = $link->listinfo("where passed =1 AND linktype=1 AND typeid ='$data[typeid]'");
+        $link_words[$data[typeid]] = $link->listinfo("where passed =1 AND linktype=0 AND typeid ='$data[typeid]'");
+    }
+	include template('link', 'index');
 }
-$templateid = 'index';
-include template($mod, $templateid);
 
 ?>

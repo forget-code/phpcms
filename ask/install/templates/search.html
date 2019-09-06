@@ -1,0 +1,68 @@
+{template 'phpcms','header'}
+<script language="JavaScript">
+function search_submit()
+{
+	if($('#title').val() =="")
+    {
+		$('#title').focus();
+		alert("请填写您要搜索的问题.");
+		return false;
+	}
+	document.wordform.action = '{$M[url]}search.php';
+    document.wordform.keywords.value = document.wordform.title.value;
+	document.wordform.submit();
+}
+</script>
+<!--begin main-->
+<div id="main">
+  <!--begin left-->
+  <div id="main_l">
+    <div id="position"><a href="">首页</a><a href="{$M[url]}">问吧</a> 搜索结果</div>
+	<div id="box_1" class="mar_10">
+<form name="wordform" action="{$M[url]}question.php" method="get">
+<input type="text" name="title" id="title" size="70" value="{$keywords}"/>
+<input type="submit" value="我要提问" /> 
+<input type="hidden" name="keywords" id="keywords"/>
+<input type="button" value="搜索答案" name="search" onClick="search_submit();" />
+</form>
+      </div>
+    <div class="tag_menu">
+      <ul>
+        <li {if $status==5 || !$status && !$flag}class="selected"{/if}><a href="{$M[url]}search.php?status=5&keywords={$keywords}">已解决的问题</a></li>
+        <li {if $status==3}class="selected"{/if}><a href="{$M[url]}search.php?status=3&keywords={$keywords}">未解决的问题</a></li>
+        <li {if $flag==1}class="selected"{/if}><a href="{$M[url]}search.php?flag=1&keywords={$keywords}">投票中的问题</a></li>
+      </ul>
+    </div>
+<table cellpadding="0" cellspacing="0" class="table_list">
+<tr>
+<th>标题</th>
+<th width="50">回答数</th>
+<th width="80">提问者</th>
+<th width="110">提问时间</th>
+</tr>
+{loop $infos $n $r}
+<tr>
+<td class="align_left">·<a href="{$M[url]}show.php?id={$r[askid]}" target="{$target}">{$r[title]}</a> <a href="{$CATEGORY[$r[catid]][url]}" style="color:gray">[{$CATEGORY[$r[catid]][catname]}]</a></td>
+<td>{$r[answercount]}</td>
+<td><a href="{space_url($r['userid'])}" target="_blank">{$r[username]}</a></td>
+<td>{date('Y-m-d H:i', $r[addtime])}</td>
+</tr>
+{/loop}
+</table>
+{if $pages}<p id="pages">{$pages}</p>{/if}
+  </div>
+  <!--end left-->
+  <!--begin right-->
+  <div id="main_r">
+    <h4>热点问题</h4>
+    <div>
+      <ul class="text_list">
+       {tag_侧栏热点问题}
+      </ul>
+    </div>
+  </div>
+  <!--end right-->
+</div>
+<!--end main-->
+<!--begin foot-->
+{template 'phpcms','footer'}

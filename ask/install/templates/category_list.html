@@ -1,0 +1,77 @@
+{template 'phpcms','header'}
+<!--begin main-->
+<div id="main">
+  <!--begin left--> 
+  <div id="main_l"> 
+    <div id="position"><a href="">首页</a><a href="{$M[url]}">问吧</a>{catpos($catid)}</div>
+    <div class="tag_menu">
+      <ul>
+        <li {if $action=='all'}class="selected"{/if}><a href="{$all}">全部问题</a></li>
+        <li {if $action=='solve'}class="selected"{/if}><a href="{$solve}">已解决问题</a></li>
+        <li {if $action=='nosolve'}class="selected"{/if}><a href="{$nosolve}">待解决问题</a></li>
+        <li {if $action=='vote'}class="selected"{/if}><a href="{$vote}">投票中问题</a></li>
+        <li {if $action=='high'}class="selected"{/if}><a href="{$high}">高分问题</a></li>
+        <li><a href="{$M[url]}question.php?catid={$catid}">我要提问</a></li>
+      </ul>
+    </div>
+{if $action=='solve'}{tag_栏目页已解决问题}{elseif $action=='nosolve'}{tag_栏目页待解决问题}{elseif $action=='vote'}{tag_栏目页投票问题}{elseif $action=='high'}{tag_栏目页高分问题}{else}{tag_栏目页全部问题}{/if}
+  </div>
+  <!--end left-->
+  <!--begin right-->
+  <div id="main_r">
+    <h4>热点问题</h4>
+    <div>
+      <ul class="text_list">
+       {tag_栏目热点问题}
+      </ul>
+    </div>
+    <h4>推荐问题</h4>
+    <div class="text_list">
+      <ul>
+        {tag_栏目页推荐问题}
+      </ul>
+    </div>
+    <h4 class="tag_box">积分排行<span class="tag_menu_1"><a href="{$M[url]}creditlist.php?action=week" onMouseOver="showContent('0')" id="nav0">上周</a><a href="{$M[url]}creditlist.php?action=month" onMouseOver="showContent('1')" id="nav1">上月</a><a href="{$M[url]}creditlist.php?action=all" onMouseOver="showContent('2')" id="nav2" class="selected">总排行</a></span></h4>
+    <div id="content0" style="display:none;">
+      <ul class="text_list_1">
+	  {tag_上周积分排行榜}
+      </ul>
+    </div>
+	<div id="content1" style="display:none;">
+      <ul class="text_list_1">
+	  {tag_上月积分排行榜}
+      </ul>
+    </div>
+	<div id="content2">
+      <ul class="text_list_1">
+	  {tag_总积分排行榜}
+      </ul>
+    </div>
+  </div>
+  <!--end right-->
+</div>
+<script language="JavaScript">
+<!--
+	function showContent(id)
+	{
+		for (var i = 0;i < 3;i++)
+		{
+		var nav = document.getElementById("nav" + i);
+		var content = document.getElementById("content" + i);
+			if (i == id)
+			{
+			nav.className = 'selected';
+			content.style.display = "";
+			}
+			else
+			{
+			nav.className = '';        
+			content.style.display = "none";
+			}
+		}
+	}
+ //-->
+</script>
+<!--end main-->
+<!--begin foot-->
+{template 'phpcms','footer'}

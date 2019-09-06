@@ -1,26 +1,24 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
 <body>
 <?=$menu?>
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <tr>
-    <th colspan=2> 编辑文件</th>
-  </tr>
+<table cellpadding="0" cellspacing="1" class="table_form">
+    <caption> 编辑文件</caption>
 <form method="post" name="myform" action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>">
 <input type="hidden" name="fname" value="<?=$fname?>">
 <input name="dir" type="hidden" value="<?=$dir?>">
 <tr>
-<td class="tablerow">文件物理路径：</td>
-<td class="tablerow"><font color="blue"><?=$fname?></font> (上次修改时间：<?=$filemtime?>) <font color="red">*</font></td>
+<th>文件物理路径：</th>
+<td><font color="blue"><?=$fname?></font> (上次修改时间：<?=$filemtime?>) <font color="red">*</font></td>
 </tr>
 <tr>
-<td class="tablerow"></td>
-<td class="tablerow"></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td class="tablerow" colspan=2 align="center">
+<td colspan=2 align="center">
 <textarea id='txt_ln' rows='30' cols='4' align=right style='overflow:hidden;border-right:0px;padding-right:0px;text-align:right;scrolling:no;height:450px;font-family:Fixedsys,verdana,宋体;font-size:12px;color:#0000FF;background-color:#eeeeee;' readonly>
 1
 2
@@ -1739,7 +1737,7 @@ function show_ln()
 </table>
 <table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">
   <tr>
-    <td align="center"><input type="submit" name="dosubmit" value=" 确认修改 "> <input type="reset" name="submit" value=" 重置 "></td>
+    <td class="align_c"><input type="submit" name="dosubmit" value=" 确认修改 "> <input type="reset" name="submit" value=" 重置 "></td>
   </tr>
 </table>
 </form>

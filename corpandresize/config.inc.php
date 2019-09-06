@@ -6,7 +6,6 @@ if(!$_userid) showmessage("你没有登陆");
 $tmp = $_COOKIE['tmp'];
 $tmp_url = $_COOKIE['tmp_url'];
 
-
 define("TMP_PATH", $tmp);
 define("TMP_URL", $tmp_url);
 define("FILENAME_CHECK",'/(jpg|jpeg|gif|png|bmp)$/i');

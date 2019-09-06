@@ -1,0 +1,5 @@
+<marquee direction="left" width="{$width}" height="{$height}" onmouseover="this.stop();" onmouseout="this.start();" behavior="scroll" scrollamount="3">
+{loop $data $announce}
+ <li><a href="{$announce['linkurl']}" {if $target}target="_blank"{/if}>{$announce['title']}</a>&nbsp;[{if $showauthor}发布人：{$announce[username]}&nbsp;{/if}{$announce[addtime]}]</li>
+{/loop}
+</marquee>

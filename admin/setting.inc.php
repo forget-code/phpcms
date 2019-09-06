@@ -1,7 +1,7 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
 
-require_once PHPCMS_ROOT.'/include/ftp.class.php';
+@set_time_limit(0);
 
 function fileext_select($name, $fileext = 'html' , $property = '', $fileextarr = array('html','htm','shtml','shtm','php'))
 {
@@ -16,53 +16,84 @@ function fileext_select($name, $fileext = 'html' , $property = '', $fileextarr =
 switch($action)
 {
 	case 'save':
-		if($setting['enableftp'])
+		if(empty($setting)) showmessage('操作失败', '?mod=phpcms&file=setting');
+	    if($setting['siteurl'] && substr($setting['siteurl'], -1, 1) != '/')
 	    {
-			$ftp = new phpcms_ftp($setting['ftphost'], $setting['ftpuser'], $setting['ftppass'], $setting['ftpport'], $setting['ftpwebpath'], 'I', 1);
-			if(strpos($ftp->data, '230') === FLASE) showmessage($LANG['ftp_set_error']);
-			if(!$ftp->is_phpcms()) showmessage($LANG['root_or_relative_ftproot_error']); 
+			$setting['siteurl'] .= '/';
 		}
-
+		else
+	    {
+			$setting['siteurl'] = SITE_URL;
+		}
+		filter_write($setting['filter_word']);
 		module_setting($mod, $setting);
-	    
 		set_config($setconfig);
-
-		if($setting['ishtml'] == 0) 
-	    {
-			$data = '<html>
-					<head>
-					<title>phpcms 2007</title>
-					<meta http-equiv="Refresh" content="0;URL=index.php" />
-					</head>
-					<body>
-					</body>
-					</html>';
-			file_put_contents(PHPCMS_ROOT.'/'.$setting['index'].'.'.$setting['fileext'], $data);
-			chmod(PHPCMS_ROOT.'/'.$setting['index'].'.'.$setting['fileext'], 0777);
-		}
-
-		ob_start();
 		phpcms_tm();
-		$data = ob_get_contents();
-		ob_clean();
-		cache_write('tm.html', $data);
-
-		showmessage($LANG['save_setting_success'], $PHP_REFERER);
+		if($PHPCMS['fileext'] != $setting['fileext'] || $PHPCMS['enable_urlencode'] != $setting['enable_urlencode'])
+	    {
+			showmessage('网站配置保存成功！开始更新内容页URL ...', '?mod=phpcms&file=url&forward='.urlencode(URL));
+		}
+		else
+	    {
+			showmessage($LANG['save_setting_success'], $forward);
+		}
 		break;
 
-	case 'testftp':
-		$ftp = new phpcms_ftp($ftphost, $ftpuser, $ftppass, $ftpport, $ftpwebpath, 'I', 1);
-		if(!$ftp->connected) showmessage($LANG['ftp_set_error']);
-		if(!$ftp->is_phpcms()) showmessage($LANG['root_or_relative_ftproot_error']); 
+	case 'test_user':
+		$http = load('http.class.php');
+	    $is_ok = $http->get('http://www.phpcms.cn/member/api/test_user.php?charset='.CHARSET.'&phpcms_username='.urlencode($phpcms_username).'&phpcms_password='.urlencode($phpcms_password));
+		echo $is_ok === false ? 0 : $http->get_data();
+		break;
 
-        showmessage($LANG['ftp_set_right']);
+	case 'test_mail':
+		require_once 'sendmail.class.php';
+        $sendmail = new sendmail();
+        $sendmail->set($mail_server, $mail_port, $mail_user, $mail_password, $mail_type, $mail_user);
+        echo $sendmail->send($email_to, '邮件发送测试 - '.$PHPCMS['sitename'], '邮件发送测试！<br />'.$PHPCMS['mail_sign'], $mail_user) ? '邮件发送成功！' : '邮件发送失败！';
+		exit;
+		break;
+
+    case 'test_uc':
+        $link = mysql_connect($uc_dbhost, $uc_dbuser, $uc_dbpwd, 1)  or exit($LANG['can_not_connect_mysql_server']. mysql_error());
+        @mysql_select_db($uc_dbname, $link) or exit($uc_dbname.$LANG['can_note_find_database']);
+        @mysql_fetch_array(mysql_query("show tables like '{$uc_dbpre}members'")) or exit($LANG['invalid_tablepre'].$uc_dbpre);
+        $db->select_db(DB_NAME);
+        exit('success');
+        break;
+
+	case 'test_ftp':
+		require_once 'ftp.class.php';
+		$ftp = new ftp($ftp_host, $ftp_port, $ftp_user, $ftp_pw, $ftp_path);
+		$message = $ftp->error ? $ftp->errormsg() : 'FTP 连接成功';
+		exit($message);
+		break;
+
+	case 'ftpdir_list':
+		require_once 'ftp.class.php';
+		$ftp = new ftp($ftp_host, $ftp_port, $ftp_user, $ftp_pw, '');
+		if($ftp->error)
+	    {
+			exit($ftp->error);
+		}
+		else
+	    {
+			$dirs = $ftp->nlist($path);
+			if($dirs)
+			{
+				$options = $path == '/' ? array('/'=>'/') : array(''=>'请选择');
+				foreach($dirs as $k=>$v)
+				{
+					if(!str_exists($v, '.')) $options[$v] = $v;
+				}
+				if(count($options) > 1)
+				{
+					echo form::select($options, 'dirlist', 'dirlist', '', 1, '', 'onchange="$(\'#ftp_path\').val(this.value == \'/\' ? \'/\' : \''.$path.'\'+this.value+\'/\');ftpdir_list(\''.$path.'\'+this.value+\'/\')"');
+				}
+			}
+		}
 		break;
 
 	default :
-		require PHPCMS_ROOT.'/config.inc.php';
-		
-
-		@extract(new_htmlspecialchars($CONFIG));
 		@extract(new_htmlspecialchars($PHPCMS));
 
 		if(!function_exists('ob_gzhandler')) $enablegzip = 0;
@@ -81,7 +112,6 @@ switch($action)
         if(function_exists('imagepng')) $gd .= "PNG ";
         if(function_exists('imagejpeg')) $gd .= " JPG ";
         if(function_exists('imagegif')) $gd .= " GIF ";
-
-        include admintpl('setting');
+        include admin_tpl('setting');
 }
 ?>

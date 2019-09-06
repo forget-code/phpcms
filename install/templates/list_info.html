@@ -1,0 +1,38 @@
+{template 'phpcms','header'}
+
+<!--begin main-->
+<div id="main">
+  <div id="main_l" class="bdr_1">
+    <!--位置导航-->
+    <div id="position"><a href="">首页</a>{catpos($catid)}</div>
+    <div class="bdr_2">
+      <ul class="pic_list">
+		{tag_二级栏目图片}
+      </ul>
+    </div>
+		{tag_二级栏目标题列表}
+  </div>
+  <div id="main_r">
+    <!--广告位-->
+    <div class="ad_side"><script language="javascript" src="data/js.php?id=5"></script></div>
+    <h4>图片信息</h4>
+    <div>
+      <ul class="pic_list">
+        {tag_栏目页图片文章}
+      </ul>
+    </div>
+	<!--{block("list_info", 1)}-->
+    <h4>周DIGG排行</h4>
+    <div>
+      <ul class="digg_text_list">
+       <!--{get sql="select d.contentid,d.supports,c.title,c.style,c.url from phpcms_digg d left join phpcms_content c on d.contentid=c.contentid where c.status=99 AND c.catid='$catid' order by d.supports_week desc" rows="10"}-->
+				<li><span>{$r[supports]}</span><a href="{$r[url]}" target="_blank" class="{$r[style]}">{str_cut($r[title], 44)}</a></li>
+		<!--{/get}-->
+      </ul>
+    </div>
+	<!--{block("list_$catid", 2)}-->
+  </div>
+</div>
+<!--end main-->
+
+{template 'phpcms','footer'}

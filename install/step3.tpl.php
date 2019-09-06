@@ -1,65 +1,87 @@
-<?php include PHPCMS_ROOT."/install/header.tpl.php";?>
-<table  border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
-  <tr>
-    <td>	
-	  <table  border="0" cellpadding="0" cellspacing="0" class="ttable" align="center">
-        <tr>
-          <td><table  border="0" align="center" cellpadding="2" cellspacing="0"  class="ttable">
-              <tr>
-                <td width="5" height="5" class="td-left-top"></td>
-                <td class="td-l-top"></td>
-                <td class="td-l-top"></td>
-                <td width="5" height="5" class="td-right-top"></td>
-              </tr>
-              <tr class="tr-l-bottom">
-			   <td></td>
-                <td class="txttitle"><img src="install/images/ico.jpg" width="14" height="14" align="absmiddle"/>&nbsp;PHPCMS 程序安装向导</td>
-			    <td align="right" valign="top">
-				<img src="install/images/minimum.gif"  style="cursor:pointer;" onClick="MiniWindow();" title="最小化到状态栏"><img src="install/images/maxmum.gif"><img src="install/images/close.gif" style="cursor:pointer;" onClick="CloseWindow();" title="退出安装程序"></td>
-			    <td></td>
-              </tr>
-          </table></td>
-        </tr>
-      </table>
-	  <table height="300"  border="0"  align="center" cellpadding="0" cellspacing="0" class="btable">
-  <tr>
-    <td><table  border="0" align="center" cellpadding="2" cellspacing="0" class="ltable">
-      <tr>
-        <td height="56" colspan="2"  style="background:url('install/images/install_banner.jpg') no-repeat right;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#383F69"><strong> 最终用户许可证协议</strong></font><br>
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="#383F69">请检阅授权条款</font></td>
-        </tr>
-	  <tr>
-        <td width="186" height="2" class="tr-bottom-bg"></td>
-        <td width="606" height="2" class="tr-bottom-bg"></td>
-	  </tr>
-      <tr  class="tr-bottom">
-        <td height="230" colspan="2">         
-          <table width="100%" height="230"  border="0" cellpadding="0" cellspacing="0">
-            <tr>
-              <td width="19" rowspan="3">&nbsp;</td>
-              <td width="455" height="25"> 请阅读许可证协议，拖动下拉条查看更多</td>
-              <td width="18" rowspan="3">&nbsp;</td>
-            </tr>
-            <tr>
-              <td><textarea name="textfield" cols="48" rows="10" wrap="VIRTUAL" class="textarea" readonly><?php echo $license?></textarea></td>
-              </tr>
-            <tr>
-              <td height="34">如果您接受协议重的条款，单击 [接受(I)] 继续安装。如果您选定 [取消(C)] ，安装程序将会关闭。安装<?php echo $PHPCMS_VERSION_NAME;?>必须接收该协议。 </td>
-              </tr>
-          </table>          </td>
-        </tr>
-	  <tr>
-        <td height="2" colspan="3" class="tr-bottom-bg"></td>
-	  </tr>
-      <tr class="tr-bottom">
-        <td align="right" valign="top"><img src="install/images/installsystem.gif" width="183" height="12" align="top">&nbsp;&nbsp;</td>
-        <td align="right"><input class="btn" onClick="location.href='javascript: history.go(-1);'" type=reset value="上一步(P)" name=reset>
-          <input class="btn" onClick="location.href='install.php?step=<?=++$step?>'" type=reset value="接受(I)" name=reset>
-          <input class="btn" onClick="CloseWindow();" type=reset value="取消(C)" name=reset1>&nbsp;&nbsp;</td>
-      </tr>
-    </table></td>
-  </tr>
-</table></td>
-  </tr>
-</table>
-<?php include PHPCMS_ROOT."/install/footer.tpl.php";?>
+<?php include PHPCMS_ROOT.'install/header.tpl.php';?>
+	 <table width="100%" cellpadding="0" cellspacing="0" class="table_list">
+                  <tr>
+                    <th>检查项目</th>
+                    <th>当前环境</th>
+                    <th>建议环境</th>
+                    <th>功能影响</th>
+                  </tr>
+                  <tr>
+                    <td>操作系统</td>
+                    <td><?php echo php_uname();?></td>
+                    <td>Windows_NT/Linux/Freebsd</td>
+                    <td><font color="yellow">√</font></td>
+                  </tr>
+                  <tr>
+                    <td>web 服务器</td>
+                    <td><?php echo $_SERVER['SERVER_SOFTWARE'];?></td>
+                    <td>Apache/IIS</td>
+                    <td><font color="yellow">√</font></td>
+                  </tr>
+                  <tr>
+                    <td>php 版本</td>
+                    <td>php <?php echo phpversion();?></td>
+                    <td>php 4.3.0 及以上</td>
+                    <td><?php if(phpversion() >= '4.3.0'){ ?><font color="yellow">√<?php }else{ ?><font color="red">无法安装</font><?php }?></font></td>
+                  </tr>
+                  <tr>
+                    <td>mysql 扩展</td>
+                    <td><?php if(extension_loaded('mysql')){ ?>√<?php }else{ ?>×<?php }?></td>
+                    <td>建议开启</td>
+                    <td><?php if(extension_loaded('mysql')){ ?><font color="yellow">√</font><?php }else{ ?><font color="red">无法安装</font><?php }?></td>
+                  </tr>
+                  <tr>
+                    <td>gd 扩展</td>
+                    <td><?php if($PHP_GD){ ?>√ （支持 <?php echo $PHP_GD;?>）<?php }else{ ?>×<?php }?></td>
+                    <td>建议开启</td>
+                    <td><?php if($PHP_GD){ ?><font color="yellow">√</font><?php }else{ ?><font color="red">不支持缩略图和水印</font><?php }?></td>
+                  </tr>
+                  <tr>
+                    <td>zlib 扩展</td>
+                    <td><?php if(extension_loaded('zlib')){ ?>√<?php }else{ ?>×<?php }?></td>
+                    <td>建议开启</td>
+                    <td><?php if(extension_loaded('zlib')){ ?><font color="yellow">√</font><?php }else{ ?><font color="red">不支持Gzip功能</font><?php }?></td>
+                  </tr>
+                  <tr>
+                    <td>ftp 扩展</td>
+                    <td><?php if(extension_loaded('ftp')){ ?>√<?php }else{ ?>×<?php }?></td>
+                    <td>建议开启</td>
+                    <td><?php if(extension_loaded('ftp')){ ?><font color="yellow">√</font><?php }elseif(ISUNIX){ ?><font color="red">不支持在线升级</font><?php }?></td>
+                  </tr>
+                  <tr>
+                    <td>iconv/mb_string 扩展</td>
+                    <td><?php if(extension_loaded('iconv') || extension_loaded('mbstring')){ ?>√<?php }else{ ?>×<?php }?></td>
+                    <td>建议开启</td>
+                    <td><?php if(extension_loaded('iconv') || extension_loaded('mbstring')){ ?><font color="yellow">√</font><?php }else{ ?><font color="red">字符集转换效率低</font><?php }?></td>
+                  </tr>
+                  <tr>
+                    <td>short_open_tag</td>
+                    <td><?php if(ini_get('short_open_tag')){ ?>√<?php }else{ ?>×<?php }?></td>
+                    <td>必须打开</td>
+                    <td><?php if(ini_get('short_open_tag')){ ?><font color="yellow">√</font><?php }else{ ?><font color="red">无法安装</font><?php }?></td>
+                  </tr>
+                  <tr>
+                    <td>allow_url_fopen</td>
+                    <td><?php if(ini_get('allow_url_fopen')){ ?>√<?php }else{ ?>×<?php }?></td>
+                    <td>建议打开</td>
+                    <td><?php if(ini_get('allow_url_fopen')){ ?><font color="yellow">√</font><?php }else{ ?><font color="red">不支持保存远程图片</font><?php }?></td>
+                  </tr>
+                  <tr>
+                    <td>DNS解析</td>
+                    <td><?php if($PHP_DNS){ ?>√<?php }else{ ?>×<?php }?></td>
+                    <td>建议设置正确</td>
+                    <td><?php if($PHP_DNS){ ?><font color="yellow">√</font><?php }else{ ?><font color="red">不支持采集和保存远程图片</font><?php }?></td>
+                  </tr>
+                </table>
+<form id="install" action="install.php?" method="post">
+<input type="hidden" name="step" value="4">
+ </form>
+<a href="javascript:history.go(-1);" class="btn">返回上一步：<?php echo $steps[--$step];?></a><?php if($is_right) { ?>
+<a onClick="$('#install').submit();" class="btn"><span>下一步</span></a>
+<?php }else{ ?>
+<a onClick="alert('当前配置不满足Phpcms安装需求，无法继续安装！');" class="btn"><span>检测不通过，无法继续安装</span></a>
+ <?php }?>
+  </div>
+</div>
+</body>
+</html>		 

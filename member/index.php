@@ -1,54 +1,32 @@
 <?php
 require './include/common.inc.php';
+if(!$_userid) showmessage($LANG['please_login'], $M['url'].'login.php?forward='.urlencode(URL));
 
-if(!$_userid) showmessage($LANG['please_login'], $MOD['linkurl'].'login.php?forward='.urlencode($PHP_URL));
-
-extract($member->get_info());
-$GROUPS = cache_read('member_group.php');
-extract(cache_read('member_group_'.$_groupid.'.php'));
-extract(cache_read('member_group_'.$_groupid.'.php'));
-if($MODULE['wenba']['name'])
+switch($action)
 {
-	$r = $db->get_one("SELECT grade, actor FROM ".TABLE_WENBA_ACTOR." WHERE typeid=$actortype AND min<=$credit AND max>=$credit");
-	@extract($r);
+	case 'get_remaintime':
+		require MOD_ROOT.'include/group.class.php';
+		$group = new group();
+		$array = $group->extend_get($_userid, $groupid, 'startdate, enddate');
+		$data = $array['startdate'].'~'.$array['enddate'];
+		exit($data);
+	break;
+	default:
+		$memberinfo = $member->get($_userid, $fields = '*', 1);
+		$memberinfo['avatar'] = avatar($_userid);
+		@extract(new_htmlspecialchars($memberinfo));
+		
+		if(isset($MODULE['message']))
+		{
+			$message_api = load('message_api.class.php', 'message', 'api');
+			$msg_num = $message_api->count_message($_userid, 'new');
+			if($_userid && $msg_num < 1)
+			{
+				$arr_msg = array('userid'=>$_userid, 'message'=>0);
+				$member->edit($arr_msg);
+			}
+		}
+	break;
 }
-
-$chargetype = $chargetype==1 ? $LANG['period_of_validity'] : $LANG['subtract_point'];
-$gender = $gender==1 ? $LANG['male'] : $LANG['female'];
-$regtime = $regtime ? date('Y-m-d H:i:s',$regtime) : '';
-$lastlogintime = $lastlogintime ? date('Y-m-d H:i:s',$lastlogintime) : '';
-$begindate = $begindate > '0000-00-00' ? $begindate : '';
-$enddate = $enddate > '0000-00-00' ? $enddate : '';
-$old = '';
-if($birthday > '0000-00-00')
-{
-	$date->set_date($birthday);
-	$old = date('Y') - $date->get_year();
-}
-$enableaddalways = $enableaddalways == 1 ? $LANG['yes'] : $LANG['no'];
-
-$groupnames = '';
-foreach($_arrgroupid as $gid)
-{
-	$groupnames .= ($groupnames ? ' ' : '').$GROUPS[$gid]['groupname'];
-}
-
-if($_groupid == 1 || $_groupid > 5)
-{
-	$status = $LANG['normal'];
-}
-else
-{
-	$status = $GROUP['groupname'];
-}
-
-require_once PHPCMS_ROOT.'/include/field.class.php';
-$field = new field($CONFIG['tablepre'].'member_info');
-$fields = $field->show_list('<tr>
-<td width="15%"  class="td_right">$title:&nbsp;</td>
-<td width="85%"  class="td_left">$value &nbsp;</td>
-</tr>
-');
-
 include template($mod, 'index');
 ?>

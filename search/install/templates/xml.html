@@ -1,0 +1,8 @@
+<!--{loop $data $n $r}-->
+<item>
+<title><![CDATA[{$r[title]}]]></title>
+<url>{$r[url]}</url>
+<description><![CDATA[{$r[title]}]]></description>
+<time>{date('Y-m-d H:i:s', $r['time'])}</time>
+</item>
+<!--{/loop}-->

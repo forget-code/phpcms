@@ -1,141 +1,144 @@
-<?php 
+<?php
 defined('IN_PHPCMS') or exit('Access Denied');
+require_once MOD_ROOT.'include/global.func.php';
+require_once MOD_ROOT.'include/ask.class.php';
+require_once MOD_ROOT.'include/output.func.php';
 
-$departments = cache_read('ask_department.php');
-$departmentids = array();
-$sql = '';
+$ask = new ask();
+$submenu = array
+(
+	array($LANG['all_question'], '?mod='.$mod.'&file='.$file.'&action=manage'),
+	array($LANG['waiting_solve'], '?mod='.$mod.'&file='.$file.'&action=manage&job=3'),
+	array($LANG['solove_question'], '?mod='.$mod.'&file='.$file.'&action=manage&job=5'),
+	array($LANG['vote_question'], '?mod='.$mod.'&file='.$file.'&action=manage&flag=1'),
+	array($LANG['elite_question'], '?mod='.$mod.'&file='.$file.'&action=manage&flag=3'),
+	array($LANG['close_question'], '?mod='.$mod.'&file='.$file.'&action=manage&job=6'),
+	array($LANG['overdue_question'], '?mod='.$mod.'&file='.$file.'&action=manage&passed=1'),
+	array("<font color='#FF0000'>".$LANG['check_question']."</font>", '?mod='.$mod.'&file='.$file.'&action=manage&job=1'),
+	array($LANG['move_question'], '?mod='.$mod.'&file='.$file.'&action=move'),
+	array('删除问题', '?mod='.$mod.'&file='.$file.'&action=advancedelete'),
+);
+$menu = admin_menu($LANG['question_manage'], $submenu);
 
-if($_grade > 0)
-{
-	foreach($departments as $k=>$v)
-	{
-		if($v['admin']==$_username) $departmentids[] = $k;
-	}
-    $ids = implode(',', $departmentids);
-	if($ids) $sql = " and departmentid in($ids) ";
-}
-else
-{
-    $departmentids = array_keys($departments);
-}
-
-$submenu = array();
-$submenu[] = array($LANG['all'], '?mod='.$mod.'&file='.$file);
-foreach($departmentids as $id)
-{
-    $submenu[] = array($departments[$id]['department'], '?mod='.$mod.'&file='.$file.'&departmentid='.$id);
-}
-$menu = adminmenu($LANG['consultation_manage'], $submenu);
-
-$STATUS = array($LANG['unsettled'], $LANG['under_dealing'], $LANG['dealed'], $LANG['reject_deal']);
-
-$pagesize = $PHPCMS['pagesize'];
-
-$action=$action ? $action : 'manage';
+if(!$action) $action = 'manage';
 
 switch($action)
 {
-    case 'reply':
-		$askid = intval($askid);
-		if(!$askid) showmessage($LANG['illegal_parameters']);
-
-		$subject = $db->get_one("select * from ".TABLE_ASK." where askid=$askid $sql");
-		if(!$subject) showmessage($LANG['sorry_not_exist_record']);
-
-		if($dosubmit)
+	case 'manage':
+		if(isset($job))
 		{
-			$reply = str_safe($reply);
-			$db->query("insert into ".TABLE_ASK_REPLY."(askid,reply,username,ip,addtime) values('$askid','$reply','$_username','$PHP_IP','$PHP_TIME')");
-	        $db->query("UPDATE ".TABLE_ASK." SET lastreply='$PHP_TIME' WHERE askid=$askid");
-
-			showmessage($LANG['operation_success'],$PHP_REFERER);
+			$job = intval($job);
+			$where = "status='$job'";
+		}
+		else if(isset($flag))
+		{
+			$where = "flag='$flag'";
 		}
 		else
 		{
-			$GROUPS = cache_read('member_group.php');
-
-			require_once PHPCMS_ROOT.'/member/include/global.func.php';
-			require_once MOD_ROOT.'/include/global.func.php';
-			require_once PHPCMS_ROOT.'/include/ip.class.php';
-			$getip = new ip;
-
-			$subject['addtime'] = date('Y-m-d h:i', $subject['addtime']);
-
-			$departmentid = $subject['departmentid'];
-			extract($departments[$departmentid]);
-
-			$memberinfo = get_member_info($subject['username']);
-			$subject = array_merge($subject, $memberinfo);
-			$subject['groupname'] = $GROUPS[$subject['groupid']]['groupname'];
-			$subject['arrgroupname'] = get_arrgroupname($subject['arrgroupid']);
-			$subject['iparea'] = $getip->getlocation($subject['ip']);
-
-			$replys = array();
-			$result = $db->query("select * from ".TABLE_ASK_REPLY." where askid=$askid");
-			while($r = $db->fetch_array($result))
-			{
-				$r['addtime'] = date('Y-m-d h:i', $r['addtime']);
-				$memberinfo = get_member_info($r['username']);
-				$r = array_merge($r, $memberinfo);
-				$r['groupname'] = $GROUPS[$r['groupid']]['groupname'];
-				$r['arrgroupname'] = get_arrgroupname($r['arrgroupid']);
-			    $r['iparea'] = $getip->getlocation($r['ip']);
-				$replys[] = $r;
-			}
-
-			if($reply == '') $status = 1;
-
-			include admintpl('reply');
+			$where = '1';
 		}
-	    break;
-
-	case 'delete':
-		if(empty($askid)) showmessage($LANG['illegal_parameters'], $referer);
-
-		$askids=is_array($askid) ? implode(',',$askid) : $askid;
-		$db->query("DELETE FROM ".TABLE_ASK." WHERE askid IN ($askids) $sql");
-		$db->query("DELETE FROM ".TABLE_ASK_REPLY." WHERE askid IN ($askids) $sql");
-		showmessage($LANG['operation_success'], $PHP_REFERER);
-		break;
-
-	case 'status':
-		if(empty($askid)) showmessage($LANG['illegal_parameters'], $referer);
-
-		$askids=is_array($askid) ? implode(',',$askid) : $askid;
-		$db->query("UPDATE ".TABLE_ASK." SET status=$status WHERE askid=$askid $sql");
-		$db->affected_rows() ? showmessage($LANG['operation_success'], $PHP_REFERER) : showmessage($LANG['operation_failure']);
-		break;
-
-	default:
-		require_once PHPCMS_ROOT.'/include/ip.class.php';
-		$getip = new ip;
-
-		if(!isset($page)) $page = 1;
-		$offset = ($page-1)*$pagesize;
-
-		$dkeywords = isset($keywords) ? str_replace(" ","%",$keywords) : "";
-		$sql .= isset($keywords) ? " and (subject like '%$dkeywords%' or content like '%$dkeywords%')" : "";
-		$sql .= (isset($departmentid) && $departmentid) ? " and departmentid='$departmentid' " : "";
-		$sql .= isset($status) ? " and status='$status' " : '';
-		$sql = $sql ? " where 1 ".$sql : "";
-
-		$r = $db->get_one("select count(*) as number from ".TABLE_ASK." $sql order by askid desc");
-		$pages = phppages($r['number'], $page, $pagesize);
-
-        $asks = array();
-		$result = $db->query("select * from ".TABLE_ASK." $sql order by askid desc limit $offset,$pagesize");
-		while($r = $db->fetch_array($result))
+		if($username) $where .= " AND `username` LIKE '%$username%'";
+		if($search) $where .= " AND title like '%$keywords%'";
+		if($catid) $where .= " AND catid=$catid";
+		if($passed) $where .= " AND endtime<".TIME;
+		$infos = $ask->listinfo($where, 'askid DESC', $page, 20);
+		if(isset($job) && $job==1)
 		{
-			$r['lastreply'] = $r['lastreply'] ? date('Y-m-d h:i', $r['lastreply']) : '';
-			$r['addtime'] = date('Y-m-d h:i', $r['addtime']);
-			$r['iparea'] = $getip->getlocation($r['ip']);
-			$asks[] = $r;
+			$tpl_job = 'check';
 		}
+		else
+		{
+			$tpl_job = 'manage';
+		}
+		include admin_tpl('ask_'.$tpl_job);
+	break;
+	
+	case 'delete':
+		$ask->delete($id);
+		showmessage($LANG['delete_success'], "?mod=$mod&file=$file&action=manage");
+	break;
 
-		if(!isset($date)) $date = date('Y-m-d');
-		if(!isset($keywords)) $keywords = '';
-		if(!isset($truename)) $truename = '';
+	case 'advancedelete':
+		if($dosubmit)
+		{
+			$where = '';
+			if($addtime) $addtime = strtotime($addtime);
+			if($endtime) $endtime = strtotime($endtime);
+			if($username) $where .= " AND `username`='$username'";
+			if($addtime && !$endtime) $where .= " AND `addtime`>$addtime";
+			if($endtime && !$addtime) $where .= " AND `endtime`<$endtime";
+			if($addtime && $endtime) $where .= " AND `addtime`>$addtime AND `endtime`<$endtime";
+			if($ischeck) $where .= " AND `ischeck`='$ischeck'";
+			if(!$where) showmessage('请选择删除条件', $forward);
+			$result = $ask->listinfo($where);
+			if($result)
+			{
+				foreach($result as $item)
+				{
+					$ask->delete($item['askid']);
+				}
+			}
+			showmessage($LANG['delete_success'], "?mod=$mod&file=$file&action=manage");
+		}
+		else
+		{
+			include admin_tpl('ask_advancedelete');
+		}
+	break;
 
-		include admintpl('ask');
+	case 'check':
+		$ask->check($id);
+		showmessage($LANG['check_seccess'], $forward);
+	break;
+
+	case 'move':
+		if(isset($ids) && $targetcatid)
+		{
+			if($targetcatid=='') showmessage('目标栏目不能为空',$forward);
+			if(!$fromtype)
+			{
+				if(empty($ids)) showmessage('指定的ID不能为空');
+				if(!preg_match("/^[0-9]+(,[0-9]+)*$/",$ids)) showmessage($LANG['illegal_parameters']);
+				$ask->move($ids,$targetcatid,$fromtype);
+			}
+			else
+			{
+				$ask->move($batchcatid,$targetcatid,$fromtype);
+			}
+			showmessage($LANG['operation_success'], $forward);
+		}
+		else
+		{
+			$ids = is_array($id) ? implode(',',$id) : $id;
+			$category_select = form::select_category($mod, 0);
+			$category_select = str_replace(array("<select name='catid' id='catid' >","<option value='0'></option>"),'',$category_select);
+			include admin_tpl('ask_move');
+		}
+	break;
+
+	case 'view':
+		$info = $ask->detail($id,'*',1);
+		include admin_tpl('ask_view');
+	break;
+
+	case 'elite':
+		if(is_array($id))
+		{
+			if($flag)
+			{
+				$flag = 3;
+			}
+			else
+			{
+				$flag = 0;
+			}
+			foreach($id AS $askid)
+			{
+				$ask->flag($askid, $flag);
+			}
+		}
+		showmessage($LANG['operation_success'], $forward);
+	break;
 }
 ?>

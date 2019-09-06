@@ -1,93 +1,99 @@
 <?php defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
 <body>
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
-  <tr>
-    <td></td>
-  </tr>
-</table>
 <form name="myform" method="post" action="?mod=<?=$mod?>&file=<?=$file?>">
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <th colspan=2>基本信息</th>
+<table cellpadding="0" cellspacing="1" class="table_form">
+  <caption>基本信息</caption>
     <tr>
-      <td class='tablerow'><strong>是否允许新会员注册</strong></td>
-      <td class='tablerow'>
-	  <input type='radio' name='setting[enableregister]' value='1'  <?php if($enableregister){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
-	  <input type='radio' name='setting[enableregister]' value='0'  <?php if(!$enableregister){ ?>checked <?php } ?>> 否
+      <th width="200"><strong>允许新会员注册：</strong></th>
+      <td>
+	  <input type='radio' name='setting[allowregister]' value='1'  <?php if($allowregister){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
+	  <input type='radio' name='setting[allowregister]' value='0'  <?php if(!$allowregister){ ?>checked <?php } ?>> 否
+	 </td>
+    </tr>
+	 <tr>
+      <th><strong>注册选择模型：</strong></th>
+      <td>
+	  <input type='radio' name='setting[choosemodel]' value='1'  <?php if($choosemodel){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
+	  <input type='radio' name='setting[choosemodel]' value='0'  <?php if(!$choosemodel){ ?>checked <?php } ?>> 否
 	 </td>
     </tr>
 	<tr>
-      <td class='tablerow'><strong>新会员注册是否需要邮件验证</strong></td>
-      <td class='tablerow'>
-	  <input type='radio' name='setting[enablemailcheck]' value='1'  <?php if($enablemailcheck){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
-	  <input type='radio' name='setting[enablemailcheck]' value='0'  <?php if(!$enablemailcheck){ ?>checked <?php } ?>> 否
+      <th><strong>新会员注册需要邮件验证：</strong></th>
+      <td>
+	  <input type='radio' name='setting[enablemailcheck]' value='1'  <?=($enablemailcheck ? 'checked' : '')?> /> 是&nbsp;&nbsp;&nbsp;&nbsp;
+	  <input type='radio' name='setting[enablemailcheck]' value='0'   <?=($enablemailcheck ? '' : 'checked')?> /> 否
 	 </td>
+    </tr>	
+    <tr>
+    	<th><strong>允许前台浏览会员列表：</strong></th>
+        <td>
+        <input type="radio" name="setting[enableshowlist]" value="1" <?=($enableshowlist ? 'checked' : '')?> /> 是&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="radio" name="setting[enableshowlist]" value="0" <?=($enableshowlist ? '' : 'checked')?> /> 否
+        </td>
     </tr>
 	<tr>
-      <td class='tablerow'><strong>新会员注册是否需要管理员审核</strong></td>
-      <td class='tablerow'>
+      <th><strong>新会员注册需要管理员审核：</strong></th>
+      <td>
 	  <input type='radio' name='setting[enableadmincheck]' value='1'  <?php if($enableadmincheck){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
 	  <input type='radio' name='setting[enableadmincheck]' value='0'  <?php if(!$enableadmincheck){ ?>checked <?php } ?>> 否
 	 </td>
     </tr>
 	<tr>
-      <td class='tablerow'><strong>每个Email是否允许注册多次</strong></td>
-      <td class='tablerow'>
-	  <input type='radio' name='setting[enablemultiregperemail]' value='1'  <?php if($enablemultiregperemail){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
-	  <input type='radio' name='setting[enablemultiregperemail]' value='0'  <?php if(!$enablemultiregperemail){ ?>checked <?php } ?>> 否
-	 </td>
-    </tr>
-	<tr>
-      <td class='tablerow'><strong>会员注册是否启用验证码功能</strong></td>
-      <td class='tablerow'>
+      <th><strong>会员注册启用验证码功能：</strong></th>
+      <td>
 	  <input type='radio' name='setting[enablecheckcodeofreg]' value='1'  <?php if($enablecheckcodeofreg){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
 	  <input type='radio' name='setting[enablecheckcodeofreg]' value='0'  <?php if(!$enablecheckcodeofreg){ ?>checked <?php } ?>> 否
 	 </td>
     </tr>
-	<tr>
-      <td class='tablerow'><strong>会员登录是否启用验证码功能</strong></td>
-      <td class='tablerow'>
-	  <input type='radio' name='setting[enablecheckcodeoflogin]' value='1'  <?php if($enablecheckcodeoflogin){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
-	  <input type='radio' name='setting[enablecheckcodeoflogin]' value='0'  <?php if(!$enablecheckcodeoflogin){ ?>checked <?php } ?>> 否
-	 </td>
-    </tr>
     <tr>
-      <td width='40%' class='tablerow'><strong>用户资金数发生变化时是否发送Email</strong></td>
-            <td class='tablerow'>
-	  <input type='radio' name='setting[ismoneydiffemail]' value='1'  <?php if($ismoneydiffemail){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
-	  <input type='radio' name='setting[ismoneydiffemail]' value='0'  <?php if(!$ismoneydiffemail){ ?>checked <?php } ?>> 否&nbsp;&nbsp;&nbsp;&nbsp;
-	  <input type="button" value="点击修改资金变化邮件模板" onclick="location='?mod=phpcms&file=template&action=edit&template=moneymailtpl&module=<?=$mod?>&project=default'">
-	 </td>
-    </tr>
-   <tr>
-      <td width='40%' class='tablerow'><strong>用户购买点卡时是否发送Email</strong></td>
-            <td class='tablerow'>
-	  <input type='radio' name='setting[ispointdiffemail]' value='1'  <?php if($ispointdiffemail){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
-	  <input type='radio' name='setting[ispointdiffemail]' value='0'  <?php if(!$ispointdiffemail){ ?>checked <?php } ?>> 否&nbsp;&nbsp;&nbsp;&nbsp;
-	  <input type="button" value="点击修改点卡变化邮件模板" onclick="location='?mod=phpcms&file=template&action=edit&template=pointmailtpl&module=<?=$mod?>&project=default'">
+    	<th><strong>会员注册时进行问题答案验证：</strong></th>
+        <td>
+	  <input type='radio' name='setting[enableQchk]' value='1'  <?php if($enableQchk){ ?>checked <?php } ?>> 是&nbsp;&nbsp;&nbsp;&nbsp;
+	  <input type='radio' name='setting[enableQchk]' value='0'  <?php if(!$enableQchk){ ?>checked <?php } ?>> 否
 	 </td>
     </tr>
 	<tr>
-      <td width='40%' class='tablerow'><strong>禁止在注册用户名中使用的词语</strong><br/>多个词之间用","分隔,例如如果你禁用了"admin"，那么所有含有"admin"(如:administrator)的用户名将被禁止使用</td>
-      <td class='tablerow'><textarea name='setting[banname]' cols='60' rows='4' id='banname'><?=$banname?></textarea></td>
+	  <th><strong>会员升级付费方式：</strong></th>
+	  <td>
+	  <input type='radio' name='setting[paytype]' value='amount'  <?php if($paytype=='amount'){ ?>checked <?php } ?>> 金钱&nbsp;&nbsp;
+	  <input type='radio' name='setting[paytype]' value='point'  <?php if($paytype=='point'){ ?>checked <?php } ?>> 积分
+	  </td>
+	</tr>
+	<tr>
+      <th><strong>新会员注册默认赠送点数：</strong></th>
+      <td><input name='setting[defualtpoint]' type='text' id='defualtpoint' value='<?=$defualtpoint?>' size='5' maxlength='5'> 点</td>
     </tr>
-
+	<tr>
+      <th><strong>新会员注册默认赠送资金：</strong></th>
+      <td><input name='setting[defualtamount]' type='text' id='defualtamount' value='<?=$defualtamount?$defualtamount:'0.00'?>' size='5' maxlength='5' require="true" datatype="currency" msg="请输入正确的金额" msgid="err_currency"> 元<span id="err_currency"></span></td>
+    </tr>
     <tr>
-      <td width='40%' class='tablerow'><strong>用户注册协议</strong><br/>留空则注册时直接跳过阅读注册协议</td>
-      <td class='tablerow'><textarea name='setting[reglicense]' cols='60' rows='8' id='reglicense'><?=$reglicense?></textarea></td>
+      <th><strong>会员注册协议：</strong></th>
+      <td><textarea name='setting[reglicense]' cols='60' rows='20' id='reglicense' style="width:100%"><?=$reglicense?></textarea></td>
     </tr>
     <tr>
-      <td width='40%' class='tablerow'><strong>模块绑定域名</strong></td>
-      <td class='tablerow'><input name='setting[moduledomain]' type='text' id='moduledomain' value='<?=$moduledomain?>' size='40' maxlength='50'></td>
+      <th><strong>模块访问网址（URL）：</strong></th>
+      <td>
+      <input name='setting[url]' type='text' id='url' value='<?=$url?>' size='40' maxlength='50'><br />
+      如果其它与会员相关的栏目、模块绑定了其它域名(包括二级域名)，则会员模块的访问网址请填写 http://主站域名/member <br />
+      当然，也可以为会员模块绑定其它域名(需要WEB服务器的配置)
+      </td>
     </tr>
-</table>
-<table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">
-  <tr>
-     <td width='40%'></td>
-     <td><input type="submit" name="dosubmit" value=" 确定 ">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" name="reset" value=" 重置 "></td>
+  	<tr>
+	 <th>
+	 </th>
+     <td>
+     <input type="submit" name="dosubmit" value=" 确定 ">&nbsp;&nbsp;&nbsp;&nbsp;<input type="reset" name="reset" value=" 重置 ">
+     </td>
   </tr>
 </table>
 </form>
 </body>
 </html>
+<script language="javascript">
+$().ready(function() {
+	  $('form').checkForm(1);
+});
+</script>

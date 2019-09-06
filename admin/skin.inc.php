@@ -1,49 +1,22 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
 
-if(!isset($project)) $project = $CONFIG['defaulttemplate'];
-
-$submenu = array
-(
-	array($LANG['skin_manage'], '?mod='.$mod.'&file=templateproject&action=manage'),
-	array($LANG['template_manage'], '?mod='.$mod.'&file=template&action=manage&project='.$project),
-	array($LANG['style_manage'], '?mod='.$mod.'&file=skin&action=manage&project='.$project),
-);
-$menu = adminmenu($LANG['style_manage'],$submenu);
-
-$skindir = PHPCMS_ROOT.'/templates/'.$project.'/skins/';
-
-@include_once PHPCMS_ROOT.'/templates/templateprojectnames.php';
-
-$projectname = $templateprojectnames[$project] ? $templateprojectnames[$project] : $project;
-
-@include_once $skindir.'skinnames.php';
+if(!isset($project)) $project = TPL_NAME;
+$projects = cache_read('name.inc.php', TPL_ROOT);
+$projectname = $projects[$project] ? $projects[$project] : $project;
+$skindir = TPL_ROOT.TPL_NAME.'/skins/';
+$names = cache_read('name.inc.php', $skindir);
 
 $action = $action ? $action : 'manage';
 
 switch($action)
 {
-	case 'edit':
-		if(!$skin) showmessage($LANG['illegal_parameters']);
-		if($dosubmit)
-		{
-			file_put_contents($skindir.$skin.'/style.css', stripslashes($content));
-	        showmessage($LANG['operation_success'],$forward);
-		}
-		else
-	    {
-			$skinname = $skinnames[$skin];
-			$filepath = PHPCMS_ROOT.'/templates/'.$project.'/skins/'.$skin.'/style.css';
-			$filemtime = date('Y-m-d H:i:s',filemtime($filepath));
-			$content = file_get_contents($filepath);
-		    include admintpl('skin_edit');
-		}
-		break;
-
     case 'delete':
 		if(!$skin) showmessage($LANG['illegal_parameters']);
-        $f->delete($skindir.$skin);
-        showmessage($LANG['operation_success'],$forward);
+        dir_delete($skindir.$skin);
+        unset($names[$skin]);
+		cache_write('name.inc.php', $names, $skindir);
+        showmessage($LANG['operation_success'], $forward);
         break;
 
 	case 'manage':
@@ -54,25 +27,25 @@ switch($action)
 		foreach($dirs as $d)
 	    {
 			$skin['dir'] = basename($d);
-            $skin['name'] = $skinnames[$skin['dir']];
-			$skin['isdefault'] = $CONFIG['defaultskin'] == $skin['dir'] ? 1 : 0;
+            $skin['name'] = $names[$skin['dir']];
+			$skin['isdefault'] = TPL_CSS == $skin['dir'] ? 1 : 0;
             if($skin['isdefault']) $skinname = $skin['name'];
-			$skin['mtime'] = date('Y-m-d H:i:s',filemtime($d.'/style.css'));
+			$skin['mtime'] = date('Y-m-d H:i:s', filemtime($d.'/phpcms.css'));
 			$skins[$skin['dir']] = $skin;
 		}
 		ksort($skins);
-    	include admintpl('skin');
+    	include admin_tpl('skin');
 		break;
 
 	case 'update':
-		array_save($skinname,'$skinnames',$skindir.'skinnames.php');
+		cache_write('name.inc.php', $skinname, $skindir);
 	    showmessage($LANG['style_name_update_complete'],$forward);
 		break;
 
 	case 'setdefault':
 		if(!$skin) showmessage($LANG['illegal_parameters']);
-	    set_config(array('defaultskin'=>$skin));
-		showmessage($LANG['operation_success'],$forward);
+	    set_config(array('TPL_CSS'=>$skin));
+		showmessage($LANG['operation_success'], $forward);
 		break;
 }
 ?>

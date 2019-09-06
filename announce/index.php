@@ -1,18 +1,28 @@
 <?php
 require './include/common.inc.php';
-
-$announceid = isset($announceid) ? intval($announceid) : 0;
-$sql = $announceid ? " AND announceid=$announceid " : " ORDER BY announceid DESC LIMIT 0,1";
-
-$today = date('Y-m-d');
-
-$r = $db->get_one("SELECT * FROM ".TABLE_ANNOUNCE." WHERE passed=1 AND (todate='0000-00-00' OR todate>='$today') $sql");
-if(!$r) showmessage($LANG['not_exist_announce']);
-
-extract($r);
-
-if($todate == '0000-00-00') $todate = $LANG['indefinitely'];
-
-$db->query("UPDATE ".TABLE_ANNOUNCE." SET hits=hits+1 WHERE announceid=$announceid");
+require_once MOD_ROOT.'/include/announce.class.php';
+$a = new announce;
+$pagesize = $M['pagesize'] ?  $M['pagesize'] : 15;
+$page = $page ? $page : 1 ;
+$announceid = intval($announceid) ? intval($announceid) : '';
+if($announceid)
+{
+	$annou = $a->getone($announceid);
+	if($annou)
+	{
+		$a->update($announceid);
+		@extract($annou);
+	}
+}
+else
+{
+	$annou = $a->show("WHERE passed=1");
+	if($annou)
+	{
+		@extract($annou);
+		$a->update($announceid);
+	}
+}
+$announces = $a->listinfo($page,$pagesize,"WHERE passed=1");
 include template($mod, 'index');
 ?>

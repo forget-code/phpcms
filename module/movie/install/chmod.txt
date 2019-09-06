@@ -1,5 +1,0 @@
-movie/
-movie/uploadfile/
-movie/pos/
-movie/special/
-movie/config.inc.php

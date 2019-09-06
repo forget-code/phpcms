@@ -1,47 +1,34 @@
 <?php
 require './include/common.inc.php';
+require_once PHPCMS_ROOT.'include/form.class.php';
+require_once 'output.class.php';
+
+require_once MOD_ROOT.'/admin/include/error.class.php';
 if ($dosubmit)
 {
-    if (!$report_mod || (!array_key_exists($report_mod, $MODULE))) showmessage($LANG['illegal_operation']);
-    $forward = "?title=$error[error_title]&error_link=$error[error_link]";
-    if ($checkcodestr)
+    checkcode($checkcode, $M['enablecheckcode']);
+    if (strpos($info['error_link'], 'http://') === false && strpos($info['error_link'], 'https://') === false)
     {
-        checkcode($checkcodestr, $PHPCMS['enableadmincheckcode'], $forward);
+        $info['error_link'] = 'http://' . trim($info['error_link']);
     }
     else
     {
-        showmessage($LANG['input_checkcode'], $forward);
+        $info['error_link'] = trim($info['error_link']);
     }
-    $error['addtime'] = $PHP_TIME;
-    if ($keyid == 0 || empty($keyid))
-    {
-        $error['keyid'] = $report_mod;
-    }
-    else
-    {
-        $error['keyid'] = $keyid;
-    }
-    $keys = $values = $s = "";
-    foreach($error as $key => $value)
-    {
-        $keys .= $s . $key;
-        $values .= $s . "'" . $value . "'";
-        $s = ",";
-    }
-    $db->query("INSERT INTO " . TABLE_ERROR_REPORT . "($keys) VALUES ($values)");
-    echo "<script type='text/javascript'>\n";
-    echo "alert('" . $LANG['thanks'] . "');";
-    echo "close();";
-    echo "</script>\n";
+    $forward = $info['error_link'];
+    $errors = new error();
+    if($errors->add($info)) showmessage('提交成功', $forward);
 }
 else
 {
-    if (empty($title) || empty($error_link)) showmessage($LANG['illegal_operation']);
-    $error_link = substr($error_link, 0, -1);
-    $error_link = substr($error_link, 1);
-    $error_date = date('Y-m-d', $PHP_TIME);
-
+	$title = htmlspecialchars(stripslashes($title));
+    $radio = '';
+	$types = subtype('error_report');
+    foreach($types AS $k => $v)
+    {
+        $radio .= "<input id='typeid' name='info[typeid]' type='radio' value=".$v['typeid']." />";
+        $radio .= output::style($v['name'], $v['style']);
+    }
     include template('error_report', 'error_report');
 }
-
 ?>

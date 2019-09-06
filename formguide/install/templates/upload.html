@@ -1,0 +1,51 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>文件上传</title>
+<base href="{SITE_URL}" />
+<link href="admin/skin/system.css" rel="stylesheet" type="text/css">
+<script language="JavaScript" src="data/config.js"></script>
+<script type="text/javaScript" src="images/js/jquery.min.js"></script>
+<script language="JavaScript" src="images/js/css.js"></script>
+<script type="text/javaScript" src="images/js/common.js"></script>
+</head>
+<body>
+<table cellpadding="0" cellspacing="1" class="table_form">
+  <tr>
+    <th>文件上传</th>
+  </tr>
+	<form name="upload" method="post" action="{$M[url]}upload_field.php" enctype="multipart/form-data">
+  <tr>
+     <td  height="30">
+	         <input type="hidden" name="formid" value="{$formid}">
+	         <input type="hidden" name="fieldid" value="{$fieldid}">
+             <input name="{$uploadtext}" type="file" size="15" onChange="previewimage()">
+             <input type="hidden" name="oldname">
+             <input type="hidden" name="uploadtext" value="{$uploadtext}">
+             <input type="hidden" name="rename" value="{$rename}">
+             <input type="hidden" name="MAX_FILE_SIZE" value="{$upload_maxsize}"> 
+             <input type="submit" name="dosubmit" value=" 上传 ">
+			 </td>
+   </tr>
+   <tr>
+     <td  height="30">
+	 允许上传类型：<?=UPLOAD_ALLOWEXT?><br />
+	 允许上传大小：<?=UPLOAD_MAXSIZE?>
+	 </td>
+   </tr>
+  <tr>
+     <td>
+<script>
+if(window.opener.myform.<?=$uploadtext?>.value!="")
+{
+	upload.oldname.value = window.opener.myform.<?=$uploadtext?>.value;
+	upload.oldaid.value = window.opener.myform.<?=$uploadtext?>_aid.value;
+}
+</script>
+			 </td>
+   </tr>
+	</form>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+@import url("base.css");
+#main{ background-image:none; width:980px; border:1px solid #B9DFF9;}
+.search_list{ border-bottom:1px dashed #B9DFF9; margin-bottom:10px; padding:6px;}
+.search_list dt{ line-height:24px;}
+.search_list dt a:link,.search_list dt a:visited{ font-size:14px; color:#00c; text-decoration:underline;}
+.search_list dt a:hover,.search_list dt a:active{ font-size:14px; color:#00c; text-decoration:underline;}
+dd.search_txt{ color:#666;  line-height:180%;}
+dd.search_attribute,dd.search_attribute a:link,dd.search_attribute a:visited,dd.search_attribute a:hover,dd.search_attribute a:active{ text-align:left; color:#008000;}
+.c_red{ color:#f00;}
+.search_box{ margin:20px 10px;}
+
+/*标签菜单*/
+.tag_menu {	width:100%;	margin:10px auto 0;	border-bottom:3px solid #99D3FB; overflow:hidden;}
+.tag_menu li { float:left; height:27px;	margin:0 3px; padding:0; display:inline; text-align:center;}
+.tag_menu li a { background:url(images/tag_menu.gif) no-repeat 0 -27px;	height:27px; line-height:27px; float:left; width:98px;	display:block;	white-space: nowrap; text-decoration:none; color:#1589C8;}
+.tag_menu li a:link, .tag_menu li a:visited { text-decoration:none;}
+.tag_menu li a:hover, .tag_menu li a:active { text-decoration:none;}
+.tag_menu li.selected {}
+.tag_menu li.selected a { background:url(images/tag_menu.gif) no-repeat 0 0;}
+.tag_menu li.selected a:link, .tag_menu li.selected a:visited {	font-weight:bold; text-decoration:none;	color:#fff;}
+.tag_menu li.selected a:hover, .tag_menu li.selected a:active {	color:#fff;	font-weight:bold; text-decoration:none;}
+
+.guestbook_list{ }
+.guestbook_list h3{ background:#E4F3FC url(images/bg_member_1.gif) no-repeat 3px -56px; height:24px; line-height:24px; font-size:12px; color:#09c; clear:both; padding:0 6px 0 20px;}
+.guestbook_list h3 sup{ font-family:Arial; font-weight:bold; color:#090; font-size:12px; padding:0; width:120px; text-align:right;} 
+.guestbook_list ul{ border-bottom:1px solid #E4F3FC; width:978px; overflow:hidden; background:url(images/bg_gst.jpg) repeat-y 160px 0;}
+li.guestbook_person{ text-align:center; width:160px;float:left;}
+li.guestbook_person ol{ height:180px; margin:5px;}
+li.guestbook_text{ width:780px; float:right; padding:10px; word-wrap:break-word; word-break:break-all; overflow:hidden; height:100%;}
+.date{ color:#09c; float:none; font-weight:normal; font-size:12px;}
+/*签写留言*/
+.table_form{ width:100%;}
+.table_form th{ text-align:right; padding:2px 5px; width:15%; font-weight:normal;}
+.table_form td{text-align:left; padding:2px 5px; width:85%;}
+th.form_th{ font-weight:bold; color:red;}

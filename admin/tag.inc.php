@@ -1,187 +1,394 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
+$types = array('content'=>'内容','category'=>'栏目','special'=>'专题','type'=>'类别','area'=>'地区');
 
-if(!isset($filename) && $file == 'tag' && $action != 'clear')
-{
-	require_once PHPCMS_ROOT.'/include/tag.func.php';
-	require_once PHPCMS_ROOT.'/include/formselect.func.php';
-
-	$action = $action ? $action : 'manage';
-	$actions = array('add','edit','copy','delete','manage','save', 'preview', 'checkname', 'list','category_select', 'quickoperate','listtag','specialid_select','tagcache');
-	if(!in_array($action, $actions)) showmessage($LANG['illegal_action']);
-
-	$function = isset($function) ? $function : 'phpcms_cat';
-	$functions = array('phpcms_cat'=>$LANG['category'], 'phpcms_type'=>$LANG['type'], 'phpcms_special_list'=>$LANG['specail_list'], 'phpcms_special_slide'=>$LANG['specail_slide']);
-	if(!array_key_exists($function, $functions)) showmessage($LANG['not_exist']." $function ".$LANG['function_label'], "goback");
-
-	$referer = isset($referer) ? $referer : "?mod=$mod&file=$file";
-
-	$tag_funcs = array(
-		'phpcms_cat'=>'$templateid,$keyid,$catid,$child,$showtype,$open',
-		'phpcms_type'=>'$templateid,$keyid',
-		'phpcms_special_list'=>'$templateid,$keyid,$page,$specialnum,$specialnamelen,$descriptionlen,$iselite,$datenum,$showtype,$imgwidth,$imgheight,$cols',
-		'phpcms_special_slide'=>'$templateid,$keyid,$specialnum,$specialnamelen,$iselite,$datenum,$imgwidth,$imgheight,$timeout,$effectid',
-	);
-
-	$submenu = array();
-	foreach($functions as $func=>$name)
-	{
-		$submenu[] = array($name.$LANG['label'], "?mod=$mod&file=$file&action=manage&function=$func");
-	}
-	$menu = adminmenu($LANG['label_manage'], $submenu);
-
-	require_once PHPCMS_ROOT."/include/tree.class.php";
-	$tree = new tree();
-
-	require_once PHPCMS_ROOT.'/admin/include/tag.class.php';
-	$tag = new tag($mod);
-
-	if(!$tag->writeable()) showmessage($LANG['template_dir_not_writeable']);
-    if($action == 'add' || $action == 'edit' || $action == 'copy')
-	{
-		if(!isset($keyid)) $keyid = 1;
-		require PHPCMS_ROOT.'/admin/'.$file.'_'.$action.'.inc.php';
-		exit;
-	}
-}
-
+require 'admin/tag.class.php';
+if(!isset($module)) $module = $mod;
+$t = new tag($module);
 switch($action)
 {
-    case 'list':
-		$modules = array();
-		foreach($MODULE as $key=>$m)
-		{
-			if(file_exists(PHPCMS_ROOT.'/'.moduledir($key).'/admin/tag.inc.php')) $modules[$key] = $m['name'];
+    case 'add':
+		if($type == 'content')
+	    {
+			require CACHE_MODEL_PATH.'content_tag_form.class.php';
+			$content_tag_form = new content_tag_form($modelid);
+			$forminfos = $content_tag_form->get();
+			$fields = $orderfields = $selectfields = array();
+			foreach($content_tag_form->fields as $field=>$v)
+			{
+				$fields[$field] = $v['name'];
+				if($v['isselect']) $selectfields[] = $field;
+				if($v['isorder'])
+				{
+					$orderfields[$field.' ASC'] = $v['name'].' 升序';
+					$orderfields[$field.' DESC'] = $v['name'].' 降序';
+				}
+			}
+			$selectfields = implode(',', $selectfields);
 		}
-        require PHPCMS_ROOT.'/templates/'.$CONFIG['defaulttemplate'].'/tags.php';
-	    include admintpl('tag_list');
-	    break;
-
-	case 'quickoperate':
-        require PHPCMS_ROOT.'/templates/'.$CONFIG['defaulttemplate'].'/tags.php';
-	    $tagname = preg_replace("/^[^{]*[{]?tag_([^}]+)[}]?.*/", "\\1", trim($tagname));
-        if(!isset($tags[$tagname])) showmessage($LANG['label'].$LANG['not_exist'], $PHP_REFERER);
-		$tag = $tags[$tagname];
-		preg_match("/^(([a-z0-9]+)[_][a-z0-9_]*)[(]/", $tag, $m);
-		$function = $m[1];
-		$mod = $m[2];
-		header('location:?mod='.$mod.'&file=tag&action='.$operate.'&function='.$function.'&job='.$job.'&tagname='.urlencode($tagname));
+		if(isset($tag_config)) extract($tag_config, EXTR_SKIP);
+		include admin_tpl('tag_'.$type.'_add');
+	break;
+	case 'edit':
+		$tagname = preg_replace("/^[^{]*[{]?tag_([^}]+)[}]?.*/", "\\1", trim($tagname));
+		$tag_config = $t->get_tag_config($tagname);
+		$tempmodelid = $modelid;
+		if($tag_config) extract(new_htmlspecialchars($tag_config));
+		if($tempmodelid) $modelid = $tempmodelid;
+		$tpl = 'tag_'.$type.'_edit';
+		if($type == 'content')
+	    {
+			if($modelid) $tag_config['modelid'] = $modelid;
+			require CACHE_MODEL_PATH.'content_tag_form.class.php';
+			$content_tag_form = new content_tag_form($modelid);
+			$forminfos = $content_tag_form->get($where);
+			$fields = $orderfields = array();
+			foreach($content_tag_form->fields as $field=>$v)
+			{
+				$fields[$field] = $v['name'];
+				if(isset($_GET['modelid']) && $v['isselect']) $selectfields[] = $field;
+				if($v['isorder'])
+				{
+					$orderfields[$field.' ASC'] = $v['name'].' 升序';
+					$orderfields[$field.' DESC'] = $v['name'].' 降序';
+				}
+			}
+			$selectfields = implode(',', $selectfields);
+		}
+		elseif($type == 'category')
+		{
+		}
+		if($ajax) $tpl = 'tag_'.$type.'_edit_ajax';
+		include admin_tpl($tpl);
+		break;
+	case 'copy':
+		$tagname = preg_replace("/^[^{]*[{]?tag_([^}]+)[}]?.*/", "\\1", trim($tagname));
+		$tag_config = $t->get_tag_config($tagname);
+		if($tag_config) extract(new_htmlspecialchars($tag_config));
+		if($type == 'content')
+	    {
+			if($modelid) $tag_config['modelid'] = $modelid;
+			require CACHE_MODEL_PATH.'content_tag_form.class.php';
+			$content_tag_form = new content_tag_form($modelid);
+			$forminfos = $content_tag_form->get($where);
+			$fields = $orderfields = array();
+			foreach($content_tag_form->fields as $field=>$v)
+			{
+				$fields[$field] = $v['name'];
+				if(isset($_GET['modelid']) && $v['isselect']) $selectfields[] = $field;
+				if($v['isorder'])
+				{
+					$orderfields[$field.' ASC'] = $v['name'].' 升序';
+					$orderfields[$field.' DESC'] = $v['name'].' 降序';
+				}
+			}
+			$selectfields = implode(',', $selectfields);
+		}
+		include admin_tpl('tag_'.$type.'_copy');
+		break;
+	case 'manage':
+		$page = max(intval($page), 1);
+        $tags = $t->listinfo($type, $page, 20);
+		include admin_tpl('tag_manage');
+		break;
+	case 'update':
+		$tag_config['type'] = $type;
+		if($type == 'content')
+	    {
+			if(!$tag_config['mode'])
+			{
+				$tag_config['where'] = $info;
+				require CACHE_MODEL_PATH.'content_tag.class.php';
+				$content_tag = new content_tag($modelid);
+				$tag_config['sql'] = $content_tag->get($tag_config['selectfields'], $info, $tag_config['orderby']);
+			}
+			$tag_config['modelid'] = $modelid;
+			$t->update($tagname, $tag_config);
+		}
+		elseif($type == 'category')
+	    {
+			$tag_config['sql'] = '';
+			$tag_config['page'] = 0;
+			if(!$tag_config['number']) $tag_config['number'] = 0;
+			$t->update($tagname, $tag_config, array('module'=>$tag_config['module'], 'catid'=>$tag_config['catid']));
+		}
+		elseif($type == 'special')
+	    {
+			extract($tag_config);
+			$where = '';
+			if($typeid) $where .= "AND `typeid`='$typeid' ";
+			if($elite) $where .= "AND `elite`='$elite' ";
+			if($where) $where = 'WHERE '.substr($where, 3);
+			$tag_config['sql'] = "SELECT * FROM `".DB_PRE."special` $where ORDER BY $orderby";
+			$t->update($tagname, $tag_config);
+		}
+		if($ajax)
+		{
+			if($template_data) file_put_contents(TPL_ROOT.TPL_NAME.'/'.$module.'/'.$tag_config['template'].'.html', stripslashes($template_data));
+			if(strpos($tag_config, '$') !== false)
+			{
+				echo '<script language="JavaScript">top.right.location.reload();</script>';
+			}
+			else
+			{
+				$tagcode = $t->TAG[$tagname];
+				eval($tagcode.';');
+				$data = ob_get_contents();
+				ob_clean();
+				echo '<script language="JavaScript">top.right.tag_save("'.$tagname.'", "'.format_js($data, 0).'");</script>';
+			}
+		}
+		else
+		{
+			showmessage('操作成功！', $forward);
+		}
 		break;
 
-	case 'listtag':
+		case 'listtag':
 		if($dosubmit)
 	    {
-			require PHPCMS_ROOT.'/templates/'.$CONFIG['defaulttemplate'].'/tags.php';
+			$arr_tag = include PHPCMS_ROOT.'templates/'.TPL_NAME.'/tag.inc.php';
 			$content = stripslashes($content);
 			preg_match_all("/[{]tag_([^}]+)[}]/", $content, $m);
-			$listtags = $m[1];
-			$listtags1 = $listtags2 = array();
-			foreach($listtags as $tagname)
+			foreach ($m[1] as $k=>$v)
 			{
-				isset($tags[$tagname]) ? $listtags2[] = $tagname : $listtags1[] = $tagname;
+				$tag = $arr_tag[$v];
+				if(preg_match("/^(tag\(')?([a-z0-9]+)/i", $tag, $t))
+				{
+					$r['tagname'] = $v;
+					$r['module'] = $t[2];
+					$array[] = $r;
+				}
+				else
+				{
+					$r['tagname'] = $v;
+					$un_tag[] = $r;
+				}
 			}
-			$templateinfo = $templatename.($templatename ? '/' : '').$template;
-		    include admintpl('tag_listtag','phpcms');
+		    include admin_tpl('tag_list','phpcms');
 		}
 		else
 	    {
 			$message = '<form name="myform" method="post" action="?mod=phpcms&file=tag&action=listtag&module='.$module.'&template='.$template.'&templatename='.$templatename.'&dosubmit=1"><input type="hidden" name="content"></form><script type="text/javascript">myform.content.value=window.opener.document.myform.content.value;myform.submit();</script>';
 			showmessage($message);
 		}
-		break;
-
-	case 'manage':
-		$tags = $tag->get_tags_config($function);
-		include admintpl('tag_manage','phpcms');
-	    break;
+	break;
 
 	case 'preview':
-		if($tag->exists($tagname) && !isset($tag_config))
+		$tagname = preg_replace("/^[^{]*[{]?tag_([^}]+)[}]?.*/", "\\1", trim($tagname));
+		if(!isset($tag_config) && $t->get_tag($tagname))
 		{
-			$tag_config = $tag->get_tag_config($tagname);
-			$eval = $tag_config['longtag'].';';
-			$vars = get_var($eval);
-			if($vars === 0 || is_defined($vars))
+			$chk_var = 0;
+			preg_match("/^(tag\(')?([a-z0-9]+)/i", $t->get_tag($tagname), $m);
+			$module = $m[2];
+			$t = new tag($module);
+			$tag_config = $t->get_tag_config($tagname);
+			if(isset($tag_config['catid']))
 			{
-		        include admintpl('tag_preview', 'phpcms');
+				preg_match("/\\$[a-zA-Z0-9]+/i", $tag_config['module'], $module_vars);
+				preg_match("/\\$[a-zA-Z0-9]+/i", $tag_config['catid'], $cat_vars);
+				if(!empty($module_vars) || !empty($cat_vars))
+				{
+					$vars = array_merge($module_vars, $cat_vars);
+				}
+				if(is_array($vars) && !empty($vars))
+				{
+					foreach($vars as $var)
+					{
+						eval("\$var = \"$var\";");
+						if(empty($var)) $chk_var = 1;
+					}
+				}
+				if($chk_var === 0)
+				{
+					eval("\$catid = \"$catid\";");
+					eval("\$module = \"$module\";");
+
+					$tag = $t->preview($tagname, $tag_config, array('module'=>$module, 'catid'=>$catid));
+					if($ajax)
+					{
+						tag($tag['module'], $tag['template'], $tag['sql'], $tag['page'], $tag['number'], $tag['var_description']);
+						$data = ob_get_contents();
+						ob_clean();
+						echo '<script language="JavaScript">top.right.tag_preview("'.$tagname.'", "'.format_js($data, 0).'");</script>';
+					}
+					else
+					{
+						include admin_tpl('tag_preview', 'phpcms');
+					}
+				}
+				else
+				{
+					include admin_tpl('tag_preview_form', 'phpcms');
+				}
 			}
 			else
 			{
-				parse_str($PHP_QUERYSTRING, $hiddens);
-            	include admintpl('tag_preview_form', 'phpcms');
+				$tag = $t->preview($tagname, $tag_config);
+
+				$tag['module'] = $module;
+				$sql = $tag['sql'];
+				preg_match("/\\$[a-zA-Z0-9]+/i", $sql, $vars);
+				if(is_array($vars) && !empty($vars))
+				{
+					foreach($vars as $var)
+					{
+						eval("\$var = \"$var\";");
+						if(empty($var)) $chk_var = 1;
+					}
+				}
+				if(empty($tag['template'])) showmessage('请选择模板');
+				eval("\$tag[sql] = \"$tag[sql]\";");
+				if($chk_var === 0)
+				{
+					if($ajax)
+					{
+						tag($tag['module'], $tag['template'], $tag['sql'], $tag['page'], $tag['number'], $tag['var_description']);
+						$data = ob_get_contents();
+						ob_clean();
+						echo '<script language="JavaScript">top.right.tag_preview("'.$tagname.'", "'.format_js($data, 0).'");</script>';
+					}
+					else
+					{
+						include admin_tpl('tag_preview', 'phpcms');
+					}
+				}
+				else
+				{
+					include admin_tpl('tag_preview_form', 'phpcms');
+				}
 			}
 		}
 		else
 		{
-			$function or showmessage($LANG['function_name_not_null']);
-			$tagname or showmessage($LANG['label_name_not_null']);
-			@extract($tag_config);
-			strpos($catid, '$catid') === FALSE or showmessage($LANG['contain_catid_cannot_preview'], 'goback');
-			$eval = $function.'('.$tag_funcs[$function].');';
-			include admintpl('tag_preview', 'phpcms');
-		}
-	    break;
+			$tag_config['type'] = $type;
 
-	case 'delete':
-		if(!$tag->exists($tagname)) showmessage($LANG['label']." $tagname ".$LANG['not_exist']);
-		$tag->update($tagname , '');
-		showmessage($LANG['operation_success'], "?mod=$mod&file=$file&channelid=$channelid&function=$function");
-	    break;
-
-	case 'checkname':
-		if(empty($tagname))
-		{
-			$message = '<font color="red">'.$LANG['input_label_name'].'</font>';
-		}
-		else
-		{
-			if($tag->exists($tagname))
+			if($type == 'content')
 			{
-				$message = '<font color="red">'.$LANG['label_name_exist_cannot_use_it'].'</font>';
+				if(!$tag_config['mode'])
+				{
+					$tag_config['where'] = $info;
+					require CACHE_MODEL_PATH.'content_tag.class.php';
+					$content_tag = new content_tag($modelid);
+					$tag_config['sql'] = $content_tag->get($tag_config['selectfields'], $info, $tag_config['orderby']);
+				}
+				$tag_config['modelid'] = $modelid;
+			}
+			if(isset($info['catid']))
+			{
+				preg_match("/^(tag\(')?([a-z0-9]+)/i", $t->get_tag($tagname), $m);
+				$module = $m[2];
+				$t = new tag($module);
+				preg_match("/\\$[a-zA-Z0-9]+/i", $tag_config['module'], $module_vars);
+				preg_match("/\\$[a-zA-Z0-9]+/i", $info['catid'], $cat_vars);
+				if(!empty($module_vars) || !empty($cat_vars))
+				{
+					$vars = array_merge($module_vars, $cat_vars);
+				}
+				if(is_array($vars) && !empty($vars))
+				{
+					foreach($vars as $var)
+					{
+						eval("\$var = \"$var\";");
+						if(empty($var))
+						{
+							$chk_var = 1;
+							break;
+						}
+					}
+				}
+				if($chk_var == 0)
+				{
+					eval("\$catid = \"$catid\";");
+					eval("\$module = \"$module\";");
+
+					$tag = $t->preview($tagname, $tag_config, array('module'=>$module, 'catid'=>$catid));
+					if($ajax)
+					{
+						tag($tag['module'], $tag['template'], $tag['sql'], $tag['page'], $tag['number'], $tag['var_description']);
+						$data = ob_get_contents();
+						ob_clean();
+						echo '<script language="JavaScript">top.right.tag_preview("'.$tagname.'", "'.format_js($data, 0).'");</script>';
+					}
+					else
+					{
+						eval("\$tag[sql] = \"$tag[sql]\";");
+						include admin_tpl('tag_preview', 'phpcms');
+					}
+				}
+				else
+				{
+					$hiddens = $info;
+					include admin_tpl('tag_preview_form', 'phpcms');
+				}
 			}
 			else
 			{
-				$message = '<font color="blue">'.$LANG['label_name_not_exist_can_use'].'</font>';
+				if(!$tag_config['mode'])
+				{
+					$tag_config['where'] = $info;
+					if($module == 'member')
+					{
+						require CACHE_MODEL_PATH.'member_tag.class.php';
+						$member_tag = new member_tag($modelid);
+						$tag_config['sql'] = $member_tag->get($tag_config['selectfields'], $info, $tag_config['orderby']);
+					}
+					elseif($module == 'content')
+					{
+						require CACHE_MODEL_PATH.'content_tag.class.php';
+						$content_tag = new content_tag($modelid);
+						$tag_config['sql'] = $member_tag->get($tag_config['selectfields'], $info, $tag_config['orderby']);
+					}
+				}
+				$tag_config['modelid'] = $modelid;
+				$tag = $t->preview($tagname, $tag_config);
+				$tag['module'] = $module;
+				if(empty($tag['template'])) showmessage('请选择模板');
+				if($ajax)
+				{
+					tag($tag['module'], $tag['template'], $tag['sql'], $tag['page'], $tag['number'], $tag['var_description']);
+					$data = ob_get_contents();
+					ob_clean();
+					echo '<script language="JavaScript">top.right.tag_preview("'.$tagname.'", "'.format_js($data, 0).'");</script>';
+				}
+				else
+				{
+					include admin_tpl('tag_preview', 'phpcms');
+				}
 			}
 		}
-		include admintpl('tag_checkname', 'phpcms');
-	    break;
-
-    case 'clear':
-
-		dir_delete(PHPCMS_ROOT.'/data/tagscache/', 0);
-
-		showmessage($LANG['label_cache_update_success']);
-		break;
-		
-    case 'tagcache':
-		$tag->tagcache();
-		showmessage($LANG['label_cache_update_success']);
-		break;
-
-	case 'category_select':
-		if($keyid && strpos($keyid, '$') === FALSE)
-	    {
-		    $catid = isset($catid) ? intval($catid) : 0;
-			$CATEGORY = cache_read('categorys_'.$keyid.'.php');
-			echo category_select('setcatid', '', $catid, 'onchange="myform.catid.value=this.value"');
-		}
-		else
-	    {
-			echo '<select name="setcatid"><option value="0"></option></select>';
-		}
-		break;
-
-	case 'specialid_select':
-	if($keyid && strpos($keyid, '$') === FALSE)
-	    {	
-			echo str_replace('<option value=\'0\'>1</option>','<option value="0">不限专题</option><option value=\'$specialid\'>$specialid</option>',special_select($keyid, 'specialid','1','','onchange="$(\'specialid\').value=this.value"'));
-		}
-		else
-	{
-				echo '<select name="setcatid" onchange="$(\'specialid\').value=this.value"><option value="0">不限专题</option><option value=\'$specialid\'>$specialid</option></select>';
-	}
 	break;
+	case 'delete':
+		$tagname = preg_replace("/^[^{]*[{]?tag_([^}]+)[}]?.*/", "\\1", trim($tagname));
+        $t->delete($tagname);
+		showmessage('操作成功！', "?mod=$mod&file=$file&action=manage&module=$module");
+		break;
+	case 'ajax_category':
+		$parentid = max(intval($parentid), 0);
+		echo form::select_category($module, $parentid, 'category[parentid]', 'parentid', '不限', $catid, 'onchange="myform.catid.value=this.value;"');
+		break;
+	case 'quickoperate':
+		if($type == 'content')
+	    {
+			require CACHE_MODEL_PATH.'content_tag_form.class.php';
+			$content_tag_form = new content_tag_form($modelid);
+			$forminfos = $content_tag_form->get();
+			$fields = $orderfields = $selectfields = array();
+			foreach($content_tag_form->fields as $field=>$v)
+			{
+				$fields[$field] = $v['name'];
+				if($v['isselect']) $selectfields[] = $field;
+				if($v['isorder'])
+				{
+					$orderfields[$field.' ASC'] = $v['name'].' 升序';
+					$orderfields[$field.' DESC'] = $v['name'].' 降序';
+				}
+			}
+			$selectfields = implode(',', $selectfields);
+		}
+		if(isset($tag_config)) extract($tag_config, EXTR_SKIP);
+		include admin_tpl('tag_'.$type.'_add');
+		break;
 }
 
 function get_var($string)
@@ -198,7 +405,7 @@ function is_defined($vars)
 		{
 			$isset = 0;
 			eval("\$isset = isset($var);");
-			if(!$isset || ($var = '$channelid' && (!isset($CHANNEL[$channelid]) || ($MODULE[$mod]['iscopy'] && $CHANNEL[$channelid]['module'] != $mod)))) return FALSE;
+			if(!$isset) return FALSE;
 		}
 	}
 	else

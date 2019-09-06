@@ -1,0 +1,6 @@
+@import url("base.css");
+#main{background-image:none;}
+.table_form { margin:0 auto 20px; width:100%; *margin-top:6px; background:#D5EDFD; border:1px solid #99d3fb;}
+.table_form caption{ border:1px solid #99d3fb; border-bottom-width:0; font-weight:bold; color:#077ac7; background:url(images/bg_table.jpg) repeat-x 0 0; height:27px; line-height:27px; margin:6px auto 0;}
+.table_form td, .table_form th{ line-height:150%; padding:4px; background-color:#fff;}
+.table_form th{ color:#077ac7; text-align:right;}

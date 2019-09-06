@@ -1,0 +1,65 @@
+{template 'member','header'}
+<div id="main">
+  {template "ask","left"}
+  <div id="right">
+    <p id="position"><strong>当前位置：</strong><a href="{$MODULE[member][url]}">会员中心</a><a href="{$M[url]}center.php">问吧</a>修改提问</p>
+    <div class="clear"></div>
+    {if $job=='ask'}
+	<form action="" method="post" name="myform">
+    <table width="98%" cellpadding="0" cellspacing="1" class="table_form">
+      <caption>修改提问</caption>
+      <tr>
+        <th>您的问题</th>
+		<td><input type="text" name="info[title]" id="title" value="{$title}"></td></tr>
+		<tr>
+		<th>问题补充</th>
+        <td>
+		<textarea name="posts[message]" rows="9" cols="60" id="message">{$message}</textarea>
+		{if $M[use_editor]}{form::editor('message','introduce','100%',200,0)}{/if}
+		</td>
+      </tr>
+	  <tr>
+		<td></td>
+        <td>
+		<input type="hidden" name="id" value="{$id}"/>
+		<input type="hidden" name="action" value="edit"/>
+		<input type="hidden" name="forward" value="{$forward}"/>
+		<input type="submit" name="dosubmit" id="button" value=" 更 新 " /></td>
+      </tr>
+    </table>
+	<form>
+	{else}
+	<form action="" method="post" name="myform">
+    <table cellpadding="0" cellspacing="0" class="table_form">
+      <caption>修改答案</caption>
+      <tr>
+		<tr>
+		<th>答案</th>
+        <td><textarea name="posts[message]" rows="9" cols="60" id="message">{$message}</textarea>
+		{if $M[use_editor]}{form::editor('message','introduce','100%',200,0)}{/if}
+		</td>
+      </tr>
+	  <tr>
+		<td></td>
+        <td class="align_left" >
+		<input type="hidden" name="id" value="{$id}"/>
+		<input type="hidden" name="action" value="edit"/>
+		<input type="hidden" name="forward" value="{$forward}"/>
+		<input type="submit" name="dosubmit" id="button" value=" 更 新 " /></td>
+      </tr>
+    </table>
+	<form>
+	{/if}
+    <table cellpadding="0" cellspacing="0" class="table_info">
+      <caption>提示信息</caption>
+      <tr>
+        <td> 为了让您的提问被更多人关注，以获得最佳的回答，您可以一次追加悬赏20分以上（含20分），<br/> 
+将问题在分类下的“待解决”问题列表中显示为最新，类似于新提出的问题 
+<br/>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="clear"></div>
+{template 'phpcms','footer'}

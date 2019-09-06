@@ -1,0 +1,10 @@
+@import url("base.css");
+#main_l{ border:0;}
+.commentbox{ border:1px solid #bde3fd; margin-top:10px;}
+.commenthead{ background:#EDF8FE; color:#09c; border:1px solid #fff; line-height:26px; height:26px; padding:0 6px;}
+.commenthead img{ float:right; margin:7px 10px 0 0; }
+.commenttext{ padding:10px;}
+.commenttext p{ font-size:14px; padding:5px; text-indent:2em;}
+.commentfunction{ border:1px solid #fff; text-align:right; border-top:1px dotted #bde3fd; color:#09c; line-height:24px; padding-right:15px;}
+.reply{ border:1px solid #bde3fd; border-left-width:5px; padding:5px 10px; font-size:12px; margin:10px auto; text-indent:0; line-height:180%; color:#454545;}
+.reply p{ margin:2px auto; text-indent:2em; line-height:150%;font-size:12px;}

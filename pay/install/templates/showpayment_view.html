@@ -1,0 +1,32 @@
+{template 'member','header'}
+<body>
+<div id="main">
+  {template 'pay' , 'left'}
+  <div id="right">
+    <!--面包屑导航-->
+    <p id="position"><strong>当前位置：</strong><a href="{$M[url]}">财务管理</a>支付充值</p>
+    <!--欢迎页基本信息-->
+    <div class="clear"></div>
+    <div class="clear"></div>
+    <!--提示信息-->
+	<form action = "{$MODULE[$mod]['url']}showpayment.php?action=type" name="thisform" method="post">
+    <table cellpadding="0" cellspacing="1" class="table_form">
+      <caption>支付充值</caption>
+      <tr>
+	    <th width="15%">支付充值：</th>
+        <td>
+			&nbsp<input type="radio" value="online" name="pay" id="online" checked=""/>&nbsp<label>在线充值</label><br/>
+			&nbsp<input type="radio" value="card" name="pay" id="card"/>&nbsp<label>充值卡充值</label><br/>
+			&nbsp<input type="radio" value="offline" name="pay" id="offline"/>&nbsp<label>银行汇款</label><br/>
+        </td>
+      </tr>
+	   <tr> 
+	   	<td></td>
+        <td><input type="submit" name="button" id="button" value="下一步" /></td>
+      </tr>
+    </table>
+	</form>
+  </div>
+</div>
+<div class="clear"></div>
+{template 'member','footer'}

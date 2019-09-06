@@ -1,0 +1,10 @@
+{template 'phpcms','header'}
+<div id="main_full">
+  <div id="content">
+    <h3>{$catname}</h3>
+	<div style="padding:10px;">
+      <p>{block("catid_$catid", 1)}</p>
+    </div>
+  </div>
+</div>
+{template 'phpcms','footer'}

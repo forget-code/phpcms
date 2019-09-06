@@ -1,199 +1,189 @@
-<?php
+<?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-
-$g = $db->get_one("SELECT count(linkid) AS number FROM ".TABLE_LINK." WHERE passed=0 ");
-if($g['number'])
-{
-	$submenu = array(
-		array("<font color=\"blue\">".$LANG['add_link']."</font>","?mod=$mod&file=$file&action=add"),
-		array("<font color=\"red\">".$LANG['link_manage']."</font>","?mod=$mod&file=$file&action=manage"),
-		array("<font color=\"red\">".$LANG['link_checked']."($g[number])</font>","?mod=$mod&file=$file&action=manage&passed=0"),
-		array("<font color=\"blue\">".$LANG['link_type_list']."</font>","?mod=$mod&file=$file&action=typelist")
-	);
-}
-else
-{
-	$submenu = array(
-		array("<font color=\"blue\">".$LANG['add_link']."</font>","?mod=$mod&file=$file&action=add"),
-		array("<font color=\"red\">".$LANG['link_manage']."</font>","?mod=$mod&file=$file&action=manage"),
-		array($LANG['link_checked'],"?mod=$mod&file=$file&action=manage&passed=0"),
-		array("<font color=\"blue\">".$LANG['link_type_list']."</font>","?mod=$mod&file=$file&action=typelist")
-
-	);
-}
-$menu = adminmenu($LANG['link_manage'],$submenu);
 $action = $action ? $action : 'manage';
+$pagesize = $M[pagesize] && $M[pagesize]<500 ? $M[pagesize] : 20;
 switch($action)
 {
 	case 'add':
-		
 		if(isset($submit))
 		{
-			if(!ereg('^[01]+$',$linktype))
+
+			if(empty($typeid))
 			{
-				showmessage($LANG['illegal_parameters']); 
-			}   
+				showmessage('请选择分类');
+			}
 			if(empty($name))
 			{
-				showmessage($LANG['input_domain_name'],"goback");
+				showmessage('请填写网站名称');
 			}
-			if(empty($url) || $url=='http://')
+			if(empty($url))
 			{
-				showmessage($LANG['input_url'],"goback");
+				showmessage('请填写网站地址');
 			}
-			
-			$db->query("INSERT INTO ".TABLE_LINK." (`typeid` , `linktype` , `style` , `name` , `url` , `logo` , `introduce` , `username` , `elite` , `passed` , `addtime` )  VALUES('$typeid','$linktype','$style_color','$name','$url','$logo','$introduce','$username','$elite','$passed','$PHP_TIME')");
-			if($db->affected_rows()>0)
+			if(!preg_match('/\b((?#protocol)https?|ftp):\/\/((?#domain)[-A-Z0-9.]+)((?#file)\/[-A-Z0-9+&@#\/%=~_|!:,.;]*)?((?#parameters)\?[-A-Z0-9+&@#\/%=~_|!:,.;]*)?/i', $url))
 			{
-				$linkid = $db->insert_id();
-				$db->query("UPDATE ".TABLE_LINK." SET `listorder`=$linkid WHERE linkid=$linkid");
-				showmessage($LANG['operation_success'], "?mod=link&file=createhtml&forward=".urlencode($forward));
+				showmessage('请填写正确的网站地址');
+			}
+			if($linktype && empty($logo))
+			{
+				showmessage('请填写网站的logo');
+			}
+
+			$arr = array('typeid'=>$typeid,'linktype'=>$linktype,'style'=>$style,'name'=>$name,'url'=>$url,'logo'=>$logo,'introduce'=>$introduce,'username'=>$username,'elite'=>$elite,'passed'=>$passed,'addtime'=>TIME);
+			if($link->add($arr))
+			{
+				//showmessage($LANG['operation_success'], "?mod=link&file=createhtml&forward=".urlencode($forward));
+				showmessage($LANG['operation_success'],"?mod=$mod&file=$file&action=manage");
 			}
 			else
 			{
-				showmessage($LANG['operation_failure']);
+				showmessage($LANG['operation_failure'],$forward);
 			}
 		}
 		else
-		{			
-			$style_edit = style_edit("style","");
-			include admintpl('link_add');
+		{
+			include admin_tpl('link_add');
+		}
+	break;
+
+	case 'delete':
+		if(isset($submit6))
+		{
+		if(empty($linkid))
+			{
+				showmessage('请选择要删除的记录',$forward);
+			}
+			else
+			{
+				if($link->del($linkid))
+				{	
+					//showmessage($LANG['operation_success'], "?mod=link&file=createhtml&forward=".urlencode($forward));
+					showmessage($LANG['operation_success'],"?mod=$mod&file=$file&action=manage");
+				}
+				else
+				{
+					showmessage($LANG['operation_failure'],$forward);
+				}
+			}
+		}
+		else
+		{
+			include admin_tpl('link_del');
+		}
+	break;
+
+	case 'pass':
+		if(isset($passed))
+		{
+			if($link->check($linkid,$passed))
+			{	
+			//	showmessage($LANG['operation_success'], "?mod=link&file=createhtml&forward=".urlencode($forward));
+				showmessage($LANG['operation_success'],$forward);
+			}
+			else
+			{
+				showmessage($LANG['operation_failure'],$forward);
+			}
+		}
+		else
+		{	$links = $link->listinfo('where passed=0');
+			include admin_tpl('link_manage');
+		}
+	break;
+
+	case 'elite':
+		if(isset($elite))
+		{
+			if($link->elite($linkid,$elite))
+			{
+				showmessage($LANG['operation_success'],$forward);
+			}
+			else
+			{
+				showmessage($LANG['operation_failure'],$forward);
+			}
+		}
+		else
+		{
+			$links = $link->listinfo();
+			include admin_tpl('link_manage');
 		}
 		break;
 
 	case 'manage':
-		$passed = isset($passed) ? intval($passed) : 1;
-		$pagesize = $PHPCMS['pagesize'];
-		$page = isset($page) ? intval($page) : 1;
-		$offset = ($page-1)*$pagesize;
-
-		$condition = '';
-		if(isset($typeid)) $condition = ' AND typeid='.intval($typeid);
-		if(isset($linktype)) $condition = ' AND linktype='.intval($linktype);
-		if(isset($elite)) $condition = ' AND elite='.intval($elite);
+		if(!isset($passed)) $passed=1;
+		$condition = "where passed='$passed'";
+		if(isset($typeid)) $condition .= ' AND typeid='.intval($typeid);
+		if(isset($linktype)) $condition .= ' AND linktype='.intval($linktype);
+		if(isset($elite)) $condition .= ' AND elite='.intval($elite);
 		if(isset($keyword))
 		{
 			$keyword = trim($keyword);
 			$keyword = str_replace(' ','%',$keyword);
 			$keyword = str_replace('*','%',$keyword);
 			$condition .= " AND name LIKE '%$keyword%' ";
-		}		
-		$r = $db->get_one("SELECT COUNT(linkid) AS num FROM ".TABLE_LINK." WHERE passed=$passed $condition");
-		$number = $r['num'];
-		$pages = phppages($number,$page,$pagesize);
-		$links = array();
-		$result = $db->query("SELECT linkid,typeid,linktype,style,name,url,logo,introduce,username,listorder,elite,hits,passed FROM ".TABLE_LINK." WHERE passed=$passed $condition ORDER BY listorder,elite DESC LIMIT $offset,$pagesize");		
-		while($r = $db->fetch_array($result))
-		{
-			$links[] = $r;
-		}
-		include admintpl('link_manage');
-		break;
-		
-	case 'typelist':
-		include admintpl('link_typelist');
-		break;
-		
-	case 'pass' :
-		if(empty($linkid))
-		{
-			showmessage($LANG['illegal_parameters']);
-		}
-		if(!ereg('^[0-1]+$',$passed))
-		{
-			showmessage($LANG['illegal_parameters']);
-		}
-		$linkids=is_array($linkid) ? implode(',',$linkid) : $linkid;
-		$db->query("UPDATE ".TABLE_LINK." SET passed=$passed WHERE linkid IN ($linkids)");
-		if($db->affected_rows()>0)
-		{
-			showmessage($LANG['operation_success'],$forward);
-		}
-		else
-		{
-			showmessage($LANG['operation_failure']);
-		}
-	break;
-
-	case 'elite' :
-		if(empty($linkid))
-		{
-			showmessage($LANG['illegal_parameters']);
-		}
-		if(!ereg('^[0-1]+$',$elite))
-		{
-			showmessage($LANG['illegal_parameters']);
-		}
-		$linkids=is_array($linkid) ? implode(',',$linkid) : $linkid;
-		$db->query("UPDATE ".TABLE_LINK." SET elite=$elite WHERE linkid IN ($linkids)");
-		if($db->affected_rows()>0)
-		{
-			showmessage($LANG['operation_success'],$forward);
-		}
-		else
-		{
-			showmessage($LANG['operation_failure']);
-		}
-	break;
-
-	case 'delete' :
-		if(empty($linkid))
-		{
-			showmessage($LANG['illegal_parameters']);
-		}
-		$linkids=is_array($linkid) ? implode(',',$linkid) : $linkid;
-		$db->query("DELETE FROM ".TABLE_LINK." WHERE linkid IN ($linkids)");
-		if($db->affected_rows()>0)
-		{
-			showmessage($LANG['operation_success'],$forward);
-		}
-		else
-		{
-			showmessage($LANG['operation_failure']);
-		}
-	break;
-	
-	case 'updatelistorderid':
-
-		if(empty($listorder) || !is_array($listorder))
-		{
-			showmessage($LANG['illegal_parameters']);
-		}
-
-		foreach($listorder as $key=>$val)
-		{
-			$db->query("UPDATE ".TABLE_LINK." SET `listorder`='$val' WHERE linkid=$key ");
-		}
-
-		showmessage($LANG['order_update_success'],$forward);
-
+		}	
+		$links = $link->listinfo($condition,$order,$page);
+		$pages = $link->pages;
+		include admin_tpl('link_manage');
 	break;
 
 	case 'edit':
-
 		if(isset($submit))
 		{
-			if(!ereg('^[01]+$',$linktype))
+			if(empty($typeid))
 			{
-				showmessage($LANG['illegal_parameters']); 
-			}    
-			$query="UPDATE ".TABLE_LINK." SET typeid = '$typeid' , linktype = '$linktype' , style = '$style' , name = '$name' , url = '$url' , logo = '$logo' , introduce = '$introduce' , username = '$username' , elite = '$elite' , passed = '$passed' WHERE linkid=$linkid ";
-			$db->query($query);
-			if($db->affected_rows()>0)
-			{
-				showmessage($LANG['operation_success'],$forward);
+				showmessage('请选择分类');
 			}
-			else
+			if(empty($name))
 			{
-				showmessage($LANG['operation_failure_content']);
+				showmessage('请填写网站名称');
+			}
+			if(empty($url))
+			{
+				showmessage('请填写网站地址');
+			}
+			if(!preg_match('/\b((?#protocol)https?|ftp):\/\/((?#domain)[-A-Z0-9.]+)((?#file)\/[-A-Z0-9+&@#\/%=~_|!:,.;]*)?((?#parameters)\?[-A-Z0-9+&@#\/%=~_|!:,.;]*)?/i', $url))
+			{
+				showmessage('请填写正确的网站地址');
+			}
+			if($linktype && empty($logo))
+			{
+				showmessage('请填写网站的logo');
+			}
+
+
+			$arr = array('typeid'=>$typeid,'linktype'=>$linktype,'style'=>$style,'name'=>$name,'url'=>$url,'logo'=>$logo,'introduce'=>$introduce,'username'=>$username,'elite'=>$elite,'passed'=>$passed,'addtime'=>TIME);
+			if(isset($linkid))
+			{
+				if($link->update($arr,$linkid))
+				{
+					showmessage($LANG['operation_success'],"?mod=$mod&file=$file&action=manage");
+				}
+				else
+				{
+					showmessage($LANG['operation_failure'],$forward);
+				}
 			}
 		}
 		else
-		{		
-			@extract($db->get_one("select * from ".TABLE_LINK." where linkid='$linkid' "));
-			$style_edit = style_edit("style",$style);			
-			include admintpl('link_edit');
+		{	
+			$links = $link->listinfo("where linkid=$linkid");
+			$links = $links[0];
+			include admin_tpl('link_edit');
 		}
 		break;
+
+	case 'updatelistorderid':
+		$result = $link->listorder($listorder);
+		if($result)
+		{
+			showmessage('操作成功！', $forward);
+		}
+		else
+		{
+			showmessage('操作失败！',$forward);
+		}
+
 }
 ?>

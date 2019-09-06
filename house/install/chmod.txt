@@ -1,3 +1,0 @@
-house/
-house/uploadfile/
-house/pos/

@@ -1,0 +1,145 @@
+{template 'phpcms','header'}
+<!--begin main-->
+<div id="main">
+  <!--begin left-->
+  <div id="main_l">
+    <!--导航-->
+    <div id="position"><a href="{$M[url]}">问吧首页</a>我要提问</div>
+    <!--详细栏目列表-->
+    <!--标签页-->
+    <table cellpadding="0" cellspacing="6" width="100%">
+	<form name="myform" method="post" action="{$M[url]}question.php?" onSubmit="return checkform(this);">
+      <tr>
+        <th width="90">您的问题</th>
+        <td><input type="text" name="info[title]" id="title" value="{$title}" size="50"></td>
+      </tr>
+      <tr>
+        <th style="vertical-align:top">问题补充</th>
+        <td><textarea name="message" id="message" rows="9" cols="60"></textarea>
+		{if $M[use_editor]}{form::editor('message','introduce','100%',200,0)}{/if}
+        </td>
+      </tr>
+      <tr>
+        <th style="vertical-align:top">问题分类</th>
+        <td>
+		<span id="load_catid"></span>
+		<input type="hidden" name="info[catid]" id="catid" value="">
+		<a href="javascript:category_reload();">重选</a>
+<script type="text/javascript">
+		function category_load(id)
+		{
+			$.get('{$M[url]}load.php', { id: id },
+				  function(data){
+					$('#load_catid').append(data);
+				  });
+		}
+		function category_reload()
+		{
+			$('#load_catid').html('');
+			category_load(0);
+		}
+		category_load(0);
+</script>
+		</td>
+      </tr>
+      <tr>
+        <th>悬赏积分</th>
+        <td><select name="info[reward]" id="reward"  onchange="ckreward();">
+	<option value=0>0</option>
+	<option value=5>5</option>
+	<option value=10>10</option>
+	<option value=15>15</option>
+	<option value=20>20</option>
+	<option value=30>30</option>
+	<option value=45>45</option>
+	<option value=60>60</option>
+	<option value=80>80</option>
+	<option value=100>100</option>
+</select>( 注：您目前的总积分为：{$_point} )
+<span id="reward_msg"></span></td>
+      </tr>
+      <tr>
+        <th>匿名设定</th>
+        <td><input type="checkbox" id="anonymity" onclick="checkAnonymity();" name="info[anonymity]" value="1">您可以对问题设定匿名，但您需要付出积分{$M[anybody_score]}分。<span id="anonymity_msg"></span></td>
+      </tr>
+      {if $M[publish_code]}
+      <tr>
+  	    <th>验证码</th>
+    	<td>
+        	<input name="checkcodestr" type="text" style="ime-mode:disabled" require="true" datatype="limit" min="4" max="4" msgid="code" msg="验证码必须填写" size="6" />
+          &nbsp;<img src="checkcode.php" id="checkcode" onClick="this.src='checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" width="48" height="19" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle" class="color_1" />&nbsp;<span class="color_1"></span><span id="code"></span>
+        </td>
+      </tr>
+      {/if}
+      <tr>
+        <th></th>
+        <td><input type="hidden" name="forward" value="{$forward}"><input name="dosubmit" type="submit" value="好了，提交" /></td>
+      </tr>
+	  </form>
+    </table>
+    <!--分页-->
+  </div>
+  <!--end left-->
+  <!--begin right-->
+  <div id="main_r">
+    <h4>热点问题</h4>
+    <div>
+      <ul class="text_list">
+       {tag_问吧首页热点问题}
+      </ul>
+    </div>
+  </div>
+  <!--end right-->
+</div>
+<script language="javascript">
+<!--
+function checkform()
+{
+	if($('#title').val() == '')
+	{
+		alert("标题不能为空");
+		$('#title').focus();
+		return false;
+	}
+	if($('#catid').val() == 0)
+	{
+		alert("请选择分类");
+		$('#catid').focus();
+		return false;
+	}
+}
+function ckreward()
+{
+	if($('#reward').val() != "" && $('#reward').val() > {$_point})
+	{
+		$('#reward_msg').html("<font color='red'><strong>抱歉,悬赏不能高于您目前的总积分.</strong></font>");
+		return false;
+	}
+	else
+	{
+		$('#reward_msg').html("");
+		return true;
+	}
+}
+function checkAnonymity()
+{
+	if($('#anonymity').attr('checked')==true)
+	{
+		var _points = {$_point};
+		if(_points < {$M[anybody_score]})
+		{
+			$('#anonymity_msg').html("<font color='red'><strong>抱歉,您的积分不足以设置匿名.</strong></font>");
+			$('#anonymity').attr('checked',false);
+		}
+	}
+}
+
+$().ready(function() {
+	  $('form').checkForm(1);
+});
+//-->
+</script>
+
+<!--end main-->
+<!--begin foot-->
+{template 'phpcms','footer'}

@@ -1,15 +1,15 @@
 <?php
-include("config.inc.php");
+include './config.inc.php';
 
-$dirnames = dirname($PHP_QUERYSTRING);
-$tmp = PHPCMS_ROOT.'/'.str_replace($PHPCMS['siteurl'],'',$dirnames).'/';
+$dirnames = dirname(QUERY_STRING);
+$tmp = PHPCMS_ROOT.str_replace($PHPCMS['siteurl'],'',$dirnames).'/';
 $tmp_url = str_replace($PHPCMS['siteurl'],'',$dirnames);
+
 if(preg_match("/http:/",$tmp))
 {
-	include_once PHPCMS_ROOT."/include/upload.class.php";
-	$tmp = PHPCMS_ROOT.'/'.$PHPCMS['uploaddir'].'/'.date('Ym').'/';
-	$tmp_url = $PHPCMS['uploaddir'].'/'.date('Ym');
-	dir_create($uploaddir);
+	$tmp = PHPCMS_ROOT.UPLOAD_URL.date('Y').'/'.date('md').'/';
+	$tmp_url = UPLOAD_URL.date('Y').'/'.date('md');
+	dir_create($tmp);
 }
 setcookie('tmp',$tmp);
 setcookie('tmp_url',$tmp_url);
@@ -17,9 +17,9 @@ setcookie('tmp_url',$tmp_url);
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8".CHARSET />
 <?php
-$pic = @trim($PHP_QUERYSTRING);
+$pic = @trim(QUERY_STRING);
 if(empty($pic)){
 	echo '<script language="javascript">alert("请选择需要剪切的图片！");window.opener=null;window.close();</script>';
 	exit;
@@ -40,7 +40,7 @@ elseif(!preg_match(FILENAME_CHECK,$pic))
 	<td>
 		<div id="element_container" class="element_container">
 			<img src="<?php echo $pic;?>" alt="" id="sampleid"/>
-			<img src="images/uploading.gif" alt="" id="uploadingid" class="uploading"/>
+			<img src="images/uploading.gif" id="uploadingid" class="uploading" width="78" height="7"/>
 		</div>
 	</td>
 	</tr>

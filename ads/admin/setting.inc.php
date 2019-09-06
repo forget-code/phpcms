@@ -6,11 +6,11 @@ if($dosubmit)
 	$setting['htmldir'] = trim($setting['htmldir']);
 	if(!$setting['htmldir']) showmessage('Ads dir is null !');
 	module_setting($mod, $setting);
-	if(trim($MOD['htmldir']) != '' && $MOD['htmldir'] != $setting['htmldir'])
+	if(trim($M['htmldir']) != '' && $M['htmldir'] != $setting['htmldir'])
 	{
-		@unlink(PHPCMS_ROOT.'/data/'.$MOD['htmldir'].'.php');
-		dir_delete(PHPCMS_ROOT.'/data/'.$MOD['htmldir'].'/');
-		$forward = '?mod=ads&file=createhtml';
+		@unlink(PHPCMS_ROOT.'/data/'.$M['htmldir'].'.php');
+		dir_delete(PHPCMS_ROOT.'/data/'.$M['htmldir'].'/');
+		$forward = '?mod=ads&file=ads_place&action=createhtml';
 	}
 	$filename = PHPCMS_ROOT.'/data/'.$setting['htmldir'].'.php';
 	if(!file_exists($filename))
@@ -23,8 +23,7 @@ if($dosubmit)
 }
 else
 {
-	@extract(new_htmlspecialchars($MOD));
-
-    include admintpl('setting');
+	@extract(new_htmlspecialchars($M));
+    include admin_tpl('setting');
 }
 ?>

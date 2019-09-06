@@ -1,6 +1,0 @@
-{loop $digg_list $i $list}
-<li>
-{if $i<=2}<strong>{$list['digg_hits']}&nbsp;&nbsp;</strong>{else}<em>{$list['digg_hits']}&nbsp;&nbsp;</em>{/if}
-<a href='{PHPCMS_PATH}{$list['digg_link']}' target='_blank' title='{$list['digg_title']}'>{$list['digg_title']}</a>
-</li>
-{/loop}

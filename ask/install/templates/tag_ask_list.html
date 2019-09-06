@@ -1,0 +1,20 @@
+<table cellpadding="0" cellspacing="0" class="table_list">
+  <tr>
+    <th>标题</th>
+    <th width="50">状态</th>
+    <th width="50">回答数</th>
+    <th width="110">提问时间</th>
+  </tr>
+  {loop $data $n $r}
+  <tr>
+    <td class="align_left" style="padding-left:5px">{if $r['reward']}<span style="color:orange;"><img src="images/icon_credit.gif" width="12" height="11">{$r[reward]} </span>{/if}
+	<a href="{ask_url($r[askid])}" target="{$target}">{str_cut($r[title],$titlelen,'..')}</a> <a href="{$CATEGORY[$r[catid]][url]}" style="color:gray">[{$CATEGORY[$r[catid]][catname]}]</a></td>
+    <td>{if $r[status]==3}解决中{elseif $r[status]==6}已关闭{else}已解决{/if}</td>
+    <td>{$r[answercount]}</td>
+    <td>{date('Y-m-d H:i', $r[addtime])}</td>
+  </tr>
+  {/loop}
+</table>
+{if $pages}
+<p id="pages">{$pages}</p>
+{/if}

@@ -1,32 +1,48 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
-
-$action = $action ? $action : 'config';
-
+require_once MOD_ROOT.'admin/include/maillist.class.php';
+$maillist = new maillist();
 //目录参数设置
-$mail_setdir = "data/mail/";
-$mail_datadir = "data/mail/data/";
+$mail_setdir = PHPCMS_ROOT.'data/mail/';
+$mail_datadir = PHPCMS_ROOT.'data/mail/data/';
+switch ($action)
+{
+	case 'list':
+        $dir = 'data/mail/data/';
+		$mailfiles = $maillist->get_list();
+		include admin_tpl('maillist_manage');
+	break;
+	case 'down':
+		if(!isset($filename))
+        {
+            showmessage($LANG['illegal_parameters'],'goback');
+        }
+        else
+        {
+		    file_down($mail_datadir.$filename);
+        }
+	break;
+	case 'delete':
+		if ($dosubmit)
+		{
+			if (!empty($mail))
+			{
+				if($maillist->drop($mail))
+				showmessage($LANG['maillist_file']." $filename ".$LANG['delete_success'],"?mod=$mod&file=$file&action=list");
+			}
+			showmessage('请选择要删除的对象',"?mod=$mod&file=$file&action=list");
+		}
+		else
+		{
+			if(!isset($filename)) showmessage($LANG['illegal_parameters'],'goback');
+			if(!preg_match("/^[0-9a-z_]+\.txt$/i",$filename)) showmessage($LANG['illegal_file']);
+			if($maillist->drop($filename))
+				showmessage($LANG['maillist_file']." $filename ".$LANG['delete_success'],"?mod=$mod&file=$file&action=list");
+		}
+	break;
+	case 'upload':
+        $maillist->uploadfile();
+	break;
 
-dir_create(PHPCMS_ROOT."/".$mail_setdir);
-dir_create(PHPCMS_ROOT."/".$mail_datadir);
-
-//临时邮件参数设置
-$tmpname = PHPCMS_ROOT."/data/mail/mailing.php";
-$separator='|||';
-$url="?mod=".$mod."&file=mail&action=send2";
-
-//头部菜单
-$submenu=array(
-	array('<font color="red">'.$LANG['obtain_maillist'].'</font>',"?mod=".$mod."&file=maillist&action=get"),
-	array($LANG['maillist_manage'],"?mod=".$mod."&file=maillist&action=manage"),
-	array($LANG['manual_send_mail'],"?mod=".$mod."&file=send")
-);
-$menu=adminmenu($LANG['maillist'],$submenu);
-
-
-$referer= isset($referer) ? $referer : $PHP_REFERER;
-$action = $action ? $action : 'manage';
-$filearray = array('get','config','manage','delete','getlist','down','upload');
-in_array($action,$filearray) or showmessage($LANG['illegal_action'],$referer);
-require $file."_".$action.".inc.php";
+}
 ?>

@@ -1,58 +1,63 @@
 <?php
 require './include/common.inc.php';
+if(!$_userid) showmessage($LANG['please_login'], $M['url'].'login.php?forward='.urlencode(URL));
+if(!$forward) $forward = HTTP_REFERER;
 
-if(!$_userid) showmessage($LANG['please_login'], $MOD['linkurl'].'login.php?forward='.urlencode($PHP_URL));
+if(!class_exists('member_form'))
+{
+	require CACHE_MODEL_PATH.'member_form.class.php';
+}
+$member_form = new member_form($_modelid);
 
-require_once PHPCMS_ROOT.'/include/field.class.php';
-$field = new field($CONFIG['tablepre'].'member_info');
+if(!class_exists('member_input'))
+{
+	require CACHE_MODEL_PATH.'member_input.class.php';
+}
+$member_input = new member_input($_modelid);
+
+if(!class_exists('member_update'))
+{
+	require CACHE_MODEL_PATH.'member_update.class.php';
+}
+$member_update = new member_update($_modelid, $_userid);
 
 if($dosubmit)
 {
-	if(!is_email($email)) showmessage($LANG['input_valid_email']);
-	$gender = $gender==1 ? 1 : 0;
-	$showemail = isset($showemail) ? 1 : 0;
-	$byear = intval($byear);
-	$byear = $byear==19 ? '0000' : $byear;
-	$bmonth = intval($bmonth);
-	$bday = intval($bday);
-
-	$birthday = $byear.'-'.$bmonth.'-'.$bday;
-	if(!preg_match("/[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}/", $birthday)) $birthday = '0000-00-00';
-
-    if($msn && !is_email($msn)) showmessage($LANG['input_valid_msn'],"goback");
-	if(!empty($qq) && (!is_numeric($qq) || strlen($qq)>20 || strlen($qq)<5)) showmessage($LANG['input_correct_qq'],"goback");
-	if(!empty($postid) && (!is_numeric($postid) || strlen($postid)!=6)) showmessage($LANG['input_correct_zipcode'],"goback");
-	if(strlen($truename)>50 || strlen($telephone)>50 || strlen($address)>255 || strlen($homepage)>100) showmessage($LANG['truename_telephoe_etc_not_too_long'],"goback");
-	$memberinfo = array('email'=>$email,'question'=>$question,'answer'=>md5($answer),'showemail'=>$showemail,'truename'=>$truename,'gender'=>$gender,'birthday'=>$birthday,'idtype'=>$idtype,'idcard'=>$idcard,'province'=>$province,'city'=>$city,'area'=>$area,'industry'=>$industry,'edulevel'=>$edulevel,'occupation'=>$occupation,'income'=>$income,'telephone'=>$telephone,'mobile'=>$mobile,'address'=>$address,'postid'=>$postid,'homepage'=>$homepage,'qq'=>$qq,'msn'=>$msn,'icq'=>$icq,'skype'=>$skype,'alipay'=>$alipay,'paypal'=>$paypal,'userface'=>$userface,'facewidth'=>$facewidth,'faceheight'=>$faceheight,'sign'=>$sign);
+	if($PHPCMS['uc'])
+	{
+		$username = $_username;
+		$email = $_email;
+		$password = $_password;
+		$action = 'editpwd';
+		require MOD_ROOT.'api/passport_server_ucenter.php';
+	}
+	$inputinfo = $member_input->get($info);
+	if(isset($info) && is_array($info))
+	{
+		if(!$member->edit($info)) showmessage($member->msg());
+	}
 	
-	$field->check_form();
-
-	$member->edit($memberinfo);
-
-	$field->update("userid=$_userid");
-
-	showmessage($LANG['operation_success'], $PHP_REFERER);
+	$modelinfo = $inputinfo['model'];
+	if($modelinfo)
+	{
+		$modelinfo['userid'] = $_userid;
+		$member_update->update($modelinfo);
+		$member->edit_model($_modelid, $modelinfo);
+	}
+	showmessage($LANG['operation_success'], $forward);
 }
 else
 {
-	$memberinfo = $member->get_info();
-	$memberinfo = new_htmlspecialchars($memberinfo);
-	@extract($memberinfo);
-
-	$birthday = explode("-", $birthday);
-	$byear = $birthday[0]=="0000" ? "19" : $birthday[0];
-    $bmonth = $birthday[1];
-    $bday = $birthday[2];
-
-	$montharr = array('01','02','03','04','05','06','07','08','09','10','11','12');
-	$dayarr = array('01','02','03','04','05','06','07','08','09','10','11','12','13','14','15','16','17','18','19','20','21','22','23','24','25','26','27','28','29','30','31');
-
-	$fields = $field->get_form('<tr><td class="td_right" width="16%" ><strong>$title:</strong></td><td class="td_left">$input $tool $note</td></tr>');
+	$memberinfo = $member->get($_userid, $fields = '*', 1);
+	$memberinfo['avatar'] = avatar($_userid);
+	@extract(new_htmlspecialchars($memberinfo));
+	$data = $member->get_model_info($_userid, $_modelid);
+	$forminfos = $member_form->get($data);
 
 	$head['title'] = $LANG['member_profile_edit'];
 	$head['keywords'] = $LANG['member_profile_edit'];
 	$head['description'] = $LANG['member_profile_edit'];
-
+	
     include template('member', 'edit');
 }
 ?>

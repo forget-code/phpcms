@@ -1,0 +1,46 @@
+{template 'phpcms','header'} 
+<!--begin main-->
+<div id="main_full">
+  <!--位置导航-->
+  <div id="position"><a href="">首页</a>{catpos($catid)}搜索</div>
+  <!--搜索条件-->
+<form name="myform" method="get" action="">
+  <table cellpadding="0" cellspacing="1" class="search_term">
+{loop $where $field $r}
+    <tr>
+      <th width="30%">{$r[name]}</th>
+      <td>{$r[form]}</td>
+    </tr>
+{/loop}
+    <tr>
+      <th>排序方式</th>
+      <td><?=form::select($order, 'orderby', 'orderby', 'a.contentid DESC', 1)?></td>
+    </tr>
+    <tr>
+      <th></th>
+      <td><input type="submit" value="立即搜索" />
+        <input type="reset" value="重新搜索" /></td>
+    </tr>
+  </table>
+  <input type="hidden" name="mod" value="{$mod}"> 
+  <input type="hidden" name="file" value="{$file}"> 
+  <input type="hidden" name="action" value="{$action}"> 
+  <input type="hidden" name="dosubmit" value="1"> 
+</form>
+  <!--搜索结果-->
+{if $dosubmit}
+  <div class="search_res">共找到到符合条件的结果 <span style="color:red">{$total}</span> 条</div>
+	{loop $data $i $r}
+  <dl class="search_list">
+    <dt><a href="{$r[url]}" target="_blank">{$r[title]}</a></dt>
+    <dd class="search_txt">{$r[description]}</dd>
+    <dd class="search_attribute">{url($r[url], 1)}　{date('Y-m-d', $r[updatetime])}</dd>
+  </dl>
+	{/loop}
+{/if}
+  <!--分页-->
+  <div id="pages">{$pages}</div>
+</div>
+<!--end main-->
+<!--begin foot-->
+{template 'phpcms','footer'}

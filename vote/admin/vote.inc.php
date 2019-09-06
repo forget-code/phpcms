@@ -1,246 +1,279 @@
-<?php
+ <?php
 defined('IN_PHPCMS') or exit('Access Denied');
 
-$keyid = isset($keyid) ? $keyid : 'phpcms';
-$submenu=array(
-	array('<font color="#0000FF">'.$LANG['add_vote'].'</font>','?mod='.$mod.'&file='.$file.'&action=add&keyid='.$keyid),
-	array('<font color="#FF0000">'.$LANG['vote_manage'].'</font>','?mod='.$mod.'&file='.$file.'&action=manage&passed=1&keyid='.$keyid),
-	array($LANG['vote_checked'],'?mod='.$mod.'&file='.$file.'&action=manage&passed=0&keyid='.$keyid),
-	array($LANG['vote_expired'],'?mod='.$mod.'&file='.$file.'&action=manage&keyid='.$keyid.'&timeout=1'),
-	array('<font color="#0000FF">'.$LANG['label_manage'].'</font>','?mod='.$mod.'&file=tag&keyid='.$keyid),
-	array('<font color="#FF0000">'.$LANG['update_vote'].'</font>','?mod='.$mod.'&file='.$file.'&action=getcode&updatejs=1&keyid='.$keyid)
-);
-$menu = adminmenu($LANG['vote_manage'],$submenu);
-$pagesize = isset($pagesize) && $pagesize<500 ? intval($pagesize) : $PHPCMS['pagesize'];
+$keyid = $keyid ? $keyid : 'phpcms';
 $action = $action ? $action : 'manage';
+$passed = isset($passed)?$passed:1;
+$subjectid = intval($subjectid);
+
+if(in_array($action, array('add','edit', 'edit_subject', 'edit_option', 'delete', 'delopt')) && $dosubmit)  update_votejs($subjectid);
+
 switch($action)
-{	
+{
 	case 'add':
-	if(isset($submit))
+	if(isset($dosubmit))
 	{
 		if(empty($subject)) showmessage($LANG['inout_vote_subject']);
-		if(empty($voteoption[0])) showmessage($LANG['illegal_parameters']); 
-		if(!ereg('^[01]+$',$passed)) showmessage($LANG['illegal_parameters']); 
-		$db->query("INSERT INTO ".TABLE_VOTE_SUBJECT."(`keyid` , `subject` , `type` , `username` , `fromdate` , `todate` , `addtime` , `passed` , `templateid` , `skinid` , `attribute`) VALUES('$keyid','$subject','$type','$_username','$fromdate','$todate','$PHP_TIME','$passed','$templateid','$skinid','$enableTourist')");
-        $voteid = $db->insert_id();
-		foreach($voteoption as $optionid=>$option)
+
+		$vote_subject = array();
+		$vote_subject = $subject;
+		$userinfo = is_array($userinfo) ? $userinfo : array();
+		foreach($userinfo as $key=>$val)
 		{
-			if(empty($option)) continue;
-			$db->query("INSERT INTO ".TABLE_VOTE_OPTION."(`voteid` , `option`) VALUES('$voteid','$option')");
+			$userinfo[$key] = $required[$key]?1:0;
 		}
-        showmessage($LANG['operation_success'],"?mod=vote&file=vote&action=getcode&updatejs=1&voteid=".$voteid."&keyid=".$keyid);
-    }
+
+		if($save_username)  $voteinfo[allowguest] = 0;
+
+		$userinfo = $userinfo ? addslashes(var_export($userinfo,TRUE)) : '';
+		$voteinfo['userinfo'] = $userinfo;
+
+		$voteinfo['parentid'] = $voteinfo['parentid'] ? $voteinfo['parentid'] : $subject['parentid'];
+		$voteinfo['parentid'] = ($voteinfo['ismultiple']==1 && $voteinfo['parentid']) ? $voteinfo['parentid'] : 0;
+
+		$voteinfo['groupidsvote'] = $voteinfo['groupidsvote'] ? implode(',',$voteinfo['groups']) : '';
+		$voteinfo['addtime'] = TIME;
+		$voteinfo['groupidsview'] = $voteinfo['groupidsview'] ? implode(',',$voteinfo['groupidsview']) : '';
+
+
+		if($voteinfo['ismultiple'])
+		{
+			$voteinfo['subject'] = trim($voteinfo['title']);
+			unset($voteinfo['title']);
+			if(!$voteinfo['subject'])   showmessage($LANG['invalid_vote_title'], $forward);
+
+			$subjectid = $admin_vote->add_subject($voteinfo) ;
+			if(!$subjectid)  showmessage($LANG['operation_failure']);
+			showmessage($LANG['ok_next'],"?mod={$mod}&file=vote&action=edit_subject&subjectid={$subjectid}");
+			$admin_vote->add_options(array('option'=>$subject['option'],'image'=>$subject['image']),$newsubjectid);
+		}
+
+		if(!$voteinfo['ismultiple'])
+		{
+			if(count($subject['option'])<2) showmessage($LANG['less_than_two_options']);
+			$voteinfo['subject']= $subject['subject'] ;
+            if(!$voteinfo['subject'])   showmessage($LANG['invalid_vote_title'], $forward);
+			$voteinfo['addtime']=TIME ;
+			$voteinfo['minval'] = intval($subject['minval'])  ;
+			$voteinfo['maxval'] = intval($subject['maxval']) ;
+			$voteinfo['ischeckbox'] = $subject['ischeckbox']	 ;
+			if($subject['parentid'])  $voteinfo['parentid']   = $subject['parentid'] ;
+			unset($voteinfo['title']);
+
+			$subjectid = $admin_vote->add_subject($voteinfo);
+			$admin_vote->add_options(array('option'=>$subject['option'],'image'=>$subject['image']),$subjectid);
+		}
+		update_votejs($subjectid);
+		showmessage($LANG['operation_success'],$forward);
+	}
 	else
 	{
-		$fromdate = date("Y-m-d",$PHP_TIME);
-		$todate = $PHP_TIME+3600*24*30;
-		$todate = date("Y-m-d",$todate);
-		$showskin = showskin('skinid');
-		$showtpl = showtpl($mod,'show','templateid');
-        include admintpl('vote_add');
-    } 
+		$fromdate = date("Y-m-d",TIME);
+		$todate = date("Y-m-d",TIME+3600*24*30);
+        include admin_tpl('add');
+   	}
 	break;
 
 	case 'manage':
-	if(!isset($page))
-	{
-		$page=1;
-		$offset=0;
-	}
-	else
-	{
-		$offset = ($page-1)*$pagesize;
-	}
-	$passed = isset($passed) ? $passed : '1';
-	$today = date("Y-m-d",$PHP_TIME);
-	$timeout = isset($timeout) ? 1 : 0;
-	$sql = "";
-	if($keyid == 'phpcms' || !$keyid)
-	{
-		$sql .= 1;
-	}
-	else
-	{
-		$sql .= " keyid = '$keyid' ";
-	}
-	$sql .= isset($passed) ? " AND passed='$passed' " : "";
-	$sql .= $timeout ? " AND todate<'$today' AND todate!='0000-00-00' " : " AND (todate>='$today' OR todate='0000-00-00') ";
-	$r = $db->get_one("SELECT COUNT(voteid) AS num FROM ".TABLE_VOTE_SUBJECT." WHERE $sql");
-	$number = $r['num'];
-	$pages = phppages($number,$page,$pagesize);
-	$result = $db->query("SELECT * FROM  ".TABLE_VOTE_SUBJECT." WHERE $sql ORDER BY voteid DESC LIMIT $offset,$pagesize");
-	$votes = array();
-	while($r=$db->fetch_array($result))
-	{
-		$r['adddate'] = date("Y-m-d",$r['addtime']);
-		$r['addtime'] = date("Y-m-d H:i:s",$r['addtime']);
-		$votes[]=$r;
-	}
-	include admintpl('vote_manage');
-	break;
+        $passed = isset($passed) ? $passed : '1';
+        $today = date("Y-m-d",TIME);
+        $timeout = isset($timeout) ? 1 : 0;
+
+		$sql=" 1 " ;
+        $sql .= isset($enabled) ? " AND enabled='$enabled' " : "";
+        $sql .= $timeout ? " AND todate<'$today' AND todate!='0000-00-00' " : "";
+		$sql.= $survey? " AND ismultiple=1 ":"  AND ismultiple<>1 " ;
+        if(isset($enbled)) $sql.=' enabled='.intval($enabled);
+
+        $r = $db->get_one("SELECT COUNT(subjectid) AS num FROM ".DB_PRE."vote_subject WHERE $sql and parentid=0");
+        $number = $r['num'];
+        $pages = pages($number,$page,$pagesize);
+        $votes = $db->select("SELECT * FROM  ".DB_PRE."vote_subject WHERE  $sql and  parentid=0 ORDER BY subjectid DESC LIMIT $offset,$pagesize",'subjectid');
+        include admin_tpl('manage');
+        break;
 
 	case 'edit':
 	if(isset($submit))
 	{
-		$db->query("UPDATE ".TABLE_VOTE_SUBJECT." SET subject='$subject',type='$type',fromdate='$fromdate',todate='$todate',templateid='$templateid',skinid='$skinid',attribute='$enableTourist' WHERE voteid='$voteid' ");
-		foreach($voteoptionedit as $optionid=>$option)
+
+		$voteinfo['groupidsvote'] = $voteinfo['groupidsvote']?implode(',',$voteinfo['groupidsvote']):'';
+		$voteinfo['groupidsview'] = $voteinfo['groupidsview']?implode(',',$voteinfo['groupidsview']):'';
+		$userinfo = $userinfo?$userinfo:array();
+		foreach($userinfo as $key=>$val)
 		{
-			if($option)
-			{
-				$db->query("UPDATE ".TABLE_VOTE_OPTION." SET `option`='$option' WHERE optionid='$optionid'");
-			}
-			else
-			{
-				$db->query("DELETE FROM ".TABLE_VOTE_OPTION." WHERE optionid='$optionid'");
-			}
+			$userinfo[$key] = $required[$key]?1:0;
 		}
-		//Edition time new increase option
-		if(isset($voteoption))
+		$userinfo = addslashes(var_export($userinfo,TRUE));
+		$voteinfo['userinfo'] = $userinfo;
+
+		$option_data = array('option'=>$subject['option'],'image'=>$subject['image']);
+		unset($subject['option'],$subject['image']);
+		if(is_array($subject)) $voteinfo = array_merge($voteinfo,$subject);
+
+		$admin_vote->edit_subject($voteinfo,$subjectid);
+
+		$admin_vote->edit_option($option_data);
+		$newoption = is_array($newoption)?$newoption:array();
+
+		foreach($newoption as $key=>$option)
 		{
-			foreach($voteoption as $optionid=>$option)
-			{
-				if(empty($option)) continue;
-				$db->query("INSERT INTO ".TABLE_VOTE_OPTION."(`voteid` , `option`) VALUES('$voteid','$option')");
-			}
+			if(!$option) continue ;
+			$admin_vote->add_option(array('subjectid'=>$subjectid,'option'=>$option,'image'=>$newpic[$key]));
 		}
-		showmessage($LANG['operation_success'],"?mod=vote&file=vote&action=getcode&updatejs=1&voteid=".$voteid."&keyid=".$keyid);
-	}
-	else
-	{
-		@extract($db->get_one("SELECT * FROM ".TABLE_VOTE_SUBJECT."  WHERE voteid='$voteid'"));
-		$result=$db->query("SELECT * FROM ".TABLE_VOTE_OPTION." WHERE voteid='$voteid'");
-		$ops = array();
-		while($r=$db->fetch_array($result))
-		{
-			$ops[]=$r;
-		}
-		$number = $db->num_rows($result);
+		if($deloption) $admin_vote->del_option($deloption);
+		$admin_vote->set_listorder(DB_PRE.'vote_option','optionid',$listorder);
+		$admin_vote->update_number($subjectid);
+		update_votejs($subjectid);
+		showmessage($LANG['operation_success'],"?mod=vote&file=vote&action=manage&updatejs=1&survey=".$survey);
+
+	} else {
+		$subject=$admin_vote->get_subject($subjectid);
+		$userinfo = $subject['userinfo']?$subject['userinfo'] : 'array()';
+		eval("\$userinfo=$userinfo;");
+		@extract($userinfo);
+		$options = $admin_vote->get_options($subjectid);
 		$todate = $todate>'0000-00-00' ? $todate : "";
-		$showskin = showskin('skinid',$skinid);
-        $showtpl = showtpl($mod,'show','templateid',$templateid);
-		include admintpl('vote_edit');
+		include admin_tpl('edit');
 	}
 	break;
 
+	case 'edit_subject':
+		$parentid=$subjectid;
+		if(!$subjectid) showmessage($LANG['illegal_parameters']);
+		if($dosubmit)
+		{
+
+			$admin_vote->set_listorder(DB_PRE.'vote_subject','subjectid',$subjectorder);
+			if(is_array($delsubject)) $admin_vote->del($delsubject);
+			$admin_vote->update_number($subjectid);
+            update_votejs($subjectid);
+			showmessage($LANG['operation_success'],$forward);
+		} else {
+			$subjects = $admin_vote->get_subjects($subjectid);
+			$vote_info = $admin_vote->get_vote($subjectid, 'subject');
+			$title=$vote_info['subject'];
+			unset($subjects[$subjectid]);
+			include  admin_tpl('edit_subject');
+		}
+		break;
+	case 'edit_option':
+		if(!$subjectid) showmessage($LANG['illegal_parameters']);
+		if($dosubmit)
+		{
+			$data=array();
+			$data['ismultiple']=1;
+			$data['ischeckbox'] = intval($ischeckbox);
+			$data['subject'] = $subject;
+			$data['minval']=intval($minval);
+			$data['maxval']=intval($maxval);
+
+			$admin_vote->edit_subject($data,$subjectid);
+			$admin_vote->edit_option(array('option'=>$option,'image'=>$image));
+			$admin_vote->add_options(array('option'=>$newopt,'image'=>$newpic),$subjectid);
+			$admin_vote->set_listorder(DB_PRE.'vote_option','optionid',$listorder);
+			$admin_vote->update_number($subjectid);
+             update_votejs($subjectid);
+			showmessage($LANG['operation_success'],$forward);
+		} else {
+			$subject = $admin_vote->get_subject($subjectid);
+			$subject['options'] = $admin_vote->get_options($subjectid);
+			include admin_tpl('edit_option');
+		}
+		break;
 	case 'delete':
-		if(empty($voteid)) showmessage($LANG['illegal_parameters']);
-
-		$voteids=is_array($voteid) ? implode(',',$voteid) : $voteid;
-		$db->query("DELETE FROM ".TABLE_VOTE_SUBJECT." WHERE voteid IN ($voteids)");
-		if($db->affected_rows()>0)
-		{
-			$db->query("DELETE FROM ".TABLE_VOTE_OPTION." WHERE voteid IN ($voteids)");
-			$db->query("DELETE FROM ".TABLE_VOTE_DATA." WHERE voteid IN ($voteids)");
-			showmessage($LANG['operation_success'],$forward);
-		}
-		else
-		{
-			showmessage($LANG['operation_failure']);
-		}
-	break;
-
+		if(empty($subjectids)) showmessage('请选择要删除主题');
+		$admin_vote->del($subjectids);
+		showmessage($LANG['operation_success'],$forward);
+		break;
+	case 'delopt':
+		$admin_vote->del_option($deloption);
+		$admin_vote->update_number($subjectid);
+		showmessage($LANG['operation_success'],$forward);
+		break;
 	case 'pass':
-		if(empty($voteid)) showmessage($LANG['illegal_parameters'],$forward);
+		if(empty($subjectids)) showmessage('请选择要操作的主题','goback');
 		if(!ereg('^[0-1]+$',$passed)) showmessage($LANG['illegal_parameters'],$forward);
-		$voteids = is_array($voteid) ? implode(',',$voteid) : $voteid;
-		$db->query("UPDATE ".TABLE_VOTE_SUBJECT." SET passed=$passed WHERE voteid IN ($voteids)");
-		if($db->affected_rows()>0)
-		{
-			showmessage($LANG['operation_success'],$forward);
-		}
-		else
-		{
-			showmessage($LANG['operation_failure']);
-		}
-	break;
-	
-	case 'detail':
-		require PHPCMS_ROOT."/include/ip.class.php";
-		$getip = new Ip;
-		if(!isset($page))
-		{
-			$page=1;
-			$offset=0;
-		}
-		else
-		{
-			$offset = ($page-1)*$pagesize;
-		}
-		$r = $db->get_one("SELECT COUNT(id) AS num FROM ".TABLE_VOTE_DATA." WHERE voteid='$voteid' ORDER BY id DESC LIMIT $offset,$pagesize");
-		$number = $r['num'];
-		$pages = phppages($number,$page,$pagesize);
-		$memberdata = array();
-		$resultdata = $db->query("SELECT voteuser,votetime,ip FROM ".TABLE_VOTE_DATA." WHERE voteid='$voteid' ORDER BY id DESC LIMIT $offset,$pagesize ");
-		while($rdata=$db->fetch_array($resultdata))
-		{
-			$rdata['vip'] = $getip->getlocation($rdata['ip']);
-			$rdata['votetime'] = date("Y-m-d H:i:s",$rdata['votetime']);
-			$memberdata[] = $rdata;
-		}
-		$i=0;
-		$result = $db->query("SELECT * FROM ".TABLE_VOTE_OPTION." WHERE voteid='$voteid' ");
-		$ops = array();
-		while($rs=$db->fetch_array($result))
-		{
-			$per = $number ? round(100*$rs['number']/$number) : 0;
-			$rs['per'] = $per ? $per."%" : "0";
-			$rs['lenth'] = 4*$per;
-			$rs['i'] = substr($i,-1,1);
-			$ops[] = $rs;
-			$i++;
-		}
-		include admintpl('vote_detail');
+		$voteids = is_array($subjectids) ? implode(',',$subjectids) : $subjectids;
+		$db->query("UPDATE ".DB_PRE."vote_subject SET enabled=$passed WHERE subjectid IN ($voteids)");
+
+		showmessage($LANG['operation_success'],$forward);
 	break;
 
-	case 'getcode':
-	function voteform($voteid,$condition)
-	{
-		global $db,$MOD,$MODULE;
-		$frmVote = 'frmvote'.$voteid;
-		$m = $db->get_one("SELECT subject,voteid,type,fromdate,todate,totalnumber FROM ".TABLE_VOTE_SUBJECT." WHERE voteid = $voteid");
-		if(!$m) return FALSE;
-		extract($m);
-		$result = $db->query("SELECT * FROM ".TABLE_VOTE_OPTION." WHERE voteid = $voteid");
-		$totalnum = $db->num_rows($result);
-		$totalnum = $totalnum-1;
-		$number = 0;
-		$options = '';
-		$condition = '';
-		while($r=$db->fetch_array($result))
+	case 'detail':
+
+		$submenu[]=array($LANG['vote_user_list'] ,'?mod='.$mod.'&file='.$file.'&action=user_list&subjectid='.$subjectid);
+		$menu = admin_menu($LANG['vote_manage'],$submenu);
+
+		$vote_data=$admin_vote->get_vote_data($subjectid);
+		$subs=$db->select("select subjectid,subject from ".DB_PRE."vote_subject where  (parentid='$subjectid') or (subjectid='$subjectid' and parentid=0) order by listorder desc",'subjectid');
+		foreach($subs as $sid=>$data)
 		{
-			$options .= "<input type='$type' name='op[]' id='op$number$voteid' value='".$r['optionid']."'>".$r['option']."<br>\n";
-			$condition .= "document.getElementById('op$number$voteid').checked";
-			if($totalnum!=$number)
-			{
-				$condition .= ' || ';
-			}
-			$number++;
-		}		
-		ob_start();
-		include template('vote', 'tag_vote_show');
-		$str = ob_get_contents();
-		ob_clean();
-		return $str;
-	}
-	$condition = isset($condition) ? $condition : '';
-	if(!isset($updatejs))
-	{
-		$voteform = voteform($voteid,$condition);
-		include admintpl('vote_getcode');
-	}
-	else
-	{
-		$today = date("Y-m-d",$PHP_TIME);
-		$sql = isset($voteid) ? "voteid = ".$voteid : "passed=1 AND todate>'$today' OR todate='0000-00-00' ORDER BY voteid DESC ";
-		$result = $db->query("SELECT voteid FROM  ".TABLE_VOTE_SUBJECT." WHERE $sql ");
-		while($r = $db->fetch_array($result))
-		{
-			$voteid = $r['voteid'];
-			$voteform = voteform($voteid,$condition);
-			include PHPCMS_ROOT.'/vote/include/createhtml/updatejs.php';
+			$subs[$sid]['options']=$db->select("select optionid,`option` from ".DB_PRE."vote_option where subjectid='$sid' order by listorder",'optionid');
 		}
-		showmessage($LANG['js_update_success']);
-	}
+		$vote_info=$admin_vote->get_vote($subjectid,'subject');
+		$title = $vote_info['subject'] ;
+		include admin_tpl('detail');
 	break;
+	case 'reset_data':
+		if(!intval($subjectid)) exit($LANG['parameters_error']);
+		$admin_vote->reset_data($subjectid);
+		exit('success');
+		break;
+	case 'getcode':
+
+        vote('vote_submit', $voteid,1);
+		$voteform =ob_get_contents();
+		include admin_tpl('getcode');
+	break;
+
+	case 'user_list':
+
+		$number=$db->get_one("select count(ip) as num from ".DB_PRE."vote_data where subjectid='$subjectid'");
+		$number=$number['num'];
+        $pages = pages($number,$page,$pagesize);
+		$voteinfo=$db->get_one("select subject,ismultiple from ".DB_PRE."vote_subject where subjectid='$subjectid'");
+		$title=$voteinfo['type']?$voteinfo['title']:$voteinfo['subject'];
+
+		$user_lists=$db->select("select ip,username,userid, time,userinfo from ".DB_PRE."vote_data where subjectid='$subjectid'  limit $offset, $pagesize");
+		$pages = pages($number,$page,$pagesize);
+
+		if(!is_array($user_lists)) $user_lists=array();
+		include admin_tpl('user_list');
+	break;
+
+	case 'user_detail':
+		$subs=$db->select("select subjectid,subject from ".DB_PRE."vote_subject where subjectid='$subjectid' or parentid='$subjectid' order by listorder desc",'subjectid');
+		foreach($subs as $sid=>$data)
+		{
+			$subs[$sid]['options']=$db->select("select optionid,`option` from ".DB_PRE."vote_option where subjectid='$sid' order by listorder",'optionid');
+		}
+		$votedata=$db->get_one("select * from ".DB_PRE."vote_data where time='$time'");
+
+        eval("\$votedata[data] = $votedata[data] ;");
+
+		include admin_tpl('user_detail');
+	break;
+
+    case 'useroption':
+        $r = $db->get_one("SELECT COUNT(optionid) AS num FROM ".DB_PRE."vote_useroption WHERE optionid='$optionid'");
+        $number = $r['num'];
+        $pages = pages($number,$page,$pagesize);
+        $user_lists = $db->select("select u.*, d.userinfo from ".DB_PRE."vote_useroption u,".DB_PRE."vote_data d  where optionid='$optionid' and u.subjectid=d.subjectid LIMIT $offset,$pagesize ");
+        include admin_tpl('useroption');
+        break;
+}
+
+function update_votejs($voteid)
+{
+		global $admin_vote;
+		$subject_lists = $admin_vote->get_subjects($voteid);
+        extract($subject_lists[$voteid]);
+        $embed = 1;
+		ob_start();
+		include template('vote', 'vote_submit');
+		$voteform = ob_get_contents();
+		ob_clean() ;
+		$today = date("Y-m-d", TIME);
+        @file_put_contents(PHPCMS_ROOT.'vote/data/vote_'.$voteid.'.js', format_js($voteform));
 }
 ?>

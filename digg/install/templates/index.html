@@ -1,0 +1,47 @@
+{template 'phpcms','header'}
+<link href="{SKIN_PATH}digg.css" rel="stylesheet" type="text/css"/>
+<!--begin main-->
+<div id="main">
+  <div id="main_l">
+    <!--begin 面包屑导航-->
+    <div id="position">当前位置：<a href="">首页</a><a href="{$M[url]}">Digg首页</a>{if $catid}<a href="{$M[url]}?catid={$catid}">{$catname}</a>{/if}</div>
+    <!--begin 评论列表-->
+    <div class="commentbox">
+      <div class="commenthead">今日关注度最高{if $catid}<a href="{$caturl}">{$catname}</a>{/if}</div>
+{get sql="select d.contentid,d.supports,c.catid,c.title,c.style,c.thumb,c.url,c.description,c.inputtime from phpcms_digg d left join phpcms_content c on d.contentid=c.contentid where c.status=99 $where order by d.supports_day desc" rows="15" page="$page"}
+<dl class="digg_list">
+	<dt><a href="{$r[url]}" target="_blank"><span class="{$r[style]}">{$r[title]}</span></a></dt>
+	<dd class="digg_pic"><span><strong id="diggDivCount_{$r[contentid]}">{$r[supports]}</strong></span><br />
+	  <samp id="diggDivDo_{$r[contentid]}">{if $digg->is_done($r['contentid'])}顶过了{else}<span onclick="digg({$r[contentid]})">顶一下</span>{/if}</samp> </dd>
+	<dd class="digg_txt">{str_cut($r[description], 180, '...')}</dd>
+	<dd class="digg_attribute">发布时间：{date('Y-m-d', $r[inputtime])}　栏目：<a href="{$CATEGORY[$r[catid]][url]}">{$CATEGORY[$r[catid]][catname]}</a></dd>
+</dl>
+{/get}
+{if $pages}<p id="pages">{$pages}</p>{/if}
+     </div>
+    <!--end 评论列表-->
+  </div>
+  <!--begin 右侧边栏-->
+  <div id="main_r">
+    <div><script language="javascript" src="data/js.php?id=3"></script></div>
+    <h4 class="bdr_t_0">本周关注度最高{$catname}</h4>
+    <div>
+      <ul class="digg_text_list">
+{get sql="select d.contentid,d.supports,c.title,c.style,c.thumb,c.url,c.inputtime from phpcms_digg d left join phpcms_content c on d.contentid=c.contentid where c.status=99 $where order by d.supports_week desc" rows="10"}
+<li><span>{$r[supports]}</span><a href="{$r[url]}" target="_blank"><font class="{$r[style]}">{str_cut($r[title], 44)}</font></a></li>
+{/get}
+      </ul>
+    </div>
+    <h4>本月关注度最高{$catname}</h4>
+    <div>
+      <ul class="digg_text_list">
+{get sql="select d.contentid,d.supports,c.title,c.style,c.thumb,c.url,c.inputtime from phpcms_digg d left join phpcms_content c on d.contentid=c.contentid where c.status=99 $where order by d.supports_month desc" rows="10"}
+<li><span>{$r[supports]}</span><a href="{$r[url]}" target="_blank"><font class="{$r[style]}">{str_cut($r[title], 44)}</font></a></li>
+{/get}
+      </ul>
+    </div>
+  </div>
+  <!--end 右侧边栏-->
+</div>
+<!--end　主体-->
+{template 'phpcms','footer'}

@@ -25,7 +25,7 @@ class db_mssql
 		return $this->connid;
 	}
 
-	function select_db($dbname) 
+	function select_db($dbname)
 	{
 		return mssql_select_db($dbname , $this->connid);
 	}
@@ -63,6 +63,26 @@ class db_mssql
 		$rs = $this->fetch_array($query);
 		$this->free_result($query);
 		return $rs ;
+	}
+
+	function select($sql, $keyfield = '')
+	{
+		$array = array();
+		$result = $this->query($sql);
+		while($r = $this->fetch_array($result))
+		{
+			if($keyfield)
+			{
+				$key = $r[$keyfield];
+				$array[$key] = $r;
+			}
+			else
+			{
+				$array[] = $r;
+			}
+		}
+		$this->free_result($result);
+		return $array;
 	}
 
 	function fetch_array($query, $type = MSSQL_ASSOC)

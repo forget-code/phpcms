@@ -1,24 +1,19 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
 <body>
-<?=$menu?>
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <tr>
-    <th><?=$username?> 的备注</th>
-  </tr>
-  <form name="myform" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=note&userid=<?=$userid?>">
-     <tr> 
-      <td height="25" align="center" class="tablerow" >请在下面记录该会员的备注信息（只有管理员才能看到）</td>
-    </tr>
-   <tr> 
-      <td height="40" align="center" class="tablerow" ><textarea name="note" cols="100" rows="16"><?=$note?></textarea></td>
-    </tr>
-   <tr> 
-      <td height="40" align="center" class="tablerow" > <input type="submit" name="dosubmit" value=" 修改 "></td>
-    </tr>
-  </form>
-</table>
+<form name="myform" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=note&userid=<?=$userid?>">
+	<table cellpadding="0" cellspacing="1" class="table_form">
+		<caption><?=$username?> 的备注</caption>  
+		<tr>
+			<td style="text-align:center;"><?=form::textarea('note', 'note', $note, 16, 100)?><br />请在下面记录该会员的备注信息（只有管理员才能看到）</td>
+		</tr>
+		<tr>
+			<td style="text-align:center;"><input type="submit" name="dosubmit" value=" 修改 "></td></td>
+		</tr>
+	</table>
+	<input type="hidden" name="forward" value="<?=$forward?>" />
+</form>
 </body>
 </html>

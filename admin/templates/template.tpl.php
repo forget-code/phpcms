@@ -1,33 +1,13 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
 <body>
-<?=$menu?>
-<?php if(isset($_grade) && $_grade==0){ ?>
-<table cellpadding='2' cellspacing='1' border='0' align='center' class='tableBorder'>
-  <tr>
-    <td class='pagemenu'>
-<?php
-$i = 1;
-foreach($modules as $m=>$name)
-{
-?>
-		<a href="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&module=<?=$m?>&projectid=<?=$project?>" class='pagelink'><?=$name?></a>
-<?php 
-if($i%15==0) echo '<br/>'; else echo ' | ';
-$i++;
-}
-?>
-	</td>
-  </tr>
-</table>
-<?php } ?>
 <form name="search" method="get">
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="30">
+<table cellpadding="0" cellspacing="1" class="table_form">
+  <caption>模板搜索</caption>
   <tr>
-    <td>当前位置：<a href="?mod=phpcms&file=templateproject&action=manage">模板方案</a> > <a href="?mod=phpcms&file=template&action=manage&project=<?=$project?>&module=<?=$module?>"><?=$projectname?>-<?=$MODULE[$module]['name']?>模板</a></td>
-    <td align="right">
+    <td><span style="float:right">
 	<input type="hidden" name="mod" value="<?=$mod?>">
 	<input type="hidden" name="file" value="<?=$file?>">
 	<input type="hidden" name="action" value="<?=$action?>">
@@ -35,59 +15,62 @@ $i++;
 	<select name="searchtype">
 	<option value="templatename" <?=($searchtype == 'templatename' ? 'selected' : '')?>>模板名称</option>
 	<option value="filename" <?=($searchtype == 'filename' ? 'selected' : '')?>>模板文件名</option>
+	<option value="data" <?=($searchtype == 'data' ? 'selected' : '')?>>模板代码</option>
 	</select>
-	<input type="text" name="keyword" value="<?=$keyword?>" size="12">
-	<input type="submit" name="dosubmit" value="搜索模板">
+	<input type="text" name="keyword" value="<?=$keyword?>" size="20">
+	<input type="submit" name="dosubmit" value="搜索"></span>
+	<a href="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&module=<?=$module?>">全部模板</a> |
+	<a href="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&module=<?=$module?>&istag=0">普通模板</a> |
+	<a href="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&module=<?=$module?>&istag=1">标签模板</a>
 	</td>
   </tr>
 </table>
 </form>
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <tr>
-    <th colspan=8>模板管理</th>
-  </tr>
+<table cellpadding="0" cellspacing="1" class="table_list">
+  <caption>模板管理</caption>
 <form name="myform" method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=update&module=<?=$module?>">
-<tr align="center">
-<td width="20%" class="tablerowhighlight">模板名称</td>
-<td width="23%" class="tablerowhighlight">文件名</td>
-<td width="15%" class="tablerowhighlight">模板类型</td>
-<td width="5%" class="tablerowhighlight">新建</td>
-<td width="22%" class="tablerowhighlight">模板嵌套代码</td>
-<td width="15%" class="tablerowhighlight">管理操作</td>
+<tr>
+<th width="150">模板名称</th>
+<th>文件名</th>
+<th width="40">新建</th>
+<th width="180">模板嵌套代码</th>
+<th width="180">管理操作</th>
 </tr>
 <?php 
 if(is_array($templates)){
 	foreach($templates as $template){
 ?>
-<tr align="center" onmouseout="this.style.backgroundColor='#F1F3F5'" onmouseover="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5'>
-<td><input type="text" name="templatename[<?=$template['file']?>]" size="22" value="<?=$template['name']?>"></td>
-<td align="left"><a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&channelid=<?=$channelid?>&template=<?=$template['template']?>&module=<?=$module?>&project=<?=$project?>" title="上次修改时间：<?=date("Y-m-d H:i:s",$template['mtime'])?>"><?=$template['file']?></a></td>
-<td align="left"><a href="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&module=<?=$module?>&searchtype=filename&keyword=<?=$template['type']?>"><?=$template['type']?></a></td>
-<td><?php if($template['isdefault']){?><a href="?mod=phpcms&file=template&action=add&module=<?=$module?>&project=<?=$project?>&templatename=<?=urlencode($template['name'])?>&templatetype=<?=$template['type']?>" title="新建<?=$template['name']?>类型模板(<?=$template['type']?>)" style="color:red">+</a><?php }?></td>
-<td><input type="text" name="function<?=$template['template']?>" size="25" value="{template '<?=$module?>','<?=$template['template']?>'}" onfocus="document.myform.elements['function<?=$template['template']?>'].select();"></td>
-<td><a href="?mod=<?=$mod?>&file=<?=$file?>&action=down&channelid=<?=$channelid?>&template=<?=$template['template']?>&module=<?=$module?>&project=<?=$project?>" title="上次修改时间：<?=date("Y-m-d H:i:s",$template['mtime'])?>">下载</a> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&channelid=<?=$channelid?>&template=<?=$template['template']?>&module=<?=$module?>&project=<?=$project?>" title="上次修改时间：<?=date("Y-m-d H:i:s",$template['mtime'])?>">修改</a> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=delete&channelid=<?=$channelid?>&template=<?=$template['template']?>&module=<?=$module?>&project=<?=$project?>" title="上次修改时间：<?=date("Y-m-d H:i:s",$template['mtime'])?>">删除</a></td>
+<tr>
+<td class="align_c" width="150"><input type="text" name="templatename[<?=$template['file']?>]" value="<?=$template['name']?>" style="width:100%"></td>
+<td class="align_left"><a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&template=<?=$template['template']?>&module=<?=$module?>&project=<?=$project?>" title="上次修改时间：<?=date("Y-m-d H:i:s",$template['mtime'])?>"><?=$template['file']?></a></td>
+<td class="align_c" width="40"><?php if($template['isdefault']){?><a href="?mod=phpcms&file=template&action=add&module=<?=$module?>&project=<?=$project?>&templatename=<?=urlencode($template['name'])?>&templatetype=<?=$template['type']?>" title="新建<?=$template['name']?>类型模板(<?=$template['type']?>)" style="color:red">+</a><?php }?></td>
+<td width="180"><input type="text" name="function<?=$template['template']?>" value="{template '<?=$module?>','<?=$template['template']?>'}" onfocus="document.myform.elements['function<?=$template['template']?>'].select();" style="width:100%"></td>
+<td class="align_c" width="180">
+<a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&template=<?=$template['template']?>&module=<?=$module?>&project=<?=$project?>" title="上次修改时间：<?=date("Y-m-d H:i:s",$template['mtime'])?>">修改</a> | 
+<?php if(substr($template['template'], 0, 4) == 'tag_'){ ?>
+<font color="#cccccc">可视化</font> | 
+<?php }else{ ?>
+<a href="?mod=<?=$mod?>&file=<?=$file?>&action=tag&template=<?=$template['template']?>&module=<?=$module?>&project=<?=$project?>" title="可视化编辑中文标签和碎片">可视化</a> | 
+<?php } ?>
+<a href="?mod=<?=$mod?>&file=<?=$file?>&action=down&template=<?=$template['template']?>&module=<?=$module?>&project=<?=$project?>" title="上次修改时间：<?=date("Y-m-d H:i:s",$template['mtime'])?>">下载</a> | 
+<a href="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=delete&template=<?=$template['template']?>&module=<?=$module?>&project=<?=$project?>','确认删除模板“<?=$template['template']?>.html”吗？')" title="上次修改时间：<?=date("Y-m-d H:i:s",$template['mtime'])?>">删除</a>
+</td>
 </tr>
 <?php 
 	}
 }
 ?>
 </table>
-<table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">
-  <tr>
-    <td align="left">&nbsp;&nbsp;<input type="submit" name="submit" value=" 更新模板名称 "></td>
-  </tr>
-</table>
+<div class="button_box" style="padding-left:30px">
+   <input type="submit" name="submit" value=" 更新模板名称 ">
+</div>
 </form>
-<br/>
-<table cellpadding="2" cellspacing="1" border="0" align="center" class="tableBorder" >
+<table cellpadding="0" cellspacing="1" class="table_info">
+  <caption>提示信息</caption>
   <tr>
-    <td class="submenu" align="center">提示信息</td>
-  </tr>
-  <tr>
-    <td class="tablerow">
-	1、当前模板保存在 <font color="red">./templates/<?=$project?>/<?=$module?>/</font>  目录（如需在线修改，请通过ftp将 ./templates/ 目录设置为 777 并应用到子目录）<br/>
-	2、同类型模板都以模板类型为前缀，后面以中划线分割（命名规则：<font color="blue">模板类型-</font><font color="red">特征名</font>，同类型模板特征名不同）。<br/>
-	例如：tag_article_slide.html 和 tag_article_slide-js.html 是 tag_article_slide 类型模板，且 tag_article_slide.html 是该类型默认模板
+    <td>
+	当前模板保存在 <font color="red">./templates/<?=$project?>/<?=$module?>/</font>  目录
+	<?php if(!is_writeable($templatedir)){ ?>（如需在线修改，请通过ftp将 ./templates/ 目录设置为 777 并应用到子目录）<?php } ?><br/>
 <p>
 	<strong>PHPCMS 模板制作与标签设置的基本流程：</strong>
 <br/>

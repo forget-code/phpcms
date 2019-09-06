@@ -1,8 +1,0 @@
-{loop $pictures $i $picture}
-<li> 
-  <a href="{$picture['linkurl']}" {$target}><img src="{$picture[thumb]}" width="{$imgwidth}" height="{$imgheight}" alt="{$picture[alt]}" /></a>
-  {if $introducelen}{$picture[introduce]}{/if}
-  {if $picture[adddate]}[<span class="datetime">{$picture[adddate]}</span>]{/if}
-  <p><a href="{$picture['linkurl']}" title="{$picture['title']}" {if $picture[type]}{$picture[adddate]}{/if}{$target}>{$picture[stitle]}</a></p>
-</li>
-{/loop}

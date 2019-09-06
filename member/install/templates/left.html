@@ -1,0 +1,48 @@
+<div id="left">
+  <div id="treemenu">
+    <h5>基本设置</h5>
+    <div style="text-align:center;">
+    <img src="{$avatar}" alt="{$username}" height="150" width="150"/></div>
+    <table cellpadding="0" cellspacing="0" class="member_info">
+    <tr>
+      <th>用户名：</th><td>{$_username}</td>
+    </tr>
+    <tr>
+      <th>类　型：</th><td>{$MODEL[$_modelid][name]}</td>
+    </tr>
+    <tr>
+      <th valign="top">等　级：</th>
+      <td>{loop $_extend_group $ext_group}
+		<a href="{$MODULE[member][url]}upgrade.php?action=view&groupid={$ext_group[groupid]}" id="ext_group_{$ext_group[groupid]}" onmouseover="javascript:get_remaintime({$ext_group[groupid]});">{$GROUP[$ext_group[groupid]]}</a><br />{/loop}</td></tr>
+    </table>
+    <ul>
+      <li><a href="{$MODULE[member][url]}upgrade.php">会员升级</a></li>
+      <li><a href="{$MODULE[member][url]}edit.php">修改资料</a></li>
+      {if $PHPCMS['uc']}
+      <li><a href="{$MODULE[member][url]}avatar.php">修改头像</a></li>
+      <li><a href="{$MODULE[member][url]}changecredit.php">积分兑换</a></li>
+      {/if}
+      {if $M[enableQchk]}
+      <li><a href="{$MODULE[member][url]}editanwser.php">修改密码提示问题</a></li>
+      {/if}
+      <li><a href="{$MODULE[member][url]}editpwd.php">修改密码</a></li>
+    </ul>
+  </div>
+  <ol>
+    <li class="local"><a href="{SITE_URL}">返回网站首页</a></li>
+    <li class="exit"><a href="{$MODULE[member][url]}logout.php">退出登录</a></li>
+  </ol>
+</div>
+<script language="javascript">
+function get_remaintime(groupid)
+{
+	var id = "#ext_group_" + groupid;
+	if($(id).attr('title') == '')
+	{
+		$.get("{$MODULE[member][url]}index.php", {action:'get_remaintime', groupid:groupid}, function(data){
+			data = '服务期限为：' + data;
+			$(id).attr('title', data);
+		});
+	}
+}
+</script>

@@ -7,7 +7,7 @@ include admintpl('header');
 <table cellpadding='2' cellspacing='0' border='0' align='center' class='tableBorder'>
 
   <tr>
-    <td class='tablerow' align="left">
+    <td align="left">
 	分类列表：</br>	
 	<?php 
 	$i = 1;

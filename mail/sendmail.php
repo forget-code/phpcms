@@ -1,38 +1,56 @@
 <?php
 require './include/common.inc.php';
-
-
-$head['title'] = $LANG['send_email'];
-$head['keywords'] = $LANG['online_send_email'];
-$head['description'] = $LANG['send_email'];
-
-if($dosubmit)
+require_once PHPCMS_ROOT.'/include/form.class.php';
+$mail = load('sendmail.class.php');
+switch ($action)
 {
-      if(empty($mailto)) showmessage($LANG['input_addressee'],"goback");
-      if(empty($title)) showmessage($LANG['input_mail_subject'],"goback");
-      if(empty($content)) showmessage($LANG['input_mail_content'],"goback");
-      
-      if($MOD['ischeckcode'])
-      {
-	      if(empty($checkcodestr)) showmessage($LANG['input_checkcode'],"goback");
-			checkcode($checkcodestr, $MOD['ischeckcode'], $PHP_REFERER);
-      }
-      $content = stripslashes(str_safe($content));
-	  if(sendmail($mailto,$title,stripslashes($content)))
-	  {      
-	      showmessage($LANG['email_send_success'],"close");
-	  }
-	  else 
-	  {
-		showmessage($LANG['sendmail_to']." $mailto ".$LANG['failed_contract_administrator'],'goback');
-	  }
-}
-else
-{
-	 $mailto = isset($mailto) ? $mailto : '';
-	 $title = isset($title) ? $title : '';
-	 $content = isset($content) ? $content : '';
-     $mailmessage = isset($mailmessage) ? $mailmessage : $LANG['send_email'];
-     include template("mail","sendmail");
+	case 'ajax':
+		if (empty($email) && !empty($contentid) )
+		{
+			$email = explode(',',$email);
+			if(!array_map('is_mail',$email))
+			{
+				echo '0';
+			}
+		}
+		else
+		{
+			$email = explode(',',$email);
+			if(!array_filter($email, 'is_email'))
+			{
+				echo '0';
+			}
+			else
+			{
+				$email = implode(',',$email);
+				$sql = "SELECT `title` , `url` FROM ".DB_PRE."content WHERE contentid = '{$contentid}' ";
+				$row = $db->get_one($sql);
+				if(empty($row)) echo '0';
+				$content = '<html><a href='.$row[url].' target="_blank">'.$row[title].'</a><br/></html>';
+				if( $mail->send($email, $row['title'], $content, $PHPCMS['mail_user']) ) echo '1';
+			}
+		}
+	break;
+	default:
+		if($dosubmit)
+		{
+            checkcode($checkcode,$M['ischeckcode']);
+			if(empty($mailto)) showmessage($LANG['input_addressee'],"goback");
+			if(empty($title)) showmessage($LANG['input_mail_subject'],"goback");
+			if(empty($content)) showmessage($LANG['input_mail_content'],"goback");
+			$content = stripslashes($content);
+			if( $mail->send($mailto, $title, $content, $PHPCMS['mail_user'])) showmessage('发送成功');
+            else showmessage('发送失败,检查你的邮件设置');
+		}
+		else
+		{
+           	$mailto = isset($mailto) ? $mailto : '';
+			$title = isset($title) ? $title : '';
+			$content = isset($content) ? $content : '';
+			$title = htmlspecialchars(stripslashes($title));
+			$mailmessage = isset($mailmessage) ? $mailmessage : $LANG['send_email'];
+			include template("mail","sendmail");
+		}
+	break;
 }
 ?>

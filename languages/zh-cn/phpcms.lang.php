@@ -48,7 +48,7 @@ $LANG['last'] = '尾页';
 $LANG['page'] = '页次：';
 $LANG['redirect'] = '转到：';
 $LANG['serial'] = '第';
-$LANG['page'] = '页';
+$LANG['page'] = '页：';
 $LANG['userid_banned_by_administrator'] = '您的帐号已经被管理员禁止访问！';
 $LANG['select_specail'] = '请选择专题';
 $LANG['select_list_mypage'] = '可选择自定义网页';
@@ -114,5 +114,4 @@ $LANG['is_unique'] = '不能重复';
 $LANG['color'] = '颜色';
 $LANG['bold'] = '加粗';
 $LANG['re_select'] = '重选';
-$LANG['out_of_services_period'] = '服务期已过，请续费！';
 ?>

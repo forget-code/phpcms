@@ -1,7 +1,0 @@
-{loop $articles $i $article}
-<li><a href="{$article['linkurl']}" {$target}><img src="{$article[thumb]}" width="{$imgwidth}" height="{$imgheight}" alt="{$article[alt]}" /></a><span><a href="{$article['linkurl']}" title="{$article['title']}" {$target} class="tag_title_link">{$article[stitle]}</a>
-{if $datetype}[<span class="datetime">{$article[adddate]}</span>]{/if}</span></li>
-{/loop}
-{if $pages}
-<div class="pages">{$pages}</div>
-{/if}

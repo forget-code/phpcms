@@ -1,8 +1,0 @@
-{loop $companys $i $company}
-<li>{if $datetype}<span>{$company[adddate]}</span>{/if}
-<em>{intval($i+1)}</em>
-<a href="{$company[linkurl]}" title="{$company[title]}" {$target}>{$company[companyname]}</a></li>
-{/loop}
-{if $pages}
-<div class="pages">{$pages}</div>
-{/if}

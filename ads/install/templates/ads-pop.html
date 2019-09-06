@@ -1,0 +1,12 @@
+{loop $contents $i $content}
+_openads{$ads[$i]['adsid']} = window.open("","{$ads[$i]['adsid']}","height={$ads[$i]['height']},width={$ads[$i]['width']},status=no,toolbar=no,menubar=no,location=no");
+_openads{$ads[$i]['adsid']}.document.writeln("
+<html>
+<body leftmargin=0 topmargin=0>
+");
+_openads{$ads[$i]['adsid']}.{$content[0]}
+_openads{$ads[$i]['adsid']}.document.writeln("
+</body>
+</html>
+");
+{/loop}

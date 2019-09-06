@@ -1,3 +1,0 @@
-{loop $products $i $product}<ul>
-<li class="s_1">{$product[my_selecttype]}</li><li class="s_2 "><a href="{$product[linkurl]}" title="{$product[title]}" {$target} class="tag_title_link">{$product[stitle]}</a></li><li class="s_3">{$product[linkman]}</li><li class="s_4">{if $showhits}{$product[hits]}{/if}</li><li class="s_4">{$product[my_buyprice]}</li><li class="s_4">{if $datetype}{$product[adddate]}{/if}</li>
-</ul>{/loop}

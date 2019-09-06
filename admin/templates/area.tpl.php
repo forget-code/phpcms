@@ -1,27 +1,23 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
-include admintpl('header');
+include admin_tpl('header');
 ?>
 <body>
-<?=$menu?>
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <tr>
-    <th colspan=7>地区管理</th>
-  </tr>
-<form method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=listorder&keyid=<?=$keyid?>">
-<tr align="center">
-<td width="15%" class="tablerowhighlight">排序</td>
-<td width="15%" class="tablerowhighlight">ID</td>
-<td width="25%" class="tablerowhighlight">地区名称</td>
-<td class="tablerowhighlight">管理操作</td>
+<form method="post" action="?mod=<?=$mod?>&file=<?=$file?>&action=listorder">
+<table cellpadding="0" cellspacing="1" class="table_list">
+    <caption>地区管理</caption>
+
+<tr>
+<th width="8%"><strong>排序</strong></th>
+<th width="8%"><strong>ID</strong></th>
+<th><strong>地区名称</strong></th>
+<th width="30%"><strong>管理操作</strong></th>
 </tr>
 <?=$areas?>
 </table>
-<table cellpadding="0" cellspacing="0" border="0" width="100%" height="30">
-  <tr>
-    <td><input name="submit" type="submit" size="4" value=" 更新排序 "></td>
-  </tr>
-</table>
+    <div class="button_box">
+        <input name="submit" type="submit" size="4" value=" 更新排序 ">
+    </div>
 </form>
 </body>
 </html>

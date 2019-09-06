@@ -1,132 +1,126 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
+require_once 'template.func.php';
+require 'admin/module.class.php';
 
-if($_grade > 0 ) showmessage($LANG['you_have_no_permission']);
-
-require_once PHPCMS_ROOT."/include/template.func.php";
-
-$action = $action ? $action : 'manage';
-
-$submenu = array
-(
-    array($LANG['install_module'], "?mod=".$mod."&file=".$file."&action=install"),
-    array($LANG['module_manage'], "?mod=".$mod."&file=".$file."&action=manage"),
-    array($LANG['new_module'], "?mod=".$mod."&file=".$file."&action=add", $LANG['only_for_php_programmer']),
-);
-
-$menu = adminmenu($LANG['module_manage'],$submenu);
-$chas = glob(PHPCMS_ROOT.'/module/*');
-$chas = array_map('basename', $chas);
-if(!isset($module)) $module = '';
-if(in_array($module, $chas)) $installdir = 'module/'.$install;
+$m = new module();
 
 switch($action)
 {
 	case 'install':
 		if(isset($confirminstall) && $confirminstall)
-		{			
-			require_once PHPCMS_ROOT."/".$installdir."/install/config.php";
+		{
 			
-			$r = $db->get_one("SELECT moduleid From ".TABLE_MODULE." WHERE module='$module'");
-			if($r) showmessage($LANG['installed_module_unstall_it_then_continue']);			
+			require_once PHPCMS_ROOT.$installdir."/install/config.inc.php";
 			
-			if($PHPCMS['enableftp'])
+			$r = $db->get_one("SELECT module From ".DB_PRE."module WHERE module='$installdir'");
+			if($r) showmessage($LANG['installed_module_unstall_it_then_continue']);					
+			
+			if(file_exists(PHPCMS_ROOT.$installdir."/install/mysql.sql"))
 			{
-				require_once PHPCMS_ROOT.'/include/ftp.inc.php';
-			}			
-
-			if(file_exists(PHPCMS_ROOT."/".$installdir."/install/mysql.sql"))
-			{
-				$sql = file_get_contents(PHPCMS_ROOT."/".$installdir."/install/mysql.sql");
+				$sql = file_get_contents(PHPCMS_ROOT.$installdir."/install/mysql.sql");
 				sql_execute($sql);
 			}
-			if(file_exists(PHPCMS_ROOT."/".$installdir."/install/extension.php"))
+			if(file_exists(PHPCMS_ROOT.$installdir."/install/extention.inc.php"))
 			{
-				@include (PHPCMS_ROOT."/".$installdir."/install/extension.php");
+				@extract($db->get_one("SELECT menuid AS member_0 FROM ".DB_PRE."menu WHERE keyid='member_0'"));
+				@extract($db->get_one("SELECT menuid AS member_1 FROM ".DB_PRE."menu WHERE keyid='member_1'"));
+				@include (PHPCMS_ROOT.$installdir."/install/extention.inc.php");
 			}
-			if(file_exists(PHPCMS_ROOT."/".$installdir."/install/chmod.txt"))
+			if(FTP_ENABLE)
 			{
-				$files = file(PHPCMS_ROOT."/".$installdir."/install/chmod.txt");
-				$files = array_filter($files);
-				foreach($files as $file)
+				require_once PHPCMS_ROOT.'include/ftp.class.php';
+				$ftp = new ftp(FTP_HOST, FTP_PORT, FTP_USER, FTP_PW, FTP_PATH);
+				if(file_exists(PHPCMS_ROOT.$installdir."/install/chmod.txt"))
 				{
-					dir_chmod(PHPCMS_ROOT.'/'.$file);
+					$files = file(PHPCMS_ROOT.$installdir."/install/chmod.txt");
+					$files = array_filter($files);
+					foreach($files as $file)
+					{
+						$ftp->dir_chmod(PHPCMS_ROOT.$file);
+					}
 				}
 			}
-			if(file_exists(PHPCMS_ROOT."/".$installdir."/install/templates/"))
+
+			if(file_exists(PHPCMS_ROOT.$installdir."/install/templates/"))
 			{
-				dir_copy(PHPCMS_ROOT."/".$installdir."/install/templates/", PHPCMS_ROOT.'/templates/'.$CONFIG['defaulttemplate'].'/'.$module.'/');
+				dir_copy(PHPCMS_ROOT.$installdir."/install/templates/", PHPCMS_ROOT.'templates/'.TPL_NAME.'/'.$module.'/');
 			}
-			if(file_exists(PHPCMS_ROOT."/".$installdir."/install/languages/"))
+			if(file_exists(PHPCMS_ROOT.$installdir."/install/languages/"))
 			{
-				dir_copy(PHPCMS_ROOT.'/'.$installdir.'/install/languages/', PHPCMS_ROOT.'/languages/');
+				dir_copy(PHPCMS_ROOT.$installdir.'/install/languages/', PHPCMS_ROOT.'languages/'.LANG.'/');
 			}
 			cache_all();
+			tags_update();
 			showmessage($LANG['module_install_success'], "?mod=".$mod."&file=module&action=updatecache");
 		}
 		else
 		{
 			if(isset($confirm) && $confirm==1)
 			{
-				if(!is_dir(PHPCMS_ROOT."/".$installdir."/install/"))
+				if(!is_dir(PHPCMS_ROOT.$installdir."/install/"))
 				{
 					showmessage($LANG['module_install_dir_not_exist']);
 				}
-			    require_once PHPCMS_ROOT."/".$installdir."/install/config.php";
+				
+			    require_once PHPCMS_ROOT.$installdir."/install/config.inc.php";
 				if(array_key_exists($module, $MODULE)) showmessage($LANG['installed_module_unstall_it_then_continue']);
-				$enablecopy = $enablecopy ? $LANG['yes'] : $LANG['no'] ;
-				$isshare = $isshare ? $LANG['yes']  : $LANG['no'] ;
-			    include admintpl('module_install_confirm');
+			    include admin_tpl('module_install_confirm');
 			}
 			else
 			{
-			    include admintpl('module_install');
+			    include admin_tpl('module_install');
 			}
 		}
 		break;
 		
 	case 'uninstall':
-		if(!isset($modulename)) showmessage($LANG['illegal_operation']);
-		if(in_array($modulename, $chas))
+		if(!isset($module)) showmessage($LANG['illegal_operation']);
+		if(in_array($module, $chas))
 		{
-			if(file_exists(PHPCMS_ROOT.'/module/'.$modulename."/uninstall/extension.php"))
+			if(file_exists(PHPCMS_ROOT.'module/'.$module."/uninstall/extention.php"))
 			{
-				@include (PHPCMS_ROOT.'/module/'.$modulename."/uninstall/extension.php");
+				@include (PHPCMS_ROOT.'module/'.$module."/uninstall/extention.php");
 			}
 		}
 		else 
 		{
-			if(file_exists(PHPCMS_ROOT.'/'.$modulename."/uninstall/mysql.sql"))
+			if(file_exists(PHPCMS_ROOT.$module."/uninstall/extention.inc.php"))
 			{
-				$sql = file_get_contents(PHPCMS_ROOT.'/'.$modulename."/uninstall/mysql.sql");
-				sql_execute($sql);
+				@include (PHPCMS_ROOT.$module."/uninstall/extention.inc.php");
 			}
-            if(file_exists(PHPCMS_ROOT.'/'.$modulename."/uninstall/delete.txt"))
+			if(file_exists(PHPCMS_ROOT.$module."/uninstall/mysql.sql"))
 			{
-				$delete = file_get_contents(PHPCMS_ROOT.'/'.$modulename."/uninstall/delete.txt");				
+				$sql = file_get_contents(PHPCMS_ROOT.$module."/uninstall/mysql.sql");
+				sql_execute($sql);
+			}	
+            if(file_exists(PHPCMS_ROOT.$module."/uninstall/delete.txt"))
+			{
+				$delete = file_get_contents(PHPCMS_ROOT.$module."/uninstall/delete.txt");				
 				$deletearr = explode("\n",str_replace("\r","",$delete));
 	    		$deletearr = array_filter($deletearr);
 	    		foreach($deletearr as $del)
 	    		{
-					$del = PHPCMS_ROOT.'/'.$del;
+					$del = PHPCMS_ROOT.$del;
 	    		 	if(is_dir($del)) dir_delete($del);
 	    		 	else if(file_exists($del)) @unlink($del);
 	    		}
-
-			}
-			if(file_exists(PHPCMS_ROOT.'/'.$modulename."/uninstall/extension.php"))
-			{
-				@include (PHPCMS_ROOT.'/'.$modulename."/uninstall/extension.php");
 			}			
 		}
-		@unlink(PHPCMS_ROOT.'/languages/'.$CONFIG['language'].'/'.$modulename.'.lang.php');
-		@unlink(PHPCMS_ROOT.'/languages/'.$CONFIG['adminlanguage'].'/'.$modulename.'_admin.lang.php');
-		dir_delete(PHPCMS_ROOT.'/templates/'.$CONFIG['defaulttemplate'].'/'.$modulename.'/');
+		@unlink(PHPCMS_ROOT.'languages/'.LANG.'/'.$module.'.lang.php');
+		@unlink(PHPCMS_ROOT.'languages/'.LANG.'/'.$module.'_admin.lang.php');
+		dir_delete(PHPCMS_ROOT.'templates/'.TPL_NAME.'/'.$module.'/');
+		require_once 'menu.class.php';
+		$menu = new menu();
+		$menuid = $menu->menuid($module);
+		$menu->delete($menuid);
+		$db->query("DELETE FROM `".DB_PRE."module` WHERE `module`='$module';");
+		$db->query("DELETE FROM `".DB_PRE."menu` WHERE `keyid`='$module';");
 		cache_all();
 		$modules = array();
 		foreach($MODULE as $module=>$v)
 		{
-			if($module != $modulename) $modules[] = $module;
+			if($module != $module) $modules[] = $module;
 		}
 		tags_update($modules);
 		showmessage($LANG['module_uninstall_success'],"?mod=".$mod."&file=module");
@@ -141,40 +135,30 @@ switch($action)
 	case 'add':
 		if($dosubmit)
 	    {
-		    if(!preg_match("/^[a-z0-9]+$/",$module) || strlen($module) > 20) showmessage($LANG['template_dir_not_over_20char'], "goback");
-			if(!$name || !$moduledir || !$version || !$author || !$email || !$introduce) showmessage($LANG['modulename_version_etc_not_null'].$name.$moduledir.$introduce, "goback");
-            if(array_key_exists($module,$MODULE)) showmessage($LANG['module_name_cannot_repeat'], "goback");
-            if($iscopy) $moduledomain = '';
-		    $db->query("INSERT INTO ".TABLE_MODULE."(name,module,moduledir,moduledomain,iscopy,isshare,version,author,site,email,introduce,license,faq) VALUES('$name','$module','$moduledir','$moduledomain','$iscopy','$isshare','$version','$author','$site','$email','$introduce','$license','$faq')");
+		    if(!$m->add($info)) showmessage($m->msg());
             showmessage($LANG['operation_success'], $forward);
 		}
 		else
 	    {
-			include admintpl('module_add');
+			include admin_tpl('module_add');
 		}
 		break;
 
 	case 'view':
-		$r = $db->get_one("select * from ".TABLE_MODULE." where moduleid='$moduleid'");
+		$r = $m->get($module);
 		@extract($r);
-		include admintpl('module_view', 'phpcms');
+		include admin_tpl('module_view');
 		break;
 
 	case 'faq':
-		$r = $db->get_one("select name,faq from ".TABLE_MODULE." where moduleid='$moduleid'");
+		$r = $m->get($module);
 		@extract($r);
-		if(!$faq) $faq=$LANG['no_help'];
- 		include admintpl('module_faq');
+ 		include admin_tpl('module_faq');
 		break;
 
 	case 'disable':
-		if(empty($moduleid)) showmessage($LANG['illegal_parameters'],"goback");
-
-		$moduleids = is_array($moduleid) ? implode(',',$moduleid) : $moduleid;
-		$db->query("UPDATE ".TABLE_MODULE." SET disabled=$value WHERE moduleid IN ($moduleids)");
-		if($db->affected_rows()>0)
+		if($m->disable($module, $value))
 		{
-			cache_common();
 			showmessage($LANG['operation_success'], '?mod='.$mod.'&file='.$file);
 		}
 		else
@@ -183,13 +167,8 @@ switch($action)
 		}
 		break;
 
-	case 'manage':
-		  $result=$db->query("select * from ".TABLE_MODULE." order by moduleid");
-		  while($r=$db->fetch_array($result))
-		  {
-			  $r['admin'] = admin_users('modules', $r['module']);
-			  $modules[] = $r;
-		  }
-		  include admintpl('module');
+	default:
+        $data = $m->listinfo();
+		include admin_tpl('module');
 }
 ?>

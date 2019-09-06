@@ -1,56 +1,86 @@
 <?php 
 defined('IN_PHPCMS') or exit('Access Denied');
 
-$action = isset($action) ? $action : 'setting';
+require_once 'admin/type.class.php';
+if(!isset($module)) $module = 'phpcms';
+$type = new type($module);
+
+if(!$action) $action = 'manage';
+if(!$forward) $forward = '?mod='.$mod.'&file='.$file.'&action=mange';
+
 switch($action)
 {
-	case 'disabled':
-		if(!isset($keyid)) showmessage($LANG['illegal_parameters']);
-		if(!isset($typeid)) showmessage($LANG['illegal_parameters']);
-		$typeid = intval($typeid);
-		$db->query('UPDATE '.TABLE_TYPE.' SET disabled = NOT disabled WHERE typeid='.$typeid);
-		cache_type($keyid);
-		showmessage($LANG['operation_success'], $forward);
-
-    default:
-    	if(!isset($keyid)) showmessage($LANG['illegal_parameters']);
+    case 'add':
 		if($dosubmit)
 		{
-			if(is_array($name))
+			$result = $type->add($info);
+			if($result)
 			{
-				foreach($name as $id=>$v)
-				{
-					if(isset($delete[$id]) && $delete[$id])
-					{
-						$db->query("delete from ".TABLE_TYPE." where typeid='$id'");
-					}
-					else
-					{
-						$db->query("update ".TABLE_TYPE." SET name='$name[$id]',style='$style[$id]',type='$type[$id]',introduce='$introduce[$id]',listorder='$listorder[$id]' where typeid='$id'");
-					}
-				}
+				showmessage('操作成功！', $forward);
 			}
-			if($newname)
+			else
 			{
-				$db->query("insert into ".TABLE_TYPE."(keyid,name,style,type,introduce,listorder,disabled) values('$keyid','$newname','$newstyle','$newtype','$newintroduce','$newlistorder','0')");
+				showmessage('操作失败！');
 			}
-			cache_type($keyid);
-			showmessage($LANG['operation_success'], $forward);
 		}
 		else
 		{
-			$maxtypeid = 1;
-			$style_edit = style_edit('newstyle','');
-			$result = $db->query("select * from ".TABLE_TYPE." where keyid='$keyid' order by listorder");
-			$types = array();
-			while($r = $db->fetch_array($result))
-			{
-				$r['style_edit'] = style_edit("style[".$r['typeid']."]",$r['style']);
-				$types[$r['typeid']] = $r;
-				$maxtypeid = max($maxtypeid, $r['typeid']);
-			}
-			$newlistorder = $maxtypeid + 1;
-			include admintpl('type');
+			include admin_tpl('type_add');
 		}
+		break;
+    case 'edit':
+		if($dosubmit)
+		{
+			$result = $type->edit($typeid, $info);
+			if($result)
+			{
+				showmessage('操作成功！', $forward);
+			}
+			else
+			{
+				showmessage('操作失败！');
+			}
+		}
+		else
+		{
+			$info = $type->get($typeid);
+			if(!$info) showmessage('指定的类别不存在！');
+			extract($info);
+			include admin_tpl('type_edit');
+		}
+		break;
+    case 'manage':
+		$page = max(intval($page), 1);
+		$pagesize = max(intval($pagesize), 20);
+        $infos = $type->listinfo($page, $pagesize);
+		include admin_tpl('type_manage');
+		break;
+    case 'delete':
+		$result = $type->delete($typeid);
+		if($result)
+		{
+			showmessage('操作成功！', $forward);
+		}
+		else
+		{
+			showmessage('操作失败！');
+		}
+		break;
+    case 'listorder':
+		$result = $type->listorder($info);
+		if($result)
+		{
+			showmessage('操作成功！', $forward);
+		}
+		else
+		{
+			showmessage('操作失败！');
+		}
+		break;
+    default :
+		$page = max(intval($page), 1);
+		$pagesize = max(intval($pagesize), 20);
+        $infos = $type->listinfo($page, $pagesize);
+		include admin_tpl('type_manage');
 }
 ?>

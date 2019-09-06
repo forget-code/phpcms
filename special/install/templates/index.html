@@ -1,0 +1,36 @@
+{template 'phpcms','header'}
+<!--begin main-->
+<div id="main">
+  <div id="main_l" class="bdr_1">
+    <!--位置导航-->
+    <div id="position"><a href="">首页</a>专题</div>
+    {loop $TYPE $typeid $type}
+    <div class="cat">
+      <div class="cat_title"><a href="{$M[url]}{$type[url]}"><img src="images/more.gif" alt="更多" /></a>
+        <h3>{$type[name]}</h3>
+      </div>
+      <div class="cat_left mar_5">{tag_专题首页推荐专题}</div>
+      <div class="cat_right">
+        <ul class="text_list">
+          {tag_专题首页最新专题循环列表}
+        </ul>
+      </div>
+    </div>
+    {/loop}</div>
+  <div id="main_r">
+    <!--广告位-->
+    <div class="ad_side">
+      <script language="javascript" src="data/js.php?id=5"></script>
+    </div>
+    <h4>推荐专题</h4>
+    <div>
+      <ul class="pic_list">
+        {tag_推荐专题}
+      </ul>
+    </div>
+
+    
+  </div>
+</div>
+<!--end main-->
+{template 'phpcms','footer'}

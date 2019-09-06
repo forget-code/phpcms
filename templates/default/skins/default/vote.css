@@ -1,0 +1,48 @@
+@import url("base.css");
+/*会员中心公共属性*/
+#main,#main_full{ width:980px; border:1px solid #B9DFF9; margin:10px auto 0; }
+#main_full{ border-width:0;}
+table { padding:0; margin:0;}
+th { text-align:right; padding-right:5px; font-weight:normal;}
+td { line-height:200%; padding:0 5px; text-align:left;}
+caption { text-align:center;}
+a:link, a:visited { text-decoration:none; color:#077ac7;}
+a:hover, a:active { text-decoration:underline;}
+/*列表样式，表单样式，提示信息样式*/
+#main{background-image:none; with:980px;}
+.table_list, .table_form { margin:0 auto; width:100%; *margin-top:6px; background:#D5EDFD; border:1px solid #99d3fb;}
+.table_list caption, .table_form caption { border:1px solid #99d3fb; border-bottom-width:0; font-weight:bold; color:#077ac7; background:url(images/bg_table.jpg) repeat-x 0 0; height:27px; line-height:27px; margin:6px auto 0;}
+.table_form{}
+.table_form tr,.table_list tr{ background-color:#fff;}
+.table_form td, .table_form th,.table_list td  { line-height:150%; padding:4px;}
+.table_form th strong { color:#077ac7;}
+.table_list {}
+.table_list td { text-align:center;}
+.table_list th, th.form_th { text-align:center; color:#077ac7; background: url(images/bg_table.jpg) repeat-x 0 -26px; line-height:22px; height:22px;}
+th.form_th { text-align:left; text-indent:2em; font-weight:bold; padding:0; line-height:1.8em;}
+td.align_left { text-align:left;}
+/*投票页 */
+/*投票说明*/
+#vote_info{ line-height:180%; text-indent:2em; font-size:14px; color:#454545; padding:10px; border-bottom:1px dotted #B9DFF9;}
+#vote_list{ padding:0 10px 10px;}
+#vote_list dl{ margin-top:14px; width:100%; overflow:hidden; border-bottom:1px dotted #B9DFF9;}
+#vote_list dt{ color:#09c; font-size:12px; font-weight:bold; text-indent:1em; height:30px; line-height:30px;}
+#vote_list dd{ color:#09c; padding-right:10px; height:30px; line-height:30px;}
+#vote_list dl.inline{}
+#vote_list dl.inline dd{ float:left; display:block;}
+#vote_list dl.pic_vote{}
+#vote_list dl.pic_vote dd{ float:left; display:block; width:94px; height:90px; overflow:hidden; text-align:center; margin-top:10px; line-height:18px;}
+#vote_list dl.pic_vote dd img{ padding:1px; border:1px solid #ccc;}
+.pointer{cursor:pointer;}
+.bar{ background-image:url(images/bg_table.jpg);	background-color:#0099CC;	float:left;	color:#fff000;	height:24px;}
+.vote_show{	margin-bottom:8px;	border:#aaa 1px solid;}
+.vote_show *,.vote_show{ font-size:14px;}
+.vote_show table{ margin-left:16px; border:#eee 1px solid;	margin-bottom:4px;}
+.vote_show tr{ height:22px;}
+.vote_show td{ border-bottom:#eee 1px solid;}
+.vote_show .option{	padding-left:6px;}
+.vote_title{ font-size:16px; text-align:center; }
+.userinfo{ border:#B9DFF9 2px solid;
+.userinfo .title{background:url(images/bg_admin.jpg); font-size:16px; height:26px; font-weight:700;}
+.userinfo td{border-bottom:#B9DFF9 1px solid;}
+

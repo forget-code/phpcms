@@ -1,0 +1,57 @@
+{template 'member','header'}
+<script type="text/javascript" src="<?=PHPCMS_PATH?>images/js/validator.js"></script>
+<body>
+<div id="main">
+  {template 'pay' , 'left'}
+  <div id="right">
+    <p id="position"> <strong>当前位置：</strong><a href="{$M[url]}">财务管理</a>汇款确认</p>
+<form name="thisForm" id= "thisForm" action="{$MODULE[$mod]['url']}showpayment.php?action=verified" method="POST">
+    <table cellpadding="0" cellspacing="1" class="table_form">
+      <caption>汇款申请信息</caption>
+	  <tr>
+        <th width="15%">类　型：</th>
+        <td>{$offlines['option']}</td>       
+       </tr>
+	   <tr>
+		<th width="15%">E-mail：</th>
+        <td><input name="setting[email]" type="text" id="email" size="30" value="{$_email}" require="true" datatype="email" msg="邮件格式不正确" /></td>        
+      </tr>
+	  <tr>
+        <th width="15%"><font style="color:red;">*</font>姓 名：</th>
+        <td><input name="setting[contactname]" type="text" id="contactname" size="30" value="{$_username}" require="true" datatype="limit" min="2" max="20" msg="姓名不得少于2个字符超过20个字符" msgid = "name"/><span id="name" ></span></td>        
+	  </tr>
+	  <tr>
+        <th width="15%">电 话：</th>
+        <td><input name="setting[telephone]" type="text" id="telephone" size="15" require="false" datatype="custom" regexp="(^((\(\d{3}\))|(\d{3}\-))?13[0-9]\d{8}?$|15[89]\d{8}?$)|(^(0[0-9]{2,3}\-)?([2-9][0-9]{6,7})+(\-[0-9]{1,4})?$)" msg="请输入正确的电话号码" msgid="msgid1"/>  格式：010-88888888或13888888888<span id="msgid1"></span></td>        
+      </tr>
+	  <tr>
+        <th width="15%"><font style="color:red;">*</font>金 额：</th>
+        <td><input name="setting[amount]" type="text" id="amount" size="15" require="true" datatype="number" msg="请输入金额" msgid="msgid"/>&nbsp;元<span id="msgid"></span></td>
+      </tr>
+	  <tr>
+        <th width="15%">备  注：</th>
+        <td><textarea name="setting[usernote]"  id="usernote" rows="5" cols="28" value= "{$_username}" ></textarea></td>        
+      </tr>
+       {if $M[ischeckcode] }
+      <tr><tH>验证码</tH>
+        <td> {form::checkcode('checkcode',4,'require="true" datatype="require" msg="请输入验证码"')}
+        <span class="errtip" id="checkcodetip"></span>
+        </td>
+      </tr>{/if}
+      <tr>
+        <th></th>
+        <td>
+		<label>
+          <input type="submit" name="dosubmit" id="button" value="确 定" />
+          </label></td>
+      </tr>
+    </table></form>
+  </div>
+</div>
+<div class="clear"></div>
+{template 'phpcms','footer'}
+<script language="javascript" type="text/javascript">
+$().ready(function() {
+	  $('form').checkForm(1);
+	});
+</script>

@@ -1,0 +1,134 @@
+//随屏移动广告模板  2008-10-09 李勇
+<?php 
+	if(strpos($_SERVER['HTTP_USER_AGENT'],'MSIE')){
+		$css_position='absolute';
+	}else{
+		$css_position='fixed';
+	}
+	$place=$adses[0];
+	$placeheight=$place['height']+16;
+?>
+
+	//生成一个浮动层,自动裁剪
+	document.write('<div id="FloatDiv{$placeid}" style="width: {$place[width]}px;height: {$placeheight}px;float: left;top: 0px;left: 0px;position: {$css_position};z-index: 100;display:none; overflow:hidden; ">');
+	
+	//收缩,展开按钮的动作
+	function swapDiv{$placeid}(btn){
+		obj=document.getElementById('FloatDiv{$placeid}');
+		if(btn.value=='关闭'){
+			btn.value='展开';
+			obj.style.height='16px';
+		}else{
+			btn.value='关闭';
+			obj.style.height=16+{$place[height]}+'px';
+		}
+		FloatEvent{$placeid}();
+	}
+	
+	//收缩,展开按钮
+	document.write('{$place[placename]}<input type="button" value="关闭" onclick="swapDiv{$placeid}(this)" /><br/>');
+		
+	//循环此广告位每一个广告(但只显示一个)
+	{loop $contents $i $content}
+		{php $ads=$adses[$i];}
+		
+		//广告内容,可以是图片,影片,SWF等
+		{if $ads['type']=='image'}
+			{$content[0]}
+		{else}
+			{$content}
+		{/if}
+	{/loop}	
+			
+	//广告位层的结束
+	document.write('</div>');
+		
+		//根据位置,生成事件代码
+		<?php  
+			$position=$place['position'];
+			$floatDivInterval="obj=document.getElementById('FloatDiv$placeid');de=document.documentElement;";
+			$xpos=substr($position,0,1);
+			$ypos=substr($position,1,1);
+			
+			if(strpos($_SERVER['HTTP_USER_AGENT'],'MSIE')){
+				$deTop='de.scrollTop';
+				$deLeft='de.scrollLeft';
+				$deHeight='de.offsetHeight';
+				$deWidth='de.offsetWidth';
+				$objHeight='obj.style.posHeight';
+				$objWidth='obj.style.posWidth';
+			}else{
+				$deTop='0';
+				$deLeft='0';
+				$deHeight='de.clientHeight';
+				$deWidth='de.clientWidth';
+				$objHeight='parseInt(obj.style.height)';
+				$objWidth='parseInt(obj.style.width)';
+			}			
+	
+			//Y方向调整
+			if($ypos=='t')
+				$floatDivInterval.="obj.style.top=$deTop+'px';";
+			elseif($ypos=='m')
+				$floatDivInterval.="obj.style.top=($deTop+($deHeight-$objHeight-16)/2)+'px';";	
+			elseif($ypos=='b') 
+				$floatDivInterval.="obj.style.top=($deTop+$deHeight-$objHeight-16)+'px';";
+			
+			//X方向调整
+			if($xpos=='l')
+				$floatDivInterval.="obj.style.left=$deLeft+'px';";
+			elseif($xpos=='m')
+				$floatDivInterval.="obj.style.left=($deLeft+($deWidth-$objWidth-16)/2)+'px';";
+			elseif($xpos=='r')
+				$floatDivInterval.="obj.style.left=($deLeft+$deWidth-$objWidth-16)+'px';";
+				
+			//显示此层(因为最初是隐藏的)
+			$floatDivInterval.="obj.style.display='block';";
+		?>	
+
+
+	
+	//将事件代码挂到滚动与大小调整事件上
+	function FloatEvent{$placeid}(){
+		{$floatDivInterval}
+	}
+	
+	$(function(){
+		de=document.documentElement;	
+		
+		//IE响应此事件
+		old=de.onscroll;
+		func=FloatEvent{$placeid};
+		if(typeof de.onscroll !='function'){
+			de.onscroll=func;
+		}else{
+			de.onscroll=function(){
+				old();
+				func();
+			}
+		}
+	  
+		//IE响应
+		old=de.onresizeend;
+		if(typeof de.onresizeend !='function'){
+			de.onresizeend=func;
+		}else{
+			de.onresizeend=function(){
+				old();
+				func();
+			}
+		}
+		
+		//FF响应
+		old=window.onresize;
+		if(typeof window.onresize !='function'){
+			window.onresize=func;
+		}else{
+			window.onresize=function(){
+				old();
+				func();
+			}
+		}
+		
+	  	func();
+	});

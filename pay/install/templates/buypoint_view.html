@@ -1,0 +1,87 @@
+{template 'member','header'}
+<script type="text/javascript">
+<!--
+var amount = {$_amount};
+var cardtype = Array();
+{loop $infos $info}
+cardtype[{$info[ptypeid]}] = {$info['amount']};
+{/loop}
+function check()
+{
+    check_amount();
+     var id = $("input[name=pid]:checked").val();
+    var total = cardtype[id];
+    if(total > {$_amount})
+    {
+        alert('资金不足，请充值！');
+        return false;
+    }
+    return true;
+}
+function check_amount()
+{
+    var id = $("input[name=pid]:checked").val();
+    var total = cardtype[id];
+    if(total > {$_amount})
+    {
+         var url = 'showpayment.php?action=type&pay=online';
+         $('#amount').html('您的资金不足，请<a href="pay/'+url+'" style="color:red;">点击这里充值</a>！');
+         return false;
+    }
+    else 
+    {
+        $('#amount').html('');
+        return true;
+    }
+}
+//-->
+</script>
+<body>
+<div id="main">
+  {template 'pay' , 'left'}
+  <div id="right">
+    <!--面包屑导航-->
+    <p id="position"><strong>当前位置：</strong><a href="{$M[url]}">财务管理</a>购买点数</p>
+    <!--欢迎页基本信息-->
+    <div class="clear"></div>
+    <div class="clear"></div>
+    <!--列表样式-->
+    <form name="thisForm" id= "thisForm" action="{$MODULE[$mod]['url']}showpayment.php?action=buypoint" method="POST" onsubmit="return check();">
+    <table cellpadding="0" cellspacing="1" class="table_form">
+    <caption>购买点数</caption>
+    <tr>
+        <th width="15%">点数余额：</th>        
+        <td>{$_point} 点</td>
+     </tr>
+     <tr>
+        <th width="15%">资金余额：</th>        
+        <td>{$_amount} 元 <span id="amount" name="amount"></span></td>
+     </tr>      
+	  <tr>
+        <th width="25%">充值：</th>
+        <td>
+        {loop $infos $info}
+          <input type="radio" value='{$info[ptypeid]}' checked onclick="check_amount()" id = "pid" name="pid"/>&nbsp;{$info['point']}点（{$info['amount']}元）<br />
+        {/loop}
+        </td>
+      </tr>       
+      <tr>
+        <th></th>
+        <td colspan="2"><label>
+          <input type="submit" name="button" id="button" value="确认购买" />
+          </label></td>
+      </tr>
+    </table>    
+    <div class="button_box">
+    </div>
+    <div id="pages">{$pages}</div>
+    <!--表单样式-->
+  </div>
+</div>
+<div class="clear"></div>
+<script type="text/javascript">
+<!--
+
+//-->
+</script>
+{template 'member','footer'}

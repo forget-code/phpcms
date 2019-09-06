@@ -38,7 +38,7 @@ class tree
 	function tree($arr=array())
 	{
        $this->arr = $arr;
-	   $this->ret = "";
+	   $this->ret = '';
 	   return is_array($arr);
 	}
 
@@ -114,7 +114,7 @@ class tree
 	* @param int 被选中的ID，比如在做树型下拉框的时候需要用到
 	* @return string
 	*/
-	function get_tree($myid,$str,$sid=0,$adds='')
+	function get_tree($myid, $str, $sid = 0, $adds = '', $str_group = '')
 	{
 		$number=1;
 		$child = $this->get_child($myid);
@@ -124,22 +124,64 @@ class tree
 			foreach($child as $id=>$a)
 			{
 				$j=$k='';
-				if($number==$total){
+				if($number==$total)
+				{
 					$j .= $this->icon[2];
-				}else{
+				}
+				else
+				{
 					$j .= $this->icon[1];
 					$k = $adds ? $this->icon[0] : '';
 				}
 				$spacer = $adds ? $adds.$j : '';
-				$selected = $id==$sid ? "selected" : '';
+				$selected = $id==$sid ? 'selected' : '';
 				@extract($a);
-				eval("\$nstr = \"$str\";");
+				$parentid == 0 && $str_group ? eval("\$nstr = \"$str_group\";") : eval("\$nstr = \"$str\";");
 				$this->ret .= $nstr;
-				$this->get_tree($id,$str,$sid,$adds.$k.'&nbsp;');
+				$this->get_tree($id, $str, $sid, $adds.$k.'&nbsp;',$str_group);
 				$number++;
 			}
 		}
 		return $this->ret;
+	}
+    /**
+	* 同上一方法类似,但允许多选
+	*/
+	function get_tree_multi($myid, $str, $sid = 0, $adds = '')
+	{
+		$number=1;
+		$child = $this->get_child($myid);
+		if(is_array($child))
+		{
+		    $total = count($child);
+			foreach($child as $id=>$a)
+			{
+				$j=$k='';
+				if($number==$total)
+				{
+					$j .= $this->icon[2];
+				}
+				else
+				{
+					$j .= $this->icon[1];
+					$k = $adds ? $this->icon[0] : '';
+				}
+				$spacer = $adds ? $adds.$j : '';
+				
+				$selected = $this->have($sid,$id) ? 'selected' : '';
+				//echo $sid.'=>'.$id.' : '.$selected.' . <br/>';
+				@extract($a);
+				eval("\$nstr = \"$str\";");
+				$this->ret .= $nstr;
+				$this->get_tree_multi($id, $str, $sid, $adds.$k.'&nbsp;');
+				$number++;
+			}
+		}
+		return $this->ret;
+	}
+	
+	function have($list,$item){
+		return(strpos(',,'.$list.',',','.$item.','));
 	}
 }
 ?>

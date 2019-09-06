@@ -30,7 +30,7 @@ function ubb($string) {
 			"<font face=\"\\1\">",
 			"<p align=\"\\1\">",
 			"<p align=\"center\">",
-			"bbcodeurl('\\1', ' <img src=\"images/attachicons/flash.gif\" align=\"absmiddle\"> <a href=\"%s\" target=\"_blank\">Flash: %s</a> ')",
+			"bbcodeurl('\\1', ' <img src=\"images/flash.gif\" align=\"absmiddle\"> <a href=\"%s\" target=\"_blank\">Flash: %s</a> ')",
 			"bbcodeurl('\\1', '<img src=\"%s\" border=\"0\" onload=\"if(this.width>screen.width*0.7) {this.resized=true; this.width=screen.width*0.7; this.alt=\'Click here to open new window\';}\" onmouseover=\"if(this.resized) this.style.cursor=\'hand\';\" onclick=\"if(this.resized) {window.open(\'%s\');}\">')",
 			"bbcodeurl('\\3', '<img width=\"\\1\" height=\"\\2\" src=\"%s\" border=\"0\">')"
 		);

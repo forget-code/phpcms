@@ -1,0 +1,27 @@
+{template 'phpcms','header'}
+
+<!--begin main-->
+<div id="main">
+  <div id="main_l" class="bdr_1">
+    <!--位置导航-->
+    <div id="position"><a href="">首页</a><a href="type.php">类别首页</a><a>{$T[name]}</a></div>
+    <div class="bdr_2">
+      <ul class="pic_list">
+		{tag_类别列表页最新图片}
+      </ul>
+    </div>
+		{tag_类别列表页标题列表}
+  </div>
+  <div id="main_r">
+    <!--广告位-->
+    <div class="ad_side"><script language="javascript" src="data/js.php?id=5"></script></div>
+    <h4>类别导航</h4>
+	<div id="area">
+	{loop $TYPE $type}
+	<a href="type.php?typeid={$type[typeid]}">{$type[name]}</a>
+	{/loop}
+	</div>
+  </div>
+</div>
+<!--end main-->
+{template 'phpcms','footer'}

@@ -1,0 +1,138 @@
+{template 'phpcms','header'}
+<!--begin main-->
+<div id="main">
+  <!--begin left-->
+  <div id="main_l">
+    <!--begin 焦点图片，新闻-->
+    <div class="cribox_top"></div>
+    <div class="cribox_bdr">
+      <!--幻灯片-->
+      <div id="slide">{tag_首页幻灯片}</div>
+      <!--热点文章-->
+      <div id="hotnews" class="f_r"> {tag_网站首页头条}
+        <ul class="text_list">
+          {tag_网站首页推荐}
+        </ul>
+      </div>
+    </div>
+    <div class="cribox_btm"></div>
+    <!--end 焦点图片，新闻-->
+    <!--begin 全站搜索-->
+<!--{if isset($MODULE['search'])}-->
+<script type="text/javascript">
+function set_type(type)
+{
+	$('#type').val(type);
+
+	$('#search_tag>span').removeClass('selected');
+	$('#type_'+type).addClass('selected');
+}
+</script>
+    <form name="search" action="{$MODULE[search][url]}" target="_blank">
+      <div class="search_tag_top mar_10">
+        <p id="search_tag"> <span id="type_all" class="selected" onclick="set_type('all')">全部</span> {php $types = cache_read('search_type.php');}
+          {loop $types $type $name} <span id="type_{$type}" onclick="set_type('{$type}')">{$name}</span> {/loop} </p>
+      </div>
+      <div class="cribox_bdr_1">
+        <input type="hidden" name="type" value="all" id="type"/>
+        <input type="text" name="q" size="50"/>
+        <input type="submit" name="s" id="button" value="搜索" />
+      </div>
+    </form>
+    <div class="cribox_btm"></div>
+<!--{/if}-->
+    <!--end 全站搜索-->
+    <div class="ad mar_10">
+      <script language="javascript" src="data/js.php?id=7"></script>
+    </div>
+<!--{php $subcats = subcat('phpcms', 0, 0);}-->
+<!--{loop $subcats $catid $cat}-->
+    <div class="cat_index">
+      <div class="cat_title"><a href="{$cat[url]}"><img src="images/more.gif" alt="更多" /></a>
+        <h3>{$cat[catname]}</h3>
+      </div>
+      <div class="cat_left">
+        <ul class="pic_list">
+          {tag_首页图片循环标签}
+        </ul>
+      </div>
+      <div class="cat_right">
+        <ul class="text_list">
+          {tag_网站首页内容标签}
+        </ul>
+      </div>
+    </div>
+<!--{/loop}-->
+    <!--end 栏目列表-->
+  </div>
+  <!--end left-->
+  <!--begin right-->
+  <div id="main_r">
+<!--{if isset($MODULE['announce'])}-->
+    <h4><a href="{$MODULE[announce][url]}"><img src="images/more.gif" alt="更多" /></a>网站公告</h4>
+    <div>
+      <ul class="text_list">
+        {tag_首页最新公告}
+      </ul>
+    </div>
+<!--{/if}-->
+<!--{if isset($MODULE['special'])}-->
+    <h4><a href="{$MODULE[special][url]}"><img src="images/more.gif" alt="更多" /></a>推荐专题</h4>
+    <div class="pic_txt_list">
+      <ul>
+        {tag_首页推荐专题}
+      </ul>
+    </div>
+<!--{/if}-->
+<!--{block('index', 1)}-->
+    <h4><a href="tags.php"><img src="images/more.gif" alt="更多" /></a>热门标签</h4>
+    <div>
+      <ul class="text_list_1">
+	  <!--{get sql="select tag,hits from phpcms_keyword order by listorder desc,hits desc" rows="10"}-->
+        <li><a href="tag.php?tag={urlencode($r[tag])}">{$r[tag]}</a>({$r[hits]})</li>
+	  <!--{/get}-->
+	  </ul>
+    </div>
+<!--{if isset($MODULE['digg'])}-->
+    <h4><a href="{$MODULE[digg][url]}"><img src="images/more.gif" alt="更多" /></a>DIGG 周排行</h4>
+    <div>
+      <ul class="digg_text_list">
+<!--{get sql="select d.contentid,d.supports,c.title,c.style,c.url from phpcms_digg d left join phpcms_content c on d.contentid=c.contentid where c.status=99 order by d.supports_week desc" rows="10"}-->
+	<li><span>{$r[supports]}</span><a href="{$r[url]}" target="_blank" class="{$r[style]}">{str_cut($r[title], 44)}</a></li>
+<!--{/get}-->
+      </ul>
+    </div>
+<!--{/if}-->
+<!--{if isset($MODULE['ask'])}-->
+    <h4><a href="{$MODULE[ask][url]}"><img src="images/more.gif" alt="更多" /></a>问吧热点</h4>
+    <div>
+      <ul class="text_list_1">
+        {tag_首页热点问题}
+      </ul>
+    </div>
+<!--{/if}-->
+<!--{if isset($MODULE['vote'])}-->
+	<h4><a href="{$MODULE[vote][url]}"><img src="images/more.gif" alt="更多" /></a>投票调查</h4>
+    <div id="vote_list">  
+    <script language='javascript' src='{$MODULE[vote][url]}vote.php?action=js&voteid=1'></script>
+    </div>   
+<!--{/if}-->
+<!--{if isset($MODULE['mail']) }-->
+    <h4>邮件订阅</h4>
+    <div class="pic_txt_list_1">
+     <form action="mail/" method="POST">
+      E-mail：<input type="text" name="em" id="em">&nbsp;&nbsp;<input type="submit" value="订阅" class="button_style"/>
+      </form>
+    </div>
+<!--{/if}-->
+<!--{if isset($MODULE['link'])}-->
+    <h4><a href="{$MODULE[link][url]}"><img src="images/more.gif" alt="更多" /></a>友情链接</h4>
+    <div class="pic_txt_list_1"> {tag_logo链接} </div>
+    <div class="pic_txt_list_1"> {tag_文字链接} </div>
+<!--{/if}-->
+
+  </div>
+  <!--end right-->
+</div>
+<!--end main-->
+{template 'phpcms','footer'}

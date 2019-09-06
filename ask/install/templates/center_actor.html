@@ -1,0 +1,38 @@
+{template 'member','header'}
+<div id="main">
+  {template "ask","left"}
+  <div id="right">
+    <p id="position"><strong>当前位置：</strong><a href="{$MODULE[member][url]}">会员中心</a><a href="{$M[url]}center.php">问吧</a>头衔管理</p>
+    <div class="clear"></div>
+<form action="" method="post">
+<table cellpadding="0" cellspacing="1" class="table_list">
+<caption>头衔管理</caption>
+{loop $TYPES $n $r}
+<tr>
+<th colspan="3">{$r} <input id="actortype" type="radio" name="info[actortype]" value="{$n}" {if $actortype==$n}checked{/if}> </th>
+</tr>
+	{loop $ACTOR[$n] $k $v}
+		{if $k%3==0}<tr>{/if}
+		<td>{$v[grade]} {$v[actor]}</td>
+		{if $k%3==2}</tr>{/if}
+	{php $cols++;}
+	{/loop}
+{/loop}
+    </table>
+<div class="button_box">
+<input type="hidden" name="action" value="actor"/>
+<input type="submit" name="dosubmit" id="button" value=" 更 新 " />
+</div>
+</form>
+    <!--提示信息-->
+    <table cellpadding="0" cellspacing="1" class="table_info">
+      <caption>提示信息</caption>
+      <tr>
+        <td> 每个用户都会有一套属于自己的积分、等级和头衔。您可以通过问答等操作不断增加积分，同时您的等级和头衔也会随积分不断晋升。我们特地为您量身订做了五套角色系列，请您选择一套您最喜欢的角色，从此您的头衔便会按照此角色系列不断晋升，虚拟形象也会发生相应的变化。
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+<div class="clear"></div>
+{template 'phpcms','footer'}

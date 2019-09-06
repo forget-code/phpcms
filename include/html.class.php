@@ -1,0 +1,173 @@
+<?php 
+class html
+{
+	var $url;
+
+    function __construct()
+    {
+		$this->url = load('url.class.php');
+		if(!defined('CREATEHTML')) define('CREATEHTML', 1);
+    }
+
+	function html()
+	{
+		$this->__construct();
+	}
+
+	function index()
+	{
+		extract($GLOBALS, EXTR_SKIP);
+		$head['title'] = $PHPCMS['sitename'].'-'.$PHPCMS['meta_title'];
+		$head['keywords'] = $PHPCMS['meta_keywords'];
+		$head['description'] = $PHPCMS['meta_description'];
+		$subcats = subcat('phpcms', 0, 0);
+		$catid = 0;
+		ob_start();
+		include template('phpcms', 'index');
+		$file = PHPCMS_ROOT.$this->url->index();
+		return createhtml($file);
+	}
+
+	function category($catid, $page = 0)
+	{
+		extract($GLOBALS, EXTR_SKIP);
+		$C = cache_read("category_$catid.php", '', 1);
+		if(!$C || $C['type'] > 1) return false;
+		extract($C);
+		if($type == 0) $ishtml = $MODEL[$modelid]['ishtml'];
+		if(!$ishtml) return false;
+		$catlist = submodelcat($C['modelid']);
+		$arrparentid = explode(',', $CATEGORY[$catid]['arrparentid']);
+		$parentid = $arrparentid[1];
+
+        $head['title'] = $catname.'-'.($meta_title ? $meta_title : $PHPCMS['sitename']);
+		$head['keywords'] = $meta_keywords;
+		$head['description'] = $meta_description;
+		$curpage = $page;
+		if($type == 0)
+		{	
+			if($child==1)
+			{
+				$arrchildid = subcat('phpcms',$catid);
+				$template = $template_category;
+			}
+			else
+			{
+				if($page == 0) $page = 1;
+				$template = $template_list;
+			}
+		}
+		ob_start();
+		include template('phpcms', $template);
+		$file = PHPCMS_ROOT.$this->url->category($catid, $curpage);
+		return createhtml($file);
+	}
+
+	function show($contentid, $is_update_related = 0)
+	{
+		global $MODEL,$CATEGORY;
+		extract($GLOBALS, EXTR_SKIP);
+		if(!is_a($c, 'content'))
+		{
+			if(!class_exists('content'))
+			{
+				require 'admin/content.class.php';
+			}
+			$c = new content();
+		}
+		$r = $c->get($contentid);
+		if(!$r) return false;
+		if($r['catid']) $catid = $r['catid'];
+		if(!$MODEL[$CATEGORY[$catid]['modelid']]['ishtml']) return false;
+		if($is_update_related)
+		{
+			$this->index();
+			$pages = intval($PHPCMS['autoupdatelist']);
+			$catids = explode(',', $CATEGORY[$r['catid']]['arrparentid']);
+			$catids[] = $r['catid'];
+			foreach($catids as $cid)
+			{
+				if($cid == 0) continue;
+				for($i=0; $i<=$pages; $i++)
+				{
+					if($CATEGORY[$cid]['child']==1 && $i>0) continue;
+					$this->category($cid, $i);
+				}
+			}
+		}
+		if($r['status'] != 99) return true;
+		$show_url_path = $this->url->show($r['contentid'], 0, $r['catid'], $r['inputtime']);
+		$show_url_path = str_replace('.'.$PHPCMS['fileext'],'',$show_url_path);
+		$GLOBALS['show_url_path'] = $show_url_path;
+		
+        $C = cache_read('category_'.$r['catid'].'.php', '', 1);
+		if($r['template'])
+		{
+			$GLOBALS['template_show_images'] = $r['template'];
+		}
+		else
+		{
+			$GLOBALS['template_show_images'] = $C['template_show'];
+		}
+		$data = $c->output($r);
+		extract($data);
+		$template = $GLOBALS['template_show_images'];
+
+		$head['keywords'] = $r['keywords'];
+		$head['description'] = $r['description'];
+		
+		$allow_priv = $allow_readpoint = true;
+		$pages = $titles = '';
+		if(strpos($content, '[page]') !== false)
+		{
+			$contents = array_filter(explode('[page]', $content));
+			$pagenumber = count($contents);
+			for($i=1; $i<=$pagenumber; $i++)
+			{
+				$pageurls[$i] = $this->url->show($r['contentid'], $i, $r['catid'], $r['inputtime']);
+			}
+			if(strpos($content, '[/page]') !== false)
+			{
+				if(preg_match_all("|\[page\](.*)\[/page\]|U", $content, $m, PREG_PATTERN_ORDER))
+				{
+					foreach($m[1] as $k=>$v)
+					{
+						$page = $k+1;
+						$titles .= '<a href="'.$pageurls[$page].'">'.$page.'、'.$v.'</a>';
+					}
+				}
+			}
+			$page = $filesize = 0;
+			foreach($contents as $content)
+			{
+				$page++;
+				$pages = $this->url->show_pages($page, $pagenumber, $pageurls);
+				if($titles)
+				{
+					list($title, $content) = explode('[/page]', $content);
+				}
+				$title = strip_tags($title);
+				$head['title'] = $title.'_'.$C['catname'].'_'.$PHPCMS['sitename'];
+				ob_start();
+				include template('phpcms', $template);
+				$file = PHPCMS_ROOT.$pageurls[$page];
+				$filesize += createhtml($file);
+			}
+			return $filesize;
+		}
+		else
+		{
+			$page = $page ? $page : 1;
+			$images_number = $GLOBALS['images_number'];
+			$array_images = $GLOBALS['array_images'];
+			$title = strip_tags($title);
+			$head['title'] = $title.'_'.$C['catname'].'_'.$PHPCMS['sitename'];
+			$ishtml = 1;
+			$file = PHPCMS_ROOT.$this->url->show($r['contentid'], 0, $r['catid'], $r['inputtime']);
+			ob_start();
+			include template('phpcms', $template);
+			return createhtml($file);exit;
+		}
+	}
+}
+?>

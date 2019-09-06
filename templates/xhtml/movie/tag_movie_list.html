@@ -1,9 +1,0 @@
-{loop $movies $i $movie}
-<li><span>{if $datetype}{$movie[adddate]}{/if}
-{if $showmovies}({$movie[totalmovies]}){/if}
-{if $showauthor}[作者:{$movie[author]}]{/if}
-{if $introducelen}<br/>{$movie[introduce]}{/if}</span><a href="{$movie[linkurl]}" title="{$movie[title]}" {$target}>{$movie[stitle]}</a></li>
-{/loop}
-{if $pages}
-<div class="pages">{$pages}</div>
-{/if}

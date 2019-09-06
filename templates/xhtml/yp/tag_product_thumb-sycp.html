@@ -1,8 +1,0 @@
-{loop $products $i $product}<li class="ynrrboxn"><a href="{$product['linkurl']}" {$target}><img src="{$product[thumb]}" width="{$imgwidth}" height="{$imgheight}" alt="{$product[alt]}" /></a>
-<div class="liqt"><a href="{$product['linkurl']}" title="{$product['title']}" {$target}>{str_replace('...','',$product[stitle])}</a></div>
-<div class="num"><b>￥{$product[price]}元</b></div>
-</li>{/loop}
-</ul>
-{if $pages}
-<div class="pages">{$pages}</div>
-{/if}

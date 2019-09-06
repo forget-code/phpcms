@@ -1,0 +1,158 @@
+@import url('color.css');
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,   
+form,fieldset,input,textarea,p,blockquote,th,td {padding:0; margin:0;}
+html, body { height:100%;} /* 同时设置html是为了兼容FF */
+body { font-size: 12px; color: black; line-height: 150%; background-color:#fff; text-align: center; height:100%; width:98%;}
+img { border:0;}
+ul li { list-style:none;}
+a:link,a:visited { text-decoration:none; color:#077ac7;}
+a:hover,a:active { text-decoration:none;}
+/*表单相关*/
+input, textarea, select, button{ font-size:12px; padding-left:2px;}
+textarea {overflow:auto;}
+button{ padding-left:0;}
+input { font-family:"宋体"; font-size:12px; border:1px solid #dcdcdc;height:18px; line-height:20px;padding-left:2px;}
+.inputtitle{ background:url("images/ruler.gif") repeat-x 0 5px; height:20px;padding-left:2px;}
+.input_focus, .input_blur {	height:20px; line-height:20px; border:1px solid #dcdcdc; padding-left:2px;}
+.input_focus, .textarea_focus {	background-color:#F6FCFF; font-size: 12px; border:1px solid #C7E8F9;}
+/*列表菜单 文本区域*/
+select,textarea,.textarea_style{border:1px solid #dcdcdc;}
+/*单选框复选框*/
+.radio_style, .checkbox_style { border:0;}
+/*按钮样式*/
+.button_style { background:url(images/btn_bg.gif) repeat-x 0 0; text-align:center; border:1px solid #9cc9e0; padding:3px 4px; *padding:0 4px; color:#077ac7; cursor:pointer; height:21px; line-height:21px; overflow:hidden;}
+.file_style{ height:20px; line-height:20px;border:1px solid #dcdcdc; }
+
+/*按钮区域*/
+.button_box { text-align:left; padding:5px;}
+/*后台头部*/
+#header { background:url(images/bg_admin.jpg) repeat-x 0 0; height:58px; width:100%; position:absolute; top:0; left:0; z-index:12; border-bottom:5px solid #069;}
+.logo { width:220px; float:left;}
+/*菜单*/
+#menu { position:absolute; right:5px; bottom:0; z-index:22;}
+#menu li { float:left; list-style:none; text-align:center;}
+#menu li a { cursor:pointer; float:left; color:#fff; background:url(images/menu_l.gif) no-repeat 0 0; height:29px; line-height:29px;}
+#menu li a span { background:url(images/menu_r.gif) no-repeat right 0; padding:0 10px; display:block; float:left;}
+#menu li a:hover,#menu li a.selected { color:#ff0; background:url(images/menu_l.gif) no-repeat 0 -29px; height:29px; line-height:29px;}
+#menu li a:hover span,#menu li a.selected span { color:#ff0; background-position:right -29px; padding:0 10px;}
+#menu li a img { margin:9px 0;}
+/*左边*/
+#admin_left { width:220px; float:left; display:inline; position:absolute; top:62px; bottom:0; left:0; z-index:11;}
+/*右边*/
+#admin_right { position:absolute; top:62px; bottom:0; left:220px; right:0; z-index:10; zoom:1;}
+#admin_left .inner, #admin_right .inner { height:100%; overflow:hidden;}
+#admin_right .inner { background: url(images/position.gif) repeat-x 0 -1px ; position:relative;}
+.clear { clear:both;}
+table {font-size:12px; padding:0; margin:0;}
+th {text-align:right; padding-right:5px; font-weight:normal;}
+td {line-height:200%; padding:0 5px; text-align:left;}
+/*列表样式，表单样式，提示信息样式*/
+.table_list, .table_form, .table_info { margin:0 auto; width:99%; *margin-top:6px; background:#D5EDFD; border:1px solid #99d3fb;}
+.table_list caption, .table_form caption, .table_info caption{ border:1px solid #99d3fb; border-bottom-width:0; font-weight:bold; color:#077ac7; background:url(images/bg_table.jpg) repeat-x 0 0; height:27px; line-height:27px; margin:6px auto 0;font-size:12px; font-family:"宋体"}
+h4 { border:1px solid #069; border-width:0 1px 1px 0; margin-top:0; font-size:14px; text-align:left; background:url(images/bg_admin.jpg) repeat-x 0 -58px; height:28px; line-height:28px; color:#fff;position:absolute; top:0; bottom:0; left:0; z-index:500; width:219px;}
+h4 span{ background:url(images/bg_arrow.gif) no-repeat 5px -1px; padding-left:30px;}
+h4 img{ cursor:pointer;}
+.table_form, .table_info {}
+.table_form tr,.table_info tr,.table_list tr{ background-color:#fff;}
+.table_form td, .table_form th, .table_info td,.table_list td  { line-height:150%; padding:4px;font-size:12px; font-family:"宋体";}
+.table_form th strong, .table_info th strong { color:#077ac7;}
+.table_list {}
+.table_list th {font-weight:bold}
+.table_list th, th.form_th,th.form_th_c{ text-align:center; font-size:12px; color:#077ac7; background: url(images/bg_table.jpg) repeat-x 0 -26px; line-height:22px; height:22px;}
+th.form_th{ text-align:left; text-indent:2em; font-weight:bold; padding:0; line-height:1.8em;}
+th.form_th_c{ text-align:center; text-indent:0; font-weight:bold; padding:0; line-height:1.8em;}
+.align_left,td.align_left { text-align:left;}
+.table_info td { padding:5px;}
+td.tablerowhighlight { text-align:center; color:#077ac7; background: url(images/bg_table.jpg) repeat-x 0 -22px; line-height:22px; height:22px; font-weight:bold; }
+td.align_l,th.align_l{ text-align:left;}
+td.align_c,th.align_c{ text-align:center;}
+td.align_r,th.align_r{ text-align:right;}
+/*表格变色*/
+.mouseover { background-color:#ECF7FE !important;}
+/*分页*/
+#pages {padding:5px; text-align:center;}
+#pages a {padding:3px 6px 2px; margin:3px; border:1px solid #2e6ab1; text-align:center; color:#2e6ab1;}
+#pages a:hover {background:#2e6ab1; color:#fff; border:1px solid #000080;}
+.mar_10 {margin-top:10px;}
+/*后台位置导航*/
+#position {background: url(images/position.gif) no-repeat 5px -32px; text-align:left; color:#069; text-indent:24px; height:30px; line-height:30px; width:500px; float:left;}
+#position strong {color:#069;}
+#position a:link, #position a:visited {color:#069; background:url(images/position.gif) no-repeat right -72px; padding-right:16px; text-decoration:underline;}
+#position a:hover, #position a:active {color:#069; background:url(images/position.gif) no-repeat right -72px; padding-right:16px; text-decoration:underline;}
+#pages {width:99%;}
+/*标签菜单*/
+.tag_menu { width:100%; margin:0 auto 0; *margin-bottom:-7px; /*border-bottom:3px solid #99D3FB;*/ overflow:hidden;}
+.tag_menu ul{ text-align:left;}
+.tag_menu li { float:left; height:23px; margin-right:3px; padding:0; display:inline;}
+.tag_menu li a { background:url(images/tag_menu.gif) no-repeat 0 -23px; height:23px; line-height:23px; float:left; width:75px; display:block; white-space: nowrap; text-decoration:none; color:#1589C8; text-align:center;}
+.tag_menu li a:link, .tag_menu li a:visited { text-decoration:none;}
+.tag_menu li a:hover, .tag_menu li a:active { text-decoration:none;}
+
+.tag_menu li a.selected { background:url(images/tag_menu.gif) no-repeat 0 0;}
+.tag_menu li a.selected:link, .tag_menu li a.selected:visited { font-weight:bold; text-decoration:none; color:#fff;}
+.tag_menu li a.selected:hover, .tag_menu li a.selected:active { color:#fff; font-weight:bold; text-decoration:none;}
+.float_r {float:right;}
+.float_l {float:left;}
+/*右上管理信息*/
+#info_bar {position:absolute; top:3px; right:10px; z-index:23; zoom:1; color:#fff;}
+/*登录成功后台页面样式*/
+.font_arial {font-family:Arial, Helvetica;}
+#admin_main {}
+#admin_main h3 {color:#690; border-bottom:1px dotted #b4d3ef; padding-left:1em; line-height:30px; margin:5px auto; font-size:12px;}
+#admin_main_2_1 {width:320px; float:left; text-align:left;}
+#admin_main_2_1 p {border-bottom:1px dotted #b4d3ef; margin:10px auto; text-align:left; padding:0 10px 10px; color:#5097D8;}
+#admin_main_2_1 li {padding-left:1.4em; background:#fff url(list_bg.gif) no-repeat 5px 8px;}
+#admin_main_2_2 { margin-left:400px; zoom:1; text-align:left;}
+#admin_main_2_2 div {width:100%; float:left;}
+#admin_main_2_2 li {float:left; width:50px; margin:5px 10px; text-align:center; line-height:24px; display:inline;}
+#admin_main_2_2 li a {color:#333;}
+#admin_main_2_2 li a:hover {display:block;}
+.ad {text-align:center;}
+.c_orange {color:orange;}
+a.orange:link, a.orange:visited {color:orange;}
+a.orange:hover, a.orange:active {color:orange;}
+a.white:link, a.white:visited {color:#fff;}
+a.white:hover, a.white:active {color:#fff;}
+/*布尔样式*/
+span.yes, span.no { background:url(images/member_bg_1.gif) no-repeat 0 -418px; padding:0.4em 0 0 1.6em; color:#070; line-height:18px; height:18px;}
+span.no { background-position:0 -450px; color:#c00;}
+
+/**/
+#td_content td {text-align:center;}
+#td_content td .left {text-align:left;}
+/*输入法模式禁止ie支持*/
+.noime{ime-mode:disabled;}
+
+/*弹出层*/
+.jqmWindow {display: none;position: absolute;z-index:3000;top: 17%;left: 50%;margin-left: -301px; width:600px; overflow:hidden; background: #fff; border:1px solid #B9DFF9;}
+/*.jqmOverlay { background-color: #000; }*/
+* html .jqmWindow {position: absolute;top: expression((document.documentElement.scrollTop || document.body.scrollTop) + Math.round(17 * (document.documentElement.offsetHeight || document.body.clientHeight) / 100) + 'px');}
+.jqmWindow h5 { margin:0; border:0; background:url(images/bg_table.jpg) repeat-x 0 0; font-size:12px; padding:0 10px; border-bottom:1px solid #B9DFF9;	color:#077AC7; height:28px;	line-height:28px; width:602px; text-align:left; }
+.jqmWindow h5 a { float:right;	margin-top:6px;}
+.jqmWindow table {	width:100%;}
+a.jqmClose { height:16px; width:16px; display:block;padding-right:20px; * padding-right:0;}
+.jqmWindow table th { font-weight:bold; text-align:right; padding-right:5px;}
+.jqmWindow table td { font-size:12px; height:28px;	line-height:28px; padding-left:5px;}
+.jqmOverlay { background-color: #000;z-index:2999;}
+#protocol {	line-height:180%; overflow:auto; padding:10px;}
+
+/* Fixed posistioning emulation for IE6
+     Star selector used to hide definition from browsers other than IE6
+     For valid CSS, use a conditional include instead */
+* html .jqmWindow {
+    position: absolute;
+    top: expression((document.documentElement.scrollTop || document.body.scrollTop) + Math.round(17 * (document.documentElement.offsetHeight || document.body.clientHeight) / 100) + 'px');
+}
+
+/* Background iframe styling for IE6. Prevents ActiveX bleed-through (<select> form elements, etc.) */
+* iframe.jqm {
+	position:absolute;top:0;left:0;z-index:-1;
+	width: expression(this.parentNode.offsetWidth+'px');
+	height: expression(this.parentNode.offsetHeight+'px');
+}
+
+#FilePreview img { 
+vertical-align: middle;
+max-width:300px;   /* FF IE7 */
+width:expression(this.width > 300 && this.width > this.height ? 300 : true);
+overflow:hidden;}

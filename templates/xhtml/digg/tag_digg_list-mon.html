@@ -1,9 +1,0 @@
-
-<div class="biaoti">本月关注度最高的{$all_cats['catname']}</div>
-<ul class="link">
-{loop $digg_list  $list}
-	<li>
-		<p>{$list['digg_hits']}</p><span><a href="{PHPCMS_PATH}{$list['digg_link']}">{$list['digg_title']}</a></span>
-	</li>
- {/loop}
-</ul>

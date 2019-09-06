@@ -1,0 +1,41 @@
+{template 'space','header'}
+<div id="main">
+  <div id="left">
+    <div id="space">
+      <h5>{$username} 的个人资料</h5>
+      <img src="{thumb($avatar, 150, 150)}" alt="{$username}" height="150" width="150"/>
+      <div id="memberinfo">
+      <p>
+	  用户名：<a href="{$MODULE[member][url]}view.php?userid={$userid}">{$username}</a><br />
+	  最后登录：{date('Y-m-d H:i', $lastlogintime)}
+	  </p>
+    </div>
+      <ol><li class="edit"><a href="{$MODULE[message][url]}send.php?userid={$userid}" class="edit">写短消息</a></li></ol>
+      <div class="clear"></div>
+    </div>
+    <ol>
+      <li class="local"><a href="{SITE_URL}">返回网站首页</a></li>
+      {if $is_host}<li class="exit"><a href="{$MODULE[member][url]}logout.php">退出登录</a></li>{/if}
+    </ol>
+  </div>
+  <div id="right">
+	<p id="position"> <strong>当前位置：</strong><a href="">首页</a>{$username} 的个人空间</p>
+     <div class="modellist_2">
+      <h3>图片文章</h3>
+      <div class="modellist_2_1 bdr_2" style="width:100%;">
+        <ul >
+          {tag_blog图片信息}
+        </ul>
+      </div>
+	   <div class="modellist_2_2 mar_10" style="width:100%;">
+        <ul>
+           {tag_blog信息列表}
+        </ul>
+      </div>
+    </div>
+	  </div>
+  </div>
+</div>
+<div class="clear"></div>
+<span id="toggle_pannel"></span>
+{template 'phpcms','footer'}

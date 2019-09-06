@@ -1,0 +1,80 @@
+<?php
+$_CACHE['apps'] = array (
+  1 => 
+  array (
+    'appid' => '1',
+    'type' => 'DISCUZ',
+    'name' => 'Discuz! Board',
+    'url' => 'http://discuz.local',
+    'authkey' => 'j2g2ccxazbkd47Ncsanap0taS3W0TeDcY5G1v6haWde35d6bhbV9T6h9Z9946c20',
+    'ip' => '',
+    'charset' => 'utf-8',
+    'dbcharset' => 'utf8',
+    'synlogin' => '1',
+    'recvnote' => '1',
+    'extra' => '',
+    'tagtemplates' => '<?xml version="1.0" encoding="ISO-8859-1"?><root> <template><![CDATA[<a href="{url}" target="_blank">{subject}</a>]]></template> <fields> <subject><![CDATA[??]]></subject> <uid><![CDATA[?? ID]]></uid> <username><![CDATA[???]]></username> <dateline><![CDATA[??]]></dateline> <url><![CDATA[????]]></url> </fields></root>',
+  ),
+  3 => 
+  array (
+    'appid' => '3',
+    'type' => 'OTHER',
+    'name' => 'phpcms',
+    'url' => 'http://cms.local',
+    'authkey' => 'google',
+    'ip' => '',
+    'charset' => '',
+    'dbcharset' => '',
+    'synlogin' => '1',
+    'recvnote' => '1',
+    'extra' => 'N;',
+    'tagtemplates' => '<?xml version="1.0" encoding="ISO-8859-1"?><root> <template><![CDATA[]]></template></root>',
+  ),
+  4 => 
+  array (
+    'appid' => '4',
+    'type' => 'SUPEV',
+    'name' => 'SupeV',
+    'url' => 'http://supe.local',
+    'authkey' => 'E2E0fdNcid0aY6973cE5b9ebEdk0mbm7G9q7R6d9obs2N8b3B9VaN3teS19co692',
+    'ip' => '',
+    'charset' => 'utf-8',
+    'dbcharset' => 'utf-8',
+    'synlogin' => '1',
+    'recvnote' => '1',
+    'extra' => '',
+    'tagtemplates' => '<?xml version="1.0" encoding="ISO-8859-1"?><root></root>',
+  ),
+  5 => 
+  array (
+    'appid' => '5',
+    'type' => 'SUPEV',
+    'name' => 'SupeV??',
+    'url' => 'http://test.local/supev/install',
+    'authkey' => 'IfP6Saofz8g8Cct85562kb56Uexef7Sb7dV4NbY9F0f0Sej2Wek5l816G4Sc1ai4',
+    'ip' => '',
+    'charset' => 'utf-8',
+    'dbcharset' => 'utf8',
+    'synlogin' => '1',
+    'recvnote' => '1',
+    'extra' => '',
+    'tagtemplates' => '<?xml version="1.0" encoding="ISO-8859-1"?><root></root>',
+  ),
+  6 => 
+  array (
+    'appid' => '6',
+    'type' => 'SUPEV',
+    'name' => 'SupeV',
+    'url' => 'http://supev.local/install',
+    'authkey' => 'D0V3rf60k9Vfn1K2Zf7a20U28cjaH2n4dan651jfC9JaHb8bZan9A5W65cNf52o8',
+    'ip' => '',
+    'charset' => 'gbk',
+    'dbcharset' => 'gbk',
+    'synlogin' => '1',
+    'recvnote' => '1',
+    'extra' => '',
+    'tagtemplates' => '<?xml version="1.0" encoding="ISO-8859-1"?><root></root>',
+  ),
+);
+
+?>

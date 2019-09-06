@@ -1,0 +1,33 @@
+{template 'phpcms','header'}
+<!--begin main-->
+<div id="main">
+  <div id="main_l" class="bdr_1">
+    <!--位置导航-->
+    <div id="position"><a href="">首页</a>{catpos($catid)}</div>
+    <!--下载列表-->
+	{tag_下载列表页详细信息列表}
+    <!--分页-->
+  </div>
+  <div id="main_r">
+    <div class="ad_side">
+      <script language="javascript" src="data/js.php?id=5"></script>
+    </div>
+    <!--搜索-->
+    <h4>推荐下载</h4>
+    <div>
+      <ul class="text_list">
+        {tag_下载列表页推荐}
+      </ul>
+    </div>
+	<!--{block("list_down", 1)}-->
+    <h4>最近更新</h4>
+    <div>
+      <ul class="text_list">
+        {tag_下载列表页最近更新}
+      </ul>
+    </div>
+	<!--{block("list_$catid", 2)}-->
+  </div>
+</div>
+<!--end main-->
+{template 'phpcms','footer'}

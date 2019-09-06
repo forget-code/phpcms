@@ -1,22 +1,17 @@
 <?php
 require './include/common.inc.php';
-
+if(!$forward) $forward = HTTP_REFERER;
 if($PHPCMS['enableserverpassport'])
 {
+	$verify = substr(md5($PHPCMS['passport_serverkey']),0,8);
 	$logouturl = $PHPCMS['passport_serverurl'].$PHPCMS['passport_logouturl'];
-	$addstr = $PHP_QUERYSTRING ? $PHP_QUERYSTRING : 'forward='.$PHP_REFERER;
-	$logouturl .= (strpos($logouturl, '?') ? '&' : '?').$addstr;
+	$addstr = QUERY_STRING ? QUERY_STRING : '';
+	$logouturl .= (strpos($logouturl, '?') ? '&' : '?').$addstr.'&verify='.$verify;
 	header('location:'.$logouturl);
 	exit;
 }
 
 if(!isset($action)) $action = '';
-
-if($action == 'ajax_message')
-{
-	echo $LANG['logout_success'];
-	exit;
-}
 
 $member->logout();
 
@@ -24,24 +19,28 @@ if($PHPCMS['enablepassport'])
 {
 	if($action == 'logout_ajax')
 	{
-		$forward = linkurl($MOD['linkurl'], 1).'logout.php?action=ajax_message';
+		$forward = url($M['url'], 1).'logout.php?action=ajax_message';
 	}
 	else
 	{
-		$forward = isset($forward) ? linkurl($forward, 1) : $PHP_SITEURL;
+		$forward = isset($forward) ? url($forward, 1) : SITE_URL;
 	}
 	$action = 'logout';
-	require MOD_ROOT.'/passport/'.$PHPCMS['passport_file'].'.php';
+	require MOD_ROOT.'api/passport_server_'.$PHPCMS['passport_file'].'.php';
 	header('location:'.$url);
 	exit;
 }
-
-if($action == 'logout_ajax')
+if($PHPCMS['uc'])
 {
-	echo $LANG['logout_success'];
+    $action = 'logout';
+    require MOD_ROOT.'api/passport_server_ucenter.php';
+}
+if($action == 'ajax')
+{
+	echo 1;
 	exit;
 }
 
-if(!$forward) $forward = $PHP_SITEURL;
-showmessage($LANG['logout_success'], $forward);
+if(!$forward) $forward = SITE_URL;
+showmessage($LANG['logout_success'].$ucsynlogout, $forward);
 ?>

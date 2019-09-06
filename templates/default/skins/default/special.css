@@ -1,0 +1,115 @@
+@import url("base.css");
+
+/*侧边搜索*/
+.sidesearch{ height:30px; line-height:30px;}
+
+/*圆角矩形*/
+.cribox_top,.cribox_btm{ background:url(images/bg_1.gif) no-repeat 0 0; height:10px; overflow:hidden;}
+.cribox_bdr,.cribox_bdr_1,.special_bdr{ border:6px solid #E5F3FE; border-width:0 6px; padding:0 5px; height:190px; max-height:190px; overflow:hidden;}
+.cribox_bdr_1{height:25px; max-height:25px; padding-top:5px;}
+.cribox_btm{ background-position:0 -12px;}
+/*专题*/
+.special_bdr{ border-width:0; margin-top:10px;}
+/*栏目*/
+.cat,.cat_index{ margin:10px auto; clear:both; overflow:hidden!important;}
+.cat{ padding:0 5px;}
+/*一行两列*/
+.cat_2{ width:315px; margin:10px 2px 0; float:left;}
+
+/*栏目标题*/
+.cat_title,.cat_title_1{ border:1px solid #99D3FB; background:url(images/bg_2.jpg) repeat-x 0 -64px; height:27px; overflow:hidden; line-height:27px; padding:0 10px; margin-bottom:10px;}
+.cat_title_1{ background-position:0 24px; border:0;}
+/*more*/
+.cat_title img,.cat_title_1 img{ float:right;}
+.cat_title h3,.cat_title_1 h3{ font-size:14px; color:#069;background:url(images/bg_model.gif) no-repeat -7px 3px; padding-left:1em;}
+.cat_left{ width:214px; float:left; border:1px solid #99D3FB; text-align:center; padding:5px 0; overflow:hidden;}
+.cat_left p{text-indent:2em; width:204px; text-align:left; line-height:200%; margin:0 auto;}
+.cat_left p a{ font-size:12px;}
+.cat_left ul{ margin:0 auto;}
+.cat_right{ width:400px; float:right;}
+.cat_right a{ font-size:14px;}
+/*幻灯片*/
+#slide{ width:300px;}
+#slide img{ padding:1px; border:1px solid #ccc;}
+/*热点新闻*/
+#hotnews{ width:312px;}
+#hotnews h1{}
+#hotnews li{ font-size:14px;}
+/*首页搜索*/
+.search_tag_top{background:url(images/bg_1.gif) no-repeat 0 -20px;padding-top:5px;}
+.search_tag_top p{ height:20px; line-height:20px;background:#E4F3FC url(images/bg_search.jpg) no-repeat 10px 0; padding-left:60px;}
+#search_tag span a{ padding:5px 10px; margin:0 2px; }
+#search_tag span a:hover,#search_tag span.selected a{ background:#fff; height:20px; line-height:20px;}
+/*内容页*/
+#content {
+	background-color:#fff;
+}
+#content h1 { text-align:center; font-family:"宋体"; font-size:20px; color:#000; margin-top:10px;}
+#text {
+	margin:10px auto;
+	line-height:30px;
+	text-align:center;
+}
+#digest {
+	margin:10px;
+	border:1px dashed #ccc;
+	padding:10px;
+	line-height:200%;
+}
+#digest strong {
+	color:#f00;
+}
+#endtext {
+ padding:0 10px;
+}
+#endtext h2 {
+	font-size:18px;
+}
+#endtext p {
+font-size:14px;
+	margin:5px;
+	text-indent:2em;
+	line-height:1.8em;
+}
+#endtext .icon {
+	border:0;
+	margin:3px 0 0;
+}
+#endtext img {
+	border:1px solid #ccc;
+}
+#endtext table {
+	table-layout:fixed;
+}
+<!--
+#endtext td {
+	overflow:hidden;/*text-overflow:ellipsis;*/
+}
+-->
+#endtext a {
+	text-decoration:underline;
+	color:#1f3a87;
+}
+#endtext a:hover {
+	color:#bc2931;
+}
+#text_1{ background-color:#E4F3FC; color:#09f; text-align:right; padding-right:10px;}
+#text_1 a{ color:#09f; font-weight:bold;}
+/*关键字*/
+#keywords{ font-size:14px; margin:10px 14px; padding:0; color:#077ac7;}
+#keywords a{ margin-left:8px; color:#f00;}
+/*分页标题*/
+#titles{ margin:10px 20px; border:1px solid #B9DFF9; width:596px; overflow:hidden;}
+#titles h3{ font-size:12px; background-color:#E4F3FC; color:#077ac7; line-height:22px; border:1px #fff solid; padding:0 8px;}
+#titles a{ list-style:none; width:280px; float:left; padding-left:8px;line-height:180%; }
+/*上下页*/
+#pre_and_next{border-top:1px solid #6DC0E9;border-bottom:1px solid #6DC0E9;}
+#pre_and_next li{ margin:8px 10px;}
+#commnent_tag{ font-size:14px; padding:10px; font-weight:bold; border-top:1px solid #6DC0E9;}
+#commnent_tag img{ float:right;}
+
+.w_100{ width:100%;}
+#main_r div p{ padding:0 5px; text-indent:20px;}
+.special_txt{}
+.special_txt img{float:left; margin:0 10px 10px 0;}
+.special_txt p{ clear:right;}

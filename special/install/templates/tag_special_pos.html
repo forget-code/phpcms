@@ -1,0 +1,4 @@
+{loop $data $n $r} 
+<li><a target="{$target}" href="{$r[url]}"><img height="{$height}" width="{$width}" alt="{$r[title]}" src="{$r[thumb]}"/></a><br/>
+<a target="{$target}" href="{$r[url]}">{str_cut($r[title],$titlelen)}</a></li>
+{/loop}

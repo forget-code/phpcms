@@ -10,16 +10,25 @@ class db_access
 
 	function connect($dbhost, $dbuser = '', $dbpw = '', $dbname = '', $pconnect = 0)
 	{
-		$this->conn = new com('adodb.connection') or exit('Cannot start ADO');
+		$this->conn = new com('adodb.connection');
+		if(!$this->conn) return false;
+		//	or exit('Cannot start ADO');
 		$this->conn->open("DRIVER={Microsoft Access Driver (*.mdb)};dbq=$dbhost;uid=$dbuser;pwd=$dbpw");
 		if($this->conn->state == 0)
 		{
 			$this->conn->open("Provider=Microsoft.Jet.OLEDB.4.0; Data Source=$dbhost");
-			if($this->conn->state == 0)	exit('Can not connect to Access Database !');
+			if($this->conn->state == 0)	return false;;
 		}
 		define('NUM', 1);
 		define('ASSOC', 2);
 		define('BOTH', 3);
+		return $this->conn->state;
+	}
+
+
+	function select_db($dbname)
+	{
+		return $this->conn->state;
 	}
 
 	function query($sql, $type = '', $expires = 3600, $dbname = '')
@@ -68,6 +77,26 @@ class db_access
 			$rs->MoveNext();
 			return $array;
 		}
+	}
+	
+	function select($sql, $keyfield = '')
+	{
+		$array = array();
+		$result = $this->query($sql);
+		while($r = $this->fetch_array($result))
+		{
+			if($keyfield)
+			{
+				$key = $r[$keyfield];
+				$array[$key] = $r;
+			}
+			else
+			{
+				$array[] = $r;
+			}
+		}
+		$this->free_result($result);
+		return $array;
 	}
 
 	function num_rows($rs)

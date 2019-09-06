@@ -1,66 +1,36 @@
-<?php
+<?php 
 defined('IN_PHPCMS') or exit('Access Denied');
 
-$rename = isset($rename) ? $rename : '';
-$type = isset($type) ? $type : '';
-if($rename!='')
-{
-	$exts = array('.php','.asp','.cgi','.jsp','.aspx','.pl','.cfg');
-	foreach($exts as $ext)
-	{
-		if(strpos($rename, $ext)===FALSE)	continue; 
-		else showmessage($LANG['illegal_extension']);
-	}
-}
-if(is_numeric($keyid))
-{
-	$CHA = cache_read('channel_'.$keyid.'.php');
-}
-else
-{
-	$MOD = cache_read($keyid.'_setting.php');
-}
-if(isset($CHA['uploaddir']))
-{
-	@extract($CHA);
-	$uploaddir = $PHPCMS['uploaddir'].'/'.$channeldir.'/'.$uploaddir;
-}
-elseif(isset($MOD['uploaddir']))
-{
-	@extract($MOD);
-	$uploaddir = $PHPCMS['uploaddir'].'/'.$mod.'/'.$uploaddir;
-}
-else 
-{
-	@extract($PHPCMS);
-}
+require_once 'attachment.class.php';
 
-$uploaddir = $rename==''?  $uploaddir.'/'.date('Ym').'/':$uploaddir.'/';
-if($type == 'cert') $uploaddir = 'cert/';
-if($type == 'favicon') $uploaddir = '/';
-$maxfilesize = isset($maxfilesize) ? $maxfilesize : 2048000 ;
-if(isset($save))
+$attachment = new attachment($mod);
+
+if($dosubmit)
 {
-	include_once PHPCMS_ROOT."/include/upload.class.php";
-	$fileArr = array('file'=>$_FILES['uploadfile']['tmp_name'],'name'=>$_FILES['uploadfile']['name'],'size'=>$_FILES['uploadfile']['size'],'type'=>$_FILES['uploadfile']['type'],'error'=>$_FILES['uploadfile']['error']);
-	dir_create($uploaddir);
-	$upload = new upload($fileArr,$rename,$uploaddir,$uploadfiletype,1,$maxfilesize);
-    if($upload->up())
+	$attachment->upload('uploadfile', UPLOAD_ALLOWEXT, UPLOAD_MAXSIZE, 1);
+	if($attachment->error) showmessage($attachment->error());
+	$imgurl = UPLOAD_URL.$attachment->uploadedfiles[0]['filepath'];	
+	$aid = $attachment->uploadedfiles[0]['aid'];
+	$filesize = $attachment->uploadedfiles[0]['filesize'];
+	$filesize = $attachment->size($filesize);
+    if($isthumb || $iswatermark)
 	{
-		if(isset($oldname) && $oldname && !preg_match("/^http:\/\//i",$oldname) && $oldname!=$upload->saveto)
+		require_once 'image.class.php';
+		$image = new image();
+		$img = UPLOAD_ROOT.$attachment->uploadedfiles[0]['filepath'];
+		if($isthumb)
 		{
-			@unlink(PHPCMS_ROOT."/".$oldname);
+			$image->thumb($img, $img, $width, $height);
 		}
-    	showmessage($LANG['upload_success']."<script language='javascript'>window.opener.myform.".$uploadtext.".value='".$upload->saveto."';window.close();</script>","?".$PHP_QUERYSTRING);
-    }
-	else
-	{
-		showmessage($upload->errmsg(),"?".$PHP_QUERYSTRING);
+		if($iswatermark)
+		{
+			$image->watermark($img, $img, $PHPCMS['watermark_pos'], $PHPCMS['watermark_img'], '', 5, '#ff0000', $PHPCMS['watermark_jpgquality']);
+		}
 	}
+	showmessage("文件上传成功！<script language='javascript'>	try{ window.opener.myform.".$uploadtext.".value='".$imgurl."';window.opener.myform.".$uploadtext."_aid.value='".$aid."';window.opener.myform.filesize.value='".$filesize."';}catch(e){} window.close();</script>", HTTP_REFERER);
 }
 else
 {
-	if(!isset($keyid)) $keyid = isset($module) ? $module : $channelid;
-	include admintpl('upload');
+	include admin_tpl('upload');
 }
 ?>

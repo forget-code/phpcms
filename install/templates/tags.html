@@ -1,0 +1,14 @@
+{template 'phpcms','header'}
+<div id="main_full">
+  <div id="position"><a href="">首页</a><a href="tags.php">热门标签</a></div>
+  <div id="content">
+    <ul id="tag_list">
+	  <!--{get sql="select tag,hits from phpcms_keyword order by listorder desc,hits desc" rows="100" page="$page"}-->
+        <li><a href="tag.php?tag={urlencode($r[tag])}">{$r[tag]}</a>({$r[hits]})</li>
+	  <!--{/get}--> 
+    </ul>
+    <div id="pages">{$pages}</div>
+    <div class="clear"></div>
+  </div>
+</div>
+{template 'phpcms','footer'}

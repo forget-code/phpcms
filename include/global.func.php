@@ -1,17 +1,7 @@
-<?php 
-defined('IN_PHPCMS') or exit('Access Denied');
-
-function showmessage($msg, $url_forward = 'goback', $ms=1250)
-{
-	global $CONFIG,$PHPCMS,$debuginfo;
-	$templatefile = defined('IN_ADMIN') ? PHPCMS_ROOT.'/admin/templates/showmessage.tpl.php' : template('phpcms','showmessage');
-	include $templatefile;
-    exit;
-}
-
+<?php
 function new_htmlspecialchars($string)
 {
-    return is_array($string) ? array_map('new_htmlspecialchars', $string) : htmlspecialchars($string,ENT_QUOTES);
+	return is_array($string) ? array_map('new_htmlspecialchars', $string) : htmlspecialchars($string, ENT_QUOTES);
 }
 
 function new_addslashes($string)
@@ -41,30 +31,219 @@ function filter_xss($string, $allowedtags = '', $disabledattributes = array('ona
 	return $string;
 }
 
-function strip_sql($string)
+function filter_word($data = '')
 {
-	global $search_arr,$replace_arr;
-	return is_array($string) ? array_map('strip_sql', $string) : preg_replace($search_arr, $replace_arr, $string);
+	global $PHPCMS;
+	$filter_word = trim($PHPCMS['filter_word']);
+	if(!$filter_word || (!$data && !$_GET && !$_POST)) return false;
+	$filter_word = array_filter(array_map('trim', explode("\n", $filter_word)));
+    if(!$filter_word) return false;
+	$pattern = str_replace('\*', '.*', implode('|', array_map('preg_quote', $filter_word)));
+	$data = array2string($_REQUEST);
+	if($pattern && preg_match("/($pattern)/", $data, $m))
+	{
+		$pattern_word = $m[0];
+		define('ILLEGAL_WORD', $pattern_word);
+		unset($m[0]);
+		$word = implode(' ', $m);
+		$logdata = array(TIME, IP, $word, $pattern_word);
+		$logfile = PHPCMS_ROOT.'data/filterlog/'.date('Ym', TIME).'.csv';
+		$fp = fopen($logfile, 'a');
+		fputcsv($fp, $logdata);
+		fclose($fp);
+		return true;
+	}
+	return false;
 }
 
-function strip_textarea($string)
+function format_textarea($string)
 {
-	return nl2br(str_replace(' ', '&nbsp;', htmlspecialchars($string, ENT_QUOTES)));
+	return nl2br(str_replace(' ', '&nbsp;', htmlspecialchars($string)));
 }
 
-function strip_js($string, $js = 1)
+function format_js($string, $isjs = 1)
 {
-	$string = str_replace(array("\n","\r","\""),array('','',"\\\""),$string);
-	return $js==1 ? "document.write(\"".$string."\");\n" : $string;
+	$string = addslashes(str_replace(array("\r", "\n"), array('', ''), $string));
+	return $isjs ? 'document.write("'.$string.'");' : $string;
 }
 
-function str_safe($string)
+if(!function_exists('file_put_contents'))
 {
-	$searcharr = array("/(javascript|jscript|js|vbscript|vbs|about):/i","/on(mouse|exit|error|click|dblclick|key|load|unload|change|move|submit|reset|cut|copy|select|start|stop)/i","/<script([^>]*)>/i","/<iframe([^>]*)>/i","/<frame([^>]*)>/i","/<link([^>]*)>/i","/@import/i");
-	$replacearr = array("\\1\n:","on\n\\1","&lt;script\\1&gt;","&lt;iframe\\1&gt;","&lt;frame\\1&gt;","&lt;link\\1&gt;","@\nimport");
-	$string = preg_replace($searcharr,$replacearr,$string);
-	$string = str_replace("&#","&\n#",$string);
-	return $string;
+	define('FILE_APPEND', 8);
+	function file_put_contents($file, $data, $append = '')
+	{
+		$mode = $append == '' ? 'wb' : 'ab';
+		$fp = @fopen($file, $mode) or exit("Can not open file $file !");
+		flock($fp, LOCK_EX);
+		$len = @fwrite($fp, $data);
+		flock($fp, LOCK_UN);
+		@fclose($fp);
+		return $len;
+	}
+}
+
+if(!function_exists('http_build_query'))
+{
+    function http_build_query($data, $prefix = null, $sep = '', $key = '')
+	{
+        $ret = array();
+		foreach((array)$data as $k => $v)
+		{
+			$k = urlencode($k);
+			if(is_int($k) && $prefix != null)
+			{
+				$k = $prefix.$k;
+			}
+			if(!empty($key)) {
+				$k = $key."[".$k."]";
+			}
+			if(is_array($v) || is_object($v))
+			{
+				array_push($ret,http_build_query($v,"",$sep,$k));
+			}
+			else
+			{
+				array_push($ret,$k."=".urlencode($v));
+			}
+		}
+        if(empty($sep))
+		{
+            $sep = ini_get("arg_separator.output");
+        }
+        return implode($sep, $ret);
+    }
+}
+
+if(!function_exists('image_type_to_extension'))
+{
+    function image_type_to_extension($type, $dot = true)
+    {
+        $e = array ( 1 => 'gif', 'jpeg', 'png', 'swf', 'psd', 'bmp' ,'tiff', 'tiff', 'jpc', 'jp2', 'jpf', 'jb2', 'swc', 'aiff', 'wbmp', 'xbm');
+        $type = intval($type);
+        if (!$type)
+		{
+            trigger_error( 'File Type is null...', E_USER_NOTICE );
+            return null;
+        }
+        if(!isset($e[$type]))
+		{
+            trigger_error( 'Image type is wrong...', E_USER_NOTICE );
+            return null;
+        }
+        return ($dot ? '.' : '') . $e[$type];
+    }
+}
+
+if(!function_exists('array_intersect_key'))
+{
+	function array_intersect_key($isec, $keys)
+	{
+		$argc = func_num_args();
+		if ($argc > 2)
+		{
+			for ($i = 1; !empty($isec) && $i < $argc; $i++)
+			{
+				$arr = func_get_arg($i);
+				foreach (array_keys($isec) as $key)
+				{
+					if (!isset($arr[$key]))
+					{
+						unset($isec[$key]);
+					}
+				}
+			}
+			return $isec;
+		}
+		else
+		{
+			$res = array();
+			foreach (array_keys($isec) as $key)
+			{
+				if (isset($keys[$key]))
+				{
+					$res[$key] = $isec[$key];
+				}
+			}
+			return $res;
+		}
+	}
+}
+
+if(!function_exists('json_encode'))
+{
+	function json_encode($string)
+	{
+		require_once 'json.class.php';
+		$json = new json();
+		return $json->encode($string);
+	}
+}
+
+if(!function_exists('json_decode'))
+{
+	function json_decode($string,$type = 1)
+	{
+		require_once 'json.class.php';
+		$json = new json();
+		return $json->decode($string,$type);
+	}
+}
+
+if(!function_exists('iconv'))
+{
+	function iconv($in_charset, $out_charset, $str)
+	{
+		if(function_exists('mb_convert_encoding'))
+		{
+			return mb_convert_encoding($str, $out_charset, $in_charset);
+		}
+		else
+		{
+
+			require_once 'iconv.func.php';
+			$in_charset = strtoupper($in_charset);
+			$out_charset = strtoupper($out_charset);
+			if($in_charset == 'UTF-8' && ($out_charset == 'GBK' || $out_charset == 'GB2312'))
+			{
+				return utf8_to_gbk($str);
+			}
+			if(($in_charset == 'GBK' || $in_charset == 'GB2312') && $out_charset == 'UTF-8')
+			{
+				return gbk_to_utf8($str);
+			}
+			return $str;
+		}
+	}
+}
+
+function str_charset($in_charset, $out_charset, $str_or_arr)
+{
+	if(is_array($str_or_arr))
+	{
+		foreach($str_or_arr as $k=>$v)
+		{
+			$str_or_arr[$k] = str_charset($in_charset, $out_charset, $v);
+		}
+	}
+	else
+	{
+		$str_or_arr = iconv($in_charset, $out_charset, $str_or_arr);
+	}
+	return $str_or_arr;
+}
+
+function stripstr($str)
+{
+	return str_replace(array('..', "\n", "\r"), array('', '', ''), $str);
+}
+
+if(!function_exists('fputcsv'))
+{
+	function fputcsv(&$fp, $array, $delimiter = ',', $enclosure = '"')
+	{
+		$data = $enclosure.implode($enclosure.$delimiter.$enclosure, $array).$enclosure."\n";
+		return fwrite($fp, $data);
+	}
 }
 
 function random($length, $chars = '0123456789')
@@ -78,148 +257,238 @@ function random($length, $chars = '0123456789')
 	return $hash;
 }
 
-function mkcookie($var, $value = '', $time = 0)
+function set_cookie($var, $value = '', $time = 0)
 {
-	global $CONFIG,$PHP_TIME;
-	$time = $time > 0 ? $time : (empty($value) ? $PHP_TIME - 3600 : 0);
+	$time = $time > 0 ? $time : ($value == '' ? PHP_TIME - 3600 : 0);
 	$s = $_SERVER['SERVER_PORT'] == '443' ? 1 : 0;
-	$var = $CONFIG['cookiepre'].$var;
-	return setcookie($var, $value, $time, $CONFIG['cookiepath'], $CONFIG['cookiedomain'], $s);
-}
-
-function getcookie($var)
-{
-	global $CONFIG;
-	$var = $CONFIG['cookiepre'].$var;
-	return isset($_COOKIE[$var]) ? $_COOKIE[$var] : FALSE;
-}
-
-if(!function_exists('file_put_contents'))
-{
-	define('FILE_APPEND', 8);
-	function file_put_contents($file, $string, $append = '')
+	$var = COOKIE_PRE.$var;
+	$_COOKIE[$var] = $value;
+	if(is_array($value))
 	{
-		$mode = $append == '' ? 'wb' : 'ab';
-		$fp = @fopen($file, $mode) or exit("Can not open file $file !");
-		flock($fp, LOCK_EX);
-		$stringlen = @fwrite($fp, $string);
-		flock($fp, LOCK_UN);
-		@fclose($fp);
-		return $stringlen;
+		foreach($value as $k=>$v)
+		{
+			setcookie($var.'['.$k.']', $v, $time, COOKIE_PATH, COOKIE_DOMAIN, $s);
+		}
+	}
+	else
+	{
+		setcookie($var, $value, $time, COOKIE_PATH, COOKIE_DOMAIN, $s);
 	}
 }
 
-function file_down($file, $filename = '')
+function get_cookie($var)
 {
-	global $PHP_TIME;
-	if(!file_exists($file)) showmessage("The file $file is not exists !");
-	$filename = $filename ? $filename : basename($file);
+	$var = COOKIE_PRE.$var;
+	return isset($_COOKIE[$var]) ? $_COOKIE[$var] : false;
+}
+
+function content_set($contentid, $field, $data)
+{
+	return @file_put_contents(content_file($contentid, $field), $data);
+}
+
+function content_get($contentid, $field)
+{
+	return @file_get_contents(content_file($contentid, $field));
+}
+
+function content_del($contentid, $field)
+{
+	return @unlink(content_file($contentid, $field));
+}
+
+function content_file($contentid, $field)
+{
+	$id = str_pad($contentid, 4, '0', STR_PAD_LEFT);
+	return CONTENT_ROOT.$field.'/'.substr($id, 0, 2).'/'.substr($id, 2, 2).'/'.$contentid.'.txt';
+}
+
+function content_init($field)
+{
+	@set_time_limit(300);
+	@mkdir(CONTENT_ROOT.$field, 0777);
+	for($i=1; $i<=9999; $i++)
+	{
+		$id = str_pad($i, 4, '0', STR_PAD_LEFT);
+		$dir1 = CONTENT_ROOT.$field.'/'.substr($id, 0, 2);
+		$dir2 = $dir1.'/'.substr($id, 2, 2);
+		@mkdir($dir1, 0777);
+		@mkdir($dir2, 0777);
+	}
+	return true;
+}
+
+function menu($parentid, $code = '')
+{
+	global $db, $_userid, $_roleid, $_groupid;
+	$code = str_replace('"', '\"', $code);
+	$where = $parentid == 99 ? "AND userid=$_userid" : '';
+	$menus = $db->select("SELECT * FROM `".DB_PRE."menu` WHERE `parentid`='$parentid' $where ORDER BY `listorder`,`menuid`", 'menuid');
+	if($code)
+	{
+		foreach($menus as $m)
+		{
+			extract($m);
+			if(($roleids && defined('IN_ADMIN') && !check_in($_roleid, $roleids)) || ($groupids && !defined('IN_ADMIN') && !check_in($_groupid, $groupids))) continue;
+			eval("\$menu .= \"$code\";");
+		}
+		$menus = $menu;
+	}
+	return $menus;
+}
+
+function url($url, $isabs = 0)
+{
+	if(strpos($url, '://') !== FALSE || $url[0] == '?') return $url;
+	if($isabs || defined('SHOWJS'))
+	{
+		$url = strpos($url, PHPCMS_PATH) === 0 ? SITE_URL.substr($url, strlen(PHPCMS_PATH)) : SITE_URL.$url;
+	}
+	else
+	{
+		$url = strpos($url, PHPCMS_PATH) === 0 ? $url : PHPCMS_PATH.$url;
+	}
+	return $url;
+}
+
+function is_ie()
+{
+	$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
+	if((strpos($useragent, 'opera') !== false) || (strpos($useragent, 'konqueror') !== false)) return false;
+	if(strpos($useragent, 'msie ') !== false) return true;
+	return false;
+}
+
+function is_websearch()
+{
+	if(!defined('IS_WEBSEARCH'))
+	{
+		$useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
+		$browsers = 'msie|netscape|opera|konqueror|mozilla';
+		$spiders = 'bot|spider|google|isaac|surveybot|baiduspider|yahoo|sohu-search|yisou|3721|qihoo|daqi|ia_archiver|p.arthur|fast-webcrawler|java|microsoft-atl-native|turnitinbot|webgather|sleipnir|msn';
+		if(preg_match("/($browsers)/", $_SERVER['HTTP_USER_AGENT']))
+		{
+			define('IS_WEBSEARCH', FALSE);
+		}
+		elseif(preg_match("/($spiders)/", $_SERVER['HTTP_USER_AGENT']))
+		{
+			define('IS_WEBSEARCH', TRUE);
+		}
+		else
+		{
+			define('IS_WEBSEARCH', FALSE);
+		}
+	}
+	return IS_WEBSEARCH;
+}
+
+function is_date($ymd, $sep='-')
+{
+	if(empty($ymd)) return FALSE;
+	list($year, $month, $day) = explode($sep, $ymd);
+	return checkdate($month, $day, $year);
+}
+
+function is_email($email)
+{
+	return strlen($email) > 6 && preg_match("/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/", $email);
+}
+
+function str_exists($haystack, $needle)
+{
+	return !(strpos($haystack, $needle) === FALSE);
+}
+
+function file_down($filepath, $filename = '')
+{
+	if(!$filename) $filename = basename($filepath);
+	if(is_ie()) $filename = rawurlencode($filename);
 	$filetype = fileext($filename);
-	$filesize = filesize($file);
-    ob_end_clean();
-	@set_time_limit(900);
-	header('Cache-control: max-age=31536000');
-	header('Expires: '.gmdate('D, d M Y H:i:s', $PHP_TIME + 31536000).' GMT');
+	$filesize = sprintf("%u", filesize($filepath));
+	if(ob_get_length() !== false) @ob_end_clean();
+	header('Pragma: public');
+	header('Last-Modified: '.gmdate('D, d M Y H:i:s') . ' GMT');
+	header('Cache-Control: no-store, no-cache, must-revalidate');
+	header('Cache-Control: pre-check=0, post-check=0, max-age=0');
+	header('Content-Transfer-Encoding: binary');
 	header('Content-Encoding: none');
-	header('Content-Length: '.$filesize);
-	header('Content-Disposition: attachment; filename='.$filename);
-	header('Content-Type: '.$filetype);
-	readfile($file);
+	header('Content-type: '.$filetype);
+	header('Content-Disposition: attachment; filename="'.$filename.'"');
+	header('Content-length: '.$filesize);
+	readfile($filepath);
 	exit;
 }
 
-function phpcache($is_js = 0)
+function fileext($filename)
 {
-	global $CONFIG,$cachefiledir,$cachefile;
-    if(!$is_js && $CONFIG['phpcache'] != '2') return FALSE;
-	$contents = ob_get_clean();
-	if($is_js) $contents = strip_js($contents);
-	if($CONFIG['phpcache'] == '2' && $cachefiledir && $cachefile)
+	return strtolower(trim(substr(strrchr($filename, '.'), 1, 10)));
+}
+
+function implodeids($array, $s = ',')
+{
+	if(empty($array)) return '';
+	return is_array($array) ? implode($s, $array) : $array;
+}
+
+function check_submit($var)
+{
+	if(empty($GLOBALS[$var])) return false;
+	if(empty($_SERVER['HTTP_REFERER'])) return true;
+	return strpos($_SERVER['HTTP_REFERER'], DOMAIN) === 7;
+}
+
+function check_in($id, $ids = '', $s = ',')
+{
+	if(!$ids) return false;
+	$ids = explode($s, $ids);
+	return is_array($id) ? array_intersect($id, $ids) : in_array($id, $ids);
+}
+
+function ip()
+{
+	if(getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown'))
 	{
-		dir_create($cachefiledir);
-		file_put_contents($cachefile, $contents);
-		@chmod($cachefile, 0777);
+		$ip = getenv('HTTP_CLIENT_IP');
 	}
-	header('Expires: Mon, 26 Jul 2000 05:00:00 GMT'); 
-	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT'); 
-	header('Cache-Control: no-cache, must-revalidate'); 
-	header('Pragma: no-cache');
-	echo $contents;
-}
-
-function cache_read($file, $mode = 'i')
-{
-	$cachefile = PHPCMS_CACHEDIR.$file;
-	if(!file_exists($cachefile)) return array();
-	return $mode == 'i' ? include $cachefile : file_get_contents($cachefile);
-}
-
-function cache_write($file, $string, $type = 'array')
-{
-	if(is_array($string))
+	elseif(getenv('HTTP_X_FORWARDED_FOR') && strcasecmp(getenv('HTTP_X_FORWARDED_FOR'), 'unknown'))
 	{
-		$type = strtolower($type);
-		if($type == 'array')
-		{
-			$string = "<?php\n return ".var_export($string,TRUE).";\n?>";
-		}
-		elseif($type == 'constant')
-		{
-			$data='';
-			foreach($string as $key => $value) $data .= "define('".strtoupper($key)."','".addslashes($value)."');\n";
-			$string = "<?php\n".$data."\n?>";
-		}
+		$ip = getenv('HTTP_X_FORWARDED_FOR');
 	}
-	$strlen = file_put_contents(PHPCMS_CACHEDIR.$file, $string);
-	chmod(PHPCMS_CACHEDIR.$file, 0777);
-	return $strlen;
-}
-
-function cache_delete($file)
-{
-	return @unlink(PHPCMS_CACHEDIR.$file);
-}
-
-function phpcms_auth($txt, $operation = 'ENCODE', $key = '')
-{
-	$key = $key ? $key : $GLOBALS['phpcms_auth_key'];
-	require_once PHPCMS_ROOT.'/include/auth.func.php';
-    return $operation=='ENCODE' ? phpcms_encode($txt, $key) : phpcms_decode($txt, $key);
-}
-
-function createhtml($filename, $mod_root = '')
-{
-    global $TEMP;
-	if(!defined('CREATEHTML')) define('CREATEHTML', 1);
-    @extract($GLOBALS, EXTR_SKIP);
-	if(!$mod_root) $mod_root = defined('MOD_ROOT') ? MOD_ROOT : PHPCMS_ROOT;
-    include $mod_root.'/include/createhtml/'.$filename.'.php';
-}
-
-function template($module = 'phpcms', $template = 'index')
-{
-	global $CONFIG;
-	$compiledtplfile = $CONFIG['templatescachedir'].$module.'_'.$template.'.tpl.php';
-	if($CONFIG['templaterefresh'])
+	elseif(getenv('REMOTE_ADDR') && strcasecmp(getenv('REMOTE_ADDR'), 'unknown'))
 	{
-        $tplfile = PHPCMS_ROOT.'/templates/'.$CONFIG['defaulttemplate'].'/'.$module.'/'.$template.'.html';
-        if(!file_exists($compiledtplfile) || @filemtime($tplfile) > @filemtime($compiledtplfile))
+		$ip = getenv('REMOTE_ADDR');
+	}
+	elseif(isset($_SERVER['REMOTE_ADDR']) && $_SERVER['REMOTE_ADDR'] && strcasecmp($_SERVER['REMOTE_ADDR'], 'unknown'))
+	{
+		$ip = $_SERVER['REMOTE_ADDR'];
+	}
+	return preg_match("/[\d\.]{7,15}/", $ip, $matches) ? $matches[0] : 'unknown';
+}
+
+function ip_banned($ip)
+{
+	$ips = cache_read('ipbanned.php');
+	if(!$ips) return false;
+	foreach($ips as $k=>$v)
+	{
+		if($v < TIME) continue;
+		if($ip == $k) return true;
+		if(strpos($k, '*'))
 		{
-			require_once PHPCMS_ROOT.'/include/template.func.php';
-			template_refresh($tplfile, $compiledtplfile);
+			$k = str_replace(array('.', '*'), array('\.', '[0-9]{1,3}'), $k);
+		    if(preg_match("/$v/", $ip)) return true;
 		}
 	}
-	return $compiledtplfile;
+	return false;
 }
 
-function str_cut($string, $length, $dot = ' ...')
+function str_cut($string, $length, $dot = '...')
 {
-	global $CONFIG;
 	$strlen = strlen($string);
 	if($strlen <= $length) return $string;
-	$string = str_replace(array('&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;'), array(' ', '&', '"', "'", '“', '”', '—', '<', '>'), $string);
+	$string = str_replace(array('&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;'), array(' ', '&', '"', "'", '“', '”', '—', '<', '>', '·', '…'), $string);
 	$strcut = '';
-	if(strtolower($CONFIG['charset']) == 'utf-8')
+	if(strtolower(CHARSET) == 'utf-8')
 	{
 		$n = $tn = $noc = 0;
 		while($n < $strlen)
@@ -258,200 +527,470 @@ function str_cut($string, $length, $dot = ' ...')
 	return $strcut.$dot;
 }
 
-function reword($content)
+function cache_page_start()
 {
-	global $TEMP;
-	if(!isset($TEMP['rewords']['enable']))
+	define('CACHE_PAGE_ID', md5(RELATE_URL));
+	define('CACHE_PAGE_DIR', CACHE_PAGE_PATH.substr(CACHE_PAGE_ID, 0, 2).'/');
+	define('CACHE_PAGE_FILE', CACHE_PAGE_DIR.CACHE_PAGE_ID.'.html');
+	$contents = @file_get_contents(CACHE_PAGE_FILE);
+	if($contents && intval(substr($contents, 15, 25)) > TIME)
 	{
-		$rewords = cache_read('cache_reword.php');
-		$TEMP['rewords']['enable'] = $rewords ? 1 : 0;
-	    if(!$TEMP['rewords']['enable']) return $content;
-		$word = $replacement = array();
-		foreach($rewords as $v)
+		echo substr($contents, 29);
+		exit;
+	}
+	return true;
+}
+
+function cache_page($ttl = CACHE_PAGE_TTL, $isjs = 0)
+{
+	if($ttl == 0 || !defined('CACHE_PAGE_FILE')) return false;
+	$contents = ob_get_contents();
+	if($isjs) $contents = format_js($contents);
+	dir_create(CACHE_PAGE_DIR);
+	$contents = "<!--expiretime:".(TIME + $ttl)."-->\n".$contents;
+	file_put_contents(CACHE_PAGE_FILE, $contents);
+	@chmod(CACHE_PAGE_FILE, 0777);
+}
+
+function cache_page_clear()
+{
+	@set_time_limit(600);
+	$dirs = glob(CACHE_PAGE_PATH.'*');
+	foreach($dirs as $dir)
+	{
+		$files = glob($dir.'/*');
+		foreach($files as $file)
 		{
-			$word[] = $v['word'];
-			$replacement[] = $v['replacement'];
+			@unlink($file);
 		}
-        $TEMP['rewords']['word'] = $word;
-        $TEMP['rewords']['replacement'] = $replacement;
+		@rmdir($dir);
 	}
-	if(!$TEMP['rewords']['enable']) return $content;
-	return str_replace($TEMP['rewords']['word'], $TEMP['rewords']['replacement'], $content);
 }
 
-function keylink($content)
+function cache_count($sql)
 {
-	return substr(preg_replace_callback("/>([^><]+)</", "keylink_callback", '>'.$content.'<'), 1, -1);
-}
-
-function keylink_callback($matches) 
-{
-	global $TEMP;
-	if(!isset($TEMP['keylinks']['enable']))
+	global $db, $TEMP;
+	$id = md5($sql);
+	if(!isset($TEMP['count'][$id]))
 	{
-		$keylinks = cache_read('cache_keylink.php');
-		$TEMP['keylinks']['enable'] = $keylinks ? 1 : 0;
-	    if(!$TEMP['keylinks']['enable']) return '>'.$matches[1].'<';
-		$word = $replacement = array();
-		foreach($keylinks as $v)
+		if(CACHE_COUNT_TTL)
 		{
-			$word[] = $v['linktext'];
-			$replacement[] = '<a href="'.$v['linkurl'].'" target="_blank" class="keylink">'.$v['linktext'].'</a>';
-		}
-        $TEMP['keylinks']['word'] = $word;
-        $TEMP['keylinks']['replacement'] = $replacement;
-	}
-	if(!$TEMP['keylinks']['enable']) return '>'.$matches[1].'<';
-	return '>'.str_replace($TEMP['keylinks']['word'], $TEMP['keylinks']['replacement'], $matches[1]).'<';
-}
-
-function ip_banned($ip)
-{
-	global $PHP_TIME;
-	$ipbanneds = cache_read('banip.php');
-	if(!is_array($ipbanneds)) return FALSE;
-	foreach($ipbanneds as $v)
-	{
-		if($v['overtime'] < $PHP_TIME) return FALSE;
-		if($ip == $v['ip'] || preg_match("/^".str_replace('.', '[.]', $v['ip'])."$/", $ip)) return TRUE;
-	}
-}
-
-function is_email($email)
-{
-	return strlen($email) > 8 && preg_match("/^[-_+.[:alnum:]]+@((([[:alnum:]]|[[:alnum:]][[:alnum:]-]*[[:alnum:]])\.)+([a-z]{2,4})|(([0-9][0-9]?|[0-1][0-9][0-9]|[2][0-4][0-9]|[2][5][0-5])\.){3}([0-9][0-9]?|[0-1][0-9][0-9]|[2][0-4][0-9]|[2][5][0-5]))$/i", $email);
-}
-
-function is_date($date, $sep='-') 
-{
-	if(empty($date)) return FALSE;
-	if(strlen($date) > 10)  return FALSE;
-	list($year, $month, $day) = explode($sep, $date);
-	return @checkdate($month, $day, $year);
-}
-
-function numberval($number, $precision = 2)
-{
-	if(!is_numeric($number) || substr_count($number, '.') > 1) return FALSE;
-	return sprintf('%.'.$precision.'f', round(floatval($number), $precision));
-}
-
-function dir_path($dirpath)
-{
-	$dirpath = str_replace('\\', '/', $dirpath);
-	if(substr($dirpath, -1) != '/') $dirpath = $dirpath.'/';
-	return $dirpath;
-}
-
-function dir_create($path, $mode = 777)
-{
-    global $PHPCMS, $ftp;
-	if(is_dir($path)) return TRUE;
-    if($PHPCMS['enableftp'] && !is_object($ftp)) require_once PHPCMS_ROOT.'/include/ftp.inc.php';
-	$dir = str_replace(PHPCMS_ROOT.'/', '', $path);
-	$dir = dir_path($dir);
-    $temp = explode('/', $dir);
-    $cur_dir = PHPCMS_ROOT.'/';
-	$max = count($temp) - 1;
-    for($i=0; $i<$max; $i++)
-    {
-        $cur_dir .= $temp[$i].'/';
-        if(is_dir($cur_dir)) continue;
-		if($PHPCMS['enableftp'])
-		{
-		    $ftp->mkdir($cur_dir);
+			$r = $db->get_one("SELECT `count`,`updatetime` FROM `".DB_PRE."cache_count` WHERE `id`='$id'");
+			if(!$r || $r['updatetime'] < TIME - CACHE_COUNT_TTL)
+			{
+				$r = $db->get_one($sql);
+				$TEMP['count'][$id] = $r['count'];
+				$db->query("REPLACE INTO `".DB_PRE."cache_count`(`id`, `count`, `updatetime`) VALUES('$id', '".$r['count']."', '".TIME."')");
+			}
 		}
 		else
 		{
-		    mkdir($cur_dir);
-			@chmod($cur_dir, 0777);
+			$r = $db->get_one($sql);
 		}
-    }
-	return $PHPCMS['enableftp'] ? TRUE : is_dir($path);           
+		$TEMP['count'][$id] = $r['count'];
+	}
+	return $TEMP['count'][$id];
 }
 
-function phppages($total, $page = 1, $perpage = 20, $url = '')
+function cache_member()
 {
-	global $PHP_URL,$LANG;
-	if(!$url) $url = preg_replace("/(.*)([&?]page=[0-9]*)(.*)/i", "\\1\\3", $PHP_URL);
-	$s = strpos($url, '?') === FALSE ? '?' : '&';
+	global $db;
+	$status = $db->table_status(DB_PRE.'member_cache');
+	if($status['Rows'] == 0)
+	{
+		@set_time_limit(600);
+		$db->query("INSERT INTO `".DB_PRE."member_cache` SELECT * FROM `".DB_PRE."member`");
+		return true;
+	}
+	return false;
+}
+
+function cache_read($file, $path = '', $iscachevar = 0)
+{
+	if(!$path) $path = CACHE_PATH;
+	$cachefile = $path.$file;
+	if($iscachevar)
+	{
+		global $TEMP;
+		$key = 'cache_'.substr($file, 0, -4);
+		return isset($TEMP[$key]) ? $TEMP[$key] : $TEMP[$key] = @include $cachefile;
+	}
+	return @include $cachefile;
+}
+
+function cache_write($file, $array, $path = '')
+{
+	if(!is_array($array)) return false;
+	$array = "<?php\nreturn ".var_export($array, true).";\n?>";
+	$cachefile = ($path ? $path : CACHE_PATH).$file;
+	$strlen = file_put_contents($cachefile, $array);
+	@chmod($cachefile, 0777);
+	return $strlen;
+}
+
+function cache_delete($file, $path = '')
+{
+	$cachefile = ($path ? $path : CACHE_PATH).$file;
+	return @unlink($cachefile);
+}
+
+function setting_set($tablename, $where, $setting)
+{
+	global $db;
+	if(!is_array($setting)) return false;
+	$setting = new_stripslashes($setting);
+	$setting = addslashes(var_export($setting, TRUE));
+	return $db->query("UPDATE `$tablename` SET `setting`='$setting' WHERE $where");
+}
+
+function setting_get($tablename, $where)
+{
+	global $db;
+	$r = $db->get_one("SELECT `setting` FROM `$tablename` WHERE $where LIMIT 1");
+	$setting = $r['setting'];
+	if($setting) eval("\$setting = $setting;");
+	else $setting = array();
+	return $setting;
+}
+
+function string2array($data)
+{
+	if($data == '') return array();
+	eval("\$array = $data;");
+	return $array;
+}
+
+function array2string($data, $isformdata = 1)
+{
+	if($data == '') return '';
+	if($isformdata) $data = new_stripslashes($data);
+	return addslashes(var_export($data, TRUE));
+}
+
+function subcat($module = 'phpcms', $parentid = NULL, $type = NULL)
+{
+	global $CATEGORY;
+	$subcat = array();
+	foreach($CATEGORY as $id=>$cat)
+	{
+		if($cat['module'] == $module && ($parentid === NULL || $cat['parentid'] == $parentid) && ($type === NULL || $cat['type'] == $type)) $subcat[$id] = $cat;
+	}
+	return $subcat;
+}
+
+function submodelcat($modelid = 1, $parentid = NULL, $type = NULL)
+{
+	global $CATEGORY;
+	$subcat = array();
+	foreach($CATEGORY as $id=>$cat)
+	{
+		if($cat['modelid'] == $modelid && ($parentid === NULL || $cat['parentid'] == $parentid) && $cat['parentid'] !=0 && ($type === NULL || $cat['type'] == $type)) $subcat[$id] = $cat;
+	}
+
+	return $subcat;
+}
+
+function catpos($catid, $urlrule = '')
+{
+	global $CATEGORY;
+	if(!isset($CATEGORY[$catid])) return '';
+	$pos = '';
+	$arrparentid = array_filter(explode(',', $CATEGORY[$catid]['arrparentid'].','.$catid));
+	foreach($arrparentid as $catid)
+	{
+		if($urlrule) eval("\$url = \"$urlrule\";");
+		else $url = $CATEGORY[$catid]['url'];
+		$pos .= '<a href="'.$url.'">'.$CATEGORY[$catid]['catname'].'</a>';
+	}
+	return $pos;
+}
+
+function subarea($parentid = 0)
+{
+	global $AREA;
+	$subarea = array();
+	foreach($AREA as $id=>$area)
+	{
+		if($area['parentid'] == $parentid) $subarea[$id] = $area;
+	}
+	return $subarea;
+}
+
+function areapos($areaid, $urlrule = '')
+{
+	global $AREA;
+	if(!isset($AREA[$areaid])) return '';
+	$pos = '';
+	$arrparentid = array_filter(explode(',', $AREA[$areaid]['arrparentid'].','.$areaid));
+	foreach($arrparentid as $areaid)
+	{
+		if($urlrule) eval("\$url = \"$urlrule\";");
+		else $url = $AREA[$areaid]['url'];
+		$pos .= '<a href="'.$url.'">'.$AREA[$areaid]['name'].'</a>';
+	}
+	return $pos;
+}
+
+function subtype($module = 'phpcms')
+{
+	global $TYPE;
+	$subtype = array();
+	foreach($TYPE as $id=>$type)
+	{
+		if($type['module'] == $module) $subtype[$id] = $type;
+	}
+	return $subtype;
+}
+
+function template($module = 'phpcms', $template = 'index', $istag = 0)
+{
+	$compiledtplfile = TPL_CACHEPATH.$module.'_'.$template.'.tpl.php';
+	if(TPL_REFRESH && (!file_exists($compiledtplfile) || @filemtime(TPL_ROOT.TPL_NAME.'/'.$module.'/'.$template.'.html') > @filemtime($compiledtplfile) || @filemtime(TPL_ROOT.TPL_NAME.'/tag.inc.php') > @filemtime($compiledtplfile)))
+	{
+		require_once PHPCMS_ROOT.'include/template.func.php';
+		template_compile($module, $template, $istag);
+	}
+	return $compiledtplfile;
+}
+
+function thumb($imgurl, $width = 100, $height = 100 ,$autocut = 1)
+{
+	global $image;
+	if(empty($imgurl)) return 'images/nopic_small.gif';
+	if(!extension_loaded('gd') || strpos($imgurl, '://')) return $imgurl;
+	if(!file_exists(PHPCMS_ROOT.$imgurl)) return 'images/nopic.gif';
+	$newimgurl = dirname($imgurl).'/thumb_'.$width.'_'.$height.'_'.basename($imgurl);
+	if(file_exists($newimgurl)) return $newimgurl;
+	if(!is_object($image))
+	{
+		require_once 'image.class.php';
+		$image = new image();
+	}
+	return $image->thumb(PHPCMS_ROOT.$imgurl, PHPCMS_ROOT.$newimgurl, $width, $height, '', $autocut) ? $newimgurl : $imgurl;
+}
+
+function ssi($file)
+{
+	if(!file_exists(PHPCMS_ROOT.$file)) return false;
+	return (SHTML && defined('CREATEHTML')) ? '<!--#include virtual="'.PHPCMS_PATH.$file.'"-->' : @file_get_contents(PHPCMS_ROOT.$file);
+}
+
+function get($sql, $rows = 0, $page = 0, $dbname = '', $dbsource = '')
+{
+	if(!$sql) return false;
+	if($dbsource)
+	{
+		$s = cache_read('db_'.$dbsource.'.php', '', 1);
+		if(!$s) return false;
+		if($s['status'])
+		{
+            global $db;
+			$dbname = $s['dbname'];
+		}
+		else
+		{
+			$db = new db_mysql;
+			$db->connect($s['dbhost'], $s['dbuser'], $s['dbpw'], $s['dbname'], 0, $s['dbcharset']);
+		}
+	}
+	else
+	{
+		global $db;
+		if(DB_PRE != 'phpcms_') $sql = str_replace('phpcms_', DB_PRE, $sql);
+	}
+	if($dbname) $db->select_db($dbname) or exit("The database $database is not exists!");
+	$rows = intval($rows);
+	if(!isset($page)) $page = 1;
+	$page = max(intval($page), 0);
+	$pages = $limit = '';
+	if($page)
+	{
+		$offset = $rows*($page-1);
+		$limit = " LIMIT $offset, $rows";
+		if($dbname || $dbsource)
+		{
+			$r = $db->get_one("SELECT COUNT(*) AS `count` ".stristr($sql, 'from'));
+			$total = $r['count'];
+		}
+		else
+		{
+			$total = cache_count("SELECT COUNT(*) AS `count` ".stristr($sql, 'from'));
+		}
+		$pages = pages($total, $page, $rows);
+	}
+	elseif($rows > 0)
+	{
+		$limit = " LIMIT $rows";
+	}
+	$data = $rows == -1 ? $db->get_one($sql) : $db->select($sql.$limit);
+	if($dbname) $db->select_db(DB_NAME);
+	if(isset($s['dbcharset']) && $s['dbcharset'] != DB_CHARSET) $data = str_charset($s['dbcharset'], DB_CHARSET, $data);
+	if($page)
+	{
+		$count = count($data);
+		if(!isset($total)) $total = $count;
+		return array('data'=>$data, 'total'=>$total, 'count'=>count($data), 'pages'=>$pages);
+	}
+	else
+	{
+		return $data;
+	}
+}
+
+function tag($module, $template, $sql, $page = 0, $number = 10, $setting = array(), $catid = 0)
+{
+	global $db, $CATEGORY, $MODULE, $URLRULE, $PHPCMS, $MODEL;
+	if($sql)
+	{
+		@include_once PHPCMS_ROOT.$MODULE[$module]['path'].'include/output.func.php';
+		$offset = 0;
+		if($page !== 0)
+		{
+			$page = max(intval($page), 1);
+			$offset = $number*($page-1);
+			$count = cache_count("SELECT COUNT(*) AS `count` ".stristr($sql, 'from'));
+			$urlruleid = isset($setting['urlruleid']) ? intval($setting['urlruleid']) : 0;
+			$urlrule = $urlruleid > 0 ? $URLRULE[$urlruleid] : '';
+			$pages = pages($count, $page, $number, $urlrule, $setting, $catid);
+		}
+		$i = 0;
+		$data = array();
+		$result = $db->query("$sql LIMIT $offset, $number");
+		while($r = $db->fetch_array($result))
+		{
+			$data[++$i] = $r;
+		}
+		$rows = $db->num_rows($result);
+		$db->free_result($result);
+	}
+	else
+	{
+		$data = array();
+		$number = $rows = $count = $page = 0;
+		$pages = '';
+	}
+	require_once template($module, $template, 1);
+	$func = '_tag_'.$module.'_'.$template;
+	$func($data, $number, $rows, $count, $page, $pages, $setting);
+}
+
+function block($pageid, $blockno)
+{
+	echo ssi('data/block/'.$pageid.'_'.$blockno.'.html');
+}
+
+function get_sql_catid($catid)
+{
+	global $CATEGORY;
+	$catid = intval($catid);
+	if(!isset($CATEGORY[$catid])) return false;
+	return $CATEGORY[$catid]['child'] ? " AND `catid` IN(".$CATEGORY[$catid]['arrchildid'].") " : " AND `catid`=$catid ";
+}
+
+function get_sql_in($string, $s = ' ')
+{
+	$array = array_map('trim', explode($s, $string));
+	$array = new_addslashes($array);
+	return "'".implode("','", $array)."'";
+}
+
+function pages($total, $page = 1, $perpage = 20, $urlrule = '', $array = array(), $catid = 0)
+{
+	global $PHPCMS;
+	if($total < 1) return '';
+	if($urlrule == '') $urlrule = url_par('page={$page}');
 	$pages = ceil($total/$perpage);
-	$page = min($pages,$page);
-	$prepg = $page-1;
-	$nextpg = $page == $pages ? 0 : ($page+1);
-	if($total < 1) return FALSE;
-	$pagenav = $LANG['total']."<b>$total</b>&nbsp;&nbsp;&nbsp;&nbsp;";
-	$pagenav .= $prepg ? "<a href='$url{$s}page=1'>".$LANG['first']."</a>&nbsp;<a href='$url{$s}page=$prepg'>".$LANG['previous']."</a>&nbsp;" : $LANG['first']."&nbsp;".$LANG['previous']."&nbsp;";
-	$pagenav .= $nextpg ? "<a href='$url{$s}page=$nextpg'>".$LANG['next']."</a>&nbsp;<a href='$url{$s}page=$pages'>".$LANG['last']."</a>&nbsp;" : $LANG['next']."&nbsp;".$LANG['last']."&nbsp;";
-	$pagenav .= $LANG['page'].": <b><font color=red>$page</font>/$pages</b>&nbsp;&nbsp;<input type='text' name='page' id='page' class='page' size='2' onKeyDown=\"if(event.keyCode==13) {window.location='{$url}{$s}page='+this.value; return false;}\"> <input type='button' value='GO' class='gotopage' style='width:30px' onclick=\"window.location='{$url}{$s}page='+$('page').value\">\n";
-	return $pagenav;
-}
-
-function fileext($filename)
-{
-	return trim(substr(strrchr($filename, '.'), 1));
-}
-
-function channel_table($name, $channelid)
-{
-	global $CONFIG;
-	return $CONFIG['tablepre'].$name.'_'.$channelid;
-}
-
-function show_type($keyid, $typeid)
-{
-	global $CHANNEL, $MODULE, $TYPE, $TEMP;
-	if(!$typeid) return '';
-	if(!isset($TYPE[$typeid])) $TYPE = isset($TEMP['type'][$keyid]) ? $TEMP['type'][$keyid] : $TEMP['type'][$keyid] = cache_read('type_'.$keyid.'.php');
-	$linkurl = is_numeric($keyid) ? $CHANNEL[$keyid]['linkurl'] : $MODULE[$keyid]['linkurl'];
-	return '<a href="'.linkurl($linkurl).'type.php?typeid='.$typeid.'">'.style($TYPE[$typeid]['name'], $TYPE[$typeid]['style']).'</a>';
-}
-
-function channel_setting($channelid)
-{
-	global $CHA, $CATEGORY, $TEMP;
-	if(isset($TEMP['cha'][$channelid]) && isset($TEMP['category'][$channelid]))
+	$page = min($pages, $page);
+	$prepage = $page - 1;
+	$prepage = max($prepage, 1);
+	$nextpage = $page+1;
+	$nextpage = min($nextpage, $pages);
+	if($catid)
 	{
-		$CHA = $TEMP['cha'][$channelid];
-		$CATEGORY = $TEMP['category'][$channelid];
+		$url = load('url.class.php');
+		$firstpage = $url->category($catid, 1, 1);
+		$prepage = $url->category($catid, $prepage, 1);
+		$nextpage = $url->category($catid, $nextpage, 1);
+        $lastpage = $url->category($catid, $pages, 1);
+		$urlpre = $url->category($catid, '', 1);
 	}
 	else
 	{
-		$CHA = $TEMP['cha'][$channelid] = cache_read('channel_'.$channelid.'.php');
-		$CATEGORY = $TEMP['category'][$channelid] = cache_read('categorys_'.$channelid.'.php');
+		$firstpage = pageurl($urlrule, 1, $array);
+		$prepage = pageurl($urlrule, $prepage, $array);
+		$nextpage = pageurl($urlrule, $nextpage, $array);
+        $lastpage = pageurl($urlrule, $pages, $array);
+		$urlpre = pageurl($urlrule, '', $array);
 	}
+	$data = str_replace('"', '\"', $PHPCMS['pageshtml']);
+	eval("\$url = \"$data\";");
+	return $url;
 }
 
-function linkurl($linkurl, $isabs = 0)
+function pageurl($urlrule, $page, $array = array())
 {
-	global $PHP_SITEURL;
-	if(strpos($linkurl, '://') !== FALSE || $linkurl[0] == '?') return $linkurl;
-    if($isabs || defined('SHOWJS'))
+	extract($array, EXTR_SKIP);
+	if(strpos($urlrule, '|'))
 	{
-		return strpos($linkurl, PHPCMS_PATH) === 0 ? $PHP_SITEURL.substr($linkurl, strlen(PHPCMS_PATH)) : $PHP_SITEURL.$linkurl;
+		$urlrules = explode('|', $urlrule);
+		$urlrule = $page < 2 ? $urlrules[0] : $urlrules[1];
 	}
-	else
-	{
-		return strpos($linkurl, PHPCMS_PATH) === 0 ? $linkurl : PHPCMS_PATH.$linkurl;
-	}
+	eval("\$url = \"$urlrule\";");
+	return $url;
 }
 
-function imgurl($imgurl = '', $isabs = 0)
+function showmessage($msg, $url_forward = 'goback', $ms = 1250, $direct = 0)
 {
-	$imgurl = $imgurl == '' ? 'images/nopic.gif' : $imgurl;
-	return linkurl($imgurl, $isabs);
+	global $PHPCMS;
+	if($url_forward && $url_forward != 'goback' && $url_forward != 'close') $url_forward = url($url_forward, 1);
+    if($direct && $url_forward && $url_forward!='goback')
+    {
+        ob_clean();
+        header("location:$url_forward");
+        exit("<script>self.location='$url_forward';</script>");
+    }
+	include defined('IN_ADMIN') ? PHPCMS_ROOT.'admin/templates/showmessage.tpl.php' : template('phpcms','showmessage');
+	exit;
 }
 
-function style($title, $style = '')
+function createhtml($file)
 {
-	return $style == '' ? $title : "<samp style=\"$style\">$title</samp>";
+	$data = ob_get_contents();
+	ob_clean();
+	dir_create(dirname($file));
+	$strlen = file_put_contents($file, $data);
+	@chmod($file,0777);
+	return $strlen;
+}
+
+function keyid_make($module, $tablename, $titlefield, $id)
+{
+	$keyid = $module.'-'.$tablename.'-'.$titlefield.'-'.$id;
+
+	$verify = md5($keyid.AUTH_KEY);
+	return array($keyid, $verify);
+}
+
+function keyid_get($keyid)
+{
+	global $db;
+	list($module, $tablename, $titlefield, $id) = explode('-', $keyid);
+	$tablename = DB_PRE.$tablename;
+	$keyfield = $db->get_primary($tablename);
+	return $db->get_one("SELECT `$titlefield` AS title,`url` FROM `$tablename` WHERE `$keyfield`='$id'");
+}
+
+function keyid_verify($keyid, $verify)
+{
+    $keyid = md5($keyid.AUTH_KEY);
+	return $verify == $keyid;
 }
 
 function checkcode($checkcode, $enable = 1, $forward = '')
 {
-	global $LANG, $session;
-	if(!$enable) return TRUE;
-	if(!is_object($session)) $session = new phpcms_session();
+	global $LANG;
+	if(!$enable) return true;
+	session_start();
 	if(!isset($_SESSION['checkcode'])) showmessage($LANG['do_not_refresh'], $forward);
 	if(strtolower($_SESSION['checkcode']) != strtolower($checkcode))
 	{
@@ -459,220 +998,23 @@ function checkcode($checkcode, $enable = 1, $forward = '')
 		showmessage($LANG['checkcode_error'], $forward);
 	}
 	unset($_SESSION['checkcode']);
+	return true;
 }
 
-function editor($textareaid = 'content', $toolbar = 'phpcms', $width = 500, $height = 400, $editorName = 'editor')
+function usedtime()
 {
-	global $CONFIG, $channelid, $mod, $iseditorinit,$PHPCMS,$CHA;
-	if(!$PHPCMS['enableeditor']) return FALSE;
-	$module = $mod ? $mod : 'phpcms';
-	if($toolbar == 'editor')
-	{
-		$editorKeyid = $channelid ? $channelid : $module;
-		$editorCss = PHPCMS_PATH.'templates/'.$CONFIG['defaulttemplate'].'/skins/'.$CONFIG['defaultskin'].'/style.css';
-		if(substr($width,-1) == '%') $width = 550;
-		if($width < 380) $width = 380;
-		include PHPCMS_ROOT.'/editor/'.$editorName.'.php';
-	}
-	else
-	{
-		$editorinit = '';
-		if(!$iseditorinit)
-		{
-			$iseditorinit = 1;
-			$module = $mod ? $mod : 'phpcms';
-			$channelid = $channelid ? $channelid : 0;
-			$editorinit = "var Module = \"".$module."\"; var ChannelId = ".$channelid.";";
-		}
-		return "\n<script language=\"JavaScript\" type=\"text/JavaScript\">".$editorinit."document.getElementById('".$textareaid."').style.display=\"none\";</script>
-				<input type=\"hidden\" id=\"".$textareaid."___Config\" value=\"FullPage=false\" style=\"display:none\" />
-				<iframe id=\"".$textareaid."___Frame\" src=\"".PHPCMS_PATH."fckeditor/editor/fckeditor.html?InstanceName=".$textareaid."&amp;Toolbar=".$toolbar."\" width=\"".$width."\" height=\"".$height."\" frameborder=\"no\" scrolling=\"no\"></iframe>\n";
-	}
-}
-function date_select($name, $value = '', $format = '%Y-%m-%d')
-{
-	global $iscalendarinit;
-	if($value == '0000-00-00 00:00:00') $value = '';
-	$id = str_replace(array('[',']'), array('',''), $name);
-	if($format == '%Y-%m-%d')
-	{
-		$size = 10;
-		$showsTime = 'false';
-	}
-	else
-	{
-		$size = 20;
-		$showsTime = 'true';
-	}
-	$str = '';
-	if(!$iscalendarinit)
-	{
-		$iscalendarinit = 1;
-		$str .= "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".PHPCMS_PATH."include/calendar/calendar-blue2.css\" title=\"system\" />";
-		$str .= "<script type=\"text/javascript\" src=\"".PHPCMS_PATH."include/calendar/calendar.js\"></script>";
-		$str .= "<script type=\"text/javascript\" src=\"".PHPCMS_PATH."include/calendar/calendar-zh.js\"></script>";
-		$str .= "<script type=\"text/javascript\" src=\"".PHPCMS_PATH."include/calendar/calendar-setup.js\"></script>";
-	}
-	$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" readonly>&nbsp;';
-	$str .= '<script language="javascript" type="text/javascript">date = new Date();document.getElementById ("'.$id.'").value="'.$value.'";
-    Calendar.setup({
-        inputField     :    "'.$id.'",
-        ifFormat       :    "'.$format.'",
-        showsTime      :    '.$showsTime.',
-        timeFormat     :    "24"
-    });</script>';
-	return $str;
+	$stime = explode(' ', MICROTIME_START);
+	$etime = explode(' ', microtime());
+	return number_format(($etime[1] + $etime[0] - $stime[1] - $stime[0]), 6);
 }
 
-function subcat($keyid = 1, $catid = 0, $type = 'menu')
+function debug()
 {
-	global $CATEGORY, $TEMP;
-	if(!isset($CATEGORY) || !isset($TEMP['category'][$keyid]))
-	{
-		$_CATEGORY = isset($TEMP['category'][$keyid]) ? $TEMP['category'][$keyid] : $TEMP['category'][$keyid] = cache_read('categorys_'.$keyid.'.php');
-	}
-	else
-	{
-		$_CATEGORY = $CATEGORY;
-	}
-	if(!$_CATEGORY) return array();
-	$subcat = array();
-	foreach($_CATEGORY as $id=>$cat)
-	{
-		if($cat['parentid'] == $catid)
-		{
-			if(!$cat['ismenu']) continue;
-			if(defined('SHOWJS')) $cat['linkurl'] = linkurl($cat['linkurl']);
-			if($type == 'menu')
-			{
-				$subcat[] = $cat; 
-			}
-			elseif($type == 'list')
-			{
-				if(!$cat['islink'] && $cat['islist']) $subcat[] = $cat; 
-			}
-		}
-	}
-	return $subcat;
-}
-
-function catpos($catid, $s = ' >> ')
-{
-	global $CATEGORY, $MODULE, $channelid, $mod;
-	if(!isset($CATEGORY[$catid]))
-	{
-		$keyid = $MODULE[$mod]['iscopy'] ? $channelid : $mod;
-		$CATEGORY = isset($TEMP['category'][$keyid]) ? $TEMP['category'][$keyid] : $TEMP['category'][$keyid] = cache_read('categorys_'.$keyid.'.php');
-	}
-    $arrparentid = $CATEGORY[$catid]['arrparentid'];
-	$arrparentid = explode(',', $arrparentid);
-	if($catid) $arrparentid[] = $catid;
-	$pos = '';
-	foreach($arrparentid as $pcatid)
-	{
-		if($pcatid == 0 || !isset($CATEGORY[$pcatid])) continue;
-		$catname = $CATEGORY[$pcatid]['catname'];
-		$linkurl = $CATEGORY[$pcatid]['linkurl'];
-		$pos .= '<a href="'.$linkurl.'">'.$catname.'</a>'.$s;
-	}
-	return $pos;
-}
-
-function menu($module, $position, $username = '')
-{
-	global $db,$_groupid,$_arrgroupid,$_grade;
-	$sql = $username ? " AND username='$username' " : '';
-	$menus = array();
-	$result = $db->query("SELECT * FROM ".TABLE_MENU." WHERE position='$position' $sql ORDER BY listorder", "CACHE",86400);
-	while($r = $db->fetch_array($result))
-	{
-		if($r['arrgroupid'])
-		{
-			$arrgroupid = explode(',', $r['arrgroupid']);
-			if(!in_array($_groupid, $arrgroupid) && !array_intersect($_arrgroupid, $arrgroupid)) continue;
-		}
-		if(defined('IN_ADMIN') && $r['arrgrade'] !== '')
-		{
-			$arrgrade = explode(',', $r['arrgrade']);
-			if(!in_array($_grade, $arrgrade)) continue;
-		}
-		$r['url'] = linkurl($r['url']);
-		$menus[] = $r;
-	}
-	$db->free_result($result);
-	include template($module, $position);
-}
-
-function moduledir($module)
-{
-	global $MODULE;
-	if($module == 'phpcms') return '';
-	return ($MODULE[$module]['iscopy'] ? 'module/' : '').$MODULE[$module]['moduledir'];
-}
-
-function tag_write($keyid, $name)
-{
-	global $mod,$channelid;
-	ob_start();
-	tag_data($keyid, $name);
-	$data = ob_get_contents();
-	ob_clean();
-	$dir = PHPCMS_ROOT.'/data/tagscache/'.$keyid.'/';
-	$file = $dir.$mod.'_'.$channelid.'_'.urlencode($name).'.html';
-	dir_create($dir);
-	file_put_contents($file, $data);
-	@chmod($file, 0777);
-	return $data;
-}
-
-function tag_read($keyid, $name)
-{
-	global $CONFIG,$PHP_TIME;
-	if(!isset($keyid) || !$keyid) return '<span style="color:red">$keyid undefined</span>';
-	if(defined('CREATEHTML') || $CONFIG['phpcache'] != '1') return tag_data($keyid, $name);
-	$file = PHPCMS_ROOT.'/data/tagscache/'.$keyid.'/'.urlencode($name).'.html';
-	if(!file_exists($file) || (filemtime($file) < $PHP_TIME - $CONFIG['phpcacheexpires'])) return tag_write($keyid, $name);
-	include $file;
-}
-
-function tag_data($keyid, $name)
-{
-	global $tags,$mod,$MODULE,$CHANNEL,$CONFIG;
-    if(!$tags) require PHPCMS_ROOT.'/templates/'.$CONFIG['defaulttemplate'].'/tags.php';
-    if(is_numeric($keyid))
-	{
-		$channelid = intval($keyid);
-		$module = $CHANNEL[$channelid]['module'];
-	}
-	else
-	{
-		$channelid = $GLOBALS['channelid'];
-		$module = $keyid;
-	}
-    if(isset($MODULE[$module]))
-	{
-		require_once PHPCMS_ROOT.'/'.moduledir($module).'/include/tag.func.php';
-		eval($tags[$name].';');
-	}
-}
-
-function itemurl($keyid, $itemid)
-{
-	global $db,$CONFIG,$CHANNEL;
-    if(is_numeric($keyid))
-	{
-		$channelid = intval($keyid);
-		$module = $CHANNEL[$channelid]['module'];
-		$table = $CONFIG['tablepre'].$module.'_'.$channelid;
-	}
-	else
-	{
-		$module = $keyid;
-		$table = $CONFIG['tablepre'].$module;
-	}
-	$idfield = $module.'id';
-	$r = $db->get_one("SELECT linkurl FROM $table WHERE $idfield=$itemid");
-	return linkurl($r['linkurl']);
+	global $db;
+	if(!DEBUG || defined('CREATEHTML')) return false;
+	define('DEBUG_TIME', usedtime());
+	define('DEBUG_QUERIES', $db->querynum);
+	return true;
 }
 
 function tpl_data($module = 'phpcms', $template = 'index')
@@ -685,34 +1027,182 @@ function tpl_data($module = 'phpcms', $template = 'index')
 	return $data;
 }
 
-function check_purview($groupids = '')
+function load($file, $module = 'phpcms', $dir = '', $isinit = 1)
 {
-	global $_groupid,$_arrgroupid;
-	if(empty($groupids) || $_groupid == 1) return TRUE;
-	$groupids = explode(',', $groupids);
-	return in_array($_groupid, $groupids) || array_intersect($_arrgroupid, $groupids);
+	global $MODULE;
+	if(!isset($MODULE[$module])) return false;
+	$path = PHPCMS_ROOT.$MODULE[$module]['path'].($dir ? $dir.'/' : 'include/').$file;
+	if(!(@include_once $path)) return false;
+	if($isinit && strpos($file, '.class.php') !== false)
+	{
+		$classname = substr($file, 0, -10);
+		return new $classname();
+	}
+	return true;
+}
+
+function sizecount($filesize)
+{
+	if($filesize >= 1073741824)
+	{
+		$filesize = round($filesize / 1073741824 * 100) / 100 . ' GB';
+	}
+	elseif($filesize >= 1048576)
+	{
+		$filesize = round($filesize / 1048576 * 100) / 100 . ' MB';
+	}
+	elseif($filesize >= 1024)
+	{
+		$filesize = round($filesize / 1024 * 100) / 100 . ' KB';
+	}
+	else
+	{
+		$filesize = $filesize . ' Bytes';
+	}
+	return $filesize;
+}
+
+function phpcms_auth($txt, $operation = 'ENCODE', $key = '')
+{
+	$key	= $key ? $key : $GLOBALS['phpcms_auth_key'];
+	$txt	= $operation == 'ENCODE' ? $txt : base64_decode($txt);
+	$len	= strlen($key);
+	$code	= '';
+	for($i=0; $i<strlen($txt); $i++){
+		$k		= $i % $len;
+		$code  .= $txt[$i] ^ $key[$k];
+	}
+	$code = $operation == 'DECODE' ? $code : base64_encode($code);
+	return $code;
+}
+
+function hash_string($str)
+{
+	$str = str_pad($str, 10, 0, STR_PAD_LEFT);
+	$str = base64_encode($str);
+	$str = substr($str,-5,-3).substr($str,0,-2);
+	return $str;
+}
+
+function areaname($areaid)
+{
+	global $AREA;
+	if(!isset($AREA[$areaid])) return '';
+	$pos = array();
+    $arrparentid = array_filter(explode(',', $AREA[$areaid]['arrparentid'].','.$areaid));
+	foreach($arrparentid as $areaid)
+	{
+		$pos[] = $AREA[$areaid]['name'];
+	}
+	return join('.',$pos);
+}
+
+function magic_image($txt, $fonttype = 4)
+{
+	if(empty($txt)) return false;
+	if(function_exists("imagepng"))
+	{
+		$txt = phpcms_auth($txt, 'ENCODE', AUTH_KEY);
+		$txt = '<img src="'.PHPCMS_PATH.'magic_image.php?gd=1&fonttype='.$fonttype.'&txt='.$txt.'" align="absmiddle">';
+	}
+	return $txt;
+}
+
+function keylinks($txt, $replacenum = '')
+{
+	$linkdatas = cache_read('keylink.php','',1);
+	if($linkdatas)
+	{
+		$word = $replacement = array();
+		foreach($linkdatas as $v)
+		{
+			$word1[] = '/'.preg_quote($v[0], '/').'/';
+			$word2[] = $v[0];
+			$replacement[] = '<a href="'.$v[1].'" target="_blank" class="keylink">'.$v[0].'</a>';
+		}
+		if($replacenum != '')
+		{
+			$txt = preg_replace($word1, $replacement, $txt, $replacenum);
+		}
+		else
+		{
+			$txt = str_replace($word2, $replacement, $txt);
+		}
+
+	}
+	return $txt;
+}
+
+function url_par($par, $url = '')
+{
+	if($url == '') $url = URL;
+	$pos = strpos($url, '?');
+	if($pos === false)
+	{
+		$url .= '?'.$par;
+	}
+	else
+	{
+		$querystring = substr(strstr($url, '?'), 1);
+		parse_str($par, $pars);
+		foreach($pars as $k=>$v)
+		{
+			$querystring = _url_par($k, $v, $querystring);
+		}
+		$url = substr($url, 0, $pos).'?'.$querystring;
+	}
+	return $url;
+}
+
+function _url_par($var, $value, $querystring)
+{
+	if($querystring)
+	{
+		$pattern = "/([&]?)(".preg_quote($var)."\=)([^&]+)([&]?)/";
+		$querystring = preg_match($pattern, $querystring) ? preg_replace($pattern, '${1}${2}'.$value.'${4}', $querystring) : $querystring."&$var=$value";
+	}
+	else
+	{
+		$querystring = $var.'='.$value;
+	}
+	return $querystring;
+}
+
+function username($userid)
+{
+	global $db;
+	$userid = intval($userid);
+	$r = $db->get_one("SELECT `username` FROM `".DB_PRE."member_cache` WHERE `userid`=$userid");
+	return $r ? $r['username'] : false;
+}
+
+function userid($username)
+{
+	global $db;
+	$r = $db->get_one("SELECT `userid` FROM `".DB_PRE."member_cache` WHERE `username`='$username'");
+	return $r ? $r['userid'] : false;
 }
 
 function phpcms_error($errno, $errmsg, $filename, $linenum, $vars)
 {
 	$filename = str_replace(PHPCMS_ROOT, '.', $filename);
-    $filename = str_replace("\\", '/', $filename);
-    if(!defined('E_STRICT')) define('E_STRICT', 2048);
+	$filename = str_replace("\\", '/', $filename);
+	if(!defined('E_STRICT')) define('E_STRICT', 2048);
 	$dt = date('Y-m-d H:i:s');
 	$errortype = array (
-					   E_ERROR           => 'Error',
-					   E_WARNING         => 'Warning',
-					   E_PARSE           => 'Parsing Error',
-					   E_NOTICE          => 'Notice',
-					   E_CORE_ERROR      => 'Core Error',
-					   E_CORE_WARNING    => 'Core Warning',
-					   E_COMPILE_ERROR   => 'Compile Error',
-					   E_COMPILE_WARNING => 'Compile Warning',
-					   E_USER_ERROR      => 'User Error',
-					   E_USER_WARNING    => 'User Warning',
-					   E_USER_NOTICE     => 'User Notice',
-					   E_STRICT          => 'Runtime Notice'
-			           );
+	E_ERROR           => 'Error',
+	E_WARNING         => 'Warning',
+	E_PARSE           => 'Parsing Error',
+	E_NOTICE          => 'Notice',
+	E_CORE_ERROR      => 'Core Error',
+	E_CORE_WARNING    => 'Core Warning',
+	E_COMPILE_ERROR   => 'Compile Error',
+	E_COMPILE_WARNING => 'Compile Warning',
+	E_USER_ERROR      => 'User Error',
+	E_USER_WARNING    => 'User Warning',
+	E_USER_NOTICE     => 'User Notice',
+	E_STRICT          => 'Runtime Notice'
+	);
 	$user_errors = array(E_USER_ERROR, E_USER_WARNING, E_USER_NOTICE);
 	$err = "<errorentry>\n";
 	$err .= "\t<datetime>" . $dt . "</datetime>\n";
@@ -723,44 +1213,10 @@ function phpcms_error($errno, $errmsg, $filename, $linenum, $vars)
 	$err .= "\t<scriptlinenum>" . $linenum . "</scriptlinenum>\n";
 	if (in_array($errno, $user_errors))
 	{
-	   $err .= "\t<vartrace>" . wddx_serialize_value($vars, "Variables") . "</vartrace>\n";
+		$err .= "\t<vartrace>" . wddx_serialize_value($vars, "Variables") . "</vartrace>\n";
 	}
 	$err .= "</errorentry>\n\n";
-	echo $err;
 	error_log($err, 3, PHPCMS_ROOT.'/data/php_error_log.xml');
-	chmod(PHPCMS_ROOT.'/data/php_error_log.xml', 0777);
-}
-
-function debuginfo()
-{
-	global $db,$CONFIG,$phpcms_starttime,$debuginfo;
-	if(!$CONFIG['debug'] || defined('CREATEHTML')) return FALSE;
-	$mtime = explode(' ', microtime());
-	$debuginfo = array('time' => number_format(($mtime[1] + $mtime[0] - $phpcms_starttime), 6), 'queries' => $db->querynum);
-	return TRUE;
-}
-
-
-function style_edit($name = 'style', $style = '')
-{
-	global $styleid,$LANG;
-	if(!$styleid) $styleid = 1; else $styleid++;
-    $colorarr = array('#000000','#FFFFFF','#008000','#800000','#808000','#000080','#800080','#808080','#FFFF00','#00FF00','#00FFFF','#FF00FF','#FF0000','#0000FF','#008080');
-	
-	$color = $strong = '';
-	if($style)
-	{
-		if(preg_match("/color:([#0-9a-z]+);/i",$style,$matchs)) $color = strtoupper($matchs[1]);
-		if(preg_match("/font-weight:([a-z]+);/i",$style,$matchs)) $strong = $matchs[1];
-	}
-	$styleform = "<option value=\"\">".$LANG['color']."</option>\n";
-	foreach($colorarr as $key=>$val)
-	{
-	    $styleform .= "<option value=\"color:".$val.";\" ".($color == $val ? "selected=\"selected\"" : "")." style=\"background-color:".$val.";align:center\"></option>\n";
-	}
-	$styleform = "<select name=\"style_color$styleid\" id=\"style_color$styleid\" onchange=\"document.all.style_id$styleid.value=document.all.style_color$styleid.value;if(document.all.style_strong$styleid.checked)document.all.style_id$styleid.value += document.all.style_strong$styleid.value;\">\n".$styleform."</select>\n";
-	$styleform .= " <input type=\"checkbox\" name=\"style_strong$styleid\" id=\"style_strong$styleid\" value=\"font-weight:bold;\" ".($strong == "bold" ? "checked=\"checked\"" : "")." onclick=\"document.all.style_id$styleid.value=document.all.style_color$styleid.value;if(document.all.style_strong$styleid.checked)document.all.style_id$styleid.value += document.all.style_strong$styleid.value;\"> ".$LANG['bold'];
-	$styleform .= "<input type=\"hidden\" name=\"".$name."\" id=\"style_id$styleid\" value=\"".$style."\">";
-	return $styleform;
+	@chmod(PHPCMS_ROOT.'/data/php_error_log.xml', 0777);
 }
 ?>

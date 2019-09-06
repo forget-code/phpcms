@@ -1,0 +1,36 @@
+{template 'phpcms','header'}
+
+<!--begin main-->
+<div id="main">
+  <div id="main_l" class="bdr_1">
+    <!--位置导航-->
+    <div id="position"><a href="">首页</a><a href="tags.php">热门标签</a>{$tag}（{$hits}）</div>
+    <div class="bdr_2">
+      <ul class="pic_list">
+       {tag_tag图片标签}
+      </ul>
+    </div>
+    <div class="mar_10">   
+	    {tag_tag页面}
+    </div>
+  </div>
+  <div id="main_r">
+    <!--广告位-->
+    <div class="ads_side"><script language="javascript" src="data/js.php?id=5"></script></div>
+    <h4>推荐图片信息</h4>
+    <div>
+      <ul class="pic_list">
+        {tag_侧栏推荐图片信息}
+      </ul>
+    </div>
+    <h4>热点信息</h4>
+    <div>
+      <ul class="text_list">
+        {tag_侧栏热点信息}
+      </ul>
+    </div>
+
+  </div>
+</div>
+
+{template 'phpcms','footer'}

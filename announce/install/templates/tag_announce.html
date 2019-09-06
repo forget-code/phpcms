@@ -1,0 +1,4 @@
+{loop $data $announce}
+{if $announce[passed]}<li><a href="announce/?announceid={$announce[announceid]}" target="{$target}">{str_cut($announce['title'],$titlelen)}</a>{if $showauthor}&nbsp;[发布人：<a href="{MODULE[member][url]}member.php?username={$announce['username']}" target="{target}">{$announce['username']}</a>]{/if}&nbsp;{if $datetype}{$announce['addtime']}{/if}</li>{/if}
+{/loop}
+{if $pages}<p id="pages">{$pages}</p>{/if}

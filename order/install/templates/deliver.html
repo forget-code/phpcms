@@ -1,0 +1,95 @@
+{template 'member','header'}
+<script type="text/javascript" src="images/js/validator.js"></script>
+<div id="main">
+  {template 'order' , 'left'}
+  <div id="right">
+    <p id="position"> <strong>当前位置：</strong><a href="">首页</a><a href="{$MODULE[member][url]}">会员中心</a><a href="{$M[url]}">订单</a>收货地址</p>
+
+    <table cellpadding="0" cellspacing="1" class="table_list">
+      <caption>管理收货地址</caption>
+	  <tr>
+        <th width="60">收货人</th>
+        <th width="60">配送区域</th>
+        <th width="90">电话</th>
+        <th width="90">手机</th>
+        <th>地址</th>
+        <th width="50">邮编</th>
+        <th width="80">操作</th>
+	  </tr>
+{if $delivers}
+{loop $delivers $k $d}
+ 	  <tr>
+        <td>{$d[consignee]}</td>
+        <td>{$AREA[$d[areaid]][name]}<input type="hidden" name="areaid_{$d[deliverid]}" id="areaid_{$d[deliverid]}" value="{$d[areaid]}"><input type="hidden" name="areaname_{$d[deliverid]}" id="areaname_{$d[deliverid]}" value="{$AREA[$d[areaid]][name]}"></td>
+        <td>{$d[telephone]}</td>
+        <td>{$d[mobile]}</td>
+        <td class="align_l">{$d[address]}</td>
+        <td>{$d[postcode]}</td>
+        <td><a href="{$M[url]}deliver.php?action=edit&deliverid={$d[deliverid]}">修改</a> | <a href="javascript:confirmurl('{$M[url]}deliver.php?action=delete&deliverid={$d[deliverid]}', '删除该地区')">删除</a></td>
+	  </tr>
+{/loop}
+{/if}
+   </table>
+
+{if !$delivers || count($delivers) < $M['maxdelivers']}
+<form action="{$M[url]}deliver.php?action=add" method="post" name="myform" id ="myform">
+<table cellpadding="0" cellspacing="1" id="newdeliver" class="table_form">
+    <caption>新增收货地址</caption>
+	  <tr>
+        <th width="15%"><font color="red">*</font> 配送区域：</th>
+        <td>
+            <input type="hidden" name="d[areaid]" id="areaid" value="{$areaid}">
+			<span id="load_areaid"></span>
+			<a href="javascript:areaid_reload();">重选</a>
+        </td> 
+      </tr>
+      <tr>
+        <th><font color="red">*</font> 收货人：</th>
+        <td><input type="text" name="d[consignee]" id="consignee" value="{$consignee}" size="12" require="true" datatype="require" msg="请填写收货人"/></td>       
+      </tr>
+	  <tr>
+        <th><font color="red">*</font> 电话：</th>
+        <td><input type="text" name="d[telephone]" id="telephone" value="{$telephone}" size="20" require="true" datatype="custom" regexp="^[\d|\-|\+]{3,20}$"  msg="请填写正确的电话" msgid="telephone_notice"/> 格式：010-10000000-801 <span id="telephone_notice"></span></td>     
+      </tr>
+	  <tr>
+        <th><font color="red">*</font> 手机：</th>
+        <td><input type="text" name="d[mobile]" id="mobile" value="{$mobile}" size="20" require="true" datatype="mobile" msg="请填写正确的手机" msgid="mobile_notice"/> 格式：13800000000 <span id="mobile_notice"></span></td>       
+      </tr>
+	  <tr>
+        <th><font color="red">*</font> 地址：</th>
+        <td><input type="text" name="d[address]" id="address" value="{$address}" size="60" require="true" datatype="require" msg="填写正确的地址"/></td>       
+      </tr>
+      <tr>
+        <th><font color="red">*</font> 邮编：</th>
+        <td><input type="text" name="d[postcode]" id="postcode" value="{$postcode}" size="8" require="true" datatype="zip" msg="填写正确的邮编" msgid="postcode_notice"/> 格式：100000 <span id="postcode_notice"></span></td>       
+      </tr>
+      <tr>
+        <th></th>
+        <td><input type="submit" name="dosubmit" value=" 确定 "/> <input type="reset" name="reset" value=" 重置 "/> 最多保存{$M[maxdelivers]}个有效地址</td>       
+      </tr>
+</table>
+</form>	
+{/if}
+  </div>
+</div>
+<div class="clear"></div>
+{template 'phpcms','footer'}
+<script language="javascript" type="text/javascript">
+$().ready(function() {
+	  $('form').checkForm(1);
+});
+
+function areaid_load(id)
+{
+	$.get("load.php", { field: 'areaid', id: id }, function(data){
+		$('#load_areaid').append(data);
+	});
+}
+
+function areaid_reload()
+{
+	$('#load_areaid').html('');
+	areaid_load(0);
+}
+areaid_reload();
+</script>

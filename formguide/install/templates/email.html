@@ -1,0 +1,8 @@
+<table width="98%"  cellspacing="1" cellpadding="0" class="table_list">
+	<caption>{$FORMGUIDE[$formid][name]}表单</caption>
+	{loop $info $k $v}
+    <tr>
+    	<th><strong>{if $forminfos[$k][name]}{$forminfos[$k][name]}{else}{$k}{/if}</strong></th><td>{$v}</td>
+    </tr>
+	{/loop}	
+</table>

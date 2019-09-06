@@ -1,7 +1,8 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
 
-unset($_SESSION['admin_grade'], $_SESSION['admin_modules'], $_SESSION['admin_channelids'], $_SESSION['admin_catids'], $_SESSION['admin_specialids'], $_SESSION['admin_purviewids']);
-
-showmessage($LANG['logout_success'], $PHP_SITEURL);
+require PHPCMS_ROOT.'member/include/member.class.php';
+$member = new member();
+$member->logout();
+showmessage($LANG['logout_success'], SITE_URL);
 ?>

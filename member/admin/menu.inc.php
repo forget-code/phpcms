@@ -1,6 +1,7 @@
 <?php
 $modtitle[$mod] = "会员管理";
 $menu[$mod][] = array("审核新会员","?mod=".$mod."&file=member&action=check");
+$menu[$mod][] = array("添加会员","?mod=".$mod."&file=member&action=add");
 $menu[$mod][] = array("会员管理","?mod=".$mod."&file=member&action=manage");
 $menu[$mod][] = array("搜索会员","?mod=".$mod."&file=member&action=search");
 $menu[$mod][] = array("会员组管理","?mod=".$mod."&file=group&action=manage");
