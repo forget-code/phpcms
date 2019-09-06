@@ -326,7 +326,9 @@ class category extends admin {
 		//if($items[$catid]) showmessage(L('category_does_not_allow_delete'));
 		$this->delete_child($catid, $modelid);
 		$this->db->delete(array('catid'=>$catid));
-		$this->delete_category_video($catid, $modelid);
+		if ($modelid != 0) {
+			$this->delete_category_video($catid, $modelid);
+		}
 		$this->cache();
 		showmessage(L('operation_success'),HTTP_REFERER);
 	}
@@ -341,7 +343,9 @@ class category extends admin {
 		if($r) {
 			$this->delete_child($r['catid']);
 			$this->db->delete(array('catid'=>$r['catid']));
-			$this->delete_category_video($r['catid'], $modelid);
+			if ($modelid != 0) {
+				$this->delete_category_video($r['catid'], $modelid);
+			}
 		}
 		return true;
 	}

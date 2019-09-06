@@ -28,10 +28,27 @@ class ku6api {
 	public function __construct($ku6api_sn = '', $ku6api_skey = '') {
 		$this->ku6api_skey = $ku6api_skey;
 		$this->ku6api_sn = $ku6api_sn;
+		if (!$this->ku6api_sn) {
+			$this->set_sn();
+		}
 		$this->ku6api_url = pc_base::load_config('ku6server', 'api_url');
 		$this->http = pc_base::load_sys_class('http');
 		$this->xxtea = pc_base::load_app_class('xxtea', 'video');
 		
+	}
+
+	/**
+	 * 
+	 * 设置身份识别码及身份密钥
+	 * 
+	 */
+	private function set_sn() {
+		//获取短信平台配置信息
+		$setting = getcache('video', 'video');
+		if ($setting['sn'] && $setting['skey']) {
+			$this->ku6api_skey = $setting['skey'];
+			$this->ku6api_sn = $setting['sn'];
+		}
 	}
 	
 	/**

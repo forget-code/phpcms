@@ -189,7 +189,7 @@ function reject_check(type) {
 	if(type==1) {
 		var str = 0;
 		$("input[name='ids[]']").each(function() {
-			if($(this).attr('checked')==true) {
+			if($(this).attr('checked')=='checked') {
 				str = 1;
 			}
 		});

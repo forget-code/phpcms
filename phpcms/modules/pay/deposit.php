@@ -28,7 +28,7 @@ class deposit extends foreground {
 		if($_GET['dosubmit']){
 			$start_addtime = $_GET['info']['start_addtime'];
 			$end_addtime = $_GET['info']['end_addtime'];
-			$status = $_GET['info']['status'];
+			$status = safe_replace($_GET['info']['status']);
 			if($start_addtime && $end_addtime) {
 				$start = strtotime($start_addtime.' 00:00:00');
 				$end = strtotime($end_addtime.' 23:59:59');

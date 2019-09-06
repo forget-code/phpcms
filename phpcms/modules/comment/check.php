@@ -7,6 +7,7 @@ class check extends admin {
 	function __construct() {
 		$this->comment_data_db = pc_base::load_model('comment_data_model');
 		$this->comment_check_db = pc_base::load_model('comment_check_model');
+		parent::__construct();
 		$this->comment = pc_base::load_app_class('comment');
 	}
 	
@@ -22,7 +23,7 @@ class check extends admin {
 	public function ajax_checks() {
 		$id =  isset($_GET['id']) && $_GET['id'] ? $_GET['id'] : (isset($_GET['form']) ? showmessage(L('please_chose_comment'), HTTP_REFERER) : exit('0'));
 		$type =  isset($_GET['type']) && intval($_GET['type']) ? intval($_GET['type']) : exit('0');
-		$commentid =  isset($_GET['commentid']) && trim($_GET['commentid']) ? trim($_GET['commentid']) : exit('0');
+		$commentid =  isset($_GET['commentid']) && trim($_GET['commentid']) ? safe_replace(trim($_GET['commentid'])) : exit('0');
 		if (is_array($id)) {
 			foreach ($id as $v) {
 				if (!$v = intval($v)) {
