@@ -20,6 +20,7 @@ if(!$downid || empty($fileurl) || !preg_match("/[0-9]{10}/", $starttime) || !pre
 
 $endtime = TIME - $starttime;
 if($endtime > 3600) showmessage('地址失效');
+if($s && !preg_match('/http:\/\//i',$s)) showmessage($LANG['illegal_parameters']);
 if($m) $fileurl = trim($s).trim($fileurl);
 
 require_once 'admin/content.class.php';

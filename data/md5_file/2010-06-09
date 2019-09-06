@@ -529,7 +529,7 @@ c47a5f4a9f53c74cc0022a1c01de03a2 data/cache/category_6.php
 5408032a88c0139b67c3dd003793ca60 data/cache/category_7.php
 538a6b90a20d5d0cd8f7ad4879de4f2d data/cache/category_8.php
 5a736be36b9860b9c9229e2f35abb360 data/cache/category_9.php
-f169a1fba6e2e8547c1c810f801ff103 data/cache/common.php
+636de420e4fed0803d76d8a0e9c588ff data/cache/common.php
 5290d069b8b14d28ba0ca6b00fd2ae00 data/cache/copyfrom.php
 5290d069b8b14d28ba0ca6b00fd2ae00 data/cache/keyword.php
 be9482264f2742127fd508c1081d53f1 data/cache/member_group.php
@@ -681,7 +681,7 @@ dc1caa523caf03cdcc0dc45ab594712b data/cache_template/phpcms_header.tpl.php
 4f6d870b218d354361969cfc5aca3cec data/cache_template/phpcms_sitemap.tpl.php
 a8d92967897dbbbee6a9459ceff2a8c8 data/cache_template/phpcms_tag_category.tpl.php
 62f599270c3e3c9e580e395a05d63661 data/cache_template/phpcms_tag_category_footer.tpl.php
-1acda1da39ea50fdc54e7e9b93cf3568 data/config.js
+8b4273c418c52d28607a5849493bc6cd data/config.js
 4722f7eb916cbeade0ec21490802cded data/datasource/phpcms.php
 5ae2bee537ddb04cc358475a14e35d88 data/datasource/phpcms_phpcms_admin.php
 6421e1ae8c72c822651956d2f5170b62 data/datasource/phpcms_phpcms_admin_role.php
@@ -781,8 +781,8 @@ ec02f44074e0bb5b170718c5e339b23b data/datasource/phpcms_phpcms_workflow.php
 fb22e1ffba99fa27854051f5638583b5 data/js/comment_setting.js
 22ad6efe10f9a381ac062d198165fe38 data/js.php
 90ef9a6d52ffeb7410f703e79f7a68d4 data/memo/1.php
-c49ec0e6bf0d7c3e67fab1361c56987e data/moodrank/1.js
-01bbbcfc51cdda2d9b642529e71e54c8 data/moodrank/2.js
+8cbbcfc0dda83224bd49cd2614c9f5a3 data/moodrank/1.js
+d515c109c5856fff80827691e1a17d4b data/moodrank/2.js
 bccf6aef70ff84da158ed5f069db7512 digg/admin/admin.inc.php
 bff489651ff7df1f5b9bf4bdf25c3229 digg/admin/priv.inc.php
 2e1cce763990da4625b3d63a19a04730 digg/admin/range.inc.php
@@ -802,9 +802,9 @@ a3117a3f741fb26274e98f6d6bfa9a51 digg/index.php
 c1bc4530d290da5d5d00121032e8cf41 digg/install/templates/name.inc.php
 6344e9d1e6dbe67025e3feac9d84b218 digg/install/templates/show.html
 ea79677e20733f86f20c4414139406e9 digg/uninstall/extention.inc.php
-10d1a819a39f212c991fa095321c1d0a down.php
+01cf9a36d59796782b5c70dd77bd1b48 down.php
 07017169d62b26cf9a453f46bb092bb4 downfiles.php
-7a46ecca1556d8fa3636f3cc6bccae90 download.php
+d20da5ed74a276073ffa7da04857b5ee download.php
 31a8e31ea0b578af7cc6051b695d28c7 error_report/admin/admin.inc.php
 d12ed41be43f82f11e5e2177ee50424a error_report/admin/error_report.inc.php
 2f87280e2ba87b3e30eadaad19586ce9 error_report/admin/include/error.class.php
@@ -1178,7 +1178,7 @@ b5d45b7e780ce29908c407924a1405d9 include/cache_apc.class.php
 e8e05fbbb5b32ad8df8a772d04cd97a5 include/cache_memcache.class.php
 6cb7018a6d3176c71ba62d432537baf5 include/cache_shmop.class.php
 3acb0443caccf14b1aa5502175935ecb include/common.inc.php
-91671fd19db645d8c88eed012da00ce9 include/config.inc.php
+87c40717645320553fc48baf193a5674 include/config.inc.php
 827b92e566de7e01b8d8beb9b2b1fd48 include/count.class.php
 b71d8776d6f88acf58184c90b6e47e1d include/date.class.php
 2482258a7d0f33d29cbeabca6d3c0ecf include/db_access.class.php
@@ -1509,8 +1509,8 @@ d41d8cd98f00b204e9800998ecf8427e include/fields/userid/update.inc.php
 ef8c08e862f631d331b5f0ed5240a1ec include/filecheck.class.php
 c1cbfad2a0e509d7043bd0a7ea370120 include/form.class.php
 24d6bd68018f574ad156a5a86b525988 include/ftp.class.php
-39ef31b57062b55724a550df55fb77d7 include/global.func.php
-5e25ffb11d04764d6810f792516ad0a5 include/html.class.php
+b3bbdc4a97f78261d89503773dcc316c include/global.func.php
+35200d4f788ff7618c59f2a3f32bf8b3 include/html.class.php
 3462b152cbbe5048dab7410c935e14be include/http.class.php
 d155b883caf751660d9f3bf2fa7227ba include/iconv.func.php
 edfaaa1833361d5916506c94e38ab981 include/image.class.php
@@ -1550,7 +1550,7 @@ a5688c5eca2a5da64ddf5dbb480f892f include/upgrade.class.php
 bbc763d06ab8044033a705ade1d139e5 include/upload.class.php
 eb0eb3348336b3f81329b49df4448658 include/url.class.php
 79a14a1b56b528d12eb9dd58e3dac113 include/url.func.php
-d79b405660099111cebf198b5d032bc9 include/version.inc.php
+4b30e538db5adc441e11a4eee1b67a31 include/version.inc.php
 9f006f78c4f601397c2608600777028f include/xml.func.php
 151679b59f8fa3a957188ccac49b4017 index.html
 2a6981c485cfc68c1c1d8584cb7917ea index.php
@@ -2260,7 +2260,7 @@ f9343c0a2f9f33c4ff22196a2afc42bd search/admin/type.inc.php
 b98da76eb7742e4fd97a2561cec70fad search/include/common.inc.php
 5b57850b0ef0d9595b1258c718258537 search/include/search.class.php
 e25fa835c5afd50bc59e0be590bcdf3b search/include/type.class.php
-2b96d263b874f59e8e8e56b858bf995e search/index.php
+aac81fa22232cda4805247a3bd1f4a49 search/index.php
 af9556a818848dbec15921bc3a71d11f search/install/config.inc.php
 cd5c90671e87032dc6e5a640b5dd6db1 search/install/extention.inc.php
 df37623912267e87df50545a65466705 search/install/templates/index.html
@@ -2270,7 +2270,7 @@ c513225fe75f95512a4fc19439e23aae search/install/templates/list.html
 d41d8cd98f00b204e9800998ecf8427e search/uninstall/extention.inc.php
 237d864e6b59bd5e4c6b6db60fc95f84 search.php
 b5fed5665863d260423aff452a02eb0d show.php
-2d0668cca9543ea0fcd7caea45f8d2a2 sitemap.html
+7203f78449298a12922c800f56844b5b sitemap.html
 db86d7cf7739af6f665b996144091b05 space/admin/admin.inc.php
 a849595c7984528ffda6454a54b15c5c space/admin/include/space_admin.class.php
 b58c218f39ef408591ec5fe49418e8eb space/admin/manage.inc.php

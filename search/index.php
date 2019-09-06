@@ -9,7 +9,9 @@ if($q)
 	$order = isset($order) ? intval($order) : 0;
 	$page = max(intval($page), 1);
 	$search->set($M['titlelen'], $M['descriptionlen'], 'red');
+	$type = safe_replace($type);
 	$search->set_type($type);
+	$q = safe_replace($q);
 	$q = new_htmlspecialchars(strip_tags($q));
 	$data = $search->q($q, $order, $page, $PHPCMS['search_pagesize']);
 	$pages = $search->pages;

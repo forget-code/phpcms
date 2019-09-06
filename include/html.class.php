@@ -36,16 +36,9 @@ class html
 		$C = cache_read("category_$catid.php", '', 1);
 		if(!$C || $C['type'] > 1) return false;
 		extract($C);
-		if($type == 0)
+		if($type == 0 && !isset($ishtml))
 		{
-			if(isset($content_ishtml))
-			{
-				$ishtml = $content_ishtml;
-			}
-			else
-			{
-				$ishtml = $MODEL[$modelid]['ishtml'];
-			}
+			$ishtml = $MODEL[$modelid]['ishtml'];
 		}
 		if(!$ishtml) return false;
 		$catlist = submodelcat($C['modelid']);
