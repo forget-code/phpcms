@@ -164,7 +164,7 @@ function push() {
 	var str = 0;
 	var id = tag = '';
 	$("input[name='ids[]']").each(function() {
-		if($(this).attr('checked')==true) {
+		if($(this).attr('checked')=='checked') {
 			str = 1;
 			id += tag+$(this).val();
 			tag = '|';

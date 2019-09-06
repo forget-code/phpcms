@@ -17,7 +17,7 @@ class formguide_input {
     }
 
 	function get($data,$isimport = 0) {
-		$this->data = $data;
+		$this->data = $data = trim_script($data);
 		$info = array();
 		foreach($this->fields as $field) {
 			//if(!isset($this->fields[$field]) || check_in($_roleid, $this->fields[$field]['unsetroleids']) || check_in($_groupid, $this->fields[$field]['unsetgroupids'])) continue;

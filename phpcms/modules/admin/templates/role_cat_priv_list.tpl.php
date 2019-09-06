@@ -26,7 +26,7 @@ function select_all(name, obj) {
 	if (obj.checked) {
 		$("input[type='checkbox'][name='priv["+name+"][]']").attr('checked', 'checked');
 	} else {
-		$("input[type='checkbox'][name='priv["+name+"][]']").attr('checked', '');
+		$("input[type='checkbox'][name='priv["+name+"][]']").removeAttr('checked');
 	}
 }
 //-->

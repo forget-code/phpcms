@@ -39,6 +39,30 @@ function change_images(uploadid,returnid){
 	$('#'+returnid).html(str);
 }
 
+function change_videoes(uploadid, returnid) {
+	var d = window.top.art.dialog({id:uploadid}).data.iframe;
+	var in_content = d.$("#video-paths").html().substring(1);
+	var in_filename = d.$("#video-name").html().substring(1);
+	var in_vid = d.$("#video-ids").html().substring(1);
+	var video_num = parseInt($("#key").val());
+	var str = $('#'+returnid).html();
+	var contents = in_content.split('|');
+	var fields = uploadid.split('_');
+	var field = fields[0];
+	var filenames = in_filename.split('|');
+	var vids = in_vid.split('|');
+	$('#'+returnid+'_tips').css('display','none');
+	if(contents=='') return true;
+	$.each( contents, function(i, n) {
+		var ids = parseInt(Math.random() * 10000 + 10*i); 
+		video_num = video_num + 1;
+		var filename = filenames[i];
+		str += "<li id=\"video_"+field+"_"+video_num+"\"><div class=\"r1\"><img src=\""+contents[i]+"\" width=\"132\" height=\"75\"><h6>"+filename+"</h6><input type='hidden' name='"+field+"_video["+video_num+"][videoid]' value='"+vids[i]+"'><div class=\"r2\"><span class=\"l\"><label>排序</label><input type='text' name='"+field+"_video["+video_num+"][listorder]' value='"+video_num+"' class=\"input-text\"></span><span class=\"r\"> <a href=\"javascript:remove_div('video_"+field+"_"+video_num+"')\">移除</a></span></li>";
+		});
+	$('#key').val(video_num);
+	$('#'+returnid).html(str);
+}
+
 function change_multifile(uploadid,returnid){
 	var d = window.top.art.dialog({id:uploadid}).data.iframe;
 	var in_content = d.$("#att-status").html().substring(1);

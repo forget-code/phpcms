@@ -74,7 +74,8 @@ $(function(){
         {/pc}
 		{php echo runhook('glogal_menu')}
         </map>
-    </div>
+    </div> 
+	
 	{if $top_parentid}
     <div class="subnav">
 		{pc:content action="category" catid="$top_parentid" num="15" siteid="$siteid" order="listorder ASC"}
@@ -82,7 +83,9 @@ $(function(){
 			<a href="{$r[url]}">{$r[catname]}</a><span> | </span>
 			{/loop}
         {/pc}
+		<a href="{APP_PATH}index.php?m=video&c=index&a=album">视频专辑</a> <span> | </span>
     	{if $modelid}<a href="{APP_PATH}index.php?m=content&c=search&catid={$catid}">搜索</a>{/if}
     </div>
 	{/if}
+</div>
 </div>

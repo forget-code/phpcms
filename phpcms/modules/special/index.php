@@ -41,7 +41,7 @@ class index {
 			$vote_info = explode('|', $voteid);
 			$voteid = $vote_info[1];
 		}
-		$siteid =  $_GET['siteid'] ? intval($_GET['siteid']) : get_siteid();
+		$siteid =  $_GET['siteid'] ? $_GET['siteid'] : get_siteid();
 		$SEO = seo($siteid, '', $title, $description);
 		$commentid = id_encode('special', $id, $siteid);
 		$template = $info['index_template'] ? $info['index_template'] : 'index';
@@ -66,7 +66,7 @@ class index {
 		$info = $type_db->get_one(array('typeid'=>$typeid));
 		$SEO = seo($siteid, '', $info['typename'], '');
 		$template = $list_template ? $list_template : 'list';
-		include template('special', $template);
+ 		include template('special', $template);
 	}
 	
 	/**
@@ -76,11 +76,11 @@ class index {
 		$id = intval($_GET['id']);
 		if(!$id) showmessage(L('content_not_exist'),'blank');
 		
-		$page = max(intval($_GET['page']), 1);
+		$page = $_GET['page'];
 		$c_db = pc_base::load_model('special_content_model');
 		$c_data_db = pc_base::load_model('special_c_data_model');
 		$rs = $c_db->get_one(array('id'=>$id));
-		if(!$rs) showmessage(L('content_checking'),'blank');
+ 		if(!$rs) showmessage(L('content_checking'),'blank');
 		extract($rs);
 		if ($isdata) {
 			$arr_content = $c_data_db->get_one(array('id'=>$id));
@@ -153,11 +153,16 @@ class index {
 			pc_base::load_app_func('util', 'content');
 			$title_pages = content_pages($pagenumber,$page, $pageurls);
 		}
-		$_special = $this->db->get_one(array('id'=>$specialid), '`title`, `url`');
+		$_special = $this->db->get_one(array('id'=>$specialid), '`title`, `url`, `show_template`, `isvideo`');
+		if ($_special['isvideo']) {
+			$video_store = pc_base::load_model('video_store_model');
+			$v_r = $video_store->get_one(array('videoid'=>$videoid), 'vid');
+			$video['vid'] = $v_r['vid'];
+		}
 		pc_base::load_sys_class('format', '', 0);
 		$inputtime = format::date($inputtime);
 		$SEO = seo($siteid, '', $title);
-		$template = $show_template ? $show_template : 'show';
+		$template = $show_template ? $show_template : ($_special['show_template'] ? $_special['show_template'] : 'show');
 		$style = $style ? $style : 'default';
 		include template('special', $template, $style);
 	}
@@ -182,9 +187,9 @@ class index {
 		}
 		$date = date('m-d H:i', SYS_TIME);
 		if ($_POST['dosubmit']) {
-			$r = $this->db->get_one(array('id'=>$_POST['id']), '`title`, `url`');
+			$r = $this->db->get_one(array('id'=>intval($_POST['id'])), '`title`, `url`');
 			$comment = pc_base::load_app_class('comment', 'comment');
-			if ($comment->add($commentid, $siteid, array('userid'=>$userid, 'username'=>$username, 'content'=>$_POST['content']), '', $r['title'], $r['url'])) {
+			if ($comment->add($commentid, $siteid, array('userid'=>$userid, 'username'=>$username, 'content'=>addslashes($_POST['content'])), '', $r['title'], $r['url'])) {
 				exit($username.'|'.SYS_TIME.'|'.$_POST['content']);
 			} else {
 				exit(0);

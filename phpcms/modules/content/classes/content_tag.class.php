@@ -10,10 +10,15 @@ class content_tag {
 	 * @param $catid
 	 */
 	public function set_modelid($catid) {
+		static $CATS;
 		$siteids = getcache('category_content','commons');
 		if(!$siteids[$catid]) return false;
 		$siteid = $siteids[$catid];
-		$this->category = getcache('category_content_'.$siteid,'commons');
+		if ($CATS[$siteid]) {
+			$this->category = $CATS[$siteid];
+		} else {
+			$CATS[$siteid] = $this->category = getcache('category_content_'.$siteid,'commons');
+		}
 		if($this->category[$catid]['type']!=0) return false;
 		$this->modelid = $this->category[$catid]['modelid'];
 		$this->db->set_model($this->modelid);

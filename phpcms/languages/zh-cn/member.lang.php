@@ -400,4 +400,12 @@ $LANG['sms_send_fail'] = '短信发送失败';
 $LANG['wait_second_repeat_sms_code'] = '秒后重获验证码';
 $LANG['error_sms_code'] = '短信验证码错误，请重新输入';
 $LANG['register_func_tips'] = '可用变量：用户名 - {username} ，密码 - {password} ，Email - {email} ，点击认证地址 - {click} ，链接地址：{url}';
+
+$LANG['enablcodecheck'] = '是否开启验证码';
+$LANG['mobile_checktype'] = '手机强制验证方式';
+$LANG['user_sendsms'] = '用户自发短信验证 ';
+$LANG['get_verify'] = '获取验证码验证';
+$LANG['no_checksms'] = '不验证';
+$LANG['user_sendsms_title'] = '用户自发短信提示语';
+
 ?>

@@ -71,6 +71,10 @@ include $this->admin_tpl('header', 'admin');
 			<td valign="top" id="index_template"><?php echo form::select_template('default', 'special', $info['index_template'], 'name="special[index_template]"', 'index');?></td>
 		</tr>
 		<tr>
+			<th align="right"  valign="top"><?php echo L('special_type_template')?>：</th>
+			<td valign="top" id="list_template"><?php echo form::select_template('default', 'special', $info['list_template'], 'name="special[list_template]"', 'list');?></td>
+		</tr>
+		<tr>
 			<th align="right"  valign="top"><?php echo L('special_content_template')?>：</th>
 			<td valign="top" id="show_template"><?php echo form::select_template('default', 'special', $info['show_template'], 'name="special[show_template]"', 'show');?></td>
 		</tr>

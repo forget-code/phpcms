@@ -153,6 +153,9 @@ class content extends admin {
 				$template_list[$v['dirname']] = $v['name'] ? $v['name'] : $v['dirname'];
 				unset($template_list[$k]);
 			}
+			$special_db = pc_base::load_model('special_model');
+			$s_info = $special_db->get_one(array('id'=>$_GET['specialid']));
+			@extract($s_info);
 			include $this->admin_tpl('content_edit');
 		}
 	}

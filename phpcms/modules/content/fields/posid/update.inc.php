@@ -34,7 +34,7 @@
 				$textcontent['style'] = $_POST['style_color'] ? strip_tags($_POST['style_color']) : '';
 				$textcontent['inputtime'] = strtotime($textcontent['inputtime']);
 				if($_POST['style_font_weight']) $textcontent['style'] = $textcontent['style'].';'.strip_tags($_POST['style_font_weight']);
-				$push_api->position_update($this->id, $this->modelid, $catid, $posids, $textcontent);
+				$push_api->position_update($this->id, $this->modelid, $catid, $posids, $textcontent,0);
 			}
 		}
 	}

@@ -79,3 +79,16 @@ div#areaid{border:1px solid #A7A6AA;height:18px;margin:0 5px 0 0;padding:2px 5px
 
 .picList li{ padding:0 0 8px}
 .display {display:none}
+
+/**视频上传**/
+.tbsa{}
+.tbsa li{float:left; width:25%; margin:8px 0px;padding-top:6px;}
+.tbsa li.ac{background-color:#EFEFEF;}
+.r1{width:132px; margin-left:auto; margin-right:auto; overflow:hidden;}
+.r1 img{display:block; box-shadow: 0 0 2px #EFEFEF;}
+.r1 h6{height:26px; line-height:26px; overflow:hidden;font-weight: 100; color:#666;}
+.r2 input{width:2em;}
+.r2 .l{float:left; color:#666;}
+.r2 .l label{margin-right:2px;}
+.r2 .r{float:right;}
+.tbb{border-left:1px solid #eee;border-right:1px solid #eee; margin-bottom:8px;}

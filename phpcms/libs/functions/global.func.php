@@ -331,12 +331,12 @@ function L($language = 'no_language',$pars = array(), $modules = '') {
 	if(!$LANG) {
 		require_once PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.'system.lang.php';
 		if(defined('IN_ADMIN')) require_once PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.'system_menu.lang.php';
-		if(file_exists(PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.ROUTE_M.'.lang.php')) require PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.ROUTE_M.'.lang.php';
+		if(file_exists(PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.ROUTE_M.'.lang.php')) require_once PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.ROUTE_M.'.lang.php';
 	}
 	if(!empty($modules)) {
 		$modules = explode(',',$modules);
 		foreach($modules AS $m) {
-			if(!isset($LANG_MODULES[$m])) require PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.$m.'.lang.php';
+			if(!isset($LANG_MODULES[$m])) require_once PC_PATH.'languages'.DIRECTORY_SEPARATOR.$lang.DIRECTORY_SEPARATOR.$m.'.lang.php';
 		}
 	}
 	if(!array_key_exists($language,$LANG)) {
@@ -1602,4 +1602,55 @@ function pc_file_get_contents($url, $timeout=30) {
 	$stream = stream_context_create(array('http' => array('timeout' => $timeout)));
 	return @file_get_contents($url, 0, $stream);
 }
+
+/**
+ * Function get_vid
+ * 获取视频信息
+ * @param int $contentid 内容ID 必须
+ * @param int $catid 栏目id 取内容里面视频信息时必须
+ * @param int $isspecial 是否取专题的视频信息
+ */
+function get_vid($contentid = 0, $catid = 0, $isspecial = 0) {
+	static $categorys;
+	if (!$contentid) return false;
+	if (!$isspecial) {
+		if (!$catid) return false;
+		$contentid = intval($contentid);
+		$catid = intval($catid);
+		$siteid = get_siteid();
+		if (!$categorys) {
+			$categorys = getcache('category_content_'.$siteid, 'commons');
+		}
+		$modelid = $categorys[$catid]['modelid'];
+		$video_content = pc_base::load_model('video_content_model');
+		$r = $video_content->get_one(array('contentid'=>$contentid, 'modelid'=>$modelid), 'videoid', '`listorder` ASC');
+		$video_store =pc_base::load_model('video_store_model');
+		return $video_store->get_one(array('videoid'=>$r['videoid']));
+	} else {
+		$special_content = pc_base::load_model('special_content_model');
+		$contentid = intval($contentid);
+		$video_store =pc_base::load_model('video_store_model');
+		$r = $special_content->get_one(array('id'=>$contentid), 'videoid');
+		return $video_store->get_one(array('videoid'=>$r['videoid']));
+	}
+}
+
+/**
+ * Function dataformat
+ * 时间转换
+  * @param $n INT时间
+ */
+ function dataformat($n) {
+	$hours = floor($n/3600);
+	$minite	= floor($n%3600/60);
+	$secend = floor($n%3600%60);
+	$minite = $minite < 10 ? "0".$minite : $minite;
+	$secend = $secend < 10 ? "0".$secend : $secend;
+	if($n >= 3600){
+		return $hours.":".$minite.":".$secend;
+	}else{
+		return $minite.":".$secend;
+	}
+
+ } 
 ?>

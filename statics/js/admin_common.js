@@ -15,13 +15,14 @@ $(function(){
  * @param string name 列表check名称,如 uid[]
  */
 function selectall(name) {
-	if ($("#check_box").attr("checked")==false) {
+	if ($("#check_box").attr("checked")=='checked') {
 		$("input[name='"+name+"']").each(function() {
-			this.checked=false;
+  			$(this).attr("checked","checked");
+			
 		});
 	} else {
 		$("input[name='"+name+"']").each(function() {
-			this.checked=true;
+  			$(this).removeAttr("checked");
 		});
 	}
 }

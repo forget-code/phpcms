@@ -2,7 +2,7 @@
 /**
  * Description:
  * 
- * Encoding:    UTF-8
+ * Encoding:    GBK
  * Created on:  2012-4-16-下午5:48:04
  * Author:      kangyun
  * Email:       KangYun.Yun@Snda.Com
@@ -16,8 +16,12 @@ class maillist extends admin {
 	private $_request_uri = 'http://o.sdo.com/';
 	private $_request_actions = array ('isPtExists.ext', 'createPtAndCode.ext', 'cmsapi.ext' );
 	private $groups = array();
+	private $_charset = '';
 	
 	function __construct() {
+		$charset = pc_base::load_config('database', 'default');
+		$this->_charset = $charset['charset'];
+		
 		pc_base::load_app_func ( 'global' );
 		parent::__construct ();
 		$this->db = pc_base::load_model ( 'maillist_model' );
@@ -62,6 +66,10 @@ class maillist extends admin {
 						'email' => $maillist['group']['ownerEmail'],
 						'is_activate' => $maillist['group']['status'] == 0 ? 1 : 0
 				);
+				if ('utf8' != strtolower($this->_charset)) {
+					$bind['group_name'] = iconv("UTF-8", $this->_charset, $maillist['group']['name']);
+					$bind['descs'] = iconv("UTF-8", $this->_charset, $maillist['group']['description']);
+				}
 
 				$this->db->update($bind, 'sdid = '. $this->maillist ['sdid'] );
 			
@@ -101,10 +109,10 @@ class maillist extends admin {
 			return;
 		}
 		
-		$group_name = $_POST ['group_name'];
+		$group_name = trim($_POST ['group_name']);
 		$group_addr = $_POST ['group_addr'] . '@o.sdo.com';
 		$email = $_POST ['email'];
-		$descs = $_POST ['descs'];
+		$descs = trim($_POST ['descs']);
 		$password = $_POST ['pwd'];
 		$password2 = $_POST ['pwd2'];
 		
@@ -195,11 +203,11 @@ class maillist extends admin {
 	            'code'          => $code,
 	            'domain'        => $this->domain,
 	            'sdid'          => $sdid,
-	            'group_name'    => trim($group_name),
+	        	'group_name'    => $group_name,
+	        	'desc'          => $descs,
 	            'group_addr'    => $group_addr,
 	            'cat_id'        => 46,
 	            'cat_sub'       => -1,
-	            'desc'          => $descs,
 	            'email'         => $email,
 	            'privacy'       => 0,
 	            'level'         => 0,
@@ -219,10 +227,10 @@ class maillist extends admin {
 	        		'code' => $code,
 	        		'domain' => $this->domain,
 	        		'sdid' => $sdid,
-	        		'group_name' => urldecode($group_name),
 	        		'group_addr' => $group_addr,
 	        		'email' => $email,
-	        		'descs' => urldecode($descs),
+	        		'group_name' => (strtolower($this->_charset) != 'utf8') ? iconv("UTF-8", $this->_charset, urldecode($group_name)) : urldecode($group_name),
+	        		'descs'       => (strtolower($this->_charset) != 'utf8') ? iconv("UTF-8", $this->_charset, urldecode($descs)) : urldecode($descs),
 	        		'wzz' => $result['wzz']
 	       	);
 	        $this->db->delete('1=1');
@@ -245,6 +253,7 @@ class maillist extends admin {
 				if (isset ($_GET['back_msg']) && isset($_GET['url'])) {
 					$back_msg = str_replace("\\", "", $_GET['back_msg']);
 					$url = base64_decode($_GET['url']);
+					file_put_contents("/tmp/maillist_log.txt", date('Y-m-d H:i:s') . "\nback_msg" . $back_msg . "\n", FILE_APPEND);
 					$result = json_decode($back_msg, true);
 					if ($result['status']) {
 						showMessage(L('update_succ'), $url, 3000);
@@ -351,8 +360,8 @@ class maillist extends admin {
 			'code'			=> $this->maillist['code'],
 			'group_addr'	=> $this->maillist['group_addr'],
 			'domain'		=> $this->domain,			
-            'group_name'    => urlencode($group_name),    
-            'desc'          => urlencode($descs),
+            'group_name'    => urlencode((strtolower($this->_charset) != 'utf8') ? iconv($this->_charset, "UTF-8", $group_name) : $group_name),    
+            'desc'          => urlencode((strtolower($this->_charset) != 'utf8') ? iconv($this->_charset, "UTF-8", $descs) : $descs),
         );
 		$hash = md5($params['action'] . $params['code'] . $this->domain . 'o.com');
 		$result =$this->api($params, $hash, 2, false);

@@ -34,7 +34,7 @@ html,body{background:#e2e9ea}
 	 <input type="text" name="linkurl" id="linkurl" value="<?php if($info['islink']) { echo $info['url']; }?>" size="30" maxlength="255"<?php if($info['islink']) {?> disabled<?php }?>> <input name="info[islink]" type="checkbox" id="islink" value="1"<?php if($info['islink']) {?> checked<?php }?> onclick="ruselinkurl();" > <font color="red"><?php echo L('islink')?></font> 
 	<h6> <?php echo L('inputtime')?></h6> <?php echo form::date('info[inputtime]', format::date($info['inputtime'], 1) , 1);?>
 	<h6> <?php echo L('template_style')?></h6> <?php echo form::select($template_list, $data['style'], 'name="data[style]" id="style" onchange="load_file_list(this.value)"', L('please_select'))?>
-	<h6> <?php echo L('show_template')?></h6> <span id="show_template"><?php if ($data['style']) echo '<script type="text/javascript">$.getJSON(\'?m=admin&c=category&a=public_tpl_file_list&style='.$data['style'].'&id='.$data['show_template'].'&module=special&templates=show&name=data\', function(data){$(\'#show_template\').html(data.show_template);});</script>'?></span> 
+	<h6> <?php echo L('show_template')?></h6> <span id="show_template"><?php echo '<script type="text/javascript">$.getJSON(\'?m=admin&c=category&a=public_tpl_file_list&style='.$style.'&id='.$data['show_template'].'&module=special&templates=show&name=data\', function(data){$(\'#show_template\').html(data.show_template);});</script>'?></span> 
           </div>
         </div>
     </div>

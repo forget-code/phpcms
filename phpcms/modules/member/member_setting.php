@@ -32,10 +32,26 @@ class member_setting extends admin {
 			$member_setting = string2array($member_setting['setting']);
 			
 			$email_config = getcache('common', 'commons');
+			$this->sms_setting_arr = getcache('sms','sms');
+			$siteid = get_siteid();
+			
 			if(empty($email_config['mail_user']) || empty($email_config['mail_password'])) {
 				$mail_disabled = 1;
 			}
 			
+			if(!empty($this->sms_setting_arr[$siteid])) {
+ 				$this->sms_setting = $this->sms_setting_arr[$siteid];
+				if($this->sms_setting['sms_enable']=='0'){
+					$sms_disabled = 1;
+				}else{
+					if(empty($this->sms_setting['userid']) || empty($this->sms_setting['productid']) || empty($this->sms_setting['sms_key'])){
+					$sms_disabled = 1;
+					}
+				}
+ 			} else {
+				$sms_disabled = 1;
+			}
+ 			
 			include $this->admin_tpl('member_setting');
 		}
 

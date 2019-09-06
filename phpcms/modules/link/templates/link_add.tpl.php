@@ -87,7 +87,7 @@ include $this->admin_tpl('header','admin');
 
 <tr>
 		<th></th>
-		<td><input type="hidden" name="forward" value="?m=vote&c=vote&a=add"> <input
+		<td><input type="hidden" name="forward" value="?m=link&c=link&a=add"> <input
 		type="submit" name="dosubmit" id="dosubmit" class="dialog"
 		value=" <?php echo L('submit')?> "></td>
 	</tr>

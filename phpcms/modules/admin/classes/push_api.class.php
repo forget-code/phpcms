@@ -30,7 +30,7 @@ class push_api {
 	 * $push = pc_base::load_app_class('push_api','admin');
 	 * $push->position_update(323, 25, 45, array(20,21), array('title'=>'文章标题','thumb'=>'缩略图路径','inputtime'='时间戳'));
 	 */
-	public function position_update($id, $modelid, $catid, $posid, $data, $expiration, $undel = 0, $model = 'content_model') {
+	public function position_update($id, $modelid, $catid, $posid, $data, $expiration = 0, $undel = 0, $model = 'content_model') {
 		$arr = $param = array();
 		$id = intval($id);
 		if($id == '0') return false;

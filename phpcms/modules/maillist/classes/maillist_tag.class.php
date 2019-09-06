@@ -2,7 +2,7 @@
 /**
  * Description:
  *
- * Encoding:    UTF-8
+ * Encoding:    GBK
  * Created on:  2012-5-7-下午2:11:42
  * Author:      kangyun
  * Email:       KangYun.Yun@Snda.Com

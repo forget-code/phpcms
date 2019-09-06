@@ -7,6 +7,7 @@ defined('IN_PHPCMS') or exit('No permission resources.');
 pc_base::load_app_class('foreground');
 pc_base::load_sys_class('format', '', 0);
 pc_base::load_sys_class('form', '', 0);
+pc_base::load_app_func('global', 'member');
 
 class content extends foreground {
 	private $times_db;
@@ -126,6 +127,9 @@ class content extends foreground {
 			showmessage(L('points_less_than',array('point'=>$memberinfo['point'],'need_point'=>abs($setting['presentpoint']))),APP_PATH.'index.php?m=pay&c=deposit&a=pay&exchange=point',3000);
 			if($category['type']!=0) showmessage(L('illegal_operation'));
 			$modelid = $category['modelid'];
+			$model_arr = getcache('model', 'commons');
+			$MODEL = $model_arr[$modelid];
+			unset($model_arr);
 	
 			require CACHE_MODEL_PATH.'content_form.class.php';
 			$content_form = new content_form($modelid, $catid, $CATEGORYS);
@@ -147,7 +151,8 @@ class content extends foreground {
 			unset($forminfos['catid']);
 			$workflowid = $setting['workflowid'];
 			header("Cache-control: private");
-			include template('member', 'content_publish');
+			$template = $MODEL['member_add_template'] ? $MODEL['member_add_template'] : 'content_publish';
+			include template('member', $template);
 		}
 	}
 	
@@ -629,5 +634,57 @@ class content extends foreground {
 		return $phpsso_api_url;
 	}
 	
+	/**
+	 * Function UPLOAD_VIDEO
+	 * 用户上传视频
+	 */
+	public function upload_video() {
+		
+		//加载视频库配置信息 
+		pc_base::load_app_class('ku6api', 'video', 0);
+		$setting = getcache('video', 'video');
+		if(empty($setting)) {
+			showmessage('上传功能还在开发中，请稍后重试！');
+		}
+		$ku6api = new ku6api($setting['sn'], $setting['skey']);
+		if (isset($_POST['dosubmit'])) {
+			$_POST['info']['catid'] = isset($_POST['info']['catid']) ? intval($_POST['info']['catid']) : showmessage('请选择栏目！');
+			$_POST['info']['title'] = isset($_POST['info']['title']) ? safe_replace($_POST['info']['title']) : showmessage('标题不能为空！');
+			$_POST['info']['keywords'] = isset($_POST['info']['keywords']) ? safe_replace($_POST['info']['keywords']) : '';
+			$_POST['info']['description'] = isset($_POST['info']['description']) ? safe_replace($_POST['info']['description']) : '';
+			//查询此模型下的视频字段
+			$field = get_video_field($_POST['info']['catid']);
+			if (!$field) showmessage('上传功能还在开发中，请稍后重试！');
+			$_POST['info'][$field] = 1;
+			$_POST[$field.'_video'] = array(1=>array('title'=>$_POST['info']['title'], 'vid' => $_POST['vid'], 'listorder'=>1)); 
+			unset($_POST['vid']);
+			$this->publish();
+		} else {
+			$categorys = video_categorys();
+			if (is_array($categorys) && !empty($categorys)) {
+				$cat = array();
+				foreach ($categorys as $cid => $c) {
+					if ($c['child']) {
+						$ischild = 1;
+						$categorys[$cid]['disabled'] = 'disabled';
+					}
+					$cat[$cid] = $c['catname'];
+				}
+				if (!$ischild) {
+					$cat_list = form::radio($cat, '', 'name="info[catid]"', '90');
+				} else {
+					$tree = pc_base::load_sys_class('tree');
+					$str  = "<option value='\$catid' \$selected \$disabled>\$spacer \$catname</option>";
+
+					$tree->init($categorys);
+					$string = $tree->get_tree(0, $str);
+					$cat_list = '<select name="info[catid]" id="catid"><option value="0">请选择栏目</option>'.$string.'</select>';
+				}
+			}
+			$flash_info = $ku6api->flashuploadparam(); //加载视频上传工具信息
+			
+			include template('member', 'upload_video');
+		}
+	}
 }
 ?>

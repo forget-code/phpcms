@@ -24,8 +24,8 @@ if(is_array($infos)){
 	<td width="40" align="center"><?php echo $info['id']?></td>
 	<td width="80" align="center"><input type='text' name='listorder[<?php echo $info['id']?>]' value="<?php echo $info['listorder']?>" class="input-text-c" size="4"></td>
 	<td>
-    <div class="col-left mr10" style="width:146px; height:112px">
-<a href="<?php echo $info['url']?>" target="_blank"><img src="<?php echo $info['thumb']?>" width="146" height="112" style="border:1px solid #eee" align="left"></a>
+    <div class="col-left mr10" style="width:146px; height:112px"><?php if ($info['thumb']) {?>
+<a href="<?php echo $info['url']?>" target="_blank"><img src="<?php echo $info['thumb']?>" width="146" height="112" style="border:1px solid #eee" align="left"></a><?php }?>
 </div>
 <div class="col-auto">  
     <h2 class="title-1 f14 lh28 mb6 blue"><a href="<?php echo $info['url']?>" target="_blank"><?php echo $info['title']?></a></h2>

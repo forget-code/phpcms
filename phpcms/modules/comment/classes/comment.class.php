@@ -93,6 +93,7 @@ class comment {
 		if ($site['check']) {
 			$data['status'] = 0;
 		}
+		$data['content'] = addslashes($data['content']);
 		if ($comment_data_id = $this->comment_data_db->insert($data, true)) {
 			//需要审核，插入到审核表
 			if ($data['status']==0) {

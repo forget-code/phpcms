@@ -11,7 +11,7 @@
 {pc:comment action="lists" commentid="$commentid" siteid="$siteid" page="$_GET[page]" hot="$hot" num="20"}
 {loop $data $r}
     <h5 class="title fn">{direction($r[direction])} <font color="#FF0000">{format::date($r[creat_at], 1)}</font> {if $r[userid]}{get_nickname($r[userid])}{else}{$r[username]}{/if} </h5>
-    <div class="content">{$r[content]}
+    <div class="content">{stripcslashes($r[content])}
 	<div class="rt"><a href="javascript:void(0)" onclick="reply({$r[id]}, '{$commentid}')">回复</a>  <a href="javascript:void(0)" onclick="support({$r[id]}, '{$commentid}')">支持</a>（<font id="support_{$r[id]}">{$r[support]}</font>）
 	</div>
 	<div id="reply_{$r[id]}" style="display:none"></div>

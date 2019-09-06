@@ -227,4 +227,26 @@ class admin {
 			showmessage(L('hash_check_false'),HTTP_REFERER);
 		}
 	}
+
+	/**
+	 * 后台信息列表模板
+	 * @param string $id 被选中的模板名称
+	 * @param string $str form表单中的属性名
+	 */
+	final public function admin_list_template($id = '', $str = '') {
+		$templatedir = PC_PATH.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.'content'.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR;
+		$pre = 'content_list';
+		$templates = glob($templatedir.$pre.'*.tpl.php');
+		if(empty($templates)) return false;
+		$files = @array_map('basename', $templates);
+		$templates = array();
+		if(is_array($files)) {
+			foreach($files as $file) {
+				$key = substr($file, 0, -8);
+				$templates[$key] = $file;
+			}
+		}
+		ksort($templates);
+		return form::select($templates, $id, $str,L('please_select'));
+	}
 }

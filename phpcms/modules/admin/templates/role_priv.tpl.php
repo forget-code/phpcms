@@ -21,15 +21,15 @@ include $this->admin_tpl('header');
               var le = chk.eq(i).attr('level');
               if(eval(le) < eval(level_top)) 
               {
-                  chk.eq(i).attr("checked",true);
+                  chk.eq(i).attr("checked",'checked');
                   var level_top = level_top-1;
               }
       }
       for (var j=num+1; j<count; j++)
       {
               var le = chk.eq(j).attr('level');
-              if(chk.eq(num).attr("checked")==true) {
-                  if(eval(le) > eval(level_bottom)) chk.eq(j).attr("checked",true);
+              if(chk.eq(num).attr("checked")=='checked') {
+                  if(eval(le) > eval(level_bottom)) chk.eq(j).attr("checked",'checked');
                   else if(eval(le) == eval(level_bottom)) break;
               }
               else {

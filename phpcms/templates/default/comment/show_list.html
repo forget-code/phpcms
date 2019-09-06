@@ -102,7 +102,7 @@ function on_submit() {
 function iframe_height(height) {
 	if (!height) {
 		var height = document.getElementById('bodyheight').scrollHeight;
-	}
+	} 
 	$('#top_src').attr('src', "{$domain}js.html?"+height+'|'+{if $comment['total']}{$comment['total']}{else}0{/if});
 }
 

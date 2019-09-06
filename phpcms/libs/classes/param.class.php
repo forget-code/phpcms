@@ -2,9 +2,9 @@
 /**
  *  param.class.php	参数处理类
  *
- * @copyright			(C) 2005-2010 PHPCMS
+ * @copyright			(C) 2005-2012 PHPCMS
  * @license				http://www.phpcms.cn/license/
- * @lastmodify			2010-6-7
+ * @lastmodify			2012-9-17
  */
 class param {
 
@@ -47,7 +47,7 @@ class param {
 		if (empty($m)) {
 			return $this->route_config['m'];
 		} else {
-			return $m;
+			if(is_string($m)) return $m;
 		}
 	}
 
@@ -60,7 +60,7 @@ class param {
 		if (empty($c)) {
 			return $this->route_config['c'];
 		} else {
-			return $c;
+			if(is_string($c)) return $c;
 		}
 	}
 
@@ -73,7 +73,7 @@ class param {
 		if (empty($a)) {
 			return $this->route_config['a'];
 		} else {
-			return $a;
+			if(is_string($a)) return $a;
 		}
 	}
 

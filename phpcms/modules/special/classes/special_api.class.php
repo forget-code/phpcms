@@ -382,6 +382,62 @@ class special_api {
 	}
 	
 	/**
+	 * Function importfalbum
+	 * 将专辑载入到专题
+	 * @param array $info 专辑详细信息
+	 */
+	public function importfalbum($info = array()) {
+		static $siteid,$sitelists;
+		if (!$siteid) $siteid = get_siteid();
+		if (!$sitelists) $sitelists = getcache('sitelist', 'commons');
+		pc_base::load_sys_func('iconv');
+		if (is_array($info)) {
+			$username = param::get_cookie('admin_username');
+			$userid = param::get_cookie('userid');
+			$arr = array(
+						'siteid' => $siteid,
+						'aid' => $info['id'],
+						'title' => $info['title'],
+						'thumb' => format_url($info['coverurl']),
+						'banner' => format_url($info['coverurl']),
+						'description' => $info['desc'],
+						'ishtml' => 0,
+						'ispage' => 0,
+						'style' => 'default',
+						'index_template' => 'index_video',
+						'list_template' => 'list_video',
+						'show_template' => 'show_video',
+						'username' => $username,
+						'userid' =>$userid,
+						'createtime' => SYS_TIME,
+						'isvideo' => 1,
+					);
+			//将数据插入到专题表中
+			$arr = new_html_special_chars($arr);
+			$specialid = $this->db->insert($arr, true);
+			$url = $sitelists[$siteid]['domain'].'index.php?m=special&c=index&id='.$specialid;
+			$this->db->update(array('url'=>$url), array('id'=>$specialid));
+			//组合子分类数组
+			$letters = gbk_to_pinyin($info['title']);
+			$type_info = array(
+							'siteid' => $siteid,
+							'module' => 'special',
+							'modelid' => 0,
+							'name' => htmlspecialchars($info['title']),
+							'parentid' => $specialid,
+							'typedir' => strtolower(implode('', $letters)),
+							'listorder' => 1,
+							);
+			$typeid = $this->type_db->insert($type_info, true);
+			$url = $sitelists[$siteid]['domain'].'index.php?m=special&c=index&a=type&specialid='.$specialid.'&typeid='.$typeid;
+			$this->type_db->update(array('url'=>$url), array('typeid'=>$typeid));
+			return $specialid;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * 添加到全站搜索
 	 * @param intval $id 文章ID
 	 * @param array $data 数组

@@ -2,7 +2,7 @@
 /**
  * Description:
  * 
- * Encoding:    UTF-8
+ * Encoding:    GBK
  * Created on:  2012-4-16-下午5:48:04
  * Autdor:      kangyun
  * Email:       KangYun.Yun@Snda.Com
@@ -64,9 +64,9 @@ include $this->admin_tpl ( 'header', 'admin' );
     </form>
 </div>
 <script language="javascript" type="text/javascript"
-    src="<?php echo JS_PATH; ?>formvalidator.js"></script>
+    src="<?php echo JS_PATH; ?>formvalidator.js" charset="UTF-8"></script>
 <script language="javascript" type="text/javascript"
-    src="<?php echo JS_PATH; ?>formvalidatorregex.js"></script>
+    src="<?php echo JS_PATH; ?>formvalidatorregex.js" charset="UTF-8"></script>
 <script type="text/javascript">
 	function trim(str){
 	    return str ? str.replace(/^\s+|\s+$/g, "") : str;

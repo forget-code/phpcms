@@ -199,6 +199,13 @@ class html {
 		//$base_file = $parentdir.$catdir.'/';
 		//生成地址
 		if($CAT['create_to_html_root']) $parentdir = '';
+		
+		//获取父级的配置，看是否生成静态，如果是动态则直接把父级目录调过来为生成静态目录所用
+		$parent_setting = string2array($CATEGORYS[$CAT['parentid']]['setting']);
+		if($parent_setting['ishtml']==0 && $setting['ishtml']==1){
+			$parentdir = $CATEGORYS[$CAT['parentid']]['catdir'].'/';
+		}
+		
 		$base_file = $this->url->get_list_url($setting['category_ruleid'],$parentdir, $catdir, $catid, $page);
 		$base_file = '/'.$base_file;
 		
@@ -210,8 +217,7 @@ class html {
 			} else {
 				$base_file = '/'.$site_dir.$this->html_root.$base_file;
 			}
-		}
-
+		} 
 		//判断二级域名是否直接绑定到该栏目
 		$root_domain = preg_match('/^((http|https):\/\/)([a-z0-9\-\.]+)\/$/',$CAT['url']) ? 1 : 0;
 		$count_number = substr_count($CAT['url'], '/');

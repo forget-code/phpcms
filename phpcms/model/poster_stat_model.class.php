@@ -31,10 +31,7 @@ class poster_stat_model extends model {
   		`type` tinyint(1) unsigned NOT NULL default '1',
   		PRIMARY KEY  (`id`),
   		KEY `pid` (`pid`,`type`,`ip`)
-		) TYPE=MyISAM DEFAULT CHARSET=".$charset." ;";
-		if($this->db->version() > '4.1') {
-			$sql = preg_replace("/TYPE=(InnoDB|MyISAM|MEMORY)( DEFAULT CHARSET=[^; ]+)?/", "ENGINE=\\1 DEFAULT CHARSET=".$charset, $sql);
-		}
+		) ENGINE=MyISAM DEFAULT CHARSET=".$charset." ;";
 		$this->db->query($sql);
 	}
 	

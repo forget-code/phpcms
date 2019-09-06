@@ -2,7 +2,7 @@
 /**
  * Description:
  * 
- * Encoding:    UTF-8
+ * Encoding:    GBK
  * Created on:  2012-4-16-下午5:48:04
  * Author:      kangyun
  * Email:       KangYun.Yun@Snda.Com
@@ -118,5 +118,4 @@ $LANG['act_id'] = '活动编号';
 $LANG['act_name'] = '活动名称';
 $LANG['act_time'] = '活动时间';
 $LANG['act_content'] = '活动内容';
-
 

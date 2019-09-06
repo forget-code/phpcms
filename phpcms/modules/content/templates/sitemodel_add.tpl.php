@@ -58,6 +58,22 @@ include $this->admin_tpl('header','admin');
 </table>
 </fieldset>
 <div class="bk15"></div>
+<fieldset>
+	<legend><?php echo L('other_template_setting')?> <input type="checkbox" id="other" value="1" name="other"></legend>
+	<table width="100%" id="other_tab" class="table_form" style="display:none;">
+		<tr>
+        <th width="200"><?php echo L('admin_content_list')?></th>
+        <td  id="admin_list_template"><?php echo $admin_list_template;?>
+		</td>
+      </tr>
+	  <tr>
+        <th width="200"><?php echo L('member_content_add')?></th>
+        <td  id="member_add_template"><?php echo form::select_template($default_style,'member', '', 'name="setting[member_add_template]" id="template_member_add"', 'content_publish')?>
+		</td>
+      </tr>
+</table>
+</fieldset>
+<div class="bk15"></div>
     <input type="submit" class="dialog" id="dosubmit" name="dosubmit" value="<?php echo L('submit');?>" />
 </form>
 </div>
@@ -66,6 +82,13 @@ include $this->admin_tpl('header','admin');
 	function load_file_list(id) {
 		$.getJSON('?m=admin&c=category&a=public_tpl_file_list&style='+id+'&catid=', function(data){$('#category_template').html(data.category_template);$('#list_template').html(data.list_template);$('#show_template').html(data.show_template);});
 	}
+	$("#other").click(function() {
+		if ($('#other').attr('checked')) {
+			$('#other_tab').show();
+		} else {
+			$('#other_tab').hide();
+		}
+	})
 	//-->
 </script>
 </body>

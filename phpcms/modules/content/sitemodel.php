@@ -44,6 +44,13 @@ class sitemodel extends admin {
 			$_POST['info']['category_template'] = $_POST['setting']['category_template'];
 			$_POST['info']['list_template'] = $_POST['setting']['list_template'];
 			$_POST['info']['show_template'] = $_POST['setting']['show_template'];
+			if (isset($_POST['other']) && $_POST['other']) {
+				$_POST['info']['admin_list_template'] = $_POST['setting']['admin_list_template'];
+				$_POST['info']['member_add_template'] = $_POST['setting']['member_add_template'];
+				$_POST['info']['member_list_template'] = $_POST['setting']['member_list_template'];
+			} else {
+				unset($_POST['setting']['admin_list_template'], $_POST['setting']['member_add_template'], $_POST['setting']['member_list_template']);
+			}
 			$modelid = $this->db->insert($_POST['info'],1);
 			$model_sql = file_get_contents(MODEL_PATH.'model.sql');
 			$tablepre = $this->db->db_tablepre;
@@ -71,6 +78,7 @@ class sitemodel extends admin {
 				$style_list[$v['dirname']] = $v['name'] ? $v['name'] : $v['dirname'];
 				unset($style_list[$k]);
 			}
+			$admin_list_template = $this->admin_list_template('content_list', 'name="setting[admin_list_template]"');
 			include $this->admin_tpl('sitemodel_add');
 		}
 	}
@@ -81,6 +89,13 @@ class sitemodel extends admin {
 			$_POST['info']['category_template'] = $_POST['setting']['category_template'];
 			$_POST['info']['list_template'] = $_POST['setting']['list_template'];
 			$_POST['info']['show_template'] = $_POST['setting']['show_template'];
+			if (isset($_POST['other']) && $_POST['other']) {
+				$_POST['info']['admin_list_template'] = $_POST['setting']['admin_list_template'];
+				$_POST['info']['member_add_template'] = $_POST['setting']['member_add_template'];
+				$_POST['info']['member_list_template'] = $_POST['setting']['member_list_template'];
+			} else {
+				unset($_POST['setting']['admin_list_template'], $_POST['setting']['member_add_template'], $_POST['setting']['member_list_template']);
+			}
 			
 			$this->db->update($_POST['info'],array('modelid'=>$modelid,'siteid'=>$this->siteid));
 			showmessage(L('update_success'), '', '', 'edit');
@@ -95,6 +110,7 @@ class sitemodel extends admin {
 			$modelid = intval($_GET['modelid']);
 			$r = $this->db->get_one(array('modelid'=>$modelid));
 			extract($r);
+			$admin_list_template_f = $this->admin_list_template($admin_list_template, 'name="setting[admin_list_template]"');
 			include $this->admin_tpl('sitemodel_edit');
 		}
 	}

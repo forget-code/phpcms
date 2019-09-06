@@ -1,7 +1,7 @@
 <table cellpadding="2" cellspacing="1" width="98%">
 	<tr> 
       <td width="100">文本域宽度</td>
-      <td><input type="text" name="setting[width]" value="100%" size="10" class="input-text" >%</td>
+      <td><input type="text" name="setting[width]" value="100" size="10" class="input-text" >%</td>
     </tr>
 	<tr> 
       <td>文本域高度</td>

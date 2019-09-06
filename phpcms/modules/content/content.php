@@ -31,9 +31,12 @@ class content extends admin {
 	public function init() {
 		$show_header = $show_dialog  = $show_pc_hash = '';
 		if(isset($_GET['catid']) && $_GET['catid'] && $this->categorys[$_GET['catid']]['siteid']==$this->siteid) {
-		$catid = $_GET['catid'] = intval($_GET['catid']);
-		$category = $this->categorys[$catid];
-		$modelid = $category['modelid'];
+			$catid = $_GET['catid'] = intval($_GET['catid']);
+			$category = $this->categorys[$catid];
+			$modelid = $category['modelid'];
+			$model_arr = getcache('model', 'commons');
+			$MODEL = $model_arr[$modelid];
+			unset($model_arr);
 			$admin_username = param::get_cookie('admin_username');
 			//查询当前的工作流
 			$setting = string2array($category['setting']);
@@ -103,7 +106,8 @@ class content extends admin {
 				$current = isset($_GET['reject']) ? 'class=on' : '';
 				$workflow_menu .= '<a href="?m=content&c=content&a=&menuid='.$_GET['menuid'].'&catid='.$catid.'&pc_hash='.$pc_hash.'&reject=1" '.$current.' ><em>'.L('reject').'</em></a><span>|</span>';
 			}
-			include $this->admin_tpl('content_list');
+			$template = $MODEL['admin_list_template'] ? $MODEL['admin_list_template'] : 'content_list';
+			include $this->admin_tpl($template);
 		} else {
 			include $this->admin_tpl('content_quick');
 		}
@@ -203,7 +207,7 @@ class content extends admin {
 			param::set_cookie('module', 'content');
 			if(isset($_POST['dosubmit']) || isset($_POST['dosubmit_continue'])) {
 				define('INDEX_HTML',true);
-				$id = intval($_POST['id']);
+				$id = $_POST['info']['id'] = intval($_POST['id']);
 				$catid = $_POST['info']['catid'] = intval($_POST['info']['catid']);
 				if(trim($_POST['info']['title'])=='') showmessage(L('title_is_empty'));
 				$modelid = $this->categorys[$catid]['modelid'];
@@ -270,6 +274,9 @@ class content extends admin {
 			$this->content_check_db = pc_base::load_model('content_check_model');
 			$this->position_data_db = pc_base::load_model('position_data_model');
 			$this->search_db = pc_base::load_model('search_model');
+			if (file_exists(PC_PATH.'model'.DIRECTORY_SEPARATOR.'video_content_model.class.php')) {
+				$video_content_db = pc_base::load_model('video_content_model');
+			}
 			$this->comment = pc_base::load_app_class('comment', 'comment');
 			$search_model = getcache('search_model_'.$this->siteid,'search');
 			$typeid = $search_model[$modelid]['typeid'];
@@ -313,6 +320,10 @@ class content extends admin {
 				$this->position_data_db->delete(array('id'=>$id,'catid'=>$catid,'module'=>'content'));
 				//删除全站搜索中数据
 				$this->search_db->delete_search($typeid,$id);
+				//删除视频库与内容对应关系数据
+				if (is_object($video_content_db)) {
+					$video_content_db->delete(array('contentid'=>$id, 'modelid'=>$modelid));
+				}
 				
 				//删除相关的评论,删除前应该判断是否还存在此模块
 				if(module_exists('comment')){

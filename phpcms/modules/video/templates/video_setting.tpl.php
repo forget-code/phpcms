@@ -1,0 +1,38 @@
+<?php 
+	defined('IN_ADMIN') or exit('No permission resources.');
+	include $this->admin_tpl('header', 'admin');
+?>
+<div class="pad-10">
+<div class="explain-col search-form">
+<?php echo L('subscribe_notic');?>
+</div>
+<div class="common-form">
+<form name="myform" action="?m=video&c=video&a=setting&pc_hash=<?php echo $_GET['pc_hash'];?>" method="post" id="myform">
+<fieldset>
+	<legend><?php echo L('pass_settings');?></legend>
+<table width="100%" class="table_form">
+	<tr>
+		<td  width="120"><?php echo L('vms_sn');?></td> 
+		<td><input name="setting[sn]"  type="text" id="sn"  size="40" value="<?php echo $this->setting['sn'];?>"> </td>
+	</tr>
+	<tr>
+		<td  width="120"><?php echo L('vms_skey');?></td> 
+		<td><input type="text" name="setting[skey]" size="40" value="<?php echo $this->setting['skey']?>" id="skey"></td>
+	</tr>
+	<tr>
+		<td  width="120"><?php echo L('vms_style');?> </td> 
+		<td><input type="text" name="setting[style_projectid]" size="20" value="<?php echo $this->setting['style_projectid']?>" id="style_projectid"></td>
+	</tr>
+	<tr>
+		<td  width="120"><?php echo L('default_video_to_cat');?> </td> 
+		<td> <?php echo $category_list;?></td>
+	</tr>
+</table>
+</fieldset>
+<div class="bk15"></div>
+<input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="button" id="dosubmit">
+</form>
+</div>
+
+</body>
+</html>

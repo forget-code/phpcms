@@ -3,7 +3,7 @@
  * Description:
  * 
  * Project:    PhpCms
- * Encoding:    UTF-8
+ * Encoding:    GBK
  * Created on:  2012-4-16-下午4:40:19
  * Author:     kangyun
  * Email:       KangYun.Yun@Snda.Com

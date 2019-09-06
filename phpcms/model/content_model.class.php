@@ -130,6 +130,7 @@ class content_model extends model {
 		//END发布到审核列表中
 		if(!$isimport) {
 			$html = pc_base::load_app_class('html', 'content');
+			$urls['data']['system']['id'] = $id;
 			if($urls['content_ishtml'] && $data['status']==99) $html->show($urls[1],$urls['data']);
 			$catid = $systeminfo['catid'];
 		}

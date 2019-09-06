@@ -74,7 +74,7 @@ include $this->admin_tpl('header','admin');
 	$("#myform").submit(function (){
 		var str = 0;
 		$("input[name='ids[]']").each(function() {
-			if($(this).attr('checked')==true) str = 1;
+			if($(this).attr('checked')=='checked') str = 1;
 		});
 		if(str==0) {
 			alert('<?php echo L('choose_news')?>');

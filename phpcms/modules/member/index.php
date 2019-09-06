@@ -31,12 +31,6 @@ class index extends foreground {
 	
 	public function register() {
 		$this->_session_start();
-		//加载用户模块配置
-		$member_setting = getcache('member_setting');
-		if(!$member_setting['allowregister']) {
-			showmessage(L('deny_register'), 'index.php?m=member&c=index&a=login');
-		}
-		
 		//获取用户siteid
 		$siteid = isset($_REQUEST['siteid']) && trim($_REQUEST['siteid']) ? intval($_REQUEST['siteid']) : 1;
 		//定义站点id常量
@@ -44,11 +38,23 @@ class index extends foreground {
 		   define('SITEID', $siteid);
 		}
 		
+		//加载用户模块配置
+		$member_setting = getcache('member_setting');
+		if(!$member_setting['allowregister']) {
+			showmessage(L('deny_register'), 'index.php?m=member&c=index&a=login');
+		}
+		//加载短信模块配置
+ 		$sms_setting_arr = getcache('sms','sms');
+		$sms_setting = $sms_setting_arr[$siteid];		
+		
 		header("Cache-control: private");
 		if(isset($_POST['dosubmit'])) {
-			if (empty($_SESSION['connectid']) && $_SESSION['code'] != strtolower($_POST['code'])) {
-				showmessage(L('code_error'));
+			if($member_setting[enablcodecheck]=='1'){//开启验证码
+				if (empty($_SESSION['connectid']) && $_SESSION['code'] != strtolower($_POST['code'])) {
+					showmessage(L('code_error'));
+				}
 			}
+			
 			$userinfo = array();
 			$userinfo['encrypt'] = create_randomstr(6);
 
@@ -68,7 +74,31 @@ class index extends foreground {
 			$userinfo['siteid'] = $siteid;
 			$userinfo['connectid'] = isset($_SESSION['connectid']) ? $_SESSION['connectid'] : '';
 			$userinfo['from'] = isset($_SESSION['from']) ? $_SESSION['from'] : '';
-			unset($_SESSION['connectid'], $_SESSION['from']);
+			//手机强制验证
+			
+			if($member_setting[mobile_checktype]=='1'){
+				//取用户手机号
+				$mobile_verify = $_POST['mobile_verify'] ? intval($_POST['mobile_verify']) : '';
+				if($mobile_verify=='') showmessage('请提供正确的手机验证码！', HTTP_REFERER);
+ 				$sms_report_db = pc_base::load_model('sms_report_model');
+				$posttime = SYS_TIME-360;
+				$where = "`id_code`='$mobile_verify' AND `posttime`>'$posttime'";
+				$r = $sms_report_db->get_one($where,'*','id DESC');
+ 				if(!empty($r)){
+					$userinfo['mobile'] = $r['mobile'];
+				}else{
+					showmessage('未检测到正确的手机号码！', HTTP_REFERER);
+				}
+ 			}elseif($member_setting[mobile_checktype]=='2'){
+				//获取验证码，直接通过POST，取mobile值
+				$userinfo['mobile'] = isset($_POST['mobile']) ? $_POST['mobile'] : '';
+			} 
+			if($userinfo['mobile']!=""){
+				if(!preg_match('/^1([0-9]{9})/',$userinfo['mobile'])) {
+					showmessage('请提供正确的手机号码！', HTTP_REFERER);
+				}
+			} 
+ 			unset($_SESSION['connectid'], $_SESSION['from']);
 			
 			if($member_setting['enablemailcheck']) {	//是否需要邮件验证
 				$userinfo['groupid'] = 7;
@@ -227,6 +257,8 @@ class index extends foreground {
 			}
 		}
 	}
+ 	
+	
 	/*
 	 * 测试邮件配置
 	 */
@@ -675,7 +707,7 @@ class index extends foreground {
 			include template('member', 'login');
 		}
 	}
-	
+  	
 	public function logout() {
 		$setting = pc_base::load_config('system');
 		//snda退出
@@ -1425,10 +1457,12 @@ class index extends foreground {
         }	
 	/**
 	 * 找回密码
+	 * 新增加短信找回方式 
 	 */
 	public function public_forget_password () {
 		
 		$email_config = getcache('common', 'commons');
+		
 		//SMTP MAIL 二种发送模式
  		if($email_config['mail_type'] == '1'){
 			if(empty($email_config['mail_user']) || empty($email_config['mail_password'])) {
@@ -1501,6 +1535,132 @@ class index extends foreground {
 			$siteinfo = siteinfo($siteid);
 			
 			include template('member', 'forget_password');
+		}
+	}
+	
+	/**
+	*通过手机修改密码
+	*方式：用户发送HHPWD afei985#821008 至 1065788 ，PHPCMS进行转发到网站运营者指定的回调地址，在回调地址程序进行密码修改等操作,处理成功时给用户发条短信确认。
+	*phpcms 以POST方式传递相关数据到回调程序中
+	*要求：网站中会员系统，mobile做为主表字段，并且唯一（如已经有手机号码，把号码字段转为主表字段中）
+	*/
+	
+	public function public_changepwd_bymobile(){
+		$phone = $_REQUEST['phone'];
+		$msg = $_REQUEST['msg'];
+		$sms_key = $_REQUEST['sms_passwd'];
+		$sms_pid = $_REQUEST['sms_pid'];
+		if(empty($phone) || empty($msg) || empty($sms_key) || empty($sms_pid)){
+			return false;
+		}
+		if(!preg_match('/^1([0-9]{9})/',$phone)) {
+			return false;
+		}
+		//判断是否PHPCMS请求的接口
+		pc_base::load_app_func('global','sms');
+		pc_base::load_app_class('smsapi', 'sms', 0);
+		$this->sms_setting_arr = getcache('sms');
+		$siteid = $_REQUEST['siteid'] ? $_REQUEST['siteid'] : 1;
+		if(!empty($this->sms_setting_arr[$siteid])) {
+			$this->sms_setting = $this->sms_setting_arr[$siteid];
+		} else {
+			$this->sms_setting = array('userid'=>'', 'productid'=>'', 'sms_key'=>'');
+		}
+		if($sms_key != $this->sms_setting['sms_key'] || $sms_pid != $this->sms_setting['productid']){
+			return false;
+		}
+		//取用户名
+		$msg_array = explode("@@",$str);
+		$newpwd = $msg_array[1];
+		$username = $msg_array[2];
+		$array = $this->db->get_one(array('mobile'=>$phone,'username'=>$username));
+		if(empty($array)){
+			echo 1;
+		}else{
+			$result = $this->db->update(array('password'=>$newpwd),array('mobile'=>$phone,'username'=>$username));
+			if($result){
+				//修改成功，发送短信给用户回执
+ 				//检查短信余额
+				if($this->sms_setting['sms_key']) {
+					$smsinfo = $this->smsapi->get_smsinfo();
+				}
+				if($smsinfo['surplus'] < 1) {
+ 					echo 1;
+				}else{
+ 					$this->smsapi = new smsapi($this->sms_setting['userid'], $this->sms_setting['productid'], $this->sms_setting['sms_key']);
+					$content = '你好,'.$username.',你的新密码已经修改成功：'.$newpwd.' ,请妥善保存！';
+					$return = $this->smsapi->send_sms($phone, $content, SYS_TIME, CHARSET);
+					echo 1;
+				}
+ 			}
+		}
+	}
+	
+	/**
+	 * 手机短信方式找回密码
+	 */
+	public function public_forget_password_mobile () {
+ 		$email_config = getcache('common', 'commons'); 
+		$this->_session_start();
+		$member_setting = getcache('member_setting');
+		if(isset($_POST['dosubmit'])) {
+		//处理提交申请，以手机号为准
+			if ($_SESSION['code'] != strtolower($_POST['code'])) {
+				showmessage(L('code_error'), HTTP_REFERER);
+			}
+			$mobile = $_POST['mobile'];
+			$mobile_verify = intval($_POST['mobile_verify']);
+			$password = $_POST['password'];
+			$pwdconfirm = $_POST['pwdconfirm'];
+			if($password != $pwdconfirm){
+				showmessage(L('passwords_not_match'), HTTP_REFERER);
+			}
+			//验证手机号和传递的验证码是否匹配
+			$sms_report_db = pc_base::load_model('sms_report_model');
+			$sms_report_array = $sms_report_db->get_one(array("mobile">$mobile,'in_code'=>$mobile_verify));
+			if(empty($sms_report_array)){
+				showmessage("手机和验证码不对应，请通过正常渠道修改密码！", HTTP_REFERER);
+			}
+			//更新密码
+			$updateinfo['password'] = $password;
+ 			$this->db->update($updateinfo, array('userid'=>$this->memberinfo['userid']));
+			if(pc_base::load_config('system', 'phpsso')) {
+				//初始化phpsso
+				$this->_init_phpsso();
+				$res = $this->client->ps_member_edit('', $email, $_POST['info']['password'], $_POST['info']['newpassword'], $this->memberinfo['phpssouid'], $this->memberinfo['encrypt']);
+			}
+			
+			
+			
+			$memberinfo = $this->db->get_one(array('email'=>$_POST['email']));
+			if(!empty($memberinfo['email'])) {
+				$email = $memberinfo['email'];
+			} else {
+				showmessage(L('email_error'), HTTP_REFERER);
+			}
+			
+			pc_base::load_sys_func('mail');
+			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
+
+			$code = sys_auth($memberinfo['userid']."\t".SYS_TIME, 'ENCODE', $phpcms_auth_key);
+
+			$url = APP_PATH."index.php?m=member&c=index&a=public_forget_password&code=$code";
+			$message = $member_setting['forgetpassword'];
+			$message = str_replace(array('{click}','{url}'), array('<a href="'.$url.'">'.L('please_click').'</a>',$url), $message);
+			//获取站点名称
+			$sitelist = getcache('sitelist', 'commons');
+			
+			if(isset($sitelist[$memberinfo['siteid']]['name'])) {
+				$sitename = $sitelist[$memberinfo['siteid']]['name'];
+			} else {
+				$sitename = 'PHPCMS_V9_MAIL';
+			}
+			sendmail($email, L('forgetpassword'), $message, '', '', $sitename);
+			showmessage(L('operation_success'), 'index.php?m=member&c=index&a=login');
+		} else {
+			$siteid = isset($_REQUEST['siteid']) && trim($_REQUEST['siteid']) ? intval($_REQUEST['siteid']) : 1;
+			$siteinfo = siteinfo($siteid);
+ 			include template('member', 'forget_password_mobile');
 		}
 	}
 }
