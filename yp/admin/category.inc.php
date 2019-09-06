@@ -43,6 +43,7 @@ switch($action)
 			$letter = gbk_to_pinyin($letter);
 			$category['letter'] = substr($letter[0],0,1);
 			$catid = $cat->add($category, $setting);
+			cache_common();
 	        showmessage('分类添加完成，待全部添加完成后，请修复分类', '?mod='.$mod.'&file='.$file.'&action=add');
 		}
 		else

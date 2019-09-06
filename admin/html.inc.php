@@ -125,7 +125,7 @@ switch($action)
 				$offset = $pagesize*($page-1);
 			}
 		    $where = ' WHERE status=99 ';
-			$order = 'ASC';
+			$order = 'DESC';
 			
 			if(!isset($first) && is_array($catids) && $catids[0] > 0) 
 			{

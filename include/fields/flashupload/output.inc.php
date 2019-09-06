@@ -14,7 +14,14 @@
 			if(!$v) continue;
 			$v = explode("|",$v);
 			$name = $v[0];
-			$videourl = $server.trim($v[1]);			
+			if(preg_match('/:\/\//i',$v[1]))
+			{
+				$videourl = trim($v[1]);
+			}
+			else
+			{
+				$videourl = $server.trim($v[1]);
+			}
 			if(!$t)
 			{
 				$fileext = fileext($videourl);

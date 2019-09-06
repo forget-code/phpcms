@@ -50,6 +50,7 @@ switch ($action)
 		}
 		else 
 		{
+			if(!is_ie()) showmessage('本功能只支持IE浏览器，请用IE浏览器打开。');
 			$unsetgroups = form::checkbox($GROUP, 'unsetgroupids', 'unsetgroupids', '', 5);
 			include admin_tpl('fields_add');
 		}
@@ -74,6 +75,7 @@ switch ($action)
 		}
 		else 
 		{
+			if(!is_ie()) showmessage('本功能只支持IE浏览器，请用IE浏览器打开。');
 			$infos = $formguide_fields->get($fieldid);
 			@extract(new_htmlspecialchars($infos));
 			$unsetgroups = form::checkbox($GROUP, 'unsetgroupids', 'unsetgroupids', $unsetgroupids, 5);

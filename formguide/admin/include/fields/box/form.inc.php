@@ -1,7 +1,8 @@
+
 	function box($field, $value, $fieldinfo)
 	{
 		extract($fieldinfo);
-		if(empty($value) && $value != 0) $value = $defaultvalue;
+		if(!$value) $value = $defaultvalue;
 		if($boxtype == 'radio')
 		{
 			return form::radio($options, 'info['.$field.']', $field, $value, $cols, $css, $formattribute, $width);

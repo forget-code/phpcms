@@ -24,6 +24,7 @@ CREATE TABLE `phpcms_mood` (
 ) TYPE=MyISAM;
 
 INSERT INTO `phpcms_mood` (`moodid`, `name`, `number`, `m1`, `m2`, `m3`, `m4`, `m5`, `m6`, `m7`, `m8`, `m9`, `m10`, `m11`, `m12`, `m13`, `m14`, `m15`) VALUES(1, '新闻', 11, '支持|mood/images/zhichi.gif', '高兴|mood/images/gaoxing.gif', '震惊|mood/images/zhenjing.gif', '愤怒|mood/images/fennu.gif', '无奈|mood/images/wunai.gif', '谎言|mood/images/huangyan.gif', '枪稿|mood/images/qianggao.gif', '不解|mood/images/bujie.gif', '搞笑|mood/images/gaoxiao.gif', '无聊|mood/images/wuliao.gif', '标题党|mood/images/biaotidang.gif', '', '', '', '');
+INSERT INTO `phpcms_mood` (`moodid`, `name`, `number`, `m1`, `m2`, `m3`, `m4`, `m5`, `m6`, `m7`, `m8`, `m9`, `m10`, `m11`, `m12`, `m13`, `m14`, `m15`) VALUES(2, '视频', 10, '支持|mood/images/zhichi.gif', '高兴|mood/images/gaoxing.gif', '震惊|mood/images/zhenjing.gif', '愤怒|mood/images/fennu.gif', '无奈|mood/images/wunai.gif', '谎言|mood/images/huangyan.gif', '枪稿|mood/images/qianggao.gif', '不解|mood/images/bujie.gif', '搞笑|mood/images/gaoxiao.gif', '无聊|mood/images/wuliao.gif', '', '', '', '', '');
 
 DROP TABLE IF EXISTS `phpcms_mood_data`;
 CREATE TABLE `phpcms_mood_data` (

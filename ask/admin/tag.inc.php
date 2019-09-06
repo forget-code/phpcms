@@ -50,7 +50,10 @@ switch($action)
 		$tag_config['type'] = $function;
 		if($function == 'ask')
 		{	
-			$tag_config['sql'] = tag_ask($tag_config);
+			if(!$tag_config['mode'])
+			{
+				$tag_config['sql'] = tag_ask($tag_config);
+			}
 			$t->update($tagname, $tag_config, array('catid'=>$tag_config['catid'],'userid'=>$tag_config['userid'],'flag'=>$tag_config['flag'],'action'=>'$action','urlruleid'=>$M['categoryUrlRuleid']));	
 
 		}
@@ -59,7 +62,7 @@ switch($action)
 			if(!$tag_config['mode'])
 			{
 				$tag_config['sql'] = tag_credit($tag_config);
-			}		
+			}
 			$t->update($tagname, $tag_config, array(''));
 		}
 		if($ajax)

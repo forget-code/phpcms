@@ -24,6 +24,7 @@ switch($action)
 			$priv_group->update('catid', $catid, $priv_groupid);
 			$priv_role->update('catid', $catid, $priv_roleid);
 			$forward = '?mod='.$mod.'&file='.$file.'&action=add';
+			cache_common();
 	        showmessage('栏目添加成功！待栏目全部添加完成，请修复栏目', $forward);
 		}
 		else

@@ -88,22 +88,32 @@ class content
 		if(!$systeminfo['username']) $systeminfo['username'] = $_username;
 		if(!$systeminfo['userid']) $systeminfo['userid'] = $_userid;
 
-		if($data['inputtime'])
+		if($data['inputtime'] && !is_numeric($data['inputtime']))
 		{
 			$systeminfo['inputtime'] = strtotime($data['inputtime']);
 		}
-		else
+		elseif(!$data['inputtime'])
 		{
 			$systeminfo['inputtime'] = TIME;
 		}
-		if($data['updatetime'])
+		else
+		{
+			$systeminfo['inputtime'] = $data['inputtime'];
+		}
+
+		if($data['updatetime'] && !is_numeric($data['updatetime']))
 		{
 			$systeminfo['updatetime'] = strtotime($data['updatetime']);
 		}
-		else
+		elseif(!$data['updatetime'])
 		{
 			$systeminfo['updatetime'] = TIME;
 		}
+		else
+		{
+			$systeminfo['updatetime'] = $data['updatetime'];
+		}
+
 		if(isset($data['paginationtype']))
 		{
 			$modelinfo['paginationtype'] = $data['paginationtype'];

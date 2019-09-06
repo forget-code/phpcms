@@ -25,6 +25,7 @@ class content_tag_form
 		{
 			if(!$v['iswhere']) continue;
 			$func = $v['formtype'];
+			if(!method_exists($this,$func)) continue;
 			$value = isset($data[$field]) ? $data[$field] : '';
 			$form = $this->$func($field, $value, $v);
 			$info[$field] = array('name'=>$v['name'], 'tips'=>$v['tips'], 'form'=>$form, 'star'=>$v['minlength']);

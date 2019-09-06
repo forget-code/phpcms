@@ -284,11 +284,13 @@ class MainSpider
             $sarr_start = $this->regexEncode($this->CJob->Label['StartStr'][$keys[$i]]);
             $sarr_end = $this->regexEncode($this->CJob->Label['EndStr'][$keys[$i]]); 
 
-            if (!empty($this->CJob->Job['DividePageStart']) && !empty($this->CJob->Job['DividePageEnd']) && $this->CJob->Label['LabelName'][$keys[$i]] == $LANG['content'])
+           if (!empty($this->CJob->Job['DividePageStart']) && !empty($this->CJob->Job['DividePageEnd']) && $this->CJob->Label['LabelName'][$keys[$i]] == $LANG['content'])
             {
+				//防止干扰其他页面的分页
+				$this->dividePageHtml ='';
                 $pagestart = $this->regexEncode($this->CJob->Job['DividePageStart']);
                 $pageend = $this->regexEncode($this->CJob->Job['DividePageEnd']);
-                $regexStr = "/" . $pagestart . "([\s\S]*?)" . $pageend . "/";
+                $regexStr = "/" . $pagestart . "([\s\S]*?)" . $pageend . "/i";
                 $regexnum = preg_match($regexStr, $html, $matches);
                 $p = $matches[1];
                 unset($matches);
@@ -300,17 +302,52 @@ class MainSpider
                     $htmlp->GetLinkType = "link";
                     $htmlp->SetSource($p, $dourl, false);
 					$this->dividePageHtml ='';
-                    foreach($htmlp->Links as $k => $v)
+
+					//暂存页面是否抓取的信息
+					$url_fetched = array($dourl=>true);
+					$url_timer = 0;
+
+                    //foreach($htmlp->Links as $k => $v)
+					while(list($k,$v)=each($htmlp->Links))
                     {
+						//最大抓取页数
+						$url_timer++;
+						if($url_timer>50){
+							break;
+						}
+
                         $k = $htmlp->FillUrl($k, $basehref);
                         if ($k == $dourl) continue;
+
+						//检测是否已经抓取
+						if(isset($url_fetched[$k])){
+							continue;
+						}
+						$url_fetched[$k] = true;
+
                         if ($this->CJob->Job['Cookie']) $this->CFileGetContent->puthead["Cookie"] = $this->CJob->Job['Cookie'];
                         $this->CFileGetContent->OpenUrl($k);
                         $nhtml = $this->CFileGetContent->GetHtml();
+						if(empty($nhtml)){$nhtml = curl_html($k,$this->CFileGetContent->puthead);}
                         if ($nhtml != '')
                         {
                             $this->dividePageHtml .= $this->CJob->Job['DividePageUnion'] . $this->GetOneField($nhtml, $k, $sarr_start, $sarr_end, $pagestart, $pageend);
                         }
+
+						//上下页模式时，自动读取当前页的其他页码
+						if($this->CJob->Job['DividePageStyle']){
+							$nhtml = $this->ConvertChatSet($nhtml);
+							$regexnum = preg_match($regexStr, $nhtml, $matches);
+							$p = $matches[1];
+							unset($matches);
+							$p = trim($p);
+							if ($p != '')
+							{
+								$p = "-" . $p;
+								$htmlp->SetSource($p, $k, false);
+							}
+						}
+
                     }
                 } 
             } 

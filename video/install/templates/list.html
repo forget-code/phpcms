@@ -1,0 +1,87 @@
+{template 'video','header'}
+{php $catids = get_sql_catid($catid);}
+<div id="main">
+<div class="gg980 mar_10"><!--预留978*60广告位--></div>
+<div class="weizhi">当前位置：<a href="{$M[url]}">视频首页</a>{catpos($catid)}</div>
+<div class="w670 left">
+<div class="inner_title"><span class="more blue">&nbsp;</span><h2 class="f14 blue">{$catname}</h2></div>
+<div class="midcon">
+<div class="blank10"></div>
+<ul class="list_vedio">
+{get sql="SELECT * FROM $video_table WHERE catid='$catid' AND status=99 ORDER BY vid DESC" page="$page" rows="16" urlrule="$urlrule"}
+<li><a href="{video_show_url($r[vid],$r[url])}" class="img_padding"><span class="v_time">{format_time($r[timelen])}</span>
+<img src="{$r[thumb]}" width="124" height="94"/></a><h2 class="blue"><a href="{video_show_url($r[vid],$r[url])}">{$r[title]}</a></h2><p>播放: 2471</p><p>添加时间:{date('Y-m-d',$r[inputtime])}</p></li>
+{/get}
+</ul>
+<div class="blank10"></div><div id="pages" class="channel_pages">{$pages}</div>
+</div>
+
+</div>
+<!--w670结束-->
+
+<div class="w302 right">
+<div class="ph">
+<div class="titleBar">
+<h3>排行榜</h3>
+<ul class="tagList right">
+<li class="on" id="linktab_1" onmouseover="showmenu(1, 3, 'linktab', 'link')">本周</li>
+<li id="linktab_2" onmouseover="showmenu(2, 3, 'linktab', 'link')">本月</li>
+<li  class="r_border" id="linktab_3" onmouseover="showmenu(3, 3, 'linktab', 'link')">今日</li>
+</ul>
+</div>
+<div class="clear"></div>
+<div class="midcon">
+<div class="blank8"></div>
+<ul class="rtlist" id="link_1">
+{get sql="SELECT * FROM phpcms_video a,phpcms_video_count b WHERE a.vid=b.vid AND status=99 $catids AND hits_time>$week_time ORDER BY b.hits_week DESC" rows="10"}
+<li><span>{str_pad($n, 2, 0, STR_PAD_LEFT)}</span><a href='{video_show_url("$r[vid]","$r[url]")}'>{str_cut($r[title],36,'')}</a></li>
+{/get}
+</ul>
+<div class="clear"></div>
+<ul class="rtlist" id="link_2" style="display:none">
+{get sql="SELECT * FROM phpcms_video a,phpcms_video_count b WHERE a.vid=b.vid AND status=99 $catids AND hits_time>$month_time ORDER BY b.hits_month  DESC" rows="10"}
+<li><span>{str_pad($n, 2, 0, STR_PAD_LEFT)}</span><a href='{video_show_url("$r[vid]","$r[url]")}'>{str_cut($r[title],36,'')}</a></li>
+{/get}
+</ul>
+<div class="clear"></div>
+<ul class="rtlist" id="link_3" style="display:none">
+{get sql="SELECT * FROM phpcms_video a,phpcms_video_count b WHERE a.vid=b.vid AND status=99 $catids AND hits_time>$day_time ORDER BY b.hits_month  DESC" rows="10"}
+<li><span>{str_pad($n, 2, 0, STR_PAD_LEFT)}</span><a href='{video_show_url("$r[vid]","$r[url]")}'>{str_cut($r[title],36,'')}</a></li>
+{/get}
+</ul>
+<div class="clear"></div>
+</div>
+</div>
+<!--排行结束-->
+
+<div class="gg302"><!--预留广告位304*156--></div>
+<!--推荐视频-->
+<div class="r_tit fb f14">推荐视频</div>
+<div class="midcon">
+<div class="blank10"></div>
+<ul class="r_vedio">
+{tag_内容页推荐视频}
+</ul>
+<div class="blank5"></div>
+</div>
+<!--推荐视频结束-->
+
+</div>
+<!--w300结束-->
+
+</div>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function showmenu(id, all, menu, tab)
+{
+	for (var i = 1; i<= all; i++)
+	{
+		$('#'+tab+'_'+i).hide();
+		$('#'+menu+'_'+i).removeClass('on');
+	}
+	$('#'+menu+'_'+id).addClass('on');
+	$('#'+tab+'_'+id).show();
+}
+//-->
+</SCRIPT>
+{template 'phpcms','footer'}

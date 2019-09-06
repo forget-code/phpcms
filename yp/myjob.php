@@ -23,7 +23,14 @@ switch($action)
 			$info['userid'] = $_userid;
 			$info['status'] = 3;
 			$info['addtime'] = TIME;
+			$byear = intval($byear);
+			$byear = $byear==19 ? '0000' : $byear;
+			$bmonth = intval($bmonth);
+			$bday = intval($bday);
+			$info['birthday'] = $byear.'-'.$bmonth.'-'.$bday;
+			
 			$a->add($info);
+			
 			$MS['title'] = '恭喜！您的简历已经添加成功了！';
 			$MS['description'] = '接着您可以做下面的事情';
 			$MS['urls'][0] = array(

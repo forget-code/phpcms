@@ -27,8 +27,8 @@ return array (
     'number' => '18',
     'page' => '0',
     'type' => 'link',
-    'sql' => 'SELECT * FROM phpcms2008_link where linktype=\'0\' and passed=1 AND elite=1',
-    'tagcode' => 'tag(\'link\', \'tag_link\', "SELECT * FROM phpcms2008_link where linktype=\'0\' and passed=1 AND elite=1", 0, 18, array (  \'typeid\' => \'0\',  \'rownum\' => \'10\',  \'showhits\' => \'是\',))',
+    'sql' => 'SELECT * FROM phpcms2008_link where linktype=\'0\' and passed=1 AND elite=1 ORDER BY listorder ASC',
+    'tagcode' => 'tag(\'link\', \'tag_link\', "SELECT * FROM phpcms2008_link where linktype=\'0\' and passed=1 AND elite=1 ORDER BY listorder ASC", 0, 18, array (  \'typeid\' => \'0\',  \'rownum\' => \'10\',  \'showhits\' => \'是\',))',
   ),
   'logo链接' => 
   array (

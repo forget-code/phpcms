@@ -1,7 +1,7 @@
 <?php
 include './config.inc.php';
-
-$dirnames = dirname(QUERY_STRING);
+$query_string = htmlspecialchars($_SERVER['QUERY_STRING']);
+$dirnames = dirname($query_string);
 $tmp = PHPCMS_ROOT.str_replace($PHPCMS['siteurl'],'',$dirnames).'/';
 $tmp_url = str_replace($PHPCMS['siteurl'],'',$dirnames);
 
@@ -19,7 +19,7 @@ setcookie('tmp_url',$tmp_url);
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8".CHARSET />
 <?php
-$pic = @trim(QUERY_STRING);
+$pic = @trim($query_string);
 if(empty($pic)){
 	echo '<script language="javascript">alert("请选择需要剪切的图片！");window.opener=null;window.close();</script>';
 	exit;

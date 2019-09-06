@@ -117,11 +117,16 @@ class category
 	{
 		global $CATEGORY, $setting, $priv_groupid, $priv_roleid, $priv_role, $priv_group, $MODEL;
 		if(!$catid) return FALSE;
+		
 		$cat_childs = $CATEGORY[$catid]['arrchildid'];
 		$cat_child = explode(',', $cat_childs);
 		$t = $catids = '';
 		foreach($cat_child as $cid)
 		{
+			$C = cache_read('category_'.$cid.'.php');
+			$setting['meta_title'] = $C['meta_title'];
+			$setting['meta_keywords'] = $C['meta_keywords'];
+			$setting['meta_description'] = $C['meta_description'];
 			if($CATEGORY[$catid]['modelid']==$CATEGORY[$cid]['modelid'] && $cid!=$catid)
 			{
 				$catids .= $t.$cid;

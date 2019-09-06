@@ -22,7 +22,7 @@ function get_remotefileurls($string, $ext = 'gif|jpg|jpeg|bmp|png', $absurl = ''
 {
     global $PHP_DOMAIN;
     if ($ext == '') $ext = '[A-Za-z0-9]{2,4}';
-    if (!preg_match_all("/(href| src)=([\"|']?)([^ \"'>]+\.($ext))\\2/i", $string, $matches))
+    if (!preg_match_all("/<(?:a|img).+?(href| src)=([\"|']?)([^ \"'>]+\.($ext))\\2/i", $string, $matches))
     {
         return array();
     } 

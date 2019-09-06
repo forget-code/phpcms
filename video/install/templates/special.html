@@ -1,0 +1,39 @@
+{template 'video','header'}
+<div id="main">
+
+<div class="gg980 mar_10"><!--预留978*60广告位--></div>
+<div class="weizhi">当前位置：<a href="{$M[url]}">视频首页</a><a href="{$M[url]}special.php">专辑列表</a></div>
+<div class="w670 left">
+
+
+<div class="inner_title"><span class="more blue">&nbsp;</span><h2 class="f14 blue">专辑列表</h2></div>
+<div class="midcon">
+<div class="blank10"></div>
+<ul class="list_vedio">
+{get sql="SELECT * FROM phpcms_video_special WHERE disabled=0 ORDER BY specialid DESC" rows="15" page="$page" urlrule="$urlrule"}
+<li><a href="{video_special_url($r[specialid])}" class="img_padding"><span class="v_time">{format_time($r[timelen])}</span>
+<img src="{$r[thumb]}" width="124" height="94"/></a><h2 class="blue"><a href="{video_show_url($r[vid],$r[url])}">{$r[title]}</a></h2><p>视频数:{$r[videonums]}</p><p>添加时间:{date('Y-m-d',$r[addtime])}</p></li>
+{/get}
+</ul>
+<div class="blank10"></div><div id="pages" class="channel_pages" >{$pages}</div>
+</div>
+
+</div>
+<!--w670结束-->
+<div class="w302 right">
+<!--推荐视频-->
+<div class="r_tit fb f14">推荐视频</div>
+<div class="midcon">
+<div class="blank10"></div>
+<ul class="r_vedio">
+{tag_内容页推荐视频}
+</ul>
+<div class="blank5"></div>
+</div>
+<!--推荐视频结束-->
+<div class="gg302"><!--预留广告位304*156--></div>
+</div>
+<!--w300结束-->
+
+</div>
+{template 'phpcms','footer'}

@@ -45,11 +45,20 @@ if($enablegd)
 	//fill image with bgcolor
 	imagefill($im, 0, 0, imagecolorallocate($im, 250, 253, 254));
 	//writes string
-	imagettftext($im, 12, rand(30, -30), 5, rand(14, 16), $foregroundArr[rand(0,3)], PHPCMS_ROOT.'include/fonts/ALGER.TTF', $string[0]);
-	imagettftext($im, 12, rand(50, -50), 20, rand(14, 16), $foregroundArr[rand(0,3)], PHPCMS_ROOT.'include/fonts/ARIALNI.TTF', $string[1]);
-	imagettftext($im, 12, rand(50, -50), 35, rand(14, 16), $foregroundArr[rand(0,3)], PHPCMS_ROOT.'include/fonts/ALGER.TTF', $string[2]);
-	imagettftext($im, 12, rand(30, -30), 50, rand(14, 16), $foregroundArr[rand(0,3)], PHPCMS_ROOT.'include/fonts/arial.ttf', $string[3]);
-	
+	if(function_exists('imagettftext'))
+	{
+		imagettftext($im, 12, rand(30, -30), 5, rand(14, 16), $foregroundArr[rand(0,3)], PHPCMS_ROOT.'include/fonts/ALGER.TTF', $string[0]);
+		imagettftext($im, 12, rand(50, -50), 20, rand(14, 16), $foregroundArr[rand(0,3)], PHPCMS_ROOT.'include/fonts/ARIALNI.TTF', $string[1]);
+		imagettftext($im, 12, rand(50, -50), 35, rand(14, 16), $foregroundArr[rand(0,3)], PHPCMS_ROOT.'include/fonts/ALGER.TTF', $string[2]);
+		imagettftext($im, 12, rand(30, -30), 50, rand(14, 16), $foregroundArr[rand(0,3)], PHPCMS_ROOT.'include/fonts/arial.ttf', $string[3]);
+	}
+	else
+	{
+		imagestring($im, 5, 3, floor(rand(0,5))-1, $string[0], $foregroundArr[rand(0,3)]);
+		imagestring($im, 5, 16, floor(rand(0,5))-1, $string[1], $foregroundArr[rand(0,3)]);
+		imagestring($im, 5, 23, floor(rand(0,5))-1, $string[2], $foregroundArr[rand(0,3)]);
+		imagestring($im, 5, 33, floor(rand(0,5))-1, $string[3], $foregroundArr[rand(0,3)]);
+	}
 	//strikethrough
 
 	$border = imagecolorallocate($im, 133, 153, 193);

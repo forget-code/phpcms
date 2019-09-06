@@ -94,7 +94,7 @@ if(strpos($content, '[page]') !== false)
 		}
 	}
 	$pages = $curl->show_pages($page, $pagenumber, $pageurls);
-	$content = $contents[$page];
+	$content = $contents[$page-1];
 	if($titles)
 	{
 		list($title, $content) = explode('[/page]', $content);

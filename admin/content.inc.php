@@ -99,6 +99,7 @@ switch($action)
 			$tree = new tree($cats);
 			$categorys = $tree->get_tree(0, $str);
             $pagetitle = $CATEGORY[$catid]['catname'].'-发布';
+			header("Cache-control: private");
 			include admin_tpl('content_add');
 		}
 		break;

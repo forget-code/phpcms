@@ -52,12 +52,12 @@ class content_search
 		if($this->modelid)
 		{
 			if($where) $where = "AND $where";
-			$sql = "SELECT * FROM $this->table WHERE a.contentid=b.contentid $where ORDER BY $orderby";
+			$sql = "SELECT * FROM $this->table WHERE a.contentid=b.contentid AND a.status=99 $where ORDER BY $orderby";
 		}
 		else
 		{
-			if($where) $where = "WHERE $where";
-			$sql = "SELECT * FROM $this->table $where ORDER BY $orderby";
+			if($where) $where = " AND $where";
+			$sql = "SELECT * FROM $this->table WHERE status=99 $where ORDER BY $orderby";
 		}
 		$this->sql = $sql;
 		return true;

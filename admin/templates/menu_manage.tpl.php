@@ -38,7 +38,7 @@ include admin_tpl('header');
 
 <div class="button_box">
 	 <input name="dosubmit" type="submit" value=" 排序 " /> 
-	 <input name="addmenu" type="button" value="添加菜单" onclick="redirect('?mod=phpcms&file=menu&action=add&parentid=<?=$parentid?>&parentname=<?=urlencode($parentname)?>')" />
+	 <input name="addmenu" type="button" value="添加菜单" onclick="redirect('?mod=phpcms&file=menu&action=add&parentid=<?=$parentid?>&parentname=<?=urlencode($parentname)?>&forward=<?=urlencode(URL)?>')" />
 </div>
 <div id="pages">
 	<?=$m->pages?>

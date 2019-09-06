@@ -69,8 +69,7 @@ include admin_tpl('header');
 			}
 		?>
         <td class="align_c">
-		<a href="?mod=formguide&file=viewinfo&formid=<?=$formid?>&dataid=<?=$dataid?>">查看</a> | 
-		<a href="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=delete&formid=<?=$formid?>&dataid=<?=$dataid?>', '删除该条信息')">删除</a>
+		<a href="?mod=formguide&file=viewinfo&formid=<?=$formid?>&dataid=<?=$dataid?>">查看</a>
 		</td>
     </tr>
     <?php

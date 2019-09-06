@@ -1,0 +1,5 @@
+{loop $data $n $r}
+{php $flash_texts .= str_replace('"',"'",$r[title]).'|';$picstr .= thumb($r[thumb], 456, 315).'|';$flash_links .= video_show_url($r[vid],$r[url]).'|';$smallpic .= thumb($r[thumb], 85, 60,1).'|';$description .= strip_tags($r[description]).'|';}
+{/loop}
+<embed height="383" width="456" pluginspage="http://www.macromedia.com/go/getflashplayer" 
+flashvars="smallpic={$smallpic}&picstr={$picstr}&clickstr={$flash_links}&descriptstr={$flash_texts}&aboutvideo={$description}&&isonvideo=0|0|0|0|0&secstr=6" wmode="transparent" menu="false" scale="noscale" allowfullscreen="true" allowscriptaccess="always" allownetworking="all" quality="high" bgcolor="#FFFFFF" name="flash_focus" id="flash_focus" src="video/images/indexff.swf" type="application/x-shockwave-flash"/> 

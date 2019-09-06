@@ -167,7 +167,12 @@ class http
 
 	function get_data()
 	{
-		return $this->data;
+		if (strpos($this->header,'chunk')) {
+			$data = explode(chr(13), $this->data);
+			return $data[1];
+		} else {
+			return $this->data;
+		}
 	}
 
 	function get_header()

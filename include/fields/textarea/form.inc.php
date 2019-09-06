@@ -7,7 +7,7 @@
 			$formattribute .= ' onkeyup="checkLength(this, \''.$field.'\', \''.$maxlength.'\');"';
 		}
 		$html = '';
-		if($value)
+		if($value && $checkcharacter && $maxlength)
 		{
 			$html = '<script type="text/javascript">checkLength(document.getElementById(\''.$field.'\'), \''.$field.'\', \''.$maxlength.'\');</script>';
 		}

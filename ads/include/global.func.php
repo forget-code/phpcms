@@ -44,7 +44,7 @@ function ads_content($ads, $isjs = 1)
 function ads_image($id, $linkurl, $imageurl, $width, $height, $alt = '', $adsname = '')
 {
 	global $M;
-	$url = $M['enableadsclick'] ? SITE_URL.'ads/c.php?id='.$id : $linkurl;
+	$url = $M['enableadsclick'] ? SITE_URL.'c.php?id='.$id : $linkurl;
 	if(!preg_match('/http:\/\//',$url)) $url = 'http://'.$url;
 	if($linkurl)
 	{
@@ -84,7 +84,7 @@ function ads_text($id, $text)
 function ads_code($id, $code, $linkurl)
 {
 	global $M;
-	$url = $M['enableadsclick'] ? SITE_URL.'ads/c.php?id='.$id : $linkurl;
+	$url = $M['enableadsclick'] ? SITE_URL.'c.php?id='.$id : $linkurl;
 	if($linkurl)
 	{
 		$adscode = '<span><a href="'.$url.'">'.new_htmlspecialchars($code).'</a></span>';

@@ -9,7 +9,7 @@ class order
 
 	function __construct()
 	{
-		global $db, $_userid, $_username, $_amount;
+		global $db, $_userid, $_username, $_amount,$M;
 		$this->db = &$db;
 		$this->table = DB_PRE.'order';
         $this->table_log = DB_PRE.'order_log';
@@ -18,6 +18,8 @@ class order
 		$this->amount = $_amount;
 		$this->STATUS = include dirname(__FILE__).'/status.inc.php';
 		$this->where_userid = defined('IN_ADMIN') ? '' : "AND `userid`=$this->userid ";
+		$endtime = TIME-86400*$M['maxcloseday'];
+		$this->db->query("UPDATE $this->table SET status=4 WHERE status=0 AND `time`<$endtime");
 	}
 
 	function order()

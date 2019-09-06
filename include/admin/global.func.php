@@ -7,6 +7,7 @@ function set_config($config)
 	$pattern = $replacement = array();
 	foreach($config as $k=>$v)
 	{
+		if(in_array($k,array('UPLOAD_MAXSIZE','UPLOAD_MAXUPLOADS','SESSION_TTL','CACHE_PAGE_TTL','CACHE_PAGE_INDEX_TTL','CACHE_PAGE_CATEGORY_TTL','CACHE_PAGE_LIST_TTL','CACHE_PAGE_CONTENT_TTL'))) $v = intval($v);
 		$pattern[$k] = "/define\(\s*['\"]".strtoupper($k)."['\"]\s*,\s*([']?)[^']*([']?)\s*\)/is";
         $replacement[$k] = "define('".$k."', \${1}".$v."\${2})";
 	}
@@ -72,11 +73,17 @@ function admin_tpl($file = 'index', $module = '')
 function admin_menu($menuname, $submenu = array())
 {
 	global $mod,$file,$action;
-    $menu = $s = '';
+    $menu = $s = '';echo $flag;
     foreach($submenu as $m)
 	{
+		$B1 = $B2 = '';	
+		if($m[3] && $m[4] && $m[3]==$m[4]) 
+		{
+			$B1 = '<b>';
+			$B2 = '</b>';
+		}
 		$title = isset($m[2]) ? "title='".$m[2]."'" : "";
-		$menu .= $s."<a href='".$m[1]."' ".$title.">".$m[0]."</a>";
+		$menu .= $s."<a href='".$m[1]."' ".$title.">".$B1.$m[0].$B2."</a>";
         $s = ' | ';
 	}
 	return include PHPCMS_ROOT.'admin/templates/admin_menu.tpl.php';

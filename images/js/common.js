@@ -14,12 +14,13 @@ function redirect(url)
 	{
 		url = url.replace(/\/(\.[a-zA-Z]+)([0-9]+)$/g, "/$2$1");
 	}
-	else if(url.match(/\/([a-z\-]+).html([0-9]+)$/)) {
-		url = url.replace(/\/([a-z\-]+).html([0-9]+)$/, "/$1/page-$2.html");
-	}
 	else if(url.match(/\/([a-z]+).html([0-9]+)$/)) {
 		url = url.replace(/\/([a-z]+).html([0-9]+)$/, "/$1-$2.html");
 	}
+	else if(url.match(/-.html([0-9]+)$/)) {
+		url = url.replace(/-.html([0-9]+)$/, "-$1.html");
+	}
+
 	if(url.indexOf('://') == -1 && url.substr(0, 1) != '/' && url.substr(0, 1) != '?') url = $('base').attr('href')+url;
 	location.href = url;
 }

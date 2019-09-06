@@ -13,7 +13,7 @@ class player
 
 	function player()
 	{
-		$this->__construst();
+		$this->__construct();
 	}
 
 	function get($playerid)

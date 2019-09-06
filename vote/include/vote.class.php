@@ -266,7 +266,7 @@ class vote
 		if($info['interval']>0)
 		{
 			$condition = '('. TIME.'-time)/(24*3600)<'.$info['interval'];
-			if($this->db->get_one("select time from ".DB_PRE."vote_data where subjectid='$subjectid' and ip='".IP."' and $condition ")) return -5;
+			if($this->db->get_one("select time from ".DB_PRE."vote_data where subjectid='$voteid' and ip='".IP."' and $condition ")) return -5;
 		}
 		if($info['groups'] && is_array($info['groups']) && !in_array($_groupid,$info['groups'])) return -6;
 		if(!$info['allowguest'] && !$_userid) return -9;

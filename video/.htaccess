@@ -1,0 +1,7 @@
+RewriteEngine on
+RewriteBase /
+RewriteRule ^(.*)video-([0-9]+)\.html$ $1/video/show.php?vid=$2
+RewriteRule ^(.*)video-list-([0-9]+)-([0-9]+)\.html$ $1/video/list.php?catid=$2&page=$3
+RewriteRule ^(.*)specialid-([0-9]+)-([0-9]+)\.html$ $1/video/special.php?specialid=$2&page=$3
+RewriteRule ^(.*)specialid--([0-9]+)\.html$ $1/video/special.php?page=$2
+RewriteRule ^(.*)specialvideo-([0-9]+)-([0-9]+)\.html$ $1/video/show.php?vid=$2&specialid=$3

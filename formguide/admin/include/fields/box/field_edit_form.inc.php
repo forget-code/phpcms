@@ -3,7 +3,7 @@
       <td>选项列表</td>
       <td><textarea name="setting[options]" rows="2" cols="20" id="options" style="height:100px;width:200px;"><?=$options?></textarea></td>
     </tr>
-	<tr>
+	<tr> 
       <td>选项类型</td>
       <td>
 	  <input type="radio" name="setting[boxtype]" value="radio" <?=$boxtype == 'radio' ? 'checked' : ''?>  onclick="$('#setcols').show();$('#setsize').hide();"/> 单选按钮 <br />
@@ -14,7 +14,7 @@
     </tr>
 <tbody id="setcols" style="display:<?=($boxtype == 'radio' || $boxtype == 'checkbox') ? 'block' : 'none'?>">
 	<tr> 
-      <td>字段类型</td>
+      <td>字段类型 </td>
       <td>
 	  <select name="setting[fieldtype]">
 	  <option value="CHAR" <?=$fieldtype == 'CHAR' ? 'selected' : ''?>>定长字符 CHAR</option>

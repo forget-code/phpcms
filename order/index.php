@@ -20,6 +20,7 @@ switch($action)
     case 'pay':
 		$r = $order->get($orderid);
 		if(!$r) showmessage('订单不存在！');
+		if($r['status']==4) showmessage('交易已经关闭',url($M['url'], 1).'index.php?action=manage');
 		extract($r);
 
 		if($dosubmit)

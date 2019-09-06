@@ -3,9 +3,9 @@ $PHPCMS_VERSION_NAME = 'PHPCMS2008';
 $PHPCMS_VERSION_BUILD_TIME = PHPCMS_RELEASE;
 
 $PHPCMS_MODULES = array(
-'name'=>array('ads','space','comment','vote','link','order','message','pay','mail','guestbook','announce','ask','digg','mood','search','special','error_report','formguide','yp','spider'),
-'modulename'=>array('广告','个人空间','评论','投票','友情链接','订单','短消息','财务','邮件订阅','留言本','公告','问吧','顶一下','心情指数','全站搜索','专题','错误报告','表单向导','企业黄页','采集'),
-'modules'=>array('ads'=>'广告','space'=>'个人空间','comment'=>'评论','vote'=>'投票','link'=>'友情链接','order'=>'订单','message'=>'短消息','pay'=>'财务','mail'=>'邮件订阅','page'=>'单网页','guestbook'=>'留言本','announce'=>'公告','ask'=>'问吧','digg'=>'顶一下','mood'=>'心情指数','search'=>'全站搜索','special'=>'专题','error_report'=>'错误报告','formguide'=>'表单向导'),
+'name'=>array('ads','space','comment','vote','link','order','message','pay','mail','guestbook','announce','ask','digg','mood','search','special','error_report','formguide','yp','spider','video'),
+'modulename'=>array('广告','个人空间','评论','投票','友情链接','订单','短消息','财务','邮件订阅','留言本','公告','问吧','顶一下','心情指数','全站搜索','专题','错误报告','表单向导','企业黄页','采集','视频'),
+'modules'=>array('ads'=>'广告','space'=>'个人空间','comment'=>'评论','vote'=>'投票','link'=>'友情链接','order'=>'订单','message'=>'短消息','pay'=>'财务','mail'=>'邮件订阅','page'=>'单网页','guestbook'=>'留言本','announce'=>'公告','ask'=>'问吧','digg'=>'顶一下','mood'=>'心情指数','search'=>'全站搜索','special'=>'专题','error_report'=>'错误报告','formguide'=>'表单向导','yp'=>'企业黄页','spider'=>'采集','video'=>'视频'),
 'introduce'=>array('可自由设置广告位、尺寸、价格，可向广告位投放图片、文字、FLASH、弹窗、漂浮等各种常见类型的广告，支持广告上线和下线时间设置，支持广告展示和点击次数统计，支持前台查看广告报价和购买广告。',//广告
  '可聚合会员在网站各个模块发布的信息，类似于个人主页',//个人空间
  '可以对任意频道和模块里的任意内容附加评论，支持评论中加入表情图标（自定义表情图标），可对单一评论回复和投鲜花鸡蛋，支持是否开启评论，游客回复等',//评论
@@ -26,6 +26,7 @@ $PHPCMS_MODULES = array(
  '管理员可以在后台按提示自动添加完成包含单行文本，多行文本，单选框，复选框，下拉菜单，文件浏览等表单项的表单，可把调用标签后插入到任意模版显示该表单，用户提交的信息可在后台和指定的E-mail查看。此功能可以用来建立在线报名或者其他各类反馈表单',//表单向导
  '功能较2007版更强大，效率更有显著的高。支持企业属于多个行业，支持商务中心地址随意更改功能等多种功能',//企业黄页
  '在保留2007版原有的功能上，修复了2007遗留的一些bug，功能更强，性能更优',//采集
+ '完全的自主管理，内部整合ku6vms系统，上传视频到ku6，使用全国cdn',//视频
  )
  );
 ?>

@@ -42,6 +42,7 @@ switch($action)
 		}
 		else
 		{
+			if(!is_ie()) showmessage('本功能只支持IE浏览器，请用IE浏览器打开。');
 			$unsetgroups = form::checkbox($GROUP, 'unsetgroupids', 'unsetgroupids', '', 4);
 			$unsetroles = form::checkbox($ROLE, 'unsetroleids', 'unsetroleids', '', 4);
 		    require_once 'fields/patterns.inc.php';
@@ -69,6 +70,7 @@ switch($action)
 		}
 		else
 		{
+			if(!is_ie()) showmessage('本功能只支持IE浏览器，请用IE浏览器打开。');
 			$info = $field->get($fieldid);
 			if(!$info) showmessage('指定的字段不存在！');
 			extract(new_htmlspecialchars($info));

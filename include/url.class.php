@@ -160,16 +160,79 @@ class url
 		return $url_a;
 	}
 
-	function show_pages($page, $pagenumber, $pageurls)
-	{
-		$pages = '';
-		for($i=1; $i<=$pagenumber; $i++)
+	function show_pages($curr_page, $num, $pageurls)
+	{		
+		$multipage = '';
+		$page = 11;
+		$offset = 4;
+		$pages = $num;
+		$from = $curr_page - $offset;
+		$to = $curr_page + $offset;
+		$more = 0;
+		if($page >= $pages)
 		{
-			$pages .= $page == $i ? '<span>'.$i.'</span>' : '<a href="'.$pageurls[$i][1].'">'.$i.'</a>';        
+			$from = 2;
+			$to = $pages-1;
 		}
-		$prepage = max($page-1, 1);
-		$nextpage = min($page+1, $pagenumber);
-		return '<a href="'.$pageurls[$prepage][1].'">上一页</a>'.$pages.'<a href="'.$pageurls[$nextpage][1].'">下一页</a>';
+		else
+		{
+			if($from <= 1)
+			{
+				$to = $page-1;
+				$from = 2;
+			}
+			elseif($to >= $pages)
+			{
+				$from = $pages-($page-2);
+				$to = $pages-1;
+			}
+			$more = 1;
+		}
+
+		if($curr_page>0)
+		{
+			$perpage = $curr_page == 1 ? 1 : $curr_page-1;
+			$multipage .= '<a href="'.$pageurls[$perpage][1].'">上一页</a>';
+			if($curr_page==1)
+			{
+				$multipage .= '<u><b>1</b></u> ';
+			}
+			elseif($curr_page>6 && $more)
+			{
+				$multipage .= '<a href="'.$pageurls[1][1].'">1</a>..';
+			}
+			else
+			{
+				$multipage .= '<a href="'.$pageurls[1][1].'">1</a>';
+			}
+		}
+		for($i = $from; $i <= $to; $i++)
+		{
+			if($i != $curr_page)
+			{
+				$multipage .= '<a href="'.$pageurls[$i][1].'">'.$i.'</a>';
+			}
+			else
+			{
+				$multipage .= ' <u><b>'.$i.'</b></u> ';
+			}
+		}
+		if($curr_page<$pages)
+		{
+			if($curr_page<$pages-5 && $more)
+			{
+				$multipage .= '..<a href="'.$pageurls[$pages][1].'">'.$pages.'</a> <a href="'.$pageurls[$curr_page+1][1].'">下一页</a>';
+			}
+			else
+			{
+				$multipage .= '<a href="'.$pageurls[$pages][1].'">'.$pages.'</a> <a href="'.$pageurls[$curr_page+1][1].'">下一页</a>';
+			}
+		}
+		elseif($curr_page==$pages)
+		{
+			$multipage .= ' <u><b>'.$pages.'</b></u><a href="'.$pageurls[$curr_page][1].'">下一页</a>';
+		}
+		return $multipage;
 	}
 
 	function update($contentid,$url)

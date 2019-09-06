@@ -59,10 +59,10 @@ class html
 				$template = $template_list;
 			}
 		}
-		ob_start();
-		include template('phpcms', $template);
 		$file_a = $this->url->category($catid, $curpage);
 		$file = PHPCMS_ROOT.$file_a[0];
+		ob_start();
+		include template('phpcms', $template);
 		return createhtml($file);
 	}
 

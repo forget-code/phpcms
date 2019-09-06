@@ -99,7 +99,7 @@ switch($action)
             $adsplace->createhtml($place['placeid'], 0, $place['option']);
             $adsplace->createhtml($place['placeid'], 1, $place['option']);
         }
-        showmessage($LANG['opration_completed'], '?mod=ads&file=ads_place');
+        showmessage($LANG['opration_completed']);
         break;
 	case 'view':
         $placeid = intval($placeid);

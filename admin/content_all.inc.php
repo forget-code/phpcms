@@ -142,6 +142,7 @@ switch($action)
 				$t = ',';
 			}
 		}
+		if(!$catids) showmessage('您的账号没有管理栏目的权限');
 		$status = $status ? intval($status) : 3;
 		$where = " `catid` IN ($catids) AND `status`=".$status;
 		$infos = $c->listinfo($where, '`listorder` DESC,`contentid` DESC', $page, 20);

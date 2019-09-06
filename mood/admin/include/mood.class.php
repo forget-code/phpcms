@@ -96,7 +96,7 @@ class mood
 				$infos[$i]['id'] = $i;
 				$infos[$i]['img'] = trim($m[1]);
 			}
-
+			$moodtitle = $r['name'];
 			$string = "var votehtml = '";
 			ob_start();
 			include template('mood','show');

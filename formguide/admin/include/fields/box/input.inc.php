@@ -1,3 +1,4 @@
+
 	function box($field, $value)
 	{
 		if($this->fields[$field]['boxtype'] == 'checkbox') 

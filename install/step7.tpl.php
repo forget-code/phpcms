@@ -48,6 +48,7 @@ setting['error_report'] = '错误报告模块安装成功...';
 setting['formguide'] = '表单向导模块安装成功...';
 setting['yp'] = '企业黄页模块安装成功...';
 setting['spider'] = '采集模块安装成功...';
+setting['video'] = '视频模块安装成功...';
 var dbhost = '<?=$dbhost?>';
 var dbuser = '<?=$dbuser?>';
 var dbpw = '<?=$dbpw?>';

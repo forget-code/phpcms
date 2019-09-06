@@ -19,9 +19,12 @@ $page = max(intval($page), 1);
 $catlist = submodelcat($C['modelid']);
 unset($catlist[$catid]);
 
+$arrchildid = $CATEGORY[$catid]['arrchildid'];
+
 if($child)
 {
 	$areas = subarea($areaid);
+	$arr_areaid = $AREA[$areaid]['arrchildid'];
 	$template = $template ? $template : 'area';
 }
 else

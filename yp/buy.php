@@ -66,11 +66,11 @@ switch($action)
 		$areaname = htmlspecialchars($areaname);
 		if(strpos(',',$areaname)===false)
 		{
-			$where .= " c.areaname='$areaname' AND";
+			$where .= " c.areaname='$areaname' AND ";
 		}
 		else
 		{
-			$where .= " c.areaname IN ($areaname) AND";
+			$where .= " c.areaname IN ($areaname) AND ";
 		}
 		$areaname = urlencode($areaname);
 	}

@@ -1,0 +1,182 @@
+{template 'video','header'}
+<div id="main">
+<div class="weizhi">当前位置：<a href="{$M[url]}">视频首页</a>{catpos($catid)}{$title}</div>
+<div class="areaLeft">
+<h2>{$title}</h2>
+<div class="videoPlay">
+	<embed src="http://v.ku6vms.com/phpvms/player/html/vid/{$vmsvid}/style/{$style_projectid}/" quality="high" width="531" height="425" align="middle" allowScriptAccess="always" allowfullscreen="true" type="application/x-shockwave-flash"></embed>
+</div>
+<div class="blank10"></div>
+<div class="shareModule">
+<p>{$content}</p>
+</div>
+<div class="btnZhuang">转帖到博客论坛</div>
+<div class="shareModule">
+<span class="quteArrow"></span>
+<p>Flash播放器的代码：</p>
+<input type="text" onclick="this.select();document.execCommand('Copy');" value="http://v.ku6vms.com/phpvms/player/html/vid/{$vmsvid}/style/{$style_projectid}/" class="input" readonly="readonly" id="outSideSwfCode" name="outSideSwfCode"/>
+<a class="btnCopy" onclick="$('#outSideSwfCode').select();document.execCommand('Copy');" href="javascript:void(0);">复 制</a>
+<div class="clear"></div>
+<p>转帖到论坛、博客的HTML代码：</p>
+<input type="text" onclick="this.select();document.execCommand('Copy');" value='{htmlspecialchars("<embed src=\"http://v.ku6vms.com/phpvms/player/html/vid/$vmsvid/style/$style_projectid/\" quality=\"high\" width=\"531\" height=\"425\" align=\"middle\" allowScriptAccess=\"always\" allowfullscreen=\"true\" type=\"application/x-shockwave-flash\"></embed>")}' class="input" readonly="readonly" id="bbsCode"/>
+<a class="btnCopy" onclick="$('#bbsCode').select();document.execCommand('Copy');" href="javascript:void(0);">复 制</a>
+<div class="clear"></div>
+</div>
+ {if isset($MODULE[mood])}
+      <div id="moodrank_div"></div>
+      <script  type="text/javascript">var contentid = {$vid};</script>
+      <script type="text/javascript" id="callback_js"></script>
+      <script type="text/javascript" src="data/moodrank/2.js"></script>
+{/if}
+<div class="clear"></div>   
+<p id="text_1" style="margin-top:1%;">
+        {if isset($MODULE[error_report])}
+
+      <form action="{$MODULE[error_report][url]}error_report.php" name="errors" id="errors">
+        <input type="hidden" name="title" value="{$title}" />
+		<input type="hidden" name="contentid" value="{$contentid}" />
+      </form>
+
+		<a href="javascript:$('#errors').submit();">[错误报告]</a>{/if} 
+        <a href="javascript:window.print();">[打印]</a> <a href="javascript:window.close();">[关闭]</a> 
+        <a href="{URL}#top">[返回顶部]</a> </p>
+  {if isset($MODULE[comment])}
+      {php list($keyid, $verify) = keyid_make('video', 'video', 'title', $vid);}
+<div class="commnent">
+<div class="hd blue fb"><span class="more"><a href="{$MODULE[comment][url]}?keyid={$keyid}&verify={$verify}">查看评论</a></span> <a href="{$MODULE[comment][url]}?keyid={$keyid}&verify={$verify}">已有<span id="comments">{$comments}</span>条评论</a></div>
+<div class="commnentTxt">
+ <form action="{$MODULE[comment][url]}?action=addpost" method="post" onSubmit="return checkForm();">
+<ul>
+<li>
+<input type="hidden" name="keyid" value="{$keyid}"/>
+			<input type="hidden" name="verify" value="{$verify}"/>
+<textarea  id="comment" name="comment" rows="8" cols="80" class="textarea_style" onfocus="reply_clearfield()" onblur="reply_restoration()"/></textarea></li>
+<li style="text-align:left;margin-left:1%;margin-top:1%;">
+            <span id="checker"><div style="float:left">验证码：</div><input type="text" style="ime-mode: disabled;" size="6" id="checkcode" name="checkcode" /><img src="" id="code_img" style="display:none" onclick="this.src='checkcode.php?'+Math.random()" alt="点击换一张"></span>
+            <input id="dosubmit" name="dosubmit" type="submit" value="发表评论" />
+          </li>
+</ul>
+  </form>
+<div class="blank5"></div>
+</div>
+
+</div>
+      <script type="text/javascript" src="data/js/comment_setting.js"></script>
+      <script type="text/javascript">
+      <!--
+        $().ready(function() {        
+            if(setting.ischecklogin == 0 && getcookie('auth') === null)
+            {
+                $('#comment').val("请您登陆后发表评论！");
+                $('#comment').attr("disabled","disabled");
+                $('#dosubmit').attr("disabled","disabled");
+            }
+            else 
+            {
+                $('#comment').val("我也来说两句！");
+            }
+        });
+        function reply_restoration()
+        {
+            if($('#comment').val() == '')
+            {
+                $('#comment').val("我也来说两句！");
+            }
+        }
+        function reply_clearfield()
+        {
+            if ($('#comment').val() == "我也来说两句！") 
+            {
+                $('#comment').val("");   
+            }
+			document.getElementById('code_img').style.display = 'block';document.getElementById('code_img').src='checkcode.php';
+        }
+        function checkForm()
+        {
+            if($('#comment').val() == '' || $('#comment').val() == "我也来说两句！")
+            {
+                alert("内容不能为空");
+                $('#comment').focus();
+                return false;
+            }
+            if($('#checkcode').val() == '' )
+            {
+                alert("验证码不能为空");
+                $('#checkcode').focus();
+                return false;
+            }
+            if ($('#comment').val().length > 1000) 
+            {
+                alert("内容太长，最多 1000 个文字");
+                return false;
+            }
+        }
+      //-->
+      </script>
+    {/if}        
+
+<!--评论结束-->
+
+
+</div>
+<!--左侧结束-->
+<div class="areaRight">
+{if $specialid}
+<div class="rcon">
+<div class="title">专辑名称：{$r_special[title]}</div>
+<p>{str_cut(strip_tags($r_special[description]),200)}</p>
+<div class="blank10"></div>
+<ul class="playList">
+<div id="ajax_page">
+{loop $specialdata $info}
+	{if $info[vid]==$vid}
+	<li class="listpic"><a href="{video_show_url($info[vid],$info[url],$specialid)}" class="img"><img src="{$info[thumb]}" width="112" height="64"/></a><h3><a href="{video_show_url($info[vid],$info[url],$specialid)}">{$info[title]}</a></h3>
+	<P>时长：{format_time($info[timelen])}</P><p>添加时间：{date('Y-m-d',$info[inputtime])} </p></li>
+	{else}
+	<li><a href="{video_show_url($info[vid],$info[url],$specialid)}">{$info[title]}</a><span>{format_time($info[timelen])}</span></li>
+	{/if}
+{/loop}
+</div>
+</ul>
+<div class="blank10"></div>
+<div class="pagesVideo">{$specialpages}</div>
+</div>
+{/if}
+<!--ron结束-->
+<div class="rcon">
+<div class="title">相关视频</div>
+<ul class="rcon_vedio">
+{tag_视频内容相关视频}
+</ul>
+<div class="clear"></div>
+</div>
+<!--ron结束-->
+<div class="rcon">
+<div class="title">推荐视频</div>
+<ul class="rcon_vedio">
+{tag_内容页推荐视频6条}
+</ul>
+<div class="clear"></div>
+</div>
+<!--ron结束-->
+
+</div>
+<!--右侧结束-->
+<div class="clear"></div>    
+</div>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function ajax_page(specialid,page)
+{
+	var html = '';
+	$.get("video/special_ajax.php",{
+		specialid: specialid, page: page }, function(data){
+	$('#ajax_page').html(data);
+	}); 
+	
+	
+	return true;
+}
+//-->
+</SCRIPT>
+{template 'phpcms','footer'}

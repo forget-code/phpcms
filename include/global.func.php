@@ -505,7 +505,7 @@ function str_cut($string, $length, $dot = '...')
 {
 	$strlen = strlen($string);
 	if($strlen <= $length) return $string;
-	$string = str_replace(array('&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;'), array(' ', '&', '"', "'", '¡°', '¡±', '¡ª', '<', '>', '¡¤', '¡­'), $string);
+	$string = str_replace(array('&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;', '&middot;', '&hellip;'), array(' ', '&', '"', "'", 'â€œ', 'â€', 'â€”', '<', '>', 'Â·', 'â€¦'), $string);
 	$strcut = '';
 	if(strtolower(CHARSET) == 'utf-8')
 	{
@@ -787,7 +787,7 @@ function thumb($imgurl, $width = 100, $height = 100 ,$autocut = 1, $smallpic = '
 	if(!extension_loaded('gd') || strpos($imgurl, '://')) return $imgurl;
 	if(!file_exists(PHPCMS_ROOT.$imgurl)) return 'images/nopic.gif';
 	list($width_t, $height_t, $type, $attr) = getimagesize(PHPCMS_ROOT.$imgurl);
-	if($with>=$width_t || $height>=$height_t) return $imgurl;
+	if($width>=$width_t || $height>=$height_t) return $imgurl;
 	$newimgurl = dirname($imgurl).'/thumb_'.$width.'_'.$height.'_'.basename($imgurl);
 	if(file_exists(PHPCMS_ROOT.$newimgurl)) return $newimgurl;
 	if(!is_object($image))
@@ -855,6 +855,7 @@ function get($sql, $rows = 0, $page = 0, $dbname = '', $dbsource = '', $urlrule 
 	{
 		$limit = " LIMIT $rows";
 	}
+	//echo $sql.$limit;
 	$data = $rows == -1 ? $db->get_one($sql) : $db->select($sql.$limit);
 	if($dbname) $db->select_db(DB_NAME);
 	if(isset($s['dbcharset']) && $s['dbcharset'] != DB_CHARSET) $data = str_charset($s['dbcharset'], CHARSET, $data);
@@ -972,11 +973,11 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 			if($urlrule == '') $urlrule = url_par('page={$page}');
 			if(is_object($url)) $url = load('url.class.php');
 
-			$multipage .= '×ÜÊı£º<b>'.$num.'</b>&nbsp;&nbsp;';
+			$multipage .= 'æ€»æ•°ï¼š<b>'.$num.'</b>&nbsp;&nbsp;';
 
 			if($curr_page>0)
 			{
-				$multipage .= $catid ? '<a href="'.$url->category($catid, $curr_page-1, 1, 1).'">ÉÏÒ»Ò³</a>' : '<a href="'.pageurl($urlrule, $curr_page-1, $array).'">ÉÏÒ»Ò³</a>';
+				$multipage .= $catid ? '<a href="'.$url->category($catid, $curr_page-1, 1, 1).'">ä¸Šä¸€é¡µ</a>' : '<a href="'.pageurl($urlrule, $curr_page-1, $array).'">ä¸Šä¸€é¡µ</a>';
 				if($curr_page==1)
 				{
 					$multipage .= '<u><b>1</b></u> ';
@@ -1005,16 +1006,16 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 			{
 				if($curr_page<$pages-5 && $more)
 				{
-					$multipage .= $catid ? '..<a href="'.$url->category($catid, $pages, 1, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1).'">ÏÂÒ»Ò³</a>' : '..<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">ÏÂÒ»Ò³</a>';
+					$multipage .= $catid ? '..<a href="'.$url->category($catid, $pages, 1, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1).'">ä¸‹ä¸€é¡µ</a>' : '..<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">ä¸‹ä¸€é¡µ</a>';
 				}
 				else
 				{
-					$multipage .= $catid ? '<a href="'.$url->category($catid, $pages, 1, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1, 1).'">ÏÂÒ»Ò³</a>' : '<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">ÏÂÒ»Ò³</a>';
+					$multipage .= $catid ? '<a href="'.$url->category($catid, $pages, 1, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1, 1).'">ä¸‹ä¸€é¡µ</a>' : '<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">ä¸‹ä¸€é¡µ</a>';
 				}
 			}
 			elseif($curr_page==$pages)
 			{
-				$multipage .= ' <u><b>'.$pages.'</b></u><a href="'.pageurl($urlrule, $curr_page, $array).'">ÏÂÒ»Ò³</a>';
+				$multipage .= ' <u><b>'.$pages.'</b></u><a href="'.pageurl($urlrule, $curr_page, $array).'">ä¸‹ä¸€é¡µ</a>';
 			}
 		}
 		return $multipage;
@@ -1106,7 +1107,18 @@ function keyid_get($keyid)
 	if(!$tablename) return false;
 	$tablename = DB_PRE.$tablename;
 	$keyfield = $db->get_primary($tablename);
-	return $db->get_one("SELECT `$titlefield` AS title,`url` FROM `$tablename` WHERE `$keyfield`='$id'");
+	
+	if($module=='video')
+	{
+		$r =$db->get_one("SELECT `vid`,`title`,`url` FROM `$tablename` WHERE `$keyfield`='$id'");
+		require_once PHPCMS_ROOT.'video/include/output.func.php';
+		$r['url'] = video_show_url($r['vid'],$r['url']);
+	}
+	else
+	{
+		$r =$db->get_one("SELECT `$titlefield` AS title,`url` FROM `$tablename` WHERE `$keyfield`='$id'");
+	}
+	return $r;
 }
 
 function keyid_verify($keyid, $verify)
@@ -1237,8 +1249,21 @@ function magic_image($txt, $fonttype = 4)
 	return $txt;
 }
 
+function _base64_encode($t,$str)
+{
+	return $t."\"".base64_encode($str)."\"";
+}
+function _base64_decode($t,$str)
+{
+	return $t."\"".base64_decode($str)."\"";
+}
+
 function keylinks($txt, $replacenum = '')
 {
+	$search = "/(alt\s*=\s*|title\s*=\s*)[\"|\'](.+?)[\"|\']/ise";
+	$replace = "_base64_encode('\\1','\\2')";
+	$replace1 = "_base64_decode('\\1','\\2')";
+	$txt = preg_replace($search, $replace, $txt);
 	$linkdatas = cache_read('keylink.php','',1);
 	if($linkdatas)
 	{
@@ -1257,10 +1282,11 @@ function keylinks($txt, $replacenum = '')
 		{
 			$txt = str_replace($word2, $replacement, $txt);
 		}
-
 	}
+	$txt = preg_replace($search, $replace1, $txt);
 	return $txt;
 }
+
 
 function url_par($par, $url = '')
 {

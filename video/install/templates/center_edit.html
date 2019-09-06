@@ -1,0 +1,82 @@
+{template 'member','header'}
+<style type="text/css">
+.centermenu {
+	-moz-background-clip:border;
+	-moz-background-inline-policy:continuous;
+	-moz-background-origin:padding;
+	background:#F2F9FD url(video/images/member_bg_1.gif) no-repeat scroll 170px -24px;
+	color:#006699;
+	font-weight:bold;
+}
+#uploadp{background-color: #FFFFFF; border:#666666 1px solid; height: 21px; line-height:21px;  width: 238px; margin: 0px 0px 0px 25px; padding:1px;text-align: center;overflow:hidden;font-size:14px;}
+#e{float:left; margin-top:0px;background-color: #83BAEC;text-align:right; height:20px; line-height:20px; color:#fff;font-size:14px;}
+</style>
+<script type="text/javascript" src="images/js/video.validator.js"></script>
+<script type="text/javascript" src="images/js/form.js"></script>
+<script type="text/javascript" src="images/js/swfobject.js"></script>
+<div id="main">
+   <div id="left">
+    <div id="treemenu">
+      <h5>视频</h5>
+      <ul>
+	    <li><a href="video/center.php?action=add&catid=0" class="centermenu">发布视频</a></li>
+        <li><a href="video/center.php?action=manage&status=99">终审通过</a></li>
+        <li><a href="video/center.php?action=manage&status=3">待审</a></li>
+        <li><a href="video/center.php?action=manage&status=1">退稿</a></li>
+        <li><a href="video/center.php?action=manage&status=0">删除</a></li>
+      </ul>
+    </div>
+    <ol>
+      <li class="local"><a href="">返回网站首页</a></li>
+      <li class="exit"><a href="{$MODULE['member']['url']}logout.php">退出登录</a></li>
+    </ol>
+  </div>
+  <div id="right">
+    <p id="position"><strong>当前位置：</strong><a href="{$MODULE[member][url]}">会员中心</a><a href="video/center.php">视频管理</a></p>
+    <div class="clear"></div>
+    <form action="video/center.php?action=edit&catid={$catid}&dosubmit=1" method="post" name="myform"  enctype="multipart/form-data">
+<table cellpadding="0" cellspacing="1" class="table_form">
+	<caption>修改信息</caption>
+
+    {loop $forminfos $field $info}
+	<tr> 
+      <th width="20%"> {if $info['star']} <font color="red">*</font>{/if} <strong>{$info[name]}</strong><br />
+	  {$info[tips]}
+	  </th>
+      <td>{$info[form]} </td>
+    </tr>
+	{/loop}
+    <tr> 
+      <td></td>
+      <td> 
+	  <input type="hidden" name="vid" value="{$vid}"> 
+	  <input type="hidden" name="forward" value="{$forward}"> 
+	  <input type="submit" name="dosubmit" value=" 确定 "> 
+      <input type="reset" name="reset" value=" 清除 ">
+	  <input type="button" name="preview" value=" 预览 " onclick="preview_content();">
+	  </td>
+    </tr>
+</table>
+</form>
+  </div>
+</div>
+<div class="clear"></div>
+
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+	$().ready(function() {
+	$('form').checkForm(1);
+	});
+function check_catid(catid)
+{
+	$.get('video/center.php?action=check_catid&catid='+catid,function(data)
+	{
+		if(data=='1') {
+			$('#catiderror').html("<span tag='err' class='no'>父栏目不允许发布视频，请选择子栏目</span>");
+			document.getElementById('catid').options[0].selected=true;
+		}
+	});
+}
+//-->
+</SCRIPT>
+{template 'phpcms','footer'}

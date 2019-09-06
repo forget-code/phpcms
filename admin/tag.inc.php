@@ -27,6 +27,7 @@ switch($action)
 			$selectfields = implode(',', $selectfields);
 		}
 		if(isset($tag_config)) extract($tag_config, EXTR_SKIP);
+		header("Cache-control: private");
 		include admin_tpl('tag_'.$type.'_add');
 	break;
 
@@ -96,6 +97,7 @@ switch($action)
 		$tag_config['type'] = $type;
 		if($isadd && isset($t->TAG[$tagname])) showmessage('该标签已经存在');
 		$tagname = trim($tagname);
+		if(preg_match('/([\'"${}\(\)\\/,;])/',$tagname)) showmessage('标签不能含有下面字符\' " $ { } ( ) \ / , ;');
 		if($type == 'content')
 	    {
 			if(!$tag_config['mode'])
