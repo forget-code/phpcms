@@ -1,0 +1,32 @@
+<table width="100%"  cellpadding="0" cellspacing="0">
+{loop $articles $i $article}
+{if $i%$cols==0}<tr>{/if}
+<td width="{$width}">
+
+	<table width="100%"  cellpadding="0" cellspacing="5">
+	<tr>
+	<td align="center"><a href="{$article['linkurl']}" {$target}><img src="{$article[thumb]}" width="{$imgwidth}" height="{$imgheight}" alt="{$article[alt]}" /></a></td>
+	</tr>
+	<tr>
+	<td  align="center">
+	{$article[type]} <a href="{$article['linkurl']}" title="{$article['title']}" {$target} class="tag_title_link">{$article[stitle]}</a>
+	{if $datetype}[<span class="datetime">{$article[adddate]}</span>]{/if}
+	</tr>
+
+	{if $introducelen}
+	<tr>
+	<td><span class="tag_description">&nbsp;&nbsp;&nbsp;&nbsp;{$article[introduce]}</span>
+	</td>
+	</tr>
+	{/if}
+
+	</table>
+
+</td>
+{if $i%$cols==($cols-1)}</tr>{/if}
+{/loop}
+</table>
+
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

@@ -1,0 +1,115 @@
+{template 'phpcms','header'}
+<style type="text/css">
+.stat {
+	width:100%;
+	border:1px solid #c1ccd9;
+	background-color:#ececec;
+}
+.stat caption {
+	font-size:14px;
+	font-weight:bold;
+	color:#D4380E;
+	padding-bottom:10px;
+}
+.stat th {
+	text-align:center;
+	background-color:#f8f8f8;
+	font-size:14px;
+	font-weight:bold;
+	color:#D4380E;
+}
+.stat td {
+    background-color:#ffffff;
+}
+</style>
+<table class="stat" cellspacing="1">
+	<caption>综合统计</caption>
+	<thead>
+		<tr>
+			<th>统计类别</th>
+			<th>页面总访问量(同一访客的每次访问均被记录)</th>
+			<th>独立IP访问量(24小时内相同IP地址只被计算1次)</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<td width="16%" align="center" valign="middle">今日流量</td>
+			<td width="42%" align="center" valign="middle">{$stat['tday_pv']}</td>
+			<td width="42%" align="center" valign="middle">{$stat['tday_ip']}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">昨日流量</td>
+			<td width="42%" align="center" valign="middle">{$stat['yday_pv']}</td>
+			<td width="42%" align="center" valign="middle">{$stat['yday_ip']}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">本周合计</td>
+			<td width="42%" align="center" valign="middle">{$stat['tweek_pv']}</td>
+			<td width="42%" align="center" valign="middle">{$stat['tweek_ip']}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">上周合计</td>
+			<td width="42%" align="center" valign="middle">{$stat['lweek_pv']}</td>
+			<td width="42%" align="center" valign="middle">{$stat['lweek_ip']}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">本月合计</td>
+			<td width="42%" align="center" valign="middle">{$stat['tmonth_pv']}</td>
+			<td width="42%" align="center" valign="middle">{$stat['tmonth_ip']}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">上月合计</td>
+			<td width="42%" align="center" valign="middle">{$stat['lmonth_pv']}</td>
+			<td width="42%" align="center" valign="middle">{$stat['lmonth_ip']}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">日均流量</td>
+			<td width="42%" align="center" valign="middle">{$stat['davg_pv']}</td>
+			<td width="42%" align="center" valign="middle">{$stat['davg_ip']}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">平均周量</td>
+			<td width="42%" align="center" valign="middle">{$stat['wavg_pv']}</td>
+			<td width="42%" align="center" valign="middle">{$stat['wavg_ip']}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">平均月量</td>
+			<td width="42%" align="center" valign="middle">{$stat['mavg_pv']}</td>
+			<td width="42%" align="center" valign="middle">{$stat['mavg_ip']}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">本年合计</td>
+			<td width="42%" align="center" valign="middle">{$stat['year_pv']}</td>
+			<td width="42%" align="center" valign="middle">{$stat['year_ip']}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">总访问量</td>
+			<td width="42%" align="center" valign="middle">{$total_pv}</td>
+			<td width="42%" align="center" valign="middle">{$total_ip}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">最大日量</td>
+			<td width="42%" align="center" valign="middle">{$stat['maxd_pv']}{if !empty($stat['mdate_pv'])}&nbsp;({$stat['mdate_pv']}){/if}</td>
+			<td width="42%" align="center" valign="middle">{$stat['maxd_ip']}{if !empty($stat['mdate_ip'])}&nbsp;({$stat['mdate_ip']}){/if}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">最大周量</td>
+			<td width="42%" align="center" valign="middle">{$stat['maxw_pv']}{if !empty($stat['fdate_pv']) && !empty($stat['ldate_pv'])}&nbsp;({$stat['fdate_pv']}至{$stat['ldate_pv']}){/if}</td>
+			<td width="42%" align="center" valign="middle">{$stat['maxw_ip']}{if !empty($stat['fdate_ip']) && !empty($stat['fdate_ip'])}&nbsp;({$stat['fdate_ip']}至{$stat['ldate_ip']}){/if}</td>
+		</tr>
+		<tr>
+			<td width="16%" align="center" valign="middle">最大月量</td>
+			<td width="42%" align="center" valign="middle">{$stat['maxm_pv']}{if !empty($stat['mmonth_pv'])}&nbsp;({$stat['mmonth_pv']}){/if}</td>
+			<td width="42%" align="center" valign="middle">{$stat['maxm_ip']}{if !empty($stat['mmonth_ip'])}&nbsp;({$stat['mmonth_ip']}){/if}</td>
+		</tr>
+	</tbody>
+	{if isset($fdate) && isset($ldate) && isset($days)}
+	<tfoot>
+		<tr>
+			<td width="100%" align="center" valign="middle" colspan="3">开始日期:{$fdate}&nbsp;&nbsp;截止日期:{$ldate}&nbsp;&nbsp;共统计{$days}天</td>
+		</tr>
+	</tfoot>
+	{/if}
+</table>
+<p style="text-align:center">Alexa排名走势图<br><a href="http://www.alexa.com/data/details/traffic_details?q=&url={$PHP_DOMAIN}" target="_blank"><img src="http://traffic.alexa.com/graph?w=379&h=216&r=6m&y=t&u={$PHP_DOMAIN}" border="0" alt="点击查看Alexa详情"></a><br><a href="http://www.alexa.com/data/details/traffic_details?q=&url={$PHP_DOMAIN}" target="_blank">点击查看Alexa详情</a></div>
+{template 'phpcms','footer'}

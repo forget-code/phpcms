@@ -1,0 +1,24 @@
+<form id="member_login" name="member_login" action="{$MOD[linkurl]}login.php" method="post">
+<table cellpadding="0" cellspacing="0">
+  <tr>
+    <td>
+&nbsp;用户名：<input type="text" name="username" id="username" size="12" class="inp" />
+&nbsp;密码：<input name="password" type="password" id="password" size="12" class="inp" />
+<!--{if $MOD['enablecheckcodeoflogin']}-->&nbsp;验证码：<input name="checkcodestr" type="text" size="4" class="inp" /> <img src="{PHPCMS_PATH}checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/><!--{/if}-->
+    </td>
+    <td>
+<select name="cookietime" id="cookietime" class="inp" >
+<option value="0" {$select[0]}>不保存</option>
+<option value="86400" {$select[86400]}>保存一天</option>
+<option value="2592000" {$select[2592000]}>保存一月</option>
+<option value="31536000" {$select[31536000]}>保存一年</option>
+</select>
+    </td>
+    <td>
+<input type="submit" name="dosubmit" value="登 录" class="btn" /> 
+&nbsp;&nbsp;<a href="{$MOD[linkurl]}register.php">免费注册</a> | 
+<a href="{$MOD[linkurl]}getpassword.php">忘记密码</a>
+    </td>
+  </tr>
+</table>
+</form>

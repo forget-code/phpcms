@@ -1,23 +1,23 @@
-document.writeln("<div id='phpcms_adlayer<?=$ads[adsid]?>_1' style='position:absolute;visibility:hidden;'>");
+document.writeln("<div id='phpcms_adlayer<?=$ads['adsid']?>_1' style='position:absolute;visibility:hidden;'>");
 <?=$content?>
 document.writeln("</div>");
 
-document.writeln("<div id='phpcms_adlayer<?=$ads[adsid]?>_2' style='position:absolute;visibility:hidden;'>");
+document.writeln("<div id='phpcms_adlayer<?=$ads['adsid']?>_2' style='position:absolute;visibility:hidden;'>");
 <?=$content?>
 document.writeln("</div>");
 
-document.all.phpcms_adlayer<?=$ads[adsid]?>_1.style.posTop = 100;
-document.all.phpcms_adlayer<?=$ads[adsid]?>_2.style.posTop = 100;
+document.all.phpcms_adlayer<?=$ads['adsid']?>_1.style.posTop = 100;
+document.all.phpcms_adlayer<?=$ads['adsid']?>_2.style.posTop = 100;
 
-MoveLayer('phpcms_adlayer<?=$ads[adsid]?>_1',20);
+MoveLayer('phpcms_adlayer<?=$ads['adsid']?>_1',20);
 
-var x2 = document.body.clientWidth-document.all.phpcms_adlayer<?=$ads[adsid]?>_2.offsetWidth-20;
-MoveLayer('phpcms_adlayer<?=$ads[adsid]?>_2',x2);
+var x2 = document.body.clientWidth-document.all.phpcms_adlayer<?=$ads['adsid']?>_2.offsetWidth-20;
+MoveLayer('phpcms_adlayer<?=$ads['adsid']?>_2',x2);
 
 function MoveLayer(layerName,x) {
 var y = document.body.clientWidth/5;
 
-var diff = (document.body.scrollTop + y - document.all.phpcms_adlayer<?=$ads[adsid]?>_1.style.posTop)*.40;
+var diff = (document.body.scrollTop + y - document.all.phpcms_adlayer<?=$ads['adsid']?>_1.style.posTop)*.40;
 var y = document.body.scrollTop + y - diff;
 
 eval("document.all." + layerName + ".style.posTop = y");
@@ -26,5 +26,5 @@ eval("document.all." + layerName + ".style.posLeft = x");
 setTimeout("MoveLayer('"+layerName+"',"+x+");", 15); 
 }
 
-document.all.phpcms_adlayer<?=$ads[adsid]?>_1.style.visibility = 'visible';
-document.all.phpcms_adlayer<?=$ads[adsid]?>_2.style.visibility = 'visible';
+document.all.phpcms_adlayer<?=$ads['adsid']?>_1.style.visibility = 'visible';
+document.all.phpcms_adlayer<?=$ads['adsid']?>_2.style.visibility = 'visible';

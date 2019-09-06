@@ -1,39 +1,24 @@
 <?php 
-/*
-*######################################
-* PHPCMS v3.0.0 - Advanced Content Manage System.
-* Copyright (c) 2004-2005 phpcms.cn
-*
-* For further information go to http://www.phpcms.cn/
-* This copyright notice MUST stay intact for use.
-*######################################
-*/
-require "common.php";
+require './include/common.inc.php';
 
-foreach($_MODULE as $module => $m)
+if($PHPCMS['ishtml'] == 1 && file_exists(PHPCMS_ROOT.'/'.$PHPCMS['index'].'.'.$PHPCMS['fileext']))
 {
-    if($m['enablecopy']) @include_once PHPCMS_ROOT."/module/".$module."/include/tag.php";
+	header('location:'.$PHPCMS['index'].'.'.$PHPCMS['fileext']);
+	exit;
 }
 
-$cha_articles = $cha_downs = $cha_pictures = $cha_infos = array();
-foreach($_CHANNEL as $k=>$v)
+$channels = array();
+$channels['article'] = $channels['down'] = $channels['picture'] = $channels['info']= array();
+foreach($CHANNEL as $v)
 {
-	if(!$v['channeltype']) continue;
-	if($v['module']=='article')
-	   $cha_articles[] = $v;
-	elseif($v['module']=='down')
-	   $cha_downs[] = $v;
-	elseif($v['module']=='picture')
-	   $cha_pictures[] = $v;
-	else
-	   $cha_infos[] = $v;
+	$module = $v['module'];
+	if($v['islink'] == 0 && $MODULE[$module]['iscopy'] == 1) $channels[$module][$v['channelid']] = $v;
 }
 
-$meta_title = $_PHPCMS['meta_title'] ;
-$meta_keywords = $_PHPCMS['meta_keywords'] ;
-$meta_description = $_PHPCMS['meta_description'] ;
+$head['title'] = $PHPCMS['seo_title'];
+$head['keywords'] = $PHPCMS['seo_keywords'];
+$head['description'] = $PHPCMS['seo_description'];
 
-$filecaching = 1;
-
-include template('phpcms','index');
+include template('phpcms', 'index');
+phpcache();
 ?>

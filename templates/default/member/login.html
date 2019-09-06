@@ -1,4 +1,5 @@
 {template 'phpcms','header'}
+
 <script language="javascript">
 function checkform()
 {
@@ -14,63 +15,50 @@ function checkform()
 		document.myform.password.focus();
 		return false;
 	}
-    document.myform.phpcms_user.value = escape(document.myform.username.value);
     return true;
 }
 </script>
-<table width="400" align="center" cellpadding="0" cellspacing="0">
+<table width="352" align="center" cellpadding="0" cellspacing="1" class="loginbox">
+<form name="myform" method="post" action="{$MOD[linkurl]}login.php"  onsubmit="return checkform();">
   <tr>
-    <td class="side_3">会员登录</td>
-  </tr>
-</table>
-<br>
-<table width="360" align="center" cellpadding="0" cellspacing="10" class="loginbox">
-<form name="myform" method="post" action="{PHPCMS_PATH}member/login.php"  onsubmit="return checkform();">
+    <td colspan="2"><img src="{$skindir}/images/login.gif" /></td>
+	</tr>
   <tr>
-    <td height="24" align="center">用户名：</td>
+    <td width="120" height="30" class="td_right_1">用户名：</td>
     <td><input name="username" type="text" id="username" size="15" style="width:120px">
-       <input name="phpcms_user" type="hidden" id="phpcms_user">
- <a href="{PHPCMS_PATH}member/register.php" target="_blank" class="left">立即注册</a></td>
+       <a href="{$MOD[linkurl]}register.php" target="_blank" class="blue">立即注册</a></td>
   </tr>
   <tr>
-    <td height="24" align="center">密　码：</td>
-    <td><input name="password" type="password" id="password" size="15" style="width:120px" > <a href="{PHPCMS_PATH}member/getpassword.php" target="_blank" class="left">忘记密码</a> </td>
+    <td height="30" class="td_right_1">密　码：</td>
+    <td><input name="password" type="password" id="password" size="15" style="width:120px" > <a href="{$MOD[linkurl]}getpassword.php" target="_blank" class="red">忘记密码</a> </td>
   </tr>
+<!--{if $MOD['enablecheckcodeofreg']}-->
+    <tr>
+      <td class="td_right_1">验证码：</td>
+      <td>
+      <input name="checkcodestr" type="text" style="width:120px">
+	  <img src="{PHPCMS_PATH}checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/>
+      </td>
+    </tr>
+<!--{/if}-->
   <tr>
-    <td height="24" align="center">Cookie：</td>
+    <td height="30" class="td_right_1">Cookie：</td>
     <td><select name="cookietime" id="cookietime" style="width:120px">
           <option value="0">不保存</option>
-          <option value="86400" {$cookietimeselect[86400]}>保存一天</option>
-          <option value="2592000" {$cookietimeselect[2592000]}>保存一月</option>
-          <option value="31536000" {$cookietimeselect[31536000]}>保存一年</option>
+          <option value="86400" {$select[86400]}>保存一天</option>
+          <option value="2592000" {$select[2592000]}>保存一月</option>
+          <option value="31536000" {$select[31536000]}>保存一年</option>
         </select></td>
   </tr>
   <tr>
-    <td height="24"></td>
+    <td height="30"></td>
     <td>
-      <input name="referer" type="hidden" id="referer" value="{$referer}">
-      <input name="loginsubmit" type="submit" id="loginsubmit" size="15" value=" 登 录 " class="btn">
+      <input name="forward" type="hidden" id="forward" value="{$forward}">
+      <input name="dosubmit" type="submit" id="dosubmit" size="15" value=" 登 录 " class="btn">
       <input name="reset" type="reset" id="reset  size="15" value=" 重 置 " class="btn">
 </td>
   </tr>
 </form>
 </table>
-<br>
-<table width="400" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td class="side_3">会员注册</td>
-  </tr>
-</table>
-
-<table width="400" align="center" cellpadding="0" cellspacing="0" class="mar_10">
-  <tr>
-    <td height="30" class="color_1" align="center"><strong> 您只需填写一些简单的信息即可成为我们的会员</strong></td>
-  </tr>
-  <tr>
-    <td align="center"><a href="{PHPCMS_PATH}member/register.php" target="_blank"><img src="{PHPCMS_PATH}images/reg.jpg" width="135" height="54" border="0"></a></td>
-  </tr>
-</table>
-<br>
-
 
 {template 'phpcms','footer'}

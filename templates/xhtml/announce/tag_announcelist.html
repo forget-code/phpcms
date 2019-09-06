@@ -1,9 +1,0 @@
-{loop $announces $i $announce}
-<a href="{$announce[url]}" title="{$announce[title]}" target="{$target}" >{$announce[title]}</a>
-{if $datetype}&nbsp;<span class="px10">{$announce[addtime]}</span>{/if}
-{if $showauthor}&nbsp;[发布人：{$announce[username]}]{/if}
-<br />
-{/loop}
-{if $pages}
-<span class="pages">{$pages}</span>
-{/if}

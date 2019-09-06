@@ -1,0 +1,11 @@
+<!--投票标签列表-->
+<table width="100%" cellpadding="0" cellspacing="0" >
+<!--{loop $votes $i $vote}-->
+<!--{if $i%$cols==0}--><tr><!--{/if}-->
+<td height="20" >
+<a href="{$vote[url]}" target="_blank">{$vote[subject]} </a>
+</td>
+<!--{if $i%$cols==($cols-1)}--></tr><!--{/if}-->
+<!--{/loop}-->
+</table>
+<!--{if $page}--> <div class="pages">{$pages}</div><!--{/if}-->

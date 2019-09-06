@@ -1,140 +1,68 @@
 {template 'phpcms','header'}
-<table width="980" align="center" cellpadding="0" cellspacing="0">
+<table width="980" cellpadding="0" cellspacing="0">
   <tr>
-    <td width="250">
-<!--幻灯片-->
-{$slidepicdown(0,$channelid,0,1,0,5,36,0,0,1,250,180,5000,-1)}
-     </td>
-    <td width="20"></td>
+    <td width="270" class="slidepic"><!--260X220-->{tag_下载频道首页幻灯片}</td>
+    <td width="10"></td>
     <td valign="top" width="475">
-	<!--最近更新下载-->
-	<table width="100%" cellspacing="0" cellpadding="0">
-      <tr>
-        <td class="bg_gx" width="115"></td>
-        <td class="bg_titlebar" width="320" align="right"><a href="{$channelurl}search.php?elite=1&search=1" class="more">更多</a></td>
-        <td width="39"><img src="{$skindir}/images/tit2_r.jpg" /></td>
-      </tr>
-    </table>
-    <table width="100%"  cellspacing="0" cellpadding="0" style="font-size:14px;">
-      <tr>
-        <td>
-	{$downlist(0,$channelid,0,1,0,0,10,50,0,0,0,3,2,1,0,0,0,0,1,1)}
-	</td>
-      </tr>
-    </table>
-
-   </td>
-    <td width="20"> </td>
-    <td valign="top" width="210" class="gray">
-    <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
-      <tr>
-        <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
-        <td width="62%">推荐下载</td>
-        <td width="14%">&nbsp;</td>
-        <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
-      </tr>
-    </table>
-<!--推荐下载 -->
-{$downlist(0,$channelid,0,1,0,0,10,24,0,1,0,1,0,0,0,0,0,0,1,1)}
-</td>
+	  <div class="cat_box_1">
+	    <div class="cat_title">
+	      <div class="cat_name">推荐下载</div>
+	    </div>
+	    {tag_下载频道首页推荐列表}
+	  </div>
+    </td>
+    <td width="15"> </td>
+    <td valign="top" width="210" class="right_bg">
+	<div class="rightcats"><h1>下载排行</h1><h2></h2></div>
+        {tag_下载频道首页排行}</td>
   </tr>
 </table>
 
-<table width="980" align="center" cellpadding="0" cellspacing="0" class="mar_10">
+<table width="980" cellpadding="0" cellspacing="0" class="mar_5">
   <tr>
-    <td width="770" valign="top">
-    <table width="100%" cellspacing="0" cellpadding="0" height="40">
-      <tr>
-        <td>
-<script language="Javascript" src="{PHPCMS_PATH}data/js/search.js"></script>
-	</td>
-      </tr>
-    </table>
-	  <table width="100%"  cellspacing="0" cellpadding="0">
-           <tr>
-          <td width="185" valign="top" style="border:1px solid #cccccc">
-              <table width="100%" cellspacing="0" cellpadding="0" class="bg_left">
-                <tr>
-                  <td>&nbsp;&nbsp;本月下载排行</td>
-                  <td>&nbsp;</td>
-                </tr>
-            </table>
-<!--下载排行-->{$downlist(0,$channelid,0,1,0,0,15,22,0,0,0,5,0,0,0,0,0,0,1,1)}</td>
-          <td width="5"></td>
-          <td valign="top">
-<!--自定义栏目开始-->
-    <table width="100%"  cellspacing="3" cellpadding="3">
-        {loop $childcats $i $cat}
-        {if $i%2==0}<tr>{/if}
-          <td valign="top" style="padding:0 5px;">
+    <td width="760" valign="top">
 	<table width="100%"  cellspacing="0" cellpadding="0">
-            <tr>
-              <td class="titlebar" width="100">{$cat[catname]}</td>
-              <td width="10" height="25"><img src="{$skindir}/images/tit3_r.jpg"></td>
-              <td width="225" align="right" class="bg_titlebar"><a href="{$cat[caturl]}" class="more">更多</a>&nbsp;</td>
-              <td  width="36"><img src="{$skindir}/images/tit2_r.jpg"></td>
-            </tr>
-          </table>
-<!--自定义栏目列表标签-->{$downlist(0,$channelid,$cat[catid],1,0,0,10,40,0,0,0,$cat[ordertype],0,0,0,0,0,0,$cat[target],1)}</td>
-     {if $i%2==1}</tr>{/if}
-	 {/loop}
-      </table>
-<!--自定义栏目结束-->
-
-        </td>
-       </tr>
-     </table>
-    </td>
-    <td width="10"> </td>
-    <td width="210" valign="top" class="gray">
-	<table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
+	<tbody>
       <tr>
-        <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25" /></td>
-        <td width="62%">最新专题</td>
-        <td width="14%"><a href="{PHPCMS_PATH}{$_CHA['channeldir']}/special/" class="more">更多</a></td>
-        <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25" /></td>
+        <td valign="top">
+<script language="JavaScript" src="{PHPCMS_PATH}data/js/search.js"></script>
+<table height="5" cellpadding="0" cellspacing="0">
+  <tr>
+    <td></td>
+  </tr>
+</table>
+            <!--自定义栏目开始-->
+          {loop $childcats $i $cat}
+          <div class="cat_box">          
+            <div class="cat_title">
+              <div class="cat_name">{$cat[catname]}</div>
+              <div class="cat_url"><a href="{$cat[linkurl]}" class="more">更多</a></div>
+            </div>
+            {tag_下载频道首页自定义栏目列表}</div>
+          {if $i%2!=1}
+          <!--两列之间的间隔-->
+          <div class="float_left"><img src="{PHPCMS_PATH}images/spacer.gif" width="10" height="10" alt="" /></div>
+          {/if}
+          {/loop}
+          <!--自定义栏目结束--></td>
       </tr>
-    </table>
-
-<!--最新专题列表标签-->
-{$speciallist(0,$channelid,0,0,1,28,50,0,0,4,100,100,1)}
-
-      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
+     </tbody>
+    </table></td>
+    <td width="10"></td>
+    <td width="210" valign="top" class="right_bg">
+	  <div class="rightcats"><h1>最新专题</h1><h2><a href="{$MOD[linkurl]}special/" class="more">更多</a></h2></div>
+<!--最新专题列表标签-->{tag_下载频道首页专题}
+	  <div class="rightcats"><h1>最新公告</h1><h2><a href="{PHPCMS_PATH}announce/?keyid={$channelid}" class="more">更多</a></h2></div>
+      <!--最新公告列表标签-->{tag_频道首页最新公告}
+	  <div class="rightcats"><h1>投票调查</h1><h2><a href="{PHPCMS_PATH}vote/?keyid={$channelid}" class="more">更多</a></h2></div>
+       <table width="100%" height="100" cellpadding="0" cellspacing="5">
         <tr>
-          <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
-          <td width="62%">最新公告</td>
-          <td width="14%"><a href="{PHPCMS_PATH}announce/?channelid={$channelid}" class="more">更多</a></td>
-          <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
+          <td>{tag_下载频道首页投票}</td>
         </tr>
-      </table>
-<!--最新公告列表标签-->
-{$announcelist(0,$channelid,0,5,30,0,0,1,200,100)}
-      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
-        <tr>
-          <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
-          <td width="62%">投票调查</td>
-          <td width="14%"><a href="{PHPCMS_PATH}vote/?channelid={$channelid}" class="more">更多</a></td>
-          <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
-        </tr>
-      </table>
-<!--投票调查-->
-     <table width="100%" height="100" cellpadding="0" cellspacing="5">
-        <tr>
-          <td>{$voteshow(0,0,$channelid)}</td>
-        </tr>
-      </table>
-      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
-        <tr>
-          <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
-          <td width="62%">友情链接</td>
-          <td width="14%"><a href="{PHPCMS_PATH}link/?channelid={$channelid}" class="more">更多</a></td>
-          <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
-        </tr>
-    </table>
-<!--友情链接标签-->
-{$linklist(0,$channelid,1,0,10,2)}
-{$linklist(0,$channelid,0,0,10,2)}
-	</td>
+       </table>
+	  <div class="rightcats"><h1>友情链接</h1><h2><a href="{PHPCMS_PATH}link/" class="more">更多</a></h2></div> 
+{tag_下载频道首页logo链接}
+{tag_下载频道首页文字链接}</td>
   </tr>
 </table>
 {template 'phpcms','footer'}

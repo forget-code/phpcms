@@ -1,36 +1,66 @@
 <?php
-/**
-* 会员登录
-* @version phpcms 3.0.0 build 20060424
-* @package phpcms
-* @subpackage member
-* @link http://dev.phpcms.cn phpcms模块开发网站
-* @license http://www.phpcms.cn/license.html phpcms版权声明
-* @copyright (C) 2005 - 2006 Phpcms Group
-*/
-require_once("common.php");
+define('SHOWJS', 1);
+require './include/common.inc.php';
 
-$referer = $referer ? $referer : ($forward ? $forward : $PHP_REFERER);
+if(!isset($forward)) $forward = $PHP_REFERER;
+if(!isset($action)) $action = '';
 
-if($loginsubmit)
+switch($action)
 {
-	$referer = $referer ? $referer : $PHP_SITEURL."member/";
-	$password = isset($password) ? $password : getcookie('password');
+    case 'js':
+		if($_userid)
+		{
+			include template('member', 'login_show');
+		}
+		else
+		{
+			$select = array();
+			$cookietime = intval(getcookie('cookietime'));
+			$cookietimes = array(0, 86400, 2592000, 31536000);
+			foreach($cookietimes as $v)
+			{
+				$select[$v] = $v == $cookietime ? 'selected' : '';
+			}
+			include template('member', 'login_form');
+		}
+		$CONFIG['phpcache'] = 0;
+        phpcache(1);
+		break;
 
-	include_once PHPCMS_ROOT."/include/cmd.php";
-	member_login($username,$password,$referer);
-}
-else
-{
-	$meta_title = "会员登录";
-	$cookietime = getcookie('cookietime');
-	if($cookietime) $cookietimeselect[$cookietime] = "selected"; 
-	$referer = $referer ? $referer : $PHP_REFERER;
+    default:
+		if($dosubmit)
+		{
+        	checkcode($checkcodestr, $MOD['enablecheckcodeoflogin'], $PHP_REFERER);
 
-    include template("member","login");
-}
-
-function quescrypt($questionid, $answer) {
-	 return $questionid > 0 && $answer != '' ? substr(md5($answer.md5($questionid)), 16, 8) : '';
+		    $info = $member->login($password, $cookietime);
+		    if(!$info)
+			{
+				showmessage($member->errormsg(), $PHP_REFERER);
+			}
+			else
+			{
+				$forward = isset($forward) ? linkurl($forward, 1) : $PHP_SITEURL;
+				if($PHPCMS['enablepassport'])
+	            {
+			        $action = 'login';
+					extract($info);
+					require MOD_ROOT.'/passport/'.$PHPCMS['passport_file'].'.php';
+					header('location:'.$url);
+                    exit;
+				}
+                showmessage($LANG['login_success'], $forward);
+			}
+		}
+		else
+		{
+			$select = array();
+			$cookietime = intval(getcookie('cookietime'));
+			$cookietimes = array(0, 86400, 2592000, 31536000);
+			foreach($cookietimes as $v)
+			{
+				$select[$v] = $v == $cookietime ? 'selected' : '';
+			}
+			include template('member', 'login');
+		}
 }
 ?>

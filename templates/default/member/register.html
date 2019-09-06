@@ -1,120 +1,191 @@
 {template 'phpcms','header'}
-<script type="text/javascript" src="{PHPCMS_PATH}include/js/MyCalendar.js"></script>
-<script LANGUAGE="javascript">
+<script language="javascript">
 <!--
 function CheckForm() {
-if (document.myform.username.value=="")
+if ($F('reg_username') == "")
 	{
-	  alert("请输入用户名！")
-	  document.myform.username.focus()
-	  return false
+	    alert("请输入用户名！")
+		Field.clear('reg_username')
+		Field.focus('reg_username');
+	    return false
 	 }
-if (document.myform.password.value=="")
+if ($F('reg_password') == "")
 	{
-	  alert("请输入密码！")
-	  document.myform.password.focus()
-	  return false
+	    alert("请输入密码！")
+		Field.clear('reg_password')
+		Field.focus('reg_password');
+	    return false
 	 }
-if (document.myform.pwdconfirm.value!=document.myform.password.value)
+if ($F('pwdconfirm') != $F('reg_password'))
 	{
-	  alert("两次输入的密码不一致！")
-      document.myform.password.value = ""
-      document.myform.pwdconfirm.value = ""
-	  document.myform.password.focus()
-	  document.myform.password.select()
-	  return false
+	    alert("两次输入的密码不一致！")
+		Field.clear('reg_password')
+		Field.clear('pwdconfirm')
+		Field.focus('reg_password');
+	    return false
 	 }
-if (document.myform.email.value=="")
+if ($F('email') == "")
 	{
-	  alert("请输入E-mail！")
-	  document.myform.email.focus()
-	  return false
+	    alert("请输入E-mail！")
+		Field.clear('email')
+		Field.focus('email');
+	    return false
 	 }
-{if $_PHPCMS[enableregcheckcode]}
-if (document.myform.checkcode.value=="")
+{if $MOD['enablecheckcodeofreg']}
+if (myform.checkcodestr.value == "")
 	{
-	  alert("请输入验证码！")
-	  document.myform.checkcode.focus()
-	  return false
+	    alert("请输入验证码！")
+	    return false
 	 }
 {/if}
-    document.myform.phpcms_user.value = escape(document.myform.username.value);
-    document.myform.province.value=area.document.regionform.province.value;
-    document.myform.city.value=area.document.regionform.city.value;
-    document.myform.submit.disabled=true;
+    document.myform.submit.disabled = true;
+}
+
+function checkuser(inputname)
+{
+    if(inputname==''){
+        alert("会员名不能为空！");
+        $('username_notice').innerHTML="<font color='red'>会员名不能为空！</font>";
+        Field.focus('username');
+    }else{
+        var checkurl = '{$MOD[linkurl]}register.php';
+		var pars = "action=checkuser&username="+inputname;
+		var myAjax = new Ajax.Request(checkurl, {method: 'post', parameters: pars, onComplete: checkmessage});
+    }
+}
+
+function checkmessage(Request)
+{
+	if(Request.responseText == '1'){
+		alert("您填写的会员名长度不合法！");
+		$('username_notice').innerHTML="<font color='red'>您注册的会员名长度不合法，请重新填写。</font>";
+		Field.clear('reg_username')
+		Field.focus('reg_username');
+	}else if(Request.responseText == '2'){
+		alert("您填写的会员名含有非法字符！");
+		$('username_notice').innerHTML="<font color='red'>您注册的会员名含有非法字符，请重新填写。</font>";
+		Field.clear('reg_username')
+		Field.focus('reg_username');
+	}else if(Request.responseText == '3'){
+		alert("您填写的会员名已被使用！");
+		$('username_notice').innerHTML="<font color='red'>您注册的会员名已被使用，请重新填写。</font>";
+		Field.clear('reg_username')
+		Field.focus('reg_username');
+	}else if(Request.responseText == '4'){
+		alert("您填写的会员名已被禁止使用！");
+		$('username_notice').innerHTML="<font color='red'>您注册的会员名被禁止使用，请重新填写。</font>";
+		Field.clear('reg_username')
+		Field.focus('reg_username');
+	}else{
+		$('username_notice').innerHTML="<font color=green>您注册的会员名尚未被使用，可以注册。</font>";
+	}
+}
+
+function checkemail(email)
+{
+    if(email==''){
+        alert("E-mail 不能为空！");
+        $('email_notice').innerHTML="<font color='red'>E-mail 不能为空！</font>";
+        Field.focus('email');
+    }else{
+        var checkurl = '/member/register.php';
+		var pars = "action=checkemail&email="+email;
+		var myAjax = new Ajax.Request(checkurl, {method: 'post', parameters: pars, onComplete: checkemailmessage});
+    }
+}
+
+function checkemailmessage(Request)
+{
+	if(Request.responseText == '1'){
+		alert("E-mail 地址不合法！");
+		$('email_notice').innerHTML="<font color='red'>E-mail 地址不合法！请重新填写。</font>";
+		Field.clear('email')
+		Field.focus('email');
+	}else if(Request.responseText == '2'){
+		alert("您填写的E-mail已被他人占用！");
+		$('email_notice').innerHTML="<font color='red'>您填写的E-mail已被他人占用！请重新填写。</font>";
+		Field.clear('email')
+		Field.focus('email');
+	}else{
+		$('email_notice').innerHTML="<font color=green>您填写的 E-mail 尚未被占用，可以注册。</font>";
+	}
 }
 //-->
 </script>
-<table width="780" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td class="side_3">基本资料（必填）</td>
-  </tr>
-</table>
-<table width="780" align="center" cellpadding="1" cellspacing="1" class="reg_tab mar_5">
-  <form name="myform" method="post" action="{PHPCMS_PATH}member/register.php" onSubmit='return CheckForm();'>
+
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>基本资料 [必填]</h1>
+  <form name="myform" method="post" action="{$MOD[linkurl]}register.php" onSubmit='return CheckForm();'>
+   <table cellpadding="0" cellspacing="0" class="righttable">
     <tr>
-      <td width="22%" class="r_t_r">用户名：</td>
-      <td><input name="username" type="text" id="username" value="{$username}" size="15">
-          <input name="phpcms_user" type="hidden" id="phpcms_user">
-          <input type="button" name="submit" value="检查用户名" onClick="javascript:openwinx('{PHPCMS_PATH}member/checkuser.php?username='+myform.username.value,'checkuser','490','110')" class="btn">
-          <span class="color_1">3到20个字符，不得包含非法字符！</span></td>
+      <td width="15%" class="td_right">用户名：</td>
+      <td><input name="username" type="text" id="reg_username" value="{$username}" size="15" onBlur="checkuser(this.value);">
+          <span id="username_notice" class="color_1">3到20个字符，不得包含非法字符！</span></td>
     </tr>
     <tr>
-      <td class="r_t_r">密　码：</td>
-      <td><input name="password" type="password" id="password" size="15">
+      <td class="td_right">密　码：</td>
+      <td><input name="password" type="password" id="reg_password" size="15">
         <span class="color_1">4到20个字符</span></td>
     </tr>
     <tr>
-      <td class="r_t_r">确认密码：</td>
+      <td class="td_right">确认密码：</td>
       <td><input name="pwdconfirm" type="password" id="pwdconfirm" size="15"></td>
     </tr>
     <tr>
-      <td class="r_t_r">密码提示问题：</td>
+      <td class="td_right">密码提示问题：</td>
       <td><input name="question" type="text" id="question" size="30"></td>
     </tr>
     <tr>
-      <td class="r_t_r">问题答案：</td>
+      <td class="td_right">问题答案：</td>
       <td><input name="answer" type="text" id="answer" size="30"></td>
     </tr>
     <tr>
-      <td class="r_t_r">Email地址：</td>
+      <td class="td_right">Email地址：</td>
       <td>
-        <input name="email" type="text" id="email" size="30" maxlength="50">
+        <input name="email" type="text" id="email" size="30" maxlength="50"  onBlur="checkemail(this.value);">
         <input type="checkbox" name="showemail" id="showemail" value="1" class="radio">
-        <span class="color_1">是否公开</span> </td>
+        <span class="color_1">是否公开</span> <span id="email_notice" class="color_1"></span></td>
     </tr>
-{if $_PHPCMS[enableregcheckcode]}
+<!--{if $MOD['enablecheckcodeofreg']}-->
     <tr>
-      <td class="r_t_r">验证码：</td>
+      <td class="td_right">验证码：</td>
       <td>
-        <input name="checkcode" type="text" size="15">
-        <img src="{PHPCMS_PATH}checkcode.php" border="0">
+      <input name="checkcodestr" type="text" size="15">
+	  <img src="{PHPCMS_PATH}checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/>
         <span class="color_1">请把图形中的字符填写到输入框中</span> </td>
     </tr>
-{/if}
+<!--{/if}-->
 </table>
-<table width="780" align="center" cellpadding="0" cellspacing="0" class="mar_5">
+<script language="javascript">
+function show(c_Str){
+if(document.all(c_Str).style.display=='none'){
+document.all(c_Str).style.display='block'
+}else{
+document.all(c_Str).style.display='none'
+}
+}
+</script>
+<h1>详细资料 [选填] <input type="checkbox" name="showdetail" id="showdetail" value="1" class="radio" onclick="javascript:show('detail')">　</h1>
+<table cellpadding="0" cellspacing="0" class="righttable">
+<tbody id="detail" style="display:none">
     <tr>
-      <td class="side_3">详细资料（选填）</td>
-    </tr>
-</table>
-<table width="780" align="center" cellpadding="0" cellspacing="0" class="reg_tab mar_5">
-    <tr>
-      <td width="22%" class="r_t_r">真实姓名：</td>
+      <td width="15%" class="td_right">真实姓名：</td>
       <td><input name="truename" type="text" id="truename" size="20" maxlength="50"></td>
     </tr>
     <tr>
-      <td class="r_t_r">性　　别：</td>
+      <td class="td_right">性　　别：</td>
       <td>
         <input name="gender" type="radio" style="border:0px " value="1" checked>
         <span class="color_2">男</span>        <input type="radio" name="gender" value="0" class="radio">
         <span class="color_2">女</span></td>
     </tr>
     <tr>
-      <td class="r_t_r">生　　日：</td>
+      <td class="td_right">生　　日：</td>
       <td>
         <input name="byear" type="text" size="4" value="19">
-        <span class="color_2">年</span>        <select name="bmonth" id="bmonth">
+        <span class="color_2">年</span> 
+		<select name="bmonth" id="bmonth">
           <option value="00"></option>
           <option value="01">1</option>
           <option value="02">2</option>
@@ -129,7 +200,8 @@ if (document.myform.checkcode.value=="")
           <option value="11">11</option>
           <option value="12">12</option>
         </select>
-        <span class="color_2">月</span>        <select name="bday" id="bday">
+        <span class="color_2">月</span> 
+		<select name="bday" id="bday">
           <option value="00"></option>
           <option value="01">1</option>
           <option value="02">2</option>
@@ -166,7 +238,7 @@ if (document.myform.checkcode.value=="")
         <span class="color_2">日</span></td>
     </tr>
     <tr>
-      <td class="r_t_r">证件类别：</td>
+      <td class="td_right">证件类别：</td>
       <td>
         <select name="idtype">
           <option value="身份证" >身份证</option>
@@ -177,19 +249,38 @@ if (document.myform.checkcode.value=="")
       </td>
     </tr>
     <tr>
-      <td class="r_t_r">证件号码：</td>
+      <td class="td_right">证件号码：</td>
       <td><input type=text name="idcard" value="" size=22 maxlength=18></td>
     </tr>
     <tr>
-      <td class="r_t_r">>所在地：</td>
+      <td class="td_right">>所在地：</td>
       <td>
-        <iframe name='area' id='area' src='../region.php?country=&province=&city=' width='300' height='60' frameborder='0' scrolling='no'></iframe>
-        <input name='province' type='hidden'>
-        <input name='city' type='hidden'>
+<select name="province" id="province" onchange="javascript:loadcity(this.value);">
+<option value="0" selected="selected">请选择</option>
+</select>
+
+<select name="city" id="city" onchange="javascript:loadarea($('province').value, this.value);">
+<option value="0" selected="selected">请选择</option>
+</select>
+
+<select name="area" id="area">
+<option value="0" selected="selected">请选择</option>
+</select>
+
+<script language="javascript">
+<!--
+var phpcms_path = '{PHPCMS_PATH}';
+var selectedprovince = '{$PHPCMS[province]}';
+var selectedcity = '{$PHPCMS[city]}';
+var selectedarea = '{$PHPCMS[area]}';
+//-->
+</script>
+<script type="text/javascript" src="{PHPCMS_PATH}include/js/area.js"></script>
+
       </td>
     </tr>
     <tr>
-      <td class="r_t_r">所属行业：</td>
+      <td class="td_right">所属行业：</td>
       <td>
         <select name="industry">
           <option value="">请选择　　</option>
@@ -207,7 +298,7 @@ if (document.myform.checkcode.value=="")
       </td>
     </tr>
     <tr>
-      <td class="r_t_r">教育水平：</td>
+      <td class="td_right">教育水平：</td>
       <td>
         <select name="edulevel" size=1>
           <option value="">请选择　　</option>
@@ -221,7 +312,7 @@ if (document.myform.checkcode.value=="")
       </td>
     </tr>
     <tr>
-      <td class="r_t_r">从事职业：</td>
+      <td class="td_right">从事职业：</td>
       <td>
         <select name="occupation">
           <option value="">请选择　　</option>
@@ -238,7 +329,7 @@ if (document.myform.checkcode.value=="")
       </td>
     </tr>
     <tr>
-      <td class="r_t_r">收入水平：</td>
+      <td class="td_right">收入水平：</td>
       <td>
         <select name="income">
           <option value="">请选择　　</option>
@@ -252,57 +343,57 @@ if (document.myform.checkcode.value=="")
       </td>
     </tr>
     <tr>
-      <td class="r_t_r">电　　话：</td>
+      <td class="td_right">电　　话：</td>
       <td><input name="telephone" type="text" id="telephone" size="20"></td>
     </tr>
     <tr>
-      <td class="r_t_r">手　　机：</td>
+      <td class="td_right">手　　机：</td>
       <td><input name="mobile" type="text" id="mobile" size="20"></td>
     </tr>
     <tr>
-      <td class="r_t_r">地　　址：</td>
+      <td class="td_right">地　　址：</td>
       <td><input name="address" type="text" id="address" size="50">
       </td>
     </tr>
     <tr>
-      <td class="r_t_r">邮　　编：</td>
+      <td class="td_right">邮　　编：</td>
       <td><input name="postid" type="text" id="postid" size="10">
       </td>
     </tr>
     <tr>
-      <td class="r_t_r">主　　页：</td>
+      <td class="td_right">主　　页：</td>
       <td><input name="homepage" type="text" id="homepage" size="20"></td>
     </tr>
     <tr>
-      <td class="r_t_r">QQ号码：</td>
+      <td class="td_right">QQ号码：</td>
       <td><input name="qq" type="text" id="qq" size="20" maxlength="20"></td>
     </tr>
     <tr>
-      <td class="r_t_r">MSN帐号：</td>
+      <td class="td_right">MSN帐号：</td>
       <td><input name="msn" type="text" id="msn" size="20" maxlength="50"></td>
     </tr>
     <tr>
-      <td class="r_t_r">ICQ号码：</td>
+      <td class="td_right">ICQ号码：</td>
       <td><input name="icq" type="text" id="icq" size="20" maxlength="20"></td>
     </tr>
     <tr>
-      <td class="r_t_r">Skype帐号：</td>
+      <td class="td_right">Skype帐号：</td>
       <td><input name="skype" type="text" id="skype" size="20" maxlength="50"></td>
     </tr>
     <tr>
-      <td class="r_t_r">支付宝帐号：</td>
+      <td class="td_right">支付宝帐号：</td>
       <td><input name="alipay" type="text" id="alipay" size="20" maxlength="50"></td>
     </tr>
     <tr>
-      <td class="r_t_r">贝宝帐号：</td>
+      <td class="td_right">贝宝帐号：</td>
       <td><input name="paypal" type="text" id="paypal" size="20" maxlength="50"></td>
     </tr>
     <tr>
-      <td class="r_t_r">头像地址：</td>
+      <td class="td_right">头像地址：</td>
       <td><input name="userface" type="text" id="userface" size="50" maxlength="50"></td>
     </tr>
     <tr>
-      <td class="r_t_r">头像大小：</td>
+      <td class="td_right">头像大小：</td>
       <td><span class="color_2">宽度：</span>
           <input name="facewidth" type="text" id="facewidth" size="4" maxlength="50">
         <span class="color_2">px 高度</span>：
@@ -310,17 +401,29 @@ if (document.myform.checkcode.value=="")
         <span class="color_2">px</span></td>
     </tr>
     <tr>
-      <td class="r_t_r">签名信息：</td>
+      <td class="td_right">签名信息：</td>
       <td><textarea name='sign' cols='35' rows='5' id='sign'></textarea></td>
     </tr>
-    <tr>
-    <tr>
-      <td class="r_t_r"></td>
-      <td height="60">
-  <input name="referer" type="hidden" id="referer" value="{$referer}">
-  <input type="submit" name="submit" value=" 注 册 " class="btn">
-　<input type="reset" name="Submit" value=" 清 除 " class="btn"></td>
-    </tr>
-  </form>
+	</tbody>
 </table>
+{if $fields}
+<h1>其他资料</h1>
+<table cellpadding="0" cellspacing="0" class="righttable">
+{$fields}
+</table>
+{/if}
+<table cellpadding="0" cellspacing="0" class="righttable">
+    <tr>
+      <td width="15%" class="td_right">&nbsp;</td>
+      <td height="60">
+	      <input name="dosubmit" type="hidden" id="dosubmit" value="1">
+          <input name="forward" type="hidden" id="forward" value="{$forward}">
+		  <input type="submit" name="submit" value=" 注 册 " class="btn">
+		　<input type="reset" name="Submit" value=" 清 除 " class="btn">
+	  </td>
+     </tr>
+</table>
+</form>
+</div>
+</div>
 {template 'phpcms','footer'}

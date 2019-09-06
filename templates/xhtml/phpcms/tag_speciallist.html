@@ -1,9 +1,0 @@
-{loop $specials $i $special}
-<li class="li_line"><a href="{$special[url]}" target="_blank" title="{$special[alt]}">·{$special[specialname]}</a></li>
-{if $descriptionlen}
-<li style="padding:3px;line-height:180%;color:#888888;">{$special[introduce]}</li>
-{/if}
-{/loop}
-{if $pages}
-<li class="pages">{$pages}</li>
-{/if}

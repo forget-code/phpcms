@@ -39,7 +39,7 @@
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 function SelectPic(){
-  var arr=showModalDialog('../../../admin.php?mod=phpcms&file=file_select&channelid='+oEditor.FCKConfig.ChannelID+'&type=', '', 'dialogWidth:820px; dialogHeight:600px; help: no; scroll: yes; status: no');
+  var arr=showModalDialog('../../../'+oEditor.FCKConfig.Adminpath+'?mod=phpcms&file=file_select&module='+oEditor.FCKConfig.Module+'&channelid='+oEditor.FCKConfig.ChannelID+'&type=', '', 'dialogWidth:820px; dialogHeight:600px; help: no; scroll: yes; status: no');
   if(arr!=null){
     var ss=arr.split('|');
     SetUrl(ss[2]+ss[0]);
@@ -47,11 +47,11 @@ function SelectPic(){
 }
 //-->
 </SCRIPT>
-&nbsp; <input id="btnBrowse" onclick="SelectPic();" type="button" value="Browse Server" fckLang="DlgBtnBrowseServer">
+&nbsp; <input id="btnBrowse" onClick="SelectPic();" type="button" value="Browse Server" fckLang="DlgBtnBrowseServer">
 </td>
 </tr>
 <tr>
-<td vAlign="top"><input id="txtUrl" onblur="UpdatePreview();" style="WIDTH: 100%" type="text">
+<td vAlign="top"><input id="txtUrl" onBlur="UpdatePreview();" style="WIDTH: 100%" type="text">
 </td>
 </tr>
 </table>
@@ -95,11 +95,11 @@ function SelectPic(){
 </table>
 </div>
 <div id="divUpload" style="DISPLAY: none">
-<form id="frmUpload" method="post" target="UploadWindow" enctype="multipart/form-data" action="" onsubmit="return CheckUpload();">
+<form id="frmUpload" method="post" target="UploadWindow" enctype="multipart/form-data" action="" onSubmit="return CheckUpload();">
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 function uploadfile_submit(uploadform) {
-	uploadform.action = "../../uploads.php?needjump=1&uploadtext=txtUrl&save=1&channelid="+oEditor.FCKConfig.ChannelID;
+	uploadform.action = "../../uploads.php?needjump=1&uploadtext=txtUrl&save=1&mod="+oEditor.FCKConfig.Module+"&channelid="+oEditor.FCKConfig.ChannelID;
 	uploadform.submit();
 }
 //-->

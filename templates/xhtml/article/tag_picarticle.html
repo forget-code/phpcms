@@ -1,8 +1,0 @@
-{loop $articles $i $article}
-<li class="li_pic"><a href="{$article[url]}" target="_blank"><img src="{$article[thumb]}"  width="{$imgwidth}" height="{$imgheight}" alt="{$article[alt]}" /><br />{$article[title]}</a></li>
-{if $descriptionlen}
-<li><b>内容简介:</b>{$article[description]} <a href="{$article[url]}" target="_blank">详细&gt;&gt;</a></li>{/if}
-{/loop}
-{if $pages}
-<li class="pages">{$pages}</li>
-{/if}

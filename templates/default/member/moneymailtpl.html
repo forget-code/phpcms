@@ -1,0 +1,37 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset={$CONFIG['charset']}">
+<title>资金变化邮件模板</title>
+</head>
+<body>
+<table cellpadding="2" cellspacing="1" >
+  <tr>
+    <th colspan=2>这封邮件是来自{$PHPCMS['sitename']}的资金变化确认邮件</td>
+  </tr>
+  <tr>
+    <th colspan=2><br>
+    </tr>
+  <tr>
+     <td height="25" align="right" >&nbsp;</td>
+     <td >您的帐户于{$date('Y-m-d H:i:s',$PHP_TIME)}时间在我们的网站资金发生了变化，请确认</td>
+  </tr>
+        <tr>
+          <td height="35" >&nbsp;</td>
+          <td >变化金额数：{$amount} </td>
+        </tr>
+        <tr>
+          <td height="35" >&nbsp;</td>
+          <td >剩余金额数：{$_money} </td>
+        </tr>
+        <tr>
+          <td height="35" >&nbsp;</td>
+          <td >如果该操作不是您进行的，请联系我们</td>
+        </tr>
+        <tr>
+          <td height="35" >&nbsp;</td>
+          <td ><a href="{$PHP_SITEURL}">{$PHPCMS[sitename]}</a><br>
+  {$PHP_SITEURL}</td>
+        </tr>
+</table>
+</body>
+</html>

@@ -1,18 +1,21 @@
-<table width="980" height="75" align="center" cellpadding="0"  cellspacing="0" class="footer">
-   <tr>
-    <td align="center">{$_PHPCMS['copyright']}</td>
-  </tr>
- <tr>
-    <td align="center">{$showdefinedpage(0)}<a href="{PHPCMS_PATH}guestbook/?channelid={$channelid}">留言本</a></td>
-  </tr>
-<!--{if debuginfo()}-->
-  <tr>
-    <td align="center">Processed in {$debuginfo[time]} second(s), {$debuginfo[queries]} queries<!--{if $gzipcompress}-->, Gzip enabled<!--{/if}--> </td>
-  </tr>
-<!--{/if}-->
+<table cellspacing="0" cellpadding="0" width="980">
+    <tbody>
+        <tr>
+            <td height="10"> </td>
+        </tr>
+    </tbody>
 </table>
-<Script Language=Javascript Src="{PHPCMS_PATH}include/js/Std_StranJF.Js"></Script>
+<div class="footer">
+<ul>
+    <li class="footer_border_1">
+    <div class="footer_border_2">{tag_全站单网页}</div>
+    </li>
+    <li>{$PHPCMS['copyright']} <!--{if debuginfo()}--></li>
+    <li>Processed in {$debuginfo[time]} second(s), {$debuginfo[queries]} queries<!--{if $PHPCMS['enablegzip']}-->, Gzip enabled<!--{/if}--> <!--{/if}--></li>
+    <li><!--{if isset($MODULE['stat'])}--><script type="text/javascript" src="{$MODULE[stat][linkurl]}stat.php"></script>&nbsp;&nbsp;&nbsp;&nbsp;<!--{/if}-->
+<a href="http://www.miibeian.gov.cn/" target="_blank">{$PHPCMS[icpno]}</a>&nbsp;&nbsp;&nbsp;&nbsp;{$copyright}</li>
+</ul>
+</div>
+<script type="text/javascript" src="{PHPCMS_PATH}include/js/Std_StranJF.Js"></script>
 </body>
 </html>
-{$copyright()}
-{$output()}

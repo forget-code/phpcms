@@ -1,277 +1,149 @@
 {template 'phpcms','header'}
-<table width="980" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td width="710" valign="top">
-<table width="100%" cellspacing="0" cellpadding="0">
-      <tr>
-        <td width="260" height="230" align="center" valign="middle">
-
-<!--幻灯片-->
-{$slidepicarticle(0,1,0,1,0,5,30,1,0,1,250,180,5000,-1)}
-
-        </td>
-	<td width="10" align="center" valign="top"> </td>
-        <td valign="top">
-
-    <table width="100%"  cellspacing="0" cellpadding="0">
-      <tr>
-        <td class="bg_a" width="114">推荐{$_CHANNEL[1][channelname]}</td>
-        <td width="10" height="25"><img src="{$skindir}/images/tit3_r1.jpg" width="10" height="25"></td>
-        <td align="right" class="bg_titlebar"><a href="{$_CHANNEL[1][channelurl]}" class="more">更多</a>&nbsp;</td>
-        <td width="36"><img src="{$skindir}/images/tit2_r.jpg" width="36" height="25"></td>
-      </tr>
-    </table>
-
-<!--推荐文章列表-->
-{$articlelist(0,1,0,1,0,0,10,46,0,1,0,1,2,1,0,0,1,1)}
-
-       </td>
-        </tr>
-    </table>
-
-<!--搜索框-->
-<script language="Javascript" src="{PHPCMS_PATH}data/js/search.js"></script>
-    <td width="15">&nbsp;</td>
-    <td width="255" valign="top" class="gray">
-     <table width="100%" cellspacing="0" cellpadding="0" class="sidebar">
-      <tr>
-        <td width="27"><img src="{$skindir}/images/tit1_l.jpg" /></td>
-        <td width="156">网站公告</td>
-        <td width="42"><a href="{PHPCMS_PATH}announce/" class="more">更多</a></td>
-        <td width="28" align="right"><img src="{$skindir}/images/tit1_r.jpg" /></td>
-      </tr>
-     </table>
-
-<!--公告列表-->
-{$announcelist(0,0,0,5,30,2,0,1,250,100)}
-
-      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
+<table cellspacing="0" cellpadding="0" width="980" align="center">
+    <tbody>
         <tr>
-          <td width="27"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25" /></td>
-          <td width="198">推荐专题</td>
-          <td width="28" align="right"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25" /></td>
+            <td valign="top" width="710">
+            <table cellspacing="0" cellpadding="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td align="center" width="270"><!--幻灯片-->
+                        <div class="slidepic">{tag_首页幻灯片}</div>
+                        </td>
+                        <td width="10"></td>
+                        <td valign="top">
+                        <div class="div_box_1">
+                        <div class="cat_title">
+                        <div class="cat_name">推荐信息</div>
+                        </div>
+                        {tag_首页推荐信息} </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <script language="JavaScript" src="{PHPCMS_PATH}data/js/search.js"></script></td>
+            <td width="15"></td>
+            <td class="right_bg" valign="top" width="255" align="left">
+            <div class="rightcats">
+            <h1>网站公告</h1>
+            <h2><a class="more" href="{$MODULE[announce][linkurl]}">更多 &gt;&gt;</a></h2>
+            </div>
+            <table cellspacing="0" cellpadding="0" width="100%">
+                    <tr>
+                        <td>{tag_网站首页最新公告}
+                    </td>
+                    </tr>
+            </table>
+            <div class="rightcats">
+            <h1>推荐专题</h1>
+            </div>
+{tag_网站首页推荐专题} 
+
+            </td>
         </tr>
-      </table>
-      <table width="100%" height="100" cellpadding="" cellspacing="5">
-        <tr>
-          <td>
-{$speciallist(0,1,0,0,1,50,100,1,0,4,100,100,1)}
-         </td>
-        </tr>
-      </table>
-	</td>
-  </tr>
+    </tbody>
 </table>
-<table width="980" align="center" cellpadding="0" cellspacing="0">
-  <tr>
-    <td width="710" valign="top">
-     
-<!--banner-->
-	<table width="100%" height="80" cellpadding="0" cellspacing="0" class="mar_10">
-	  <tr>
-		<td align="center" bgcolor="red">
-		<SCRIPT LANGUAGE="JavaScript" src="{PHPCMS_PATH}ads/ads.php?id=2"></SCRIPT>
-		</td>
-	  </tr>
-	</table>
-
-<table width="100%" cellspacing="0" cellpadding="0" class="mar_10">
-{loop $cha_articles $i $cha}
-      <tr>
-        <td width="50%" valign="top">
-
-		  <table width="350"  cellspacing="0" cellpadding="0">
-            <tr>
-              <td class="bg_a" width="114">最新{$cha[channelname]}</td>
-              <td width="10"><img src="{$skindir}/images/tit3_r1.jpg" /></td>
-              <td align="right" width="195" class="bg_titlebar"><a href="{$cha[channelurl]}" class="m_p">更多</a>&nbsp;</td>
-              <td width="36"><img src="{$skindir}/images/tit2_r.jpg" width="36" height="25" /></td>
-             </tr>
-          </table>
-
-<!--最新文章-->
-{$articlelist(0,$cha[channelid],0,1,0,0,10,44,0,0,0,1,2,1,0,0,1,1)}
-
-       </td>
-        <td width="50%" valign="top">
-
-		  <table width="350"  cellspacing="0" cellpadding="0">
-            <tr>
-              <td class="bg_a" width="114">热点{$cha[channelname]}</td>
-              <td width="10"><img src="{$skindir}/images/tit3_r1.jpg" /></td>
-              <td align="right" width="195" class="bg_titlebar"><a href="{$cha[channelurl]}" class="m_p">更多</a>&nbsp;</td>
-              <td width="36"><img src="{$skindir}/images/tit2_r.jpg" width="36" height="25" /></td>
-             </tr>
-          </table>
-
-<!--最新文章-->
-{$articlelist(0,$cha[channelid],0,1,0,0,10,44,0,0,60,5,2,1,0,0,1,1)}
-
-       </td>
-    </tr>
-{/loop}
-</table>
-
-
-
-<table width="100%" cellspacing="0" cellpadding="0" class="mar_10">
-{loop $cha_pictures $i $cha}
-       <tr>
-        <td width="50%" valign="top">
-	  <table width="350"  cellspacing="0" cellpadding="0">
-            <tr>
-              <td class="bg_p" width="114">最新{$cha[channelname]}</td>
-              <td width="10"><img src="{$skindir}/images/tit3_r.jpg" /></td>
-              <td align="right" width="195" class="bg_titlebar"><a href="{$cha[channelurl]}" class="m_p">更多</a>&nbsp;</td>
-              <td width="36"><img src="{$skindir}/images/tit2_r.jpg" width="36" height="25" /></td>
-             </tr>
-      </table>
-
-<!--最新图片列表-->
-{$picpicture(0,$cha[channelid],0,1,0,0,6,14,0,0,0,1,1,0,100,100,3)}
-       </td>
-        <td width="50%" valign="top">
-	  <table width="350"  cellspacing="0" cellpadding="0">
-            <tr>
-              <td class="bg_p" width="114">热点{$cha[channelname]}</td>
-              <td width="10"><img src="{$skindir}/images/tit3_r.jpg" /></td>
-              <td align="right" width="195" class="bg_titlebar"><a href="{$cha[channelurl]}" class="m_p">更多</a>&nbsp;</td>
-              <td width="36"><img src="{$skindir}/images/tit2_r.jpg" width="36" height="25" /></td>
-             </tr>
-      </table>
-
-<!--最新图片列表-->
-{$picpicture(0,$cha[channelid],0,1,0,0,6,14,0,0,60,5,1,0,100,100,3)}
-       </td>
-    </tr>
-{/loop}
-</table>
-
-
-
-<table width="100%" cellspacing="0" cellpadding="0" class="mar_10">
-{loop $cha_downs $i $cha}
-   <tr>
-     <td width="50%" valign="top">
-	   <table width="350"  cellspacing="0" cellpadding="0">
-            <tr>
-              <td class="bg_d" width="114">最新{$cha[channelname]}</td>
-              <td width="10"><img src="{$skindir}/images/tit3_r2.jpg" /></td>
-              <td width="195" align="right" class="bg_titlebar"><a href="{$cha[channelurl]}" class="m_d">更多</a>&nbsp;</td>
-              <td  width="36"><img src="{$skindir}/images/tit2_r.jpg" width="36" height="25" /></td>
-            </tr>
-       </table>
-
-<!--最新下载列表-->
-{$downlist(0,$cha[channelid],0,1,0,0,10,44,0,0,0,1,0,1,0,0,0,0,1,1)}
-
-     </td>
-     <td width="50%" valign="top">
-	   <table width="350"  cellspacing="0" cellpadding="0">
-            <tr>
-              <td class="bg_d" width="114">热点{$cha[channelname]}</td>
-              <td width="10"><img src="{$skindir}/images/tit3_r2.jpg" /></td>
-              <td width="195" align="right" class="bg_titlebar"><a href="{$cha[channelurl]}" class="m_d">更多</a>&nbsp;</td>
-              <td  width="36"><img src="{$skindir}/images/tit2_r.jpg" width="36" height="25" /></td>
-            </tr>
-       </table>
-
-<!--最新下载列表-->
-{$downlist(0,$cha[channelid],0,1,0,0,10,44,0,0,60,5,0,1,0,0,0,0,1,1)}
-
-     </td>
-  </tr>
-{/loop}
-</table>
-
-<table width="100%" cellspacing="0" cellpadding="0" class="mar_10">
-{loop $cha_infos $i $cha}
-      <tr>
-        <td width="50%" valign="top">
-
-		  <table width="350"  cellspacing="0" cellpadding="0">
-            <tr>
-              <td class="bg_p" width="114">最新{$cha[channelname]}</td>
-              <td width="10"><img src="{$skindir}/images/tit3_r.jpg" /></td>
-              <td align="right" width="195" class="bg_titlebar"><a href="{$cha[channelurl]}" class="m_p">更多</a>&nbsp;</td>
-              <td width="36"><img src="{$skindir}/images/tit2_r.jpg" width="36" height="25" /></td>
-             </tr>
-          </table>
-
-<!--最新文章-->
-{$infolist(0,$cha[channelid],0,1,0,0,10,44,0,0,0,1,2,1,0,0,1,1)}
-
-       </td>
-        <td width="50%" valign="top">
-
-		  <table width="350"  cellspacing="0" cellpadding="0">
-            <tr>
-              <td class="bg_p" width="114">热点{$cha[channelname]}</td>
-              <td width="10"><img src="{$skindir}/images/tit3_r.jpg" /></td>
-              <td align="right" width="195" class="bg_titlebar"><a href="{$cha[channelurl]}" class="m_p">更多</a>&nbsp;</td>
-              <td width="36"><img src="{$skindir}/images/tit2_r.jpg" width="36" height="25" /></td>
-             </tr>
-          </table>
-
-<!--最新文章-->
-{$infolist(0,$cha[channelid],0,1,0,0,10,44,0,0,60,5,2,1,0,0,1,1)}
-
-       </td>
-    </tr>
-{/loop}
-</table>
-
-    </td>
-    <td width="15"> </td>
-    <td width="255" valign="top" class="gray">
-      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
+<table cellspacing="0" cellpadding="0" width="980" align="center" class="mar_10">
+    <tbody>
         <tr>
-          <td width="27"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25" /></td>
-          <td width="156">用户排行</td>
-          <td width="42"></td>
-          <td width="28" align="right"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25" /></td>
+            <td valign="top" width="710">
+            <table height="80" cellspacing="0" cellpadding="0" width="100%">
+                    <tr>
+                        <td align="center"><SCRIPT LANGUAGE="JavaScript" src="{$MODULE[ads][linkurl]}ad.php?id=2"></SCRIPT></td>
+                    </tr>
+            </table>
+            <!--{loop $channels['article'] $channelid $cha}-->
+            <div class="cat_box_1">
+            <div class="cat_title">
+            <div class="cat_name">{$cha[channelname]}</div>
+            <div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
+            </div>
+            <table cellspacing="0" cellpadding="0" width="100%">
+                <tbody>
+                    <tr>
+                    <td valign="top" width="50%">{tag_网站首页最新文章}</td>
+					<td width="10"></td>
+                    <td valign="top"  width="50%">{tag_网站首页推荐图片文章}</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <!--{/loop}-->
+	    <!--{loop $channels['picture'] $channelid $cha}-->
+            <div class="cat_box_1">
+            <div class="cat_title">
+            <div class="cat_name">{$cha[channelname]}</div>
+            <div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
+            </div>
+            <table cellspacing="0" cellpadding="0" width="100%" class="mar_10">
+                <tbody>
+                    <tr>
+                        <td valign="top" >{tag_网站首页最新图片}</td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <!--{/loop}-->
+	    <!--{loop $channels['down'] $channelid $cha}-->
+            <div class="cat_box_1">
+            <div class="cat_title">
+            <div class="cat_name">{$cha[channelname]}</div>
+            <div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
+            </div>
+            <table cellspacing="0" cellpadding="0" width="100%" class="mar_10">
+                <tbody>
+                    <tr>
+                        <td valign="top"  width="50%">{tag_网站首页推荐下载} </td>
+                        <td width="10"></td>
+                        <td valign="top"  width="50%">{tag_网站首页最新下载} </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <!--{/loop}-->
+	    <!--{loop $channels['info'] $channelid $cha}-->
+            <div class="cat_box_1">
+            <div class="cat_title">
+            <div class="cat_name">{$cha[channelname]}</div>
+            <div class="cat_url"><a class="more" href="{$cha[linkurl]}">更多 &gt;&gt;</a></div>
+            </div>
+            <table cellspacing="0" cellpadding="0" width="100%" class="mar_10">
+                <tbody>
+                    <tr>
+                        <td valign="top" width="50%">{tag_网站首页推荐信息}</td>
+                        <td width="10"></td>
+                        <td valign="top" width="50%">{tag_网站首页最新信息} </td>
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+            <!--{/loop}-->
+			</td>
+            <td width="15"></td>
+            <td class="right_bg" valign="top" width="255">
+            <div class="rightcats">
+            <h1>投票调查</h1>
+            <h2><a class="more" href="{$MODULE[vote][linkurl]}">更多 &gt;&gt;</a></h2>
+            </div>
+            <table height="100" cellspacing="5" cellpadding="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td>{tag_网站首页投票调查}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="rightcats">
+            <h1>友情链接</h1>
+            <h2><a class="more" href="{$MODULE[link][linkurl]}">更多 &gt;&gt;</a></h2>
+            </div>
+            <table height="100" cellspacing="5" cellpadding="0" width="100%">
+                <tbody>
+                    <tr>
+                        <td>{tag_网站首页图片链接} {tag_网站首页文字链接} </td>
+                    </tr>
+                </tbody>
+            </table>
+            </td>
         </tr>
-      </table>
-<!--用户排行-->
-     <table width="100%" height="160" cellpadding="0" cellspacing="5">
-        <tr>
-          <td valign="top">{$user_itemstop(10)}</td>
-        </tr>
-      </table>
-      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
-        <tr>
-          <td width="27"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25" /></td>
-          <td width="156">投票调查</td>
-          <td width="42"><a href="{PHPCMS_PATH}vote/" class="more">更多</a></td>
-          <td width="28" align="right"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25" /></td>
-        </tr>
-      </table>
-<!--投票-->
-     <table width="100%" height="100" cellpadding="0" cellspacing="5">
-        <tr>
-          <td>{$voteshow(0,0,0)}</td>
-        </tr>
-      </table>
-
-      <table width="100%" cellspacing="0" cellpadding="0" class="sidebar">
-        <tr>
-          <td width="27"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25" /></td>
-          <td width="156">友情链接</td>
-          <td width="42"><a href="{PHPCMS_PATH}link/" class="more">更多</a></td>
-          <td width="28" align="right"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25" /></td>
-        </tr>
-      </table>
-
-     <table width="100%" height="100" cellpadding="0" cellspacing="5">
-        <tr>
-          <td>
-{$linklist(0,0,1,0,10,2)}
-{$linklist(0,0,0,0,10,2)}
-          </td>
-        </tr>
-      </table>
-
-    </td>
-  </tr>
+    </tbody>
 </table>
 {template 'phpcms','footer'}

@@ -1,0 +1,11 @@
+<table width="100%" cellpadding="0" cellspacing="0">
+{loop $articles $article}
+<tr>
+<td height="20">
+{$article[type]} <a href="{$article[linkurl]}" class="tag_title_link">{$article[title]}</a>
+{if $article['showcommentlink']}&nbsp;<a href="{$MODULE['comment']['linkurl']}index.php?keyid={$channelid}&itemid={$article[articleid]}&itemurl={$urlencode($article[linkurl])}&title={$urlencode($article[title])}" target="_blank"><span class="font_red">评</span></a> {/if}
+{if $datetype}[<span class="datetime">{$article[adddate]}</span>]{/if}
+ </td>
+</tr>
+{/loop}
+</table>

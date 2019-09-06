@@ -1,0 +1,10 @@
+<table width="{$width}" height="{$height}" cellpadding="1" cellspacing="1">
+{loop $announces $announce}
+<tr>
+ <td align="left" valign="top">
+ ·<a href="{$announce['linkurl']}" {if $target}target="_blank"{/if}>{$announce['title']}</a>{if $showauthor}&nbsp;[发布人：<a href="{PHPCMS_PATH}member/member.php?username={$announce['username']}" target="_blank">{$announce['username']}</a>]{/if}&nbsp;{if $datetype}{$announce['addtime']}{/if}
+ </td>
+</tr>
+{/loop}
+</table>
+{if $pages}{$pages}{/if}

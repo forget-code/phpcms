@@ -1,6 +1,6 @@
 <?php
-$templatenames=array (
+$templatenames = array (
   'page.html' => '单网页模板',
-  'tag_showdefinedpage.html' => '单网页调用标签模板',
+  'tag_page_list.html' => '单网页标签模板',
 );
 ?>

@@ -1,62 +1,16 @@
-<div class="side_0">
-  <div class="side_2">帐户中心</div>
-  <div align="left">
-您的身份：{$_GROUP['groupname']}<br>
-{if $_chargetype}
-计费方式：有效期 <br>
-剩余天数：{$validdatenum} <br>
-{else}
-计费方式：扣点数<br>
-可用点数：{$_point}点</div>
-{/if}
-</div>
-</div>
-<div class="side_1">
-  <div class="side_2">信息管理</div>
-  <div class="side_4">
-    <ul>
-{loop $_CHANNEL $channel}
-{if $channel[channeltype]}
-      <li><a href="{PHPCMS_PATH}member/myitem.php?module={$channel[module]}&channelid={$channel[channelid]}&action=manage">{$channel[channelname]}管理 | 发布</a></li>
-{/if}
-{/loop}
-    </ul>
-  </div>
-</div>
-<div class="side_1">
-  <div class="side_2">短信息</div>
-  <div class="side_4">
-       <ul>
-	  <li><a href="{PHPCMS_PATH}member/pm.php?action=send">发短信息</a></li>
-      <li><a href="{PHPCMS_PATH}member/pm.php?action=tract">信息追踪</a></li>
-      <li><a href="{PHPCMS_PATH}member/pm.php">收件箱{if $inbox_new_num} <span style="font-size:10px;color:red;">[{$inbox_new_num}]new!</span>{/if}</a></li>
-      <li><a href="{PHPCMS_PATH}member/pm.php?action=draft">草稿箱</a></li>
-	  <li><a href="{PHPCMS_PATH}member/pm.php?action=outbox">已发送</a></li>
-	  <li><a href="{PHPCMS_PATH}member/pm.php?action=recycle">垃圾箱</a></li>
-	  <li><a href="{PHPCMS_PATH}member/pm.php?action=addresslist">通讯录</a></li>
-	  <li><a href="{PHPCMS_PATH}member/pm.php?action=blacklist">黑名单</a></li>
-	</ul>
-  </div>
-</div>
-<div class="side_1">
-  <div class="side_2">充值服务</div>
-  <div class="side_4">
-    <ul>
-      <li><a href="{PHPCMS_PATH}member/exchange.php?action=paycard">充值卡充值</a></li>
-      <li><a href="{PHPCMS_PATH}member/exchange.php?action=getpoint">兑换点数</a></li>
-      <li><a href="{PHPCMS_PATH}member/exchange.php?action=gettime">兑换有效期</a></li>
-      <li><a href="{PHPCMS_PATH}member/exchange.php?action=sendpoint">赠送点数</a></li>
-	</ul>
-  </div>
-</div>
-<div class="side_1">
-  <div class="side_2">个人资料</div>
-  <div class="side_4">
-    <ul>
-      <li><a href="{PHPCMS_PATH}member/member.php?username={$_username}" target="_blank">我的作品集</a></li>
-      <li><a href="{PHPCMS_PATH}member/index.php">查看资料</a></li>
-      <li><a href="{PHPCMS_PATH}member/modify.php">修改资料</a></li>
-      <li><a href="{PHPCMS_PATH}member/logout.php">退出登录</a></li>
-    </ul>
-  </div>
-</div>
+<script language="javascript" src="{$MODULE[member][linkurl]}info_js.php"></script>
+
+<ul class="functionlist">
+
+<!--{loop $CHANNEL $cha}-->
+<!--{if $cha['islink'] == 0}--><li><a href="{$cha[linkurl]}myitem.php">{$cha[channelname]}发布管理</a></li><!--{/if}-->
+<!--{/loop}-->
+
+{$menu('member', 'member_menu')}
+
+  <li><a href="{$MODULE[member][linkurl]}member.php?username={$_username}" target="_blank">我的文集</a></li>
+  <li><a href="{$MODULE[member][linkurl]}index.php">查看资料</a></li>
+  <li><a href="{$MODULE[member][linkurl]}edit.php">修改资料</a></li>
+  <li><a href="{$MODULE[member][linkurl]}editpassword.php">修改密码</a></li>
+  <li><a href="{$MODULE[member][linkurl]}logout.php">退出登录</a></li>
+</ul>

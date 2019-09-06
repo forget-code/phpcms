@@ -47,12 +47,12 @@ function Ok()
 }
 
 function uploadfile_submit(uploadform) {
-	uploadform.action = "../../uploads.php?uploadtext=myform.thumb&save=1&action=thumb&channelid="+oEditor.FCKConfig.ChannelID;
+	uploadform.action = "../../uploads.php?uploadtext=myform.thumb&save=1&action=thumb&mod="+oEditor.FCKConfig.Module+"&channelid="+oEditor.FCKConfig.ChannelID;
 	uploadform.submit();
 }
 
 function SelectPic() {
-  var arr=showModalDialog('../../../admin.php?mod=phpcms&file=file_select&channelid='+oEditor.FCKConfig.ChannelID+'&type=', '', 'dialogWidth:820px; dialogHeight:600px; help: no; scroll: yes; status: no');
+  var arr=showModalDialog('../../../'+oEditor.FCKConfig.Adminpath+'?mod=phpcms&file=file_select&module="+oEditor.FCKConfig.Module+"&channelid='+oEditor.FCKConfig.ChannelID+'&type=', '', 'dialogWidth:820px; dialogHeight:600px; help: no; scroll: yes; status: no');
   if(arr!=null){
     var ss=arr.split('|');
 	ext_gif = ss[3];
@@ -75,7 +75,7 @@ function SelectPic() {
 <FORM METHOD="POST" name="myform" ACTION="">
 <TR>
 <TD style="border-bottom: 0px solid Gray;padding: 5px 5px 5px 5px;" valign="top"><BR>
-附件地址：<BR><INPUT TYPE="text" NAME="thumb" style="width:70%">&nbsp;&nbsp;<input id="btnBrowse" onclick="SelectPic();" type="button" value="浏览服务器"><BR>
+附件地址：<BR><INPUT TYPE="text" NAME="thumb" style="width:70%">&nbsp;&nbsp;<input id="btnBrowse" onClick="SelectPic();" type="button" value="浏览服务器"><BR>
 附件标题：<BR><INPUT TYPE="text" NAME="hreftext" style="width:90%"><BR>
 </TD>
 </TR>
@@ -87,7 +87,7 @@ function SelectPic() {
          <FORM METHOD="POST" name="uploads" ACTION="" enctype="multipart/form-data" target="uploadiframe">
           <tr> 
             <td>
-	        <INPUT TYPE="file" NAME="uploadfile" style="width:70%">&nbsp;&nbsp;<INPUT TYPE="button" value=" 上传 " onclick="uploadfile_submit(this.form);">
+	        <INPUT TYPE="file" NAME="uploadfile" style="width:70%">&nbsp;&nbsp;<INPUT TYPE="button" value=" 上传 " onClick="uploadfile_submit(this.form);">
             </td>
           </tr>
 		  </FORM>

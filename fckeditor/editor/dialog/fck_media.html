@@ -1,4 +1,3 @@
-﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <HTML>
 <HEAD>
 <title>插入多媒体</title>
@@ -54,7 +53,7 @@ function Ok(){
 }
 
 function SelectPic() {
-  var arr=showModalDialog('../../../admin.php?mod=phpcms&file=file_select&channelid='+oEditor.FCKConfig.ChannelID+'&type=', '', 'dialogWidth:820px; dialogHeight:600px; help: no; scroll: yes; status: no');
+  var arr=showModalDialog('../../../'+oEditor.FCKConfig.Adminpath+'?mod=phpcms&file=file_select&module='+oEditor.FCKConfig.Module+'&channelid='+oEditor.FCKConfig.ChannelID+'&type=', '', 'dialogWidth:820px; dialogHeight:600px; help: no; scroll: yes; status: no');
   if(arr!=null){
     var ss=arr.split('|');
     myform.thumb.value=ss[2]+ss[0];
@@ -62,6 +61,7 @@ function SelectPic() {
 }
 
 </script>
+<link href="base.css" rel="stylesheet" type="text/css">
 </HEAD>
 <body leftmargin="0" topmargin="8" bgcolor="#EBF6CD">
 <FORM METHOD="POST" name="myform" ACTION="" enctype="multipart/form-data" target="uploadiframe">

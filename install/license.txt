@@ -1,9 +1,11 @@
-版权所有 (c) 2005-2006，陕西玖肆陆陆网络科技有限公司
+			最终用户软件许可协议
+
+版权所有 (c) 2005-2007，陕西玖肆陆陆网络科技有限公司
 保留所有权利。
 
     感谢您选择 PHPCMS 网站管理系统。希望我们的努力能为您提供一个高效快速和强大的 web 解决方案。
 
-    PHPCMS 为本产品项目的开发商，依法拥有 phpcms 软件的著作权。本协议适用于 phpcms 3.x 系列版本，PHPCMS（www.phpcms.cn）拥有对本协议的最终解释权和修改权。
+    PHPCMS 为本产品项目的开发商，依法拥有 phpcms 软件的著作权。本协议适用于PHPCMS3.x，PHPCMS2007 系列版本，PHPCMS（www.phpcms.cn）拥有对本协议的最终解释权和修改权。
 
     phpcms官方技术支持论坛为 http://bbs.phpcms.cn；phpcms产品网站为 http://www.phpcms.cn；
 

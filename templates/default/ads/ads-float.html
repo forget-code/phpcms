@@ -1,4 +1,4 @@
-document.writeln("<div id='adsimg<?=$ads[adsid]?>' style='position:absolute;' onMouseOver='pause=false;' onMouseOut='pause=true;'>");
+document.writeln("<div id='adsimg<?=$ads['adsid']?>' style='position:absolute;' onMouseOver='pause=false;' onMouseOut='pause=true;'>");
 <?=$content?>
 document.writeln("</div>");
 
@@ -14,15 +14,15 @@ var xon = 0;
 var pause = true; 
 var interval; 
 
-adsimg<?=$ads[adsid]?>.style.top = yPos; 
-function changePos<?=$ads[adsid]?>() { 
+adsimg<?=$ads['adsid']?>.style.top = yPos; 
+function changePos<?=$ads['adsid']?>() { 
 if (pause) {
 width = document.body.clientWidth; 
 height = document.body.clientHeight; 
-Hoffset = adsimg<?=$ads[adsid]?>.offsetHeight; 
-Woffset = adsimg<?=$ads[adsid]?>.offsetWidth; 
-adsimg<?=$ads[adsid]?>.style.left = xPos + document.body.scrollLeft; 
-adsimg<?=$ads[adsid]?>.style.top = yPos + document.body.scrollTop; 
+Hoffset = adsimg<?=$ads['adsid']?>.offsetHeight; 
+Woffset = adsimg<?=$ads['adsid']?>.offsetWidth; 
+adsimg<?=$ads['adsid']?>.style.left = xPos + document.body.scrollLeft; 
+adsimg<?=$ads['adsid']?>.style.top = yPos + document.body.scrollTop; 
 if (yon) { 
 yPos = yPos + step; 
 } 
@@ -54,7 +54,7 @@ xPos = (width - Woffset);
 }
 } 
 function phpcms_ads_fudong() { 
-adsimg<?=$ads[adsid]?>.visibility = "visible"; 
-interval = setInterval('changePos<?=$ads[adsid]?>()', delay); 
+adsimg<?=$ads['adsid']?>.visibility = "visible"; 
+interval = setInterval('changePos<?=$ads['adsid']?>()', delay); 
 } 
 phpcms_ads_fudong();

@@ -1,296 +1,314 @@
 {template 'phpcms','header'}
-<script language="javascript" type="text/javascript">
-<!--
+<script type="text/javascript">
 // 表单提交检测
 function doCheck(){
-    // 检测表单的有效性
-    if (document.myform.catid.value=='0'){
-        alert('请选择栏目！');
-        document.myform.catid.focus();
-        return false;
-    }
-    if (myform.title.value=="") {
-        alert("请输入标题！");
-        document.myform.title.focus();
-        return false;
-    }
-    for(var i=0;i<document.myform.DownloadUrl.length;i++){
-      if (document.myform.downurls.value=='') document.myform.downurls.value=document.myform.DownloadUrl.options[i].value;
-      else document.myform.downurls.value+="\n"+document.myform.DownloadUrl.options[i].value;
-    }
+
+	// 检测表单的有效性
+	// 如：标题不能为空，内容不能为空，等等....
+	if ($('catid').value=='0'){
+		alert('指定的栏目不允许添加下载！只允许在其子栏目中添加下载。');
+		$('catid').focus();
+		return false;
+	}
+	if ($('title').value=='') {
+		alert('对不起，标题不能为空！');
+        $('title').focus();
+		return false;
+	}
+	if($('downurls').value=='')
+	{
+		alert('对不起，下载地址不能为空！');
+		$('downurls').focus();
+		return false;
+	}
+
+	{if $MOD['check_code']}
+	if ($('checkcodestr').value=='') {
+		alert("请输入验证码!");
+		$('checkcodestr').focus();
+		return false;
+	}
+	{/if}
+
 }
-//-->
-</script>
-<script language="javascript" type="text/javascript" src="{PHPCMS_PATH}module/down/include/js/prototype.js">
-</script>
-<script language="javascript" type="text/javascript" src="{PHPCMS_PATH}module/down/include/js/common.js">
 </script>
 
-<table cellspacing="0" cellpadding="0" border="0" width="980" align="center">
+<table cellspacing="0" cellpadding="0" width="980">
 <tr>
-<td class="tablerowhighlight" width="190" align="center" valign="top" bgcolor="#F7F2E3">
-{template 'member','left'}
+<td valign="top" class="left">
+{template "member","left"}</td>
+<td width="10" valign="top">
 </td>
-<td width="20" valign="top">
-</td>
-<td width="770" valign="top">
-<table width="100%" cellpadding="0" cellspacing="0" class="tableBorder">
+<td valign="top" class="right">
+<div class="membercatslist">
+<ul>
+<li><a href="{$channelurl}myitem.php?action=add"><span>发表下载</span></a></li>
+<li><a href="{$channelurl}myitem.php?action=manage&status=3"><span>已通过</span></a></li>
+<li><a href="{$channelurl}myitem.php?action=manage&status=1"><span>待审核</span></a></li>
+</ul>
+</div>
+<div class="clearboth"></div>
+<table cellpadding="0" cellspacing="0" class="righttable">
   <tr>
-    <td height="25" bgcolor="#F7F2E3"> &nbsp;
-	·<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=add"><font color="red">发布下载</font></a>&nbsp;&nbsp;
-	·<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=manage&status=3">已通过[{$num_3}]</a>&nbsp;&nbsp;
-	·<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=manage&status=1">待审核[{$num_1}]</a>&nbsp;&nbsp;
-	·<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=manage&status=0">草稿[{$num_0}]</a>&nbsp;&nbsp;
-	·<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=manage&status=2">退稿[{$num_2}]</a>&nbsp;&nbsp;
-	</td>
+    <td class="td_right"><font color="red">Tips:请务必认真填写，信息一经通过，将无法修改！ </font></td>
   </tr>
 </table>
-<table width="100%" cellpadding="0" cellspacing="0">
-  <tr>
-    <td height="15" class="tablerow"> </td>
-  </tr>
-</table>
+<div class="memberborder_1">
+<div class="memberborder_2">
+{if $action=='add'}
+<h1>发布下载</h1>
+<form action="{$channelurl}myitem.php?action=add" method="post" name="myform" onsubmit="return doCheck();">
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tbody>
+    <tr> 
+      <td class="td_right" width="15%"> <strong><font color='#FF0000'>*</font> 所属栏目</strong></td>
+      <td class="td_left" width="85%">{$category_select}</td>
+    </tr>
 
-{if $action=='add' || $action=='edit'}
-
-<script type="text/javascript" src="{PHPCMS_PATH}fckeditor/fckeditor.js"></script>
-<script type="text/javascript">
-	var editorBasePath = '{PHPCMS_PATH}fckeditor/';
-	var ChannelId = {$channelid} ;
-</script>
-
-<script type="text/javascript">
-window.onload = function()
-{
-	var oFCKeditor = new FCKeditor('introduce') ;
-	oFCKeditor.BasePath	= editorBasePath ;
-	oFCKeditor.ReplaceTextarea() ;
-}
-</script>
-
-<table width="100%" cellpadding="2" cellspacing="1" class="tableBorder">
-  <tr>
-    <th colspan="2">欢迎投稿</th>
-  </tr>
-   <form action="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action={$action}&submit=1&downid={$downid}" method="post" name="myform" enctype="multipart/form-data" onsubmit="return doCheck();">
-
-  <tr>
-    <td width="15%" class="tablerow"> <b>所属栏目</b> </td>
-    <td class="tablerow">
-	{$cat_select}
-	</td>
-  </tr>
-  <tr>
-    <td class="tablerow"><b>所属专题</b></td>
-    <td class="tablerow">
-	{$special_select}
-      </td>
-  </tr>
-  <tr>
-    <td class="tablerow"><b>标题</b></td>
-    <td class="tablerow">
-	<input name="title" type="text" id="title" value="{$title}" title="最多100个字" size="60" maxlength="100" class="inputtitle" onKeyUp="this.title='当前 '+ this.value.length+ ' 个字';" value="{$title}"/> 
-	</td>
-  </tr>
-  <tr>
-    <td class="tablerow"><b>作者</b></td>
-    <td class="tablerow">
-	<input name="author" type="text" id="author" value="{$author}" size="20" maxlength="30" /></td>
-  </tr>
-  <tr>
-    <td class="tablerow"><b>简介</b></td>
-    <td class="tablerow">
-	<textarea name="introduce" id="introduce" style="display:none">{$introduce}</textarea>
-    	</td>
-  </tr>
-  <tr>
-    <td class="tablerow"><b>缩略图</b></td>
-    <td class="tablerow">
-	<input name="thumb" type="text" id="thumb" size="50" value="{$thumb}"/>
-{if $_CHA[enableupload]}
-	<input type="button" name="uploadpic" type="button" id="uploadpic" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=thumb&action=thumb&type=thumb&width=150&height=150','upload','350','350')"/>&nbsp;
-{/if}
-	</td>
-  </tr>
-  <tr>
-    <td class="tablerow"><b>下载地址</b></td>
-    <td class="tablerow">
-<table cellpadding='0' cellspacing='0' border='0' width='100%'>
-<tr>
-<td>
-<input type="hidden" name="downurls">
-<select id='DownloadUrl' name='DownloadUrl' style='width:400;height:100' size='2' ondblclick='return ModifyUrl();'>
-{loop $downurls $downurl}<option value='{$downurl}'>{$downurl}</option>{/loop}
-</select>
-</td>
-<td>
-<input type='button' name='addurl' value='添加外部地址' onclick='AddUrl();'><br>
-<input type='button' name='modifyurl' value='修改当前地址' onclick='return ModifyUrl();'><br>
-<input type='button' name='delurl' value='删除当前地址' onclick='DelUrl();'>
-<script language = 'JavaScript'>
-function AddUrl(){
-  var thisurl='下载地址'+(document.myform.DownloadUrl.length+1)+'|http://'; 
-  var url=prompt('请输入下载地址名称和链接，中间用“|”隔开：',thisurl);
-  if(url!=null&&url!=''){document.myform.DownloadUrl.options[document.myform.DownloadUrl.length]=new Option(url,url);}
-}
-function ModifyUrl(){
-  if(document.myform.DownloadUrl.length==0) return false;
-  var thisurl=document.myform.DownloadUrl.value; 
-  if (thisurl=='') {alert('请先选择一个下载地址，再点修改按钮！');return false;}
-  var url=prompt('请输入下载地址名称和链接，中间用“|”隔开：',thisurl);
-  if(url!=thisurl&&url!=null&&url!=''){document.myform.DownloadUrl.options[document.myform.DownloadUrl.selectedIndex]=new Option(url,url);}
-}
-function DelUrl(){
-  if(document.myform.DownloadUrl.length==0) return false;
-  var thisurl=document.myform.DownloadUrl.value; 
-  if (thisurl=='') {alert('请先选择一个下载地址，再点删除按钮！');return false;}
-  document.myform.DownloadUrl.options[document.myform.DownloadUrl.selectedIndex]=null;
-}
-</script>
-</td>
-</tr>
-</table>
-	</td>
-  </tr>
-{if $_CHA[enableupload]}
-  <tr>
-    <td class="tablerow"><b>上传文件</b></td>
-    <td class="tablerow">
-系统提供的上传功能只适合上传比较小的文件(2M以内)。如果文件过大，请点“添加外部地址”输入名称和下载地址。<br/>
-<iframe id="upload" src="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=uploadfile" border="0" vspace="0" hspace="0" marginwidth="0" marginheight="0" framespacing="0" frameborder="0" scrolling="no" width="450" height="50"></iframe>
-	</td>
-  </tr>
-{/if}
-  <tr>
-    <td class="tablerow"><b>文件大小<b></td>
-    <td class="tablerow">
-	<input name="filesize" type="text" id="filesize" value="{$filesize}" size="15" maxlength="20" /> KB</td>
-  </tr>
-
-{$fields}
-
-<tr> 
-      <td class="tablerowhighlight" align="right"><b>状态</b></td>
-      <td class="tablerow">
-		<input name='status' type='radio' value='3' {if $status==3}checked{/if} {if !$_GROUP['enableaddalways']}disabled{/if}> 已通过&nbsp;
-		<input name='status' type='radio' value='1' {if !isset($status) || $status==1}checked{/if} > 待审核&nbsp;
-		<input name='status' type='radio' value='0' {if isset($status) && $status==0}checked{/if}>草稿&nbsp;
-		<input name='status' type='radio' value='2'  {if $status==2}checked{else}disabled{/if}> 退槁&nbsp;
+    <tr> 
+      <td class="td_right"><strong><font color="#FF0000">*</font> 标题</strong></td>
+      <td class="td_left">{$type_select} <input name="title" type="text" id="title" size="50"></td>
+    </tr>
+    <tr> 
+      <td class="td_right"><strong>关键词</strong></td>
+      <td class="td_left"><input name="keywords" type="text" id="keywords" size="50"> 多个关键词之间请用半角逗号“,”隔开</td>
+    </tr>
+    <tr> 
+      <td class="td_right"><strong>作者/厂商</strong></td>
+      <td class="td_left"><input name="author" type="text" id="author" size="50" value="{$_username}"></td>
+    </tr>
+    <tr> 
+      <td class="td_right"><strong>官方主页</strong></td>
+      <td class="td_left"><input name="homepage" type="text" id="homepage" size="50">  格式：“网站名称|网站地址”
 	</td>
     </tr>
-</table>
-
-<table width="218" height="66" align="center" cellpadding="2" cellspacing="1" >
-  <tr align="center">
-    <td>
-	<input type="submit" name="Submit" id="Submit" value=" 确 定 " />
+    <tr> 
+      <td class="td_right"><strong>简介</strong></td>
+      <td class="td_left">
+		<textarea name="content" id="content" cols="100" rows="25"></textarea>
+		{$editor("content",$MOD['editor_mode'],$MOD['editor_width'],$MOD['editor_height'])}
+   </td>
+    </tr>
+ <tr> 
+      <td class="td_right"><strong>缩略图</strong></td>
+      <td class="td_left">
+         <input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=thumb&type=thumb&width={$MOD[thumb_width]}&height={$MOD[thumb_height]}','upload','360','300')">
+		</td>
+    </tr>
+<tr>
+	<td class="td_right"><strong>下载名称|地址</strong><font color="#FF0000">*<br/>地址请填写文件真实路径(URL),不允许上传</font></td>
+	<td class="td_left">
+		<table cellpadding="0" cellspacing="1" width="100%">
+		<tr>
+		<td><font color="red">下载地址举例：</font>下载说明|下载地址 <a href="###" onclick="alert('PHPCMS简体中文版|http://soft.phpcms.cn/phpcms_gbk.zip\nPHPCMS繁体中文版|http://soft.phpcms.cn/phpcms_big5.zip\nPHPCMS一键安装包|http://soft.phpcms.cn/pc_server.exe');">一个下载文件占一行，点这里查看实例</a></td>
+		</tr>
+		<tr> 
+		<td width="500"><textarea name="downurls" cols="70" rows="6" id="downurls" style="width:500px;height:100px;overflow:visible;"></textarea></td>
+		</tr>
+		</table>
 	</td>
-    <td>
-	  <input name="Reset" type="reset" id="Reset" value=" 取 消 " />
-	</td>
-  </tr>
+	</tr>
+    {$fields}
+{if $MOD['check_code']}
+    <tr> 
+      <td class="td_right"><strong>验证码</strong></td>
+      <td class="td_left"><input name="checkcodestr" type="text" size="15" id="checkcodestr"><img src="<?=PHPCMS_PATH?>checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/></td>
+    </tr>
+{/if}
+    <tr> 
+      <td class="td_center" colspan="2"><input type="submit" name="dosubmit" value=" 发表 "> &nbsp; <input type="reset" name="reset" value=" 重置 "></td>
+    </tr>
+</tbody>
 </table>
 </form>
-<br />
+
+{elseif $action=='edit'}
+<form action="{$channelurl}myitem.php?action=edit&downid={$downid}" method="post" name="myform" onsubmit="return doCheck();">
+<h1>欢迎投稿</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tbody>  
+    <tr> 
+      <td class="td_right" width="15%"> <strong>所属栏目</strong> 
+<font color='#FF0000'>*</font></td>
+      <td class="td_left" width="85%">
+{$category_select}
+</td>
+    </tr>
+  
+    <tr> 
+      <td class="td_right"><font color="#FF0000">*</font> <strong>标题</strong></td>
+      <td class="td_left">{$type_select} <input name="title" type="text" id="title" size="50" value="{$title}"></td>
+    </tr>
+    <tr> 
+      <td class="td_right"><strong>关键词</strong> </td>
+      <td class="td_left"><input name="keywords" type="text" id="keywords" size="50" value="{$keywords}"> 多个关键词之间请用半角逗号“,”隔开</td>
+    </tr>
+    <tr> 
+      <td class="td_right"><strong>作者/厂商</strong></td>
+      <td class="td_left"><input name="author" type="text" id="author" size="50" value="{$author}"></td>
+    </tr>
+    <tr> 
+      <td class="td_left"><strong>官方主页</strong> </td>
+      <td class="td_left"><input name="homepage" type="text" id="homepage" size="50" value="{$homepage}">  格式：“网站名称|网站地址”</td>
+    </tr>
+    <tr> 
+      <td class="td_right"><strong>简介</strong> </td>
+      <td class="td_left"><textarea name="content" id="content" cols="100" rows="25">{$introduce}</textarea>		{$editor("content",$MOD['editor_mode'],$MOD['editor_width'],$MOD['editor_height'])}</td>
+    </tr>
+ <tr> 
+      <td class="td_right"><strong>缩略图</strong></td>
+      <td class="td_left"><input name="thumb" type="text" id="thumb" size="50" value="{$thumb}"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=thumb&type=thumb&width={$MOD[thumb_width]}&height={$MOD[thumb_height]}','upload','360','300')"></td>
+    </tr>
+<tr>
+	<td class="td_right"><strong>下载名称|地址</strong><font color="#FF0000">*<br/>地址请填写文件真实路径(URL),不允许上传</font></td>
+	<td class="td_left">
+		<table cellpadding="0" cellspacing="1" width="100%">
+		<tr>
+		<td><font color="red">下载地址举例：</font>下载说明|下载地址 <a href="###" onclick="alert('PHPCMS简体中文版|http://soft.phpcms.cn/phpcms_gbk.zip\nPHPCMS繁体中文版|http://soft.phpcms.cn/phpcms_big5.zip\nPHPCMS一键安装包|http://soft.phpcms.cn/pc_server.exe');">一个下载文件占一行，点这里查看实例</a></td>
+		</tr>
+		<tr> 
+		<td width="500"><textarea name="downurls" cols="70" rows="6" id="downurls" style="width:500px;height:100px;overflow:visible;">{$downurls}</textarea></td>
+		</tr>
+		</table>
+	</td>
+	</tr>
+    {$fields}
+{if $MOD['check_code']}
+    <tr> 
+      <td class="td_right" ><strong>验证码</strong></td>
+      <td class="td_left"><input name="checkcodestr" type="text" size="15" id="checkcodestr">
+	  <img src="<?=PHPCMS_PATH?>checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/></td>
+    </tr>
+{/if}
+    <tr> 
+      <td class="td_center" colspan="2"><input type="submit" name="dosubmit" value=" 编辑 "> </td>
+    </tr>
+</tbody>
+</table>
+</form>
 
 {elseif $action=='preview'}
+<h1>{$title}</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
+  <tr>
+    <td class="td_right" width="15%"><strong>标题</strong></td>
+	<td class="td_left" width="85%">{$title}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>栏目</strong></td>
+	<td class="td_left">{$catname}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>标题</strong></td>
+	<td class="td_left">{$title}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>关键词</strong></td>
+    <td class="td_left">{$keywords}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>日期</strong></td>
+    <td class="td_left">{$adddate}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>作者/厂商</strong></td>
+    <td class="td_left">{$author}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>官方主页</strong></td>
+    <td class="td_left">{$homepage}</td>
+  </tr>
+  
+  <tr>
+    <td class="td_right"><strong>简介</strong></td>
+    <td class="td_left">{$introduce}</td>
+  </tr>
+    <tr>
+    <td class="td_right"><strong>缩略图</strong></td>
+    <td class="td_left"><a href="{$thumb}" target="_blank">{$thumb}</td>
+  </tr>
 
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <tr>
-    <th colspan=6>{$title} - {$adddate}</th>
+   <tr>
+    <td class="td_right"><strong>下载地址</strong></td>
+    <td class="td_left">
+	{loop $downurls $v}
+	<a href="{$v[url]}" >{$v[name]}: {$v[url]}</a><br/>
+	{/loop}
+	</td>
   </tr>
-  <tr>
-    <td class="tablerow"> {$introduce} </td>
+  {loop $fields $f}
+    <tr>
+    <td class="td_right"><strong>{$f[title]}</strong></td>
+    <td class="td_left">{$f[value]}</td>
   </tr>
+  {/loop}
   <tr>
-    <td class="tablerow">
-{loop $downurls $downurl}
-<a href="{$channelurl}download.php?downid={$downid}&id={$downurl['id']}" title="{$downurl['name']}">{$downurl['name']}{$downurl['type']}</a> 
-{/loop}
-</td>
-  </tr>
-  <tr align=right>
-    <td class="tablerow">
+   <td class="td_right"> </td>
+    <td class="td_left"  align="right">
 	<a href="#" onclick="javascript:history.go(-1);">返回</a>
-	<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=edit&downid={$downid}">编辑</a>
-	<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=send&downid={$downid}">投稿</a>
-	<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=delete&downid={$downid}">删除</a>	
+	<a href="{$channelurl}myitem.php?action=edit&downid={$downid}">编辑</a>
+	<a href="{$channelurl}myitem.php?action=delete&downid={$downid}">删除</a>	
 	</td>
   </tr>
 </table>
-
 {elseif $action=='manage'}
-
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <tr>
-    <th colspan=6>下载管理</th>
-  </tr>
-<tr align=center>
-<td width="8%"  class="tablerowhighlight">ID</td>
-<td width="43%" class="tablerowhighlight">标题</td>
-<td width="15%" class="tablerowhighlight">栏目</td>
-<td width="12%" class="tablerowhighlight">发表时间</td>
-<td width="10%" class="tablerowhighlight">下载次数</td>
-<td width="12%" class="tablerowhighlight">管理操作</td>
+<h1>下载管理 [ {if $status==3}已通过{elseif $status==1}待审核{elseif $status==0}草稿{elseif $status==2}退稿{/if} ]</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tbody>
+<tr align="center">
+<td width="8%" class="td_center">ID</td>
+<td width="43%" class="td_center">标题</td>
+<td width="15%" class="td_center">栏目</td>
+<td width="12%" class="td_center">发表时间</td>
+<td width="10%" class="td_center">点击</td>
+<td width="12%" class="td_center">管理操作</td>
 </tr>
-
-<form method="post" name="myform">
 {loop $downs  $down}
-<tr align='center' onmouseout="this.style.backgroundColor='#ffffff'" onmouseover="this.style.backgroundColor='#EBF6FB'" bgColor='#ffffff'>
-<td>{$down[downid]}</td>
-<td align=left>{if $down[status]==3}<a href="{$down[url]}" target="_blank">{else}<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=preview&downid={$down[downid]}">{/if}{$down[title]}</a>{if $down[ontop]}<font color=red> 顶</font>{/if}{if $down[elite]}<font color=blue> 荐</font>{/if}
+<tr align="center" onmouseout="this.style.backgroundColor='#ffffff'" onmouseover="this.style.backgroundColor='#EBF6FB'" bgColor="#ffffff">
+<td class="td_center">{$down[downid]}</td>
+<td class="td_left">&nbsp;{if $down[type]}{$down[type]} {/if}{if $down['status']==3}<a href="{$down['linkurl']}" target="_blank">{else}<a href="{$channelurl}myitem.php?action=preview&downid={$down[downid]}">{/if}{$down['title']}</a>
 </td>
-<td><a href="{$down[catdir]}" target="_blank">{$_CAT[$down[catid]][catname]}</a></td>
-<td>{$down[adddate]}</td>
-<td>{$down[downs]}</td>
-<td>{if $status<3}<a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=edit&downid={$down[downid]}">编辑</a> | <a href="{PHPCMS_PATH}member/myitem.php?module={$module}&channelid={$channelid}&action=delete&downid={$down[downid]}">删除</a>{else}<span style="color:#C0C0C0">编辑 | 删除</span>{/if}</td>
+<td class="td_center"><a href="{$down['catlinkurl']}" target="_blank">{$down['catname']}</a></td>
+<td class="td_center">{$down['adddate']}</td>
+<td class="td_center">{$down['hits']}</td>
+<td class="td_center">{if $down['status']<3}<a href="{$channelurl}myitem.php?action=edit&downid={$down[downid]}">编辑</a> | <a href="{$channelurl}myitem.php?action=delete&downid={$down[downid]}">删除</a>{else}<span style="color:#C0C0C0">编辑 | 删除</span>{/if}</td>
 </tr>
 {/loop}
-</table>
-
-<table width="100%" height="10" border="0" cellpadding="0" cellspacing="0">
-  <tr>
-    <td></td>
-  </tr>
+</tbody>
 </table>
 
 <table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">
   <tr>
-    <td align='center'>{$pages}</td>
+    <td align="center">{$pages}</td>
   </tr>
 </table>
-
-<table width="100%" cellpadding="0" cellspacing="0" class="tableBorder">
-<form method="get" name="search" action="{PHPCMS_PATH}member/myitem.php?">
+<form name="search" action="{$channelurl}myitem.php">
+<table width="100%" cellpadding="0" cellspacing="0" class="righttable">
+<tbody>
   <tr>
-    <td height="30" class="tablerow" align="center">
-	<input name='module' type='hidden' value='{$module}'>
-	<input name='catid' type='hidden' value='{$catid}'>
-        <input name='status' type='hidden' value='{$status}'>
+    <td height="30" class="td_center">
+    <input name="status" type="hidden" value="{$status}">
 	<select name="srchtype">
-	<option value="0" {if $srchtype==0}selected{/if}> 标题 </option>
-	<option value="1" {if $srchtype==1}selected{/if}> 内容 </option>
-	<option value="2" {if $srchtype==2}selected{/if}> 作者 </option>
+	<option value="0" {if $searchtype==0}selected{/if}> 标题 </option>
+	<option value="2" {if $searchtype==1}selected{/if}> 作者 </option>
 	</select>&nbsp;
-	<input name='keywords' type='text' size='30' value='{$keywords}'>&nbsp;
-	{$cat_select}
-	<input type="checkbox" class="radio" name="elite" value="1" {if $elite==1}checked{/if}> 推荐
-	<input type="checkbox" class="radio" name="ontop" value="1" {if $ontop==1}checked{/if}> 置顶
+	<input name="keywords" type="text" size="30" value="{$keywords}">&nbsp;
+	{$category_select}
 	<select name="ordertype">
+	<option value="0" {if $ordertype==0}selected{/if}>下载排序排序</option>
 	<option value="1" {if $ordertype==1}selected{/if}>更新时间降序</option>
 	<option value="2" {if $ordertype==2}selected{/if}>更新时间升序</option>
 	<option value="3" {if $ordertype==3}selected{/if}>浏览次数降序</option>
 	<option value="4" {if $ordertype==4}selected{/if}>浏览次数升序</option>
 	</select>
-	<input name='submit' type='submit' value='下载搜索'></td>
+	<input name="submit" type="submit" value="下载搜索"></td>
   </tr>
-</form>
+</tbody>
 </table>
-
+</form>
 {/if}
-
+</div></div>
 </td>
 </tr>
 </table>
-
 {template 'phpcms','footer'}

@@ -1,0 +1,65 @@
+{template 'phpcms','header'}
+<table cellspacing="0" cellpadding="0" class="member">
+<tr>
+<td valign="top" class="left">
+{template 'member','left'}
+</td>
+<td width="10">
+</td>
+<td class="right" valign="top">
+{template 'message','message_catlist'}
+<div class="memberborder_1">
+<div class="memberborder_2">
+  <h1>导出短消息</h1>
+<form action="{$PHP_SELF}" method="post">
+<table cellpadding="0" cellspacing="0" class="righttable">
+  <tbody>
+	<tr>
+		<td width="15%" class="td_right">文件夹:</td>
+		<td width="85%" class="td_left"><input type="radio" name="folder" value="inbox" checked>收件箱&nbsp;&nbsp;<input type="radio" name="folder" value="outbox">发件箱</td>
+	</tr>
+	<tr>
+		<td class="td_right">时间范围:</td>
+		<td class="td_left"><select name="days">
+			<option value="1">1 天</option>
+			<option value="2">2 天</option>
+			<option value="7">1 周</option>
+			<option value="30">1 月</option>
+			<option value="90">3 月</option>
+			<option value="180">6 月</option>
+			<option value="365">1 年</option>
+			<option value="0">全部</option>
+		</select>&nbsp;&nbsp;&nbsp;&nbsp;<select name="term">
+			<option value="after">以来</option>
+			<option value="before">以前</option>
+		</select></td>
+	</tr>
+	<tr>
+		<td class="td_right">导出数量:</td>
+		<td class="td_left"><select name="quantity">
+			<option value="10">10条</option>
+			<option value="20">20条</option>
+			<option value="30">30条</option>
+			<option value="40">40条</option>
+			<option value="50">50条</option>
+			<option value="0">全部</option>
+		</select></td>
+	</tr>
+	<tr>
+		<td class="td_right">删&nbsp;&nbsp;&nbsp;&nbsp;除:</td>
+		<td class="td_right"><input type="checkbox" name="delete" value="1">导出后删除短消息</td>
+	</tr>
+	<tr>
+	    <td class="td_left"></td>
+		<td class="td_center"><input type="submit" name="dosubmit" value="提 交"></td>
+	</tr>
+</tbody></table>
+</form>
+</div></div>
+    </td>
+	</tr>
+  </table>
+		</div></td>
+	</tr>
+</tbody></table>
+{template 'phpcms','footer'}

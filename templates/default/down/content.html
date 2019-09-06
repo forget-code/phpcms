@@ -1,191 +1,112 @@
 {template 'phpcms','header'}
 
-<table width="980" align="center" cellpadding="0" cellspacing="0">
+<table width="980" cellpadding="0" cellspacing="0">
   <tr>
-    <td width="210" valign="top" class="gray">
-      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
-        <tr>
-          <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25" /></td>
-          <td width="76%">最新下载</td>
-          <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25" /></td>
-        </tr>
-      </table>
-
-<!--最新下载js调用--><script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&downnum=10&titlelen=30&ordertype=1"></script>
-     
-     <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
-        <tr>
-          <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25" /></td>
-          <td width="76%">推荐下载</td>
-          <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25" /></td>
-        </tr>
-      </table>
-
-<!--推荐下载js调用--><script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&iselite=1&downnum=10&titlelen=30&ordertype=1"></script>
-
-      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
-        <tr>
-          <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25" /></td>
-          <td width="76%">下载排行</td>
-          <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25" /></td>
-        </tr>
-      </table>
-<!--下载排行js调用--><script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&downnum=10&titlelen=30&ordertype=5"></script>
-	  </td>
-    <td width="10">&nbsp;</td>
-    <td width="760" valign="top">
+    <td width="760" valign="top" class="content">
 	<!--位置导航-->
-	<table width="100%"  cellspacing="0" cellpadding="0" >
-      <tr>
-        <td class="position">当前位置：<a href="{$channelurl}">{$channelname}首页</a> >> {$position} {$title}</td>
-      </tr>
-    </table>
+	<div class="position_1">当前位置：<a href="{$channelurl}">{$channelname}首页</a> >> {$position} {$title}</div>
 <!--下载文档名称-->
-    <table width="100%" align="center" cellpadding="0" cellspacing="0">
-      <tr>
-        <td height="40"><h3>{$title} {$ontop} {$elite}</h3></td>
-      </tr>
-    </table>
-
-    <table width="740" cellpadding="3" cellspacing="1" bgcolor="#CCCCCC">
-  <tr class="bgwhite">
-    <td width="210" rowspan="8" align="center">
+<h1>{$title}</h1>
+<div class="border_3 mar_5">
+    <table width="100%" class="border_4 righttable">
+  <tr>
+    <td width="210" rowspan="8" class="td_center">
 <!--下载文档图片-->
     <img src="{$thumb}" border="0" width="200" height="160" /></td>
 <!--下载文档属性-->
-    <td width="85">　授权形式：</td>
-    <td width="115">　{$copytype}</td>
-    <td width="93">　作者/开发商：</td>
-    <td>　{$author}</td>
+    <td width="85" class="td_right">授权形式：&nbsp;</td>
+    <td width="115" class="td_left">{$my_copytype}&nbsp;</td>
+    <td width="93" class="td_right">作者/开发商：&nbsp;</td>
+    <td class="td_left"><a href="{$homepage}" target="_blank">{$author}</a>&nbsp;</td>
   </tr>
-  <tr class="bgwhite">
-                <td>　所需点数：</td>
-                <td>　{$readpoint}</td>
-                <td>　软件来源：</td>
-                <td>　<a href="{$copyfromurl}" target="_blank" >{$copyfromname}</a></td>
+  <tr>
+    <td class="td_right">文件大小：&nbsp;</td>
+    <td class="td_left">{$filesize}&nbsp;</td>
+    <td class="td_right">解压密码：&nbsp;</td>
+    <td class="td_left">{$password}&nbsp;</td>
   </tr>
-  <tr class="bgwhite">
-                <td>　软件语言：</td>
-                <td>　{$language}</td>
-                <td>　更新时间：</td>
-                <td>　{$edittime}</td>
+  <tr>
+    <td class="td_right">软件语言：&nbsp;</td>
+    <td class="td_left">{$my_language}&nbsp;</td>
+    <td class="td_right">更新时间：&nbsp;</td>
+    <td class="td_left">{$adddate}&nbsp;</td>
   </tr>
-  <tr class="bgwhite">
-                <td>　版本号：</td>
-                <td>　{$version}</td>
-                <td>　软件平台：</td>
-                <td>　{$system}</td>
+  <tr>
+    <td class="td_right">版本号：&nbsp;</td>
+    <td class="td_left">{$my_version}&nbsp;</td>
+    <td class="td_right">软件平台：&nbsp;</td>
+    <td class="td_left">{$my_system}&nbsp;</td>
   </tr>
-  <tr class="bgwhite">
-                <td>　软件类别：</td>
-                <td>　{$classtype}</td>
-                <td>　演示地址：</td>
-                <td>　<a href="{$demourl}" target="_blank">{$demourl}</a></td>
+  <tr>
+    <td class="td_right">软件类别：&nbsp;</td>
+    <td class="td_left">{$my_classtype}&nbsp;</td>
+    <td class="td_right">演示地址：&nbsp;</td>
+    <td class="td_left"><a href="{$my_demourl}" target="_blank">{$my_demourl}</a>&nbsp;</td>
   </tr>
-  <tr class="bgwhite">
-                <td>　评分等级：</td>
-                <td>　{$stars}</td>
-                <td>　注册地址：</td>
-                <td>　<a href="{$regurl}" target="_blank">{$regurl}</a></td>
+  <tr>
+    <td class="td_right">评分等级：&nbsp;</td>
+    <td class="td_left">{$stars}&nbsp;</td>
+    <td class="td_right">注册地址：&nbsp;</td>
+    <td class="td_left"><a href="{$my_regurl}" target="_blank">{$my_regurl}</a>&nbsp;</td>
   </tr>
-  <tr class="bgwhite">
-<td>　发布人：</td>
-		<td>　<a href="{PHPCMS_PATH}member/member.php?username={$username}" class="member_url">{$username}</a></td>
-                <td>　下载次数：</td>
-		<td>　<span id="downs">0</span>（今日：<span id="daydowns">0</span>，本周：<span id="weekdowns">0</span>，本月：<span id="monthdowns">0</span>）</td>
+  <tr>
+    <td class="td_right">　发布人：&nbsp;</td>
+	<td class="td_left"><a href="{PHPCMS_PATH}member/member.php?username={$username}" class="member_url">{$username}</a>&nbsp;</td>
+    <td class="td_right">下载次数：&nbsp;</td>
+	<td class="td_left"><span id="totaldowns">{$totaldowns}</span>（今日：<span id="todaydowns">{$todaydowns}</span>，本周：<span id="weekdowns">{$weekdowns}</span>，本月：<span id="monthdowns">{$monthdowns}</span>）&nbsp;</td>
   </tr>
-  <tr class="bgwhite">
-		<td>　浏览次数：</td>
-		<td>　<span id="hits">0</span>&nbsp;&nbsp;</td>
-                <td></td><td></td>
+  <tr>
+	<td class="td_right">插件认证：&nbsp;</td>
+	<td class="td_left">{$my_plugin}&nbsp;</td>
+    <td class="td_right">浏览次数：&nbsp;</td>
+	<td class="td_left"><span id="hits">{$hits}</span>&nbsp;</td>
   </tr>
-</table><!--下载地址-->
+</table>
+</div>
+<!--下载地址-->
 	<table width="740" cellpadding="0" cellspacing="5" class="downaddress">
       <tr>
-        <td width="14%" align="center"><img src="{$skindir}/images/down.gif" width="84" height="26"></td>
-        <td width="86%">{$readmessage}
-{loop $downurls $downurl} <a href="{$channelurl}download.php?downid={$downid}&id={$downurl['id']}" title="{$downurl['name']}">{$downurl['name']}{$downurl['type']}</a> 
+        <td width="14%" align="center"><img src="{$skindir}/images/down.gif" width="82" height="20"></td>
+        <td width="86%">{$purview_message}{loop $downurls $downurl} <a href="{$channelurl}down.php?downid={$downid}&id={$downurl['id']}" title="{$downurl['name']}" target="_blank">{$downurl['name']}</a> 
 {/loop}
       </td>
       </tr>
     </table>
 <!--下载站广告横幅-->
-<SCRIPT LANGUAGE="JavaScript" src="/phpcms3.0/phpcms/ads/ads.php?id=4"></SCRIPT>
+<SCRIPT LANGUAGE="JavaScript" src="{$MODULE['ads']['linkurl']}ads.php?id=4"></SCRIPT>
 	<table width="100%" align="center" cellpadding="0" cellspacing="0">
       <tr>
         <td height="10"></td>
       </tr>
     </table>
 <!--软件介绍-->
-	<table width="100%"  cellspacing="0" cellpadding="0" class="gray">
-      <tr>
-        <td class="bg_5" width="100">软件介绍</td>
-        <td>&nbsp;</td>
-      </tr>
-    </table>
-	<table width="96%" cellpadding="0" cellspacing="0" align="center">
-      <tr>
-        <td>{$introduce}</td>
-      </tr>
-    </table>
-	<table width="100%"  cellspacing="0" cellpadding="0" class="gray">
-      <tr>
-        <td class="bg_5" width="100">相关下载</td>
-        <td>&nbsp;</td>
-      </tr>
-    </table>
-	<table width="96%" cellpadding="0" cellspacing="0" align="center">
-      <tr>
-        <td>
-<!--相关下载调用-->
-{$relateddown(0,$channelid,$keywords,$downid,10,100,1)}
-		</td>
-      </tr>
-    </table>
-	<table width="100%"  cellspacing="0" cellpadding="0" class="gray">
-      <tr>
-        <td class="bg_5" width="100">相关评论</td>
-        <td align="right" style="padding-right:20px;"><a href="{PHPCMS_PATH}comment/index.php?item=downid&itemid={$downid}&itemurl={$itemurl}" class="commenturl">共<span id="commentnumber">0</span>条评论&nbsp;&nbsp;发表/查看更多评论</a></td>
-        </tr>
-    </table>	
-<!--相关评论js调用--><script type="text/javascript" src="{PHPCMS_PATH}comment/list_js.php?item=downid&itemid={$downid}&commentnum=10&ordertype=1"></script>
-<table width="100%" border="0" cellpadding="2" cellspacing="2">
-	<tr>
-	<td bgcolor="#F5F5F5" height="23">&nbsp;&nbsp;<b>发表评论</b> </td>
-	<td align="right" bgcolor="#F5F5F5"><a name="comment">　【<a href="#top">返回顶部</a>】【<a href="javascript:window.close();">关闭窗口</a>】&nbsp;</td>
-	</tr>
-	<form name="myform" method="post" action="{PHPCMS_PATH}comment/index.php?action=add&submit=1" onSubmit="return docheck();">
-	<input name="item" type="hidden" value="downid">
-	<input name="itemid" type="hidden" value="{$downid}">
-	<input name="itemurl" type="hidden" value="{$itemurl}">
-	<tr>
-	<td valign="top">
-        评分：
-        <input name="score" type="radio" class="radio" title="很差" value="1"> 1 
-        <input name="score" type="radio" class="radio" title="差" value="2"> 2 
-        <input name="score" type="radio" class="radio" title="一般" value="3" checked> 3 
-        <input name="score" type="radio" class="radio" title="好" value="4"> 4 
-        <input name="score" type="radio" class="radio" title="很好" value="5"> 5 
-        <br/>
-	<textarea name="content" cols="50" rows="8" id="content"></textarea><br/>
-	<span id="showcheckcode"></span>&nbsp;&nbsp;<input name="submit" type="submit" class="btn" value=" 发表 ">&nbsp;&nbsp;<input name="reset" type="reset" class="btn" value=" 重置 ">
+  <div class="cat_title">
+    <div class="cat_name">软件介绍</div>
+    <div class="cat_url"><a href="#" class="more"></a></div></div>
+	{$introduce}</div>
+<!--相关下载-->
+  <div class="cat_title">
+    <div class="cat_name">相关下载</div>
+	<div class="cat_url"><a href="#" class="more"></a></div></div>
+{tag_相关下载}</div>
+<!--评论部分-->
+<!--发表评论--><script type="text/javascript" src="{$MODULE['comment']['linkurl']}list_js.php?keyid={$channelid}&itemid={$downid}&commentnum=10&ordertype=1&title={$urlencode($title)}"></script>
+
+</td>
+    <td width="10">&nbsp;</td>
+	<td width="210" valign="top" class="right_bg">
+	<div class="rightcats"><h1>最新下载</h1></div>
+<!--最新下载js调用-->
+{tag_侧栏最新下载}
+	<div class="rightcats"><h1>推荐下载</h1></div>
+        {tag_推荐下载}
+	<div class="rightcats"><h1>下载排行</h1></div>
+        {tag_下载排行}
 	</td>
-	<td valign="top">
-		<ul style="border:#c0c0c0 1px dotted;padding:5px;">
-		<li>请遵守《互联网电子公告服务管理规定》及中华人民共和国其他各项有关法律法规。 </li>
-		<li>严禁发表危害国家安全、损害国家利益、破坏民族团结、破坏国家宗教政策、破坏社会稳定、侮辱、诽谤、教唆、淫秽等内容的评论 。</li>
-		<li>用户需对自己在使用本站服务过程中的行为承担法律责任（直接或间接导致的）。</li> 
-		<li>本站管理员有权保留或删除评论内容。</li>
-		</ul>
-	</td>
-	</tr>
-	</form>
-	</table>
-    </td>
   </tr>
 </table>
 
-<script type="text/javascript" src="{$channelurl}show_js.php?downid={$downid}"></script>
+<script type="text/javascript" src="{$channelurl}show_js.php?itemid={$itemid}"></script>
 <script type="text/javascript">
 function docheck()
 {

@@ -1,7 +1,0 @@
-{loop $comments $comment}
-<li class="li_line li_bg_1"><a href="{PHPCMS_PATH}member/member.php?username={$comment[username]}" title="查看该用户资料">{$comment[username]}</a> - {$comment[addtime]}  &nbsp;评分：{$comment[score]}</li>
-<li class="content">{$comment[content]}</li>
-{/loop}
-{if $pages}
-<li class="pages">{$pages}</li>
-{/if}

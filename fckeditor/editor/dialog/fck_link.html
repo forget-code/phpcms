@@ -28,7 +28,7 @@
 	<body scroll="no" style="OVERFLOW: hidden">
 		<div id="divInfo" style="DISPLAY: none">
 			<span fckLang="DlgLnkType">Link Type</span><br />
-			<select id="cmbLinkType" onchange="SetLinkType(this.value);">
+			<select id="cmbLinkType" onChange="SetLinkType(this.value);">
 				<option value="url" fckLang="DlgLnkTypeURL" selected="selected">URL</option>
 				<option value="anchor" fckLang="DlgLnkTypeAnchor">Anchor in this page</option>
 				<option value="email" fckLang="DlgLnkTypeEMail">E-Mail</option>
@@ -51,7 +51,7 @@
 						<td nowrap="nowrap">&nbsp;</td>
 						<td nowrap="nowrap" width="100%">
 							<span fckLang="DlgLnkURL">URL</span><br />
-							<input id="txtUrl" style="WIDTH: 100%" type="text" onkeyup="OnUrlChange();" onchange="OnUrlChange();" />
+							<input id="txtUrl" style="WIDTH: 100%" type="text" onKeyUp="OnUrlChange();" onChange="OnUrlChange();" />
 						</td>
 					</tr>
 				</table>
@@ -60,7 +60,7 @@
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 function SelectPic(){
-  var arr=showModalDialog('../../../admin.php?mod=phpcms&file=file_select&channelid='+oEditor.FCKConfig.ChannelID+'&type=', '', 'dialogWidth:820px; dialogHeight:600px; help: no; scroll: yes; status: no');
+  var arr=showModalDialog('../../../'+oEditor.FCKConfig.Adminpath+'?mod=phpcms&file=file_select&module='+oEditor.FCKConfig.Module+'&channelid='+oEditor.FCKConfig.ChannelID+'&type=', '', 'dialogWidth:820px; dialogHeight:600px; help: no; scroll: yes; status: no');
   if(arr!=null){
     var ss=arr.split('|');
 	var hr = location.host;
@@ -69,7 +69,7 @@ function SelectPic(){
 }
 //-->
 </SCRIPT>
-				<input id="btnBrowse" onclick="SelectPic();" type="button" value="Browse Server" fckLang="DlgBtnBrowseServer">
+				<input id="btnBrowse" onClick="SelectPic();" type="button" value="Browse Server" fckLang="DlgBtnBrowseServer">
 				<!-- <input type="button" value="Browse Server" fckLang="DlgBtnBrowseServer" onclick="BrowseServer();" /> -->
 				</div>
 			</div>
@@ -84,14 +84,14 @@ function SelectPic(){
 						<tr>
 							<td width="50%">
 								<span fckLang="DlgLnkAnchorByName">By Anchor Name</span><br />
-								<select id="cmbAnchorName" onchange="GetE('cmbAnchorId').value='';" style="WIDTH: 100%">
+								<select id="cmbAnchorName" onChange="GetE('cmbAnchorId').value='';" style="WIDTH: 100%">
 									<option value="" selected="selected"></option>
 								</select>
 							</td>
 							<td>&nbsp;&nbsp;&nbsp;</td>
 							<td width="50%">
 								<span fckLang="DlgLnkAnchorById">By Element Id</span><br />
-								<select id="cmbAnchorId" onchange="GetE('cmbAnchorName').value='';" style="WIDTH: 100%">
+								<select id="cmbAnchorId" onChange="GetE('cmbAnchorName').value='';" style="WIDTH: 100%">
 									<option value="" selected="selected"></option>
 								</select>
 							</td>
@@ -116,7 +116,7 @@ function SelectPic(){
 <SCRIPT LANGUAGE="JavaScript">
 <!--
 function uploadfile_submit(uploadform) {
-	uploadform.action = "../../uploads.php?needjump=1&uploadtext=txtUrl&save=1&channelid="+oEditor.FCKConfig.ChannelID;
+	uploadform.action = "../../uploads.php?needjump=1&uploadtext=txtUrl&save=1&mod="+oEditor.FCKConfig.Module+"&channelid="+oEditor.FCKConfig.ChannelID;
 	uploadform.submit();
 }
 //-->
@@ -133,7 +133,7 @@ function uploadfile_submit(uploadform) {
 				<tr>
 					<td nowrap="nowrap">
 						<span fckLang="DlgLnkTarget">Target</span><br />
-						<select id="cmbTarget" onchange="SetTarget(this.value);">
+						<select id="cmbTarget" onChange="SetTarget(this.value);">
 							<option value="" fckLang="DlgGenNotSet" selected="selected">&lt;not set&gt;</option>
 							<option value="frame" fckLang="DlgLnkTargetFrame">&lt;frame&gt;</option>
 							<option value="popup" fckLang="DlgLnkTargetPopup">&lt;popup window&gt;</option>
@@ -146,7 +146,7 @@ function uploadfile_submit(uploadform) {
 					<td>&nbsp;</td>
 					<td id="tdTargetFrame" nowrap="nowrap" width="100%">
 						<span fckLang="DlgLnkTargetFrameName">Target Frame Name</span><br />
-						<input id="txtTargetFrame" style="WIDTH: 100%" type="text" onkeyup="OnTargetNameChange();"
+						<input id="txtTargetFrame" style="WIDTH: 100%" type="text" onKeyUp="OnTargetNameChange();"
 							onchange="OnTargetNameChange();" />
 					</td>
 					<td id="tdPopupName" style="DISPLAY: none" nowrap="nowrap" width="100%">

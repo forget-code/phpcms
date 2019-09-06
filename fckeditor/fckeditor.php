@@ -94,7 +94,7 @@ class FCKeditor
 			else
 				$HeightCSS = $this->Height ;
 
-			$Html .= "<textarea name=\"{$this->InstanceName}\" rows=\"4\" cols=\"40\" style=\"width: {$WidthCSS}; height: {$HeightCSS}\">{$HtmlValue}</textarea>" ;
+			$Html .= "<textarea name=\"{$this->InstanceName}\" rows=\"4\" cols=\"40\" style=\"width: {$WidthCSS}; height: {$HeightCSS};\">{$HtmlValue}</textarea>" ;
 		}
 
 		$Html .= '</div>' ;

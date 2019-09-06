@@ -1,0 +1,107 @@
+{template 'phpcms','header'}
+<script type="text/javascript">
+
+// 表单提交检测
+function doCheck(){
+
+	// 检测表单的有效性
+	// 如：标题不能为空，内容不能为空，等等....
+	if ($('catid').value=='0'){
+		alert('指定的栏目不允许添加下载！只允许在其子栏目中添加下载。');
+		$('catid').focus();
+		return false;
+	}
+	if ($('title').value=='') {
+		alert('对不起，标题不能为空！');
+        $('title').focus();
+		return false;
+	}
+	if($('downurls').value=='')
+	{
+		alert('对不起，下载地址不能为空！');
+		$('downurls').focus();
+		return false;
+	}
+
+	{if $MOD['check_code']}
+	if ($('checkcodestr').value=='') {
+		alert("请输入验证码!");
+		$('checkcodestr').focus();
+		return false;
+	}
+	{/if}
+
+}
+</script>
+
+
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>发布下载</h1>
+<form action="{$CHA[linkurl]}/contribute.php" method="post" name="myform" onsubmit="return doCheck();">
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tbody>
+    <tr> 
+      <td class="td_right" width="15%"> <strong><font color='#FF0000'>*</font> 所属栏目</strong></td>
+      <td class="td_left" width="85%">{$category_select}</td>
+    </tr>
+
+    <tr> 
+      <td class="td_right"><strong><font color="#FF0000">*</font> 标题</strong></td>
+      <td class="td_left">{$type_select} <input name="title" type="text" id="title" size="50"></td>
+    </tr>
+    <tr> 
+      <td class="td_right"><strong>关键词</strong></td>
+      <td class="td_left"><input name="keywords" type="text" id="keywords" size="50"> 多个关键词之间请用半角逗号“,”隔开</td>
+    </tr>
+    <tr> 
+      <td class="td_right"><strong>作者/厂商</strong></td>
+      <td class="td_left"><input name="author" type="text" id="author" size="50" value="{$_username}"></td>
+    </tr>
+    <tr> 
+      <td class="td_right"><strong>官方主页</strong></td>
+      <td class="td_left"><input name="homepage" type="text" id="homepage" size="50">  格式：“网站名称|网站地址”
+	</td>
+    </tr>
+    <tr> 
+      <td class="td_right"><strong>简介</strong></td>
+      <td class="td_left">
+		<textarea name="content" id="content" cols="100" rows="25"></textarea>
+		{$editor("content",$MOD['editor_mode'],$MOD['editor_width'],$MOD['editor_height'])}
+   </td>
+    </tr>
+ <tr> 
+      <td class="td_right"><strong>缩略图</strong></td>
+      <td class="td_left">
+         <input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}uppic.php?channelid={$channelid}&uploadtext=thumb&type=thumb&width={$MOD[thumb_width]}&height={$MOD[thumb_height]}','upload','360','300')">
+		</td>
+    </tr>
+<tr>
+	<td class="td_right"><strong>下载名称|地址</strong><font color="#FF0000">*<br/>地址请填写文件真实路径(URL),不允许上传</font></td>
+	<td class="td_left">
+		<table cellpadding="0" cellspacing="1" width="100%">
+		<tr>
+		<td><font color="red">下载地址举例：</font>下载说明|下载地址 <a href="###" onclick="alert('PHPCMS简体中文版|http://soft.phpcms.cn/phpcms_gbk.zip\nPHPCMS繁体中文版|http://soft.phpcms.cn/phpcms_big5.zip\nPHPCMS一键安装包|http://soft.phpcms.cn/pc_server.exe');">一个下载文件占一行，点这里查看实例</a></td>
+		</tr>
+		<tr> 
+		<td width="500"><textarea name="downurls" cols="70" rows="6" id="downurls" style="width:500px;height:100px;overflow:visible;"></textarea></td>
+		</tr>
+		</table>
+	</td>
+	</tr>
+    {$fields}
+{if $MOD['check_code']}
+    <tr> 
+      <td class="td_right"><strong>验证码</strong></td>
+      <td class="td_left"><input name="checkcodestr" type="text" size="15" id="checkcodestr"><img src="<?=PHPCMS_PATH?>checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/></td>
+    </tr>
+{/if}
+    <tr> 
+      <td class="td_center" colspan="2"><input type="submit" name="dosubmit" value=" 发表 "> &nbsp; <input type="reset" name="reset" value=" 重置 "></td>
+    </tr>
+</tbody>
+</table>
+</form>
+</div>
+</div>
+{template 'phpcms','footer'}

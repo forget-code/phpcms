@@ -1,142 +1,147 @@
 {template 'phpcms','header'}
-<table cellspacing="0" cellpadding="0" width="980" align="center">
+<table cellspacing="0" cellpadding="0" class="member">
 <tr>
-<td width="200" align="center" valign="top">
+<td valign="top" class="left">
 {template 'member','left'}
 </td>
 <td width="10">
 </td>
-<td width="770" valign="top">
-
-<table cellpadding="2" cellspacing="1" class="tableborder">
-  <tr>
-    <th colspan=4>基本资料</th>
-  </tr>
+<td class="right" valign="top">
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>基本资料</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
 <tr>
-<td width="15%" class="tablerowhighlight" align="right">用 户 名：</td>
-<td width="35%" class="tablerow">{$username}</td>
-<td width="15%" class="tablerowhighlight" align="right">E-MAIL：</td>
-<td width="35%" class="tablerow">{$email}</td>
+<td width="15%" class="td_right">用 户 名：&nbsp;</td>
+<td width="35%" class="td_left">{$username}&nbsp;</td>
+<td width="15%" class="td_right">E-MAIL：&nbsp;</td>
+<td width="35%" class="td_left">{$email}&nbsp;</td>
 </tr>
 <tr>
-<td  class="tablerowhighlight" align="right">会 员 组：</td>
-<td  class="tablerow">{$_GROUP['groupname']}</td>
-<td  class="tablerowhighlight" align="right">计费方式：</td>
-<td  class="tablerow">{$chargetype}</td>
+<td  class="td_right">会 员 组：&nbsp;</td>
+<td  class="td_left">{$groupname}&nbsp;{if $groupnames}（{$groupnames}）{/if}</td>
+<td  class="td_right">计费方式：&nbsp;</td>
+<td  class="td_left">{$chargetype}&nbsp;</td>
 </tr>
 <tr>
-<td  class="tablerowhighlight" align="right">资金余额：</td>
-<td  class="tablerow">{$money}元</td>
-<td  class="tablerowhighlight" align="right">消费金额：</td>
-<td  class="tablerow">{$payment}元</td>
+<td  class="td_right">资金余额：&nbsp;</td>
+<td  class="td_left">{$money}元&nbsp;</td>
+<td  class="td_right">消费金额：&nbsp;</td>
+<td  class="td_left">{$payment}元&nbsp;</td>
 </tr>
 <tr>
-<td  class="tablerowhighlight" align="right">可用点数：</td>
-<td  class="tablerow">{$point}点</td>
-<td  class="tablerowhighlight" align="right">可用积分：</td>
-<td  class="tablerow">{$credit}分</td>
+<td  class="td_right">可用点数：&nbsp;</td>
+<td  class="td_left">{$point}点&nbsp;</td>
+<td  class="td_right">可用积分：&nbsp;</td>
+<td  class="td_left">{$credit}分&nbsp;</td>
 </tr>
 <tr>
-<td  class="tablerowhighlight" align="right">服务起始日期：</td>
-<td  class="tablerow">{$begindate}</td>
-<td  class="tablerowhighlight" align="right">服务截止日期：</td>
-<td  class="tablerow">{$enddate}</td>
+<td  class="td_right">服务起始日期：&nbsp;</td>
+<td  class="td_left">{$begindate}&nbsp;</td>
+<td  class="td_right">服务截止日期：&nbsp;</td>
+<td  class="td_left">{$enddate}&nbsp;</td>
 </tr>
 <tr>
-<td  class="tablerowhighlight" align="right">发布特权：</td>
-<td  class="tablerow">{$_GROUP['enableaddalways']}</td>
-<td  class="tablerowhighlight" align="right">购买折扣：</td>
-<td  class="tablerow">{$_GROUP['discount']}%</td>
+<td  class="td_right">发布特权：&nbsp;</td>
+<td  class="td_left">{$enableaddalways}&nbsp;</td>
+<td  class="td_right">购买折扣：&nbsp;</td>
+<td  class="td_left">{$discount}%&nbsp;</td>
 </tr>
 <tr>
-<td  class="tablerowhighlight" align="right">注册时间：</td>
-<td  class="tablerow">{$regtime}</td>
-<td  class="tablerowhighlight" align="right">注册IP：</td>
-<td  class="tablerow">{$regip}</td>
+<td  class="td_right">注册时间：&nbsp;</td>
+<td  class="td_left">{$regtime}&nbsp;</td>
+<td  class="td_right">注册IP：&nbsp;</td>
+<td  class="td_left">{$regip}&nbsp;</td>
 </tr>
 <tr>
-<td  class="tablerowhighlight" align="right">最后登录时间：</td>
-<td  class="tablerow">{$lastlogintime}</td>
-<td  class="tablerowhighlight" align="right">最后登录IP：</td>
-<td  class="tablerow">{$lastloginip}</td>
+<td  class="td_right">最后登录时间：&nbsp;</td>
+<td  class="td_left">{$lastlogintime}&nbsp;</td>
+<td  class="td_right">最后登录IP：&nbsp;</td>
+<td  class="td_left">{$lastloginip}&nbsp;</td>
 </tr>
 <tr>
-<td  class="tablerowhighlight" align="right">登录次数：</td>
-<td  class="tablerow">{$logintimes}次</td>
-<td  class="tablerowhighlight" align="right">当前状态：</td>
-<td  class="tablerow">{$locked}</td>
-</tr>
-  <tr>
-    <th colspan=4>详细资料</th>
-  </tr>
-<tr>
-<td  class="tablerowhighlight" align="right">真实姓名：</td>
-<td  class="tablerow">{$truename}</td>
-<td  class="tablerowhighlight" align="right">性别：</td>
-<td  class="tablerow">{$gender}</td>
-</tr>
-<tr>
-<td  class="tablerowhighlight" align="right">生日：</td>
-<td  class="tablerow">{$birthday}</td>
-<td  class="tablerowhighlight" align="right">年龄：</td>
-<td  class="tablerow">{$old}岁</td>
-</tr>
-<tr>
-<td  class="tablerowhighlight" align="right">证件类型：</td>
-<td  class="tablerow">{$idtype}</td>
-<td  class="tablerowhighlight" align="right">证件号码：</td>
-<td  class="tablerow">{$idcard}</td>
-</tr>
-<tr>
-<td  class="tablerowhighlight" align="right">所在地区：</td>
-<td  class="tablerow">{$province}-{$city}</td>
-<td  class="tablerowhighlight" align="right">所属行业：</td>
-<td  class="tablerow">{$industry}</td>
-</tr>
-<tr>
-<td  class="tablerowhighlight" align="right">教育水平：</td>
-<td  class="tablerow">{$edulevel}</td>
-<td  class="tablerowhighlight" align="right">职    业：</td>
-<td  class="tablerow">{$occupation}</td>
-</tr>
-<tr>
-<td  class="tablerowhighlight" align="right">收入状况：</td>
-<td  class="tablerow">{$income}</td>
-<td  class="tablerowhighlight" align="right">电话：</td>
-<td  class="tablerow">{$telephone}</td>
-</tr>
-<tr>
-<td  class="tablerowhighlight" align="right">手机：</td>
-<td  class="tablerow">{$mobile}</td>
-<td  class="tablerowhighlight" align="right">地址：</td>
-<td  class="tablerow">{$address}</td>
-</tr>
-<tr>
-<td  class="tablerowhighlight" align="right">邮编：</td>
-<td  class="tablerow">{$postid}</td>
-<td  class="tablerowhighlight" align="right">主页：</td>
-<td  class="tablerow">{$homepage}</td>
-</tr>
-<tr>
-<td  class="tablerowhighlight" align="right">QQ：</td>
-<td  class="tablerow"><a href="http://wpa.qq.com/msgrd?V=1&Uin={$qq}&Site={$PHP_DOMAIN}&Menu=yes" title="点击QQ交谈" target="_blank">{$qq}</a></td>
-<td  class="tablerowhighlight" align="right">MSN：</td>
-<td  class="tablerow">{$msn}</td>
-</tr>
-<tr>
-<td  class="tablerowhighlight" align="right">ICQ：</td>
-<td  class="tablerow">{$icq}</td>
-<td  class="tablerowhighlight" align="right">Skype：</td>
-<td  class="tablerow">{$skype}</td>
-</tr>
-<tr>
-<td  class="tablerowhighlight" align="right">支付宝帐号：</td>
-<td  class="tablerow">{$alipay}</td>
-<td  class="tablerowhighlight" align="right">贝宝帐号：</td>
-<td  class="tablerow">{$paypal}</td>
+<td  class="td_right">登录次数：&nbsp;</td>
+<td  class="td_left">{$logintimes}次&nbsp;</td>
+<td  class="td_right">当前状态：&nbsp;</td>
+<td  class="td_left">{$status}&nbsp;</td>
 </tr>
 </table>
-
+<h1>详细资料</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tr>
+<td width="15%"  class="td_right">真实姓名：&nbsp;</td>
+<td width="35%"  class="td_left">{$truename}&nbsp;</td>
+<td width="15%"  class="td_right">性别：&nbsp;</td>
+<td width="35%"  class="td_left">{$gender}&nbsp;</td>
+</tr>
+<tr>
+<td  class="td_right">生日：&nbsp;</td>
+<td  class="td_left">{$birthday}&nbsp;</td>
+<td  class="td_right">年龄：&nbsp;</td>
+<td  class="td_left">{$old}岁&nbsp;</td>
+</tr>
+<tr>
+<td  class="td_right">证件类型：&nbsp;</td>
+<td  class="td_left">{$idtype}&nbsp;</td>
+<td  class="td_right">证件号码：&nbsp;</td>
+<td  class="td_left">{$idcard}&nbsp;</td>
+</tr>
+<tr>
+<td  class="td_right">所在地区：&nbsp;</td>
+<td  class="td_left">{$province} - {$city} - {$area}&nbsp;</td>
+<td  class="td_right">所属行业：&nbsp;</td>
+<td  class="td_left">{$industry}&nbsp;</td>
+</tr>
+<tr>
+<td  class="td_right">教育水平：&nbsp;</td>
+<td  class="td_left">{$edulevel}&nbsp;</td>
+<td  class="td_right">职    业：&nbsp;</td>
+<td  class="td_left">{$occupation}&nbsp;</td>
+</tr>
+<tr>
+<td  class="td_right">收入状况：&nbsp;</td>
+<td  class="td_left">{$income}&nbsp;</td>
+<td  class="td_right">电话：&nbsp;</td>
+<td  class="td_left">{$telephone}&nbsp;</td>
+</tr>
+<tr>
+<td  class="td_right">手机：&nbsp;</td>
+<td  class="td_left">{$mobile}&nbsp;</td>
+<td  class="td_right">地址：&nbsp;</td>
+<td  class="td_left">{$address}&nbsp;</td>
+</tr>
+<tr>
+<td  class="td_right">邮编：&nbsp;</td>
+<td  class="td_left">{$postid}&nbsp;</td>
+<td  class="td_right">主页：&nbsp;</td>
+<td  class="td_left">{$homepage}&nbsp;</td>
+</tr>
+<tr>
+<td  class="td_right">QQ：&nbsp;</td>
+<td  class="td_left"><a href="http://wpa.qq.com/msgrd?V=1&Uin={$qq}&Site={$PHP_DOMAIN}&Menu=yes" title="点击QQ交谈" target="_blank">{$qq}</a>&nbsp;</td>
+<td  class="td_right">MSN：&nbsp;</td>
+<td  class="td_left">{$msn}&nbsp;</td>
+</tr>
+<tr>
+<td  class="td_right">ICQ：&nbsp;</td>
+<td  class="td_left">{$icq}&nbsp;</td>
+<td  class="td_right">Skype：&nbsp;</td>
+<td  class="td_left">{$skype}&nbsp;</td>
+</tr>
+<tr>
+<td  class="td_right">支付宝帐号：&nbsp;</td>
+<td  class="td_left">{$alipay}&nbsp;</td>
+<td  class="td_right">贝宝帐号：&nbsp;</td>
+<td  class="td_left">{$paypal}&nbsp;</td>
+</tr>
+</table>
+{if $fields}
+<h1>其他资料</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
+{$fields}
+</table>
+{/if}
+</div></div>
 </td>
 </tr>
 </table>

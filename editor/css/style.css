@@ -1,0 +1,10 @@
+body,td,input,select,div,li{
+font-family: Verdana, Arial, Helvetica, sans-serif;
+font-size:12px;
+}
+a {
+text-decoration:none;
+}
+img {
+border:none;
+}

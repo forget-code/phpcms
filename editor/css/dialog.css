@@ -1,0 +1,16 @@
+body {
+margin:0;
+height:100%;
+width:100%;
+background:#ECE9D8;
+font-size:12px;
+}
+td,input {
+font-size:12px;
+}
+img {
+cursor:pointer;
+}
+legend {
+color:blue;
+}

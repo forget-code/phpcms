@@ -1,0 +1,6 @@
+picture/
+picture/uploadfile/
+picture/uploadpics/
+picture/pos/
+picture/special/
+picture/config.inc.php

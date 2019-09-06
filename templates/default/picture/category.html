@@ -1,71 +1,19 @@
-{template 'phpcms','header'}
+	{template 'phpcms','header'}
 
 <table width="980" align="center" cellpadding="0"  cellspacing="0">
   <tr>
-    <td width="210" valign="top" class="gray">
-	<table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
-      <tr>
-        <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
-        <td width="62%">推荐图片</td>
-        <td width="14%"><a href="{$channelurl}search.php?catid={$catid}&elite=1&search=1" class="more">更多</a></td>
-        <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
-      </tr>
-    </table>
-<!--推荐图片JS-->
-<script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&iselite=1&picturenum=5&titlelen=30&ordertype=1&type=picture"></script>
-      <table width="100%"  cellspacing="0" cellpadding="0" class="sidebar">
-        <tr>
-          <td width="11%"><img src="{$skindir}/images/tit1_l.jpg" width="22" height="25"></td>
-          <td width="62%">热点图片</td>
-          <td width="14%"><a href="{$channelurl}search.php?catid={$catid}&ordertype=3&search=1" class="more">更多</a></td>
-          <td width="13%"><img src="{$skindir}/images/tit1_r.jpg" width="28" height="25"></td>
-        </tr>
-    </table>
-<!--热点图片JS-->
-<script type="text/javascript" src="{$channelurl}list_js.php?catid={$catid}&picturenum=5&titlelen=30&ordertype=5&type=picture"></script>
-	</td>
-    <td width="10"></td>
     <td width="760" valign="top">
-
-    <table width="100%"  cellspacing="0" cellpadding="0">
-      <tr>
-        <td class="position">当前位置：<a href="{$channelurl}">{$channelname}首页</a> >> {$position}</td>
-      </tr>
-    </table>
-    <table width="100%" align="center" cellpadding="0" cellspacing="0">
-      <tr>
-        <td height="10"></td>
-      </tr>
-    </table>
+    <div class="position">当前位置：<a href="{$channelurl}">{$channelname}首页</a> >> {$position}</div>
 <!--子栏目导航-->
-    <table width="100%"  cellspacing="0" cellpadding="0" class="subnav mar_10">
-      <tr>
-        <td>
-          {$catlist(0,$channelid,$catid,0,2,0)}
-        </td>
-      </tr>
-    </table>
-    <table width="100%" align="center" cellpadding="0" cellspacing="0">
-      <tr>
-        <td height="10"></td>
-      </tr>
-    </table>
-
+    <div class="subnav">{tag_频道子栏目列表}</div>
 {if $enableadd}
-   <table width="100%"  cellspacing="0" cellpadding="0">
-      <tr>
-        <td class="titlebar" width="107">{$catname}</td>
-        <td width="10" height="25"><img src="{$skindir}/images/tit3_r.jpg"></td>
-        <td class="bg_titlebar" width="602" align="right"><a href="{$catlisturl}" class="more">更多</a></td>
-        <td width="37"><img src="{$skindir}/images/tit2_r.jpg"></td>
-      </tr>
-    </table>
-<!--图片文章列表-->
-   <table width="100%" align="center" cellpadding="0" cellspacing="0">
-      <tr>
-        <td> {$picpicture(0,$channelid,$catid,0,0,0,5,20,0,0,0,1,1,1,145,145,5)} </td>
-      </tr>
-    </table>
+<div class="cat_box_1">
+	<div class="cat_title">
+	  <div class="cat_name">{$catname}</div>
+	  <div class="cat_url"><a href="{$catlisturl}" class="more">更多</a></div>
+	</div>
+<!--图片列表-->
+{tag_一级栏目图片列表}
    <table width="100%" align="center" cellpadding="0" cellspacing="0" class="gray">
       <tr>
         <td height="10"></td>
@@ -73,32 +21,30 @@
     </table>
 {/if}
 
-   <table width="100%"  cellspacing="0" cellpadding="0">
-{loop $arrchildid $i $childcat}
-      <tr>
-        <td width="50%" valign="top" style="padding:0px 5px;">
-	<table width="100%"  cellspacing="0" cellpadding="0">
-            <tr>
-              <td class="titlebar" width="100">{$childcat[catname]}</td>
-              <td width="10" height="25"><img src="{$skindir}/images/tit3_r.jpg"></td>
-              <td align="right" class="bg_titlebar"><a href="{$childcat[caturl]}" target="{$childcat[target]}" class="more">更多</a>&nbsp;</td>
-              <td width="36"><img src="{$skindir}/images/tit2_r.jpg"></td>
-            </tr>
-        </table>
-        {$picpicture(0,$channelid,$childcat[catid],1,0,0,$showchilditems,16,0,0,0,1,1,1,128,96,5)}
-	</td>
-     </tr>
-{/loop}
-    </table>
-
+<!--子栏目开始-->
+	{loop $arrchildid $i $childcat}
+<div class="cat_box_1">
+  <div class="cat_title">
+    <div class="cat_name">{$childcat[catname]}</div>
+	<div class="cat_url"><a href="{$childcat[linkurl]}" target="{$childcat[target]}" class="more">更多</a></div>
+  </div>
+{tag_子栏目图片列表}</div>
+	{/loop}
+<!--子栏目结束-->
    <table width="100%" align="center" cellpadding="0" cellspacing="0">
       <tr>
         <td height="10"></td>
       </tr>
     </table>
-
 <!--搜索框-->
 <script language="Javascript" src="{PHPCMS_PATH}data/js/search.js"></script>
+	</td>
+    <td width="10"></td>
+	<td width="210" valign="top" class="right_bg">
+	<div class="rightcats"><h1>推荐图片</h1><h2><a href="{$channelurl}search.php?catid={$catid}&elite=1&search=1" class="more">更多</a></h2></div>
+{tag_推荐图片}
+	<div class="rightcats"><h1>热点图片</h1><h2><a href="{$channelurl}search.php?catid={$catid}&ordertype=3&search=1" class="more">更多</a></h2></div>
+{tag_热点图片}
 	</td>
   </tr>
 </table>

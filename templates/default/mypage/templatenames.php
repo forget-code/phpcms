@@ -1,4 +1,5 @@
 <?php
-$templatenames=array (
+$templatenames = array (
+  'mypage.html' => '默认',
 );
 ?>

@@ -17,6 +17,7 @@
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
+FCKConfig.Adminpath = 'admin.php';
 
 FCKConfig.CustomConfigurationsPath = '' ;
 
@@ -89,14 +90,18 @@ FCKConfig.ToolbarSets["Default"] = [
 	['About','Source']
 ] ;
 
-FCKConfig.ToolbarSets["Phpcms"] = [
+FCKConfig.ToolbarSets["phpcms"] = [
 	['Source','Save','Preview','Cut','Copy','Paste','PasteText','PasteWord','Undo','Redo','Find','Replace','SelectAll','RemoveFormat','Bold','Italic','Underline','StrikeThrough','Subscript','Superscript'],
 	['Link','Unlink','Anchor','Image','Flash','Media','Attach','Table','Rule','Smiley','SpecialChar','OrderedList','UnorderedList','-','Outdent','Indent','JustifyLeft','JustifyCenter','JustifyRight','JustifyFull','TextColor','BGColor'],
 	['Style','FontFormat','FontName','FontSize']
 ] ;
 
-FCKConfig.ToolbarSets["Basic"] = [
-	['Source','Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink','-','About']
+FCKConfig.ToolbarSets["basic"] = [
+	['Source','Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink','-','Image','Flash','Media','Attach']
+] ;
+
+FCKConfig.ToolbarSets["introduce"] = [
+	['Source','Bold','Italic','-','OrderedList','UnorderedList','-','Link','Unlink','-','Image','Flash','Media','Attach']
 ] ;
 
 FCKConfig.ContextMenu = ['Generic','Link','Anchor','Image','Flash','Select','Textarea','Checkbox','Radio','TextField','HiddenField','ImageButton','Button','BulletedList','NumberedList','TableCell','Table','Form'] ;
@@ -125,6 +130,8 @@ FCKConfig.ImageDlgHideLink		= false ;
 FCKConfig.ImageDlgHideAdvanced	= false ;
 
 FCKConfig.FlashDlgHideAdvanced	= false ;
+
+FCKConfig.Module = window.parent.Module;
 
 FCKConfig.ChannelID = window.parent.ChannelId;
 

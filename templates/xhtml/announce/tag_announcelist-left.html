@@ -1,7 +1,0 @@
-<marquee direction="left" width="{$width}" height="{$height}" onmouseover="this.stop();" onmouseout="this.start();" behavior="scroll" scrollamount="3"> 
-<span class="f_red">公告:</span>{loop $announces $i $announce}
- <a href="{$announce[url]}" title="{$announce[alt]}" target="{$target}">{$announce[title]}</a>
-{if $datetype}[{$announce[addtime]}]{/if}
-{if $showauthor}[发布人：{$announce[username]}]{/if}
-{/loop}
-</marquee>

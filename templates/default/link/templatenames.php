@@ -1,6 +1,7 @@
 <?php
-$templatenames=array (
-  'link.html' => '链接首页',
-  'tag_linklist.html' => '链接标签',
+$templatenames = array (
+  'category_list.html' => '链接分类页模版',
+  'index.html' => '链接首页',
+  'tag_link_list.html' => '链接列表标签模版',
 );
 ?>

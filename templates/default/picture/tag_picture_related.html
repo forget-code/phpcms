@@ -1,0 +1,11 @@
+<table width="100%"  cellpadding="0" cellspacing="0">
+{loop $pictures $picture}
+<tr>
+<td height="20">
+{$picture[type]} <a href="{$picture[linkurl]}" class="tag_title_link">{$picture[title]}</a>
+{if $picture['showcommentlink']}&nbsp;<a href="{PHPCMS_PATH}comment/index.php?item=pictureid&itemid={$picture[pictureid]}" target="_blank"><span class="font_red">评</span></a>{/if}
+{if $datetype}[<span class="datetime">{$picture[adddate]}</span>]{/if}
+ </td>
+</tr>
+{/loop}
+</table>

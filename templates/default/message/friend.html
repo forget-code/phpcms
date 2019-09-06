@@ -1,0 +1,178 @@
+{template 'phpcms','header'}
+<table cellspacing="0" cellpadding="0" class="member">
+  <tr>
+    <td valign="top" class="left">
+      {template 'member','left'}
+    </td>
+    <td width="10"></td>
+    <td class="right" valign="top">
+{template 'message','message_catlist'}
+<div class="memberborder_1">
+<div class="memberborder_2">
+  <h1>我的好友</h1>
+<script src="{PHPCMS_PATH}templates/default/message/xmlhttp.js" language="javascript" type="text/javascript"></script>
+<table cellpadding="0" cellspacing="0" class="righttable">
+  <tbody>
+	<tr>
+		<td width="35%" valign="top" class="td_center">
+		  <font color="#CC0000"><strong>好友列表</strong></font>
+		  <select id="list0" size="2" onclick="activeBtn(this);" style="height:100%;width:90%;border:1px solid #dcdcdc;">
+{if isset($friends)}
+	{loop $friends $value}
+		{if $value[1] == 0}
+			<option value="{$value[0]}" style="color:#008000">{$value[0]}</option>
+		{/if}
+	{/loop}
+{/if}
+</select></td>
+		<td width="30%" class="td_center"><input id="userTxt" type="text" value="{if isset($username)}{$username}{else}输入会员用户名{/if}" style="width:90%" onclick="this.value='';"><br><br><input id="addBtn0" type="button" value="加为好友" onclick="transact('insert',this);">&nbsp;<input id="addBtn1" type="button" value="加入阻止" onclick="transact('insert',this);"><br><br><input id="delBtn" type="button" value="从列表中删除" disabled style="width:90%" onclick="transact('delete','');"><br><br><input id="moveBnt0" type="button" value="移到阻止列表  >>" disabled style="width:90%;color:#ff0000" onclick="transact('update',this);"><br><br><input id="moveBnt1" type="button" value="<<  移到好友列表" disabled style="width:90%;color:#008000" onclick="transact('update',this);"></td>
+		<td width="35%" class="td_center" valign="top">
+		  <font color="#CC0000"><strong>阻止列表</strong></font>
+		  <select id="list1" size="2" onclick="activeBtn(this);" style="height:100%;width:90%;border:1px solid #dcdcdc;">
+{if isset($friends)}
+	{loop $friends $value}
+		{if $value[1] == 1}
+			<option value="{$value[0]}" style="color:#ff0000">{$value[0]}</option>
+		{/if}
+	{/loop}
+{/if}
+</select></td>
+		</tr>
+  </tbody>
+</table>
+</div></div>
+    </td>
+  </tr>
+</table>
+<script language="javascript" type="text/javascript">
+<!--
+var strUser,intType,intIndex;
+var objTxt = document.getElementById("userTxt");
+function getResponse() {
+	if (xmlHttp.readyState == 4) {
+		if (xmlHttp.status == 200) {
+			var responseText = xmlHttp.responseText;
+			switch (responseText) {
+				case "0":
+					alert("不能将自己加入列表！");
+					objTxt.value = "";
+					strUser = "";
+					intType = null;
+					break;
+				case "1":
+					alert(strUser+"不是注册会员，不能加入列表！");
+					objTxt.value = "";
+					strUser = "";
+					intType = null;
+					break;
+				case "2":
+					alert(strUser+"所属的会员组被禁止使用短消息功能，不能加入列表！");
+					objTxt.value = "";
+					strUser = "";
+					intType = null;
+					break;
+				case "3":
+					alert(strUser+"已经存在！");
+					objTxt.value = "";
+					strUser = "";
+					intType = null;
+					break;
+				case "4":
+					alert("操作失败，请稍候重试！");
+					break;
+				case "5":
+					eval("var strListId = 'list' + intType;");
+					var objList = document.getElementById(strListId);
+					var listLength = objList.options.length;
+					objList.options[listLength] = new Option(strUser,strUser);
+					objList.options[listLength].selected = true;
+					objTxt.value = "";
+					strUser = "";
+					intType = null;
+					break;
+				case "6":
+					alert("操作失败，请稍候重试！");
+					break;
+				case "7":
+					eval("var strListId = 'list' + intType;");
+					var objList = document.getElementById(strListId);
+					objList.options[intIndex] = null;
+					document.getElementById("delBtn").disabled = true;
+					eval("var strBtnId = 'moveBnt' + intType.toString();") ;
+					document.getElementById(strBtnId).disabled = true;
+					strUser = "";
+					intType = null;
+					intIndex = null;
+					break;
+				case "8":
+					alert("操作失败，请稍候重试！");
+					break;
+				case "9":
+					eval("var strListId = 'list' + intType;");
+					var objList = document.getElementById(strListId);
+					var listLength = objList.options.length;
+					objList.options[listLength] = new Option(strUser,strUser);
+					objList.options[listLength].selected = true;
+					intType = Math.abs(intType - 1);
+					eval("strListId = 'list' + intType;");
+					objList = document.getElementById(strListId);
+					objList.options[intIndex] = null;
+					document.getElementById("delBtn").disabled = true;
+					eval("var strBtnId = 'moveBnt' + intType.toString();") ;
+					document.getElementById(strBtnId).disabled = true;
+					strUser = "";
+					intType = null;
+					intIndex = null;
+			}
+		}
+	}
+}
+function sendRequest(action,user,type) {
+	var strUrl = "{PHPCMS_PATH}{$mod}/frdrjt.php?action="+action+"&user="+user+"&type="+type;
+	xmlHttp.open("GET",strUrl,true);
+	xmlHttp.onreadystatechange = getResponse;
+	xmlHttp.send(null);
+}
+function transact(action,objBtn) {
+	switch (action) {
+		case "insert":
+			var strBtnId = objBtn.id;
+			intType = strBtnId.substring(strBtnId.length-1,strBtnId.length);
+			if (objTxt.value == "") {
+				alert("请输入会员用户名!");
+				objTxt.focus();
+				return false;
+			} else if (/^\w+$/i.test(objTxt.value) == false) {
+				alert("输入的用户名无效，请重新输入!");
+				objTxt.value = "";
+				objTxt.focus();
+				return false;
+			} else {
+				strUser = objTxt.value;
+			}
+			break;
+		case "delete":
+			break;
+		case "update":
+			intType = Math.abs(intType - 1);
+	}
+	sendRequest(action,strUser,intType);
+}
+function activeBtn(objList) {
+	var strListId = objList.id;
+	intType = strListId.substring(strListId.length-1,strListId.length);
+	strUser = objList.value;
+	intIndex = objList.selectedIndex;
+	document.getElementById("delBtn").disabled = false;
+	eval("var strBtnId = 'moveBnt' + intType.toString();") ;
+	document.getElementById(strBtnId).disabled = false;
+	var intTmp = Math.abs(intType - 1);
+	eval("strBtnId = 'moveBnt' + intTmp.toString();") ;
+	document.getElementById(strBtnId).disabled = true;
+}
+//-->
+</script>
+		</div></td>
+	</tr>
+</tbody></table>
+{template 'phpcms','footer'}

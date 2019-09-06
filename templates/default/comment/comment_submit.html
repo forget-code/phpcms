@@ -1,0 +1,72 @@
+<script type="text/javascript">var phpcms_path = '{PHPCMS_PATH}'; </script>
+<script type="text/javascript" src="{PHPCMS_PATH}comment/include/js/comment.js"></script>
+<div class="comment_header">
+  <h1></h1>
+  <h2> <a href="{$MODULE['comment']['linkurl']}index.php?keyid={$keyid}&itemid={$itemid}&title={$urlencode($title)}" class="commenturl">共<span id="commentnumber">0</span>条评论 &nbsp;发表/查看更多评论</a></h2>
+</div>
+<div class="clearboth"></div>
+<!--查看与发表评论区域-->
+<table width="100%" border="0" cellpadding="3" cellspacing="0">
+	<tr>
+	<td bgcolor="#F5F5F5" height="23"><b>发表评论</b> </td>
+	<td align="right" bgcolor="#F5F5F5"><a name="comment">　【<a href="#top">顶部</a>】【<a href="javascript:window.close();">关闭</a>】&nbsp;</td>
+	</tr>
+	<form name="commentform" method="post" action="{PHPCMS_PATH}comment/post.php"  onSubmit="return docheck();">
+	<input name="keyid" type="hidden" value="{$keyid}">
+	<input name="itemid" type="hidden" value="{$itemid}">
+	<input name="replycid" type="hidden" value="">
+	<tr>
+	<td valign="top">
+        评分：
+        <input name="score" type="radio" class="radio" title="很差" value="1"><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /> 
+        <input name="score" type="radio" class="radio" title="差" value="2"><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /> 
+        <input name="score" type="radio" class="radio" title="一般" value="3" checked><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /> 
+        <input name="score" type="radio" class="radio" title="好" value="4"><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /> 
+        <input name="score" type="radio" class="radio" title="很好" value="5"><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /><img src="{PHPCMS_PATH}images/comment/star.gif" alt="小星星" /> 
+        <br/><a name="content">
+        <textarea name="commentcontent" cols="80" rows="6" onclick="this.style.background='';"  id="commentcontent" {if !$_userid && !$MOD['ischecklogin']}style="color:#cccccc;" readonly {/if}><!--{if !$_userid && !$MOD['ischecklogin']}-->游客不能发表评论<!--{/if}--></textarea><br/>
+	<!--{if $MOD['enablecheckcode'] }-->验证码：<input name="checkcodestr" type="text" id="checkcodestr" size="6" value="">
+		  <img src="{PHPCMS_PATH}checkcode.php"  onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="bottom" />
+          <font color="red">*</font>
+	<!--{/if}-->&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="dosubmit" type="submit" class="btn" value=" 发表 ">&nbsp;&nbsp;<input name="reset" type="reset" class="btn" value=" 重置 ">
+	</td>
+	<td valign="top">
+
+	<table cellpadding="3" cellspacing="0" width="80%" border="0" align="center">
+	<tr><td colspan="4">&nbsp;</td>
+	</tr>
+<?php
+$i=0;
+foreach($SMILIES as $smile=>$listorder)
+{
+if($i>15) break;
+$smile = PHPCMS_PATH.$smile;
+$fname = basename($smile);
+$fname = substr($fname,0,strrpos($fname,'.'));
+if($i%4==0) echo "<tr align=\"center\">";
+?>
+<td height="26"><img src="{$smile}" id="{$fname}" alt="{$fname}" border="0" onClick="AddOnPos(document.commentform.commentcontent,'[{$fname}]');" onMouseover="this.style.cursor = 'pointer';" /></td>
+<?php
+if($i%4==3) echo "</tr>";
+$i++;
+}
+?>
+<tr>
+<td colspan="4" align="right">{if !$info}<a href="###" onclick="SelectSmilies('{PHPCMS_PATH}'); return false">
+<span align="right" class="bold">更多表情&rsaquo;&rsaquo;</span></a>{/if}</td>
+</tr>
+</table>
+</td>
+	</tr>
+	
+	<tr>
+	<td valign="top" colspan="2">
+		<ul style="border:#c0c0c0 1px dotted;padding:5px;">
+		<li>请遵守《互联网电子公告服务管理规定》及中华人民共和国其他各项有关法律法规。 </li>
+		<li>严禁发表危害国家安全、损害国家利益、破坏民族团结、破坏国家宗教政策、破坏社会稳定、侮辱、诽谤、教唆、淫秽等内容的评论 。</li>
+		<li>用户需对自己在使用本站服务过程中的行为承担法律责任（直接或间接导致的），本站管理员有权保留或删除评论内容。</li>
+		</ul>
+	</td>
+	</tr>
+	</form>
+	</table>
