@@ -229,7 +229,7 @@ class content_tag {
 		$posid = intval($data['posid']);
 		$order = $data['order'];
 		$thumb = (empty($data['thumb']) || intval($data['thumb']) == 0) ? 0 : 1;
-		$siteid = $GLOBALS['siteid'] ? $GLOBALS['siteid'] : 1;
+		$siteid = $GLOBALS['siteid'] ? intval($GLOBALS['siteid']) : 1;
 		$catid = (empty($data['catid']) || $data['catid'] == 0) ? '' : intval($data['catid']);
 		if($catid) {
 			$siteids = getcache('category_content','commons');

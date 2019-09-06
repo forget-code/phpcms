@@ -37,7 +37,7 @@ if(is_array($infos)){
 <input type="checkbox" name="filenames[]" value="<?php echo $info['filename']?>" id="sql_phpcms" boxid="sql_phpcms">
 	</td>
 	<td  width="15%" align="center"><?php echo $info['filename']?></td>
-	<td width="15%" align="center"><?php echo $info['filesize']?> M</td>
+	<td width="15%" align="center"><?php echo $info['filesize']?></td>
 	<td width="15%" align="center"><?php echo $info['maketime']?></td>
 	<td width="15%" align="center"><?php echo $info['number']?></td>
 	<td width="15%" align="center">

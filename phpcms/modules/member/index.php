@@ -1090,15 +1090,29 @@ class index extends foreground {
 	public function public_sina_login() {
 		define('WB_AKEY', pc_base::load_config('system', 'sina_akey'));
 		define('WB_SKEY', pc_base::load_config('system', 'sina_skey'));
-		pc_base::load_app_class('weibooauth', '' ,0);
+		define('WEB_CALLBACK', APP_PATH.'index.php?m=member&c=index&a=public_sina_login&callback=1');
+		pc_base::load_app_class('saetv2.ex', '' ,0);
 		$this->_session_start();
 					
 		if(isset($_GET['callback']) && trim($_GET['callback'])) {
-			$o = new WeiboOAuth(WB_AKEY, WB_SKEY, $_SESSION['keys']['oauth_token'], $_SESSION['keys']['oauth_token_secret']);
-			$_SESSION['last_key'] = $o->getAccessToken($_REQUEST['oauth_verifier']);
-			$c = new WeiboClient(WB_AKEY, WB_SKEY, $_SESSION['last_key']['oauth_token'], $_SESSION['last_key']['oauth_token_secret']);
-			//获取用户信息
-			$me = $c->verify_credentials();
+			$o = new SaeTOAuthV2(WB_AKEY, WB_SKEY);
+			if (isset($_REQUEST['code'])) {
+				$keys = array();
+				$keys['code'] = $_REQUEST['code'];
+				$keys['redirect_uri'] = WEB_CALLBACK;
+				try {
+					$token = $o->getAccessToken('code', $keys);
+				} catch (OAuthException $e) {
+				}
+			}
+			if ($token) {
+				$_SESSION['token'] = $token;
+			}
+			$c = new SaeTClientV2(WB_AKEY, WB_SKEY, $_SESSION['token']['access_token'] );
+			$ms  = $c->home_timeline(); // done
+			$uid_get = $c->get_uid();
+			$uid = $uid_get['uid'];
+			$me = $c->show_user_by_id( $uid);//根据ID获取用户等基本信息
 			if(CHARSET != 'utf-8') {
 				$me['name'] = iconv('utf-8', CHARSET, $me['name']);
 				$me['location'] = iconv('utf-8', CHARSET, $me['location']);
@@ -1197,12 +1211,8 @@ class index extends foreground {
 				showmessage(L('login_failure'), 'index.php?m=member&c=index&a=login');
 			}
 		} else {
-			$o = new WeiboOAuth(WB_AKEY, WB_SKEY);
-			$keys = $o->getRequestToken();
-			$aurl = $o->getAuthorizeURL($keys['oauth_token'] ,false , APP_PATH.'index.php?m=member&c=index&a=public_sina_login&callback=1');
-			$_SESSION['keys'] = $keys;
-			
-			
+			$o = new SaeTOAuthV2(WB_AKEY, WB_SKEY);
+			$aurl = $o->getAuthorizeURL(WEB_CALLBACK);
 			include template('member', 'connect_sina');
 		}
 	}

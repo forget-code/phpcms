@@ -35,6 +35,7 @@ class special extends admin {
 					$site = pc_base::load_app_class('sites', 'admin');
 					$site_info = $site->get_by_id($special['siteid']);
 					if ($special['ishtml']) {
+						$special['filename'] = str_replace('..','',$special['filename']);
 						$url =  $site_info['domain'].'special/'.$special['filename'].'/';
 					} else {
 						$url = $site_info['domain'].'index.php?m=special&c=index&id='.$id;
@@ -86,6 +87,7 @@ class special extends admin {
 			$site = pc_base::load_app_class('sites', 'admin');
 			$site_info = $site->get_by_id($siteid);
 			if ($special['ishtml'] && $special['filename']) {
+				$special['filename'] = str_replace('..','',$special['filename']);
 				if ($siteid>1) {
 					$special['url'] =  $site_info['domain'].'special/'.$special['filename'].'/';
 				} else {

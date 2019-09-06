@@ -37,7 +37,7 @@ class index extends foreground {
 		$this->message_db->messagecheck($this->_userid);
 		if(isset($_POST['dosubmit'])) {
 			$username = $this->_username;
-			$tousername = $_POST['info']['send_to_id'];
+			$tousername = safe_replace($_POST['info']['send_to_id']);
 			$r = $this->db->get_one(array('username'=>$tousername));
 			if(!$r) showmessage(L('user_not_exist','','member'));
 			$subject = new_html_special_chars($_POST['info']['subject']);
@@ -107,7 +107,7 @@ class index extends foreground {
 	/**
 	 * 群发邮件
 	 */
-	public function group() { 
+	public function group() {
 		//查询自己有权限看的消息
   		$where = array('typeid'=>1,'groupid'=>$this->_groupid,'status'=>1);
 		$page = isset($_GET['page']) && intval($_GET['page']) ? intval($_GET['page']) : 1;
@@ -196,6 +196,9 @@ class index extends foreground {
 		//查询消息详情
 		$infos = $this->message_db->get_one(array('messageid'=>$messageid));
 		if($infos['send_from_id']!='SYSTEM') $infos = new_html_special_chars($infos);
+		//过滤一下
+		$info['send_from_id'] = safe_replace($infos['send_from_id']);
+		$info['send_to_id'] = safe_replace($infos['send_to_id']);
 		//查询回复消息
 		$where = array('replyid'=>$infos['messageid']);
 		$reply_infos = $this->message_db->listinfo($where,$order = 'messageid ASC',$page, $pages = '10');
@@ -261,10 +264,13 @@ class index extends foreground {
 			$info['content'] = safe_replace($_POST['info']['content']);
 			$info['subject'] = safe_replace($_POST['info']['subject']);
 			$info['replyid'] = intval($_POST['info']['replyid']);
-			if(empty($_POST['info']['send_to_id'])) {
+			
+			//回复人ID进行安全处理
+			$send_to_id = safe_replace($_POST['info']['send_to_id']);
+			if(empty($send_to_id)) {
 				showmessage(L('user_noempty'),HTTP_REFERER);
 			} else {
-				$info['send_to_id'] = $_POST['info']['send_to_id'];
+				$info['send_to_id'] = $send_to_id;
 			}
 			$messageid = $this->message_db->insert($info,true);
 			if(!$messageid) return FALSE; 

@@ -68,7 +68,7 @@ function preview(filepath) {
 function att_delete(obj,filename,localdir){
 	 window.top.art.dialog({content:'<?php echo L('del_confirm')?>', fixed:true, style:'confirm', id:'att_delete'}, 
 	function(){
-	$.get('?m=attachment&c=manage&a=pulic_dirmode_del&filename='+filename+'&dir='+localdir,function(data){
+	$.get('?m=attachment&c=manage&a=pulic_dirmode_del&filename='+filename+'&dir='+localdir+'&pc_hash='+pc_hash,function(data){
 				if(data) $(obj).parent().parent().fadeOut("slow");
 			})
 		 	

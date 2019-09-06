@@ -77,14 +77,16 @@ class database extends admin {
 			}
 			$pdoname = $_GET['pdoname'] ? $_GET['pdoname'] : key($pdos);
 			$sqlfiles = glob(CACHE_PATH.'bakup/'.$pdoname.'/*.sql');
+			
 			if(is_array($sqlfiles)) {
 				asort($sqlfiles);
 				$prepre = '';
 				$info = $infos = $other = $others = array();
 				foreach($sqlfiles as $id=>$sqlfile) {
-					if(preg_match("/(phpcmstables_[0-9]{8}_[0-9a-z]{4}_)([0-9]+)\.sql/i",basename($sqlfile),$num)) {
+					if(preg_match("/([phpcmstables_|db_][0-9]{8}_[0-9a-z]{20}_)([0-9]+)\.sql/i",basename($sqlfile),$num)) {
+
 						$info['filename'] = basename($sqlfile);
-						$info['filesize'] = round(filesize($sqlfile)/(1024*1024), 2);
+						$info['filesize'] = sizecount(filesize($sqlfile));
 						$info['maketime'] = date('Y-m-d H:i:s', filemtime($sqlfile));
 						$info['pre'] = $num[1];
 						$info['number'] = $num[2];
@@ -99,7 +101,7 @@ class database extends admin {
 						$infos[] = $info;
 					} else {
 						$other['filename'] = basename($sqlfile);
-						$other['filesize'] = round(filesize($sqlfile)/(1024*1024),2);
+						$other['filesize'] = sizecount(filesize($sqlfile));
 						$other['maketime'] = date('Y-m-d H:i:s',filemtime($sqlfile));
 						$others[] = $other;
 					}
@@ -215,7 +217,7 @@ class database extends admin {
 		$fileid = ($fileid != '') ? $fileid : 1;		
 		if($fileid==1 && $tables) {
 			if(!isset($tables) || !is_array($tables)) showmessage(L('select_tbl'));
-			$random = mt_rand(1000, 9999);
+			$random = random(20, 'abcdefghigklmzopqrstuvwxyz0123456789');
 			setcache('bakup_tables',$tables,'commons');
 		} else {
 			if(!$tables = getcache('bakup_tables','commons')) showmessage(L('select_tbl'));
