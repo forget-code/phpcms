@@ -19,7 +19,7 @@ class index {
 		$_GET['aid'] = intval($_GET['aid']);
 		$where = '';
 		$where .= "`aid`='".$_GET['aid']."'";
-		$where .= " AND `passed`='1' AND (`endtime` >= '".date('Y-m-d')."' or `endtime`='0000-00-00')";
+		$where .= " AND `passed`='1' AND (`endtime` > '".date('Y-m-d')."' or `endtime`='0000-00-00')";
 		$r = $this->db->get_one($where);
 		if($r['aid']) {
 			$this->db->update(array('hits'=>'+=1'), array('aid'=>$r['aid']));

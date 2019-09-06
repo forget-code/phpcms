@@ -80,14 +80,6 @@
                     <td>建议打开</td>
                     <td><?php if(ini_get('allow_url_fopen')){ ?><span><img src="images/correct.gif" /></span><?php }else{ ?><font class="red"><img src="images/error.gif" />&nbsp;不支持保存远程图片</font><?php }?></td>
                   </tr>
-				  
-				  <tr>
-                    <td>fsockopen</td>
-                    <td><?php if(ini_get('fsockopen')){ ?>√<?php }else{ ?>×<?php }?></td>
-                    <td>建议打开</td>
-                    <td><?php if($PHP_FSOCKOPEN=='1'){ ?><span><img src="images/correct.gif" /></span><?php }else{ ?><font class="red"><img src="images/error.gif" />&nbsp;不支持fsockopen函数</font><?php }?></td>
-                  </tr>
-				  
                   <tr>
                     <td>DNS解析</td>
                     <td><?php if($PHP_DNS){ ?>√<?php }else{ ?>×<?php }?></td>

@@ -313,14 +313,10 @@ class content extends admin {
 				$this->position_data_db->delete(array('id'=>$id,'catid'=>$catid,'module'=>'content'));
 				//删除全站搜索中数据
 				$this->search_db->delete_search($typeid,$id);
-				
-				//删除相关的评论,删除前应该判断是否还存在此模块
-				if(module_exists('comment')){
-					$commentid = id_encode('content_'.$catid, $id, $siteid);
-					$this->comment->del($commentid, $siteid, $id, $catid);
-				}
-				
- 			}
+				//删除相关的评论
+				$commentid = id_encode('content_'.$catid, $id, $siteid);
+				$this->comment->del($commentid, $siteid, $id, $catid);
+			}
 			//更新栏目统计
 			$this->db->cache_items();
 			showmessage(L('operation_success'),HTTP_REFERER);
@@ -375,12 +371,10 @@ class content extends admin {
 
 				//审核通过，检查投稿奖励或扣除积分
 				if ($status==99) {
-					$html = pc_base::load_app_class('html', 'content');
-					$this->url = pc_base::load_app_class('url', 'content');
 					$member_db = pc_base::load_model('member_model');
 					if (isset($_POST['ids']) && !empty($_POST['ids'])) {
 						foreach ($_POST['ids'] as $id) {
-							$content_info = $this->db->get_content($catid,$id);
+							$content_info = $this->db->get_one(array('id'=>$id), 'username');
 							$memberinfo = $member_db->get_one(array('username'=>$content_info['username']), 'userid, username');
 							$flag = $catid.'_'.$id;
 							if($setting['presentpoint']>0) {
@@ -390,10 +384,6 @@ class content extends admin {
 								pc_base::load_app_class('spend','pay',0);
 								spend::point($setting['presentpoint'], L('contribute_del_point'), $memberinfo['userid'], $memberinfo['username'], '', '', $flag);
 							}
-							if($setting['content_ishtml'] == '1'){//栏目有静态配置
-  								$urls = $this->url->show($id, 0, $content_info['catid'], $content_info['inputtime'], '',$content_info,'add');
-   								$html->show($urls[1],$urls['data'],0);
- 							}
 						}
 					} else if (isset($_GET['id']) && $_GET['id']) {
 						$id = intval($_GET['id']);
@@ -438,8 +428,6 @@ class content extends admin {
 	 */
 	public function public_categorys() {
 		$show_header = '';
-		$cfg = getcache('common','commons');
-		$ajax_show = intval($cfg['category_ajax']);
 		$from = isset($_GET['from']) && in_array($_GET['from'],array('block')) ? $_GET['from'] : 'content';
 		$tree = pc_base::load_sys_class('tree');
 		if($from=='content' && $_SESSION['roleid'] != 1) {	
@@ -490,7 +478,7 @@ class content extends admin {
 						$strs2 = "<span class='folder'>\$catname</span>";
 						break;
 				}
-			$categorys = $tree->get_treeview(0,'category_tree',$strs,$strs2,$ajax_show);
+			$categorys = $tree->get_treeview(0,'category_tree',$strs,$strs2);
 		} else {
 			$categorys = L('please_add_category');
 		}
@@ -576,7 +564,6 @@ class content extends admin {
 
 		if($r['relation']) {
 			$relation = str_replace('|', ',', $r['relation']);
-			$relation = trim($relation,',');
 			$where = "id IN($relation)";
 			$infos = array();
 			$this->db->table_name = $tablename;
@@ -688,7 +675,7 @@ class content extends admin {
 		echo "
 		<link href=\"".CSS_PATH."dialog_simp.css\" rel=\"stylesheet\" type=\"text/css\" />
 		<script language=\"javascript\" type=\"text/javascript\" src=\"".JS_PATH."dialog.js\"></script>
-		<script type=\"text/javascript\">art.dialog({lock:false,title:'".L('operations_manage')."',mouse:true, id:'content_m', content:'<span id=cloading ><a href=\'javascript:ajax_manage(1)\'>".L('passed_checked')."</a> | <a href=\'javascript:ajax_manage(2)\'>".L('reject')."</a> |　<a href=\'javascript:ajax_manage(3)\'>".L('delete')."</a></span>',left:'100%',top:'100%',width:200,height:50,drag:true, fixed:true});
+		<script type=\"text/javascript\">art.dialog({lock:false,title:'".L('operations_manage')."',mouse:true, id:'content_m', content:'<span id=cloading ><a href=\'javascript:ajax_manage(1)\'>".L('passed_checked')."</a> | <a href=\'javascript:ajax_manage(2)\'>".L('reject')."</a> |　<a href=\'javascript:ajax_manage(3)\'>".L('delete')."</a></span>',left:'right',width:'15em', top:'bottom', fixed:true});
 		function ajax_manage(type) {
 			if(type==1) {
 				$.get('?m=content&c=content&a=pass&ajax_preview=1&catid=".$catid."&steps=".$steps."&id=".$id."&pc_hash=".$pc_hash."');
@@ -730,9 +717,9 @@ class content extends admin {
 		$this->priv_db = pc_base::load_model('category_priv_model');;
 		$admin_username = param::get_cookie('admin_username');
 		if($status==-1) {
-			$sql = "`status` NOT IN (99,0,-2) AND `siteid`=$this->siteid";
+			$sql = "`status` NOT IN (99,0,-2)";
 		} else {
-			$sql = "`status` = '$status' AND `siteid`=$this->siteid";
+			$sql = "`status` = '$status' ";
 		}
 		if($status!=0 && !$super_admin) {
 			//以栏目进行循环
@@ -773,7 +760,6 @@ class content extends admin {
 	 */
 	public function remove() {
 		if(isset($_POST['dosubmit'])) {
-			$this->content_check_db = pc_base::load_model('content_check_model');
 			if($_POST['fromtype']==0) {
 				if($_POST['ids']=='') showmessage(L('please_input_move_source'));
 				if(!$_POST['tocatid']) showmessage(L('please_select_target_category'));
@@ -781,10 +767,6 @@ class content extends admin {
 				$modelid = $this->categorys[$tocatid]['modelid'];
 				if(!$modelid) showmessage(L('illegal_operation'));
 				$ids = array_filter(explode(',', $_POST['ids']),"intval");
-				foreach ($ids as $id) {
-					$checkid = 'c-'.$id.'-'.$this->siteid;
-					$this->content_check_db->update(array('catid'=>$tocatid), array('checkid'=>$checkid));
-				}
 				$ids = implode(',', $ids);
 				$this->db->set_model($modelid);
 				$this->db->update(array('catid'=>$tocatid),"id IN($ids)");
@@ -820,7 +802,8 @@ class content extends admin {
 
 			$tree->init($categorys);
 			$string .= $tree->get_tree(0, $str);
- 			$str  = "<option value='\$catid'>\$spacer \$catname</option>";
+			
+			$str  = "<option value='\$catid'>\$spacer \$catname</option>";
 			$source_string = '';
 			$tree->init($categorys);
 			$source_string .= $tree->get_tree(0, $str);
@@ -880,54 +863,6 @@ class content extends admin {
 		$tree->init($categorys);
 		$categorys = $tree->get_tree(0, $str);
 		echo $categorys;
-	}
-	
-	public function public_sub_categorys() {
-		$cfg = getcache('common','commons');
-		$ajax_show = intval(abs($cfg['category_ajax']));	
-		$catid = intval($_POST['root']);
-		$modelid = intval($_POST['modelid']);
-		$this->categorys = getcache('category_content_'.$this->siteid,'commons');
-		$tree = pc_base::load_sys_class('tree');
-		if(!empty($this->categorys)) {
-			foreach($this->categorys as $r) {
-				if($r['siteid']!=$this->siteid ||  ($r['type']==2 && $r['child']==0)) continue;
-				if($from=='content' && $_SESSION['roleid'] != 1 && !in_array($r['catid'],$priv_catids)) {
-					$arrchildid = explode(',',$r['arrchildid']);
-					$array_intersect = array_intersect($priv_catids,$arrchildid);
-					if(empty($array_intersect)) continue;
-				}
-				if($r['type']==1 || $from=='block') {
-					if($r['type']==0) {
-						$r['vs_show'] = "<a href='?m=block&c=block_admin&a=public_visualization&menuid=".$_GET['menuid']."&catid=".$r['catid']."&type=show' target='right'>[".L('content_page')."]</a>";
-					} else {
-						$r['vs_show'] ='';
-					}
-					$r['icon_type'] = 'file';
-					$r['add_icon'] = '';
-					$r['type'] = 'add';
-				} else {
-					$r['icon_type'] = $r['vs_show'] = '';
-					$r['type'] = 'init';
-					$r['add_icon'] = "<a target='right' href='?m=content&c=content&menuid=".$_GET['menuid']."&catid=".$r['catid']."' onclick=javascript:openwinx('?m=content&c=content&a=add&menuid=".$_GET['menuid']."&catid=".$r['catid']."&hash_page=".$_SESSION['hash_page']."','')><img src='".IMG_PATH."add_content.gif' alt='".L('add')."'></a> ";
-				}
-				$categorys[$r['catid']] = $r;
-			}
-		}
-		if(!empty($categorys)) {
-			$tree->init($categorys);
-				switch($from) {
-					case 'block':
-						$strs = "<span class='\$icon_type'>\$add_icon<a href='?m=block&c=block_admin&a=public_visualization&menuid=".$_GET['menuid']."&catid=\$catid&type=list&pc_hash=".$_SESSION['pc_hash']."' target='right'>\$catname</a> \$vs_show</span>";
-					break;
-
-					default:
-						$strs = "<span class='\$icon_type'>\$add_icon<a href='?m=content&c=content&a=\$type&menuid=".$_GET['menuid']."&catid=\$catid&pc_hash=".$_SESSION['pc_hash']."' target='right' onclick='open_list(this)'>\$catname</a></span>";
-						break;
-				}
-			$data = $tree->creat_sub_json($catid,$strs);
-		}		
-		echo $data;
 	}
 }
 ?>

@@ -13,11 +13,9 @@ class index extends admin {
 		$list = glob(PHPCMS_PATH.'*');
 		if (file_exists(CACHE_PATH.'caches_scan'.DIRECTORY_SEPARATOR.'caches_data')) {
 			$md5_file_list = glob(CACHE_PATH.'caches_scan'.DIRECTORY_SEPARATOR.'caches_data'.DIRECTORY_SEPARATOR.'md5_*.php');
-			if(is_array($md5_file_list)) {
-				foreach ($md5_file_list as $k=>$v) {
-					$md5_file_list[$v] = basename($v);
-					unset($md5_file_list[$k]);
-				}
+			foreach ($md5_file_list as $k=>$v) {
+				$md5_file_list[$v] = basename($v);
+				unset($md5_file_list[$k]);
 			}
 		}
 		$scan = getcache('scan_config', 'scan');
@@ -127,20 +125,12 @@ class index extends admin {
 		include $this->admin_tpl('scan_report');
 	}
 	
-	public function view() {
+	public function public_view() {
 		$url = isset($_GET['url']) && trim($_GET['url']) ? new_stripslashes(urldecode(trim($_GET['url']))) : showmessage(L('illegal_action'), HTTP_REFERER);
-		$url = str_replace("..","",$url);
-		
 		if (!file_exists(PHPCMS_PATH.$url)) {
 			showmessage(L('file_not_exists'));
 		}
 		$html = file_get_contents(PHPCMS_PATH.$url);
-		//判断文件名，如果是database.php 对里面的关键字符进行替换
-		$basename = basename($url);
-		if($basename == "database.php"){
-			//$html = str_replace();
-			showmessage(L('重要文件，不允许在线查看！'));
-		}
 		$file_list = getcache('scan_bad_file', 'scan');
 		if (isset($file_list[$url]['func']) && is_array($file_list[$url]['func']) && !empty($file_list[$url]['func'])) foreach ($file_list[$url]['func'] as $key=>$val)
 		{
@@ -153,7 +143,7 @@ class index extends admin {
 		if (isset($func)) $func = array_unique($func);
 		if (isset($code)) $code = array_unique($code);
 		$show_header = true;
- 		include $this->admin_tpl('public_view');
+		include $this->admin_tpl('public_view');
 	}
 	
 	public function md5_creat() {

@@ -31,7 +31,7 @@ include $this->admin_tpl('header', 'admin');
 			</tr>
 			<tr>
 		    	<th align="right" valign="top"><?php echo L('ishtml')?>：</th>
-		        <td valign="top"><?php echo form::radio(array('1'=>L('yes'), '0'=>L('no')), $info['ishtml'], 'name="special[ishtml]"');?>
+		        <td valign="top"><?php echo form::radio(array('0'=>L('no'), '1'=>L('yes')), $info['ishtml'], 'name="special[ishtml]"');?>
 		        </td>
 		    </tr>
 		    <tr id="file_div" style="display:<?php if($info['ishtml']) {?> <?php } else {?>none<?php }?>;">

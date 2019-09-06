@@ -21,11 +21,6 @@ class special_tag {
 		$where .= "`siteid`='".$siteid."'";
 		if ($data['elite']) $where .= " AND `elite`='1'";
 		if ($data['thumb']) $where .= " AND `thumb`!=''"; 
-		if ($data['disable']) {
-			$where .= " AND `disabled`='".$data['disable']."'";
-		}else{
-			$where .= " AND `disabled`='0'";//默认显示，正常显示的专题。
-		}
 		$listorder = array('`id` ASC', '`id` DESC', '`listorder` ASC, `id` DESC', '`listorder` DESC, `id` DESC');
 		return $this->db->select($where, '*', $data['limit'], $listorder[$data['listorder']]);
 	}

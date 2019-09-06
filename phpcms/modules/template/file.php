@@ -39,7 +39,6 @@ class file extends admin {
 		$encode_local = str_replace(array('/', '\\'), '|', $local);
 		$file_explan = $this->style_info['file_explan'];
 		$show_header = true;
-		$tpl_edit = $this->tpl_edit;
 		include $this->admin_tpl('file_list');
 	}
 	

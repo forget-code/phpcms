@@ -1,19 +1,9 @@
 <?php 
 defined('IN_ADMIN') or exit('No permission resources.');
-//$show_header = $show_validator = $show_scroll = 1; 
-$show_dialog = $show_header = 1; 
+$show_header = $show_validator = $show_scroll = 1; 
 include $this->admin_tpl('header', 'admin');
 $authkey = upload_key('1,'.$this->M['ext'].',1');
-?> 
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH;?>formvalidator.js" charset="UTF-8"></script>
-<script language="javascript" type="text/javascript" src="<?php echo JS_PATH;?>formvalidatorregex.js" charset="UTF-8"></script>
-<div class="subnav">
-    <div class="content-menu ib-a blue line-x">
-    <?php if(isset($big_menu)) echo '<a class="add fb" href="'.$big_menu[0].'"><em>'.$big_menu[1].'</em></a>　';?>
-    <?php echo admin::submenu($_GET['menuid'],$big_menu); ?><span>|</span><a href="javascript:window.top.art.dialog({id:'setting',iframe:'?m=poster&c=space&a=setting', title:'<?php echo L('module_setting')?>', width:'540', height:'320'}, function(){var d = window.top.art.dialog({id:'setting'}).data.iframe;var form = d.document.getElementById('dosubmit');form.click();return false;}, function(){window.top.art.dialog({id:'setting'}).close()});void(0);"><em><?php echo L('module_setting')?></em></a>
-    </div>
-</div>
-
+?>
 <form method="post" action="?m=poster&c=poster&a=edit&id=<?php echo $_GET['id']?>&spaceid=<?php echo $info['spaceid']?>" id="myform">
 <table class="table_form" width="100%" cellspacing="0">
 <tbody>
@@ -61,7 +51,7 @@ $authkey = upload_key('1,'.$this->M['ext'].',1');
   <tr>
     <th width="80"><?php echo L('linkurl')?>：</th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[images][1][linkurl]" id="linkurl3" size="30" value="<?php echo $info['setting'][1]['linkurl']?>" /></td>
-    <td rowspan="2"><a href="javascript:flashupload('imgurl_images', '<?php echo L('upload_photo')?>','imgurl',preview,'1,<?php echo $this->M['ext']?>,1','poster', '', '<?php echo $authkey?>');void(0);"><img src="<?php echo $info['setting'][1]['imageurl']?>" id="imgurl_s" width="105" height="88" onerror="this.src='<?php echo IMG_PATH;?>nopic.gif'"></a><input type="hidden" id="imgurl" name="setting[images][1][imageurl]" value="<?php echo $info['setting'][1]['imageurl']?>"></td>
+    <td rowspan="2"><a href="javascript:flashupload('imgurl_images', '<?php echo L('flash_upload')?>','imgurl',preview,'1,<?php echo $this->M['ext']?>,1','poster', '', '<?php echo $authkey?>');void(0);"><img src="<?php echo $info['setting'][1]['imageurl']?>" id="imgurl_s" width="105" height="88" onerror="this.src='<?php echo IMG_PATH;?>nopic.gif'"></a><input type="hidden" id="imgurl" name="setting[images][1][imageurl]" value="<?php echo $info['setting'][1]['imageurl']?>"></td>
   </tr>
   <tr>
     <th><?php echo L('alt')?>：</th>
@@ -117,8 +107,8 @@ $authkey = upload_key('1,'.$this->M['ext'].',1');
   </tbody>
 </table>
 </fieldset></div><?php }?>
-<div class="bk15" style="margin-left:10px; line-height:30px;"><input type="submit" name="dosubmit" id="dosubmit" value=" <?php echo L('ok')?> " class="button">&nbsp;<input type="reset" value=" <?php echo L('goback')?> " class="button" onclick="history.go(-1)"></div>
-
+<div class="bk15"></div>
+<input type="submit" name="dosubmit" id="dosubmit" value=" <?php echo L('ok')?> " class="dialog">&nbsp;<input type="reset" value=" <?php echo L('clear')?> " class="dialog">
 	
 </form>
 </body>

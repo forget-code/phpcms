@@ -21,7 +21,7 @@ include $this->admin_tpl('header', 'admin');
 			<th width='10%' align="center"><?php echo L('size_format')?></th>
 			<th width="10%" align="center"><?php echo L('ads_num')?></th>
 			<th align="center" width="13%"><?php echo L('description')?></th>
-			<th width="28%" align="center"><?php echo L('operations_manage')?></th>
+			<th width="26%" align="center"><?php echo L('operations_manage')?></th>
             </tr>
         </thead>
     <tbody>
@@ -39,10 +39,9 @@ if(is_array($infos)){
 	<td align="center"><?php echo $info['items']?></td>
 	<td align="center"><?php echo $info['description']?></td>
 	<td align="center">
-	<a href="?m=poster&c=space&a=public_preview&spaceid=<?php echo $info['spaceid']?>" target="_blank"><?php echo L('preview')?></a> | <a href="javascript:call(<?php echo $info['spaceid']?>);void(0);"><?php echo L('get_code')?></a> | <a href='?m=poster&c=poster&a=init&spaceid=<?php echo $info['spaceid']?>&menuid=<?php echo $_GET['menuid']?>' ><?php echo L('ad_list')?></a> | 
+	<a href="?m=poster&c=space&a=public_preview&spaceid=<?php echo $info['spaceid']?>" target="_blank"><?php echo L('preview')?></a> | <a href="javascript:call(<?php echo $info['spaceid']?>);void(0);"><?php echo L('get_code')?></a> | <a href='?m=poster&c=poster&a=init&spaceid=<?php echo $info['spaceid']?>' ><?php echo L('ad_list')?></a> | 
 	<a href="###" onclick="edit(<?php echo $info['spaceid']?>, '<?php echo addslashes(htmlspecialchars($info['name']))?>')" title="<?php echo L('edit')?>" ><?php echo L('edit')?></a> | 
 	<a href='?m=poster&c=space&a=delete&spaceid=<?php echo $info['spaceid']?>' onClick="return confirm('<?php echo L('confirm', array('message' => addslashes(htmlspecialchars($info['name']))))?>')"><?php echo L('delete')?></a>
-	| <a href="index.php?m=poster&c=poster&a=add&spaceid=<?php echo $info['spaceid']?>&menuid=<?php echo $_GET['menuid']?>&pc_hash=<?php echo $_SESSION['pc_hash']?>">添加广告</a>
 	</td>
 	</tr>
 <?php 

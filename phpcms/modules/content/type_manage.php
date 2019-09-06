@@ -48,7 +48,6 @@ class type_manage extends admin {
 					}
 				}
 			}
-			$this->cache();//更新类别缓存，按站点
 			showmessage(L('add_success'), '', '', 'add');
 		} else {
 			$show_header = $show_validator = '';
@@ -99,7 +98,6 @@ class type_manage extends admin {
 				}
 			}
 			$this->category_cache();
-			$this->cache();//更新类别缓存，按站点
 			showmessage(L('update_success'), '', '', 'edit');
 		} else {
 			$show_header = $show_validator = '';
@@ -114,7 +112,6 @@ class type_manage extends admin {
 	public function delete() {
 		$_GET['typeid'] = intval($_GET['typeid']);
 		$this->db->delete(array('typeid'=>$_GET['typeid']));
-		$this->cache();//更新类别缓存，按站点
 		exit('1');
 	}
 	
@@ -126,7 +123,6 @@ class type_manage extends admin {
 			foreach($_POST['listorders'] as $id => $listorder) {
 				$this->db->update(array('listorder'=>$listorder),array('typeid'=>$id));
 			}
-			$this->cache();//更新类别缓存，按站点
 			showmessage(L('operation_success'),HTTP_REFERER);
 		} else {
 			showmessage(L('operation_failure'));
@@ -139,7 +135,7 @@ class type_manage extends admin {
 		foreach($result_datas as $_key=>$_value) {
 			$datas[$_value['typeid']] = $_value;
 		}
-		setcache('type_content_'.$this->siteid,$datas,'commons');
+		setcache('type_content',$datas,'commons');
 		$this->category_cache();
 		return true;
 	}

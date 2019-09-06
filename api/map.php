@@ -13,7 +13,7 @@ if(!isset($_GET['city'])) {
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"<?php if(isset($addbg)) { ?> class="addbg"<?php } ?>>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8 echo CHARSET ?>">
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET;?>">
 <?php if($maptype == 1) {?>
 <script src="http://app.mapabc.com/apis?&t=flashmap&v=2.4&key=<?php echo $key?>&hl=zh-CN" type="text/javascript"></script>
 <?php } elseif($maptype == 2) {?>

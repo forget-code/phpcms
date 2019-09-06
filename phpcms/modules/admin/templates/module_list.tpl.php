@@ -35,8 +35,8 @@ if (is_array($directory)){
 <?php 
 	} else {  
 		$moduel = $isinstall = $modulename = '';
-		if (file_exists(PC_PATH.'modules'.DIRECTORY_SEPARATOR.$d.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'config.inc.php')) {
-			require PC_PATH.'modules'.DIRECTORY_SEPARATOR.$d.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'config.inc.php';
+		if (file_exists(PHPCMS_PATH.'phpcms'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$d.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'config.inc.php')) {
+			require PHPCMS_PATH.'phpcms'.DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR.$d.DIRECTORY_SEPARATOR.'install'.DIRECTORY_SEPARATOR.'config.inc.php';
 			$isinstall = L('install');
 		} else {
 			$module = L('unknown');

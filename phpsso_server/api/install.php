@@ -1,5 +1,4 @@
 <?php
-defined('IN_PHPCMS') or exit('No permission resources.'); 
 
 $username = isset($_GET['username']) && trim($_GET['username']) ? trim($_GET['username']) : exit('-1');
 $password = isset($_GET['password']) && trim($_GET['password']) ? trim($_GET['password']) : exit('-1');
@@ -40,4 +39,9 @@ if(!empty($memberinfo)) {
 } else {
 	exit('-2');
 }
+
+
+
+
+
 ?>

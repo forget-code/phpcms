@@ -162,6 +162,11 @@
       'show.html' => '表单详情页模板',
       'show_js.html' => '表单js调用模板',
     ),
+    'templates|default|comment' => 
+    array (
+      'show_list.html' => '内容页评论列表',
+      'list.html' => '评论列表',
+    ),
     'templates|default|mood' => 
     array (
       'index.html' => '新闻心情',
@@ -181,11 +186,6 @@
     array (
       'index.html' => '公司首页模板',
       'style' => '样式文件夹',
-    ),
-    'templates|default|comment' => 
-    array (
-      'show_list.html' => '内容页评论列表',
-      'list.html' => '评论列表',
     ),
   ),
 );?>

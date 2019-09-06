@@ -6,7 +6,7 @@
 
         <ul class="list lh24 f14">
 {loop $datas $r}
-	<li><span class="rt">{date('Y-m-d H:i:s',$r[addtime])}</span>·<a href="{APP_PATH}index.php?m=formguide&c=index&a=show&formid={$r['modelid']}&siteid={$siteid}" target="_blank">{$r[name]}</a></li>
+	<li><span class="rt">{date('Y-m-d H:i:s',$r[addtime])}</span>·<a href="{APP_PATH}index.php?m=formguide&c=index&a=show&formid={$r['modelid']}" target="_blank">{$r[name]}</a></li>
 	{if $n%5==0}<li class="bk20 hr"></li>{/if}
 {/loop}
         </ul>

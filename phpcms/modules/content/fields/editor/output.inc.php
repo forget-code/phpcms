@@ -29,12 +29,13 @@
 			$word = $replacement = array();
 			foreach($linkdatas as $v) {
 				if($link_mode && $keywords) {
-					$word1[] = '/(?!(<a.*?))' . preg_quote($v, '/') . '(?!.*<\/a>)/s';
+					$word1[] = '/'.preg_quote($v, '/').'/';
 					$word2[] = $v;
 					$replacement[] = '<a href="javascript:;" onclick="show_ajax(this)" class="keylink">'.$v.'</a>';
 				} else {
-					$word1[] = '/(?!(<a.*?))' . preg_quote($v[0], '/') . '(?!.*<\/a>)/s';
-					$word2[] = $v[0];					
+					$word1[] = '/'.preg_quote($v[0], '/').'/';
+					$word2[] = $v[0];
+					
 					$replacement[] = '<a href="'.$v[1].'" target="_blank" class="keylink">'.$v[0].'</a>';
 				}
 			}

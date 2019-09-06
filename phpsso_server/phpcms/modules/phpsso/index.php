@@ -168,7 +168,7 @@ class index extends phpsso {
 			if ($this->config['ucuse']) {
 				pc_base::load_config('uc_config');
 				require_once PHPCMS_PATH.'api/uc_client/client.php';
-				$r = uc_user_edit($userinfo['username'], '', (isset($this->data['newpassword']) && !empty($this->data['newpassword']) ? $this->data['newpassword'] : ''), $data['email'],1);
+				$r = uc_user_edit($userinfo['username'], '', (isset($this->data['newpassword']) && !empty($this->data['newpassword']) ? $this->data['newpassword'] : ''), $data['email'], $data['random'], 1);
 				if ($r != 1) {
 				 //{-1:用户不存在;-2:旧密码错误;-3:email已经存在 ;1:成功;0:未作修改}
 					switch ($r) {

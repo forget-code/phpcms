@@ -54,7 +54,7 @@
 			<th align="left"><?php echo L('username')?></th>
 			<th align="left"><?php echo L('nickname')?></th>
 			<th align="left"><?php echo L('email')?></th>
-			<th align="left"><?php echo L('member_group')?></th>
+			<th align="left"><?php echo L('model_name')?></th>
 			<th align="left"><?php echo L('regip')?></th>
 			<th align="left"><?php echo L('lastlogintime')?></th>
 			<th align="left"><?php echo L('amount')?></th>
@@ -64,7 +64,6 @@
 	</thead>
 <tbody>
 <?php
-	if(is_array($memberlist)){
 	foreach($memberlist as $k=>$v) {
 ?>
     <tr>
@@ -74,7 +73,7 @@
 		<td align="left"><img src="<?php echo $v['avatar']?>" height=18 width=18 onerror="this.src='<?php echo IMG_PATH?>member/nophoto.gif'"><?php if($v['vip']) {?><img title="<?php echo L('vip')?>" src="<?php echo IMG_PATH?>icon/vip.gif"><?php }?><?php echo $v['username']?><a href="javascript:member_infomation(<?php echo $v['userid']?>, '<?php echo $v['modelid']?>', '')"><?php echo $member_model[$v['modelid']]['name']?><img src="<?php echo IMG_PATH?>admin_img/detail.png"></a></td>
 		<td align="left"><?php echo htmlspecialchars($v['nickname'])?></td>
 		<td align="left"><?php echo $v['email']?></td>
-		<td align="left"><?php echo $grouplist[$v['groupid']]?></td>
+		<td align="left"><?php echo $modellist[$v['modelid']]?></td>
 		<td align="left"><?php echo $v['regip']?></td>
 		<td align="left"><?php echo format::date($v['lastdate'], 1);?></td>
 		<td align="left"><?php echo $v['amount']?></td>
@@ -85,7 +84,7 @@
     </tr>
 <?php
 	}
-}
+
 ?>
 </tbody>
 </table>

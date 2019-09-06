@@ -21,7 +21,7 @@ if(extension_loaded('gd') && $txt ) {
 		$im = @imagecreatetruecolor ($imageX, $imageY) or die ("Cannot Initialize new GD image stream");
 		$white= imagecolorallocate($im, 255, 255, 255);
 		$font_color= imagecolorallocate($im,$fontcolor_r,$fontcolor_g,$fontcolor_b);
-		if(intval($_GET['transparent']) == 1) imagecolortransparent($im,$white); //背景透明
+		imagecolortransparent($im,$white); //背景透明
 		imagefilledrectangle($im, 0, 0, $imageX, $imageY, $white);
 		$txt = iconv(CHARSET,"UTF-8",$txt);
 		imagettftext($im, $fontsize, 0, 5, $imageY-5, $font_color, $fontfile, $txt);

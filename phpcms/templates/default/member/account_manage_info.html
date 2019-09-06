@@ -10,7 +10,7 @@ $(function(){
 	$("#nickname").formValidator({onshow:"{L('input').L('nickname')}",onfocus:"{L('nickname').L('between_2_to_20')}"}).inputValidator({min:2,max:20,onerror:"{L('nickname').L('between_2_to_20')}"}).regexValidator({regexp:"ps_username",datatype:"enum",onerror:"{L('nickname').L('format_incorrect')}"}).ajaxValidator({
 	    type : "get",
 		url : "",
-		data :"m=member&c=index&a=public_checknickname_ajax&userid={$memberinfo[userid]}",
+		data :"m=member&c=index&a=public_checknickname_ajax",
 		datatype : "html",
 		async:'false',
 		success : function(data){
@@ -21,7 +21,7 @@ $(function(){
 			}
 		},
 		buttons: $("#dosubmit"),
-		onerror : "{L('already_exist')}",
+		onerror : "{L('already_exist').L('already_exist')}",
 		onwait : "{L('connecting_please_wait')}"
 	}).defaultPassed();
 

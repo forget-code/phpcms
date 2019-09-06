@@ -14,7 +14,7 @@ class index extends foreground {
 	
 	function __construct() {
 		parent::__construct();
-		$this->http_user_agent = $_SERVER['HTTP_USER_AGENT'];
+		$this->http_user_agent = str_replace('7.0' ,'8.0',$_SERVER['HTTP_USER_AGENT']);
 	}
 
 	public function init() {
@@ -26,6 +26,7 @@ class index extends foreground {
 
 		$grouplist = getcache('grouplist');
 		$memberinfo['groupname'] = $grouplist[$memberinfo[groupid]]['name'];
+
 		include template('member', 'index');
 	}
 	
@@ -79,17 +80,6 @@ class index extends foreground {
 				$this->verify_db->insert($userinfo);
 				showmessage(L('operation_success'), 'index.php?m=member&c=index&a=register&t=3');
 			} else {
-				//查看当前模型是否开启了短信验证功能
-				$model_field_cache = getcache('model_field_'.$userinfo['modelid'],'model');
-				if(isset($model_field_cache['mobile']) && $model_field_cache['mobile']['disabled']==0) {
-					$mobile = $_POST['info']['mobile'];
-					if(!preg_match('/^1([0-9]{10})/',$mobile)) showmessage(L('input_right_mobile'));
-					$sms_report_db = pc_base::load_model('sms_report_model');
-					$posttime = SYS_TIME-300;
-					$where = "`mobile`='$mobile' AND `posttime`>'$posttime'";
-					$r = $sms_report_db->get_one($where);
-					if(!$r || $r['id_code']!=$_POST['mobile_verify']) showmessage(L('error_sms_code'));
-				}
 				$userinfo['groupid'] = $this->_get_usergroup_bypoint($userinfo['point']);
 			}
 			
@@ -99,7 +89,6 @@ class index extends foreground {
 				if($status > 0) {
 					$userinfo['phpssouid'] = $status;
 					//传入phpsso为明文密码，加密后存入phpcms_v9
-					$password = $userinfo['password'];
 					$userinfo['password'] = password($userinfo['password'], $userinfo['encrypt']);
 					$userid = $this->db->insert($userinfo, 1);
 					if($member_setting['choosemodel']) {	//如果开启选择模型
@@ -139,16 +128,13 @@ class index extends foreground {
 					//如果需要邮箱认证
 					if($member_setting['enablemailcheck']) {
 						pc_base::load_sys_func('mail');
-						$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
-						$code = sys_auth($userid.'|'.$phpcms_auth_key, 'ENCODE', $phpcms_auth_key);
+						$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
+						$code = sys_auth($userid.'|'.md5($phpcms_auth_key), 'ENCODE', $phpcms_auth_key);
 						$url = APP_PATH."index.php?m=member&c=index&a=register&code=$code&verify=1";
 						$message = $member_setting['registerverifymessage'];
-						$message = str_replace(array('{click}','{url}','{username}','{email}','{password}'), array('<a href="'.$url.'">'.L('please_click').'</a>',$url,$userinfo['username'],$userinfo['email'],$password), $message);
- 						sendmail($userinfo['email'], L('reg_verify_email'), $message);
-						//设置当前注册账号COOKIE，为第二步重发邮件所用
-						param::set_cookie('_regusername', $userinfo['username'], $cookietime);
-						param::set_cookie('_reguserid', $userid, $cookietime);
-						param::set_cookie('_reguseruid', $userinfo['phpssouid'], $cookietime);
+						$message = str_replace(array('{click}','{url}'), array('<a href="'.$url.'">'.L('please_click').'</a>',$url), $message);
+						
+						sendmail($userinfo['email'], L('reg_verify_email'), $message);
 						showmessage(L('operation_success'), 'index.php?m=member&c=index&a=register&t=2');
 					} else {
 						//如果不需要邮箱认证、直接登录其他应用
@@ -168,7 +154,7 @@ class index extends foreground {
 			
 			if(!empty($_GET['verify'])) {
 				$code = isset($_GET['code']) ? trim($_GET['code']) : showmessage(L('operation_failure'), 'index.php?m=member&c=index');
-				$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
+				$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
 				$code_res = sys_auth($code, 'DECODE', $phpcms_auth_key);
 				$code_arr = explode('|', $code_res);
 				$userid = isset($code_arr[0]) ? $code_arr[0] : '';
@@ -193,7 +179,7 @@ class index extends foreground {
 				//是否开启选择会员模型选项
 				if($member_setting['choosemodel']) {
 					$first_model = array_pop(array_reverse($modellist));
-					$modelid = isset($_GET['modelid']) && in_array($_GET['modelid'], array_keys($modellist)) ? intval($_GET['modelid']) : $first_model['modelid'];
+					$modelid = isset($_GET['modelid']) ? intval($_GET['modelid']) : $first_model['modelid'];
 
 					if(array_key_exists($modelid, $modellist)) {
 						//获取会员模型表单
@@ -222,61 +208,11 @@ class index extends foreground {
 					}
 				}
 				$description = $modellist[$modelid]['description'];
-				
 				include template('member', 'register');
 			}
 		}
 	}
-	/*
-	 * 测试邮件配置
-	 */
-	public function send_newmail() {
-		$_username = param::get_cookie('_regusername');
-		$_userid = param::get_cookie('_reguserid');
-		$_ssouid = param::get_cookie('_reguseruid');
-		$newemail = $_GET['newemail'];
 
-		if($newemail==''){//邮箱为空，直接返回错误
-			return '2';
-		}
-		$this->_init_phpsso();
-		$status = $this->client->ps_checkemail($newemail);
-		if($status=='-5'){//邮箱被占用
-			exit('-1');
-		}
-		if ($status==-1) {
-			$status = $this->client->ps_get_member_info($newemail, 3);
-			if($status) {
-				$status = unserialize($status);	//接口返回序列化，进行判断
-				if (!isset($status['uid']) || $status['uid'] != intval($_ssouid)) {
-					exit('-1');
-				}
-			} else {
-				exit('-1');
-			}
-		}
-		//验证邮箱格式
-		pc_base::load_sys_func('mail');
-		$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key'));
-		$code = sys_auth($_userid.'|'.$phpcms_auth_key, 'ENCODE', $phpcms_auth_key);
-		$url = APP_PATH."index.php?m=member&c=index&a=register&code=$code&verify=1";
-		
-		//读取配置获取验证信息
-		$member_setting = getcache('member_setting');
-		$message = $member_setting['registerverifymessage'];
-		$message = str_replace(array('{click}','{url}','{username}','{email}','{password}'), array('<a href="'.$url.'">'.L('please_click').'</a>',$url,$_username,$newemail,$password), $message);
-		
- 		if(sendmail($newemail, L('reg_verify_email'), $message)){
-			//更新新的邮箱，用来验证
- 			$this->db->update(array('email'=>$newemail), array('userid'=>$_userid));
-			$this->client->ps_member_edit($_username, $newemail, '', '', $_ssouid);
-			$return = '1';
-		}else{
-			$return = '2';
-		}
-		echo $return;
-   	}
-	
 	public function account_manage() {
 		$memberinfo = $this->memberinfo;
 		//初始化phpsso
@@ -527,7 +463,6 @@ class index extends foreground {
 			
 			$username = isset($_POST['username']) && trim($_POST['username']) ? trim($_POST['username']) : showmessage(L('username_empty'), HTTP_REFERER);
 			$password = isset($_POST['password']) && trim($_POST['password']) ? trim($_POST['password']) : showmessage(L('password_empty'), HTTP_REFERER);
-			$cookietime = intval($_POST['cookietime']);
 			$synloginstr = ''; //同步登陆js代码
 			
 			if(pc_base::load_config('system', 'phpsso')) {
@@ -569,7 +504,7 @@ class index extends foreground {
 					}
 					$password = $r['password'];
 					$synloginstr = $this->client->ps_member_synlogin($r['phpssouid']);
- 				} else {
+				} else {
 					if($status == -1) {	//用户不存在
 						showmessage(L('user_not_exist'), 'index.php?m=member&c=index&a=login');
 					} elseif($status == -2) { //密码错误
@@ -625,15 +560,12 @@ class index extends foreground {
 				$updatearr['vip'] = 0;
 			}		
 
-			//检查用户积分，更新新用户组，除去邮箱认证、禁止访问、游客组用户、vip用户，如果该用户组不允许自助升级则不进行该操作		
+			//检查用户积分，更新新用户组，除去邮箱认证、禁止访问、游客组用户、vip用户
 			if($r['point'] >= 0 && !in_array($r['groupid'], array('1', '7', '8')) && empty($r[vip])) {
-				$grouplist = getcache('grouplist');
-				if(!empty($grouplist[$r['groupid']]['allowupgrade'])) {	
-					$check_groupid = $this->_get_usergroup_bypoint($r['point']);
-	
-					if($check_groupid != $r['groupid']) {
-						$updatearr['groupid'] = $groupid = $check_groupid;
-					}
+				$check_groupid = $this->_get_usergroup_bypoint($r['point']);
+
+				if($check_groupid != $r['groupid']) {
+					$updatearr['groupid'] = $groupid = $check_groupid;
 				}
 			}
 
@@ -652,7 +584,7 @@ class index extends foreground {
 				$get_cookietime = param::get_cookie('cookietime');
 			}
 			$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
-			$cookietime = $_cookietime ? SYS_TIME + $_cookietime : 0;
+			$cookietime = $_cookietime ? TIME + $_cookietime : 0;
 			
 			$phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
 			$phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
@@ -662,18 +594,42 @@ class index extends foreground {
 			param::set_cookie('_username', $username, $cookietime);
 			param::set_cookie('_groupid', $groupid, $cookietime);
 			param::set_cookie('_nickname', $nickname, $cookietime);
-			//param::set_cookie('cookietime', $_cookietime, $cookietime);
+			param::set_cookie('cookietime', $_cookietime, $cookietime);
 			$forward = isset($_POST['forward']) && !empty($_POST['forward']) ? urldecode($_POST['forward']) : 'index.php?m=member&c=index';
 			showmessage(L('login_success').$synloginstr, $forward);
 		} else {
 			$setting = pc_base::load_config('system');
 			$forward = isset($_GET['forward']) && trim($_GET['forward']) ? urlencode($_GET['forward']) : '';
 			
+			if(!empty($setting['connect_enable'])) {
+				$snda_res = $this->_snda_get_appid();
+				$appid = $snda_res['appid'];
+				$secretkey = $snda_res['secretkey'];
+				$sid = md5("appArea=0appId=".$appid."service=".urlencode(APP_PATH.'index.php?m=member&c=index&a=public_snda_login&forward='.$forward).$secretkey);
+				$sndaurl = "https://cas.sdo.com/cas/login?gateway=true&service=".urlencode(APP_PATH.'index.php?m=member&c=index&a=public_snda_login&forward='.$forward)."&appId=".$appid."&appArea=0&sid=".$sid;
+			}
 			$siteid = isset($_REQUEST['siteid']) && trim($_REQUEST['siteid']) ? intval($_REQUEST['siteid']) : 1;
 			$siteinfo = siteinfo($siteid);
 
 			include template('member', 'login');
 		}
+	}
+	
+	/**
+	 * 
+	 * 获取已申请的appid和secretkey,默认appid为200037400
+	 */
+	private function _snda_get_appid() {
+		$snda_res = pc_base::load_config('snda', 'snda_status');
+		if(strstr($snda_res, '|')) {
+			$snda_res_arr = explode('|', $snda_res);
+			$appid = isset($snda_res_arr[0]) ? $snda_res_arr[0] : '';
+			$secretkey = isset($snda_res_arr[1]) ? $snda_res_arr[1] : '';
+		} else {
+			$appid = 200037400;
+			$secretkey = '';
+		}
+		return array('appid'=>$appid, 'secretkey'=>$secretkey);	
 	}
 	
 	public function logout() {
@@ -941,36 +897,20 @@ class index extends foreground {
 		if(CHARSET != 'utf-8') {
 			$nickname = iconv('utf-8', CHARSET, $nickname);
 			$nickname = addslashes($nickname);
-		} 
+		}
+
 		//首先判断会员审核表
 		$this->verify_db = pc_base::load_model('member_verify_model');
 		if($this->verify_db->get_one(array('nickname'=>$nickname))) {
 			exit('0');
 		}
-		if(isset($_GET['userid'])) {
-			$userid = intval($_GET['userid']);
-			//如果是会员修改，而且NICKNAME和原来优质一致返回1，否则返回0
-			$info = get_memberinfo($userid);
-			if($info['nickname'] == $nickname){//未改变
-				exit('1');
-			}else{//已改变，判断是否已有此名
-				$where = array('nickname'=>$nickname);
-				$res = $this->db->get_one($where);
-				if($res) {
-					exit('0');
-				} else {
-					exit('1');
-				}
-			}
- 		} else {
-			$where = array('nickname'=>$nickname);
-			$res = $this->db->get_one($where);
-			if($res) {
-				exit('0');
-			} else {
-				exit('1');
-			}
-		} 
+		
+		$res = $this->db->get_one(array('nickname'=>$nickname));
+		if($res) {
+			exit('0');
+		} else {
+			exit('1');
+		}
 	}
 	
 	/**
@@ -1025,14 +965,13 @@ class index extends foreground {
 				$me['screen_name'] = iconv('utf-8', CHARSET, $me['screen_name']);
 			}
 			if(!empty($me['id'])) {
- 				//检查connect会员是否绑定，已绑定直接登录，未绑定提示注册/绑定页面
+				//检查connect会员是否绑定，已绑定直接登录，未绑定提示注册/绑定页面
 				$where = array('connectid'=>$me['id'], 'from'=>'sina');
 				$r = $this->db->get_one($where);
 				
 				//connect用户已经绑定本站用户
 				if(!empty($r)) {
 					//读取本站用户信息，执行登录操作
-					
 					$password = $r['password'];
 					$this->_init_phpsso();
 					$synloginstr = $this->client->ps_member_synlogin($r['phpssouid']);
@@ -1058,58 +997,11 @@ class index extends foreground {
 					$forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
 					showmessage(L('login_success').$synloginstr, $forward);
 					
-				} else {
- 					//弹出绑定注册页面
-					$_SESSION = array();
+				} else {				
+					//弹出绑定注册页面
 					$_SESSION['connectid'] = $me['id'];
 					$_SESSION['from'] = 'sina';
 					$connect_username = $me['name'];
-					
-					//加载用户模块配置
-					$member_setting = getcache('member_setting');
-					if(!$member_setting['allowregister']) {
-						showmessage(L('deny_register'), 'index.php?m=member&c=index&a=login');
-					}
-					
-					//获取用户siteid
-					$siteid = isset($_REQUEST['siteid']) && trim($_REQUEST['siteid']) ? intval($_REQUEST['siteid']) : 1;
-					//过滤非当前站点会员模型
-					$modellist = getcache('member_model', 'commons');
-					foreach($modellist as $k=>$v) {
-						if($v['siteid']!=$siteid || $v['disabled']) {
-							unset($modellist[$k]);
-						}
-					}
-					if(empty($modellist)) {
-						showmessage(L('site_have_no_model').L('deny_register'), HTTP_REFERER);
-					}
-					
-					$modelid = 10; //设定默认值
-					if(array_key_exists($modelid, $modellist)) {
-						//获取会员模型表单
-						require CACHE_MODEL_PATH.'member_form.class.php';
-						$member_form = new member_form($modelid);
-						$this->db->set_model($modelid);
-						$forminfos = $forminfos_arr = $member_form->get();
-
-						//万能字段过滤
-						foreach($forminfos as $field=>$info) {
-							if($info['isomnipotent']) {
-								unset($forminfos[$field]);
-							} else {
-								if($info['formtype']=='omnipotent') {
-									foreach($forminfos_arr as $_fm=>$_fm_value) {
-										if($_fm_value['isomnipotent']) {
-											$info['form'] = str_replace('{'.$_fm.'}',$_fm_value['form'], $info['form']);
-										}
-									}
-									$forminfos[$field]['form'] = $info['form'];
-								}
-							}
-						}
-						
-						$formValidator = $member_form->formValidator;
-					}
 					include template('member', 'connect');
 				}
 			} else {
@@ -1120,8 +1012,6 @@ class index extends foreground {
 			$keys = $o->getRequestToken();
 			$aurl = $o->getAuthorizeURL($keys['oauth_token'] ,false , APP_PATH.'index.php?m=member&c=index&a=public_sina_login&callback=1');
 			$_SESSION['keys'] = $keys;
-			
-			
 			include template('member', 'connect_sina');
 		}
 	}
@@ -1183,7 +1073,6 @@ class index extends foreground {
 					showmessage(L('login_success').$synloginstr, $forward);
 				} else {				
 					//弹出绑定注册页面
-					$_SESSION = array();
 					$_SESSION['connectid'] = $userid;
 					$_SESSION['from'] = 'snda';
 					$connect_username = $userid;
@@ -1246,56 +1135,9 @@ class index extends foreground {
 					showmessage(L('login_success').$synloginstr, $forward);
 				} else {				
 					//弹出绑定注册页面
-					$_SESSION = array();
 					$_SESSION['connectid'] = $_SESSION['last_key']['name'];
 					$_SESSION['from'] = 'qq';
 					$connect_username = $_SESSION['last_key']['name'];
-
-					//加载用户模块配置
-					$member_setting = getcache('member_setting');
-					if(!$member_setting['allowregister']) {
-						showmessage(L('deny_register'), 'index.php?m=member&c=index&a=login');
-					}
-					
-					//获取用户siteid
-					$siteid = isset($_REQUEST['siteid']) && trim($_REQUEST['siteid']) ? intval($_REQUEST['siteid']) : 1;
-					//过滤非当前站点会员模型
-					$modellist = getcache('member_model', 'commons');
-					foreach($modellist as $k=>$v) {
-						if($v['siteid']!=$siteid || $v['disabled']) {
-							unset($modellist[$k]);
-						}
-					}
-					if(empty($modellist)) {
-						showmessage(L('site_have_no_model').L('deny_register'), HTTP_REFERER);
-					}
-					
-					$modelid = 10; //设定默认值
-					if(array_key_exists($modelid, $modellist)) {
-						//获取会员模型表单
-						require CACHE_MODEL_PATH.'member_form.class.php';
-						$member_form = new member_form($modelid);
-						$this->db->set_model($modelid);
-						$forminfos = $forminfos_arr = $member_form->get();
-
-						//万能字段过滤
-						foreach($forminfos as $field=>$info) {
-							if($info['isomnipotent']) {
-								unset($forminfos[$field]);
-							} else {
-								if($info['formtype']=='omnipotent') {
-									foreach($forminfos_arr as $_fm=>$_fm_value) {
-										if($_fm_value['isomnipotent']) {
-											$info['form'] = str_replace('{'.$_fm.'}',$_fm_value['form'], $info['form']);
-										}
-									}
-									$forminfos[$field]['form'] = $info['form'];
-								}
-							}
-						}
-						
-						$formValidator = $member_form->formValidator;
-					}	
 					include template('member', 'connect');
 				}
 			} else {

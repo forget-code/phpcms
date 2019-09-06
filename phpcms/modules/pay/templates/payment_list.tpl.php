@@ -29,7 +29,7 @@ if(is_array($infos['data'])){
 	<td width="10%" align="center"><?php echo $info['pay_order']?></td>
 	<td width="15%" align="center">
 	<?php if ($info['enabled']) {?>
-	<a href="javascript:edit('<?php echo $info['pay_id']?>', '<?php echo $info['pay_name']?>')"><?php echo L('configure')?></a> | 
+	<a href="javascript:edit('<?php echo $info['pay_id']?>', '<?php echo $info['pay_name']?>')"><?php echo L('edit')?></a> | 
 	<a href="javascript:confirmurl('?m=pay&c=payment&a=delete&id=<?php echo $info['pay_id']?>', '<?php echo L('confirm',array('message'=>$info['pay_name']))?>')"><?php echo L('plus_uninstall')?></a>
 	<?php } else {?>
 	<a href="javascript:add('<?php echo $info['pay_code']?>', '<?php echo $info['pay_name']?>')"><?php echo L('plus_install')?></a>

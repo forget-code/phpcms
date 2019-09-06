@@ -59,7 +59,6 @@ class linkage extends admin {
 			$info['description'] = trim($_POST['info']['description']);
 			$info['style'] = trim(intval($_POST['info']['style']));
 			$info['siteid'] = trim(intval($_POST['info']['siteid']));
-			$info['setting'] = array2string(array('level'=>intval($_POST['info']['level'])));
 			if($_POST['info']['keyid']) $info['keyid'] = trim($_POST['info']['keyid']);
 			if($_POST['info']['parentid']) $info['parentid'] = trim($_POST['info']['parentid']);
 			$this->db->update($info,array('linkageid'=>$linkageid));
@@ -69,7 +68,6 @@ class linkage extends admin {
 			$linkageid = intval($_GET['linkageid']);
 			$info = $this->db->get_one(array('linkageid'=>$linkageid));
 			extract($info);	
-			$setting = string2array($setting);
 			$sitelist = $this->sites->get_list();
 			foreach($sitelist as $id=>$v) {
 				$sitelist[$id] = $v['name'];
@@ -205,10 +203,9 @@ class linkage extends admin {
 	private function _cache($linkageid) {
 		$linkageid = intval($linkageid);
 		$info = array();
-		$r = $this->db->get_one(array('linkageid'=>$linkageid),'name,siteid,style,keyid,setting');
+		$r = $this->db->get_one(array('linkageid'=>$linkageid),'name,siteid,style,keyid');
 		$info['title'] = $r['name'];
 		$info['style'] = $r['style'];
-		$info['setting'] = string2array($r['setting']);
 		$info['siteid'] = $r['siteid'];
 		$info['data'] = $this->submenulist($linkageid);
 		setcache($linkageid, $info,'linkage');

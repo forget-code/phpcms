@@ -58,7 +58,6 @@ $LANG['photo']							=	'图片';
 $LANG['title']							=	'文字';
 $LANG['add_ads']						=	'添加广告';
 $LANG['add_ads_success']				=	'广告添加成功！';
-$LANG['edit_ads_success']				=	'广告修改成功！';
 $LANG['no_create_js']					=	'没有版位ID，不能生成js';
 $LANG['space_exist']					=	'版位已存在';
 $LANG['adsname_no_empty']				=	'广告名称不能为空';
@@ -165,7 +164,4 @@ $LANG['all_list']						=	'全部列出';
 $LANG['only_one']						=	'按排序列出一个';
 $LANG['is_used_type']					=	'可用广告类型';
 $LANG['max_add_param']					=	'一次最多添加的图片等元素数量';
-
-//新增加返回
-$LANG['goback']					=	'返回';
 ?>

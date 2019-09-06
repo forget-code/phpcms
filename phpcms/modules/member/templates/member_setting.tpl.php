@@ -89,8 +89,6 @@ $(function(){
 			<td width="200"><?php echo L('register_verify_message')?></td> 
 			<td>
 				<textarea name="info[registerverifymessage]" id="registerverifymessage" style="width:80%;height:120px;"><?php echo $member_setting['registerverifymessage']?></textarea>
-				<BR><?php echo L('register_func_tips');?>
-
 			</td>
 		</tr>
 

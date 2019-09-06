@@ -166,10 +166,10 @@ class html {
 		$specialid = intval($specialid);
 		if (!$specialid) return false;
 		$r = $this->db->get_one(array('id'=>$specialid, 'siteid'=>get_siteid()));
-		if (!$r['ishtml'] || $r['disabled'] != 0 ) return true;
+		if (!$r['ishtml']) return true;
 		
 		if (!$specialid) showmessage(L('illegal_action'));
-		$info = $this->db->get_one(array('id'=>$specialid));
+		$info = $this->db->get_one(array('id'=>$specialid, 'disabled'=>0));
 		if(!$info) showmessage(L('special_not_exist'), 'back');
 		extract($info);
 		if ($pics) {

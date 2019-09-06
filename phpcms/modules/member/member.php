@@ -320,7 +320,7 @@ class member extends admin {
 			$info = $this->_checkuserinfo($basicinfo, 1);
 
 			//会员模型信息
-			$modelinfo = array_diff_key($_POST['info'], $info);
+			$modelinfo = array_diff($_POST['info'], $info);
 			//过滤vip过期时间
 			unset($modelinfo['overduedate']);
 			unset($modelinfo['pwdconfirm']);
@@ -347,7 +347,7 @@ class member extends admin {
 			}
 
 			$status = $this->client->ps_member_edit($info['username'], $info['email'], '', $info['password'], $userinfo['phpssouid'], $userinfo['encrypt']);
-  			if($status >= 0) { 
+			if($status >= 0) {
 				unset($info['userid']);
 				unset($info['username']);
 				

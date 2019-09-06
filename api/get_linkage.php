@@ -3,7 +3,7 @@
  * 获取联动菜单接口
  */
 defined('IN_PHPCMS') or exit('No permission resources.'); 
-if((!$_GET['callback'] && $_GET['act'] != 'ajax_select')|| !$_GET['act'])  showmessage(L('error'));
+if(!$_GET['callback'] || !$_GET['act'])  showmessage(L('error'));
 
 switch($_GET['act']) {
 	case 'ajax_getlist':
@@ -15,12 +15,7 @@ switch($_GET['act']) {
 	break;	
 	case 'ajax_gettopparent':
 		ajax_gettopparent($_GET['linkageid'],$_GET['keyid'],$_GET['callback']);
-	break;
-	case 'ajax_select':
-		$parent_id = $_GET['parent_id'] ? intval($_GET['parent_id']) : 0;
-		$keyid = $_GET['keyid'];
-		ajax_select($parent_id,$keyid);
-	break;
+	break;		
 }
 
 
@@ -28,6 +23,7 @@ switch($_GET['act']) {
  * 获取地区列表
  */
 function ajax_getlist() {
+
 	$keyid = intval($_GET['keyid']);
 	$datas = getcache($keyid,'linkage');
 	$infos = $datas['data'];
@@ -100,53 +96,5 @@ function ajax_gettopparent($linkageid,$keyid,$callback,$infos = array()) {
 		echo trim_script($callback).'(',$linkageid,')';
 		exit;		
 	}
-}
-
-/**************************************************************
- *
- *	以下函数适用于select联动样式
- *
- *************************************************************/
-function ajax_select($parentid,$keyid) {
-	$keyid = intval($keyid);
-	$datas = getcache($keyid,'linkage');
-	$infos = $datas['data'];
-	$json_str = "[";
-	$json = array();
-	foreach($infos AS $k=>$v) {
-		if($v['parentid'] == $parentid) {
-			$r = array('region_id' => $v['linkageid'],
-					   'region_name' => $v['name']);
-			$json[] = JSON($r);		
-		}
-	}
-	$json_str .= implode(',',$json);
-	$json_str .= "]";
-	echo $json_str;	
-}
-
-function arrayRecursive(&$array, $function, $apply_to_keys_also = false)
-{
-    foreach ($array as $key => $value) {
-        if (is_array($value)) {
-            arrayRecursive($array[$key], $function, $apply_to_keys_also);
-        } else {
-            $array[$key] = $function($value);
-        }
-
-        if ($apply_to_keys_also && is_string($key)) {
-            $new_key = $function($key);
-            if ($new_key != $key) {
-                $array[$new_key] = $array[$key];
-                unset($array[$key]);
-            }
-        }
-    }
-}
-
-function JSON($array) {
-	arrayRecursive($array, 'urlencode', true);
-	$json = json_encode($array);
-	return urldecode($json);
 }
 ?>

@@ -1,6 +1,7 @@
 <?php 
+	defined('IN_ADMIN') or exit('No permission resources.');
 	$show_header = $show_validator = $show_scroll = 1; 
-	include $this->admin_tpl('header', 'attachment');
+	include $this->admin_tpl('header', 'admin');
 ?>
 <link href="<?php echo JS_PATH?>swfupload/swfupload.css" rel="stylesheet" type="text/css" />
 <form name="myform" action="" method="get" >

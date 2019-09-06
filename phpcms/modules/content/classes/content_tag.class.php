@@ -107,7 +107,7 @@ class content_tag {
 		$sql = "`status`=99";
 		$limit = $data['id'] ? $data['limit']+1 : $data['limit'];
 		if($data['relation']) {
-			$relations = explode('|',trim($data['relation'],'|'));
+			$relations = explode('|',$data['relation']);
 			$relations = array_diff($relations, array(null));
 			$relations = implode(',',$relations);
 			$sql = " `id` IN ($relations)";

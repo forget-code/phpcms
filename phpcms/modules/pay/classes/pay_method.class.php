@@ -105,9 +105,9 @@ class pay_method  {
 		}
 		@closedir($dir);
 		foreach ($modules as $key => $value ) {
-				asort($modules[$key] );
+				ksort($modules[$key] );
 		 }
-		asort( $modules );		
+		ksort( $modules );		
 		return $modules;
 	}		
 }

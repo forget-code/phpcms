@@ -37,7 +37,6 @@ class setting extends admin {
 		$setting['mail_type'] = intval($_POST['setting']['mail_type']);		
 		$setting['mail_server'] = trim($_POST['setting']['mail_server']);	
 		$setting['mail_port'] = intval($_POST['setting']['mail_port']);	
-		$setting['category_ajax'] = intval(abs($_POST['setting']['category_ajax']));	
 		$setting['mail_user'] = trim($_POST['setting']['mail_user']);
 		$setting['mail_auth'] = intval($_POST['setting']['mail_auth']);		
 		$setting['mail_from'] = trim($_POST['setting']['mail_from']);		

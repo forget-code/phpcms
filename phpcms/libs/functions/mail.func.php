@@ -25,14 +25,14 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 		$siteinfo = siteinfo($siteid);
 		$sitename = $siteinfo['site_title'];
 	}
-	
+	$adminemail = 'service@phpcms.cn';
 	if($cfg && is_array($cfg)) {
-		$from = $cfg['from'];
+		$adminemail = $cfg['from'];
 		$mail = $cfg;
 		$mail_type = $cfg['mail_type']; //邮件发送模式
 	} else {
 		$cfg = getcache('common','commons');
-		$from = $cfg['mail_from'];
+		$adminemail = $cfg['mail_from'];
 		$mail_type = $cfg['mail_type']; //邮件发送模式
 		$mail= Array (
 			'mailsend' => 2,
@@ -63,7 +63,7 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 	$mail['mailsend'] = $mail['mailsend'] ? $mail['mailsend'] : 1;
 	
 	//发信者
-	$email_from = $from == '' ? '=?'.CHARSET.'?B?'.base64_encode($sitename)."?= <".$from.">" : (preg_match('/^(.+?) \<(.+?)\>$/',$from, $mats) ? '=?'.CHARSET.'?B?'.base64_encode($mats[1])."?= <$mats[2]>" : $from);
+	$email_from = $from == '' ? '=?'.CHARSET.'?B?'.base64_encode($sitename)."?= <".$adminemail.">" : (preg_match('/^(.+?) \<(.+?)\>$/',$from, $mats) ? '=?'.CHARSET.'?B?'.base64_encode($mats[1])."?= <$mats[2]>" : $from);
 	
 	$email_to = preg_match('/^(.+?) \<(.+?)\>$/',$toemail, $mats) ? ($mailusername ? '=?'.CHARSET.'?B?'.base64_encode($mats[1])."?= <$mats[2]>" : $mats[2]) : $toemail;;
 	
@@ -84,7 +84,7 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 		return false;
 	}
 
-	fputs($fp, ($mail['auth'] ? 'EHLO' : 'HELO')." phpcms\r\n");
+	fputs($fp, ($mail['auth'] ? 'EHLO' : 'HELO')." uchome\r\n");
 	$lastmessage = fgets($fp, 512);
 	if(substr($lastmessage, 0, 3) != 220 && substr($lastmessage, 0, 3) != 250) {
 		runlog('SMTP', "($mail[server]:$mail[port]) HELO/EHLO - $lastmessage", 0);

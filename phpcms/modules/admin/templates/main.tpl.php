@@ -38,11 +38,6 @@ $(function(){if ($.browser.msie && parseInt($.browser.version) < 7) $('#browserV
 <?php echo L('main_safety_log',array('size'=>$common_cache['errorlog_size'].'MB'))?>
  <br />
 <?php } ?>
-<?php 
-$tpl_edit = pc_base::load_config('system','tpl_edit');
-if($tpl_edit=='1') {?>
-<?php echo L('main_safety_tpledit')?><br />
-<?php } ?>
 	</div>
 </div>
 <div class="bk10"></div>

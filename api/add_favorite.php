@@ -23,7 +23,7 @@ if(empty($_GET['title']) || empty($_GET['url'])) {
 //判断是否登录	
 $phpcms_auth = param::get_cookie('auth');
 if($phpcms_auth) {
-	$auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
+	$auth_key = md5(pc_base::load_config('system', 'auth_key').str_replace('7.0' ,'8.0',$_SERVER['HTTP_USER_AGENT']));
 	list($userid, $password) = explode("\t", sys_auth($phpcms_auth, 'DECODE', $auth_key));
 	if($userid >0) {
 

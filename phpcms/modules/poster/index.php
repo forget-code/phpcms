@@ -46,7 +46,6 @@ class index {
 		$now = SYS_TIME;
 		$siteid = get_siteid();
 		$r = $sdb->get_one(array('siteid'=>$siteid, 'spaceid'=>$id));
-		if(!$r) exit();
 		if($r['setting']) $r['setting'] = string2array($r['setting']);
 		$poster_template = getcache('poster_template_'.$siteid, 'commons');
 		if ($poster_template[$r['type']]['option']) {

@@ -107,7 +107,7 @@ class tree {
 		$child = $this->get_child($myid);
 		if(is_array($child)){
 		    $total = count($child);
-			foreach($child as $id=>$value){
+			foreach($child as $id=>$a){
 				$j=$k='';
 				if($number==$total){
 					$j .= $this->icon[2];
@@ -117,7 +117,7 @@ class tree {
 				}
 				$spacer = $adds ? $adds.$j : '';
 				$selected = $id==$sid ? 'selected' : '';
-				@extract($value);
+				@extract($a);
 				$parentid == 0 && $str_group ? eval("\$nstr = \"$str_group\";") : eval("\$nstr = \"$str\";");
 				$this->ret .= $nstr;
 				$nbsp = $this->nbsp;

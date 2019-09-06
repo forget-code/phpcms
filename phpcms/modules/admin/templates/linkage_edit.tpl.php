@@ -42,9 +42,7 @@ if(isset($_GET['parentid'])) { ?>
 <tr>
 <td><?php echo L('linkage_menu_style')?></td>
 <td>
-<input name="info[style]" value="0" type="radio" <?php if($style==0) {?>checked<?php }?>>&nbsp;<?php echo L('linkage_option_style')?>&nbsp;&nbsp;
-<input name="info[style]" value="1" type="radio" <?php if($style==1) {?>checked<?php }?>>&nbsp;<?php echo L('linkage_pop_style')?>&nbsp;&nbsp;
-<input name="info[style]" value="2" type="radio" <?php if($style==2) {?>checked<?php }?>>&nbsp;<?php echo L('linkage_select_style')?>,<?php echo L('linkage_select_show')?><input type="text" name="info[level]" value="<?php echo $setting['level']?>" class="input-text" id="level" size="5"></input><?php echo L('linkage_select_level')?>
+<input name="info[style]" value="0" type="radio" <?php if($style==0) {?>checked<?php }?>>&nbsp;<?php echo L('linkage_option_style')?>&nbsp;&nbsp;<input name="info[style]" value="1" type="radio" <?php if($style==1) {?>checked<?php }?>>&nbsp;<?php echo L('linkage_pop_style')?>
 </td>
 </tr>
 <tr>

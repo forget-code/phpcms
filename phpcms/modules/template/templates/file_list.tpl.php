@@ -34,14 +34,9 @@ if(is_array($list)):
 <?php if (is_dir($v)) {
 	echo '<td align="left"><img src="'.IMG_PATH.'folder-closed.gif" /> <a href="?m=template&c=file&a=init&style='.$this->style.'&dir='.(isset($_GET['dir']) && !empty($_GET['dir']) ? stripslashes($_GET['dir']).DIRECTORY_SEPARATOR : '').$filename.'"><b>'.$filename.'</b></a></td><td align="left"><input type="text" name="file_explan['.$encode_local.']['.$filename.']" value="'.(isset($file_explan[$encode_local][$filename]) ? $file_explan[$encode_local][$filename] : "").'"></td><td></td>';
 } else {
- 	if (substr($filename,-4,4) == 'html') {
- 		echo '<td align="left"><img src="'.IMG_PATH.'file.gif" /> '.$filename.'</td><td align="left"><input type="text" name="file_explan['.$encode_local.']['.$filename.']" value="'.(isset($file_explan[$encode_local][$filename]) ? $file_explan[$encode_local][$filename] : "").'"></td>';
-		if($tpl_edit=='1'){
-			echo '<td> <a href="?m=template&c=file&a=edit_file&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'">['.L('edit').']</a> <a href="?m=template&c=file&a=visualization&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'" target="_blank">['.L('visualization').']</a> <a href="javascript:history_file(\''.$filename.'\')">['.L('histroy').']</a></td>';
-		}else{
-			echo '<td></td>';
-		}
- 	}
+	if (substr($filename,-4,4) == 'html') {
+	echo '<td align="left"><img src="'.IMG_PATH.'file.gif" /> '.$filename.'</td><td align="left"><input type="text" name="file_explan['.$encode_local.']['.$filename.']" value="'.(isset($file_explan[$encode_local][$filename]) ? $file_explan[$encode_local][$filename] : "").'"></td><td> <a href="?m=template&c=file&a=edit_file&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'">['.L('edit').']</a> <a href="?m=template&c=file&a=visualization&style='.$this->style.'&dir='.urlencode(stripslashes($dir)).'&file='.$filename.'" target="_blank">['.L('visualization').']</a> <a href="javascript:history_file(\''.$filename.'\')">['.L('histroy').']</a></td>';
+	}
 }?>
 </tr>
 <?php 

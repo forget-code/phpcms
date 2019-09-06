@@ -53,7 +53,7 @@ class module_api {
 					$content = substr($content,0,-2);
 					$data = '';
 					foreach ($language as $key => $l) {
-						if (L($key, '', 'system_menu')==$key) {
+						if (L($key, '', 'system_menu')==L('no_language').'['.$key.']') {
 							$data .= "\$LANG['".$key."'] = '".$l."';\r\n";
 						}
 					}
@@ -61,7 +61,7 @@ class module_api {
 					file_put_contents($file,$data);
 				} else {
 					foreach ($language as $key =>$l) {
-						if (L($key, '', 'system_menu')==$key) {
+						if (L($key, '', 'system_menu')==L('no_language').'['.$key.']') {
 							$data .= "\$LANG['".$key."'] = '".$l."';\r\n";
 						}
 					}

@@ -1,4 +1,4 @@
-<?php $show_header = $show_validator = $show_scroll = 1; include $this->admin_tpl('header', 'attachment');?>
+<?php $show_header = $show_validator = $show_scroll = 1; include $this->admin_tpl('header', 'admin');?>
 <link href="<?php echo JS_PATH?>swfupload/swfupload.css" rel="stylesheet" type="text/css" />
 <script language="JavaScript" type="text/javascript" src="<?php echo JS_PATH?>swfupload/swfupload.js"></script>
 <script language="JavaScript" type="text/javascript" src="<?php echo JS_PATH?>swfupload/fileprogress.js"></script>
@@ -77,8 +77,8 @@
 <script type="text/javascript">
 if ($.browser.mozilla) {
 	window.onload=function(){
-	  if (location.href.indexOf("&rand=")<0) {
-			location.href=location.href+"&rand="+Math.random();
+	  if (location.href.indexOf("?rand=")<0) {
+			location.href=location.href+"?rand="+Math.random();
 		}
 	}
 }

@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2099 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: base.php 1059 2011-03-01 07:25:09Z monkey $
+	$Id: base.php 837 2008-12-05 03:14:47Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -71,7 +71,7 @@ class base {
 	function init_db() {
 		require_once UC_ROOT.'lib/db.class.php';
 		$this->db = new ucclient_db();
-		$this->db->connect(UC_DBHOST, UC_DBUSER, UC_DBPW, '', UC_DBCHARSET, UC_DBCONNECT, UC_DBTABLEPRE);
+		$this->db->connect(UC_DBHOST, UC_DBUSER, UC_DBPW, UC_DBNAME, UC_DBCHARSET, UC_DBCONNECT, UC_DBTABLEPRE);
 	}
 
 	function load($model, $base = NULL) {

@@ -13,7 +13,6 @@ pc_base::load_sys_func('plugin');
 $cache = '';
 
 if(isset($_GET['id'])) {
-	if(!preg_match("/^[a-z0-9_\-]+$/i",$_GET['id'])) showmessage((L('illegal_parameters')));
 	list($identification, $filename,$action) = explode('-', $_GET['id']);
 	$filename = !empty($filename) ? $filename : $identification;
 	$action = !empty($action) ? $action : 'init';

@@ -27,7 +27,7 @@
 				</script>
 					<tr>
 						<th>{L('please_select_cat')}：</th>
-						<td>{form::select_category('', $catid, 'name="info[catid]" onchange="javascript:c_c(this.value);"','','',0,1,$siteid,'1')}</td>
+						<td>{form::select_category('', $catid, 'name="info[catid]" onchange="javascript:c_c(this.value);"','','',0,1,$siteid)}</td>
 					</tr>
 				{/if}
 					{loop $forminfos $k $v}

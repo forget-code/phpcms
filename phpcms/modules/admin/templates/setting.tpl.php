@@ -39,10 +39,8 @@ include $this->admin_tpl('header');?>
     <th width="120"><?php echo L('setting_admin_email')?></th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[admin_email]" id="admin_email" size="30" value="<?php echo $admin_email?>"/></td>
   </tr>
-  <tr>
-    <th width="120"><?php echo L('setting_category_ajax')?></th>
-    <td class="y-bg"><input type="text" class="input-text" name="setting[category_ajax]" id="category_ajax" size="5" value="<?php echo $category_ajax?>"/>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo L('setting_category_ajax_desc')?></td>
-  </tr>
+</table>
+<table width="100%"  class="table_form">
   <tr>
     <th width="120"><?php echo L('setting_gzip')?></th>
     <td class="y-bg">
@@ -70,7 +68,7 @@ include $this->admin_tpl('header');?>
   <tr>
     <th width="120"><?php echo L('setting_upload_url')?></th>
     <td class="y-bg"><input type="text" class="input-text" name="setconfig[upload_url]" id="upload_url" size="50" value="<?php echo $upload_url?>" /></td>
-  </tr>
+  </tr>       
 </table>
 </div>
 <div id="div_setting_2" class="contentList pad-10 hidden">
@@ -102,15 +100,6 @@ include $this->admin_tpl('header');?>
   <tr>
     <th><?php echo L('setting_minrefreshtime')?></th>
     <td class="y-bg"><input type="text" class="input-text" name="setting[minrefreshtime]" id="minrefreshtime" size="10" value="<?php echo $minrefreshtime?>"/> <?php echo L('miao')?></td>
-  </tr>
-  <tr>
-    <th><?php echo L('admin_url')?></th>
-    <td class="y-bg"><TABLE>
-    <TR>
-		<TD width="270"><?php echo SITE_PROTOCOL;?><input type="text" class="input-text" name="setconfig[admin_url]" id="admin_url" size="30" value="<?php echo $admin_url?>"/> </TD>
-		<TD><?php echo L('admin_url_tips')?></TD>
-    </TR>
-    </TABLE> </td>
   </tr> 
 </table>
 </div>
@@ -245,8 +234,7 @@ function showsmtp(obj,hiddenid){
 }
 function test_mail() {
 	var mail_type = $('input[checkbox=mail_type][checked]').val();
-	var mail_auth = $('input[checkbox=mail_auth][checked]').val();
-    $.post('?m=admin&c=setting&a=public_test_mail&mail_to='+$('#mail_to').val(),{mail_type:mail_type,mail_server:$('#mail_server').val(),mail_port:$('#mail_port').val(),mail_user:$('#mail_user').val(),mail_password:$('#mail_password').val(),mail_auth:mail_auth,mail_from:$('#mail_from').val()}, function(data){
+    $.post('?m=admin&c=setting&a=public_test_mail&mail_to='+$('#mail_to').val(),{mail_type:mail_type,mail_server:$('#mail_server').val(),mail_port:$('#mail_port').val(),mail_user:$('#mail_user').val(),mail_password:$('#mail_password').val(),mail_auth:$('#mail_auth').val(),mail_auth:$('#mail_auth').val(),mail_from:$('#mail_from').val()}, function(data){
 	alert(data);
 	});
 }

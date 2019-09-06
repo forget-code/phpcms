@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset={CHARSET}" />
 <meta http-equiv="X-UA-Compatible" content="IE=7" />
 <title>phpcmsV9 - {L('member','','member').L('manage_center')}</title>
 <link href="{CSS_PATH}reset.css" rel="stylesheet" type="text/css" />
@@ -117,7 +117,7 @@ $(function(){
                         	<li style="margin-right:14px;"><a href="javascript:;" onclick="show_login('snda');return false;" style="background-image:url({IMG_PATH}member/logo/snda_16_16.png)">盛大通行证</a></li>
                         {/if}
                         {if $setting['sina_akey'] || $setting['sina_skey']}
-                            <li><a href="javascript:;" onclick="show_login('sina');return false;" style="background-image:url({IMG_PATH}member/logo/sina_16_16.png)">新浪微博登录</a></li>
+                            <li><a href="javascript:;" onclick="show_login('sina');return false;" style="background-image:url({IMG_PATH}member/logo/sina_16_16.png)">新浪微薄登录</a></li>
                         {/if}
 
 						{if $setting['qq_akey'] || $setting['qq_skey']}

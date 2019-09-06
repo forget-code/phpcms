@@ -23,7 +23,7 @@ class announce_tag {
 		$where = '1';
 		$siteid = $data['siteid'] ? intval($data['siteid']) : get_siteid();
 		if ($siteid) $where .= " AND `siteid`='".$siteid."'";
-		$where .= ' AND `passed`=\'1\' AND (`endtime` >= \''.date('Y-m-d').'\' or `endtime`=\'0000-00-00\')';
+		$where .= ' AND `passed`=\'1\' AND (`endtime` > \''.date('Y-m-d').'\' or `endtime`=\'0000-00-00\')';
 		return $this->db->select($where, '*', $data['limit'], 'aid DESC');
 	}
 	

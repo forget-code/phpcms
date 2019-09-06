@@ -267,10 +267,7 @@ class vote extends admin {
 	 * 投票结果统计
 	 */
 	public function statistics() {
-			$subjectid = intval($_GET['subjectid']);
-			if(!$subjectid){
-				showmessage(L('illegal_operation'));
-			}
+			$subjectid = $_GET['subjectid'];
 			$show_validator = $show_scroll = $show_header = true;
  			//获取投票信息
 			$sdb = pc_base::load_model('vote_data_model'); //加载投票统计的数据模型

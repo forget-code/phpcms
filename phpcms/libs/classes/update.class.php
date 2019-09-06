@@ -17,6 +17,7 @@ class update {
 	}
 
 	function url($action = 'check') {
+		$_username = param::get_cookie('_username');
         $modules = '';
         $site = getcache('sitelist','commons');
         $sitename = $site['1']['name'];
@@ -41,29 +42,16 @@ class update {
 			'uuid'=>urlencode($this->uuid),
 			);
 		$data = http_build_query($pars);
-		$verify = md5($this->uuid);		
-		if($s = $this->module()) {
-			$p = '&p='.$s;
-		}
-		return $this->update_url.'?'.$data.'&verify='.$verify.$p;
+		$verify = md5($this->uuid);
+		return $this->update_url.'?'.$data.'&verify='.$verify;
 	}
 
 	function notice() {
 		return $this->url('notice');
 	}
 
-	function module($type = '') {
-		$string = '';
-		$db = pc_base::load_model('pay_payment_model');
-		$result = $db->select('','pay_code');
-		if(is_array($result) && count($result) > 0) {
-			foreach($result as $v=>$r) {
-				$string .= strtolower($r['pay_code']).'|';
-			}
-			return base64_encode($string);
-		} else {
-			return $string;
-		}		
+	function download() {
+		//TODO
 	}
 	
 	function check_uuid(){

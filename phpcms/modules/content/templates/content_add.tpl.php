@@ -48,7 +48,6 @@ if(is_array($forminfos['senior'])) {
           </div>
         </div>
     </div>
-    <a title="展开与关闭" class="r-close" hidefocus="hidefocus" style="outline-style: none; outline-width: medium;" id="RopenClose" href="javascript:;"><span class="hidden">展开</span></a>
     <div class="col-auto">
     	<div class="col-1">
         	<div class="content pad-6">
@@ -102,16 +101,7 @@ if(is_array($forminfos['base'])) {
 <script type="text/javascript"> 
 <!--
 //只能放到最下面
-var openClose = $("#RopenClose"), rh = $(".addContent .col-auto").height(),colRight = $(".addContent .col-right"),valClose = getcookie('openClose');
 $(function(){
-	if(valClose==1){
-		colRight.hide();
-		openClose.addClass("r-open");
-		openClose.removeClass("r-close");
-	}else{
-		colRight.show();
-	}
-	openClose.height(rh);
 	$.formValidator.initConfig({formid:"myform",autotip:true,onerror:function(msg,obj){window.top.art.dialog({id:'check_content_id',content:msg,lock:true,width:'200',height:'50'}, 	function(){$(obj).focus();
 	boxid = $(obj).attr('id');
 	if($('#'+boxid).attr('boxid')!=undefined) {
@@ -134,20 +124,5 @@ self.moveTo(-4, -4);
 function refersh_window() {
 	setcookie('refersh_time', 1);
 }
-openClose.click(
-	  function (){
-		if(colRight.css("display")=="none"){
-			setcookie('openClose',0,1);
-			openClose.addClass("r-close");
-			openClose.removeClass("r-open");
-			colRight.show();
-		}else{
-			openClose.addClass("r-open");
-			openClose.removeClass("r-close");
-			colRight.hide();
-			setcookie('openClose',1,1);
-		}
-	}
-)
 //-->
 </script>

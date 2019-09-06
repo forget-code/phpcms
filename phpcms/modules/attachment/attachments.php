@@ -1,13 +1,7 @@
 <?php 
 defined('IN_PHPCMS') or exit('No permission resources.'); 
-$session_storage = 'session_'.pc_base::load_config('system','session_storage');
-pc_base::load_sys_class($session_storage);
-if(param::get_cookie('sys_lang')) {
-	define('SYS_STYLE',param::get_cookie('sys_lang'));
-} else {
-	define('SYS_STYLE','zh-cn');
-}
-class attachments {
+pc_base::load_app_class('admin','admin',0);
+class attachments extends admin  {
 	private $att_db;
 	function __construct() {
 		pc_base::load_app_func('global');
@@ -77,7 +71,7 @@ class attachments {
 			if($this->isadmin==0 && !$grouplist[$this->groupid]['allowattachment']) showmessage(L('att_no_permission'));
 			$args = $_GET['args'];
 			$authkey = $_GET['authkey'];
-			if(upload_key($args) != $authkey) showmessage(L('attachment_parameter_error'));
+			if(upload_key($args)!=$authkey) showmessage(L('attachment_parameter_error'));
 			extract(getswfinit($_GET['args']));
 			$siteid = $this->get_siteid();
 			$site_setting = get_site_setting($siteid);
@@ -105,6 +99,7 @@ class attachments {
 				if (strpos($_GET['file'], pc_base::load_config('system', 'upload_url'))!==false) {
 					$file = $_GET['file'];
 					$basename = basename($file);
+					$filepath = str_replace(APP_PATH, '', dirname($file)).'/';
 					if (strpos($basename, 'thumb_')!==false) {
 						$file_arr = explode('_', $basename);
 						$basename = array_pop($file_arr);
@@ -121,19 +116,19 @@ class attachments {
 					if (in_array($uploadedfile['fileext'], array('jpg', 'gif', 'jpeg', 'png', 'bmp'))) {
 						$uploadedfile['isimage'] = 1;
 					}
-					$file_path = $this->upload_path.date('Y/md/');
+					$file_path = pc_base::load_config('system', 'upload_path').date('Y/md/');
 					pc_base::load_sys_func('dir');
 					dir_create($file_path);
 					$new_file = date('Ymdhis').rand(100, 999).'.'.$uploadedfile['fileext'];
 					$uploadedfile['filepath'] = date('Y/md/').$new_file;
 					$aid = $attachment->add($uploadedfile);
+					$filepath = str_replace(APP_PATH, '', pc_base::load_config('system', 'upload_url')).date('Y/md/');
 				}
-				$filepath = date('Y/md/');
-				file_put_contents($this->upload_path.$filepath.$new_file, $pic);
+				file_put_contents(PHPCMS_PATH.$filepath.$new_file, $pic);
 			} else {
 				return false;
 			}
-			echo pc_base::load_config('system', 'upload_url').$filepath.$new_file;
+			echo APP_PATH.$filepath.$new_file;
 			exit;
 		}
 	}
@@ -277,14 +272,5 @@ class attachments {
 		}
 		return $att;
 	}
-	
-	final public static function admin_tpl($file, $m = '') {
-		$m = empty($m) ? ROUTE_M : $m;
-		if(empty($m)) return false;
-		return PC_PATH.'modules'.DIRECTORY_SEPARATOR.$m.DIRECTORY_SEPARATOR.'templates'.DIRECTORY_SEPARATOR.$file.'.tpl.php';
-	}
-	final public static function get_siteid() {
-		return get_siteid();
-	}	
 }
 ?>

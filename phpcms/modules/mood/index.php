@@ -7,7 +7,6 @@ class index {
 		
 		
 		$this->mood_id = isset($_GET['id']) ? $_GET['id'] : '';
-		if(!preg_match("/^[a-z0-9_\-]+$/i",$this->mood_id)) showmessage((L('illegal_parameters')));
 		if (empty($this->mood_id)) {
 			showmessage(L('id_cannot_be_empty'));
 		}

@@ -5,7 +5,6 @@ class foreground {
 	private $_member_modelinfo;
 	
 	public function __construct() {
-		self::check_ip();
 		$this->db = pc_base::load_model('member_model');
 		//ajax验证信息不需要登录
 		if(substr(ROUTE_A, 0, 7) != 'public_') {
@@ -18,7 +17,7 @@ class foreground {
 	 */
 	final public function check_member() {
 		$phpcms_auth = param::get_cookie('auth');
-		if(ROUTE_M =='member' && ROUTE_C =='index' && in_array(ROUTE_A, array('login', 'register', 'mini','send_newmail'))) {
+		if(ROUTE_M =='member' && ROUTE_C =='index' && in_array(ROUTE_A, array('login', 'register', 'mini'))) {
 			if ($phpcms_auth && ROUTE_A != 'mini') {
 				showmessage(L('login_success', '', 'member'), 'index.php?m=member&c=index');
 			} else {
@@ -27,7 +26,7 @@ class foreground {
 		} else {
 			//判断是否存在auth cookie
 			if ($phpcms_auth) {
-				$auth_key = $auth_key = md5(pc_base::load_config('system', 'auth_key').$_SERVER['HTTP_USER_AGENT']);
+				$auth_key = md5(pc_base::load_config('system', 'auth_key').str_replace('7.0' ,'8.0',$_SERVER['HTTP_USER_AGENT']));
 				list($userid, $password) = explode("\t", sys_auth($phpcms_auth, 'DECODE', $auth_key));
 				//验证用户，获取用户信息
 				$this->memberinfo = $this->db->get_one(array('userid'=>$userid));
@@ -57,12 +56,6 @@ class foreground {
 						param::set_cookie('auth', '');
 						param::set_cookie('_userid', '');
 						param::set_cookie('_groupid', '');
-						
-						//设置当前登录待验证账号COOKIE，为重发邮件所用
-						param::set_cookie('_regusername', $this->memberinfo['username']);
-						param::set_cookie('_reguserid', $this->memberinfo['userid']);
-						param::set_cookie('_reguseruid', $this->memberinfo['phpssouid']);
-						
 						param::set_cookie('email', $this->memberinfo['email']);
 						showmessage(L('need_emial_authentication', '', 'member'), 'index.php?m=member&c=index&a=register&t=2');
 					}
@@ -79,13 +72,5 @@ class foreground {
 			}
 		}
 	}
-	/**
-	 * 
-	 * IP禁止判断 ...
-	 */
-	final private function check_ip(){
-		$this->ipbanned = pc_base::load_model('ipbanned_model');
-		$this->ipbanned->check_ip();
- 	}
 	
 }

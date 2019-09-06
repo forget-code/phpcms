@@ -8,15 +8,13 @@ class index {
 		$this->db = pc_base::load_model('sitemodel_model');
 		$this->m_db = pc_base::load_model('sitemodel_field_model');
 		$this->M = new_html_special_chars(getcache('formguide', 'commons'));
-		$this->siteid = intval($_GET[siteid]) ? intval($_GET[siteid]) : get_siteid();
-		$this->M = $this->M[$this->siteid];
+		$this->siteid = get_siteid();
 	}
 	
 	/**
 	 * 表单向导首页
 	 */
 	public function index() {
-		$siteid = $this->siteid;
 		$SEO = seo($this->siteid, '', L('formguide_list'));
 		$page = max(intval($_GET['page']), 1);
 		$r = $this->db->get_one(array('siteid'=>$this->siteid, 'type'=>3, 'disabled'=>0), 'COUNT(`modelid`) AS sum');
@@ -34,9 +32,8 @@ class index {
 		if (!isset($_GET['formid']) || empty($_GET['formid'])) {
 			$_GET['action'] ? exit : showmessage(L('form_no_exist'), HTTP_REFERER);
 		}
-		$siteid = $_GET['siteid'] ? intval($_GET['siteid']) : 1;
 		$formid = intval($_GET['formid']);
-		$r = $this->db->get_one(array('modelid'=>$formid, 'siteid'=>$siteid, 'disabled'=>0), 'tablename, setting');
+		$r = $this->db->get_one(array('modelid'=>$formid, 'siteid'=>$this->siteid, 'disabled'=>0), 'tablename, setting');
 		if (!$r) {
 			$_GET['action'] ? exit : showmessage(L('form_no_exist'), HTTP_REFERER);
 		}

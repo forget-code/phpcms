@@ -39,7 +39,7 @@
                     	<span>网页结果</span>
                         <ul>
 				{loop $search_model $k=>$v}
-						<li><a href="?m=search&c=index&a=init&typeid={$v['typeid']}&q={urlencode($search_q)}&siteid={$siteid}&time={$time}" {if $v['typeid']==$typeid} class="ac"{/if}>{$v['name']}</a>
+						<li><a href="?m=search&c=index&a=init&typeid={$v['typeid']}&q={$search_q}&siteid={$siteid}&time={$time}" {if $v['typeid']==$typeid} class="ac"{/if}>{$v['name']}</a>
 						</li>
 				{/loop}
                          </ul>
@@ -47,11 +47,11 @@
                     <div>
                     	<span>按时间搜索</span>
                         <ul>
-                            <li><a href="?m=search&c=index&a=init&typeid={$typeid}&q={urlencode($search_q)}&siteid={$siteid}&time=all" {if $time=='all' || empty($time)}class="ac"{/if}>全部时间</a></li>
-                            <li><a href="?m=search&c=index&a=init&typeid={$typeid}&q={urlencode($search_q)}&siteid={$siteid}&time=day" {if $time=='day'}class="ac"{/if}>一天内</a></li>
-                            <li><a href="?m=search&c=index&a=init&typeid={$typeid}&q={urlencode($search_q)}&siteid={$siteid}&time=week" {if $time=='week'}class="ac"{/if}>一周内</a></li>
-                            <li><a href="?m=search&c=index&a=init&typeid={$typeid}&q={urlencode($search_q)}&siteid={$siteid}&time=month" {if $time=='month'}class="ac"{/if}>一月内</a></li>
-                            <li><a href="?m=search&c=index&a=init&typeid={$typeid}&q={urlencode($search_q)}&siteid={$siteid}&time=year" {if $time=='year'}class="ac"{/if}>一年内</a></li>
+                            <li><a href="?m=search&c=index&a=init&typeid={$typeid}&q={$search_q}&siteid={$siteid}&time=all" {if $time=='all' || empty($time)}class="ac"{/if}>全部时间</a></li>
+                            <li><a href="?m=search&c=index&a=init&typeid={$typeid}&q={$search_q}&siteid={$siteid}&time=day" {if $time=='day'}class="ac"{/if}>一天内</a></li>
+                            <li><a href="?m=search&c=index&a=init&typeid={$typeid}&q={$search_q}&siteid={$siteid}&time=week" {if $time=='week'}class="ac"{/if}>一周内</a></li>
+                            <li><a href="?m=search&c=index&a=init&typeid={$typeid}&q={$search_q}&siteid={$siteid}&time=month" {if $time=='month'}class="ac"{/if}>一月内</a></li>
+                            <li><a href="?m=search&c=index&a=init&typeid={$typeid}&q={$search_q}&siteid={$siteid}&time=year" {if $time=='year'}class="ac"{/if}>一年内</a></li>
                         </ul>
                     </div>
                     <div class="bgno">

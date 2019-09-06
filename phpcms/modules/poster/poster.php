@@ -26,7 +26,7 @@ class poster extends admin {
 		pc_base::load_sys_class('format', '', 0);
 		$types = array('images'=>L('photo'), 'flash'=>L('flash'), 'text'=>L('title'));
 		$show_dialog = $show_header = true;
-		$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=poster&c=space&a=add\', title:\''.L('add_space').'\', width:\'540\', height:\'320\'}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('add_space'));
+		$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=poster&c=poster&a=add&spaceid='.$spaceid.'\', title:\''.L('add_ads').'\', width:\'700\', height:\'500\', lock:true}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('add_ads'));
 		include $this->admin_tpl('poster_list');
 	}
 	
@@ -51,9 +51,9 @@ class poster extends admin {
 					$this->attachment_db = pc_base::load_model('attachment_model');
 					$this->attachment_db->api_update($imgs, 'poster-'.$id, 1);
 				}
-				showmessage(L('add_ads_success'), 'index.php?m=poster&c=space&a=init');
+				showmessage(L('add_ads_success'), HTTP_REFERER, '', 'add');
 			} else {
-				showmessage(L('operation_failure'), 'index.php?m=poster&c=space&a=init');
+				showmessage(L('operation_failure'), HTTP_REFERER, '', 'add');
 			}
 		} else {
 			$spaceid = intval($_GET['spaceid']);
@@ -62,7 +62,6 @@ class poster extends admin {
 			$TYPES = get_types();
 			$default = count($setting)>0 ? L('please_select').'&nbsp;&nbsp;&nbsp;&nbsp;' : '';
 		}
-		$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=poster&c=space&a=add\', title:\''.L('add_space').'\', width:\'540\', height:\'320\'}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('add_space'));
 		pc_base::load_sys_class('form', '', 0);
 		include $this->admin_tpl('poster_add');
 	}
@@ -86,7 +85,7 @@ class poster extends admin {
 				$this->attachment_db = pc_base::load_model('attachment_model');
 				$this->attachment_db->api_update($imgs, 'poster-'.$_GET['id'], 1);
 			}
-			showmessage(L('edit_ads_success'), 'index.php?m=poster&c=poster&a=init&spaceid='.$_GET['spaceid']);
+			showmessage(L('operation_success'), HTTP_REFERER, '', 'edit');
 		} else {
 			
 			$info = $this->db->get_one(array('id'=>$_GET['id'], 'siteid'=>$this->get_siteid()));
@@ -95,9 +94,6 @@ class poster extends admin {
 			$TYPES = get_types();
 			$info['setting'] = string2array($info['setting']);
 			$default = count($setting)>0 ? L('please_select').'&nbsp;&nbsp;&nbsp;&nbsp;' : '';
-
-			$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=poster&c=space&a=add\', title:\''.L('add_space').'\', width:\'540\', height:\'320\'}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('add_space'));
-
 			pc_base::load_sys_class('form', '', 0);
 			include $this->admin_tpl('poster_edit');
 		}
