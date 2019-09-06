@@ -21,7 +21,13 @@ class content_input {
 		$this->data = $data = trim_script($data);
 		$info = array();
 		foreach($data as $field=>$value) {
-			//if(!isset($this->fields[$field]) || check_in($_roleid, $this->fields[$field]['unsetroleids']) || check_in($_groupid, $this->fields[$field]['unsetgroupids'])) continue;
+			if(!isset($this->fields[$field])) continue;
+			if(defined('IN_ADMIN')) {
+				if(check_in($_SESSION['roleid'], $this->fields[$field]['unsetroleids'])) continue;
+			} else {
+				$_groupid = param::get_cookie('_groupid');
+				if(check_in($_groupid, $this->fields[$field]['unsetgroupids'])) continue;
+			}
 			$name = $this->fields[$field]['name'];
 			$minlength = $this->fields[$field]['minlength'];
 			$maxlength = $this->fields[$field]['maxlength'];

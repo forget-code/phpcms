@@ -520,7 +520,7 @@ CREATE TABLE `phpcms_member` (
   `vip` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `overduedate` int(10) unsigned NOT NULL DEFAULT '0',
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '1',
-  `connectid` char(15) NOT NULL DEFAULT '',
+  `connectid` char(40) NOT NULL DEFAULT '',
   `from` char(10) NOT NULL DEFAULT '',
   `mobile` char(11) NOT NULL DEFAULT '',
   PRIMARY KEY (`userid`),

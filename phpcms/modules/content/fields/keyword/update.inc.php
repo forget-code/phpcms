@@ -11,6 +11,7 @@
 			$siteid = get_siteid();
 			foreach ($data as $v) {
 				$v = defined('IN_ADMIN') ? $v : safe_replace(addslashes($v));
+				$v = str_replace(array('//','#','.'),' ',$v);
 				if (!$r = $keyword_db->get_one(array('keyword'=>$v, 'siteid'=>$siteid))) {
 					$letters = gbk_to_pinyin($v);
 					$letter = strtolower(implode('', $letters));

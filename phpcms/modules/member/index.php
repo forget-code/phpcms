@@ -105,10 +105,11 @@ class index extends foreground {
 			if($member_setting['enablemailcheck']) {	//是否需要邮件验证
 				$userinfo['groupid'] = 7;
 			} elseif($member_setting['registerverify']) {	//是否需要管理员审核
-				$userinfo['modelinfo'] = isset($_POST['info']) ? array2string($_POST['info']) : '';
+				$modelinfo_str = $userinfo['modelinfo'] = isset($_POST['info']) ? array2string(array_map('htmlspecialchars',$_POST['info'])) : '';
 				$this->verify_db = pc_base::load_model('member_verify_model');
 				unset($userinfo['lastdate'],$userinfo['connectid'],$userinfo['from']);
 				$userinfo = array_map('htmlspecialchars',$userinfo);
+				$userinfo['modelinfo'] = $modelinfo_str;
 				$this->verify_db->insert($userinfo);
 				showmessage(L('operation_success'), 'index.php?m=member&c=index&a=register&t=3');
 			} else {
@@ -1252,12 +1253,14 @@ class index extends foreground {
                 pc_base::load_app_class('qqapi','',0);
                 $info = new qqapi($appid,$appkey,$callback);
                 $this->_session_start();
-                if(!isset($_GET['oauth_token'])){
+                if(!isset($_GET['code'])){
                          $info->redirect_to_login();
                 }else{
-					$info->get_openid();//调取QQ openid值
-					if(!empty($_SESSION['openid'])){
-						$r = $this->db->get_one(array('connectid'=>$_SESSION['openid'],'from'=>'qq'));
+					$code = $_GET['code'];
+					$openid = $_SESSION['openid'] = $info->get_openid($code);
+					if(!empty($openid)){
+						$r = $this->db->get_one(array('connectid'=>$openid,'from'=>'qq'));
+						
 						 if(!empty($r)){
 								//QQ已存在于数据库，则直接转向登陆操作
 								$password = $r['password'];
@@ -1284,10 +1287,12 @@ class index extends foreground {
 						}else{	
 								//未存在于数据库中，跳去完善资料页面。页面预置用户名（QQ返回是UTF8编码，如有需要进行转码）
 								$user = $info->get_user_info();
- 								$_SESSION['connectid'] = $_SESSION['openid'];
+ 								$_SESSION['connectid'] = $openid;
 								$_SESSION['from'] = 'qq';
 								if(CHARSET != 'utf-8') {//转编码
 									$connect_username = iconv('utf-8', CHARSET, $user['nickname']); 
+								} else {
+									 $connect_username = $user['nickname']; 
 								}
  								include template('member', 'connect');
 						}
@@ -1415,54 +1420,6 @@ class index extends foreground {
 
 	}
 
-
-	//QQ登录功能
-	public function public_qq_login2(){
-                $appid = pc_base::load_config('system', 'qq_appid');
-                $appkey = pc_base::load_config('system', 'qq_appkey');
-                $callback = pc_base::load_config('system', 'qq_callback');
-                pc_base::load_app_class('qqapi','',0);
-                $info = new qqapi($appid,$appkey,$callback);
-                $this->_session_start();
-                if(!isset($_GET['oauth_token'])){
-                        $info->redirect_to_login();
-                }else{
-                        $info->get_openid();
-                        if(!empty($_SESSION['openid'])){
-                                $r = $this->db->get_one(array('connectid'=>$_SESSION['openid'],'from'=>'qq'));
-                                if(!empty($r)){
-                                        //登陆
-                                        $password = $r['password'];
-                                        $this->_init_phpsso();
-                                        $synloginstr = $this->client->ps_member_synlogin($r['phpssouid']);
-                                        $userid = $r['userid'];
-                                        $groupid = $r['groupid'];
-                                        $username = $r['username'];
-                                        $nickname = empty($r['nickname']) ? $username : $r['nickname'];
-                                        $this->db->update(array('lastip'=>ip(), 'lastdate'=>SYS_TIME, 'nickname'=>$me['name']), array('userid'=>$userid));
-                                        if(!$cookietime) $get_cookietime = param::get_cookie('cookietime');
-                                        $_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime: 0);
-                                        $cookietime = $_cookietime ? TIME + $_cookietime : 0;
-                                        $phpcms_auth_key = md5(pc_base::load_config('system', 'auth_key').$this->http_user_agent);
-                                        $phpcms_auth = sys_auth($userid."\t".$password, 'ENCODE', $phpcms_auth_key);
-                                        param::set_cookie('auth', $phpcms_auth, $cookietime);
-                                        param::set_cookie('_userid', $userid, $cookietime);
-                                        param::set_cookie('_username', $username, $cookietime);
-                                        param::set_cookie('_groupid', $groupid, $cookietime);
-                                        param::set_cookie('cookietime', $_cookietime, $cookietime);
-                                        param::set_cookie('_nickname', $nickname, $cookietime);
-                                        $forward = isset($_GET['forward']) && !empty($_GET['forward']) ? $_GET['forward'] : 'index.php?m=member&c=index';
-                                        showmessage(L('login_success').$synloginstr, $forward);
-                                }else{
-                                        $user = $info->get_user_info();
-                                        $_SESSION['connectid'] = $_SESSION['openid'];
-                                        $_SESSION['from'] = 'qq';
-                                        $connect_username = $user['nickname'];
-                                        include template('member', 'connect');
-                                }
-                        }
-                }
-        }	
 	/**
 	 * 找回密码
 	 * 新增加短信找回方式 

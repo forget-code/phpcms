@@ -72,7 +72,7 @@ class content_model extends model {
 		if(isset($_POST['add_introduce']) && $systeminfo['description'] == '' && isset($modelinfo['content'])) {
 			$content = stripslashes($modelinfo['content']);
 			$introcude_length = intval($_POST['introcude_length']);
-			$systeminfo['description'] = str_cut(str_replace(array("\r\n","\t",'[page]','[/page]','&ldquo;','&rdquo;','&nbsp;'), '', strip_tags($content)),$introcude_length);
+			$systeminfo['description'] = str_cut(str_replace(array("'","\r\n","\t",'[page]','[/page]','&ldquo;','&rdquo;','&nbsp;'), '', strip_tags($content)),$introcude_length);
 			$inputinfo['system']['description'] = $systeminfo['description'] = addslashes($systeminfo['description']);
 		}
 		//自动提取缩略图
@@ -83,6 +83,9 @@ class content_model extends model {
 				$systeminfo['thumb'] = $matches[3][$auto_thumb_no];
 			}
 		}
+		$systeminfo['description'] = str_replace(array('/','\\','#','.',"'"),' ',$systeminfo['description']);
+		$systeminfo['keywords'] = str_replace(array('/','\\','#','.',"'"),' ',$systeminfo['keywords']);
+		
 		//主表
 		$tablename = $this->table_name = $this->db_tablepre.$this->model_tablename;
 		$id = $modelinfo['id'] = $this->insert($systeminfo,true);
@@ -102,8 +105,10 @@ class content_model extends model {
 		$this->hits_db = pc_base::load_model('hits_model');
 		$hitsid = 'c-'.$modelid.'-'.$id;
 		$this->hits_db->insert(array('hitsid'=>$hitsid,'catid'=>$systeminfo['catid'],'updatetime'=>SYS_TIME));
-		//更新到全站搜索
-		$this->search_api($id,$inputinfo);
+		if($data['status']==99) {
+			//更新到全站搜索
+			$this->search_api($id,$inputinfo);
+		}
 		//更新栏目统计数据
 		$this->update_category_items($systeminfo['catid'],'add',1);
 		//调用 update
@@ -278,6 +283,8 @@ class content_model extends model {
 			$urls = $this->url->show($id, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix'],$inputinfo,'edit');
 			$systeminfo['url'] = $urls[0];
 		}
+		$systeminfo['description'] = str_replace(array('/','\\','#','.',"'"),' ',$systeminfo['description']);
+		$systeminfo['keywords'] = str_replace(array('/','\\','#','.',"'"),' ',$systeminfo['keywords']);
 		//主表
 		$this->table_name = $this->db_tablepre.$model_tablename;
 		$this->update($systeminfo,array('id'=>$id));
@@ -379,7 +386,7 @@ class content_model extends model {
 	}
 	
 	
-	private function search_api($id = 0, $data = array(), $action = 'update') {
+	public function search_api($id = 0, $data = array(), $action = 'update') {
 		$type_arr = getcache('search_model_'.$this->siteid,'search');
 		$typeid = $type_arr[$this->modelid]['typeid'];
 		if($action == 'update') {

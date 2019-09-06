@@ -391,7 +391,7 @@ class content extends admin {
 				
 				$modelid = $this->categorys[$catid]['modelid'];
 				$this->db->set_model($modelid);
-
+				$this->db->search_db = pc_base::load_model('search_model');
 				//审核通过，检查投稿奖励或扣除积分
 				if ($status==99) {
 					$html = pc_base::load_app_class('html', 'content');
@@ -413,6 +413,10 @@ class content extends admin {
   								$urls = $this->url->show($id, 0, $content_info['catid'], $content_info['inputtime'], '',$content_info,'add');
    								$html->show($urls[1],$urls['data'],0);
  							}
+							//更新到全站搜索
+							$inputinfo = '';
+							$inputinfo['system'] = $content_info;
+							$this->db->search_api($id,$inputinfo);
 						}
 					} else if (isset($_GET['id']) && $_GET['id']) {
 						$id = intval($_GET['id']);
@@ -431,6 +435,10 @@ class content extends admin {
 						$urls = $this->url->show($id, 0, $content_info['catid'], $content_info['inputtime'], '',$content_info,'add');
 						$html->show($urls[1],$urls['data'],0);
 						}
+						//更新到全站搜索
+						$inputinfo = '';
+						$inputinfo['system'] = $content_info;
+						$this->db->search_api($id,$inputinfo);
 					}
 				}
 				if(isset($_GET['ajax_preview'])) {

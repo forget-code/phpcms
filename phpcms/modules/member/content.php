@@ -17,6 +17,8 @@ class content extends foreground {
 	public function publish() {
 		$memberinfo = $this->memberinfo;
 		$grouplist = getcache('grouplist');
+		$priv_db = pc_base::load_model('category_priv_model'); //加载栏目权限表数据模型
+		
 		//判断会员组是否允许投稿
 		if(!$grouplist[$memberinfo['groupid']]['allowpost']) {
 			showmessage(L('member_group').L('publish_deny'), HTTP_REFERER);
@@ -32,7 +34,12 @@ class content extends foreground {
 		$siteids = getcache('category_content', 'commons');
 		header("Cache-control: private");
 		if(isset($_POST['dosubmit'])) {
+		
 			$catid = intval($_POST['info']['catid']);
+			//判断此类型用户是否有权限在此栏目下提交投稿
+			if (!$priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member'); 
+			
+			
 			$siteid = $siteids[$catid];
 			$CATEGORYS = getcache('category_content_'.$siteid, 'commons');
 			$category = $CATEGORYS[$catid];
@@ -110,8 +117,7 @@ class content extends foreground {
 			param::set_cookie('module', 'content');
 			$siteid = intval($_GET['siteid']);
 			if(!$siteid) $siteid = 1;
-			$CATEGORYS = getcache('category_content_'.$siteid, 'commons');
-			$priv_db = pc_base::load_model('category_priv_model'); //加载栏目权限表数据模型
+			$CATEGORYS = getcache('category_content_'.$siteid, 'commons'); 
 			foreach ($CATEGORYS as $catid=>$cat) {
 				if($cat['siteid']==$siteid && $cat['child']==0 && $cat['type']==0 && $priv_db->get_one(array('catid'=>$catid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) break;
 			}

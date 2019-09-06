@@ -7,7 +7,7 @@
 		if(!empty($pictures)) {
 			foreach($pictures as $key=>$pic) {
 				$temp['url'] = $pic;
-				$temp['alt'] = $pictures_alt[$key];
+				$temp['alt'] = str_replace(array('"',"'"),'`',$pictures_alt[$key]);
 				$array[$key] = $temp;
 			}
 		}

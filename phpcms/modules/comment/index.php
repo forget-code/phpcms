@@ -10,6 +10,7 @@ class index {
 		$this->format = isset($_GET['format']) ? $_GET['format'] : '';
 		list($this->modules, $this->contentid, $this->siteid) = decode_commentid($this->commentid);
 		define('SITEID', $this->siteid);
+		$this->callback = isset($_GET['callback']) ? safe_replace($_GET['callback']) : '';
 	}
 	
 	public function init() {
@@ -170,7 +171,7 @@ class index {
 			
 			case 'jsonp':
 				$msg = pc_base::load_config('system', 'charset') == 'gbk' ? iconv('gbk', 'utf-8', $msg) : $msg;
-				echo trim_script($_GET['callback']).'('.json_encode(array('msg'=>$msg, 'status'=>$status)).')';
+				echo trim_script($this->callback).'('.json_encode(array('msg'=>$msg, 'status'=>$status)).')';
 				exit;
 			break;
 			

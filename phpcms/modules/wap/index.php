@@ -234,7 +234,8 @@ class index {
 			} 		
 			$data = array('userid'=>$userid, 'username'=>$username, 'content'=>$msg);
 			$comment->add($commentid, $this->siteid, $data, $id, $title, $url);
-			echo L('wap_guestbook').'<br/><a href="'.show_url($catid,$contentid,$typeid).'">'.L('wap_goback').'</a>';
+			echo '<script type="text/javaScript" src="'.JS_PATH.'jquery.min.js"></script><script language="JavaScript" src="'.JS_PATH.'admin_common.js"></script>';
+			echo L('wap_guestbook').'<br/><a href="'.show_url($catid,$contentid,$typeid).'">'.L('wap_goback').'</a><script language=javascript>setTimeout("redirect(\''.HTTP_REFERER.'\');",3000);</script>';
 		}
 	}
 	

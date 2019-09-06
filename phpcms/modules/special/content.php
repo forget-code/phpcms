@@ -286,12 +286,11 @@ class content extends admin {
 			
 			//自动提取缩略图
 			if (isset($_POST['auto_thumb']) && $data['thumb'] == '' && !empty($content)) {
-				$content = $content ? $content : stripslashes($content);
-				$auto_thumb_no = intval($_POST['auto_thumb_no']) * 3;
-				if (preg_match_all("/(src)=([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|bmp|png))\\2/i", $content, $matches)) {
-					
-					$data['thumb'] = $matches[$auto_thumb_no][0];
-				}
+					$content = stripslashes($content);
+					$auto_thumb_no = intval($_POST['auto_thumb_no']) - 1;
+					if (preg_match_all("/(src)=([\"|']?)([^ \"'>]+\.(gif|jpg|jpeg|bmp|png))\\2/i", $content, $matches)) {
+						$data['thumb'] = $matches[3][$auto_thumb_no];
+					}
 			}
 			unset($data['style_color'], $data['style_font_weight']);
 			if ($action == 'add') {

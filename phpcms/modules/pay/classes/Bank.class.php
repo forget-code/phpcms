@@ -1,4 +1,5 @@
 <?php
+defined('IN_PHPCMS') or exit('No permission resources.');
 if (isset($set_modules) && $set_modules == TRUE)
 {
     $i = isset($modules) ? count($modules) : 0;
