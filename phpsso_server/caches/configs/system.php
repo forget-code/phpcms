@@ -20,7 +20,7 @@ return array(
 'upload_path' => PHPCMS_PATH.'uploadfile/', //上传文件路径
 'app_path' => '',//动态域名配置地址
 
-'charset' => 'gbk', //网站字符集
+'charset' => 'utf-8', //网站字符集
 'timezone' => 'Etc/GMT-8', //网站时区（只对php 5.1以上版本有效），Etc/GMT-8 实际表示的是 GMT+8
 'debug' => 1, //是否显示调试信息
 'admin_log' => 0, //是否记录后台操作日志

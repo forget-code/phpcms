@@ -98,6 +98,9 @@ class video extends admin {
 				showmessage(L('operation_failure'), 'index.php?m=video&c=video&a=add&meunid='.$_GET['meunid']);
 			}
 		} else {
+			if(!$this->ku6api->testapi()) {
+				showmessage(L('vms_sn_skey_error'),'?m=video&c=video&a=setting&menuid='.$_GET['menuid']);
+			}
 			$flash_info = $this->ku6api->flashuploadparam();
 			$show_validator = true;
 			include $this->admin_tpl('video_add');
@@ -216,8 +219,12 @@ class video extends admin {
 		if(isset($_POST['dosubmit'])) {
 			$setting = array2string($_POST['setting']);
 			setcache('video', $_POST['setting']);
+			$this->ku6api->ku6api_skey = $_POST['setting']['skey'];
+			$this->ku6api->ku6api_sn = $_POST['setting']['sn'];
 			$this->module_db->update(array('setting'=>$setting),array('module'=>'video'));
-
+			if(!$this->ku6api->testapi()) {
+				showmessage(L('vms_sn_skey_error'),HTTP_REFERER);
+			}
 			showmessage(L('operation_success'),HTTP_REFERER);
 		} else {
 			$show_pc_hash = '';
@@ -267,6 +274,9 @@ class video extends admin {
 				showmessage(L('please_choose_catid_and_channel'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid']);
 			}
 		} else {
+			if(!$this->ku6api->testapi()) {
+				showmessage(L('vms_sn_skey_error'),'?m=video&c=video&a=setting&menuid='.$_GET['menuid']);
+			}
 			//获取用户订阅信息
 			$v_model_categorys = $this->ku6api->get_categorys(true);
 			$category_list = '<select name="sub[catid]" id="catid" onchange="select_pos(this)"><option value="0">'.L('please_choose_catid').'</option>'.$v_model_categorys.'</select>';

@@ -525,4 +525,8 @@ $LANG['add_album'] = '添加专辑';
 $LANG['delete_album'] = '删除专辑';
 $LANG['setting_video'] = '视频设置';
 $LANG['edit_manage'] = '编辑专辑';
+$LANG['video_delete'] = '删除视频';
+$LANG['subscribe_manage'] = '订阅管理';
+$LANG['sub_delete'] = '删除订阅';
+$LANG['album_import'] = '视频专辑导入';
 ?>

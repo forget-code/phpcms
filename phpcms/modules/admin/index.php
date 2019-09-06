@@ -46,7 +46,7 @@ class index extends admin {
 			$maxloginfailedtimes = getcache('common','commons');
 			$maxloginfailedtimes = (int)$maxloginfailedtimes['maxloginfailedtimes'];
 
-			if($rtime['times'] > $maxloginfailedtimes) {
+			if($rtime['times'] >= $maxloginfailedtimes) {
 				$minute = 60-floor((SYS_TIME-$rtime['logintime'])/60);
 				showmessage(L('wait_1_hour',array('minute'=>$minute)));
 			}
@@ -206,8 +206,8 @@ class index extends admin {
 		$pc_writeable = is_writable(PC_PATH.'base.php');
 		$common_cache = getcache('common','commons');
 		$logsize_warning = errorlog_size() > $common_cache['errorlog_size'] ? '1' : '0';
-		$adminpanel = $this->panel_db->select(array('userid'=>$userid), '*',20 , 'datetime'); 
- 		$product_copyright = base64_decode('5LiK5rW355ub5aSn572R57uc5Y+R5bGV5pyJ6ZmQ5YWs5Y+4');
+		$adminpanel = $this->panel_db->select(array('userid'=>$userid), '*',20 , 'datetime');
+		$product_copyright = base64_decode('5LiK5rW355ub5aSn572R57uc5Y+R5bGV5pyJ6ZmQ5YWs5Y+4');
 		$architecture = base64_decode('546L5Y+C5Yqg');
 		$programmer = base64_decode('546L5Y+C5Yqg44CB546L6ZOB5oiQ44CB6ZmI5a2m5pe644CB6ZmI6bmP44CB546L5a6Y5bqG44CB5byg5bqG44CB54aK55Sf5Y2O44CB5ZCV5a2Y55m9');
 		$designer = base64_decode('6JGj6aOe6b6Z44CB5byg5LqM5by6');

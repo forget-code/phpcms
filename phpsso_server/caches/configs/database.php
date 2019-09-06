@@ -4,10 +4,10 @@ return array (
 	'default' => array (
 		'hostname' => 'localhost',
 		'database' => 'phpsso',
-		'username' => '',
-		'password' => '',
+		'username' => 'admin',
+		'password' => 'admin',
 		'tablepre' => 'ps_',
-		'charset' => 'gbk',
+		'charset' => 'utf8',
 		'type' => 'mysql',
 		'debug' => true,
 		'pconnect' => 0,

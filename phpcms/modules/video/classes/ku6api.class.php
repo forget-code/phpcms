@@ -15,8 +15,8 @@
  */
 
 class ku6api {
-
-	private $ku6api_sn, $ku6api_key, $ku6api_url,$http,$xxtea;
+	public $ku6api_sn, $ku6api_key;
+	private $ku6api_url,$http,$xxtea;
 	
 	/**
 	 * 
@@ -564,5 +564,19 @@ class ku6api {
 		}
 		return $sitelist[$siteid]['name'];
 
+	}
+
+	/**
+	 * Function testapi
+	 * 测试接口配置是否正确
+	 */
+	public function testapi() {
+		$postdata['method'] = 'Test';
+		$data = $this->post($postdata);
+		if ($data['code']==200) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

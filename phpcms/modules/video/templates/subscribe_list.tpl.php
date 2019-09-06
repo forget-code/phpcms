@@ -26,7 +26,7 @@
             </tr>
         </thead>
     <tbody>
- <?php 
+  <?php 
 if(is_array($subscribes)){
 	foreach($subscribes as $info){
 ?>   

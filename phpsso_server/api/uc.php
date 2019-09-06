@@ -22,7 +22,6 @@ if(empty($get)) exit('Invalid Request');
 include dirname(__FILE__).'/uc_client/lib/xml.class.php';
 $post = xml_unserialize(file_get_contents('php://input'));
 
-
 $action = $get['action'];
 
 if(in_array($get['action'], array('test', 'deleteuser', 'renameuser', 'gettag', 'synlogin', 'synlogout', 'updatepw', 'updatebadwords', 'updatehosts', 'updateapps', 'updateclient', 'updatecredit', 'getcreditsettings', 'updatecreditsettings'))) {

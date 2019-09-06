@@ -27,6 +27,11 @@
 		<td  width="120"><?php echo L('default_video_to_cat');?> </td> 
 		<td> <?php echo $category_list;?></td>
 	</tr>
+	
+	<tr>
+		<td  width="120"><?php echo L('video_api_url');?> </td> 
+		<td><?php echo APP_PATH;?>api.php?op=video_api  (用于v.ku6vms.com 配置<font color="red">返回地址</font>使用)</td>
+	</tr>
 </table>
 </fieldset>
 <div class="bk15"></div>

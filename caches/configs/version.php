@@ -1,6 +1,6 @@
 <?php
 return array(
-'pc_version' => 'V9.2.00',	//phpcms ç‰ˆæœ¬å·
-'pc_release' => '20120928',	//phpcms æ›´æ–°æ—¥æœŸ
+'pc_version' => 'V9.2.1',	//phpcms °æ±¾ºÅ
+'pc_release' => '20121015',	//phpcms ¸üÐÂÈÕÆÚ
 );
 ?>

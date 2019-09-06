@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta content="IE=7" http-equiv="X-UA-Compatible">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8 echo CHARSET?>" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET?>" />
 <title><?php echo L('phpsso')?></title>
 <link href="<?php echo CSS_PATH?>reset.css" rel="stylesheet" type="text/css" />
 <link href="<?php echo CSS_PATH?>system.css" rel="stylesheet" type="text/css" />
