@@ -99,13 +99,22 @@ include admintpl('header');
     </tr>
     
     <tr>
-      <td width='40%' class='tablerow'><strong>商品缩略图宽度</strong></td>
+      <td width='40%' class='tablerow'><strong>商品小缩略图宽度</strong></td>
       <td class='tablerow'><input name='setting[thumbwidth]' type='text' id='thumbwidth' value='<?=$thumbwidth?>' size='20' maxlength='50'></td>
     </tr>
     
     <tr>
-      <td width='40%' class='tablerow'><strong>商品缩略图高度</strong></td>
+      <td width='40%' class='tablerow'><strong>商品小缩略图高度</strong></td>
       <td class='tablerow'><input name='setting[thumbheight]' type='text' id='thumbheight' value='<?=$thumbheight?>' size='20' maxlength='50'></td>
+    </tr>
+	 <tr>
+      <td width='40%' class='tablerow'><strong>商品大缩略图宽度</strong></td>
+      <td class='tablerow'><input name='setting[bigthumbwidth]' type='text' id='thumbwidth' value='<?=$bigthumbwidth?>' size='20' maxlength='50'></td>
+    </tr>
+    
+    <tr>
+      <td width='40%' class='tablerow'><strong>商品大缩略图高度</strong></td>
+      <td class='tablerow'><input name='setting[bigthumbheight]' type='text' id='thumbheight' value='<?=$bigthumbheight?>' size='20' maxlength='50'></td>
     </tr>
     <tr>
       <td width='40%' class='tablerow'><strong>信息列表最大页数</strong><br></td>

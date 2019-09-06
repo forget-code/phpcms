@@ -1,0 +1,72 @@
+.liuyan {
+	clear: both;
+	margin-bottom: 8px;
+	height: 35px;
+	margin-top: 8px;
+}
+.liuyan .d_1 {
+	background-image: url(ly_bg.GIF);
+	height: 35px;
+	background-repeat: no-repeat;
+	float: left;
+	width: 130px;
+	margin-right: 10px;
+	line-height: 35px;
+	font-weight: bold;
+	text-align: center;
+	font-size: 14px;
+}
+.d_2 {
+	height: 22px;
+	margin-top: 5px;
+}
+.d_3 {
+	background-image: url(bt_tb.GIF);
+	padding-left: 25px;
+	background-repeat: no-repeat;
+	background-position: 1px center;
+	font-size: 13px;
+	color: #000000;
+	font-weight: normal;
+}
+.d_4 {
+	border-right-width: 1px;
+	border-right-style: dotted;
+	border-right-color: #AFD7FD;
+	width: 190px;
+	margin-right: 10px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+.d_4 li {
+	width: 150px;
+	margin: auto;
+	text-align: center;
+}
+.d_5 {
+	float: right;
+	width: 775px;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+.d_6 {
+	border: 1px dashed #99CCFF;
+	margin: 8px;
+	padding: 6px;
+	color: #FF6633;
+}
+.kuan {
+	width: 978px;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-right-color: #DADADA;
+	border-bottom-color: #DADADA;
+	border-left-color: #DADADA;
+	margin-bottom: 8px;
+}.d_xian {
+	border: 1px solid #CCCCCC;
+}

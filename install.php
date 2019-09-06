@@ -267,6 +267,9 @@ switch($step)
 				{
 					$sql = file_get_contents(PHPCMS_ROOT."/install/main/phpcms.sql");
 					sql_execute($sql);
+					$cache_setting = cache_read('phpcms_setting.php');
+					$cache_setting = addslashes(serialize($cache_setting));
+					$db->query("UPDATE {$CONFIG['tablepre']}module SET setting='$cache_setting' WHERE module='phpcms'");
 				}
 				echo "<script language=\"javascript\">parent.InstallingModule.innerHTML='1、安装PHPCMS系统主框架&nbsp;<img src=\"install/images/yes.gif\" /><br />'; parent.processor.style.width='7px';</script>";
 				if(!file_exists(PHPCMS_ROOT."/install/main/member.sql"))
@@ -278,6 +281,9 @@ switch($step)
 				{
 					$sql = file_get_contents(PHPCMS_ROOT."/install/main/member.sql");
 					sql_execute($sql);
+					$cache_setting = cache_read('member_setting.php');
+					$cache_setting = addslashes(serialize($cache_setting));
+					$db->query("UPDATE {$CONFIG['tablepre']}module SET setting='$cache_setting' WHERE module='member'");
 				}
 				echo "<script language=\"javascript\">parent.InstallingModule.innerHTML='2、安装PHPCMS会员模块&nbsp;<img src=\"install/images/yes.gif\" />'; parent.processor.style.width='15px';</script>";
 				
@@ -335,7 +341,7 @@ switch($step)
 						if(file_exists(PHPCMS_ROOT."/module/".$current."/install/mysql.sql"))
 						{
 							$sql = file_get_contents(PHPCMS_ROOT."/module/".$current."/install/mysql.sql");
-							sql_execute($sql);
+							sql_execute($sql);						
 						}
 						echo "<script language=\"javascript\">parent.InstallingModule.innerHTML+=' 2、正在创建数据表&nbsp;<img src=\"install/images/yes.gif\" /><br />';</script>";
 					}
@@ -357,28 +363,19 @@ switch($step)
 					}
 					elseif($s==4)
 					{
-						if(file_exists(PHPCMS_ROOT."/module/".$current."/install/templates/"))
-						{
-							$tpldir = PHPCMS_ROOT."/templates/".$CONFIG['defaulttemplate']."/".$current."/";
-							dir_copy(PHPCMS_ROOT."/module/".$current."/install/templates/", $tpldir);
-						}
-						echo "<script language=\"javascript\">parent.InstallingModule.innerHTML+=' 4、移动模板至当前模板目录&nbsp;<img src=\"install/images/yes.gif\" /><br />';</script>";
-					}
-					elseif($s==5)
-					{
 						if(file_exists(PHPCMS_ROOT."/module/".$current."/install/extension.php"))
 						{
 							include(PHPCMS_ROOT."/module/".$current."/install/extension.php");
 						}
-						echo "<script language=\"javascript\">parent.InstallingModule.innerHTML+=' 5、正在加载模块个性化设置&nbsp;<img src=\"install/images/yes.gif\" /><br />';</script>";
-					}
-					elseif($s==6)
-					{
-						echo "<script language=\"javascript\">parent.InstallingModule.innerHTML+=' 6、正在清理安装和卸载资源文件&nbsp;<img src=\"install/images/yes.gif\" />';</script>";
+						$cache_setting = cache_read($current.'_setting.php');
+						$cache_setting = serialize($cache_setting);
+					
+						$db->query("UPDATE {$CONFIG['tablepre']}module SET setting='$cache_setting' WHERE module='$current'");
+						echo "<script language=\"javascript\">parent.InstallingModule.innerHTML+=' 4、正在加载模块个性化设置&nbsp;<img src=\"install/images/yes.gif\" /><br />';</script>";
 					}
 					$s = $s+1;
 					$n = $n+1;
-					if($s>6)
+					if($s>4)
 					{
 						//已安装的从数组中移出；
 						unset($selectchannel[$currentkey]);
@@ -416,6 +413,9 @@ switch($step)
 						{
 							$sql = file_get_contents(PHPCMS_ROOT."/".$current."/install/mysql.sql");
 							sql_execute($sql);
+							$cache_setting = cache_read($current.'_setting.php');
+							$cache_setting = addslashes(serialize($cache_setting));
+							$db->query("UPDATE {$CONFIG['tablepre']}module SET setting='$cache_setting' WHERE module='$current'");
 						}
 						echo "<script language=\"javascript\">parent.InstallingModule.innerHTML+=' 2、正在创建数据表&nbsp;<img src=\"install/images/yes.gif\" /><br />';</script>";
 					}
@@ -437,25 +437,12 @@ switch($step)
 					}
 					elseif($s==4)
 					{
-						if(file_exists(PHPCMS_ROOT."/".$current."/install/templates/"))
-						{
-							$tpldir = PHPCMS_ROOT."/templates/".$CONFIG['defaulttemplate']."/".$current."/";
-							dir_copy(PHPCMS_ROOT."/".$current."/install/templates/", $tpldir);
-						}
-						echo "<script language=\"javascript\">parent.InstallingModule.innerHTML+=' 4、移动模板至当前模板目录&nbsp;<img src=\"install/images/yes.gif\" /><br />';</script>";
-					}
-					elseif($s==5)
-					{
 						@include PHPCMS_ROOT.'/'.$current.'/install/extension.php';
-						echo "<script language=\"javascript\">parent.InstallingModule.innerHTML+=' 5、正在加载模块个性化设置&nbsp;<img src=\"install/images/yes.gif\" /><br />';</script>";
+						echo "<script language=\"javascript\">parent.InstallingModule.innerHTML+=' 4、正在加载模块个性化设置&nbsp;<img src=\"install/images/yes.gif\" /><br />';</script>";
 					}
-					elseif($s==6)
-					{
-						echo "<script language=\"javascript\">parent.InstallingModule.innerHTML+=' 6、正在清理安装和卸载资源文件&nbsp;<img src=\"install/images/yes.gif\" />';</script>";
-					}	
 					$s = $s+1;
 					$n = $n+1;
-					if($s>6)
+					if($s>4)
 					{
 						//已安装的从数组中移出；
 						unset($selectmod[$currentkey]);
@@ -483,7 +470,6 @@ switch($step)
 				$db->query("INSERT INTO {$CONFIG['tablepre']}member (username,password,email,groupid,regip, regtime,chargetype) VALUES ('".$user['username']."',  '".md5($user['password'])."',  '".$user['email']."', 1,'".$_SERVER['REMOTE_ADDR']."','".time()."', 0)");
 				$db->query("INSERT INTO {$CONFIG['tablepre']}member_info (userid,gender) VALUES ('1','1')");
 				$db->query("INSERT INTO {$CONFIG['tablepre']}admin (userid,username,grade) VALUES ('1','".$user['username']."','0')");
-				//$db->query("INSERT INTO {$CONFIG['tablepre']}menu ( `position`, `name`, `title`, `url`, `target`, `style`, `listorder`, `arrgroupid`, `arrgrade`, `username`) VALUES ('admin_mymenu', '个人文集', '', 'member/member.php?username=".$user['username']."', '_blank', 'color:#FF0000;font-weight:bold;', 30, '', '', '".$user['username']."')");
 				@unlink(PHPCMS_ROOT.'/data/install/phpcms/phpcms.php');	
 				
 				//创建快捷操作菜单
@@ -529,16 +515,57 @@ switch($step)
 				echo "<script language=\"javascript\">
 				parent.InstallingModule.innerHTML+=' 4、首页建立成功&nbsp;<img src=\"install/images/yes.gif\" />'
 				parent.processor.style.width='400px';
-				parent.GetInstallingPage('install.php?step=installmodule&currentjob=finish');
+				parent.GetInstallingPage('install.php?step=installmodule&currentjob=freelink1');
 				</script>";
-			break;
+			break;	
 			
-			case 'finish':
-				//更新幻灯片
+			case 'freelink1':
+				//首页幻灯片
 				update_freelink('首页幻灯片');
+				echo "<script language=\"javascript\">parent.GetInstallingPage('install.php?step=installmodule&currentjob=freelink2');</script>";	
+			break;
+
+			case 'freelink2':
+				//更新幻灯片
+				update_freelink('首页推荐信息');
+				echo "<script language=\"javascript\">parent.GetInstallingPage('install.php?step=installmodule&currentjob=freelink3');</script>";	
+			break;
+
+			case 'freelink3':
+				//首页推荐问吧
+				update_freelink('首页推荐问吧');
+				echo "<script language=\"javascript\">parent.GetInstallingPage('install.php?step=installmodule&currentjob=freelink4');</script>";	
+			break;
+
+			case 'freelink4':
+				//全站头部置顶
+				update_freelink('全站头部置顶');
+				echo "<script language=\"javascript\">parent.GetInstallingPage('install.php?step=installmodule&currentjob=freelink5');</script>";	
+			break;
+
+			case 'freelink5':
+				//3dflash
+				update_freelink('3dflash');
+				echo "<script language=\"javascript\">parent.GetInstallingPage('install.php?step=installmodule&currentjob=freelink6');</script>";	
+			break;
+
+			case 'freelink6':
+				//flash_下载频道首页
+				update_freelink('flash_下载频道首页');
+				echo "<script language=\"javascript\">parent.GetInstallingPage('install.php?step=installmodule&currentjob=freelink7');</script>";	
+			break;
+
+			case 'freelink7':
+				//flash_图片频道首页
+				update_freelink('flash_图片频道首页');
+				echo "<script language=\"javascript\">parent.GetInstallingPage('install.php?step=installmodule&currentjob=finish');</script>";	
+			break;
+
+			case 'finish':
+				//flash_新闻频道首页
+				update_freelink('flash_新闻频道首页');
 				echo "<script language=\"javascript\">parent.InstallingFinish();</script>";	
 			break;
-				
 				
 		}//end switch
 		break;

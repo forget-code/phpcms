@@ -1,0 +1,13 @@
+{loop $jobs $i $job}
+<ul class="btzpli2">
+<li class="zpli1"><a href="{$job[linkurl]}" target="_blank">{$job[title]}</a></li>
+<li class="zpli2">{$job[worktype]}</li>
+<li class="zpli3"> {if $job[sex]==1}男{elseif $job[sex]==2}女{else}女{/if} </li>
+<li class="zpli1">{if $job[degree]}{$job[degree]}{else}不限{/if}</li>
+<li class="zpli2">{if $job[degree]}{$job[degree]}{else}不限{/if} </li> 
+<li class="zpli4"><a href="{$job[linkurl]}" target="_blank">{$job[unit]}</a></li>
+<li class="zpli1">{$job[adddate]}</li>
+</ul>{/loop}
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

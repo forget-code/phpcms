@@ -6,6 +6,12 @@ if(!$_userid) showmessage($LANG['please_login'], $MOD['linkurl'].'login.php?forw
 extract($member->get_info());
 $GROUPS = cache_read('member_group.php');
 extract(cache_read('member_group_'.$_groupid.'.php'));
+extract(cache_read('member_group_'.$_groupid.'.php'));
+if($MODULE['wenba']['name'])
+{
+	$r = $db->get_one("SELECT grade, actor FROM ".TABLE_WENBA_ACTOR." WHERE typeid=$actortype AND min<=$credit AND max>=$credit");
+	@extract($r);
+}
 
 $chargetype = $chargetype==1 ? $LANG['period_of_validity'] : $LANG['subtract_point'];
 $gender = $gender==1 ? $LANG['male'] : $LANG['female'];

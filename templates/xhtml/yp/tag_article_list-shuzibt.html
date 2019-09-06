@@ -1,0 +1,5 @@
+{loop $articles $i $article}
+<li>{if $datetype}<span>{$article[adddate]}</span>{/if}
+<em>{intval($i+1)}</em>
+<a href="{$article[linkurl]}" title="{$article[title]}" {$target}>{$article[stitle]}</a></li>
+{/loop}

@@ -1,0 +1,3 @@
+<!--{loop $products $k $v}-->
+<li><a href="{$v[linkurl]}"  {$target} ondblclick="addtocompare({$v[productid]},'{$v[pdt_name]}',true);" title="双击添加到商品对比栏"><img src="{$v[pdt_thumb]}"  width="{$imgwidth}" height="{$imgheight}" {if $showalt} alt="{$v[alt]}" {/if}  border="0" /></a>
+<a href="{$v[linkurl]}" title="{$v[pdt_name]}" {$target}>{$v[cut_pdt_name]}</a><br /><!--{if $showprice}-->&yen：{$v[price]}<!--{/if}--></li><!--{/loop}-->

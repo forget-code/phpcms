@@ -1,0 +1,160 @@
+{template 'phpcms','header'}
+<link href="{$skindir}/link.css" rel="stylesheet" type="text/css">
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function ajaxlink(id)
+{
+    var url =  "{$MOD[linkurl]}update_hits.php";
+    var pars = "linkid="+id;
+    var myAjax = new Ajax.Request(url, {method: 'get', parameters: pars});
+	
+}
+function CheckReg()
+{
+	if(document.myform.typeid.value=='0'){
+      alert('请选择分类！');
+      document.myform.typeid.focus();
+      return(false) ;
+    }
+    if(document.myform.name.value==''){
+      alert('网站名不能为空！');
+      document.myform.name.focus();
+      return(false) ;
+    }
+  if(document.myform.name.value.length>30){
+    alert('网站名太长了！');
+    document.myform.name.focus();
+    return(false);
+  }
+
+  if(document.myform.url.value=='' || document.myform.url.value=='http://'){
+      alert('网站地址不能为空！');
+      document.myform.url.focus();
+      return(false) ;
+    }
+
+}
+//-->
+</script>
+<div id="censent">
+  <div class="linksl">
+    <div class="yqlj xianlink"><div>
+<!--{loop $tname $i $v}-->
+<span><a href="{$v['type']}.{$PHPCMS['fileext']}" style="{$v['style']}">{$v['name']}</a></span>
+<!--{/loop}-->
+		<div style="clear:both"></div>
+	</div></div>
+    <div class="linkx"><div class="sqlj" align="center">
+<span id='TabTitle0' onclick='ShowTabs(0)'>申请链接</span>
+<span id='TabTitle1' onclick='ShowTabs(1)'>获取代码</span>
+<span id='TabTitle2' onclick='ShowTabs(2)'>修改链接</span>
+</div>
+    <div class="sqljn">
+    <ul><li><table width="100%" cellpadding="0" cellspacing="0">
+	<tbody id="Tabs0" style="display:">
+	<form method="post" name="myform" action="{$MOD[linkurl]}register.php?action=reg" onSubmit="return CheckReg()">
+	<tr>
+	<td>　链接类型：<input name="linktype"  type="radio" value="1" checked style="border:0" onClick="$('showTabs').style.display='block'">
+	LOGO&nbsp;
+	<input type="radio" name="linktype" value="0" style="border:0" onClick="$('showTabs').style.display='none'">
+	文字</td>
+	</tr>
+	<tr>
+	<td>　所属分类：<select name="typeid"> {$linktype_select} </select><font color="#FF0000"> *</font></td>
+	</tr>
+	<tr>
+	<td>　网站名称：<input name="name" size="14"  maxlength="20"><font color="#FF0000"> *</font></td>
+	</tr>
+	<tr>
+	<td>　网站地址：<input name="url" size="14"  maxlength="100" type="text"  value="http://">
+	<font color="#FF0000">*</font></td>
+	</tr>
+	<tr id='showTabs'>
+	<td>　网站标志：<input name="logo" size="14"  maxlength="100" type="text"  value="http://"></td>
+	</tr>
+	
+	<tr>
+	<td align="center"><textarea name="introduce" cols="25" rows="5" id="introduce" style="width:200px;">网站简介：</textarea></td>
+	</tr>
+	<!--{if $enablecheckcode}-->
+	<tr>
+	<td>　
+	验证码：<input name="checkcodestr" type="text" size="6">
+<img src="{PHPCMS_PATH}checkcode.php" id="checkcode" onClick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/>
+	</td>
+	</tr>
+	<!--{/if}-->
+	<tr>
+		<td align="center" height="30">
+		<input name="submit" type="submit" value=" 提 交 " class="btn">&nbsp;&nbsp;
+		<input name="reset" type="reset" value=" 重 填 " class="btn">		</td>
+	  </tr>
+	  </form>
+	<tbody id='Tabs1' style='display:none'>
+	<form method="post" name="link">
+	<tr>
+		<td>本站LOGO链接代码</td>
+	</tr>
+	<tr>
+	  <td><textarea name="logo" cols="25" rows="5" id="logo" onFocus="document.link.elements['logo'].select();" style="width:200px;"><a href="{$PHP_SITEURL}" target="_blank"><img src="{$logo}" width="88" height="31" border="0"></a></textarea></td>
+		</tr>
+	<tr>
+		<td>　本站文字链接代码　</td>
+		</tr>
+	<tr>
+	  <td>　<textarea name="text" cols="25" rows="5" id="text" onFocus="document.link.elements['text'].select();" style="width:200px;"><a href="{$PHP_SITEURL}" target="_blank">{$sitename}</a></textarea></td>
+		</tr>
+        <tr><td height="10"></td></tr>
+	</form>
+	  </tbody>
+
+	 <tbody id="Tabs2" style="display:none">
+	  <form method="post" name="edit" action="{$MOD[linkurl]}register.php?action=edit">
+		<tr>
+		<td> &nbsp;&nbsp;链接类型：<input name="linktype" type="radio" value="1" checked style="border:0" onClick="$('editshowTabs').style.display='block'">
+		LOGO&nbsp;&nbsp;<input type="radio" name="linktype" value="0" style="border:0" onClick="$('editshowTabs').style.display='none'">文字</td>
+		</tr>
+	<tr>
+	<td>　所属分类：<select name="typeid"> {$linktype_select} </select><font color="#FF0000"> *</font></td>
+	</tr>
+	<tr>
+		<td>　网站名称：<input name="name" size="14"  maxlength="20"><font color="#FF0000"> *</font></td>
+		</tr>
+	<tr>
+		<td>　网站地址：<input name="url" size="14"  maxlength="100" type="text"  value="http://">
+		<font color="#FF0000">*</font></td>
+		</tr>
+	<tr id="editshowTabs">
+		<td>　网站Logo：<input name="logo" size="14"  maxlength="100" type="text"  value="http://"></td>
+		</tr>
+	<tr>
+		<td><br /><textarea name="introduce" cols="25" rows="5" style="width:200px;">网站简介：</textarea></td>
+		</tr>
+	<tr>
+		<td align="center" height="30">
+		<input name='submit' type='submit' value=' 修 改 ' class="btn">&nbsp;&nbsp;
+		<input name='reset' type='reset' value=' 重 填 ' class="btn">		</td>
+	  </tr>
+	  </form>
+	  </tbody>
+</table></li></ul>
+    </div>
+   </div>
+  </div>
+<div class="linksr">
+<div class="rbox1">
+    <h6> &nbsp;logo链接</h6>
+    <div class="logodh">
+{tag_友情链接首页logo}
+</div>
+  </div>
+  <div class="rbox1">
+<h6> &nbsp;文字链接</h6>
+<div class="wzdhh"><ul>
+{tag_友情链接首页文字}
+</ul><br style="clear:both" /><div>
+<br style="clear:both" />
+  </div>
+</div></div>
+</div>
+{template 'phpcms','footer'}

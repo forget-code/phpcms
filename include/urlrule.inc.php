@@ -26,4 +26,8 @@ $urlrule['php']['item'][2] = array('example'=>'/show-1-2.html','index'=>'/show-{
 $urlrule['php']['special'][0] = array('example'=>'/special/show.php?specialid=1&typeid=2','index'=>'/special/index.php', 'list'=>'/special/list.php?page={$page}', 'show'=>'/special/show.php?specialid={$specialid}', 'type'=>'/special/show.php?specialid={$specialid}&typeid={$typeid}');
 $urlrule['php']['special'][1] = array('example'=>'/special/show.php?specialid-1/typeid-2.html','index'=>'/special/index.php', 'list'=>'/special/list.php?page-{$page}.html', 'show'=>'/special/show.php?specialid-{$specialid}.html', 'type'=>'/special/show.php?specialid-{$specialid}/typeid-{$typeid}.html');
 $urlrule['php']['special'][2] = array('example'=>'/special/show-1-2.html','index'=>'/special/index.php', 'list'=>'/special/list-{$page}.html', 'show'=>'/special/show-{$specialid}.html', 'type'=>'/special/show-{$specialid}-{$typeid}.html');
+
+$urlrule['php']['area'][0] = array('example'=>'/area.php?areaid=1&page=2','index'=>'/area.php?areaid={$areaid}', 'page'=>'/area.php?areaid={$areaid}&page={$page}');
+$urlrule['php']['area'][1] = array('example'=>'/area.php?areaid-1/page-2.html','index'=>'/area.php?areaid-{$areaid}.html', 'page'=>'/area.php?areaid-{$areaid}/page-{$page}.html');
+$urlrule['php']['area'][2] = array('example'=>'/area-1-2.html','index'=>'/area-{$areaid}-1.html', 'page'=>'/area-{$areaid}-{$page}.html');
 ?>

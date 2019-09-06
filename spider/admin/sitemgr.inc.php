@@ -6,7 +6,6 @@ $submenu = array
 	array($LANG['add_spider_site'], "?mod=".$mod."&file=sitemgr&action=add"),
 	array($LANG['spider_site_manage'], "?mod=".$mod."&file=sitemgr&action=manage"),
 	array("<font color='blue'>".$LANG['load_site_rule']."</font>", "?mod=".$mod."&file=sitemgr&action=sitein"),
-	array("<font color=red>".$LANG['phpcms_site_rule_share']."</font>".$LANG['online_install'], "http://www.phpcms.cn/spider/rulelist.php?type=2&file=".$PHP_DOMAIN.$PHP_SELF)
 );
 $menu = adminmenu($LANG['spider_site_manage'],$submenu);
 $action = $action ? $action : 'manage';

@@ -1,0 +1,22 @@
+<div style="BACKGROUND-COLOR: #d6e0ef;BORDER-RIGHT: 1px solid; BORDER-TOP: 1px solid; PADDING-LEFT: 10px; FONT-WEIGHT: bold; FONT-SIZE: 14px; BORDER-LEFT: 1px solid; LINE-HEIGHT: 24px; BORDER-BOTTOM: 0px solid; HEIGHT: 24px; TEXT-ALIGN: left">投票结果</div>
+<table cellspacing="2" cellpadding="1" width="100%" border="0" style="BORDER: 1px solid;HEIGHT: 24px">
+	<tr>
+		<td width="15%" align="left">回答者</td>
+		<td width="10%" align="center">票数</td>
+		<td width="75%" align="left">图示分析</td>
+	</tr>
+<!--{if $num}-->
+<!--{loop $viewvotelist $view_vote}-->
+	<tr>
+		<td >{$view_vote['username']}</td>
+		<td align="center">{$view_vote['vote_count']}</td>
+		<td align="left"><hr color="red" width="{$view_vote['view_vote']}">{$view_vote['view_vote']}</td>
+	</tr>
+<!--{/loop}-->
+<!--{else}-->
+	<tr>
+		<td colspan="3"><font color="red">对不起，此问题暂时没有投票，欢迎您成为投票该问题的第一人. </font></td>
+	</tr>
+<!--{/if}-->
+</table>
+<div align="center"><a href="javascript:;" onclick="window.close();">关闭</a></div>

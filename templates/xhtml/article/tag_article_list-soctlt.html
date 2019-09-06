@@ -1,0 +1,13 @@
+<div id="xwlb" >
+    <ul>
+{loop $articles $i $article}
+<li style="width:{$width}">
+   {if $datetype}<p><span>{$article[adddate]}</span> {/if}
+   {if $showcatname}<a href="{$article[catlinkurl]}"{$target}>[{$article[catname]}]</a>{/if}{$article[type]} <a href="{$article[linkurl]}" title="{$article[title]}" {$target}>·{$article[stitle]}</a></p>
+</li>
+{/loop}
+</ul>
+</div>
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

@@ -1,4 +1,4 @@
-INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('联盟', 'union', 'union', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn/', 'phpcms@163.com', '功能说明', '许可协议', '使用帮助', 'a:8:{s:8:"keeptime";s:7:"7776000";s:12:"profitmargin";s:2:"10";s:7:"forward";s:0:"";s:14:"visitgetnumber";s:1:"1";s:12:"visitgettype";s:5:"point";s:12:"reggetnumber";s:2:"10";s:10:"reggettype";s:5:"point";s:15:"enablecheckcode";s:1:"1";}', 0, '0000-00-00', '0000-00-00', '0000-00-00');
+INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('联盟', 'union', 'union', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn/', 'phpcms@163.com', '功能说明', '许可协议', '使用帮助', '', 0, '0000-00-00', '0000-00-00', '0000-00-00');
 
 ALTER TABLE `phpcms_member` ADD `introducer` INT UNSIGNED NOT NULL;
 

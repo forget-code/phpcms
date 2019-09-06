@@ -62,16 +62,15 @@ if($dosubmit)
 
 	$article['islink'] = isset($article['islink']) ? 1 : 0;
 	$article['arrgroupidview'] = empty($article['arrgroupidview']) ? '' : implode(',',$article['arrgroupidview']);
-	$article['catid'] = $catid;
 	$article['username'] = $article['editor'] = $article['checker'] = $_username;
 	$article['urlruleid'] = $article['ishtml'] ? $html_urlrule : $php_urlrule;
-	$article['addtime'] = $article['edittime'] = $article['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $article['addtime']) ? strtotime($article['addtime'].' '.date('H:i:s',$PHP_TIME)) : $PHP_TIME;	
+	$article['addtime'] = $article['edittime'] = $article['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})/', $article['addtime']) ? strtotime($article['addtime']) : $PHP_TIME;	
 	if(isset($article['arrposid']))
 	{
 		$arrposid = $article['arrposid'];
 		$article['arrposid'] = ','.implode(',', $arrposid).',';
 	}
-
+	$article['catid'] = $catid;
 	$field->check_form();
 
 	$articleid = $art->add($article);
@@ -93,7 +92,7 @@ if($dosubmit)
 		if(isset($arrposid) && $arrposid) $pos->add($articleid, $arrposid);
 
 		$field->update("articleid=$articleid");
-		$forward = "?mod=$mod&file=$file&action=add&channelid=$channelid&catid=$catid";
+		$forward = "?mod=$mod&file=$file&action=add&channelid=$channelid&catid=$article[catid]";
 		if($article['status'] == 3)
 		{
 			require PHPCMS_ROOT.'/include/create_related_html.inc.php';
@@ -107,13 +106,13 @@ if($dosubmit)
 }
 else
 {
-	$today=date('Y-m-d',$PHP_TIME);
+	$today=date('Y-m-d H:i:s',$PHP_TIME);
 	$type_select = type_select('article[typeid]', $LANG['type']);
 	$style_edit = style_edit('article[style]','');
 	$keywords_select = keywords_select($channelid);
 	$author_select = author_select($channelid);
 	$copyfrom_select = copyfrom_select($channelid);
-	$category_jump = category_select('catid', $LNAG['change_category_add_article'], 0, "onchange=\"if(this.value!=''){location='?mod=$mod&file=$file&action=add&job=$job&channelid=$channelid&catid='+this.value;}\"");
+	$this_category = str_replace("<option value='0'></option>",'',category_select('catid','',$catid));
 	$showgroup = showgroup('checkbox','article[arrgroupidview][]');
 	$showskin = showskin('article[skinid]');
 	$showtpl = showtpl($mod,'content','article[templateid]');

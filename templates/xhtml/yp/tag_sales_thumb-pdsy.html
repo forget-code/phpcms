@@ -1,0 +1,3 @@
+{loop $products $i $product}
+<div{if intval($i+1)%6!=0} class="cx_xian"{/if}><a href="{$product['linkurl']}" {$target}><img src="{$product[thumb]}" width="{$imgwidth}" height="{$imgheight}" alt="{$product[alt]}" /></a><br /><a href="{$product['linkurl']}" title="{$product['title']}" {$target} class="tag_title_link">{str_replace('...','',$product[stitle])}</a><br/>原：{$product[price]}<br /><font color=#ff5500><b>现：{$product[formerprice]}</b></font><br />
+<span><strong><a href="{$product['linkurl']}"><font color=#ff5500>抢购</font></a></strong></span></div>{/loop}

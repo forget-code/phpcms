@@ -88,6 +88,7 @@ class category_module
 		}
 		$db->query("UPDATE ".TABLE_CATEGORY." SET $sql WHERE catid=$this->catid");
 		$this->setting($setting);
+		$this->repair($this->catid);
 		cache_category($this->catid);
 		return TRUE;
 	}
@@ -207,7 +208,7 @@ class category_module
 		{
 		    unset($this->categorys[$id]);
 		}
-
+		if($this->module != 'yp' && $this->module != 'wenba')
 		$db->query("UPDATE ".$CONFIG['tablepre'].$this->module." SET catid=$targetcatid WHERE catid IN ($arrchildid)");
 
 		if($arrparentid)

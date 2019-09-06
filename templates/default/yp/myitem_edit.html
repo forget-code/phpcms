@@ -1,0 +1,341 @@
+{template 'phpcms','header'}
+<script language="javascript">
+<!--
+function Checkthis()
+{
+	if ($F('truename') == "")
+	{
+		alert("真实姓名不能为空！")
+		Field.focus('truename');
+		return false
+	}
+	if ($F('email') == "")
+	{
+		alert("Email地址不能为空！")
+		Field.focus('email');
+		return false
+	}
+	else
+	{
+		var mail = $F('email');
+		if(!RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(mail))
+		{
+			alert("Email 地址错误，请检查！")
+			Field.focus('email');
+			return false
+		}
+	}
+	if ($F('telephone') == "")
+	{
+		alert("电话不能为空！")
+		Field.focus('telephone');
+		return false
+	}
+}
+function CheckForm()
+{
+	if ($F('story') == "")
+	{
+		alert("工作经历不能为空！")
+		Field.focus('story');
+		return false
+	}
+	if ($F('introduce') == "")
+	{
+		alert("个人鉴定不能为空！")
+		Field.focus('introduce');
+		return false
+	}
+	if ($F('linkman') == "")
+	{
+		alert("联系人称呼不能为空！")
+		Field.focus('linkman');
+		return false
+	}
+	if ($F('school') == "")
+	{
+		alert("毕业院校不能为空！")
+		Field.focus('school');
+		return false
+	}
+	
+	if ($F('specialty') == "")
+	{
+		alert("所学专业不能为空！")
+		Field.focus('specialty');
+		return false
+	}
+}
+//-->
+</script>
+<script language="javascript">
+<!--
+function update()
+{
+	var checkurl = 'myitem.php';
+	var pars = "action=update";
+	var myAjax = new Ajax.Request(checkurl, {method: 'post', parameters: pars, onComplete: alertmessage});
+}
+
+function alertmessage(Request)
+{
+	if(Request.responseText == '1'){
+	alert('简历已经刷新到当前时间');
+	}
+	else
+	{
+		alert('操作失败');
+	}
+}
+//-->
+</script>
+<table cellspacing="0" cellpadding="0" class="member">
+<tr>
+<td valign="top" class="left">
+{template 'member','left'}
+</td>
+<td width="10">
+</td>
+<td class="right" valign="top">
+<div class="membercatslist">
+<ul>
+<li><a href="?action=edit"><span>我的简历</span></a></li>
+<li><a href="?action=manage&label=0"><span>我的职位库</span></a></li>
+<li><a href="?action=manage&label=1"><span>职位申请记录</span></a></li>
+<li><a href="javascript:update()"><span>刷新简历</span></a></li>
+</ul>
+</div>
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>编辑我的简历</h1>
+<form action="?action=editmemberinfo" method="post" name="myform" onSubmit='return Checkthis();'>
+<table cellpadding="2" cellspacing="1" class="righttable">
+  <tr>
+    <td width="19%" class="td_right">真实姓名：</td>
+    <td class="td_left"><input name="truename" type="text" id="truename" size="20" value="{$truename}" /><font color="#FF0000">*</font></td>
+  </tr>
+  <tr>
+    <td class="td_right">性别：</td>
+    <td class="td_left"><input name="gender" type="radio" style="border:0px " value="1" {if $gender} checked{/if}/>
+        <span >男</span>
+        <input type="radio" name="gender" value="0" style="border:0px "  {if !$gender} checked{/if}/>
+        <span >女</span> </td>
+  </tr>
+  <tr>
+    <td class="td_right">生日：</td>
+    <td class="td_left"><input name="byear" type="text" size="4" value="{$byear}">
+      <span class="color_2">年</span> 
+<select name="bmonth" id="bmonth">
+ <option value="00"></option>
+{loop $montharr $month}
+ <option value="{$month}" {if $month==$bmonth}selected{/if}>{$month}</option>
+{/loop}
+</select>
+      <span class="color_2">月</span> 
+      <select name="bday" id="bday">
+<option value="00"></option>
+{loop $dayarr $day}
+ <option value="{$day}" {if $day==$bday}selected{/if}>{$day}</option>
+{/loop}
+        </select>
+      <span class="color_2">日</span> </td>
+  </tr>
+  <tr>
+    <td class="td_right">证件类别：</td>
+    <td class="td_left"><select name="idtype">
+      <option value="身份证" {if $idtype=="身份证"}selected{/if} >身份证 </option>
+      <option value="学生证" {if $idtype=="学生证"}selected{/if}>学生证 </option>
+      <option value="军人证" {if $idtype=="军人证"}selected{/if}>军人证 </option>
+      <option value="护照" {if $idtype=="护照"}selected{/if} >护照 </option>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td class="td_right">证件号码：</td>
+    <td class="td_left"><input type=text name="idcard" size=22 maxlength=18 value="{$idcard}"/></td>
+  </tr>
+  <tr>
+    <td class="td_right">户口所在地：</td>
+    <td class="td_left">
+
+<select name="province" id="province" onchange="javascript:loadcity(this.value);">
+<option value="0" selected="selected">请选择</option>
+</select>
+
+<select name="city" id="city" onchange="javascript:loadarea($('province').value, this.value);">
+<option value="0" selected="selected">请选择</option>
+</select>
+
+<select name="area" id="area">
+<option value="0" selected="selected">请选择</option>
+</select>
+
+<script language="javascript">
+<!--
+var phpcms_path = '{PHPCMS_PATH}';
+var selectedprovince = '{$province}';
+var selectedcity = '{$city}';
+var selectedarea = '{$area}';
+//-->
+</script>
+<script type="text/javascript" src="{PHPCMS_PATH}include/js/area.js"></script>
+
+
+    </td>
+  </tr>
+    <tr>
+    <td class="td_right">教育水平：</td>
+    <td class="td_left"><select name="edulevel" size=1>
+      <option value="">请选择　　</option>
+      <option value="博士后"  {if $edulevel=='博士后'}selected{/if}>博士后</option>
+      <option value="博士"  {if $edulevel=='博士'}selected{/if}>博士</option>
+      <option value="硕士" {if $edulevel=='硕士'}selected{/if}>硕士</option>
+      <option value="大学" {if $edulevel=='大学'}selected{/if}>大学</option>
+      <option value="高中" {if $edulevel=='高中'}selected{/if}>高中</option>
+      <option value="初中" {if $edulevel=='初中'}selected{/if}>初中</option>
+      <option value="小学" {if $edulevel=='小学'}selected{/if}>小学</option>
+    </select>
+    </td>
+  </tr>
+  <tr>
+    <td class="td_right">照片地址：</td>
+    <td class="td_left"><input name="userface" type="text" id="userface" size="50" value="{$userface}" /> <input type="button" value="上传" onClick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid=member&type=thumb&uploadtext=userface','upload','350','200')"></td>
+  </tr>
+
+<tr> 
+<td class="td_right">E-Mail</td>
+<td valign="top" class="td_left">
+<input name="email" type="text" id="email" size="30" value="{$_email}" ><font color="#FF0000">*</font>
+</td>
+</tr>
+<tr> 
+<td class="td_right">联系电话</td>
+<td valign="top" class="td_left">
+<input name="telephone" type="text" id="telephone" size="30" value="{$telephone}"> <font color="#FF0000">*</font>
+</td>
+</tr>
+<tr> 
+<td class="td_right">所在地</td>
+<td valign="top" class="td_left">
+<input name="address" type="text" id="address" size="50" value="{$address}">
+</td>
+</tr>
+  <tr>
+    <td class="td_right"></td>
+    <td class="td_left">
+    <input type="submit" name="editmemberinfo" value=" 修改基本资料 " />
+    </td>
+  </tr>
+</table>
+</form>
+<BR>
+<form action="" method="post" name="form1" onSubmit='return CheckForm();'>
+<table cellpadding="2" cellspacing="1" class="righttable" >
+<tr>
+<td width="19%" class="td_right">工作性质</td>
+<td width="81%" class="td_left" >
+	<select id="character" name="apply[worktype]">
+	<option value="不限" {if $worktype=='不限'} selected{/if}>不限</option>	
+	<option value="全职" {if $worktype=='全职'} selected{/if}>全职</option>
+	<option value="兼职" {if $worktype=='兼职'} selected{/if}>兼职</option>
+	<option value="实习" {if $worktype=='实习'} selected{/if}>实习</option>	
+	</select>
+	</td>
+</tr>
+<tr> 
+<td class="td_right">工作经历</td>
+<td valign="top" class="td_left">
+<textarea name="apply[story]" id="story" cols="80" rows="6">{$story}</textarea>
+</td>
+</tr>
+
+<tr> 
+  <td class="td_right">欲从事岗位</td>
+  <td class="td_left">{$editstation} <font color="#FF0000">*</font></td>
+</tr>
+<tr> 
+	<td class="td_right">工作年限</td>
+	<td class="td_left" >
+	<input name="apply[experience]" type="text" id="experience" size="20" value="{$experience}">
+	</td>
+</tr>
+</tr>
+
+<tr> 
+	<td class="td_right">薪资要求</td>
+	<td class="td_left">
+	<input name="apply[pay]" type="text" id="pay" size="6" value="{$pay}">/月 0 为面议
+	</td>
+</tr>
+<tr>
+<td class="td_right">期待地区</td>
+<td class="td_left">
+<input name="apply[area]" type="text" id="area" size="36" value="{$area}">
+</select>
+</td>
+</tr>
+<tr> 
+	<td class="td_right">上岗时间</td>
+	<td class="td_left">
+	<select id="period" name="apply[period]">
+	<option value="0" {if $period=='0'} selected{/if}>随叫随到</option>
+	<option value="2" {if $period=='2'} selected{/if}>两天内</option>
+	<option value="3" {if $period=='3'} selected{/if}>三天内</option>
+	<option value="7" {if $period=='7'} selected{/if}>一周内</option>
+	<option value="30" {if $period=='30'} selected{/if}>一个月</option>
+	<option value="90" {if $period=='90'} selected{/if}>三个月</option>
+	</select>
+	</td>
+</tr>
+<tr> 
+<td class="td_right">个人鉴定</td>
+<td valign="top" class="td_left">
+<textarea name="apply[introduce]" id="introduce" cols="80" rows="15">{$introduce}</textarea>
+</td>
+</tr>
+<tr> 
+<td class="td_right">联 系 人</td>
+<td valign="top" class="td_left">
+<input name="apply[linkman]" type="text" id="linkman" size="10" value="{$linkman}"> <font color="#FF0000">*</font>
+真实姓名或王先生、李女士</td>
+</tr>
+<tr> 
+<td class="td_right">毕业时间</td>
+<td valign="top" class="td_left">
+<input name="apply[graduatetime]" type="text" id="graduatetime" size="10" value="{$graduatetime}">
+</td>
+
+</tr>
+<tr> 
+<td class="td_right">毕业学校</td>
+<td valign="top" class="td_left">
+<input name="apply[school]" type="text" id="school" size="30" value="{$school}"> <font color="#FF0000">*</font>
+</td>
+</tr>
+<tr> 
+<td class="td_right">所学专业</td>
+<td valign="top" class="td_left">
+<input name="apply[specialty]" type="text" id="specialty" size="30" value="{$specialty}"> <font color="#FF0000">*</font>
+</td>
+</tr>
+
+</table>
+
+<table cellpadding="2" cellspacing="1" class="righttable">
+  <tr>
+    <td width="15%" class="td_right">
+	</td>
+    <td class="td_left" height="25">
+	<input type="hidden" name="applyid" value="{$applyid}" />
+	<input type="submit" name="dosubmit" value=" 确认修改 " />
+	</td>
+  </tr>
+</table>
+</form>
+
+</div></div>
+</td>
+</tr>
+</table>
+
+{template 'yp','footer'}

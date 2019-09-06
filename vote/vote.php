@@ -19,7 +19,8 @@ if(!$attribute)//Forbid guest vote
 			if($r['voteuser'] == $_username)
 			showmessage($LANG['already_vote'],'goback');
 		}
-		$optionids = is_array($op) ? implode(',',$op) : $op;
+		$optionids = is_array($op) ? implode(',',$op) : intval($op);		
+		if($optionids) $optionids = new_addslashes($optionids);
 		$totalnumberadd = is_array($op) ? count($op) : 1;
 
 		$db->query("UPDATE ".TABLE_VOTE_OPTION." SET number = number+1 WHERE optionid IN ($optionids) ");
@@ -30,7 +31,8 @@ if(!$attribute)//Forbid guest vote
 }
 else
 {//Allow guest vote
-	$optionids = is_array($op) ? implode(',',$op) : $op;
+	$optionids = is_array($op) ? implode(',',$op) : intval($op);
+	if($optionids) $optionids = new_addslashes($optionids);
 	$totalnumberadd = is_array($op) ? count($op) : 1;
 	//Inspects ip in the same day whether already voted
 	$outTime= (int)($PHP_TIME - 24*60*60);

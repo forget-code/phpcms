@@ -52,7 +52,7 @@ if($dosubmit)
 	$down['catid'] = $catid;
 	$down['editor'] = $_username;
 	$down['urlruleid'] = $down['ishtml'] ? $html_urlrule : $php_urlrule;
-	$down['addtime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $down['addtime']) ? strtotime($down['addtime'].' '.date('H:i:s',$PHP_TIME)) : $PHP_TIME;
+	$down['addtime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})/', $down['addtime']) ? strtotime($down['addtime']) : $PHP_TIME;
 	$down['edittime'] = $PHP_TIME;
 	if(isset($down['arrposid']))
 	{
@@ -119,7 +119,7 @@ else
 
 	}
 	$CAT = cache_read('category_'.$catid.'.php');
-	$addtime = date('Y-m-d',$addtime);
+	$addtime = date('Y-m-d H:i:s',$addtime);
 	$type_select = type_select('down[typeid]', $LANG['type'], $typeid);
 	$style_edit = style_edit("down[style]", $style);
 	$keywords_select = keywords_select($channelid);

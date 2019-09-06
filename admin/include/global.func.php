@@ -460,7 +460,7 @@ function update_freelink($type)
 	{
 		$freelinks[$k]['image'] = linkurl($freelink['image']);
 	}
-	if($types[$type]['showtype'] == 'freelink_slide')
+	if($types[$type]['showtype'] == 'freelink_slide' || $types[$type]['showtype'] == 'freelink_slide-3d')
 	{
 		$flash_pics = '';
 		$flash_links = '';

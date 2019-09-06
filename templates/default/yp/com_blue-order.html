@@ -1,0 +1,179 @@
+<script language="javascript">
+<!--
+function CheckForm()
+{
+	if ($F('linkman') == "")
+	{
+		alert("用户名不能为空！")
+		Field.focus('linkman');
+		return false
+	}
+	if ($F('telephone') == "")
+	{
+		alert("电话不能为空！")
+		Field.focus('telephone');
+		return false
+	}
+	
+	if ($F('email') == "")
+	{
+		alert("Email地址不能为空！")
+		Field.focus('email');
+		return false
+	}
+	else
+	{
+		var mail = $F('email');
+		if(!RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(mail))
+		{
+			alert("Email 地址错误，请检查")
+			Field.focus('email');
+			return false
+		}
+	}
+	if ($F('content') == "")
+	{
+		alert("内容不能为空！")
+		Field.focus('content');
+		return false
+	}
+}
+
+function countprice(number,price)
+{
+	var total = parseInt(number)*price;
+	var totals = Math.round(total*Math.pow(10,2))/Math.pow(10,2);
+	$('totalprice').innerHTML= totals+" 元";
+}
+//-->
+</script>
+<table border="0" width="100%" id="table7" cellpadding="0" style="border-collapse: collapse" height="6">
+	<tr>
+		<td></td>
+	</tr>
+</table>
+<!-- End ImageReady Slices -->
+	<div align="center">
+	<table width="760" height="271" border="0" cellpadding="0" cellspacing="0" id="table3" style="border-collapse: collapse">
+		<tr>
+			<td width="178" valign="top">
+			<table border="0" width="178" id="table4" cellpadding="0" style="border-collapse: collapse" height="24">
+				<tr>
+					<td background="{$skindir}/images/sj_9.gif">
+					<table border="0" width="77" id="table5" cellpadding="0" style="border-collapse: collapse" height="24">
+						<tr>
+							<td width="77" background="{$skindir}/images/sj_8.gif">&nbsp;<span class="column_b"> 热点导航</span></td>
+						</tr>
+					</table>
+					</td>
+				</tr>
+			</table>
+			<table border="0" width="100%" id="table8" bgcolor="#F9F9F9" cellpadding="0" style="border-collapse: collapse">
+				<tr>
+					<td valign="top">
+					<TABLE cellSpacing="2" cellPadding="1" width="100%" border="0">
+{loop $m_user $ms}
+<TR bgColor="#F1F3F5" onmouseout="this.style.backgroundColor='#F1F3F5'"  onmouseover="this.style.backgroundColor='#BFDFFF'">
+	<TD align="right" height="25">
+	<SPAN style="PADDING-RIGHT: 70px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px">
+	<a href="{$ms[url]}">{$ms[menutitle]}</a>
+	</SPAN>
+	</TD>
+</TR>
+{/loop}
+</TABLE>
+					</td>
+				</tr>
+			</table>
+<table border="0" width="100%" id="table9" cellpadding="0" style="border-collapse: collapse" height="6">
+	<tr>
+		<td></td>
+	</tr>
+</table>
+            </td>
+			<td width="6">　</td>
+		  <td valign="top"><table border="0" width="100%" id="table29" cellpadding="0" style="border-collapse: collapse" height="35">
+	<tr>
+		<td width="89" background="{$skindir}/images/sj_25.gif"><span class="column_b">&nbsp;&nbsp;&nbsp;&nbsp; 在线订购</span>  </td>
+		<td background="{$skindir}/images/sj_26.gif" width="389">　</td>
+	    <td background="{$skindir}/images/sj_26.gif" width="83">　</td>
+	</tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="3" id="table30" style="border-collapse: collapse">
+	<tr>
+		<td valign="top">
+		<div align="center">
+			<table cellpadding="2" width="100%" border="1" bordercolor="#EEEEEE" style="border-collapse: collapse" >
+          <form action="{$orderurl}index.html" method="post" name="myform" id="myform" onsubmit='return CheckForm();'>
+            <tr>
+              <td >订购物品：</td>
+              <td ><B>{$title}</B>
+            </td>
+              <td >订购数量：</td>
+              <td ><input name="number" id="number" type="text" size="10" title="只能为整数" value="1" onBlur="countprice(this.value,'{$price}');"></td>
+            </tr>
+            <tr>
+              <td >单价：</td>
+              <td >{$price} 元</td>
+              <td >总计：</td>
+              <td ><span id="totalprice" >{$price} 元</span></td>
+            </tr>
+			<tr>
+              <td >订购要求：</td>
+              <td colspan="3"><textarea name="content" id="content" rows="6" cols="60"></textarea>
+              </td>
+            </tr>
+			<tr>
+              <td colspan="4">您的联系方式：</td>
+            </tr>
+			<tr>
+              <td >订购人：</td>
+              <td ><input name="linkman" id="linkman" type="text" size="20" maxlength="10" value="{$_username}"/>
+                * </td>
+              <td >传真：</td>
+              <td ><input name="fax" id="fax" type="text" size="20"></td>
+            </tr>
+            <tr>
+              <td >联系电话：</td>
+              <td ><input name="telephone" id="telephone" type="text" size="20" maxlength="50" value="{$telephone}"/>
+                * </td>
+              <td >QQ：</td>
+              <td ><input name="qq" id="qq" type="text" size="20" maxlength="9" value="{$qq}"/>              </td>
+            </tr>
+            <tr>
+              <td >所在单位：</td>
+              <td ><input name="unit" id="unit" type="text" size="20">
+                * </td>
+              <td >MSN：</td>
+              <td ><input name="msn" id="msn" type="text" size="20" value="{$msn}"></td>
+            </tr>
+            <tr>
+              <td >Email：</td>
+              <td colspan="3"><input name="email" id="email" type="text" size="20" value="{$_email}"/>
+                * </td>
+            </tr>
+            
+            <tr>
+              <td ></td>
+              <td colspan="3"><input name="dosubmit" type="submit" value=" 提交订单 " />
+                  <input name="companyid" type="hidden" value="{$product[companyid]}" />
+				  <input name="item" type="hidden" value="{$item}" />
+				  <input name="label" type="hidden" value="{$label}" />
+			</td>
+            </tr>
+          </form>
+		  </table></div>
+		</td>
+	</tr>
+</table>
+</td>
+		</tr>
+</table>
+</div>
+<div align="center">
+	<table width="700" height="11" border="1" cellpadding="0" id="table42" style="border-collapse: collapse; border-left-width:0px; border-right-width:0px; border-top-width:0px" bordercolor="#FFA400">
+		<tr><td style="border-left-style: none; border-left-width: medium; border-right-style: none; border-right-width: medium; border-top-style: none; border-top-width: medium" height="5"></td>
+		</tr>
+</table>
+</div>
+{template 'yp','com_blue-footer'}

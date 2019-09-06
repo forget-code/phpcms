@@ -25,6 +25,4 @@ if(is_array($childcats))
 		$subcats[$i] = subcat($mod,$cat['catid']);
 	}
 }
-$skinid = 'default';
-$skindir = PHPCMS_PATH.'templates/'.$CONFIG['defaulttemplate'].'/skins/'.$skinid;
 ?>

@@ -1,0 +1,56 @@
+<style>
+.house_pic {float:left;margin:5px;text-align:center;}
+.house_pic img {padding:2px;border:1px solid red;}
+/*图片滚动*/
+#demo {
+margin-left:10px;
+background: #FFF;
+overflow:hidden;
+}
+#demo img {
+width:111px;
+border: 1px solid #F2F2F2;
+}
+#indemo {
+float: left;
+width: 800%;
+}
+#demo1 {
+float: left;
+}
+#demo2 {
+float: left;
+}
+</style>
+<div id="demo" style="width: 504px;">
+<div id="indemo">
+<div id="demo1">
+{loop $displays $display}
+<div class="house_pic"><ul><li><a href="{$display[linkurl]}" target="_blank"><IMG src="{$display[thumb]}" alt="{$display[name]}" height=75 width=98 border=1 style="BORDER:#000000 1px solid"></a></li>
+<li><a href="{$display[linkurl]}" target="_blank">{$display[name]}</a></li>
+</ul></div>
+{/loop}
+</div>
+<div id="demo2"></div>
+</div>
+</div>
+
+<script type="text/javascript">
+ var speed=50; //数字越大速度越慢 
+var tab=document.getElementById("demo"); 
+var tab1=document.getElementById("demo1"); 
+var tab2=document.getElementById("demo2"); 
+tab2.innerHTML=tab1.innerHTML; 
+function Marquee(){ 
+if(tab2.offsetWidth-tab.scrollLeft<=0) 
+tab.scrollLeft-=tab1.offsetWidth 
+else{ 
+tab.scrollLeft++; 
+} 
+} 
+var MyMar=setInterval(Marquee,speed); 
+tab.onmouseover=function() {clearInterval(MyMar)
+}; 
+tab.onmouseout=function() {MyMar=setInterval(Marquee,speed)
+}; 
+</script>

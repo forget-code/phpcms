@@ -1,0 +1,44 @@
+{template 'wenba','header'}
+<div id="middle">
+<div align="left" id="path"><a href="">问吧</a> &gt;&gt; 搜索结果</div>
+<div class="t3 bgb bcb" align="left"><font color='FF0000'>'{$word}'搜索结果 ({$num})</font></div>
+<div class="b3 bcb mb12">
+<div class="w100">
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<tr>
+<td align="center" width="40%" height="36">标题</td>
+<td align="center" width="20%">回答数</td>
+<td align="center" width="20%">状态</td>
+<td align="center" width="20%">提问时间</td>
+</tr>
+<!--{loop $search_list $search}-->
+<tr height="30">
+	<td align="left" width="40%" height="30" class="line_1">
+		•&nbsp;<a href="{$PHPCMS[siteurl]}{$MOD[moduledir]}/question.php?qid={$search['qid']}">
+		{$search['title']}
+		</a>
+	</td>
+	<td align="center" width="20%" class="line_1">{$search['answercount']}</td>
+	<td align="center" width="20%" class="line_1">
+	<!--{if $search['status']==1}-->
+	<img src="{$PHPCMS[siteurl]}images/icn_time.gif">
+	<!--{elseif $search['status']==2}-->
+	<img src="{$PHPCMS[siteurl]}images/icn_ok.gif">
+	<!--{elseif $search['status']==3}-->
+	<img src="{$PHPCMS[siteurl]}images/icn_vote.gif">
+	<!--{else}-->
+	<img src="{$PHPCMS[siteurl]}images/icn_cancel.gif">
+	<!--{/if}-->
+	</td>
+	<td align="center" width="20%" class="line_1">{$search['asktime']}</td>
+</tr>
+<!--{/loop}-->
+</table>
+</div>
+{if $pages}
+<br />
+<div align="center">{$pages}</div>
+{/if}
+</div>
+</div>
+{template 'phpcms','footer'}

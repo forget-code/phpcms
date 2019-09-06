@@ -1,0 +1,7 @@
+{php $j=1;}
+{loop $movies $i $movie}
+{php if($j>3) $j=4;}
+<li><span class="movecli{$j}">{if $i<9}0{/if}{intval($i+1)}&nbsp;</span>
+<a href="{$movie[linkurl]}" title="{$movie[title]}" class="movie_link_1" {$target}>{$movie[stitle]}</a></li>
+{php $j++;}
+{/loop}

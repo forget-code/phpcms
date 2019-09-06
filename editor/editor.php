@@ -124,8 +124,11 @@ var isIE = (document.all && window.ActiveXObject && !window.opera) ? true : fals
 <img src="<?PHP echo PHPCMS_PATH;?>editor/images/img.gif" alt="插入图片" onclick="pic()" onmouseover="this.className='ov';" onmouseout="this.className='ot';" />
 
 <img src="<?PHP echo PHPCMS_PATH;?>editor/images/upfile.gif" alt="插入附件" onclick="att()" onmouseover="this.className='ov';" onmouseout="this.className='ot';" />
-
 <?php
+if($CHA['module'] == 'article') { ?>
+<img src="<?PHP echo PHPCMS_PATH;?>editor/images/addnext.gif" alt="插入分页符[next]" onclick="cc_Insert('[next]')" onmouseover="this.className='ov';" onmouseout="this.className='ot';" />
+<?php
+}
 if($PHPCMS['cc_uid']) echo '<object width="86" height="22"><param name="wmode" value="transparent" /><param name="allowScriptAccess" value="always" /><param name="movie" value="http://union.bokecc.com/flash/plugin_'.$PHPCMS['cc_style'].'.swf?userID='.$PHPCMS['cc_uid'].'&type=Phpcms" /><embed src="http://union.bokecc.com/flash/plugin_'.$PHPCMS['cc_style'].'.swf?userID='.$PHPCMS['cc_uid'].'&type=Phpcms" type="application/x-shockwave-flash" width="86" height="22" allowScriptAccess="always"></embed></object>';
 ?>
 </td>

@@ -45,18 +45,23 @@ else
 		$pagenumber = ceil($items/$maxperpage);
 		$pagenumber = $pagenumber ? $pagenumber : 1;
 	}
+	for($n = $page; $n <= $pagenumber; $n++)
+	{
+		$filenames[$n] = PHPCMS_ROOT.'/'.cat_url('path', $catid, $n);
+	}
+
 	for(; $page <= $pagenumber; $page++)
 	{
 		ob_start();
 		include template($mod, $templateid);
 		$data = ob_get_contents();
 		ob_clean();
-		$filename = PHPCMS_ROOT.'/'.cat_url('path', $catid, $page);
+		$filename = $filenames[$page];
 		$filepath = dirname($filename);
 		is_dir($filepath) or dir_create($filepath);
 		file_put_contents($filename,$data);
 		@chmod($filename, 0777);
-		if($page == 1)
+		if($page == 1 && !$child)
 		{
 			$filename = PHPCMS_ROOT.'/'.cat_url('path', $catid, 0);
 			file_put_contents($filename,$data);

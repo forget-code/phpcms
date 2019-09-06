@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 defined('IN_PHPCMS') or exit('Access Denied');
 require PHPCMS_ROOT.'/images/ext/ext.php';
 $realdir = isset($realdir) ? $realdir : '';

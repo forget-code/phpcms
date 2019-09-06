@@ -1,0 +1,52 @@
+{template 'phpcms','header'}
+<table width="980" border="0" class="member">
+  <tr>
+    <td align="center">
+<div class="memberborder_3">
+<div class="memberborder_2">
+<h1>广告报价</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tr>
+<td width="*" class="td_center">广告位名称</td>
+<td width="8%" class="td_center">所属频道</td>
+<td width="10%" class="td_center">版位尺寸</td>
+<td width="10%" class="td_center">广告价格</td>
+<td width="10%" class="td_center">已定用户数</td>
+<td width="12%" class="td_center">到期时间</td>
+<td width="10%" class="td_center">是否租出</td>
+<td width="10%" class="td_center">预订</td>
+</tr>
+{loop $places $place}
+<tr onmouseout="this.style.backgroundColor='#ffffff'" onmouseover="this.style.backgroundColor='#EBF6FB'" bgColor="#ffffff">
+<td class="td_left">{$place['placename']}</td>
+<td class="td_center">{if $place['channelid']}{$CHANNEL[$place['channelid']]['channelname']}{else}全站{/if}</td>
+<td class="td_center">{$place['width']}x{$place['height']}</td>
+<td class="td_center">{$place['price']}元</td>
+<td class="td_center">{$place['ads']['users']}</td>
+<td class="td_center">{$place['ads']['todate']}</td>
+<td class="td_center">{$place['status']}</td>
+<td class="td_center"><a href="{$MOD[linkurl]}sign.php?placeid={$place['placeid']}">我要预订</A>
+</td>
+</tr>
+{/loop}
+</table>
+
+<table width="100%" height="30" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="center">{$pages}</td>
+  </tr>
+</table>
+
+<table cellpadding="0" cellspacing="0" border="0" width="100%" height="10">
+  <tr>
+    <td></td>
+  </tr>
+</table>
+
+</div>
+</div>
+
+</td>
+  </tr>
+</table>
+{template 'phpcms','footer'}

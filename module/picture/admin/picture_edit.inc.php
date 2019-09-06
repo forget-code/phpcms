@@ -55,7 +55,7 @@ if($dosubmit)
 	$picture['catid'] = $catid;
 	$picture['editor'] = $_username;
 	$picture['urlruleid'] = $picture['ishtml'] ? $html_urlrule : $php_urlrule;
-	$picture['addtime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $picture['addtime']) ? strtotime($picture['addtime'].' '.date('H:i:s',$PHP_TIME)) : $PHP_TIME;
+	$picture['addtime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})/', $picture['addtime']) ? strtotime($picture['addtime']) : $PHP_TIME;
 	$picture['edittime'] = $PHP_TIME;
 	if(isset($picture['arrposid']))
 	{
@@ -110,7 +110,7 @@ else
 	extract(new_htmlspecialchars($pic->get_one()));
 	$pictureurls = trim($pictureurls);
 	$CAT = cache_read("category_$catid.php");
-	$addtime = date('Y-m-d',$addtime);
+	$addtime = date('Y-m-d H:i:s',$addtime);
 	$type_select = type_select('picture[typeid]', $LANG['type'], $typeid);
 	$style_edit = style_edit("picture[style]", $style);
 	$keywords_select = keywords_select($channelid);

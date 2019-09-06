@@ -18,8 +18,13 @@ if(is_array($TEMP['fields'][$tablename]))
 {
 	foreach($TEMP['fields'][$tablename] as $k=>$v)
 	{
-		$myfield = $v['name'];
-		$fields[] = array('title'=>$v['title'],'value'=>$$myfield);
+		if($v['fieldid']>9)
+		{
+			$myfield = $v['name'];
+			if($v['inputtool']=='imageupload' || $v['inputtool']=='fileupload')
+			$$myfield = "<a href='".linkurl($$myfield)."' title='".$v['title']."' id='".$v['name']."' target='_blank'/>".linkurl($$myfield)."</a>";
+			$fields[] = array('title'=>$v['title'],'value'=>$$myfield);
+		}
 	}
 }
 $CAT = isset($TEMP['cat'][$catid]) ? $TEMP['cat'][$catid] : $TEMP['cat'][$catid] = cache_read('category_'.$catid.'.php');
@@ -55,12 +60,14 @@ if($mode == 0)
 else
 {
 	$servers = cache_read('mirror_server.php');
+	$morror_dowm_url = $downurls;
 	$downurls = array();
 	$r = array();
 	foreach($servers as $k=>$server)
 	{
 		$r['id'] = $k;
 		$r['name'] = $server['showtype'] ? '<img src="'.$server['logo'].'" alt="'.$server['name'].'" />' : $server['name'];
+		$r['url'] = $server['url'].$morror_dowm_url;
 		$downurls[] = $r;
 	}
 }

@@ -151,7 +151,7 @@ class member
         
 		$memberinfo = new_htmlspecialchars($memberinfo);
 
-		$table_member_fields = array('email','showemail','chargetype','point','begindate','enddate');
+		$table_member_fields = array('email','question','answer','showemail','chargetype','point','begindate','enddate');
 		$table_member_info_fields = array('truename','gender','birthday','idtype','idcard','province','city','area','industry','edulevel','occupation','income','telephone','mobile','address','postid','homepage','qq','msn','icq','skype','alipay','paypal','userface','facewidth','faceheight','sign');
 		$member_sql = $member_info_sql = '';
 		foreach($memberinfo as $k=>$v)

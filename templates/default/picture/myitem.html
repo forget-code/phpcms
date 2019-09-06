@@ -44,7 +44,7 @@ if(obj.value.indexOf("\r") == -1){
 var p = obj.value.substring(obj.value.lastIndexOf("|", i)+1, i)+obj.value.substring(i, obj.value.indexOf(str, i));
 var l = obj.value.substring(i, obj.value.length);
 if(l.indexOf("\n")==-1) p = obj.value.substring(obj.value.lastIndexOf("|", i)+1, i)+l;
-var u = <?php echo "'";echo imgurl($PHPCMS['siteurl']);echo "'"; ?>;
+var u = <?php echo "'";echo imgurl($PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$MOD['upload_dir'].'/');echo "'"; ?>;
 if(p.indexOf("://") != -1) u = '';
 var m = p.match(/^[^\r\n\|]+\.(jpg|gif|png|bmp)$/);
 if(m != null)
@@ -115,7 +115,7 @@ if(m != null)
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果您使用的是IE6+浏览器，在图片名上双击鼠标可在新窗口中弹出图片
 		</td>
 		<td valign="top" style="light-height:22px;">
-		<input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=temp&type=both&width=150&height=150','upload','360','300')">
+		<input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=temp&type=both&width=150&height=150&upload_dir={$MOD[upload_dir]}','upload','360','300')">
 		<input type="hidden" name="temp" id="temp" value="" onpropertychange="Picurls();">
 		</td>
 		</tr>

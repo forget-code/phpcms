@@ -27,6 +27,19 @@ function SelectPic(){
     $('thumb').value=s[0];
   }
 }
+function CutPic(){
+  var thumb=$('thumb').value;
+	if(thumb=='')
+	{
+		alert('请先上传标题图片');
+		$('thumb').focus();
+		return false;
+	}
+  var arr=Dialog('corpandresize/ui.php?<?=$PHPCMS[siteurl]?>'+thumb,'',700,500);
+  if(arr!=null){
+    $('thumb').value=arr;
+  }
+}
 function SelectKeywords(){	
   var s=Dialog('?mod=phpcms&file=keywords&keyid=<?=$channelid?>&select=1','',700,500);
   if(s!=null){
@@ -175,20 +188,15 @@ function doKeywords(ID)
     </td>
 	</tr>
 	</table>
-
    </td>
-    </tr>
-  
+    </tr> 
 	 <tr> 
       <td class="tablerow">标题图片</td>
       <td class="tablerow"><input name="picture[thumb]" type="text" id="thumb" size="58" value="<?=$thumb?>">  <input type="button" value="上传图片" onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&channelid=<?=$channelid?>&uploadtext=thumb&type=thumb&width=<?=$MOD['thumb_width']?>&height=<?=$MOD['thumb_height']?>','upload_thumb','350','350')">
 	   <input name="fromupload" type="button" id="fromupload" value="从已经上传图片中选择" onclick="SelectPic()" style="width:150px;"/>
+	   <input name="cutpic" type="button" id="cutpic" value="裁剪图片" onclick="CutPic()"/>
       </td>
     </tr>
-
-
-
-
 	<tr>
 	<td class="tablerow">图片名称|地址 <font color="#FF0000">*</font><br/>
 		<a href="###" onclick="clipboardData.setData('text','[d]');alert('[d]已经复制到您的剪切板，Ctrl+V粘贴到需要删除的地址末尾即可彻底删除该地址！');" title="不建议直接在编辑框删除，否则不能删除对应文件！&#10;如果您不慎上传错了文件，此功能将十分有用！&#10;点击复制[d]"><font color="blue">Tips：</font>如果需要彻底删除某个图片地址（包括文件），请在其后加标识符[d]</a></td>
@@ -214,9 +222,16 @@ function doKeywords(ID)
 	<tr title="Tips:系统提供的上传功能只适合上传比较小的文件（2M以内）。如果软件比较大，请先使用FTP上传，而不要使用系统提供的上传功能，以免上传出错或过度占用服务器的CPU资源。">
 	<td class="tablerow"><a href="?mod=<?=$mod?>&file=upload&channelid=<?=$channelid?>" target="upload">上传文件</a></td>
 	<td class="tablerow">
-	<iframe id="upload" name="upload" src="?mod=<?=$mod?>&file=upload&channelid=<?=$channelid?>" border="0" vspace="0" hspace="0" marginwidth="0" marginheight="0" framespacing="0" frameborder="0" scrolling="no" width="100%" height="50"></iframe>
+	<iframe id="uploads" name="uploads" src="?mod=<?=$mod?>&file=upload&channelid=<?=$channelid?>" border="0" vspace="0" hspace="0" marginwidth="0" marginheight="0" framespacing="0" frameborder="0" scrolling="no" width="100%" height="50"></iframe>
 	</td>
 	</tr>
+	<tr> 
+      <td class="tablerow">转向链接</td>
+      <td class="tablerow">
+       <input type="text" name="picture[linkurl]" id="linkurl"  size="50" maxlength="255"<? if(!$islink) { ?>disabled<? } ?> value="<? if($islink) { ?><?=$linkurl?><? } ?>"><input name="picture[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" <? if($islink) { ?>checked<? } ?>><font color="#FF0000">转向链接</font>
+	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
+     </td>
+    </tr>
     <tr> 
       <td class="tablerow">推荐位置</td>
       <td class="tablerow">
@@ -259,17 +274,9 @@ function doKeywords(ID)
   </tr>
 
 	<tr> 
-      <td class="tablerow">添加日期</td>
-      <td class="tablerow"><?=date_select('picture[addtime]', $addtime)?>&nbsp;格式：yyyy-mm-dd</td>
+      <td width="15%" class="tablerow">添加日期</td>
+      <td class="tablerow"><?=date_select('picture[addtime]', $addtime,'%Y-%m-%d %H:%M:%S')?></td>
     </tr>
-   <tr> 
-      <td class="tablerow">转向链接</td>
-      <td class="tablerow">
-       <input type="text" name="picture[linkurl]" id="linkurl"  size="50" maxlength="255"<? if(!$islink) { ?>disabled<? } ?> value="<? if($islink) { ?><?=$linkurl?><? } ?>"><input name="picture[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" <? if($islink) { ?>checked<? } ?>><font color="#FF0000">转向链接</font>
-	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
-     </td>
-    </tr>
-	
     <tr> 
       <td class="tablerow">是否生成</td>
       <td class="tablerow"><input type="radio" name="picture[ishtml]" value="1" <?php if($ishtml==1) {?>checked <?php } ?>  onclick="$('htmlrule').style.display='';$('htmldir').style.display='';$('htmlprefix').style.display='';$('phprule').style.display='none';"> 是 <input type="radio" name="picture[ishtml]" value="0" <?php if($ishtml==0) {?>checked <?php } ?> onclick="$('htmlrule').style.display='none';$('htmldir').style.display='none';$('htmlprefix').style.display='none';$('phprule').style.display='';"> 否</td>

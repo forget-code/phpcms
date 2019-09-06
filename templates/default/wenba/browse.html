@@ -1,0 +1,60 @@
+{template 'wenba','header'}
+<div id="path"><a href="{$MOD['linkurl']}">问吧首页</a> >> {$position}</div>
+<div id="left2">
+<div class="w100">
+<!--{if $child==1}-->
+<div class="t3 bgb bcb">{$catname}</div>
+<div class="b3 bcb mb12">
+<div class="w100">
+<table cellspacing="0" cellpadding="0" width="100%" border="0">
+<!--{loop $arrchild $key $sl}-->
+<!--{if !($key%4)}--><tr><!--{/if}-->
+<td class="f14" width="25%" height="22"><li><a href="{$PHPCMS[siteurl]}{$MOD[moduledir]}/browse.php?catid={$sl['catid']}">{$sl['catname']}</a>({$sl['items']})</li></td>
+<!--{/loop}-->
+</table>
+</div>
+</div>
+<!--{/if}-->
+<div id="sub">
+<!--{if $option=='all'}-->
+<span>全部问题</span>
+<!--{else}-->
+<a href="{$linkurl}&option=all"><b>全部问题</b></a>
+<!--{/if}-->
+<!--{if $option=='solve'}-->
+<span>已解决问题</span>
+<!--{else}-->
+<a href="{$linkurl}&option=solve"><b>已解决问题</b></a>
+<!--{/if}-->
+<!--{if $option=='nosolve'}-->
+<span>待解决问题</span>
+<!--{else}-->
+<a href="{$linkurl}&option=nosolve"><b>待解决问题</b></a>
+<!--{/if}-->
+<!--{if $option=='vote'}-->
+<span>投票中问题</span>
+<!--{else}-->
+<a href="{$linkurl}&option=vote"><b>投票中问题</b></a>
+<!--{/if}-->
+<!--{if $option=='highscore'}-->
+<span>高分问题</span>
+<!--{else}-->
+<a href="{$linkurl}&option=highscore"><b>高分问题</b></a>
+<!--{/if}-->
+</div>
+
+	
+{tag_栏目页问题标签}
+
+</div>
+</div>
+<div id="right2">
+<div class="t3 bcb bgb">热点问题</div>
+<div class="b3 bcb mb12">
+<div class="w100">
+{tag_栏目热点问题}
+</div>
+</div>
+</div>
+</div>
+{template 'phpcms','footer'}

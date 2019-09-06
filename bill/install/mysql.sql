@@ -1,4 +1,4 @@
-INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('推广奖励', 'bill', 'bill', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn/', 'phpcms@163.com', '推广奖励', '', '', 'a:3:{s:4:"type";s:6:"points";s:6:"number";s:2:"10";s:6:"domain";s:9:"localhost";}', 0, '0000-00-00', '0000-00-00', '0000-00-00');
+INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('推广奖励', 'bill', 'bill', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn/', 'phpcms@163.com', '推广奖励', '', '', '', 0, '0000-00-00', '0000-00-00', '0000-00-00');
 
 DROP TABLE IF EXISTS `phpcms_bill`;
 CREATE TABLE IF NOT EXISTS `phpcms_bill` (

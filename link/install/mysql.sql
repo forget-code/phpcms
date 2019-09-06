@@ -1,4 +1,4 @@
-INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('友情链接', 'link', 'link', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn/', 'phpcms@163.com', '模块介绍', '许可协议', '使用帮助', 'a:5:{s:12:"seo_keywords";s:12:"友情链接";s:15:"seo_description";s:12:"友情链接";s:9:"uploaddir";s:7:"linkpic";s:15:"enablecheckcode";s:1:"1";s:7:"ischeck";s:1:"1";}', 0, '0000-00-00', '0000-00-00', '0000-00-00');
+INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('友情链接', 'link', 'link', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn/', 'phpcms@163.com', '模块介绍', '许可协议', '使用帮助', '', 0, '0000-00-00', '0000-00-00', '0000-00-00');
 
 DROP TABLE IF EXISTS `phpcms_link`;
 CREATE TABLE `phpcms_link` (

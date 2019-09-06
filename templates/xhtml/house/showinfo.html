@@ -1,0 +1,91 @@
+{template 'house','header'}
+<style type="text/css">
+<!--
+.fc {border: 1px solid #FDE0C6;background-color: #FEF7EF;padding: 8px;
+width:958px;margin:0 auto;
+margin-bottom:8px;}
+-->
+</style>
+<div class="fc">{include PHPCMS_ROOT.'/data/house_search_inc.html'}</div>
+<div  id="censent">
+  <div id="homeleft">
+    <div class="boxmargin" align="center"><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=1"><img src="{$skindir}/house_new/images/home/top_03.gif" /></a><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=2"><img src="{$skindir}/house_new/images/home/top_04.gif" /></a><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=3"><img src="{$skindir}/house_new/images/home/top_06.gif" /></a><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=4"><img src="{$skindir}/house_new/images/home/top_07.gif" /></a><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=5"><img src="{$skindir}/house_new/images/home/top_08.gif" /></a><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=6"><img src="{$skindir}/house_new/images/home/top_09.gif" /></a></div>
+    <ul class="xw-1">
+      <li class="xw-left">
+        <div class="xw-onn">新楼盘搜索</div>
+      </li>
+      <li class="xw-right"></li>
+    </ul>
+    <div class="boxmargin xianhome">
+     {include PHPCMS_ROOT.'/data/building_search_inc.html'}
+    </div>
+    <ul class="xw-1">
+      <li class="xw-left">
+        <div class="xw-onn"><span>合租搜索</span></div>
+      </li>
+      <li class="xw-right"></li>
+    </ul>
+    <div class="boxmargin xianhome">
+	{include PHPCMS_ROOT.'/data/coop_search_inc.html'}
+    </div>
+  </div>
+  <div id="homeright">
+    <div id="bt11" class="boxmargin">当前位置:<a href="{$MOD[linkurl]}">房产首页</a> &gt;&gt; <a href="{$CAT[$infocat][linkurl]}">{$infotypename}信息</a> &gt;&gt; {$name}</div>
+    <div class="boxmargin">
+        <ul>
+      <a href="{$MOD[linkurl]}frontmgr.php?action=add&type=1"><img src="{$skindir}/house_new/images/home/fbcz.gif" /></a>
+      <a href="{$MOD[linkurl]}frontmgr.php?action=add&type=2"><img src="{$skindir}/house_new/images/home/fbqz.gif" /></a>
+      <a href="{$MOD[linkurl]}frontmgr.php?action=add&type=3"><img src="{$skindir}/house_new/images/home/fbhz.gif" /></a>
+      <a href="{$MOD[linkurl]}frontmgr.php?action=add&type=4"><img src="{$skindir}/house_new/images/home/fbcs.gif" /></a>
+      <a href="{$MOD[linkurl]}frontmgr.php?action=add&type=5"><img src="{$skindir}/house_new/images/home/fbqg.gif" /></a>
+      <a href="{$MOD[linkurl]}frontmgr.php?action=add&type=6"><img src="{$skindir}/house_new/images/home/fbzh.gif" /></a>
+      <a href="{$MOD[linkurl]}displaymgr.php?action=add"><img src="{$skindir}/house_new/images/home/fblp.gif" /></a>
+		</ul>
+    </div>
+    <div class="qznr">
+      <ul>
+        <li><span>信息类别：</span>{$infotypename}</li>
+        <li><span>{if $infocat==2||$infocat==5}要求{/if}所在区域：</span>{$AREA[$areaid][areaname]}</li>
+        <li><span>所在楼层：</span>第{$currentfloor}层/共{$totalfloor}层</li>
+        <li><span>建筑面积：</span>{$buildarea} ㎡</li>
+        <li><span>物业管理：</span>{$manage}</li>
+        <li><span>建成时间：</span>{$buildtime}年左右</li>
+        <li><span>{if ($infocat==1||$infocat==2||$infocat==3)}租&nbsp;&nbsp;&nbsp;&nbsp;金：{else}交易价格：{/if}</span>{if $price}{$price} {$PARS[unit][$unit]}{else}面议{/if}</li>
+        <li><span>发布时间：</span>{$adddate}</li>
+        <li><span>房 型：</span>{$housetype}</li>
+        <li><span>{if $infocat==2||$infocat==5}期望商圈/区域：{else}物业地址：{/if}</span>{$address}</li>
+        <li><span>装潢程度：</span>{$DECORATES[$decorate]}</li>
+        <li><span>使用面积：</span>{$usearea}㎡</li>
+        <li><span>房产类型：</span>{$house_propertytype}</li>
+        <li><span>建筑面积：</span>{$buildarea} ㎡</li>
+        <li><span>物业管理：</span>{$manage}</li>
+        <li><span>建成时间：</span>{$buildtime}年左右</li>
+        <li><span>{if ($infocat==1||$infocat==2||$infocat==3)}租&nbsp;&nbsp;&nbsp;&nbsp;金：{else}交易价格：{/if}</span>{if $price}{$price} {$PARS[unit][$unit]}{else}面议{/if}</li>
+        <li><span>发布时间：</span>{$adddate}</li>
+        <li><span>房 型：</span>{$housetype}</li>
+        <li><span>{if $infocat==2||$infocat==5}期望商圈/区域：{else}物业地址{/if}：</span>{$address}</li>
+        <li><span>装潢程度：</span>{$DECORATES[$decorate]}</li>
+        <li><span>使用面积：</span>{$usearea}㎡</li>
+        <li><span>房屋朝向：</span>{$house_towards}</li>
+        <li><span>有效期：</span>{$validdate}</li>
+        <li><span>基础设施：</span>{$infrastructure}</li>
+        <li><span>室内设施:</span>{$indoor}</li>
+        <li><span>周边设施：</span>{$peripheral}</li>
+        <li><span>公交状况：</span>{$transit}</li>
+        <li><span>其他描述：</span>{$description}</li>
+      </ul>
+    </div>
+    <div class="newhouse_right">
+      <h5>{$name}</h5>
+      <ul>
+        <li><img src="{$img1}" border="0" width="{$MOD[thumb_width]}" height="{$MOD[thumb_height]}" alt="楼盘位置图" /></li>
+        <li>楼盘位置图</li>
+        <li><img src="{$img2}" border="0" width="{$MOD[thumb_width]}" height="{$MOD[thumb_height]}"  alt="楼盘环境图"/></li>
+        <li>环境图</li>
+        <li><img src="{$img3}" border="0" width="{$MOD[thumb_width]}" height="{$MOD[thumb_height]}" alt="楼盘室内图" /></li>
+        <li>室内图</li>
+      </ul>
+    </div>
+  </div>
+</div>
+{template 'phpcms','footer'}

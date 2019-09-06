@@ -90,6 +90,7 @@ class category_channel
 		$db->query("UPDATE ".TABLE_CATEGORY." SET $sql WHERE catid=$this->catid");
 		$this->update_linkurl($this->catid);
 		$this->setting($setting);
+		$this->repair($this->catid);
         cache_category($this->catid);
 		return TRUE;
 	}

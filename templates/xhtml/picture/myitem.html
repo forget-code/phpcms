@@ -1,0 +1,387 @@
+{template 'phpcms','header'}
+<script type="text/javascript">
+// 表单提交检测
+function doCheck(){
+	// 检测表单的有效性
+	// 如：标题不能为空，内容不能为空，等等....
+	if ($('catid').value=='0'){
+		alert('指定的栏目不允许添加图片！只允许在其子栏目中添加图片。');
+		$('catid').focus();
+		return false;
+	}
+	if ($('title').value=='') {
+		alert('对不起，标题不能为空！');
+        $('title').focus();
+		return false;
+	}
+	{if $MOD['check_code']}
+	if ($('checkcodestr').value=='') {
+		alert("请输入验证码！");
+		$('checkcodestr').focus();
+		return false;
+	}
+	{/if}
+
+}
+
+
+function ShowPreview(){
+var obj = $('pictureurls');
+var r = document.selection.createRange();
+var s = "TMP";
+var rt = r.text;
+var rv = rt+s;
+r.text = rt+s;
+var i = obj.value.indexOf(rv);
+obj.value = obj.value.replace(s, '');
+obj.blur();
+var str;
+if(obj.value.indexOf("\r") == -1){
+	str = "\n";
+}else{
+	str = "\r\n";
+}
+var p = obj.value.substring(obj.value.lastIndexOf("|", i)+1, i)+obj.value.substring(i, obj.value.indexOf(str, i));
+var l = obj.value.substring(i, obj.value.length);
+if(l.indexOf("\n")==-1) p = obj.value.substring(obj.value.lastIndexOf("|", i)+1, i)+l;
+var u = <?php echo "'";echo imgurl($PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$MOD['upload_dir'].'/');echo "'"; ?>;
+if(p.indexOf("://") != -1) u = '';
+var m = p.match(/^[^\r\n\|]+\.(jpg|gif|png|bmp)$/);
+if(m != null)
+{
+	window.open(u+p);
+}
+}
+
+</script>
+<table cellspacing="0" cellpadding="0" class="member">
+<tr>
+<td valign="top" class="left">
+{template "member","left"}</td>
+<td width="10" valign="top">
+</td>
+<td valign="top" class="right">
+<div class="membercatslist">
+<ul>
+<li><a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=add"><span>发表图片</span></a></li>
+<li><a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=manage&status=3"><span>已通过</span></a></li>
+<li><a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=manage&status=1"><span>待审核</span></a></li>
+</ul>
+</div>
+<div class="clearboth"></div>
+<table cellpadding="0" cellspacing="0" class="righttable">
+  <tr>
+    <td class="td_right"><font color="red">Tips:请务必认真填写，信息一经通过，将无法修改！ </font></td>
+  </tr>
+</table>
+<div class="memberborder_1">
+<div class="memberborder_2">
+{if $action=='add'}
+<h1>发布图片</h1>
+<form action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=add" method="post" name="myform" onsubmit="return doCheck();">
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tbody>
+    <tr>
+<td class="td_right" width="15%"><strong>栏目</strong></td>
+<td class="td_left" width="85%">{$category_select}</td>
+</tr>
+<tr>
+<td class="td_right"><font color="red">*</font> <strong>标题</strong></td>
+<td class="td_left">{$type_select} <input type="text" name="title" size="50"> </td>
+</tr>
+<tr> 
+<td class="td_right"><strong>标题图片</strong> </td>
+<td class="td_left">
+<input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=thumb&type=thumb&width=150&height=150','upload','360','300')"></td>
+</tr>
+<tr>
+<td class="td_right"><font color="red">*</font> <strong>内容</strong></td>
+<td class="td_left">
+<textarea name="content" id="content" cols="100" rows="25"></textarea>{$editor("content",$MOD['editor_mode'],$MOD['editor_width'],$MOD['editor_height'])}
+</td>
+</tr>
+<tr>
+<td class="td_right"><font color="red">*</font> <strong>图片名称|地址</strong></td>
+<td class="td_left">
+		<table cellpadding="0" cellspacing="1" width="100%">
+		<tr>
+		<td colspan="2"><font color="red">图片地址举例：</font>图片说明|图片地址 <a href="###" onclick="alert('PHPCMS简体中文版|http://soft.phpcms.cn/phpcms_gbk.jpg\nPHPCMS繁体中文版|http://soft.phpcms.cn/phpcms_big5.jpg\nPHPCMS一键安装包|http://soft.phpcms.cn/pc_server.jpg');">一个图片图片占一行，点这里查看实例</a></td>
+		</tr>
+		<tr>
+		<td width="500"><textarea name="pictureurls" cols="70" rows="6" id="pictureurls" style="width:500px;height:100px;overflow:visible;" ondblclick="ShowPreview();" title="提示:如果您使用的是IE6+浏览器，在图片名上双击鼠标可在新窗口中弹出图片..."></textarea>
+		<textarea name="allpictureurls" id="allpictureurls" style="display:none;"></textarea>
+		<br/>
+		<font color="blue">Tips:</font>如果需要彻底删除某个图片地址（包括图片），请在其后加标识符[d]<br/>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果您使用的是IE6+浏览器，在图片名上双击鼠标可在新窗口中弹出图片
+		</td>
+		<td valign="top" style="light-height:22px;">
+		<input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=temp&type=both&width=150&height=150&upload_dir={$MOD[upload_dir]}','upload','360','300')">
+		<input type="hidden" name="temp" id="temp" value="" onpropertychange="Picurls();">
+		</td>
+		</tr>
+		</table>
+</td>
+</tr>
+{$fields}
+{if $MOD['check_code']}
+    <tr> 
+      <td class="td_right"><strong>验证码</strong></td>
+      <td class="td_left"><input name="checkcodestr" type="text" size="15" id="checkcodestr">
+	  <img src="<?=PHPCMS_PATH?>checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/></td>
+    </tr>
+{/if}
+<tr>
+<td class="td_right"></td>
+<td class="td_left">
+<input type="submit" name="dosubmit" value="发布图片">
+</td>
+</tr>
+</tbody>
+</table>
+</form>
+<!--//--->
+{elseif $action=='edit'}
+<h1>编辑图片</h1>
+<form action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=edit&pictureid={$pictureid}" method="post" name="myform" onsubmit="return doCheck();">
+<table cellpadding="2" cellspacing="1" class="righttable">
+</tbody>
+  <tr>
+<td width="15%" class="td_left"><strong>栏目</strong></td>
+<td class="td_left" width="85%">{$category_select}</td>
+</tr>
+<tr>
+<td class="td_right"><font color="red">*</font> <strong>标题</strong></td>
+<td class="td_left">{$type_select} <input type="text" name="title" size="50" value="{$title}"> </td>
+</tr>
+<tr> 
+<td class="td_right"><strong>标题图片</strong> </td>
+<td class="td_left">
+<input name="thumb" type="text" id="thumb" size="50"  value="{$thumb}"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=thumb&type=thumb&width=150&height=150','upload','360','300')">          </td>
+</tr>
+<tr>
+<td class="td_right"><font color="red">*</font> <strong>内容</strong></td>
+<td class="td_left">
+<textarea name="content" id="content" cols="100" rows="25">{$introduce}</textarea>{$editor("content",$MOD['editor_mode'],$MOD['editor_width'],$MOD['editor_height'])}
+</td>
+</tr>
+<tr>
+<td class="td_right"><font color="red">*</font> <strong>图片名称|地址</strong></td>
+<td class="td_left">
+		<table cellpadding="0" cellspacing="1" width="100%">
+		<tr>
+		<td colspan="2"><font color="red">图片地址举例：</font>图片说明|图片地址 <a href="###" onclick="alert('PHPCMS简体中文版|http://soft.phpcms.cn/phpcms_gbk.jpg\nPHPCMS繁体中文版|http://soft.phpcms.cn/phpcms_big5.jpg\nPHPCMS一键安装包|http://soft.phpcms.cn/pc_server.jpg');">一个图片图片占一行，点这里查看实例</a></td>
+		</tr>
+		<tr>
+		<td width="500"><textarea name="pictureurls" cols="70" rows="6" id="pictureurls" style="width:500px;height:100px;overflow:visible;" ondblclick="ShowPreview();" title="提示:如果您使用的是IE6+浏览器，在图片名上双击鼠标可在新窗口中弹出图片...">{$pictureurls}</textarea>
+		<textarea name="allpictureurls" id="allpictureurls" style="display:none;">{$allpictureurls}</textarea>
+		<br/>
+		<font color="blue">Tips:</font>如果需要彻底删除某个图片地址（包括图片），请在其后加标识符[d]<br/>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;如果您使用的是IE6+浏览器，在图片名上双击鼠标可在新窗口中弹出图片
+		</td>
+		<td valign="top" style="light-height:22px;">
+		<input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=temp&type=both&width=150&height=150&upload_dir={$MOD[upload_dir]}','upload','360','300')">
+		<input type="hidden" name="temp" id="temp" value="" onpropertychange="Picurls();">
+		</td>
+		</tr>
+		</table>
+</td>
+</tr>
+{$fields}
+{if $MOD['check_code']}
+    <tr> 
+      <td class="td_right"><strong>验证码</strong></td>
+      <td class="td_left"><input name="checkcodestr" type="text" size="15" id="checkcodestr">
+	  <img src="{PHPCMS_PATH}checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/></td>
+    </tr>
+{/if}
+    <tr> 
+      <td class="td_center" colspan="2"><input type="submit" name="dosubmit" value="编辑图片"></td>
+    </tr>
+ </tbody>
+</table>
+</form>
+{elseif $action=='preview'}
+<h1>{$title}</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tbody>
+  <tr>
+    <td class="td_right" width="15%"><strong>栏目</strong></td>
+	<td class="td_left" width="85%">{$catname}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>标题</strong></td>
+	<td class="td_left">{$title}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>发布日期</strong></td>
+    <td class="td_left">{$adddate}</td>
+  </tr>
+
+  <tr>
+    <td class="td_right"><strong>标题图片</strong></td>
+    <td class="td_left"><a href="{$thumb}" target="_blank" onmouseover="ShowADPreview('<img src={$thumb} border=0>');">{$thumb}</a></td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>简介</strong></td>
+    <td class="td_left">{$introduce}</td>
+  </tr>
+   <tr>
+    <td class="td_right"><strong>图片地址</strong></td>
+    <td class="td_left">
+	{loop $pictureurls $p}
+	<a href="{$p[src]}" target="_blank" onmouseover="ShowADPreview('<img src={$p[src]} border=0>');">{$p[src]} {$p[alt]}</a><br/>
+	{/loop}
+	</td>
+  </tr>
+  {loop $fields $f}
+    <tr>
+    <td class="td_right"><strong>{$f[title]}</strong></td>
+    <td class="td_left">{$f[value]}</td>
+  </tr>
+  {/loop}
+  <tr>
+   <td class="td_right"> </td>
+    <td class="td_left"  align="right">
+	<a href="#" onclick="javascript:history.go(-1);">返回</a>
+	<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=edit&pictureid={$pictureid}">编辑</a>
+	<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=delete&pictureid={$pictureid}">删除</a>	
+	</td>
+  </tr>
+</tbody>
+</table>
+<div id=dHTMLADPreview style='Z-INDEX: 1000; LEFT: 0px; VISIBILITY: hidden; WIDTH: 10px; POSITION: absolute; TOP: 0px; HEIGHT: 10px'></DIV>
+<script type="text/javascript">
+<!--
+var tipTimer;
+function locateObject(n, d)
+{
+   var p,i,x;
+   if (!d) d=document;
+   if ((p=n.indexOf('?')) > 0 && parent.frames.length)
+   {d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+   if (!(x=d[n])&&d.all) x=d.all[n]; 
+   for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+   for (i=0;!x&&d.layers&&i<d.layers.length;i++) x=locateObject(n,d.layers[i].document); return x;
+}
+function ShowADPreview(ADContent)
+{
+  showTooltip('dHTMLADPreview',event, ADContent, '#ffffff','#000000','#000000','6000')
+}
+function showTooltip(object, e, tipContent, backcolor, bordercolor, textcolor, displaytime)
+{
+   window.clearTimeout(tipTimer)
+   if (document.all) {
+       locateObject(object).style.top=document.body.scrollTop+event.clientY+20
+       locateObject(object).innerHTML='<table style="font-family:宋体; font-size: 9pt; border: '+bordercolor+'; border-style: solid; border-top-width: 1px; border-right-width: 1px; border-bottom-width: 1px; border-left-width: 1px; background-color: '+backcolor+'" width="10" border="0" cellspacing="0" cellpadding="0"><tr><td nowrap><font style="font-family:宋体; font-size: 9pt; color: '+textcolor+'">'+unescape(tipContent)+'</font></td></tr></table> '
+       if ((e.x + locateObject(object).clientWidth) > (document.body.clientWidth + document.body.scrollLeft)) {
+           locateObject(object).style.left = (document.body.clientWidth + document.body.scrollLeft) - locateObject(object).clientWidth-10;
+       } else {
+           locateObject(object).style.left=document.body.scrollLeft+event.clientX
+       }
+       locateObject(object).style.visibility='visible';
+       tipTimer=window.setTimeout("hideTooltip('"+object+"')", displaytime);
+       return true;
+   } else if (document.layers) {
+       locateObject(object).document.write('<table width="10" border="0" cellspacing="1" cellpadding="1"><tr bgcolor="'+bordercolor+'"><td><table width="10" border="0" cellspacing="0" cellpadding="0"><tr bgcolor="'+backcolor+'"><td nowrap><font style="font-family:宋体; font-size: 9pt; color: '+textcolor+'">'+unescape(tipContent)+'</font></td></tr></table></td></tr></table>')
+       locateObject(object).document.close()
+       locateObject(object).top=e.y+20
+       if ((e.x + locateObject(object).clip.width) > (window.pageXOffset + window.innerWidth)) {
+           locateObject(object).left = window.innerWidth - locateObject(object).clip.width-10;
+       } else {
+           locateObject(object).left=e.x;
+       }
+       locateObject(object).visibility='show';
+       tipTimer=window.setTimeout("hideTooltip('"+object+"')", displaytime);
+       return true;
+   } else {
+       return true;
+   }
+}
+function hideTooltip(object) {
+    if (document.all) {
+        locateObject(object).style.visibility = 'hidden';
+        locateObject(object).style.left = 1;
+        locateObject(object).style.top = 1;
+        return false;
+    } else {
+        if (document.layers) {
+            locateObject(object).visibility = 'hide';
+            locateObject(object).left = 1;
+            locateObject(object).top = 1;
+            return false;
+        } else {
+            return true;
+        }
+    }
+}
+//-->
+</script>
+{elseif $action=='manage'}
+<h1>图片管理 [ {if $status==3}已通过{elseif $status==1}待审核{elseif $status==0}草稿{elseif $status==2}退稿{/if} ]</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tbody>
+<tr align="center">
+<td width="8%" class="td_center">ID</td>
+<td width="43%" class="td_center">标题</td>
+<td width="15%" class="td_center">栏目</td>
+<td width="12%" class="td_center">发表时间</td>
+<td width="10%" class="td_center">点击</td>
+<td width="12%" class="td_center">管理操作</td>
+</tr>
+{loop $pictures  $picture}
+<tr align="center" onmouseout="this.style.backgroundColor='#ffffff'" onmouseover="this.style.backgroundColor='#EBF6FB'" bgColor="#ffffff">
+<td class="td_center">{$picture[pictureid]}</td>
+<td class="td_left">&nbsp;{if $picture[type]}{$picture[type]} {/if}{if $picture['status']==3}<a href="{$picture['linkurl']}" target="_blank">{else}<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=preview&pictureid={$picture[pictureid]}">{/if}{$picture['title']}</a>
+</td>
+<td class="td_center"><a href="{$picture['catlinkurl']}" target="_blank">{$picture['catname']}</a></td>
+<td class="td_center">{$picture['adddate']}</td>
+<td class="td_center">{$picture['hits']}</td>
+<td class="td_center">{if $picture['status']<3}<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=edit&pictureid={$picture[pictureid]}">编辑</a> | <a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=delete&pictureid={$picture[pictureid]}">删除</a>{else}<span style="color:#C0C0C0">编辑 | 删除</span>{/if}</td>
+</tr>
+{/loop}
+</tbody>
+</table>
+<table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="center">{$pages}</td>
+  </tr>
+</table>
+<table width="100%" cellpadding="0" cellspacing="0" class="righttable">
+<form name="search" action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php">
+  <tr>
+    <td class="td_center">
+    <input name="status" type="hidden" value="{$status}">
+	<select name="srchtype">
+	<option value="0" {if $searchtype==0}selected{/if}> 标题 </option>
+	<option value="2" {if $searchtype==1}selected{/if}> 作者 </option>
+	</select>&nbsp;
+	<input name="keywords" type="text" size="30" value="{$keywords}">&nbsp;
+	{$category_select}
+	<select name="ordertype">
+	<option value="0" {if $ordertype==0}selected{/if}>图片排序排序</option>
+	<option value="1" {if $ordertype==1}selected{/if}>更新时间降序</option>
+	<option value="2" {if $ordertype==2}selected{/if}>更新时间升序</option>
+	<option value="3" {if $ordertype==3}selected{/if}>浏览次数降序</option>
+	<option value="4" {if $ordertype==4}selected{/if}>浏览次数升序</option>
+	</select>
+	<input type="submit" value="图片搜索"></td>
+  </tr>
+</form>
+</table>
+{/if}
+</div></div>
+</td>
+</tr>
+ </tbody>
+</table>
+<script type="text/javascript">
+function Picurls() {
+	if($('temp').value != '') {
+	var ss = $("pictureurls").value == '' ? '' : "\n";
+	$('pictureurls').value += ss+'图片说明|'+$('temp').value.replace(/<?=$PHPCMS['uploaddir']?>\/<?=$CHA['channeldir']?>\/<?=$MOD['upload_dir']?>\//g, '');
+	$('allpictureurls').value += ss+$('temp').value.replace(/<?=$PHPCMS['uploaddir']?>\/<?=$CHA['channeldir']?>\/<?=$MOD['upload_dir']?>\//g, '');
+	$('temp').value = '';
+	}
+}
+</script>
+{template 'phpcms','footer'}

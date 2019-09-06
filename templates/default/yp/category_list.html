@@ -1,0 +1,162 @@
+{template 'yp','header'}
+<table width="920" height="48" border="0" align="center" cellpadding="0" cellspacing="0" style="border-collapse: collapse;margin-bottom: 6px;">
+<tr>
+<td background="{$skindir}/yp/top.ht2.gif">
+<!--搜素开始-->
+<table cellspacing="2" cellpadding="5" style="font-size:12px;">
+<form name="myform" action="{$MOD[linkurl]}search.php" method="get">
+<tr>
+<td>搜索类型 
+<input name="keyword" id="keyword" type="text" size="30" value="{$keyword}"> 
+所属栏目{$category_select}
+<select name="searchfrom">
+<option value="0" {if !$searchfrom}selected{/if}>全部时间</option>
+<option value="1" {if $searchfrom==1}selected{/if}>1 天前</option>
+<option value="2" {if $searchfrom==2}selected{/if}>2 天前</option>
+<option value="7" {if $searchfrom==7}selected{/if}>1 周前</option>
+<option value="30" {if $searchfrom==30}selected{/if}>1 个月前</option>
+<option value="90" {if $searchfrom==90}selected{/if}>3 个月前</option>
+<option value="180" {if $searchfrom==180}selected{/if}>6 个月前</option>
+<option value="365" {if $searchfrom==365}selected{/if}>1 年前</option>
+</select>
+<input type="radio" class="radio" name="before" value="0" {if !$before}checked{/if}> 之后
+<input type="radio" class="radio" name="before" value="1" {if $before}checked{/if}> 之前
+<select name="ordertype">
+<option value="0" {if $ordertype==0}selected{/if}>按ID排序排序</option>
+<option value="1" {if $ordertype==1}selected{/if}>更新时间降序</option>
+<option value="2" {if $ordertype==2}selected{/if}>更新时间升序</option>
+<option value="3" {if $ordertype==3}selected{/if}>浏览次数降序</option>
+<option value="4" {if $ordertype==4}selected{/if}>浏览次数升序</option>
+</select>
+<input type="hidden" name="search" value="1">
+<input type="submit" value="立即搜索" class="btn" />
+</td>
+</tr>
+</form>
+</table>
+<!--搜索结束-->
+</td>
+</tr>
+</table>
+<table width="920" align="center" border="0" cellpadding="1" cellspacing="0" bgcolor="#FFFFFF">
+  <tr>
+    <td width="259" valign="top">
+	<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse" height="6" id="table13">
+			<tr>
+				<td></td>
+			</tr>
+	  </table>
+	<table border="0" cellpadding="0" cellspacing="0" bgcolor="#F27000" class="ta2">
+            <tr>
+              <td width="270" align="left" valign="top" bgcolor="#FFFFFF">
+				<table width="50" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td height="24" align="left" valign="top"><table width="271" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="218" height="24" background="{$skindir}/yp/index_45.jpg"><table width="84" border="0" cellpadding="0" cellspacing="0" class="ta3">
+                          <tr>
+                            <td width="5"><img src="{$skindir}/yp/index_40.jpg" width="5" height="24" /></td>
+                            <td width="76" background="{$skindir}/yp/index_41.jpg">产品分类</td>
+                            <td width="4" align="right"><img src="{$skindir}/yp/index_43.jpg" width="4" height="24" /></td>
+                          </tr>
+                      </table></td>
+                      <td width="53" align="center" valign="middle" background="{$skindir}/yp/index_45.jpg"><img src="{$skindir}/yp/index_48.jpg" width="36" height="11" /></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"></td>
+                    </tr>
+                  </table></td>
+                </tr>
+                <tr>
+                  <td valign="top">
+					<table border="0" width="100%" cellpadding="3" cellspacing="1" style="border-collapse: collapse" id="table51">
+					{loop $CATEGORY $cats}
+					<tr>
+						<td >
+							{if !$cats[parentid]}<a href="{$cats[linkurl]}"><font color="#CC0000">{$cats[catname]}</font></a><BR>{/if}
+							{loop $CATEGORY $childcats}
+								{if $childcats[parentid]==$cats[catid]} <a href="{$childcats[linkurl]}">{$childcats[catname]}</a> {/if}
+							{/loop}
+						
+						</td>
+					</tr>
+					{/loop}
+				  </table></td>
+                </tr>
+              </table></td>
+            </tr>
+          </table>
+	  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td height="5"></td>
+        </tr>
+      </table>
+		<table height="224" border="0" cellpadding="0" cellspacing="0" bgcolor="#F27000" class="ta2">
+            <tr>
+              <td width="270" height="192" align="left" valign="top" bgcolor="#FFFFFF"><table width="50" border="0" cellspacing="0" cellpadding="0">
+                  <tr>
+                    <td align="left" valign="top"><table width="271" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                          <td width="219" height="24" background="{$skindir}/yp/index_45.jpg"><table width="84" border="0" cellpadding="0" cellspacing="0" class="ta3">
+                              <tr>
+                                <td width="5"><img src="{$skindir}/yp/index_40.jpg" width="5" height="24" /></td>
+                                <td width="76" background="{$skindir}/yp/index_41.jpg">热点产品</td>
+                                <td width="4" align="right"><img src="{$skindir}/yp/index_43.jpg" width="4" height="24" /></td>
+                              </tr>
+                          </table></td>
+                          <td width="52" align="center" valign="middle" background="{$skindir}/yp/index_45.jpg"><img src="{$skindir}/yp/index_48.jpg" width="36" height="11" /></td>
+                        </tr>
+                        <tr>
+                          <td colspan="2"></td>
+                        </tr>
+                    </table></td>
+                  </tr>
+                  <tr>
+                    <td height="196">{tag_热点产品列表}</td>
+                  </tr>
+              </table></td>
+            </tr>
+          </table>
+    </td>
+   
+    <td width="10"></td>
+	 <td valign="top">
+	 <table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="5"></td>
+   
+  </tr>
+</table>
+
+	 <div class="position">当前位置：<a href="{$MOD[linkurl]}">黄页首页</a> >> <a href="{$MOD[linkurl]}product.php">企业产品首页>> {$position}</div>
+	 
+	  <div>
+          <div class="cat_title"><div class="cat_title-1"></div>
+	      <div class="cat_name">产品图片</div><div class="cat_title-2"></div>
+	      <div class="cat_url"></div>
+	  </div>
+          {tag_产品终极栏目页面图片} </div>
+		  
+		  <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse" height="6" id="table41">
+			<tr>
+				<td></td>
+			</tr>
+		</table>
+		  <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse">
+	  
+			<tr>
+			  <td colspan="2"  valign="top"><!--自定义栏目开始-->
+    <div>
+          <div class="cat_title"><div class="cat_title-1"></div>
+	      <div class="cat_name">{$catname}</div><div class="cat_title-2"></div>
+	      <div class="cat_url"></div>
+	  </div>
+          {tag_最终栏目页列表}</div>
+
+<!--自定义栏目结束--></td>
+			</tr>
+	  </table>
+	 </td>
+  </tr>
+</table>
+{template 'yp','footer'}

@@ -1,0 +1,11 @@
+<table width="100%" border="0" align="center" cellpadding="1" cellspacing="1" >
+<!--{loop $question $i $g}-->
+<!--{if $i%$cols==0}--><tr><!--{/if}-->
+<td class="line_1">
+{if $datetype} <span class="f_r">{$g[adddate]}</span>{/if}
+•&nbsp;{if $showcatname}&nbsp;&nbsp;[<a href="{$MODULE['wenba']['linkurl']}browse.php?catid={$g['catid']}" class="lgy">{$g['catname']}</a>]{/if}&nbsp;&nbsp;<a class="lq" href="{$MODULE['wenba']['linkurl']}question.php?qid={$g['qid']}" {$target}>{$g['title']}</a>
+
+</td>
+<!--{if $i%$cols==($cols-1)}--></tr><!--{/if}-->
+<!--{/loop}-->
+</table>

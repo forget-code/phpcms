@@ -21,10 +21,11 @@ $templatenames = array (
   'tag_cat.html' => '[标签]栏目',
   'tag_cat-1.html' => '[标签]一级栏目',
   'tag_cat-sub.html' => '[标签]子栏目',
+  'tag_phpcms_tm.html' => '在线咨询',
   'tag_special_list.html' => '[标签]专题列表',
   'tag_special_slide.html' => '[标签]专题幻灯片(fash)',
   'tag_special_slide-js.html' => '[标签]专题幻灯片(js)',
   'tag_type.html' => '[标签]分类',
-  'uppic.html' => '上传图片',
+  'upload.html' => '文件上传',
 );
 ?>

@@ -42,6 +42,8 @@
 <!--最新公告列表-->{tag_频道首页最新公告}
 	<div class="rightcats"><h1>最新专题</h1><h2><a href="{$CHA[linkurl]}special/" class="more">更多</a></h2></div>
 <!--最新专题列表-->{tag_文章频道首页专题列表}</td>
+
+
   </tr>
 </table>
 <table width="980" cellpadding="0" cellspacing="0" class="mar_5">
@@ -62,6 +64,7 @@
 <!--搜索框-->
 <!--自定义栏目开始-->
 {loop $childcats $i $cat}
+
     <div class="cat_box">
           <div class="cat_title">
 	      <div class="cat_name">{$cat[catname]}</div>
@@ -75,6 +78,7 @@
 {/if}
 {/loop}
 <!--自定义栏目结束-->
+
 	</td>
     <td width="10"></td>
     <td width="210" valign="top" class="right_bg">
@@ -85,6 +89,16 @@
           <td>{tag_文章频道首页投票}</td>
         </tr>
       </table>
+	  {if $MODULE[digg]}
+<div class="rightcats"><h1>今日文章DIGG排行</h1><h2><a href="{PHPCMS_PATH}/digg/list.php?digg_mod={$mod}{if $catid}&digg_catid={$catid}{/if}">更多</a></h2></div>
+
+     <table width="100%" height="100" cellpadding="0" cellspacing="5">
+        <tr>
+          <td>{tag_今日文章DIGG列表}</td>
+        </tr>
+      </table>
+	  {/if}
+
 <div class="rightcats"><h1>友情链接</h1><h2><a href="{$MODULE[link][linkurl]}" class="more">更多</a></h2></div>
 {tag_文章频道首页logo链接}
 <br/>
@@ -92,4 +106,5 @@
     </td>
   </tr>
 </table>
+
 {template 'phpcms','footer'}

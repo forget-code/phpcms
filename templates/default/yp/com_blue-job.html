@@ -1,0 +1,199 @@
+<table border="0" width="100%" id="table7" cellpadding="0" style="border-collapse: collapse" height="6">
+	<tr>
+		<td></td>
+	</tr>
+</table>
+<!-- End ImageReady Slices -->
+	<div align="center">
+	<table width="760" height="271" border="0" cellpadding="0" cellspacing="0" id="table3" style="border-collapse: collapse">
+		<tr>
+			<td width="178" valign="top">
+			<table border="0" width="178" id="table4" cellpadding="0" style="border-collapse: collapse" height="24">
+				<tr>
+					<td background="{$skindir}/images/sj_9.gif">
+					<table border="0" width="77" id="table5" cellpadding="0" style="border-collapse: collapse" height="24">
+						<tr>
+							<td width="77" background="{$skindir}/images/sj_8.gif">&nbsp;<span class="column_b">&nbsp; 热点导航</span></td>
+						</tr>
+					</table>
+					</td>
+				</tr>
+			</table>
+			<table border="0" width="100%" id="table8" bgcolor="#F9F9F9" cellpadding="0" style="border-collapse: collapse">
+				<tr>
+					<td valign="top">
+					<TABLE cellSpacing="2" cellPadding="1" width="100%" border="0">
+{loop $m_user $ms}
+<TR bgColor="#F1F3F5" onmouseout="this.style.backgroundColor='#F1F3F5'"  onmouseover="this.style.backgroundColor='#BFDFFF'">
+	<TD align="right" height="25">
+	<SPAN style="PADDING-RIGHT: 70px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px">
+	<a href="{$ms[url]}">{$ms[menutitle]}</a>
+	</SPAN>
+	</TD>
+</TR>
+{/loop}
+</TABLE>
+					</td>
+				</tr>
+			</table>
+<table border="0" width="100%" id="table9" cellpadding="0" style="border-collapse: collapse" height="6">
+	<tr>
+		<td></td>
+	</tr>
+</table>
+<table border="0" width="178" id="table4" cellpadding="0" style="border-collapse: collapse" height="24">
+				<tr>
+					<td background="{$skindir}/images/sj_9.gif">
+					<table border="0" width="77" id="table5" cellpadding="0" style="border-collapse: collapse" height="24">
+						<tr>
+							<td width="77" background="{$skindir}/images/sj_8.gif">&nbsp;<span class="column_b">&nbsp; 招聘职位</span></td>
+						</tr>
+					</table>
+					</td>
+				</tr>
+			</table>
+			<table border="0" width="100%" id="table8" bgcolor="#F9F9F9" cellpadding="0" style="border-collapse: collapse">
+				<tr>
+					<td valign="top">
+					<TABLE cellSpacing="2" cellPadding="1" width="100%" border="0">
+					{loop $jobs $i $job}
+					<TR bgColor="#F1F3F5" onmouseout="this.style.backgroundColor='#F1F3F5'"  onmouseover="this.style.backgroundColor='#BFDFFF'">
+						<TD align="left" height="25">
+						<SPAN style="PADDING-RIGHT: 0px; PADDING-LEFT: 10px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px">
+						<a href="{$PHP_URL}#pattern-{$i}">{$job[title]}</a>
+						</SPAN>
+						</TD>
+					</TR>
+					{/loop}
+					</TABLE>
+					</td>
+				</tr>
+			</table>
+<table border="0" width="100%" id="table9" cellpadding="0" style="border-collapse: collapse" height="6">
+	<tr>
+		<td></td>
+	</tr>
+</table>
+			<table border="0" width="178" id="table13" cellpadding="0" style="border-collapse: collapse" height="24">
+				<tr>
+					<td background="{$skindir}/images/sj_9.gif">
+					<table border="0" width="77" id="table14" cellpadding="0" style="border-collapse: collapse" height="24">
+						<tr>
+							<td width="77" background="{$skindir}/images/sj_8.gif">
+							<font color="#FFFFFF"><b>
+							<span style="font-size: 10pt">&nbsp;&nbsp; 企业新闻</span></b></font></td>
+						</tr>
+					</table>
+					</td>
+				</tr>
+			</table>
+			<table border="0" width="100%" id="table15" bgcolor="#F9F9F9" cellpadding="0" style="border-collapse: collapse">
+				<tr>
+					<td style="padding-left: 8px;">{tag_企业主页促销列表}</td>
+				</tr>
+			</table>
+<table border="0" width="100%" id="table16" cellpadding="0" style="border-collapse: collapse" height="6">
+	<tr>
+		<td></td>
+	</tr>
+</table>
+		
+			</td>
+			<td width="6">　</td>
+			<td valign="top"><table border="0" width="100%" id="table29" cellpadding="0" style="border-collapse: collapse" height="35">
+	<tr>
+		<td width="90" background="{$skindir}/images/sj_25.gif"><span class="column_b">&nbsp;&nbsp;&nbsp;&nbsp; <a name='contact'></a>招聘列表</span></td>
+		<td background="{$skindir}/images/sj_26.gif" width="475">　</td>
+	</tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="3" bgcolor="#F9F9F9" id="table30" style="border-collapse: collapse">
+	<tr>
+		<td valign="top">
+		<table width="100%" border="1" cellpadding="2" cellspacing="0" bordercolor="#E8E8E8" style="border-collapse: collapse" >
+				{loop $jobs $i $job}
+				{php $j=$i+1;}
+				<tr>
+                    <td colspan="4" bgcolor="#E9ECEF"><table border="0" cellpadding="0" style="border-collapse: collapse" width="100%">
+														<tr>
+															<td width="369"><a name="pattern-{$i}"></a>
+					职位{$j} ：<b><a href="{$job[linkurl]}" target="_blank">{$job[title]}</a></b></td>
+															<td><a onClick="javascript:window.open('{$PHPCMS[siteurl]}yp/signin.php?action=apply&jobid={$job[jobid]}','newwindow', 'height=360, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')" onMouseOver="this.style.cursor='hand'"><font color="#FF0000">申请该职位</font></a> &nbsp;&nbsp; <a onClick="javascript:window.open('{$PHPCMS[siteurl]}yp/signin.php?action=save&jobid={$job[jobid]}','newwindow', 'height=360, width=800, top=0, left=0, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')" onMouseOver="this.style.cursor='hand'"><font color="#FF0000">存入职位库</font></a></td>
+														</tr>
+														</table></td>
+                  </tr>
+                  <tr>
+                    <td width="13%">公司名称：</td>
+                    <td width="31%">{$job[companyname]}</td>
+                    <td width="14%">　</td>
+                    <td width="36%"> </td>
+                  </tr>
+                 
+                  <tr>
+                    <td>招聘人数：</td>
+                    <td>{if $job['employ']} {$job['employ']} {else}若干{/if}</td>
+                    <td>性别要求:</td>
+                    <td>{if $job['sex']==1}男{elseif $job['sex']==2}女{else}不限{/if}</td>
+                  </tr>
+                  <tr>
+                    <td>学历要求：</td>
+                    <td>{$job[degree]}</td>
+                    <td>薪水:</td>
+                    <td>{if $job['pay']}{$job['pay']}{else}面议{/if}</td>
+                  </tr>
+                  <tr>
+                    <td>工作地点：</td>
+                    <td>{$job[area]}</td>
+                    <td>　</td>
+                    <td>　</td>
+                  </tr>
+                  <tr>
+                    <td>截至日期：</td>
+                    <td>{$job[period]}</td>
+                    <td>　</td>
+                    <td>　</td>
+                  </tr>
+                  <tr>
+                    <td>职位描述：</td>
+                    <td colspan="3">{$job[introduce]}</td>
+                    </tr>
+                  <tr>
+                    <td colspan="4" bgcolor="#EFEFEF"><STRONG>联系方式</STRONG></td>
+                    </tr>
+				  <tr>
+                    <td>联 系 人：</td>
+                    <td>{$job[linkman]}</td>
+                    <td>联系电话：</td>
+                    <td>{$job[phone]}</td>
+                  </tr>
+				  <tr>
+                    <td>Email：</td>
+                    <td>{$job[email]}</td>
+                    <td>联系地址：</td>
+                    <td>{$job[address]}</td>
+                  </tr>
+				<tr>
+                    <td colspan="4">　</td>
+                  </tr>
+			{/loop}
+					
+				  <tr>
+                    <td colspan="4" bgcolor="#EFEFEF"><STRONG>公司简介</STRONG></td>
+                    </tr>
+				  <tr>
+                    <td colspan="4">{$introduce}</td>
+                    </tr>
+				  
+                </table></td>
+	</tr>
+</table>
+          </td>
+		</tr>
+</table>
+</div>
+<div align="center">
+	<table width="700" height="11" border="1" cellpadding="0" id="table42" style="border-collapse: collapse; border-left-width:0px; border-right-width:0px; border-top-width:0px" bordercolor="#FFA400">
+		<tr><td style="border-left-style: none; border-left-width: medium; border-right-style: none; border-right-width: medium; border-top-style: none; border-top-width: medium" height="5"></td>
+		</tr>
+</table>
+		</div>
+{template 'yp','com_blue-footer'}

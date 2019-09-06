@@ -1,7 +1,7 @@
 <?php
 function guestbook_list($templateid = '',$keyid = 'phpcms',$guestbooknum = 10,$subjectlen = 30,$datetype = 0,$showusername = 0,$target = 0,$cols = 1)
 {
-	global $db,$PHP_TIME,$MOD,$LANG;
+	global $db,$PHP_TIME,$MOD,$LANG,$MODULE;
 	$guestbooknum = intval($guestbooknum);
 	$subjectlen = intval($subjectlen);
 	$datetype = intval($datetype);
@@ -12,7 +12,7 @@ function guestbook_list($templateid = '',$keyid = 'phpcms',$guestbooknum = 10,$s
 	$sql = '';
 	if($keyid != 'phpcms' && $keyid) $sql = " AND keyid='$keyid' ";
 	$guestbooks = array();
-	$result = $db->query("SELECT * FROM ".TABLE_GUESTBOOK." WHERE passed=1 AND hidden=0 $sql ORDER BY gid DESC");
+	$result = $db->query("SELECT * FROM ".TABLE_GUESTBOOK." WHERE passed=1 AND hidden=0 $sql ORDER BY gid DESC LIMIT 0,$guestbooknum");
 	while($r = $db->fetch_array($result))
 	{
 		$r['addtime'] = $datetype ? date($datetypes[$datetype],$r['addtime']) : '';

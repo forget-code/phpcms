@@ -7,7 +7,7 @@ if(!isset($filename) && $file == 'tag' && $action != 'clear')
 	require_once PHPCMS_ROOT.'/include/formselect.func.php';
 
 	$action = $action ? $action : 'manage';
-	$actions = array('add','edit','copy','delete','manage','save', 'preview', 'checkname', 'list','category_select', 'quickoperate','listtag','specialid_select');
+	$actions = array('add','edit','copy','delete','manage','save', 'preview', 'checkname', 'list','category_select', 'quickoperate','listtag','specialid_select','tagcache');
 	if(!in_array($action, $actions)) showmessage($LANG['illegal_action']);
 
 	$function = isset($function) ? $function : 'phpcms_cat';
@@ -151,6 +151,11 @@ switch($action)
 
 		dir_delete(PHPCMS_ROOT.'/data/tagscache/', 0);
 
+		showmessage($LANG['label_cache_update_success']);
+		break;
+		
+    case 'tagcache':
+		$tag->tagcache();
 		showmessage($LANG['label_cache_update_success']);
 		break;
 

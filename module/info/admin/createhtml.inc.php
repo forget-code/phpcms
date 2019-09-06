@@ -30,22 +30,19 @@ case 'index':
 
 case 'list'://栏目
 
-	if(isset($catidss))
+	if(isset($_SESSION['temp_cat_name'.$mod]))
 	{
-		if(!is_array($catidss) && strpos($catidss, ','))
+		include PHPCMS_ROOT.'/data/temp/'.$_SESSION['temp_cat_name'.$mod];
+		$catids = array_shift($cats_array);
+		if(!$catids)
 		{
-			$catidss = explode(',', $catidss);
-			$catids = $catidss[0];
-			unset($catidss[0]);
-			$catidss =  implode(',', $catidss);
-			$referer = '?mod='.$mod.'&file='.$file.'&action='.$action.'&catidss='.$catidss.'&channelid='.$channelid;
+			unlink(PHPCMS_ROOT.'/data/temp/'.$_SESSION['temp_cat_name'.$mod]);
+			unset($_SESSION['temp_cat_name'.$mod]);
+			showmessage($LANG['update_success'],'?mod='.$mod.'&file=createhtml&channelid='.$channelid);
 		}
-		else
-		{
-			$catids = $catidss;
-		}
+		array_save($cats_array,"\$cats_array",PHPCMS_ROOT.'/data/temp/'.$_SESSION['temp_cat_name'.$mod]);
+		$referer = '?mod='.$mod.'&file='.$file.'&action='.$action.'&channelid='.$channelid;
 	}
-
 	if(empty($catids) && !isset($catidss))
 	{
 		$catids = array();
@@ -57,8 +54,9 @@ case 'list'://栏目
 
 	if(is_array($catids))
 	{
-		$catids = implode(',', $catids);
-		showmessage($LANG['begin_update_category'].'...','?mod='.$mod.'&file='.$file.'&action='.$action.'&catidss='.$catids.'&channelid='.$channelid);
+		$_SESSION['temp_cat_name'.$mod] = 'T'.$PHP_TIME.'.php';
+		array_save($catids,"\$cats_array",PHPCMS_ROOT.'/data/temp/'.$_SESSION['temp_cat_name'.$mod]);
+		showmessage($LANG['updating'].$LANG['category'],'?mod='.$mod.'&file='.$file.'&action='.$action.'&channelid='.$channelid);
 	}
 	elseif(is_numeric($catids))
 	{
@@ -67,7 +65,6 @@ case 'list'://栏目
 		showmessage($LANG['category'].' ['.$CATEGORY[$catids]['catname'].'] '.$LANG['update_success'], $referer);
 	}
 	break;
-
 
 case 'per_list'://分段更新栏目
 
@@ -100,7 +97,6 @@ case 'per_list'://分段更新栏目
 	{
 		showmessage($LANG['category'].' ['.$CATEGORY[$catid]['catname'].'] '.$LANG['update_success'].'...', '?mod='.$mod.'&file='.$file.'&channelid='.$channelid);
 	}
-
 	break;
 
 case 'show'://所有信息

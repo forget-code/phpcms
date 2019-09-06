@@ -90,7 +90,7 @@ class tag
 		if($this->mod != 'phpcms') template_module('phpcms');
 		return $a && $b;
 	}
-
+	
 	function get_tag_config($tagname)
 	{
 		return $this->tags_config[$tagname];
@@ -140,6 +140,25 @@ class tag
 	function writeable()
 	{
 		return is_writeable($this->tags_path) && is_writeable($this->tags_config_path);
+	}
+	function tagcache()
+	{
+		global $MODULE,$CONFIG;
+		$tpldir = PHPCMS_ROOT.'/templates/'.$CONFIG['defaulttemplate'].'/';
+		$tags = array();
+		foreach($MODULE AS $mk=>$mv)
+		{
+			if(file_exists($tpldir.$mv['module'].'/tags_config.php'))
+			{
+				require $tpldir.$mv['module'].'/tags_config.php';
+				foreach($tags_config AS $tk=>$tv)
+				{
+					$tags[$tk] = $tv['longtag'];
+				}		
+			}
+		}
+		$this->tags_path = $tpldir.'/tags.php';
+		array_save($tags, "\$tags", $this->tags_path);
 	}
 }
 ?>

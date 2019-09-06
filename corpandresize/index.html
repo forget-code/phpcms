@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>Crop and Resize Image Demo Page</title>
+	<link rel="stylesheet" type="text/css" href="css/cropandresize.css" />
+	<script type="text/javascript" src="js/lib/prototype.js"></script>
+</head>
+<body>
+<table>
+	<tr>
+		<td valign="top">
+			<img src="demo/1.jpg" width="100" onclick="javascript:openUi(this.src);" style="cursor:hand">
+			<br>
+			<img src="demo/2.jpg" width="100" onclick="javascript:openUi(this.src);" style="cursor:hand">
+			<br>
+			<img src="demo/3.jpg" width="100" onclick="javascript:openUi(this.src);" style="cursor:hand">
+			<br>
+			<img src="demo/4.jpg" width="100" onclick="javascript:openUi('demo/4.jpg');" style="cursor:hand">
+			<br>
+			<img src="demo/5.jpg" width="100" onclick="javascript:openUi('demo/5.jpg');" style="cursor:hand">
+			<br>
+			<img src="demo/6.jpg" width="100" onclick="javascript:openUi('demo/6.jpg');" style="cursor:hand">
+		</td>
+		<td width=50>
+		&nbsp;
+		</td>
+		<td valign="top">
+			Rel:<input name="relurl" id="relurl" type="text" value="" size=100>
+			<br>
+			Abs:<input name="absurl" id="absurl" type="text" value="" size=100>
+			<br>
+			<img src="images/spacer.gif" id="thumb">
+		</td>
+	</tr>
+</table>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+	function openUi(imagesrc)
+	{
+		var UISrc = 'ui.php?'+imagesrc;
+		window.open(UISrc,'UIWindow','height=450,width=510,toolbar=no,scrollbars=no');
+	}
+
+	function completeHandle(relurl,absurl)
+	{
+		document.getElementById('relurl').value = relurl;
+		document.getElementById('absurl').value = absurl;
+		document.getElementById('thumb').src = absurl;
+	}
+//-->
+</SCRIPT>
+</body>
+</html>

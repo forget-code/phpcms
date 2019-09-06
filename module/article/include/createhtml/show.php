@@ -28,6 +28,8 @@ if(is_array($TEMP['fields'][$tablename]))
 	foreach($TEMP['fields'][$tablename] as $k=>$v)
 	{
 		$myfield = $v['name'];
+		if($v['inputtool']=='imageupload' || $v['inputtool']=='fileupload')
+		$$myfield = "<a href='".linkurl($$myfield)."' title='".$v['title']."' id='".$v['name']."' target='_blank'/>".linkurl($$myfield)."</a>";
 		$fields[] = array('title'=>$v['title'],'value'=>$$myfield);
 	}
 }
@@ -53,6 +55,7 @@ unset($copyfrom);
 if($keywords) $keys = explode(',', $keywords);
 $itemurl = linkurl($linkurl, 1);
 if($titleintact) $title = $titleintact;
+$title = htmlspecialchars($title);
 $img_maxwidth = isset($MOD['img_maxwidth']) ? $MOD['img_maxwidth'] : 550;
 $adddate = date('Y-m-d H:i:s', $addtime);
 $position = isset($TEMP['catpos'][$catid]) ? $TEMP['catpos'][$catid] : $TEMP['catpos'][$catid] = catpos($catid);

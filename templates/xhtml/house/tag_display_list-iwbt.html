@@ -1,0 +1,12 @@
+<!--{loop $displays $i $display}-->
+<li><a href="{$display[linkurl]}" title="{$display[name]}"  {$target} class="tag_title_link">
+<!--{if $showareaname}-->[{$areaidS[$display[areaid]]}]<!--{/if}-->{$display[cut_name]}</a>
+<!--{if $showhits}-->（{$display[hits]}次）<!--{/if}-->
+<!--{if $showprice}--> 起价：{$display[startprice]}元 均价：{$display[avgprice]}元<!--{/if}-->
+<!--{if $datetype}-->[<span class="tag_date">{$display[addtime]}</span>]<!--{/if}-->
+<!--{if $descriptionlen}--><br/>
+<span class="tag_description">&nbsp;&nbsp;&nbsp;&nbsp;{$display[introduce]}</span><!--{/if}--></li>
+<!--{/loop}-->
+<!--{if $pages}-->
+<div class="pages">{$pages}</div>
+<!--{/if}-->

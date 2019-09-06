@@ -1,4 +1,4 @@
-<?php 
+<?php
 defined('IN_PHPCMS') or exit('Access Denied');
 require PHPCMS_ROOT.'/module/'.$mod.'/include/common.inc.php';
 $itemid = isset($itemid) ? intval($itemid) : 0;
@@ -34,6 +34,8 @@ if(is_array($myfields))
 	foreach($myfields as $k=>$v)
 	{
 		$myfield = $v['name'];
+		if($v['inputtool']=='imageupload' || $v['inputtool']=='fileupload')
+		$$myfield = "<a href='".linkurl($$myfield)."' title='".$v['title']."' id='".$v['name']."' target='_blank'/>".linkurl($$myfield)."</a>";
 		$fields[] = array('title'=>$v['title'],'value'=>$$myfield);
 	}
 }
@@ -117,7 +119,7 @@ else
 	if($MOD['enable_reword']) $content = reword($content);
 	if($MOD['enable_keylink']) $content = keylink($content);
 }
-
+$title = htmlspecialchars($title);
 if(!$skinid) $skinid = $CAT['defaultitemskin'];
 if($skinid) $skindir = PHPCMS_PATH.'templates/'.$CONFIG['defaulttemplate'].'/skins/'.$skinid;
 if(!$templateid) $templateid = $CAT['defaultitemtemplate'] ? $CAT['defaultitemtemplate'] : 'content';

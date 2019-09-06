@@ -1,0 +1,109 @@
+{template 'product','header'}
+<link href="{$skindir}/mall.css" rel="stylesheet" type="text/css">
+<div  id="censent">
+  <div id="mallleft">
+    <div class="gwmall boxmargin" ><a href="{$MOD[linkurl]}cart.php" target="_blank"><img src="{$skindir}/images/ckgwc.gif" class="wztp" /></a><img src="{$skindir}/images/gwaw.gif" class="wztp" />
+    <div class="rhgm"><img src="{$skindir}/images/gwli.gif" />&nbsp;如何购买&nbsp;<img src="{$skindir}/images/gwli.gif" />&nbsp;如何购买</div>
+    </div>
+    <div class="mbtleft">
+      <div>浏览过的商品</div> 
+    </div>
+    <div class="boxmargin xianmall">
+    <div  class="mallx1">
+<!--浏览过的商品列表-->
+<div class="product_liulan" id="visitedproduct">
+<ul>
+正在加载浏览过的商品列表......
+</ul></div>
+    </div>
+    <div id="clear"></div>
+    </div> 
+  </div>
+  <div id="mallright">
+    <!--搜索开始-->
+<div class="search_c1"> 
+<ul>
+<form name="myform" action="{$MOD[linkurl]}search.php" method="get">
+<li class="c4">搜索：</li><li>
+<select name="searchtype">
+<option value="pdt_name">按商品名称</option>
+<option value="pdt_No">按商品编号</option>
+<option value="introduce">按商品介绍</option>
+</select></li>
+<li class="c4">关键字：</li>
+<li><input class="c2" name="keyword" type="text" /></li>
+<li class="c4">价格范围：</li>
+<li><input class="c3" name="fromprice" type="text" />-<input class="c3" name="toprice" type="text" /></li>
+<li><input type="hidden" name="dosubmit" value="1" />
+<input type="hidden" name="search" value="1" />
+<input src="{$skindir}/images/ss.gif" alt="搜索" type="image" /></li>
+<li class="c4"><a href="{$MOD[linkurl]}search.php" class="red">详细</a></li>
+</form></ul>
+</div>
+<!--搜索结束-->
+<div class="mbtleft">
+  <div><em class="btys">当前位置：<a href="{PHPCMS_PATH}">网站首页</a> &gt;&gt; <a href="{PHPCMS_PATH}product/">商城首页</a> &gt;&gt; {$position}</em></div> 
+</div>
+<div class="xianmall boxmargin mallx1">
+  <div class="mclistn">
+    <div class="mtplist"><div class="product_img"><img width="160px" height="200px" src="{$imgurl($pdt_img)}"  alt="产品图片" /></div><span><a href="{$MOD[linkurl]}gallery.php?productid={$productid}" target="_blank">查看更多图片</a></span>
+<span><a href="{$MOD[linkurl]}cart.php?productid={$productid}&action=add"><img src="{$skindir}/images/mcgm.gif" /></a>
+</span></div>
+<!--产品名称--><strong class="mcbtwz">{$pdt_name}</strong>
+<ul>
+<li>市场价：{$marketprice}元　 <font color="#fd7d00">会员价：<a id=newprice><strong>{$price}元</strong></a></font></li>
+<li>产品编号：{$pdt_No} </li>
+<li>产品品牌：{$BRANDS[$brand_id][brand_name]}</li> 
+<li>计量单位：{$pdt_unit}</li> 
+<li>产品重量：{$pdt_weight} kg </li></ul>
+<div class="mccpjj"> 
+<b>产品描述：</b><br /> 
+{$pdt_description}</div>
+<form action="{$MODULE[mail][linkurl]}sendmail.php" name="sendmail" id="sendmail">
+        <input type="hidden" name="title" value="向你推荐一款产品" />
+<input type="hidden" name="content" value="<a href={$linkurl($linkurl,1)} target=_blank>我在{$PHPCMS[sitename]}上发现了一款产
+
+品推荐你来看看<br>地址：{$linkurl($linkurl,1)}</a>" />
+</form>
+<div class="frgwc"><a href="{$MOD[linkurl]}cart.php?productid={$productid}&action=add"><img src="{$skindir}/images/frgwc.gif" /></a><a href="javascript:$('sendmail').submit();"><img src="{$skindir}/images/tjgpy.gif" /></a></div>
+  </div>
+  <div style="clear:both"></div>
+  <div>
+  </div>
+<script>
+function showContent(id)
+{
+	for (var i = 0;i < 2;i++)
+	{
+		var nav = document.getElementById("nav" + i);
+		var articlecontent = document.getElementById("articlecontent" + i);
+		if (i == id)
+		{
+			nav.className = 'mallnon';
+			articlecontent.style.display = "";
+		}
+		else
+		{
+			nav.className = 'mallnoff';
+			articlecontent.style.display = "none";
+		}
+	}
+}
+</script>
+  <div class="gwcbtn1"><strong class="mallnon" onMouseOver="showContent('0')" id="nav0">详细介绍</strong>
+  <strong class="mallnoff" onMouseOver="showContent('1')" id="nav1">主要属性</strong></div>
+  <ul class="nrcent" id="articlecontent0">
+  <li><a id="newprice">{$introduce}</a></li> 
+  </ul>
+  <ul class="nrcent" id="articlecontent1" style="display:none;">
+  <!--{loop $pdt_atts $att}--> <li>{$att[att_name]}: {$att[att_value]}</li> <!--{/loop}-->
+</ul>
+  <div class="gwcbtn1"><strong class="mallnon" > &nbsp;引用地址:</strong> &nbsp;<a href="{$itemurl}">{$itemurl}</a></div>
+  <div class="gwcbtn1" style="margin-top:15px"><strong class="mallnon" >相关评论</strong></div>
+  <div class="nrcent" ><!--相关评论js调用--><script type="text/javascript" src="{$MODULE[comment][linkurl]}list_js.php?keyid={$mod}&itemid={$productid}&title={$urlencode($title)}&commentnum=10&ordertype=1"></script></div>
+  </div>   
+  </div>
+</div>
+<script type="text/javascript" src="{$MOD[linkurl]}visited.php?productid={$productid}&visitednum={$MOD[visitednum]}"></script>
+<script type="text/javascript" src="{$MOD[linkurl]}show_js.php?itemid={$productid}"></script>
+{template 'phpcms','footer'}

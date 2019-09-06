@@ -3,6 +3,8 @@ defined('IN_PHPCMS') or exit('Access Denied');
 
 if($dosubmit)
 {
+	require_once PHPCMS_ROOT."/include/charset.func.php";
+
 	$maxdaynumber = intval($maxdaynumber);
 	$maxnumber = intval($maxnumber);
 
@@ -57,7 +59,7 @@ if($dosubmit)
 				  </url>';
 	}
 	$data .= '</urlset>';
-
+	$data = convert_encoding('gbk','utf-8',$data);
 	file_put_contents(PHPCMS_ROOT.'/sitemap.xml', $data);
 	@chmod(PHPCMS_ROOT.'/sitemap.xml', 0777);
 	showmessage($LANG['google_map_created_link_num'].count($urls));

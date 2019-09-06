@@ -16,7 +16,6 @@ if(is_array($childcats))
 		$subcats[$i] = subcat($mod,$cat['catid']);
 	}
 }
-$skinid = isset($skinid) ? $skinid : 'default';
-$skindir = PHPCMS_PATH.'templates/'.$CONFIG['defaulttemplate'].'/skins/'.$skinid;
+
 if(!@include_once(MOD_ROOT."/admin/".$file.".inc.php")) showmessage($LANG['illegal_operation']);
 ?>

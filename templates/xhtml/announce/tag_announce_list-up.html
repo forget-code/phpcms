@@ -1,0 +1,12 @@
+<marquee direction="up" onmouseover="this.stop();" onmouseout="this.start();" behavior="scroll" scrollamount="3" width="{$width}" height="{$height}">
+<table width="100%" align="center" border="0" cellpadding="0" cellspacing="0" align="center">
+{loop $announces $announce}
+<tr>
+ <td align="left" valign="top">
+ ·<a href="{$announce['linkurl']}" {if $target}target="_blank"{/if}>{$announce['title']}</a>&nbsp;[{if $showauthor}发布人：<a href="{PHPCMS_PATH}member/member.php?username={$announce['username']}" target="_blank">{$announce['username']}</a>&nbsp;{/if}{$announce['addtime']}]
+ </td>
+</tr>
+{/loop}
+</table>
+{if $pages}{$pages}{/if}
+</marquee>

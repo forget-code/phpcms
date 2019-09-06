@@ -46,13 +46,18 @@ else
 	$page = 1;
 }
 
+for($n = $page; $n <= $pagenumber; $n++)
+{
+	$filenames[$n] = PHPCMS_ROOT.'/'.cat_url('path', $catid, $n);
+}
+
 for(; $page <= $pagenumber; $page++)
 {
 	ob_start();
 	include template($mod, $templateid);
 	$data = ob_get_contents();
 	ob_clean();
-	$filename = PHPCMS_ROOT.'/'.cat_url('path', $catid, $page);
+	$filename = $filenames[$page];
 	$filepath = dirname($filename);
 	is_dir($filepath) or dir_create($filepath);
 	file_put_contents($filename,$data);

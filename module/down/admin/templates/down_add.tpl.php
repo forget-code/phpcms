@@ -28,7 +28,19 @@ function SelectPic(){
     $('thumb').value=s[0];
   }
 }
-
+function CutPic(){
+  var thumb=$('thumb').value;
+	if(thumb=='')
+	{
+		alert('请先上传缩略图');
+		$('thumb').focus();
+		return false;
+	}
+  var arr=Dialog('corpandresize/ui.php?<?=$PHPCMS[siteurl]?>'+thumb,'',700,500);
+  if(arr!=null){
+    $('thumb').value=arr;
+  }
+}
 function SelectFile(){
   var arr=Dialog('?mod=phpcms&file=file_select&channelid=<?=$channelid?>&type=file','',820,600);
   if(arr!=null){
@@ -66,7 +78,7 @@ function doKeywords(ID)
 	  <input type="button"  onclick="window.location='?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&channelid=<?=$channelid?>&catid=<?=$catid?>&mode=0';" value="切换到普通模式">
 	  <?php } else { ?>
 	  <input type="button"  onclick="window.location='?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&channelid=<?=$channelid?>&catid=<?=$catid?>&mode=1';" value="切换到镜像模式">
-	  <?php } ?>&nbsp;&nbsp;<?php echo $category_jump; ?></td>
+	  <?php } ?></td>
   </tr>
 </table>
 
@@ -85,8 +97,7 @@ function doKeywords(ID)
 </tr>
 </table>
 
-<form action="?mod=<?=$mod?>&file=<?=$file?>&action=add&channelid=<?=$channelid?>&catid=<?=$catid?>&mode=<?=$mode?>&dosubmit=1" method="post" name="myform" onsubmit="return doCheck();">
-<input type="hidden" name="down[catid]" value="<?=$catid?>" />
+<form action="?mod=<?=$mod?>&file=<?=$file?>&action=add&channelid=<?=$channelid?>&mode=<?=$mode?>&dosubmit=1" method="post" name="myform" onsubmit="return doCheck();">
 <input type="hidden" name="down[username]" value="<?=$_username?>" />
 <input type="hidden" name="down[mode]" value="<?=$mode?>" />
 <table cellpadding="2" cellspacing="1" class="tableborder">
@@ -96,7 +107,7 @@ function doKeywords(ID)
   </tr>
     <tr> 
       <td width="15%" class="tablerow">所属栏目</td>
-      <td class="tablerow"><font color="#FF0000"><?=$CAT['catname']?></font></td>
+      <td class="tablerow"><?=$this_category?></td>
     </tr>
 
 	
@@ -139,6 +150,7 @@ function doKeywords(ID)
       <td class="tablerow">缩略图</td>
       <td class="tablerow"><input name="down[thumb]" type="text" id="thumb" size="58">  <input type="button" value="上传图片" onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&channelid=<?=$channelid?>&uploadtext=thumb&type=thumb&width=<?=$MOD['thumb_width']?>&height=<?=$MOD['thumb_height']?>','upload_thumb','350','350')">
 	   <input name="fromupload" type="button" id="fromupload" value="从已经上传的图片中选择" onclick="SelectPic()" style="width:150px;"/>
+	   <input name="cutpic" type="button" id="cutpic" value="裁剪图片" onclick="CutPic()"/>
       </td>
     </tr>
 
@@ -172,7 +184,7 @@ function doKeywords(ID)
 	<tr title="Tips:系统提供的上传功能只适合上传比较小的文件（2M以内）。如果软件比较大，请先使用FTP上传，而不要使用系统提供的上传功能，以免上传出错或过度占用服务器的CPU资源。">
 	<td class="tablerow"><a href="?mod=<?=$mod?>&file=upload&channelid=<?=$channelid?>" target="upload">上传文件</a></td>
 	<td class="tablerow">
-	<iframe id="upload" name="upload" src="?mod=<?=$mod?>&file=upload&channelid=<?=$channelid?>" border="0" vspace="0" hspace="0" marginwidth="0" marginheight="0" framespacing="0" frameborder="0" scrolling="no" width="100%" height="50"></iframe>
+	<iframe id="uploads" name="uploads" src="?mod=<?=$mod?>&file=upload&channelid=<?=$channelid?>" border="0" vspace="0" hspace="0" marginwidth="0" marginheight="0" framespacing="0" frameborder="0" scrolling="no" width="100%" height="50"></iframe>
 	</td>
 	</tr>
 <?php } ?>
@@ -182,6 +194,13 @@ function doKeywords(ID)
       <td class="tablerow">文件大小</td>
       <td class="tablerow"><input name="down[filesize]" type="text" id="filesize" size="15"> <select name="filesizetype"><option value="0">单位</option><option value="B">B</option><option value="Kb" selected>Kb</option><option value="M">M</option><option value="G">G</option><option value="T">T</option></select> 如大小未知，请留空，如不选择单位，系统将自动计算</td>
 	  </tr>
+<tr> 
+      <td class="tablerow">转向链接</td>
+      <td class="tablerow">
+       <input type="text" name="down[linkurl]" id="linkurl"  size="50" maxlength="255" disabled value="http://"><input name="down[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" ><font color="#FF0000">转向链接</font>
+	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
+     </td>
+    </tr>
     <tr> 
       <td class="tablerow">推荐位置</td>
       <td class="tablerow"><?=$position?></td>
@@ -227,17 +246,9 @@ function doKeywords(ID)
   </tr>
 
 	<tr> 
-      <td class="tablerow">添加日期</td>
-      <td class="tablerow"><?=date_select('down[addtime]', $today)?>&nbsp;格式：yyyy-mm-dd</td>
+      <td width="15%" class="tablerow">添加日期</td>
+      <td class="tablerow"><?=date_select('down[addtime]', $today,'%Y-%m-%d %H:%M:%S')?></td>
     </tr>
-    <tr> 
-      <td class="tablerow">转向链接</td>
-      <td class="tablerow">
-       <input type="text" name="down[linkurl]" id="linkurl"  size="50" maxlength="255" disabled value="http://"><input name="down[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" ><font color="#FF0000">转向链接</font>
-	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
-     </td>
-    </tr>
-	
     <tr> 
       <td class="tablerow">是否生成</td>
       <td class="tablerow"><input type="radio" name="down[ishtml]" value="1" <?php if($CAT['ishtml']==1) {?>checked <?php } ?>  onclick="$('htmlrule').style.display='';$('htmlprefix').style.display='';$('htmldir').style.display='';$('phprule').style.display='none';"> 是 <input type="radio" name="down[ishtml]" value="0" <?php if($CAT['ishtml']==0) {?>checked <?php } ?> onclick="$('htmlrule').style.display='none';$('htmldir').style.display='none';$('htmlprefix').style.display='none';$('phprule').style.display='';"> 否</td>

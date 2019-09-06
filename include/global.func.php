@@ -28,6 +28,19 @@ function new_stripslashes($string)
 	return $string;
 }
 
+function filter_xss($string, $allowedtags = '', $disabledattributes = array('onabort', 'onactivate', 'onafterprint', 'onafterupdate', 'onbeforeactivate', 'onbeforecopy', 'onbeforecut', 'onbeforedeactivate', 'onbeforeeditfocus', 'onbeforepaste', 'onbeforeprint', 'onbeforeunload', 'onbeforeupdate', 'onblur', 'onbounce', 'oncellchange', 'onchange', 'onclick', 'oncontextmenu', 'oncontrolselect', 'oncopy', 'oncut', 'ondataavaible', 'ondatasetchanged', 'ondatasetcomplete', 'ondblclick', 'ondeactivate', 'ondrag', 'ondragdrop', 'ondragend', 'ondragenter', 'ondragleave', 'ondragover', 'ondragstart', 'ondrop', 'onerror', 'onerrorupdate', 'onfilterupdate', 'onfinish', 'onfocus', 'onfocusin', 'onfocusout', 'onhelp', 'onkeydown', 'onkeypress', 'onkeyup', 'onlayoutcomplete', 'onload', 'onlosecapture', 'onmousedown', 'onmouseenter', 'onmouseleave', 'onmousemove', 'onmoveout', 'onmouseover', 'onmouseup', 'onmousewheel', 'onmove', 'onmoveend', 'onmovestart', 'onpaste', 'onpropertychange', 'onreadystatechange', 'onreset', 'onresize', 'onresizeend', 'onresizestart', 'onrowexit', 'onrowsdelete', 'onrowsinserted', 'onscroll', 'onselect', 'onselectionchange', 'onselectstart', 'onstart', 'onstop', 'onsubmit', 'onunload'))
+{
+	if(is_array($string))
+	{
+		foreach($string as $key => $val) $string[$key] = filter_xss($val, ALLOWED_HTMLTAGS);
+	}
+	else
+	{
+		$string = preg_replace('/\s('.implode('|', $disabledattributes).').*?([\s\>])/', '\\2', preg_replace('/<(.*?)>/ie', "'<'.preg_replace(array('/javascript:[^\"\']*/i', '/(".implode('|', $disabledattributes).")[ \\t\\n]*=[ \\t\\n]*[\"\'][^\"\']*[\"\']/i', '/\s+/'), array('', '', ' '), stripslashes('\\1')) . '>'", strip_tags($string, $allowedtags)));
+	}
+	return $string;
+}
+
 function strip_sql($string)
 {
 	global $search_arr,$replace_arr;
@@ -204,7 +217,7 @@ function str_cut($string, $length, $dot = ' ...')
 	global $CONFIG;
 	$strlen = strlen($string);
 	if($strlen <= $length) return $string;
-	$string = str_replace(array('&nbsp;', '&amp;', '&quot;', '&#039;', '&lt;', '&gt;'), array(' ', '&', '"', "'", '<', '>'), $string);
+	$string = str_replace(array('&nbsp;', '&amp;', '&quot;', '&#039;', '&ldquo;', '&rdquo;', '&mdash;', '&lt;', '&gt;'), array(' ', '&', '"', "'", '“', '”', '—', '<', '>'), $string);
 	$strcut = '';
 	if(strtolower($CONFIG['charset']) == 'utf-8')
 	{
@@ -431,15 +444,16 @@ function imgurl($imgurl = '', $isabs = 0)
 
 function style($title, $style = '')
 {
-	return $style == '' ? $title : "<span style=\"$style\">$title</span>";
+	return $style == '' ? $title : "<samp style=\"$style\">$title</samp>";
 }
 
 function checkcode($checkcode, $enable = 1, $forward = '')
 {
-	global $LANG;
+	global $LANG, $session;
 	if(!$enable) return TRUE;
-    if(!isset($_SESSION['checkcode'])) showmessage($LANG['do_not_refresh'], $forward);
-	if($_SESSION['checkcode'] != $checkcode)
+	if(!is_object($session)) $session = new phpcms_session();
+	if(!isset($_SESSION['checkcode'])) showmessage($LANG['do_not_refresh'], $forward);
+	if(strtolower($_SESSION['checkcode']) != strtolower($checkcode))
 	{
 		unset($_SESSION['checkcode']);
 		showmessage($LANG['checkcode_error'], $forward);
@@ -449,7 +463,7 @@ function checkcode($checkcode, $enable = 1, $forward = '')
 
 function editor($textareaid = 'content', $toolbar = 'phpcms', $width = 500, $height = 400, $editorName = 'editor')
 {
-	global $CONFIG, $channelid, $mod, $iseditorinit,$PHPCMS;
+	global $CONFIG, $channelid, $mod, $iseditorinit,$PHPCMS,$CHA;
 	if(!$PHPCMS['enableeditor']) return FALSE;
 	$module = $mod ? $mod : 'phpcms';
 	if($toolbar == 'editor')
@@ -475,29 +489,55 @@ function editor($textareaid = 'content', $toolbar = 'phpcms', $width = 500, $hei
 				<iframe id=\"".$textareaid."___Frame\" src=\"".PHPCMS_PATH."fckeditor/editor/fckeditor.html?InstanceName=".$textareaid."&amp;Toolbar=".$toolbar."\" width=\"".$width."\" height=\"".$height."\" frameborder=\"no\" scrolling=\"no\"></iframe>\n";
 	}
 }
-
-function date_select($name, $value = '', $format = 'yyyy-mm-dd')
+function date_select($name, $value = '', $format = '%Y-%m-%d')
 {
 	global $iscalendarinit;
-	if($value == '0000-00-00') $value = '';
+	if($value == '0000-00-00 00:00:00') $value = '';
 	$id = str_replace(array('[',']'), array('',''), $name);
+	if($format == '%Y-%m-%d')
+	{
+		$size = 10;
+		$showsTime = 'false';
+	}
+	else
+	{
+		$size = 20;
+		$showsTime = 'true';
+	}
 	$str = '';
 	if(!$iscalendarinit)
 	{
 		$iscalendarinit = 1;
-		$str .= "<script language=\"javascript\">var imgDir = \"".PHPCMS_PATH."include/calendar/\";</script>\n<script language=\"javascript\" src=\"".PHPCMS_PATH."include/calendar/calendar.js\"></script>\n";
+		$str .= "<link rel=\"stylesheet\" type=\"text/css\" media=\"all\" href=\"".PHPCMS_PATH."include/calendar/calendar-blue2.css\" title=\"system\" />";
+		$str .= "<script type=\"text/javascript\" src=\"".PHPCMS_PATH."include/calendar/calendar.js\"></script>";
+		$str .= "<script type=\"text/javascript\" src=\"".PHPCMS_PATH."include/calendar/calendar-zh.js\"></script>";
+		$str .= "<script type=\"text/javascript\" src=\"".PHPCMS_PATH."include/calendar/calendar-setup.js\"></script>";
 	}
-	$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="10">&nbsp;<img src="'.PHPCMS_PATH.'include/calendar/date_selector.gif" border="0" align="absMiddle" style="cursor:pointer" onmouseover="popUpCalendar(this,document.getElementById(\''.$id.'\'),\''.$format.'\');">';
+	$str .= '<input type="text" name="'.$name.'" id="'.$id.'" value="'.$value.'" size="'.$size.'" readonly>&nbsp;';
+	$str .= '<script language="javascript" type="text/javascript">date = new Date();document.getElementById ("'.$id.'").value="'.$value.'";
+    Calendar.setup({
+        inputField     :    "'.$id.'",
+        ifFormat       :    "'.$format.'",
+        showsTime      :    '.$showsTime.',
+        timeFormat     :    "24"
+    });</script>';
 	return $str;
 }
 
 function subcat($keyid = 1, $catid = 0, $type = 'menu')
 {
 	global $CATEGORY, $TEMP;
-	if(!isset($CATEGORY[$catid])) $CATEGORY = isset($TEMP['category'][$keyid]) ? $TEMP['category'][$keyid] : $TEMP['category'][$keyid] = cache_read('categorys_'.$keyid.'.php');
-    if(!$CATEGORY) return array();
+	if(!isset($CATEGORY) || !isset($TEMP['category'][$keyid]))
+	{
+		$_CATEGORY = isset($TEMP['category'][$keyid]) ? $TEMP['category'][$keyid] : $TEMP['category'][$keyid] = cache_read('categorys_'.$keyid.'.php');
+	}
+	else
+	{
+		$_CATEGORY = $CATEGORY;
+	}
+	if(!$_CATEGORY) return array();
 	$subcat = array();
-	foreach($CATEGORY as $id=>$cat)
+	foreach($_CATEGORY as $id=>$cat)
 	{
 		if($cat['parentid'] == $catid)
 		{

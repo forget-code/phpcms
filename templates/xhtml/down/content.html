@@ -1,0 +1,118 @@
+{template 'phpcms','header'}
+</span>
+<link href="{$skindir}/down.css" rel="stylesheet" type="text/css">
+<div id="censent"><!--content-->
+  <div id="left" >
+    <div id="bt11">当前位置：<a href="{$channelurl}">{$channelname}首页</a> >> {$position} {$title}</div>
+    
+    <div id="downn">
+	<div class="down_title">{$title}</div>
+    <div class="imgrj">
+        <!--下载文档图片-->
+        <img src="{$thumb}" border="0" width="130" height="120" /></div>
+        <!--下载文档名称-->
+    <div class="downrjsm">
+	<div class="infos">
+	<ul>
+		<li><span>授权形式：</span>{$my_copytype}</li>
+		<li><span>作者/开发商：</span><a href="{$homepage}" target="_blank">{$author}</a></li>
+		<li><span>文件大小：</span>{$filesize}</li>
+		<li><span>软件语言：</span>{$my_language}</li>
+		<li><span>版本号：</span>{$my_version}</li>
+	</ul>
+	<ul>
+		<li><span>软件平台：</span>{$my_system}</li>
+		<li><span>软件类别：</span>{$my_classtype}</li>
+		<li><span>下载次数：</span>{$hits}</li>
+		<li><span>评论等级：</span>{$stars}</li>
+		<li><span>更新时间：</span>{$adddate}</li>
+	</ul>
+	<ul class="cxx">
+	<li><span>演示地址：</span><a href="{$my_demourl}" target="_blank">{$my_demourl}</a></li>
+	</ul>
+   </div>
+</div>
+    <div  id="clear"></div>
+        <div id="bt111"><span class="STYLE1">软件介绍:</span>&nbsp;&nbsp;
+      </div>
+    <div id="padding">{$introduce}</div>
+ <div id="bt111"><span class="STYLE1">下载地址:</span>&nbsp;&nbsp;
+      </div> 
+<!--下载-->
+    <div  id="padding">
+   		<!--本地下载： -->
+        {loop $downurls $downurl}
+             <img src="{$skindir}/images/xzli.gif" /><a href="{$channelurl}down.php?downid={$downid}&id={$downurl['id']}" title="{$downurl['name']}" target="_blank">{$downurl['name']}</a><br />
+        {/loop}
+        
+        {if !$arrgroupidview && !$readpoint}
+	{if $MOD['enable_xunlei']}
+		<br />
+		<script src="http://pstatic.xunlei.com/js/webThunderDetect.js"></script>
+		迅雷下载：
+		{loop $downurls $downurl}
+		<img src="{$skindir}/images/xzli.gif" /><a href="#" thunderHref="{$ThunderEncode($downurl['url'])}" thunderPid="{$MOD[xunleipid]}" thunderType="" thunderResTitle="{$title}{$downurl[name]}" onClick="return OnDownloadClick_Simple(this,2)" oncontextmenu="ThunderNetwork_SetHref(this)" >{$downurl[name]}</a>
+		{/loop}
+	{/if}
+	{if $MOD['enable_flashget']}
+		<br />
+		<script src="http://ufile.kuaiche.com/Flashget_union.php?fg_uid={$MOD[flashgetpid]}"></script>
+		<script>
+			function ConvertURL2FG(url,fUrl,uid)
+			{	
+				try{
+					FlashgetDown(url,uid);
+				}catch(e){location.href = fUrl;}
+			}
+			function Flashget_SetHref(obj,uid){obj.href = obj.fg;}
+		</script>
+		快车下载：
+		{loop $downurls $downurl}
+		{php $flashgeturl = FlashgetEncode($downurl['url'], $MOD['flashgetpid']);}
+		<img src="{$skindir}/images/xzli.gif" /><a href="#" onClick="ConvertURL2FG('{$flashgeturl}', '{$downurl[url]}', {$MOD[flashgetpid]})" oncontextmenu="Flashget_SetHref(this)" fg="{$flashgeturl}">{$downurl[name]}</a>
+		{/loop}
+	{/if}
+{/if}    </div>
+
+							  <div id="bt111"><span class="STYLE1">相关评论</span></div>
+<div id="down-jies">
+<script type="text/javascript" src="{$MODULE['comment']['linkurl']}list_js.php?keyid={$channelid}&itemid={$downid}&commentnum=10&ordertype=1&title={$urlencode($title)}"></script>
+</div>
+<!--下载-->
+<div id="bt111"><span class="STYLE1">相关下载</span></div>
+<div id="down-jies">
+{tag_相关下载}</div>
+    </div>
+  </div>       
+    <div id="right">
+
+        <div   class="boxmargin"><script language="javascript" src="{PHPCMS_PATH}data/js/7.js"></script></div>
+        <div  class="layout">
+            <ul class="xw-1">
+            <li class="xw-left">
+            <div class="xw-onn" id="bg"><span>推荐下载</span></div>
+            </li>
+            <li class="xw-right"></li></ul>
+                <div class="xian boxmargin boxr">
+                    <ul class="down-List-1">
+                    {tag_推荐下载}
+                    </ul>
+                </div>
+      </div>
+		<div  class="layout">
+            <ul class="xw-1">
+                <li class="xw-left">
+                	<div class="xw-onn"id="bg"><span>热点下载</span></div>
+                </li>
+                <li class="xw-right"><a href="#"></a></li>
+            </ul>
+                <div class="xian boxmargin boxr">
+                    <ul class="down-List-1">
+                        {tag_下载排行}
+                    </ul>
+                </div>
+      </div>
+    </div>
+</div>
+<script type="text/javascript" src="{$channelurl}show_js.php?itemid={$itemid}"></script>
+{template 'phpcms','footer'}

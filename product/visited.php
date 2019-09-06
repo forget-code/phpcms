@@ -29,11 +29,11 @@ $html = '';
 if($invisit)
 {
 	$i = 0;
-	$result = $db->query("SELECT pdt_name,pdt_img,linkurl FROM ".TABLE_PRODUCT." WHERE productid IN($invisit)");	
+	$result = $db->query("SELECT pdt_name,pdt_thumb,linkurl FROM ".TABLE_PRODUCT." WHERE productid IN($invisit)");	
 	while($r = $db->fetch_array($result))
 	{
 		if($i>=$visitednum) break;
-		$html.= "<li><a href=\"".linkurl($r['linkurl'])."\"><img src=\"".imgurl($r['pdt_img'])."\" alt=\"".$r['pdt_name']."\" border=\"0\" /></a></li>";
+		$html.= "<li><a href=\"".linkurl($r['linkurl'])."\"><img src=\"".imgurl($r['pdt_thumb'])."\" alt=\"".$r['pdt_name']."\" border=\"0\" /></a></li>";
 		$i++;
 	}
 }

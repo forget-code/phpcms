@@ -1,0 +1,26 @@
+<table cellpadding="0" cellspacing="0" width="100%" >
+   <tr>
+    <td class="btjcwj">{$subject}</td>
+  </tr>
+<tr>
+<td style="padding-left:10px;">
+<form method="post" action="{$MODULE[vote][linkurl]}vote.php" target="_blank" name="{$frmVote}">
+<input type="hidden" name="voteid" value="{$voteid}">
+<input type="hidden" name="checktype" value="1">
+{$options}
+</form>
+<script>function {$frmVote}_submit()
+{
+	if({$condition})
+	{document.{$frmVote}.submit();}
+	else
+	{alert("你没有选择选项！");return;}
+}
+</script>
+
+<input type="button" border="0" value=" 投票 " name="submit" onClick="{$frmVote}_submit()">
+【<a href="{$MODULE[vote][linkurl]}show.php?voteid={$voteid}" target="votewin">投票结果</a>】
+</td>
+</tr>
+</form>
+</table>

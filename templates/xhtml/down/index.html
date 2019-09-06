@@ -1,0 +1,77 @@
+{template 'phpcms','header'}
+<link href="{$skindir}/down.css" rel="stylesheet" type="text/css">
+<div id="censent">
+  <!--content-->
+  <div id="left">
+    <div class="boxmargin">
+      <div id="jht">
+        <div id="flash">{tag_flash_下载频道首页}</div>
+        </div>
+      <div id="jhxxnn">
+        <div id="btnewmenu">
+          <ul>
+            <li>推荐下载</li>
+          </ul>
+        </div>
+        <div >
+          <ul class="List-1">
+            {tag_下载频道首页推荐列表}
+          </ul>
+        </div>
+      </div>
+      <div style="clear:both"></div>
+    </div>
+    <div class="search">
+<script language="JavaScript" src="{PHPCMS_PATH}data/js/search.js"></script>
+</div>
+    <div style="clear:both"></div>
+    <!--自定义栏目开始-->
+    {loop $childcats $i $cat}
+    <div {if $i%2!=1}id="xwzxboxl"{else}id="xwzxboxr"{/if}>
+      <ul class="xw-1">
+        <li class="xw-left">
+          <div class="xw-on"><span>{$cat[catname]}</span></div>
+        </li>
+        <li class="xw-right"><a href="{$cat[linkurl]}" class="more">更多</a></li>
+      </ul>
+      <div class="xian boxzwzx boxmargin" >
+        <ul class="List-1">
+          {tag_下载频道首页自定义栏目列表}
+        </ul>
+      </div>
+    </div>
+    {/loop}
+    <!--自定义栏目结束-->
+  </div>
+  <div id="right">
+    <div class="layout">
+      <ul class="xw-1">
+        <li class="xw-left">
+          <div class="xw-onn"><span>&nbsp;下载排行</span></div>
+        </li>
+        <li class="xw-right"></li>
+      </ul>
+      <div class="xian boxr boxmargin">
+        <ul class="downph">
+          {tag_下载频道首页排行}
+        </ul>
+      </div>
+    </div>
+    <div  class="boxmargin"><script language="javascript" src="{PHPCMS_PATH}data/js/7.js"></script></div>
+    <!--推荐专题 -->
+<div  class="layout">
+  <ul class="xw-1">
+    <li class="xw-left">
+      <div class="xw-onn"><span>推荐专题</span></div>
+    </li>
+    <li class="xw-right"><a href="{$CHA[linkurl]}special/">更多</a></li>
+  </ul>
+  <div class="xian boxmargin"> {tag_下载频道首页专题列表}
+    <ul class="phtoph">
+      {tag_推荐专题名称列表}
+    </ul>
+  </div>
+</div>
+  </div>
+</div>
+{template 'phpcms','footer'}

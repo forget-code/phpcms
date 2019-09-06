@@ -1,48 +1,45 @@
 <?php
-require_once("alipay_config.php");
-require_once("alipay_notify.php");
-$alipay = new alipay_notify($partner,$security_code,$sign_type,$_input_charset,$transport);
+defined('IN_PHPCMS') or exit('Access Denied');
+require_once MOD_ROOT.'/payonline/'.$paycenter.'/alipay_notify.php';
+require_once MOD_ROOT.'/payonline/'.$paycenter.'/alipay_config.php';
+$pay['notify_type']=$notify_type;			//交易类型
+$pay['notify_id']=$notify_id;				//支付宝流水号
+$pay['notify_time']=$notify_time;			//通知时间
+$pay['sign']=$sing;							//加密字符串
+$pay['sign_type']=$sing_type;				//加密方式
+$pay['out_trade_no']=$out_trade_no;			//交易ID号
+$pay['subject']=$subject;					//商品名称
+$pay['body']=$body;							//商品描述
+$pay['total_fee']=$total_fee;				//成交价
+$pay['payment_type']=$payment_type;			//支付类型
+$pay['seller_email']=$seller_email;			//卖家EMIAL
+$pay['seller_id']=$seller_id ;				//卖家ID
+$pay['buyer_id']=$buyer_id;					//买家ID
+$pay['buyer_email']=$buyer_email;			//卖家EMAIL
+$pay['trade_status']=$trade_status;			//交易状态
+$pay['sign']=$sign;
+$pay['exterface']=$exterface;
+$pay['is_success']=$is_success;
+$pay['trade_no']=$trade_no;
+//对URL组合
+$alipay = new alipay_notify($pay,$security_code,$sign_type,$_input_charset,$transport);
+//MD5验证
 $verify_result = $alipay->return_verify();
-
- //获取支付宝的反馈参数
-	$orderid = $out_trade_no; //获取订单号
-	$amount = $total_fee;//获取总价格   
- 
-   /* $receive_name    =$_GET['receive_name'];   //获取收货人姓名
-	$receive_address =$_GET['receive_address']; //获取收货人地址
-	$receive_zip     =$_GET['receive_zip'];  //获取收货人邮编
-	$receive_phone   =$_GET['receive_phone']; //获取收货人电话
-	$receive_mobile  =$_GET['receive_mobile']; //获取收货人手机
-	*/
-  
-
-if($verify_result) {
-	$info = dopay($orderid, $amount, '未知');
-        if($info)
-		{
-			$paystatus = 1;
-			extract($info, EXTR_OVERWRITE);
-		}
-		else
+if($verify_result)
+{
+	$info = dopay($out_trade_no, $total_fee, '未知');
+    if($info)
+	{
+		$paystatus = 1;
+		extract($info, EXTR_OVERWRITE);
+	}
+	else
 	{
 		$paystatus = 2;
 	}
-	//这里放入你自定义代码,比如根据不同的trade_status进行不同操作
-	log_result("verify_success"); //将验证结果存入文件	
 }
-else  {
+else
+{
 	$paystatus = 0;
-	//这里放入你自定义代码，这里放入你自定义代码,比如根据不同的trade_status进行不同操作
-	log_result ("verify_failed");
 }
-
-//日志消息,把支付宝反馈的参数记录下来
-function  log_result($word) { 
-	$fp = fopen("log.txt","a");	
-	flock($fp, LOCK_EX) ;
-	fwrite($fp,$word."：执行日期：".strftime("%Y%m%d%H%I%S",time())."\t\n");
-	flock($fp, LOCK_UN); 
-	fclose($fp);
-}
-	
 ?>

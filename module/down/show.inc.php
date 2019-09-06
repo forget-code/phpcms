@@ -25,8 +25,13 @@ if(is_array($myfields))
 {
 	foreach($myfields as $k=>$v)
 	{
-		$myfield = $v['name'];
-		$fields[] = array('title'=>$v['title'],'value'=>$$myfield);
+		if($v['fieldid']>9)
+		{
+			$myfield = $v['name'];
+			if($v['inputtool']=='imageupload' || $v['inputtool']=='fileupload')
+			$$myfield = "<a href='".linkurl($$myfield)."' title='".$v['title']."' id='".$v['name']."' target='_blank'/>".linkurl($$myfield)."</a>";
+			$fields[] = array('title'=>$v['title'],'value'=>$$myfield);
+		}
 	}
 }
 $CAT = cache_read('category_'.$catid.'.php');

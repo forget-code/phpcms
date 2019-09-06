@@ -1,0 +1,122 @@
+<script language="javascript">
+<!--
+function CheckForm()
+{
+	if ($F('yourname') == "")
+	{
+		alert("用户名不能为空！")
+		Field.focus('yourname');
+		return false
+	}
+	if ($F('telephone') == "")
+	{
+		alert("电话不能为空！")
+		Field.focus('telephone');
+		return false
+	}
+	if ($F('unit') == "")
+	{
+		alert("所在单位名称不能为空！")
+		Field.focus('unit');
+		return false
+	}
+
+	if ($F('email') == "")
+	{
+		alert("Email地址不能为空！")
+		Field.focus('email');
+		return false
+	}
+	else
+	{
+		var mail = $F('email');
+		if(!RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(mail))
+		{
+			alert("Email 地址错误，请检查")
+			Field.focus('email');
+			return false
+		}
+	}
+	if ($F('content') == "")
+	{
+		alert("内容不能为空！")
+		Field.focus('content');
+		return false
+	}
+}
+//-->
+</script>
+<div id="centent">
+
+<div id="rightpbox">
+<h3>
+<div>求购详细信息</div>
+</h3>
+<ul class="qgxxnn">
+<li><span style="float:right;"><a href="{$guestbookurl}companyid-{$product[companyid]}/label-buy/item-{$productid}.html" target="_blank"><font color="#FF0000">[我要询价]</font></a></span><strong>求购物品：</strong>{$product[title]} </li>
+<li><strong>点击次数：</strong><span id="hits">0</span></li>
+<li><strong>求购要求：</strong> {$product[introduce]} </li>
+<li><strong>采购单位：</strong>{$product[unit]}</li> 
+<li><strong>联 系 人：</strong>{$product[linkman]}</li>
+<li>&nbsp;&nbsp;<strong>E-Mail：</strong> {$product[email]}</li>
+<li><strong>联系电话：</strong>{$product[phone]} </li>
+<li><strong>联系地址：</strong>{$product[address]}</li>  
+<li class="youxiaoq"><strong>有效期：</strong>{$product['period']} 前 </li>
+</ul>
+<h5>咨询留言</h5>
+<ul class="zxly">
+<form action="{$guestbookurl}index.html" method="post" name="myform" id="myform" onsubmit='return CheckForm();'>
+<li>您的姓名：
+  <input name="yourname" id="yourname" type="text" size="20" maxlength="10" /> 
+* </li>
+<li>公司传真：
+  <input name="fax" id="fax" type="text" size="20" />
+</li>  
+<li>联系电话：
+  <input name="telephone" id="telephone" type="text" size="20" maxlength="50" />
+*</li>
+<li>QQ：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <input name="qq" id="qq" type="text" size="20" maxlength="9" /> 
+</li>  
+<li>所在单位：
+  <input name="unit" id="unit" type="text" size="20" />
+* </li>
+<li>     MSN： &nbsp;&nbsp;&nbsp;&nbsp;
+  <input name="msn" id="msn" type="text" size="20" /> 
+</li>
+<li>Email：&nbsp;&nbsp;&nbsp;
+  <input name="email" id="email" type="text" size="20" /> 
+</li>
+<li>留言内容：<br />
+  <textarea name="content" id="content" rows="6" cols="40"></textarea> *</li> 
+ <li><input name="dosubmit" type="submit" value=" 提交询价 " />
+          <input name="companyid" type="hidden" value="{$product[companyid]}" />
+          <input name="item" type="hidden" value="{$productid}" />
+	    </li>
+	</form>
+</ul>
+</div>
+
+<div id="lefepbox4">
+<h2><div>热点导航</div></h2>
+<ul class="rddh">
+  {loop $m_user $ms}
+  <li><a href="{$ms[url]}">- {$ms[menutitle]}</a></li>
+{/loop}
+</ul>
+<h2><span><a href="{$producturl}">更多</a></span>
+<div>热门产品</div>
+</h2>
+<ul class="xwzx">
+{tag_企业产品页热门产品}
+</ul> 
+<h2><span><a href="{$buyurl}">更多</a></span>
+<div>最新求购</div>
+</h2>
+<ul class="xwzx">
+{tag_企业主页最新求购列表}
+</ul>
+</div>
+<div style="clear:both"></div></div>
+<script type="text/javascript" src="{$PHPCMS['siteurl']}yp/web/show_js.php?label=buy&item={$productid}"></script>
+{template 'yp','com_xhtml-footer'}

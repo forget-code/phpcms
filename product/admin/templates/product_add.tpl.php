@@ -162,11 +162,17 @@ function GetneratePdtNo()
       <td class='tablerow'><strong>商品描述</strong><br>简介，用于需要在列表时显示</td>
       <td class='tablerow'><textarea name='pdt[pdt_description]' cols='50' rows='3' id='pdt_description'></textarea></td>
     </tr>
-        <tr>
-      <td  class='tablerow'><strong>商品缩略图</strong><br></td>
-      <td class='tablerow'><input name='pdt[pdt_img]' type='text' id='pdt_img' size='40' maxlength='50'/>&nbsp;&nbsp; 
-      <input type="button" value=" 上传 " onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&uploadtext=pdt_img&type=thumb&width=<?=$MOD['thumbwidth']?>&height=<?=$MOD['thumbheight']?>','upload','350','200')">
-      &nbsp;&nbsp;请到模块配置内更改默认生成缩略图高宽</td>
+     <tr>
+      <td  class='tablerow'><strong>商品小缩略图</strong><br></td>
+      <td class='tablerow'><input name='pdt[pdt_img]' type='text' id='pdt_img' size='40' maxlength='50' />&nbsp;&nbsp; 
+      <input type="button" value=" 上传 " onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&uploadtext=pdt_img&type=both&width=<?=$MOD['thumbwidth']?>&height=<?=$MOD['thumbheight']?>','upload','350','200')">
+      &nbsp;&nbsp;请到模块配置内更改默认生成小缩略图高宽</td>
+    </tr>
+	<tr>
+      <td  class='tablerow'><strong>商品大缩略图</strong><br></td>
+      <td class='tablerow'><input name='pdt[pdt_bigimg]' type='text' id='pdt_bigimg' size='40' maxlength='50' />&nbsp;&nbsp; 
+      <input type="button" value=" 上传 " onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&uploadtext=pdt_bigimg&type=thumb&width=<?=$MOD['bigthumbwidth']?>&height=<?=$MOD['bigthumbheight']?>','upload','350','200')">
+      &nbsp;&nbsp;请到模块配置内更改默认生成大缩略图高宽</td>
     </tr>
     <tr>
       <td class='tablerow'><strong>立即上架</strong><br>  </td>
@@ -217,7 +223,7 @@ function GetneratePdtNo()
     	<td colspan='2' class='tablerow'>    	 
         	<table cellpadding="2" cellspacing="1" id="product_image" border="0" align="center" width="100%" style="background:White;border:#F1F3F5 1px solid;">
 			<tr>
-			<td class='tablerow' valign="middle" id='createtd'><table cellpadding="2" cellspacing="1" border="0"><tr><td>图片描述 <input type="text" name="productimage_intro[]" size="20" />&nbsp;&nbsp;图片地址 <input type="text" name="productimage_url[]"  size="30" id="pdt_images"/>&nbsp;<input type="button" value=" 上传 " onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&uploadtext=pdt_images&type=both&width=<?=$MOD['thumbwidth']?>&height=<?=$MOD['thumbheight']?>','upload','350','200')">&nbsp;&nbsp;</td><td><input type="button"  onclick="addInputFile(this)" value="增加上传框" style="color:blue;"></td></tr></table></td>
+			<td class='tablerow' valign="middle" id='createtd'><table cellpadding="2" cellspacing="1" border="0"><tr><td>图片描述 <input type="text" name="productimage_intro[]" size="20" />&nbsp;&nbsp;图片地址 <input type="text" name="productimage_url[]"  size="30" id="pdt_images"/>&nbsp;<input type="button" value=" 上传 " onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&uploadtext=pdt_images&type=both&width=<?=$MOD['bigthumbwidth']?>&height=<?=$MOD['bigthumbheight']?>','upload','350','200')">&nbsp;&nbsp;</td><td><input type="button"  onclick="addInputFile(this)" value="增加上传框" style="color:blue;"></td></tr></table></td>
 			</tr>
 			</table>
     	</td>

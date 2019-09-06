@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>商品图库</title>
+<link href="{$skindir}/style.css" rel="stylesheet" type="text/css" />
+<link href="{$skindir}/style_main.css" rel="stylesheet" type="text/css" />
+<script  type="text/javascript">
+function showPic (whichpic)
+{ 		
+	document.getElementById('placeholder').src = whichpic.href; 
+	//document.getElementById('ShowLightBox').href = whichpic.href;
+	if (whichpic.title)
+	{ 			
+		document.getElementById('desc').innerHTML = whichpic.title; 
+	}
+	else
+	{ 			
+		document.getElementById('desc').innerHTML = {$pdt[pdt_name]};
+	}
+	//return false;
+}
+</script>
+</head>
+
+<body>
+<div class="main mar_10">
+　　<div class="cat_title" style="width:644px">
+       <div class="cat_name">　　商品图片相册</div>
+    </div>
+<table width="644" align="center" cellpadding="0" cellspacing="0" class="gray mar_5">
+  <tr>
+    <td width="520" height="400">
+	  <div class="picture_show"><img src="{PHPCMS_PATH}{$pdt[pdt_bigimg]}" alt="点击查看完全尺寸"  id="placeholder" onclick="window.open(this.src);" style="cursor:pointer;"/></div>
+ 	</td>
+    <td width="122">
+	  <div class="picture_list">
+        <ul>
+		<!--{loop $gallerys $gallery}-->
+          <li><a onclick="return showPic(this);" href="{PHPCMS_PATH}{$gallery[imgurl]}" title="{$gallery[introduce]}" /><img src="{PHPCMS_PATH}{$gallery[imgthumb]}" border="0"/></li>
+		<!--{/loop}-->
+        </ul>
+      </div></td>
+  </tr>
+</table>
+<table width="634" align="center" cellpadding="0" cellspacing="5">
+  <tr>
+    <td height="26" style="text-align:center;"><span class="font_blue"><strong  id="desc">{$pdt[pdt_name]}</strong></span></td>
+  </tr>
+</table>
+</div>
+</body>
+</html>
+

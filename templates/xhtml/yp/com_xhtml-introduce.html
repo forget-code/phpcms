@@ -1,0 +1,79 @@
+<div id="centent">
+<div id="lefebox">
+<h2><div>热点导航</div></h2>
+
+<ul class="rddh">
+{loop $m_user $ms}
+  <li><a href="{$ms[url]}">- {$ms[menutitle]}</a></li>
+{/loop}
+</ul>
+<h2><span><a href="{$articleurl}">更多</a></span>
+  <div>最新新闻</div>
+</h2>
+<ul class="xwzx">
+{tag_xhtml首页最新新闻}
+</ul> 
+<h2><span><a href="{$salesurl}">更多</a></span>
+<div>促销信息</div>
+</h2>
+<ul class="xwzx">
+{tag_xhtml首页促销信息}
+</ul>
+</div>
+<div id="rightbox">
+<h3>
+  <div>公司简介</div></h3>
+<div class="gsjj"><img src="{$skindir}/comep.gif" /><p>{$introduce}</p>
+</div>
+<h3>
+  <div>联系方式</div>
+</h3>
+<div id="contact">
+<ul class="p_1">
+<li>联 系 人：</li>
+<li>E-mail：</li>
+<li>联系地址：</li>
+</ul>
+<ul class="p_2">
+<li>{$linkman}</li>
+<li>{$email}</li>
+<li>{$address}</li>
+</ul>
+<ul class="p_1">
+<li>联系电话：</li>
+<li>传真：</li>
+<li>邮编：</li>
+</ul>
+<ul class="p_2">
+<li>{$telephone}</li>
+<li>{$fax}</li>
+<li>{$postid}</li>
+</ul>
+</div>
+
+</div>
+
+</div>
+{if $map!=''}
+<div class="mapdiv">
+<div class="postion"><span>所在位置</span></div>
+<script language="javascript" src="http://api.51ditu.com/js/maps.js"></script>
+<div id="maps" style="position:relative; width:758px; height:350px; border:black solid 1px;padding-top:5px;"> 
+    <script language="javascript">
+	var maps = new LTMaps( "maps" );
+	maps.cityNameAndZoom( "西安" , 2);
+	var c = new LTSmallMapControl();
+	maps.addControl(c);
+	var point = new LTPoint({$x},{$y}); 
+    maps.centerAndZoom( point, {$z} );
+	var text=new LTMapText(point,[0,-18]);
+	text.setLabel( "{$pagename}" );
+	setTimeout("maps.addOverLay( text );",3000);
+	var icon=new LTIcon("<?=$SITEURL?>/images/centerPoi.gif",[24,24],[12,12]);
+	var marker=new LTMarker(new LTPoint({$x},{$y}),icon);
+	maps.addOverLay(marker);
+</script>
+</div>
+</div>
+{/if}
+{template 'yp','com_xhtml-footer'}

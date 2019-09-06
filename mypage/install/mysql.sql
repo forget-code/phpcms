@@ -12,3 +12,4 @@ CREATE TABLE `phpcms_mypage` (
   PRIMARY KEY  (`mypageid`),
   KEY `name` (`name`)
 ) TYPE=MyISAM;
+INSERT INTO `phpcms_mypage` (`mypageid`, `name`, `seo_title`, `seo_keywords`, `seo_description`, `templateid`, `skinid`) VALUES(1, 'fangchan', '房产滚动', '房产', '房产', 'mypage-fcgd', '0');

@@ -1,0 +1,83 @@
+{template 'yp','header'}
+<script language="javascript">
+<!--
+function update()
+{
+	var checkurl = 'myitem.php';
+	var pars = "action=update";
+	var myAjax = new Ajax.Request(checkurl, {method: 'post', parameters: pars, onComplete: alertmessage});
+}
+
+function alertmessage(Request)
+{
+	if(Request.responseText == '1'){
+	alert('简历已经刷新到当前时间');
+	}
+	else
+	{
+		alert('操作失败');
+	}
+}
+//-->
+</script>
+<table cellspacing="0" cellpadding="0" class="member">
+<tr>
+<td valign="top" class="left">
+{template 'member','left'}
+</td>
+<td width="10">
+</td>
+<td class="right" valign="top">
+<div class="membercatslist">
+<ul>
+<li><a href="?action=edit"><span>我的简历</span></a></li>
+<li><a href="?action=manage&label=0"><span>我的职位库</span></a></li>
+<li><a href="?action=manage&label=1"><span>职位申请记录</span></a></li>
+<li><a href="javascript:update()"><span>刷新简历</span></a></li>
+</ul>
+</div>
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>职位申请记录</h1>
+<form action="" method="post" name="myform" >
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tr align="center">
+<td width="30" class="td_center">选中</td>
+<td width="40" class="td_center">ID</td>
+<td width="120" class="td_center">公司名称</td>
+<td width="100" class="td_center">招聘职位</td>
+<td class="td_center">标题</td>
+<td width="80" class="td_center">面试通知</td>
+<td width="80" class="td_center">收藏时间</td>
+<td width="70" class="td_center">招聘状态</td>
+</tr>
+{loop $stocks $stock}
+<tr align="center" onmouseout="this.style.backgroundColor='#F1F3F5'"  onmouseover="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5' ondblclick="$('stock_{$stock['stockid']}').checked = ($('stock_{$stock['stockid']}').checked ? false : true);">
+<td><input name="stockid[]" type="checkbox" value="{$stock['stockid']}" id="stock_{$stock['stockid']}"></td>
+<td>{$stock['stockid']}</td>
+<td>{$stock['companyname']}</td>
+<td>{$stock['station']}</td>
+
+<td align="left"><a href="{$stock['linkurl']}" target="_blank">{$stock['title']}</a></td>
+<td>面试</td>
+<td>{$stock['addtime']}</td>
+<td>
+{if $stock['period']}<font color="#ff0000">招聘中...</font>{else}招聘结束{/if}
+</td>
+</tr>
+{/loop}
+</table>
+</form>
+<table cellpadding="2" cellspacing="1" class="righttable">
+  <tr>
+    <td align='center'>{$pages}</td>
+  </tr>
+</table>
+</form>
+
+</div></div>
+</td>
+</tr>
+</table>
+
+{template 'phpcms','footer'}

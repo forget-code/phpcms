@@ -34,6 +34,14 @@ else
 	$page = isset($page) ? intval($page) : 1;
 	$templateid = $listtemplateid ? $listtemplateid : 'area_list';
 }
+$childcats = subcat($channelid, 0, 'list');
+if(is_array($childcats))
+{
+	foreach($childcats as $i=>$cat)
+	{
+		$subcats[$i] = subcat($channelid,$cat['catid']);
+	}
+}
 include template($mod,$templateid);
 if(!$enablepurview) phpcache();
 ?>

@@ -1,0 +1,35 @@
+<div id="centent">
+
+<div id="rightbox">
+<h3><div>图片新闻</div></h3>
+<ul class="tpxw">
+      {tag_商户新闻首页图片列表}
+    </ul>
+<h3><div>新闻列表</div></h3>
+
+<ul class="news">
+      {tag_商户新闻首页列表}
+    </ul>
+
+</div>
+<div></div>
+
+<div id="lefepbox3">
+<h2><div>热点导航</div></h2>
+<ul class="rddh">
+ {loop $m_user $ms}
+  <li><a href="{$ms[url]}">- {$ms[menutitle]}</a></li>
+{/loop}
+</ul>
+<h2><div>最新新闻</div></h2>
+<ul class="xwzx">
+  {tag_xhtml首页最新新闻}
+</ul>
+<h2><span><a href="{$salesurl}">更多</a></span>
+  <div>促销信息</div></h2>
+<ul class="xwzx">
+  {tag_xhtml首页促销信息}
+</ul>
+</div>
+</div><div style="clear:both"></div></div>
+{template 'yp','com_xhtml-footer'}

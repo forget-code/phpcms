@@ -31,6 +31,20 @@ function SelectPic(){
     $('thumb').value=s[0];
   }
 }
+function CutPic(){
+  var thumb=$('thumb').value;
+	if(thumb=='')
+	{
+		alert('请先上传标题图片');
+		$('thumb').focus();
+		return false;
+	}
+  var arr=Dialog('corpandresize/ui.php?<?=$PHPCMS[siteurl]?>'+thumb,'',700,500);
+  if(arr!=null){
+    $('thumb').value=arr;
+  }
+}
+
 function SelectKeywords(){	
   var s=Dialog('?mod=phpcms&file=keywords&keyid=<?=$channelid?>&select=1','',700,500);
   if(s!=null){
@@ -69,7 +83,6 @@ function doKeywords(ID)
 <table width="100%" height="25" border="0" cellpadding="3" cellspacing="0" class="tableborder">
   <tr>
     <td class="tablerow"> <img src="<?=PHPCMS_PATH?>admin/skin/images/pos.gif" align="absmiddle" alt="当前位置" > 当前位置：<a href="?mod=<?=$mod?>&file=<?=$file?>&action=main&channelid=<?=$channelid?>">文章首页</a> &gt;&gt; <a href="?mod=<?=$mod?>&file=<?=$file?>&action=add&catid=<?=$catid?>&channelid=<?=$channelid?>">添加文章</a> &gt;&gt; <?=$CAT['catname']?> &gt;&gt; </td>
-    <td class="tablerow" align="right"><?php echo $category_jump; ?></td>
   </tr>
 </table>
 
@@ -89,8 +102,7 @@ function doKeywords(ID)
 </tr>
 </table>
 
-<form action="?mod=<?=$mod?>&file=<?=$file?>&action=add&channelid=<?=$channelid?>&catid=<?=$catid?>&dosubmit=1" method="post" name="myform" onsubmit="return doCheck();">
-<input type="hidden" name="article[catid]" value="<?=$catid?>" />
+<form action="?mod=<?=$mod?>&file=<?=$file?>&action=add&channelid=<?=$channelid?>&dosubmit=1" method="post" name="myform" onsubmit="return doCheck();">
 <input type="hidden" name="article[username]" value="<?=$_username?>" />
 <table cellpadding="2" cellspacing="1" class="tableborder">
   <tbody id="Tabs0" style="display:">
@@ -99,7 +111,7 @@ function doKeywords(ID)
   </tr>
     <tr> 
       <td width="19%" class="tablerow">所属栏目</td>
-      <td class="tablerow"><font color="#FF0000"><?=$CAT['catname']?></font></td>
+      <td class="tablerow"><?=$this_category?></td>
     </tr>
     <tr> 
       <td class="tablerow">标题</td>
@@ -109,8 +121,10 @@ function doKeywords(ID)
       <td class="tablerow">标题图片</td>
       <td class="tablerow" title="如果设置标题图片，则可以在首页以及栏目页以图片方式链接到文章"><input name="article[thumb]" type="text" id="thumb" size="53">  <input type="button" value="上传图片" onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&channelid=<?=$channelid?>&uploadtext=thumb&type=thumb&width=<?=$MOD['thumb_width']?>&height=<?=$MOD['thumb_height']?>','upload','350','350')">
 	   <input name="fromupload" type="button" id="fromupload" value="从已经上传的图片中选择" onclick="SelectPic()" style="width:150px;"/>
+	   <input name="cutpic" type="button" id="cutpic" value="裁剪图片" onclick="CutPic()"/>
       </td>
     </tr>
+	
     <tr <?php if(!$MOD['keywords_show']){ ?>style="display:none"<?php } ?>> 
       <td class="tablerow">关键字</td>
       <td class="tablerow"><input name="article[keywords]" type="text" id="keywords" size="40" title="提示:多个关键字请用半角逗号“,”或空格隔开" onblur="doKeywords(this);">
@@ -133,7 +147,12 @@ function doKeywords(ID)
 		<input type="checkbox" name="addcopyfrom" value="1" <?php if($MOD['copyfrom_add']){ ?>checked<?php } ?>> 添加至来源列表中
 		=&gt;<a href="###" onclick="SelectCopyfrom();">更多来源</a></td>
     </tr>
-
+<tr> 
+      <td class="tablerow">内容摘要</td>
+      <td class="tablerow">
+    <textarea name="article[introduce]" cols="90" rows="5"></textarea>
+    </td>
+    </tr>
     <tr> 
       <td class="tablerow" title="此项可在模块配置设置">文章内容<br/><br/><input name="save_remotepic" type="checkbox"  value="1" <?php if($MOD['save_remotepic']){ ?>checked<?php } ?>>是否保存远程图片<br/><font color="red">自动下载内容中远程图片</font>
 	  <br/><br/>
@@ -171,20 +190,23 @@ function doKeywords(ID)
 自动分页时的每页大约字符数（包含HTML标记）<strong> <input name="article[maxcharperpage]" type="text" id="maxcharperpage" value="10000" size="8" maxlength="8"></strong>
    </td>
     </tr>
+	<tr> 
+      <td class="tablerow">转向链接</td>
+      <td class="tablerow">
+       <input type="text" name="article[linkurl]" id="linkurl"  size="50" maxlength="255" value="http://" disabled><input name="article[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" ><font color="#FF0000">转向链接</font>
+	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
+     </td>
+    </tr>
     <tr> 
       <td class="tablerow">推荐位置</td>
       <td class="tablerow">
 <?=$position?>
       </td>
 	  </tr>
-
-	
     <tr> 
       <td class="tablerow">添加到自由调用</td>
       <td class="tablerow"><?=freelink_select('freelink', '请选择调用类型')?></td>
 	</tr>
-
-
     <tr> 
       <td class="tablerow">文章状态</td>
       <td class="tablerow">
@@ -220,24 +242,11 @@ function doKeywords(ID)
 </table>
     </td>
     </tr>
-    <tr> 
-      <td class="tablerow">内容摘要</td>
-      <td class="tablerow">
-    <textarea name="article[introduce]" cols="70" rows="5"></textarea>
-    </td>
-    </tr>
+    
 	<tr> 
       <td class="tablerow">添加日期</td>
-      <td class="tablerow"><?=date_select('article[addtime]', $today)?>&nbsp;格式：yyyy-mm-dd</td>
+      <td class="tablerow"><?=date_select('article[addtime]', $today,'%Y-%m-%d %H:%M:%S')?></td>
     </tr>
-    <tr> 
-      <td class="tablerow">转向链接</td>
-      <td class="tablerow">
-       <input type="text" name="article[linkurl]" id="linkurl"  size="50" maxlength="255" disabled><input name="article[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" ><font color="#FF0000">转向链接</font>
-	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
-     </td>
-    </tr>
-
     <tr> 
       <td class="tablerow">是否生成</td>
       <td class="tablerow"><input type="radio" name="article[ishtml]" value="1" <?php if($CAT['ishtml']==1) {?>checked <?php } ?>  onclick="$('htmlrule').style.display='';$('htmlprefix').style.display='';$('htmldir').style.display='';$('phprule').style.display='none';"> 是 <input type="radio" name="article[ishtml]" value="0" <?php if($CAT['ishtml']==0) {?>checked <?php } ?> onclick="$('htmlrule').style.display='none';$('htmldir').style.display='none';$('htmlprefix').style.display='none';$('phprule').style.display='';"> 否</td>

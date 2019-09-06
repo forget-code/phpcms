@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta content="all" name="robots" />
+<meta name="author" content="PHPCMS版权所有!" />
+<meta name="generator" content="Phpcms {$PHPCMS[version]}">
+<meta name="keywords" content="{$head[keywords]}">
+<meta name="description" content="{$head[description]}">
+<base href="{$PHPCMS['siteurl']}">
+<link rel="icon" href="{PHPCMS_PATH}favicon.ico" type="image/x-icon" />
+<title>{$head[title]}-{$PHPCMS[sitename]}</title>
+<link href="{$skindir}/house/css.css" rel="stylesheet" type="text/css">
+<script language="javascript" src="{PHPCMS_PATH}data/js/config.js"></script>
+<script language="javascript" src="{PHPCMS_PATH}include/js/common.js"></script>
+<script language="javascript" src="{PHPCMS_PATH}include/js/prototype.js"></script>
+<script language="javascript" src="{$skindir}/house/menu.js"></script>
+</head>
+<body id="phpcms" {if isset($enableprotect) && $enableprotect}oncontextmenu='return false' ondragstart='return false' onselectstart ='return false' onselect='document.selection.empty()' oncopy='document.selection.empty()' onbeforecopy='return false'{/if}>
+<div id="center">
+<div id="header">
+  <div id="top">
+    <div id="theme"></div>
+  <div class="have f_r"><!--{if $channelid && isset($MOD['enable_rss']) && $MOD['enable_rss']}-->
+	<a href="{$CHA[linkurl]}rss.php{if isset($catid)}?catid={$catid}{/if}" target="_blank"><img src="{PHPCMS_PATH}images/rss.gif" border="0"/></a><!--{/if}-->&nbsp;&nbsp;<a title="{$PHPCMS[sitename]}" href="{PHPCMS_PATH}">网站首页</a>&nbsp;&nbsp;<a id="StranLink">繁体中文</a>&nbsp;&nbsp;<a href="#" onClick="this.style.behavior='url(#default#homepage)';this.setHomePage ('{$PHPCMS['siteurl']}');">设为首页</a>&nbsp;&nbsp;<a href="#" onClick="window.external.addFavorite('{$PHP_SITEURL}','{$PHPCMS['sitename']}')">加入收藏</a>&nbsp;&nbsp;<!--{if $_userid}--><a href="{PHPCMS_PATH}member/">会员中心</a><!--{else}--><a href="{PHPCMS_PATH}member/login.php">登陆</a><!--{/if}--></div>
+  </div>
+</div>
+<div id="header_menu">
+	<!--{loop $CHANNEL $channel}--><a title="{$channel[channelname]}" href="{$channel[linkurl]}">{$channel[channelname]}</a>&nbsp;|&nbsp;<!--{/loop}-->
+</div>
+<div class="center_ad">
+   <div style="float:left;width:200px"><a href="{PHPCMS_PATH}"><img src="{$imgurl($PHPCMS['logo'])}"></a></div>
+   <div id="top_article">
+   <SCRIPT LANGUAGE="JavaScript" src="{$MODULE[ads][linkurl]}ad.php?id=1"></SCRIPT>
+   </div>
+</div>
+<div id="house_menu">
+  <ul class="house_menu_left">
+    <li {if $tab=='home'}id="Tabi" class="Selected"{/if}><a href="{$MOD[linkurl]}">房产首页</a></li>
+
+	{loop $CAT $i $c}
+	<li {if $infocat && $tab==$i}id="Tabi" class="Selected"{/if}><a href="{$c['linkurl']}"><span style="display:block;letter-spacing:6px;">{$c['name']}</span></a></li>
+	{/loop}
+
+	<li {if $tab=='listdisplay'}id="Tabi" class="Selected"{/if}><a href="{$MOD[display_list_url]}">新楼盘</a></li>
+	<li {if $tab=='web'}id="Tabi" class="Selected"{/if}><a href="{$MOD[linkurl]}web.php">中介列表</a></li>
+	<li><a href="{$MOD[linkurl]}displaymgr.php?action=add">发布楼盘</a></li>
+	</ul>
+	<ul class="house_menu_right"></ul>
+</div>

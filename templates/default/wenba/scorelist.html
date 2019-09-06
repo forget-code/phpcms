@@ -1,0 +1,22 @@
+{template 'wenba','header'}
+<div id="path" style="font-size:12px;">当前位置：<a href="{$MOD['linkurl']}">问吧首页</a> >> 积分排行</div>
+<div id="sub">
+<!--{if $option=='week'}-->
+<span>上周积分排行榜</span>
+<!--{else}-->
+<a href="{$PHPCMS[siteurl]}{$MOD[moduledir]}/scorelist.php?option=week"><b>上周积分排行榜</b></a>
+<!--{/if}-->
+<!--{if $option=='month'}-->
+<span>上月积分排行榜</span>
+<!--{else}-->
+<a href="{$PHPCMS[siteurl]}{$MOD[moduledir]}/scorelist.php?option=month"><b>上月积分排行榜</b></a>
+<!--{/if}-->
+<!--{if $option=='all'}-->
+<span>总积分排行榜</span>
+<!--{else}-->
+<a href="{$PHPCMS[siteurl]}{$MOD[moduledir]}/scorelist.php?option=all"><b>总积分排行榜</b></a>
+<!--{/if}-->
+</div>
+<div class="subt bgb">{$title}</div>
+{tag_积分排行标签}
+{template 'phpcms','footer'}

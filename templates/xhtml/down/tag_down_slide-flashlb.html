@@ -1,0 +1,15 @@
+<script language="JavaScript" type="text/javascript">
+<!--//--><![CDATA[//><!--
+//注意：此flash焦点图必须保证图片数量为 4 幅，不可多不可少！
+var pics="{$skindir}/images/01.jpg|{$skindir}/images/02.jpg|{$skindir}/images/03.jpg|{$skindir}/images/04.jpg";	
+var mylinks="http://www.makewing.com/|http://www.makewing.com/|http://www.makewing.com/|http://www.makewing.com/";
+var texts="标题一|标题二|标题三|标题四";
+var Flash = new Flash("images/flash.swf","Flash","240","230","5","#ffffff");
+Flash.addParam("quality", "high");
+Flash.addParam("salign", "t");
+Flash.addVariable("p",pics);
+Flash.addVariable("l",mylinks);
+Flash.addVariable("icon",texts);
+Flash.write("flash");
+//--><!]]>
+</script>

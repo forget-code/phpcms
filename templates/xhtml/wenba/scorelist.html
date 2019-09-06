@@ -1,0 +1,35 @@
+{template 'wenba','header'}
+<link href="{$skindir}/why.css" rel="stylesheet" type="text/css">
+<div id="censent">
+<div class="boxmargin" id="bt11"><b>当前位置：</b><a href="{$MOD['linkurl']}">问吧首页</a> >> 积分排行</div>
+<div class="why_c" style="padding-bottom:8px">
+<!--{if $option=='week'}-->
+<div class="why_c1"><b>上周积分</b></div>
+<!--{else}-->
+<div class="why_c1"><a href="{$PHPCMS[siteurl]}{$MOD[moduledir]}/scorelist.php?option=week">上周积分</a></div>
+<!--{/if}-->
+<!--{if $option=='month'}-->
+<div class="why_c1"><b>上月积分</b></div>
+<!--{else}-->
+<div class="why_c1"><a href="{$PHPCMS[siteurl]}{$MOD[moduledir]}/scorelist.php?option=month">上月积分</a></div>
+<!--{/if}-->
+<!--{if $option=='all'}-->
+<div class="why_c1"><b>总积分</b></div>
+<!--{else}-->
+<div class="why_c1"><a href="{$PHPCMS[siteurl]}{$MOD[moduledir]}/scorelist.php?option=all">总积分</a></div>
+<!--{/if}-->
+</div>
+
+<div style="clear:both"></div>
+<div class="wbtleft">
+     <div>积分排行榜</div> 
+   </div>
+<div class="xianwhy boxmargin">
+<ul class="whylist">
+<li>
+{tag_积分排行标签}
+</li>
+</ul>
+</div>
+</div>
+{template 'phpcms','footer'}

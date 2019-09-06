@@ -1,0 +1,174 @@
+{template 'wenba','header'}
+<script language="javascript" src="ajaxmenu.js"></script>
+<div id="middle">
+<script language="javascript">
+
+function check_askform(obj)
+{
+	if(askform.qtitle.value == "")
+	{
+		alert("请输入您的问题.");
+		askform.qtitle.focus();
+		return false;
+	}
+
+	if($('catid').value == 0)
+	{
+		alert("请选择问题的分类.");
+		$('catid').focus();
+		return false;
+	}
+
+	if(!ckgivescore()) return false;
+}
+
+function ckgivescore()
+{
+	if($('givescore').value != "" && $('givescore').value > {$my_score})
+	{
+		$('givescore_msg').innerHTML = "<font color='red'><strong>抱歉,悬赏不能高于您目前的总积分.</strong></font>";
+		$('givescore').options[0].selected = true;
+		return false;
+	}
+	else
+	{
+		$('givescore_msg').innerHTML = "";
+		return true;
+	}
+}
+
+function $(obj)
+{
+	return document.getElementById(obj);
+}
+
+function App()
+{
+	var qt = "{$qtitle}";
+	if(qt == "") $("dnt").style.display = "block";
+	else
+	{
+		$("dht").style.display = "block";
+		var qc = {$num};
+		if(qc > 0) 
+		{
+			$("drq").style.display = "block";
+		}
+	}
+}
+window.onload = App;
+</script>
+<div id="c90">
+<div id="dnt" style="display:none">
+<div class="t3 bcb bgb">提出问题</div>
+<div class="b3 bcb">
+<div class="w100">
+<br />
+<form name="tcwt" method="post" action="ask.php">
+<table width="98%" border="0" align="center" cellpadding="0" cellspacing="0" >
+<tr valign="top"> 
+<td width="70" class="f14" nowrap>您的问题</td>
+<td><input type="text" name="qtitle" size="48" /></td></tr>
+</table>
+<br />
+<table width="98%" border="0" align="center" cellpadding="0" cellspacing="0" >
+<tr><td width="70" class="f14">&nbsp;</td>
+<td valign="top">
+<input type="submit" name="submit" value="好了,继续提问" class="bnsrh" />
+</td></tr>
+</table>
+<br />
+</form>
+</div>
+</div>
+</div>
+<div id="dht" style="display:none">
+<div class="t3 bcb bgb">提出问题</div>
+<div class="b3 bcb">
+
+<div class="w100">
+<div id="drq" style="display:none">
+<div class="f14"><strong>1.与您的提问"{$qtitle}"相关的已解决的问题</strong>(请查看它们是否能解答您的疑问)</div>
+<table width="97%" border="0" cellspacing="0" cellpadding="8" align="center" style="margin:5px 0 20px 0;border:1px solid #CCCCCC">
+<tr><td>
+<div id="dql">
+<!--{loop $ques_list $qlist}-->
+<div><a href="{$PHPCMS[siteurl]}{$MOD[moduledir]}/question.php?qid={$qlist['qid']}" target="_blank" class="f14">{$qlist['title']}</a></div>
+ <!--{/loop}-->
+</div>
+<div id="dp"></div>
+</td></tr>
+</table>
+<div style="margin-bottom:10px" class="f14"><strong>2.如果您没有找到合适的回答，请继续提问</strong></div>
+</div>
+</div>
+
+<form name="askform" method="post" action="ask.php" onSubmit="return check_askform(this);">
+<br />
+<table width="80%" border="0" cellpadding="0" cellspacing="0" >
+<tr valign="top"><td width="110" class="f14" nowrap>您的问题</td>
+<td><input type="text" name="qtitle" id="qtitle" value="{$qtitle}" size="67" /></td>
+</tr>
+</table>
+<br />
+<table width="80%" border="0" cellpadding="0" cellspacing="0">
+<tr valign="top"><td width="110" class="f14"  nowrap>问题补充</td>
+<td><textarea name="qsupply" id="qsupply" cols="66" rows="8"></textarea>
+<br />
+可以对您的提问补充细节，以得到更准确的答案;
+</td></tr>
+</table>
+<br />
+<table width="80%" border="0" cellpadding="0" cellspacing="0" >
+<tr valign="top"><td width="110" nowrap class="f14">问题分类</td>
+<td class="f14">
+{$category_select('catid','选择分类',0,'id="catid"')}
+</td></tr>
+</table>
+<table width="80%" border="0" cellspacing="0" cellpadding="0">
+<tr><td width="110">&nbsp;</td><td></td></tr>
+</table>
+<br />
+<table width="80%" border="0" cellpadding="0" cellspacing="0" >
+<tr><td width="110" valign="top" nowrap class="f14">悬赏积分</td>
+<td><div style="height:28px;" class="f14">
+<select name="givescore" onchange="ckgivescore();"> 
+<option value="0">0</option>
+<option value="5">5</option>
+<option value="10">10</option>
+<option value="15">15</option>
+<option value="20">20</option>
+<option value="30">30</option>
+<option value="50">50</option>
+<option value="80">80</option>
+<option value="100">100</option>
+</select>
+您目前的总积分<strong>{$my_score}</strong><span id="givescore_msg"></span>
+<br />
+<span id="scoretip"><img src="{PHPCMS_PATH}images/tips.gif" width="16" height="16">悬赏分越高,您的问题越受关注,更可能得到最佳答案,但不能高于您目前的总积分.</span></div>
+</td></tr>
+</table>
+<br />
+<table width="80%" border="0" cellpadding="0" cellspacing="0" >
+<tr> 
+<td width="110" valign="top" nowrap="nowrap" class="f14">匿名设定</td>
+<td valign="top" class="f14"><input type="checkbox" name="hidname" value="1"/>
+&nbsp;您可以对问题设定匿名，但您需要付出积分<font color="#ff0000">{$MOD[anybody_score]}</font>分.</td>
+</tr>
+</table>
+<br />
+<table width="80%" border="0" cellpadding="0" cellspacing="0" >
+<tr><td width="110" class="f14">&nbsp;</td>
+<td valign="top">
+<input type="hidden" name="myscore" value="{$my_score}"/>
+<input type="submit" name="dosubmit" value="好了,提交" class="bnsrh" />
+</td>
+</tr>
+</table>
+</form>
+<br />
+</div>
+</div>
+</div>
+</div>
+{template 'phpcms','footer'}

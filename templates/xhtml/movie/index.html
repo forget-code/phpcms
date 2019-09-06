@@ -1,0 +1,113 @@
+{template 'phpcms','header'}
+<link href="{$skindir}/movie.css" rel="stylesheet" type="text/css">
+<div id="censent"><!--content-->
+  <div id="leftmove"><div class="boxmarginT">
+<div class="flash" id="flash">
+{tag_影视首页幻灯片}
+</div>
+<div id="jhxx" style="padding:6px;margin-bottom:11px;">
+<!--推荐影视-->
+{tag_频道首页推荐影视}
+<!--结束影视-->
+</div>
+<div style="clear:both"></div>
+</div>
+<div class="layout search boxmargin boxl">
+<script language="JavaScript" src="{PHPCMS_PATH}data/js/search.js"></script>
+</div>
+<div class="boxmargin"><script language="javascript" src="{PHPCMS_PATH}data/js/9.js"></script></div>
+<div class="searchzm">
+<img src="{$skindir}/images/szm.gif" width="65" height="20" />
+<a href="{$CHA[linkurl]}letter.php?letter=a" target="_self" >A</a>
+<a href="{$CHA[linkurl]}letter.php?letter=b" target="_self" >B</a>
+<a href="{$CHA[linkurl]}letter.php?letter=c" target="_self" >C</a>
+<a href="{$CHA[linkurl]}letter.php?letter=d" target="_self" >D</a>
+<a href="{$CHA[linkurl]}letter.php?letter=e" target="_self" >E</a>
+<a href="{$CHA[linkurl]}letter.php?letter=f" target="_self" >F</a>
+<a href="{$CHA[linkurl]}letter.php?letter=g" target="_self" >G</a>
+<a href="{$CHA[linkurl]}letter.php?letter=h" target="_self" >H</a>
+<a href="{$CHA[linkurl]}letter.php?letter=i" target="_self" >I</a>
+<a href="{$CHA[linkurl]}letter.php?letter=j" target="_self" >J</a>
+<a href="{$CHA[linkurl]}letter.php?letter=k" target="_self" >K</a>
+<a href="{$CHA[linkurl]}letter.php?letter=l" target="_self" >L</a>
+<a href="{$CHA[linkurl]}letter.php?letter=m" target="_self" >M</a>
+<a href="{$CHA[linkurl]}letter.php?letter=n" target="_self" >N</a>
+<a href="{$CHA[linkurl]}letter.php?letter=o" target="_self" >O</a>
+<a href="{$CHA[linkurl]}letter.php?letter=p" target="_self" >P</a>
+<a href="{$CHA[linkurl]}letter.php?letter=q" target="_self" >Q</a>
+<a href="{$CHA[linkurl]}letter.php?letter=r" target="_self" >R</a>
+<a href="{$CHA[linkurl]}letter.php?letter=s" target="_self" >S</a>
+<a href="{$CHA[linkurl]}letter.php?letter=t" target="_self" >T</a>
+<a href="{$CHA[linkurl]}letter.php?letter=u" target="_self" >U</a>
+<a href="{$CHA[linkurl]}letter.php?letter=v" target="_self" >V</a>
+<a href="{$CHA[linkurl]}letter.php?letter=w" target="_self" >W</a>
+<a href="{$CHA[linkurl]}letter.php?letter=x" target="_self" >X</a>
+<a href="{$CHA[linkurl]}letter.php?letter=y" target="_self" >Y</a>
+<a href="{$CHA[linkurl]}letter.php?letter=z" target="_self" >Z</a></div>
+  </div>
+  <div id="rightmove">
+    <!--舌签 start-->
+<script language="javascript" type="text/javascript">
+<!--//--><![CDATA[//><!--
+function Show_Sub(id_num,num){ //舌签功能
+	for(var i = 0;i <= 9;i++){
+		if(GetObj("S_Menu_" + id_num + i)){GetObj("S_Menu_" + id_num + i).className = '';}
+		if(GetObj("S_Cont_" + id_num + i)){GetObj("S_Cont_" + id_num + i).style.display = 'none';}
+	}
+	if(GetObj("S_Menu_" + id_num + num)){GetObj("S_Menu_" + id_num + num).className = 'selectd';}
+	if(GetObj("S_Cont_" + id_num + num)){GetObj("S_Cont_" + id_num + num).style.display = 'block';}
+}
+function GetObj(objName){
+	if(document.getElementById){
+		return eval('document.getElementById("' + objName + '")');
+	}else{
+		return eval('document.all.' + objName);
+	}
+}
+//--><!]]>
+</script> 
+<!--舌签 end-->
+<div id="rpaiH" class="boxmargin">
+<div class="topBg">
+       <div class="botBg">
+    		<ul class="Menu">
+            <li id="S_Menu_11" class="selectd" onmouseover="Show_Sub(1,1)"><a href="#" target="_blank">今日</a></li>
+			<li id="S_Menu_12" onmouseover="Show_Sub(1,2)"><a href="#" target="_blank">本周</a></li>
+			<li id="S_Menu_13" onmouseover="Show_Sub(1,3)"><a href="#" target="_blank">本月</a></li>
+			<li id="S_Menu_14" onmouseover="Show_Sub(1,4)"><a href="#" target="_blank">经典</a></li>
+		</ul>
+<div id="S_Cont_11" class="order"><ul>{tag_今日影视}</ul></div>
+<div id="S_Cont_12" style="display:none;" class="order"><ul>{tag_本周影视}</ul></div>
+<div id="S_Cont_13" style="display:none;" class="order"><ul>{tag_本月影视}</ul></div>
+<div id="S_Cont_14" style="display:none;" class="order"><ul>{tag_经典影视}</ul></div>
+<div class="links">
+<a href="http://download.microsoft.com/download/ie6sp1/finrel/6_sp1/W98NT42KMeXP/CN/ie6setup.exe"><img src="{$skindir}/images/link1.gif" /></a>
+<a href="http://download.microsoft.com/download/9/4/0/94072943-9188-4a60-b31f-3031f18404e4/mpsetup.exe"><img src="{$skindir}/images/wm.jpg" ></a>
+<a href="#"><img src="{$skindir}/images/BoBo_Player.gif" ></a>
+<a href="#"><img src="{$skindir}/images/rp.jpg" ></a></div>
+<div  style="clear:both"></div>
+</div>
+</div></div>
+</div>
+   <div  style="clear:both"></div>
+<!--自定义栏目开始-->
+          {loop $childcats $i $cat}
+  <div id="movebd"{if $i%2!=1} class="move_8px"{/if}>
+    <div class="movebtleft"><div><span><a href="{$cat[linkurl]}">更多</a></span>{$cat[catname]}</div>
+    </div>
+    <div class="movenr clearfix" >
+    <div class="movellist"><ul>
+    {tag_影片频道首页自定义栏目列表}</ul>
+      </div>
+    <div class="moverlist">
+          <ul class="moveList-1">
+            {tag_频道自定义栏目列表}
+          </ul>
+     </div><div  style="clear:both"></div>
+    </div>
+  </div>
+{/loop}
+          <!--自定义栏目结束-->
+    <div  style="clear:both"></div>
+</div>
+{template 'phpcms','footer'}

@@ -2,6 +2,14 @@
 defined('IN_PHPCMS') or exit('Access Denied');
 include admintpl('header');
 ?>
+<style type="text/css">
+<!--
+.STYLE1 {
+	color: #FF0000;
+	font-weight: bold;
+}
+-->
+</style>
 <body>
 <?=$menu?>
 <form method="post" name="myform">
@@ -40,7 +48,8 @@ if(is_array($settings))
 </tr>
 <tr>
 <td class="tablerow">商户编号</td>
-<td class="tablerow"><input size="28"  type="text" name="partnerid[<?=$setting['id']?>]"  value="<?=$setting['partnerid']?>"></td>
+<td bgcolor="#D4D0C8" class="tablerow"><input size="28"  type="text" name="partnerid[<?=$setting['id']?>]"  value="<?=$setting['partnerid']?>"><?php if(ereg('tenpay',$setting['sendurl'])){?>
+  <a href="http://union.tenpay.com/mch/?id=1202059101" target="_blank" class="STYLE1">申请&quot;<?=$setting['name']?>&quot;商户号</a><?php }?></td>
 </tr>
 <tr>
 <td class="tablerow">支付密钥</td>

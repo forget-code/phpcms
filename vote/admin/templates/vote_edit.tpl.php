@@ -34,12 +34,12 @@ include admintpl('header');
 		  <tr>
             <td class="tablerow" align="left">起始日期</td>
             <td class="tablerow"><?=date_select('fromdate', $fromdate)?>
-                <font color="#FF0000">*</font> 格式：yyyy-mm-dd</td>
+                <font color="#FF0000">*</font></td>
           </tr>
           <tr>
             <td class="tablerow" align="left">截止日期</td>
             <td class="tablerow"><?=date_select('todate', $todate)?>
-                <font color="#FF0000">*</font> 留空为不限制, 格式：yyyy-mm-dd</td>
+                <font color="#FF0000">*</font></td>
           </tr>
           <tr >
             <td class="tablerow" align="left">类型</td>

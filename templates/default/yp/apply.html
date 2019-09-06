@@ -1,0 +1,198 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{$truename}的求职简历</title>
+<base href="{$PHPCMS[siteurl]}">
+<style type="text/css">
+<!--
+body,td,th {
+	font-size: 12px;
+
+}
+.print_icon,.close_icon{
+padding-left:25px;
+height:20px;
+line-height:20px;
+width:90px;
+}
+
+/*打印本页*/
+.print_icon{
+background:url(images/print.png) no-repeat 0 0;
+}
+/*关闭窗口*/ 
+.close_icon{
+background:url(images/close.png) no-repeat 0 0;
+}
+-->
+</style>
+  </head>
+  <body bgcolor=#CCCCFF>
+
+          <table width="98%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="100%" align="center" height="30" valign="bottom">
+                <b><font color="#FF7700" class="big">{$truename}</font> 的个人简历</b>
+              </td>
+            </tr>
+          </table>
+          <table width="600" height="19" align="center" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td>简历编号：{$isbn}</td>
+              <td align="right">更新日期：{$edittime}</td>
+            </tr>
+          </table>
+          <table width=600 border=0 cellpadding=5 cellspacing=1 align="center" bgcolor=#AAAAAA>
+            <tr bgcolor=#E5E5E5>
+              <td colspan="5"><font color=#777777><strong>基本信息</strong></font></td>
+            </tr>
+            <tr>
+              <td bgcolor=#F0F0F0 align="right">姓　　名：</td>
+              <td bgcolor=#F9F9F9>{$truename}</td>
+              <td bgcolor=#F0F0F0 align="right">性　　别：</td>
+              <td bgcolor=#F9F9F9>{if $gender==1}男{else}女{/if}</td>
+              <td width=117 rowspan=6 align="center" bgcolor=#F9F9F9>
+			{if $userface}<img src="{$userface}" width="130" height="170">{else}照片<BR><BR>{/if}
+               
+              </td>
+            </tr>
+            <tr>
+              <td bgcolor=#F0F0F0 align="right">身份证号：</td>
+              <td bgcolor=#F9F9F9>{$idcard}...</td>
+              <td bgcolor=#F0F0F0 align="right">出生日期：</td>
+              <td bgcolor=#F9F9F9>{$birthday}</td>
+            </tr>
+       
+            <tr>
+              <td bgcolor=#F0F0F0 align="right">户　　籍：</td>
+              <td bgcolor=#F9F9F9>{$province}{$city}</td>
+              <td bgcolor=#F0F0F0 align="right">所 在 地：</td>
+              <td bgcolor=#F9F9F9>{$address}</td>
+            </tr>
+            <tr>
+              <td bgcolor=#F0F0F0 align="right">工作年限：</td>
+              <td bgcolor=#F9F9F9>{$experience} 年</td>
+              <td bgcolor=#F0F0F0 align="right">求职类型：</td>
+            
+              <td bgcolor=#F9F9F9>
+               {$worktype}
+              </td>
+            </tr>
+          </table>
+<!-- 华丽的分隔线 -->
+          <table width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td height="3"></td>
+            </tr>
+          </table>
+          <table width=600 border=0 cellpadding=5 cellspacing=1 align="center" bgcolor=#AAAAAA>
+            <tr bgcolor=#E5E5E5>
+              <td height="23" colspan="4"><font color=#777777><strong>教育/培训</strong></font></td>
+            </tr>
+            <tr>
+              <td width=18% bgcolor=#F0F0F0 align="right">毕业院校：</td>
+              <td width=32% bgcolor=#F9F9F9>{$school}</td>
+              <td width=18% bgcolor=#F0F0F0 align="right">最高学历：</td>
+              <td width=32% bgcolor=#F9F9F9>{$edulevel}</td>
+            </tr>
+            <tr>
+              <td bgcolor=#F0F0F0 align="right">专业名称：</td>
+              <td bgcolor=#F9F9F9>{$specialty}</td>
+              <td bgcolor=#F0F0F0 align="right">毕业日期：</td>
+              <td bgcolor=#F9F9F9>{$graduatetime}</td>
+            </tr>
+            
+          </table>
+
+          <table width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td height="3"></td>
+            </tr>
+          </table>
+          <table width=600 border=0 cellpadding=5 cellspacing=1 align="center" bgcolor=#AAAAAA>
+            <tr bgcolor=#E5E5E5>
+              <td height="23" colspan="4"><font color=#777777><strong>求职意向</strong></font></td>
+            </tr>
+            <tr>
+              <td bgcolor=#F0F0F0 align="right">欲从事的工作</td>
+              
+              <td colspan="3" bgcolor=#F9F9F9>{$station}</td>
+            </tr>
+            <tr>
+              <td bgcolor=#F0F0F0 align="right">希望工作的地区</td>
+              
+              <td colspan="3" bgcolor=#F9F9F9>{$area}</td>
+            </tr>
+            <tr>
+              <td width=18% bgcolor=#F0F0F0 align="right">到岗时间：</td>
+              <td width=32% bgcolor=#F9F9F9>{if $period}{$period}天内{else}随时{/if}</td>
+              <td width=18% bgcolor=#F0F0F0 align="right">期望月薪：</td>
+              <td width=32% bgcolor=#F9F9F9>{if $pay}{$pay}{else}面议{/if}</td>
+            </tr>
+            
+          </table>
+
+          <table width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td height="3"></td>
+            </tr>
+          </table>
+     {if $_userid}
+		{if $arrgroupidview}
+		  <table width=600 border=0 cellpadding=5 cellspacing=1 align="center" bgcolor=#AAAAAA>
+            <tr bgcolor=#E5E5E5>
+              <td height="23" colspan="4"><font color=#777777><strong>详细信息</strong></font></td>
+            </tr>
+            <tr>
+              <td bgcolor=#F0F0F0 align="right">工作经历</td>
+              
+              <td colspan="3" bgcolor=#F9F9F9>{$story}</td>
+            </tr>
+            <tr>
+              <td bgcolor=#F0F0F0 align="right">个人鉴定</td>
+              
+              <td colspan="3" bgcolor=#F9F9F9>{$introduce}</td>
+            </tr>
+            <tr>
+              <td width=18% bgcolor=#F0F0F0 align="right">电话：</td>
+              <td width=32% bgcolor=#F9F9F9>{$telephone}</td>
+              <td width=18% bgcolor=#F0F0F0 align="right">Email：</td>
+              <td width=32% bgcolor=#F9F9F9>{$email}</td>
+            </tr>
+          </table>
+		  {else}
+		  <table width=600 border=0 cellpadding=5 cellspacing=1 align="center" bgcolor=#AAAAAA>
+            <tr>
+              <td align="center" bgcolor=#F9F9F9>
+                <br><font color=red>你所在的用户组没有权限查看详细资料，请联系管理，升级为VIP用户</font><br>
+				QQ:98359 100453<br>
+				电话：029-83998899
+
+              </td>
+            </tr>
+          </table>			
+		   {/if}
+		{else}
+          <table width=600 border=0 cellpadding=5 cellspacing=1 align="center" bgcolor=#AAAAAA>
+            <tr>
+              <td align="center" bgcolor=#F9F9F9>
+                <br><font color=red>你还没有登陆&nbsp;&nbsp;&nbsp;&nbsp;<a href="{$MODULE[member][linkurl]}login.php" target="_blank">立即登录</a></font><br><br>
+              </td>
+            </tr>
+          </table>
+		  {/if}
+          <table width="100%"  border="0" cellpadding="5" cellspacing="1">
+            <tr>
+              <td height="15" align="center"><a href="javascript:window.print();" class="print_icon">打印本页</a>　<a href="javascript:window.close()" class="close_icon">关闭窗口</a></td>
+            </tr>
+          </table>
+          
+          
+          
+          
+          
+        </td>
+      </tr>
+    </table>
+</body>
+</html>

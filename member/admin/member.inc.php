@@ -261,10 +261,10 @@ switch($action)
         if(!isset($homepage)) $homepage = '';
 
 		$condition = '';
-		$condition .= $username ? " and m.username='$username'" : '';
+		$condition .= $username ? " and m.username like '%$username%'" : '';
 		$condition .= $groupid ? " and (m.groupid=$groupid or m.arrgroupid like '%,$groupid,%')" : '';
 		$condition .= $email ? " and m.email='$email'" : '';
-		$condition .= $truename ? " and i.truename='$truename'" : '';
+		$condition .= $truename ? " and i.truename like '%$truename%'" : '';
 		$condition .= $province ? " and i.province='$province'" : '';
 		$condition .= $qq ? " and i.qq='$qq'" : '';
 		$condition .= $msn ? " and i.msn='$msn'" : '';
@@ -377,6 +377,10 @@ switch($action)
 		}
 	break;
 	case 'search':
+		$groupids = showgroup('select', 'groupid', $groupid);
+
+		require PHPCMS_ROOT.'/include/area.func.php';
+        $provinces = province();
         include admintpl('member_search');
 		break;
 

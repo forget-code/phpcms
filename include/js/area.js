@@ -3,7 +3,7 @@ var url = phpcms_path+"area.php";
 function loadprovince()
 {
     var pars = "action=province";
-    var myAjax = new Ajax.Request(url, {method: 'post', parameters: pars, onComplete: setprovince});
+    var myAjax = new Ajax.Request(url, {method: 'get', parameters: pars, onComplete: setprovince});
 }
 
 function setprovince(Request)
@@ -17,7 +17,7 @@ function setprovince(Request)
 function loadcity(province)
 {
     var pars = "action=city&province="+province;
-    var cAjax = new Ajax.Request(url, {method: 'post', parameters: pars, onComplete: setcity});
+    var cAjax = new Ajax.Request(url, {method: 'get', parameters: pars, onComplete: setcity});
 }
 
 function setcity(Request)
@@ -31,7 +31,7 @@ function setcity(Request)
 function loadarea(province,city)
 {
     var pars = "action=area&province="+province+"&city="+city;
-    var aAjax = new Ajax.Request(url, {method: 'post', parameters: pars, onComplete: setarea});
+    var aAjax = new Ajax.Request(url, {method: 'get', parameters: pars, onComplete: setarea});
 }
 
 function setarea(Request)

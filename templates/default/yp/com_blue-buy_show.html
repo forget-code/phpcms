@@ -1,0 +1,256 @@
+<script language="javascript">
+<!--
+function CheckForm()
+{
+	if ($F('yourname') == "")
+	{
+		alert("用户名不能为空！")
+		Field.focus('yourname');
+		return false
+	}
+	if ($F('telephone') == "")
+	{
+		alert("电话不能为空！")
+		Field.focus('telephone');
+		return false
+	}
+	if ($F('unit') == "")
+	{
+		alert("所在单位名称不能为空！")
+		Field.focus('unit');
+		return false
+	}
+
+	if ($F('email') == "")
+	{
+		alert("Email地址不能为空！")
+		Field.focus('email');
+		return false
+	}
+	else
+	{
+		var mail = $F('email');
+		if(!RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(mail))
+		{
+			alert("Email 地址错误，请检查")
+			Field.focus('email');
+			return false
+		}
+	}
+	if ($F('content') == "")
+	{
+		alert("内容不能为空！")
+		Field.focus('content');
+		return false
+	}
+}
+//-->
+</script>
+<table border="0" width="100%" id="table7" cellpadding="0" style="border-collapse: collapse" height="6">
+	<tr>
+		<td></td>
+	</tr>
+</table>
+<!-- End ImageReady Slices -->
+	<div align="center">
+	<table width="760" height="271" border="0" cellpadding="0" cellspacing="0" id="table3" style="border-collapse: collapse">
+		<tr>
+			<td width="178" valign="top">
+			<table border="0" width="178" id="table4" cellpadding="0" style="border-collapse: collapse" height="24">
+				<tr>
+					<td background="{$skindir}/images/sj_9.gif">
+					<table border="0" width="77" id="table5" cellpadding="0" style="border-collapse: collapse" height="24">
+						<tr>
+							<td width="77" background="{$skindir}/images/sj_8.gif">&nbsp;&nbsp;<span class="column_b"> 热点导航</span></td>
+						</tr>
+					</table>
+					</td>
+				</tr>
+			</table>
+			<table border="0" width="100%" id="table8" bgcolor="#F9F9F9" cellpadding="0" style="border-collapse: collapse">
+				<tr>
+					<td valign="top">
+					<TABLE cellSpacing="2" cellPadding="1" width="100%" border="0">
+{loop $m_user $ms}
+<TR bgColor="#F1F3F5" onmouseout="this.style.backgroundColor='#F1F3F5'"  onmouseover="this.style.backgroundColor='#BFDFFF'">
+	<TD align="right" height="25">
+	<SPAN style="PADDING-RIGHT: 70px; PADDING-LEFT: 0px; PADDING-BOTTOM: 0px; PADDING-TOP: 0px">
+	<a href="{$ms[url]}">{$ms[menutitle]}</a>
+	</SPAN>
+	</TD>
+</TR>
+{/loop}
+</TABLE>
+					</td>
+				</tr>
+			</table>
+<table border="0" width="100%" id="table9" cellpadding="0" style="border-collapse: collapse" height="6">
+	<tr>
+		<td></td>
+	</tr>
+</table>
+<table border="0" width="178" id="table13" cellpadding="0" style="border-collapse: collapse" height="24">
+				<tr>
+					<td background="{$skindir}/images/sj_9.gif">
+					<table border="0" width="77" id="table14" cellpadding="0" style="border-collapse: collapse" height="24">
+						<tr>
+							<td width="77" background="{$skindir}/images/sj_8.gif">
+							<font color="#FFFFFF"><b>
+							<span style="font-size: 10pt">&nbsp;&nbsp; 最新求购</span></b></font></td>
+						</tr>
+					</table>
+					</td>
+				</tr>
+			</table>
+			<table border="0" width="100%" id="table15" bgcolor="#F9F9F9" cellpadding="0" style="border-collapse: collapse">
+				<tr>
+					<td  style="padding-left: 8px;">{tag_企业主页最新求购列表}</td>
+				</tr>
+			</table>
+<table border="0" width="178" id="table4" cellpadding="0" style="border-collapse: collapse" height="24">
+<tr>
+	<td background="{$skindir}/images/sj_9.gif">
+			<table border="0" width="77" id="table5" cellpadding="0" style="border-collapse: collapse" height="24">
+				<tr>
+					<td width="77" background="{$skindir}/images/sj_8.gif">&nbsp;<span class="column_b"> 热门产品</span></td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+		</table>
+			<table border="0" width="100%" id="table8" bgcolor="#F9F9F9" cellpadding="0" style="border-collapse: collapse">
+				<tr>
+					<td valign="top"  style="padding-left: 8px;">{tag_企业产品页热门产品}</td>
+				</tr>
+			</table>
+<table border="0" width="100%" id="table9" cellpadding="0" style="border-collapse: collapse" height="6">
+	<tr>
+		<td></td>
+	</tr>
+</table>
+			
+<table border="0" width="100%" id="table16" cellpadding="0" style="border-collapse: collapse" height="6">
+	<tr>
+		<td></td>
+	</tr>
+</table>
+		
+			</td>
+			<td width="6">　</td>
+		  <td valign="top"><table border="0" width="100%" id="table29" cellpadding="0" style="border-collapse: collapse" height="35">
+	<tr>
+		<td width="89" background="{$skindir}/images/sj_25.gif"><span class="column_b">&nbsp;&nbsp;&nbsp;&nbsp; 求购信息</span>  </td>
+		<td background="{$skindir}/images/sj_26.gif" width="389">　<strong>标题：</strong>{$product[title]} </td>
+	    <td background="{$skindir}/images/sj_26.gif" width="83">浏览次数：<span id="hits">0</span></td>
+	</tr>
+</table>
+<table width="100%" border="0" cellpadding="2" cellspacing="3" id="table30" style="border-collapse: collapse">
+	<tr>
+		<td valign="top">
+		<table width="100%"  border="1" cellpadding="2" cellspacing="1" style="border-collapse: collapse" bordercolor="#F1F3F5">
+          <tr >
+            <td width="18%">标题</td>
+            <td width="69%">{$product[title]} </td>
+            <td width="13%"><a href="{$guestbookurl}companyid-{$product[companyid]}/label-buy/item-{$productid}.html" target="_blank">[我要询价]</a></td>
+          </tr>
+          <tr>
+            <td>采购要求</td>
+            <td colspan="2" >{$product[introduce]} </td>
+          </tr>
+          <tr>
+            <td>该信息联系方式</td>
+            <td colspan="2" ></td>
+          </tr>
+          <tr>
+            <td>采购单位</td>
+            <td colspan="2">{$product[unit]} </td>
+          </tr>
+		  <tr>
+            <td>联 系 人</td>
+		    <td colspan="2">{$product[linkman]} </td>
+		    </tr>
+          <tr>
+            <td>E-Mail</td>
+            <td colspan="2">{$product[email]} </td>
+          </tr>
+          <tr>
+            <td>联系电话</td>
+            <td colspan="2">{$product[phone]} </td>
+          </tr>
+          <tr>
+            <td>联系地址</td>
+            <td colspan="2" valign="top">{$product[address]} </td>
+          </tr>
+		   <tr>
+            <td>有效期</td>
+            <td colspan="2"class="table-x">{$product['period']} 前</td>
+          </tr>
+        </table>
+		<table width="100%" cellpadding="2" cellspacing="1" style="border:1px;">
+  <tr>
+    <td colspan="4">
+	<table border="0" width="100%" id="table43" cellpadding="0" style="border-collapse: collapse" height="35">
+	<tr>
+		<td width="89" background="{$skindir}/images/sj_25.gif"><span class="column_b">&nbsp;&nbsp;&nbsp;&nbsp; 询价留言</span>  </td>
+		<td background="{$skindir}/images/sj_26.gif" width="389">　</td>
+	    <td background="{$skindir}/images/sj_26.gif" width="83">　</td>
+	</tr>
+</table></td>
+  </tr>
+  <form action="{$guestbookurl}index.html" method="post" name="myform" id="myform" onsubmit='return CheckForm();'>
+    <tr>
+      <td >您的姓名：</td>
+      <td ><input name="yourname" id="yourname" type="text" size="20" maxlength="10" />
+        * </td>
+      <td >公司传真：</td>
+      <td ><input name="fax" id="fax" type="text" size="20" /></td>
+    </tr>
+    <tr>
+      <td >联系电话：</td>
+      <td ><input name="telephone" id="telephone" type="text" size="20" maxlength="50" />
+        * </td>
+      <td >QQ：</td>
+      <td ><input name="qq" id="qq" type="text" size="20" maxlength="9" />
+      </td>
+    </tr>
+    <tr>
+      <td >所在单位：</td>
+      <td ><input name="unit" id="unit" type="text" size="20" />
+        * </td>
+      <td >MSN：</td>
+      <td ><input name="msn" id="msn" type="text" size="20" /></td>
+    </tr>
+    <tr>
+      <td >Email：</td>
+      <td colspan="3"><input name="email" id="email" type="text" size="20" />
+        * </td>
+    </tr>
+    <tr>
+      <td >留言内容：</td>
+      <td colspan="3"><textarea name="content" id="content" rows="6" cols="60"></textarea>
+        *</td>
+    </tr>
+    <tr>
+      <td ></td>
+      <td colspan="3"><input name="dosubmit" type="submit" value=" 提交询价 " />
+          <input name="companyid" type="hidden" value="{$product[companyid]}" />
+          <input name="item" type="hidden" value="{$productid}" />
+      </td>
+    </tr>
+  </form>
+</table>
+		</td>
+	</tr>
+</table>
+</td>
+		</tr>
+</table>
+</div>
+<div align="center">
+	<table width="700" height="11" border="1" cellpadding="0" id="table42" style="border-collapse: collapse; border-left-width:0px; border-right-width:0px; border-top-width:0px" bordercolor="#FFA400">
+		<tr><td style="border-left-style: none; border-left-width: medium; border-right-style: none; border-right-width: medium; border-top-style: none; border-top-width: medium" height="5"></td>
+		</tr>
+</table>
+</div>
+<script type="text/javascript" src="{$PHPCMS['siteurl']}yp/web/show_js.php?label=buy&item={$productid}"></script>
+{template 'yp','com_blue-footer'}

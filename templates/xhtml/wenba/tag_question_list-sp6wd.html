@@ -1,0 +1,15 @@
+<!--{loop $question $i $g}-->
+        <li>{if $datetype}<P>{$g[adddate]}</P>{/if}
+		<!--{if $g['status']==1}-->
+		<img src="{$PHPCMS[siteurl]}images/wenhao.gif" />
+		<!--{elseif $g['status']==2}-->
+		<img src="{$PHPCMS[siteurl]}images/dui.gif" />
+		<!--{elseif $g['status']==3}-->
+		<img src="{$PHPCMS[siteurl]}images/!.gif">
+		<!--{else}-->
+		<img src="{$PHPCMS[siteurl]}images/x.gif">
+		<!--{/if}-->{if $showcatname}[<a href="{$MODULE['wenba']['linkurl']}browse.php?catid={$g['catid']}" class="lgy">{$g['catname']}</a>]{/if}
+	<a href="{$MODULE['wenba']['linkurl']}question.php?qid={$g['qid']}" {$target}>{$g['title']}</a><!--{if $g['score']}-->
+&nbsp;&nbsp;<font style="FONT-SIZE: 12px" color="#fc670e">赏</font><font style="FONT-WEIGHT: 700; FONT-SIZE: 12px" color="#e41807">{$g['score']}</font><font style="FONT-SIZE: 12px" color="#fc670e">分</font>
+		<!--{/if}--> 
+		</li><!--{/loop}-->

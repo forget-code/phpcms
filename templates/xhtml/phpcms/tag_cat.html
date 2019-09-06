@@ -1,0 +1,56 @@
+{if $showtype==1}
+
+<table border="0" cellpadding="2" cellspacing="2">
+{loop $subcat $cat}
+  <tr>
+    <td><a href="{$cat[linkurl]}"><b>{$cat[catname]}</b></a>
+	{if $child && $cat['child']==1}
+		{loop $childcat[$cat['catid']] $c}
+		&nbsp;&nbsp;<a href="{$c[linkurl]}" style="{$cat[style]}">{$c[catname]}</a>
+		{/loop}
+	{/if}
+	</td>
+  </tr>
+{/loop}
+</table>
+
+{elseif $showtype==2}
+
+<table border="0" cellpadding="2" cellspacing="2">
+  <tr>
+{loop $subcat $cat}
+    <td><a href="{$cat[caturl]}"><b>{$cat[catname]}</b></a>&nbsp;&nbsp;<br />
+	{if $child && $cat['child']==1}
+		{loop $childcat[$cat['catid']] $c}
+		<a href="{$c[linkurl]}" style="{$cat[style]}">{$c[catname]}</a><br />
+		{/loop}
+    {/if}
+    </td>
+{/loop}
+  </tr>
+</table>
+
+{else}
+
+<script type="text/javascript">
+function show(a_Str,b_Str,c_Str){
+var open = "{PHPCMS_PATH}images/icon/open.gif";
+var fopen = "{PHPCMS_PATH}images/icon/fopen.gif";
+var close = "{PHPCMS_PATH}images/icon/close.gif";
+var fclose = "{PHPCMS_PATH}images/icon/fclose.gif";
+
+if(document.all(c_Str).style.display=='none'){
+      document.all(c_Str).style.display='block';
+      document.all(a_Str).src=open;
+      document.all(b_Str).src=fopen;
+}else{
+      document.all(c_Str).style.display='none';
+      document.all(a_Str).src=close;
+      document.all(b_Str).src=fclose;
+}
+}
+</script>
+
+{$cattree}
+
+{/if}

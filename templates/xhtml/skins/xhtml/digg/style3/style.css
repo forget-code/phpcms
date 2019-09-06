@@ -1,0 +1,10 @@
+#digg { margin-bottom: 8px;line-height: 20px;font-size: 12px;background-image: url(images/d-1.gif);background-repeat: repeat-x;background-position: bottom;padding:5px 6px 8px 6px;}
+#digg dt {clear: both;}
+#digg dt span {margin-right: 5px;margin-left: 5px;}
+#digg .bg {height: 46px;width: 47px;background-image: url(images/digg_up.gif);text-align: center;float: left; overflow:hidden;}
+#digg .bg_1 {height: 46px;width: 47px;background-image: url(images/digg_down.gif);text-align: center;float: left; overflow:hidden;}
+#digg .bg span,.bg_1 span {height: 20px;color: #D1910A;*padding-left:5px;}
+#digg .bg p,.bg_1 p {height: 16px;color: #CA9711; padding-bottom:6px!important; padding-bottom:2px;}
+.bg span a,.bg_1 span a{
+	text-decoration:none!important;
+}

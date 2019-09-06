@@ -1,0 +1,4 @@
+{loop $movies $i $movie}
+<li><span class="num">{intval($i+1)}</span>
+<span class="tit"><a href="{$movie[linkurl]}" title="{$movie[title]}" {$target}>{$movie[stitle]}</a></span></li>
+{/loop}

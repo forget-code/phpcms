@@ -35,6 +35,32 @@ function SelectBigPic(){
     $('bigthumb').value=s[0];
   }
 }
+function CutPic(){
+  var thumb=$('thumb').value;
+	if(thumb=='')
+	{
+		alert('请先上传小缩略图');
+		$('thumb').focus();
+		return false;
+	}
+  var arr=Dialog('corpandresize/ui.php?<?=$PHPCMS[siteurl]?>'+thumb,'',700,500);
+  if(arr!=null){
+    $('thumb').value=arr;
+  }
+}
+function CutBigPic(){
+  var thumb=$('bigthumb').value;
+	if(thumb=='')
+	{
+		alert('请先上传大缩略图');
+		$('bigthumb').focus();
+		return false;
+	}
+  var arr=Dialog('corpandresize/ui.php?<?=$PHPCMS[siteurl]?>'+thumb,'',700,500);
+  if(arr!=null){
+    $('bigthumb').value=arr;
+  }
+}
 function SelectKeywords(){	
   var s=Dialog('?mod=phpcms&file=keywords&keyid=<?=$channelid?>&select=1','',700,500);
   if(s!=null){
@@ -131,7 +157,7 @@ function setid()
 </tr>
 <tr> 
 <td width="15%" class="tablerow">所属栏目</td>
-<td class="tablerow"><font color="#FF0000"><?=$CAT['catname']?></font></td>
+<td class="tablerow"><font color="#FF0000"><?=$CAT['catname']?></font>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font color="blue">Tips:</font><a href="?mod=<?=$mod?>&file=<?=$file?>&channelid=<?=$channelid?>&action=move&movetype=1&movieids=<?=$movieid?>&referer=<?=urlencode("?mod=$mod&file=$file&action=edit&catid=$catid&movieid=$movieid&channelid=$channelid")?>">如果需要改变所属栏目，请点这里...</td>
 </tr>
 <tr> 
 <td width="15%" class="tablerow">地区</td>
@@ -183,12 +209,14 @@ function setid()
 <td class="tablerow">大缩略图</td>
 <td class="tablerow"><input name="movie[bigthumb]" type="text" id="bigthumb" size="58" value="<?=$bigthumb?>">  <input type="button" value="上传图片" onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&channelid=<?=$channelid?>&uploadtext=bigthumb&type=thumb&width=<?=$MOD['bigthumb_width']?>&height=<?=$MOD['bigthumb_height']?>','upload_bigthumb','350','350')">
 <input name="fromuploadbig" type="button" id="fromuploadbig" value="从已经上传的图片中选择" onclick="SelectBigPic()" style="width:150px;"/>
+<input name="cutpic" type="button" id="cutBigpic" value="裁剪图片" onclick="CutBigPic()"/>
 </td>
 </tr>
 <tr> 
 <td class="tablerow">小缩略图</td>
 <td class="tablerow"><input name="movie[thumb]" type="text" id="thumb" size="58" value="<?=$thumb?>">  <input type="button" value="上传图片" onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&channelid=<?=$channelid?>&uploadtext=thumb&type=thumb&width=<?=$MOD['thumb_width']?>&height=<?=$MOD['thumb_height']?>','upload_thumb','350','350')">
 <input name="fromupload" type="button" id="fromupload" value="从已经上传的图片中选择" onclick="SelectPic()" style="width:150px;"/>
+<input name="cutpic" type="button" id="cutpic" value="裁剪图片" onclick="CutPic()"/>
 </td>
 </tr>
 <tr> 
@@ -234,6 +262,13 @@ function setid()
 </table>
 </td>
 </tr>
+<tr> 
+      <td class="tablerow">转向链接</td>
+      <td class="tablerow">
+       <input type="text" name="movie[linkurl]" id="linkurl"  size="50" maxlength="255"<? if(!$islink) { ?>disabled<? } ?> value="<? if($islink) { ?><?=$linkurl?><? } ?>"><input name="movie[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" <? if($islink) { ?>checked<? } ?>><font color="#FF0000">转向链接</font>
+	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
+     </td>
+    </tr>
   <tr> 
       <td class="tablerow">推荐位置</td>
       <td class="tablerow">
@@ -287,18 +322,10 @@ function setid()
 </tr>
 
 <tr> 
-<td class="tablerow">添加日期</td>
-<td class="tablerow"><?=date_select('movie[addtime]', $addtime)?>&nbsp;格式：yyyy-mm-dd</td>
+<td width="15%" class="tablerow">添加日期</td>
+<td class="tablerow"><?=date_select('movie[addtime]', $addtime,'%Y-%m-%d %H:%M:%S')?></td>
 </tr>
-<tr> 
-      <td class="tablerow">转向链接</td>
-      <td class="tablerow">
-       <input type="text" name="movie[linkurl]" id="linkurl"  size="50" maxlength="255"<? if(!$islink) { ?>disabled<? } ?> value="<? if($islink) { ?><?=$linkurl?><? } ?>"><input name="movie[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" <? if($islink) { ?>checked<? } ?>><font color="#FF0000">转向链接</font>
-	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
-     </td>
-    </tr>
-	
-    <tr> 
+  <tr> 
       <td class="tablerow">是否生成</td>
       <td class="tablerow"><input type="radio" name="movie[ishtml]" value="1" <?php if($ishtml==1) {?>checked <?php } ?>  onclick="$('htmlrule').style.display='';$('htmldir').style.display='';$('htmlprefix').style.display='';$('phprule').style.display='none';"> 是 <input type="radio" name="movie[ishtml]" value="0" <?php if($ishtml==0) {?>checked <?php } ?> onclick="$('htmlrule').style.display='none';$('htmldir').style.display='none';$('htmlprefix').style.display='none';$('phprule').style.display='';"> 否</td>
     </tr>

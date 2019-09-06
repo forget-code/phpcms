@@ -53,7 +53,7 @@ if($dosubmit)
 	$picture['catid'] = $catid;
 	$picture['username'] = $picture['editor'] = $picture['checker'] = $_username;
 	$picture['urlruleid'] = $picture['ishtml'] ? $html_urlrule : $php_urlrule;
-	$picture['addtime'] = $picture['edittime'] = $picture['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $picture['addtime']) ? strtotime($picture['addtime'].' '.date('H:i:s',$PHP_TIME)) : $PHP_TIME;
+	$picture['addtime'] = $picture['edittime'] = $picture['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})/', $picture['addtime']) ? strtotime($picture['addtime']) : $PHP_TIME;
 	if(isset($picture['arrposid']))
 	{
 		$arrposid = $picture['arrposid'];
@@ -97,13 +97,13 @@ if($dosubmit)
 }
 else
 {
-	$today=date('Y-m-d',$PHP_TIME);
+	$today=date('Y-m-d H:i:s',$PHP_TIME);
 	$type_select = type_select('picture[typeid]', $LANG['type']);
 	$style_edit = style_edit("picture[style]","");
 	$keywords_select = keywords_select($channelid);
 	$author_select = author_select($channelid);
 	$copyfrom_select = copyfrom_select($channelid);
-	$category_jump = category_select('catid', $LANG['switch_to_other_category'], 0, "onchange=\"if(this.value!=''){location='?mod=$mod&file=$file&action=add&channelid=$channelid&catid='+this.value;}\"");
+	$this_category = str_replace("<option value='0'></option>",'',category_select('catid','',$catid));
 	$showgroup = showgroup('checkbox','picture[arrgroupidview][]');
 	$showskin = showskin('picture[skinid]');
 	$showtpl = showtpl($mod,'content','picture[templateid]');

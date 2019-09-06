@@ -1,0 +1,69 @@
+{template 'product','header'}
+<link href="{$skindir}/mall.css" rel="stylesheet" type="text/css">
+<div  id="censent">
+  <div id="mallleft">
+    <div class="gwmall boxmargin" ><a href="{$MOD[linkurl]}cart.php" target="_blank"><img src="{$skindir}/images/ckgwc.gif" class="wztp" /></a><img src="{$skindir}/images/gwaw.gif" class="wztp" />
+    <div class="rhgm"><img src="{$skindir}/images/gwli.gif" />&nbsp;如何购买&nbsp;<img src="{$skindir}/images/gwli.gif" />&nbsp;如何购买</div>
+    </div>
+    <div class="mbtleft">
+      <div>浏览过的商品</div> 
+    </div>
+    <div class="boxmargin xianmall">
+    <div  class="mallx1">
+<!--浏览过的商品列表-->
+<div class="product_liulan" id="visitedproduct">
+<ul>
+正在加载浏览过的商品列表......
+</ul></div>
+    </div>
+    <div id="clear"></div>
+    </div>
+  </div>
+  <div id="mallright">
+    <div class="search_c1">
+      <!--搜索开始-->
+      <!--搜索结束-->
+    </div>
+    <div class="mbtleft">
+      <div><em class="btys">当前位置：<a href="{PHPCMS_PATH}product/">商城首页</a>  &gt;&gt; 查看订单</span></em></div> 
+    </div>
+	
+
+<div class="xianmall boxmargin mallx1">
+<div style="margin-top:15px;clear:both"></div>
+ <div class="cat_box_1">
+    <div class="cat_title"><h1>支付方式</h1></div>
+<table width="100%"  cellspacing="0" cellpadding="0" class="righttable">
+<form action="{$MOD[linkurl]}order.php?action=pay&odr_id={$odr_id}" method="POST">
+	 <tr>
+	 <td width="16%" class="td_right">您的帐户余额:</td>
+	 <td width="84%" class="td_left"><font color="red">￥：{$_money}</font></td>
+	 </tr>
+	 <tr>
+	 <td class="td_right">您的折扣:</td>
+	 <td class="td_left">{$discount}</td>
+	 </tr>
+	 <tr>
+	 <td class="td_right">本次订单需要支付:</td>
+	 <td class="td_left">{$total_mount}×{$discount} = ￥：<font color="Red">{$member_mount}</font></td>
+	 </tr>
+	 <tr>
+	 <td colspan="2">&nbsp;</td>
+	 </tr>
+	 <tr>
+	 <td colspan="2" class="td_center">
+       &nbsp;&nbsp;&nbsp;
+<input type="submit" name="directpay" value="直接支付"  {if $_money<$total_mount} disabled {/if}>&nbsp;&nbsp;&nbsp;
+<input type="button" name="onlinepay" value="在线充值"  {if $_money>$total_mount} disabled {/if} onclick="location='{$MODULE[pay]['linkurl']}payonline.php?amount={$amount}'">
+</td>
+	 </tr>
+  </form>
+</table>
+</div>
+ <div id="clear"></div>
+  <div>
+  </div>
+  </div>
+  </div></div>
+  <script type="text/javascript" src="{$MOD[linkurl]}visited.php?productid=0&visitednum={$MOD[visitednum]}"></script>
+{template 'phpcms','footer'}

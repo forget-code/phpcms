@@ -45,7 +45,7 @@ function product_list($templateid = '', $catid = 0, $brand_id =0 , $child = 1, $
 	$ordertype = $ordertypes[$ordertype];
 	$limit = $productnum ? " LIMIT $offset, $productnum " : 'LIMIT 0, 10';
 	$products = array();
-	$result = $db->query("SELECT productid,pdt_name,style,catid,subtype,brand_id,arrposid,pro_id,pdt_No,pdt_num,pdt_weight,pdt_unit,pdt_description,introduce,pdt_img,hits,price,showcommentlink,marketprice,addtime,edittime,onsale,disabled,ishtml,urlruleid,linkurl,listorder  FROM ".TABLE_PRODUCT." WHERE disabled=0  AND onsale=1 $condition ORDER BY $ordertype $limit ","CACHE");
+	$result = $db->query("SELECT productid,pdt_name,style,catid,subtype,brand_id,arrposid,pro_id,pdt_No,pdt_num,pdt_weight,pdt_unit,pdt_description,introduce,pdt_img,pdt_bigimg,pdt_thumb,hits,price,showcommentlink,marketprice,addtime,edittime,onsale,disabled,ishtml,urlruleid,linkurl,listorder  FROM ".TABLE_PRODUCT." WHERE disabled=0  AND onsale=1 $condition ORDER BY $ordertype $limit ","CACHE");
 	while($r = $db->fetch_array($result))
 	{
 		$r['addtime'] = date($datetypes[$datetype],$r['addtime']);
@@ -116,7 +116,7 @@ function product_thumb($templateid = '',$catid = 0,$brand_id =0 , $child = 1, $p
 	$ordertype = $ordertypes[$ordertype];
 	$limit = $productnum ? " LIMIT $offset, $productnum " : 'LIMIT 0, 10';
 	$products = array();
-	$result = $db->query("SELECT productid,pdt_name,style,catid,subtype,brand_id,arrposid,pro_id,pdt_No,pdt_num,pdt_weight,pdt_unit,pdt_description,introduce,pdt_img,hits,price,showcommentlink,marketprice,addtime,edittime,onsale,disabled,ishtml,urlruleid,linkurl,listorder  FROM ".TABLE_PRODUCT." WHERE disabled=0  AND onsale=1 $condition ORDER BY $ordertype $limit ","CACHE");
+	$result = $db->query("SELECT productid,pdt_name,style,catid,subtype,brand_id,arrposid,pro_id,pdt_No,pdt_num,pdt_weight,pdt_unit,pdt_description,introduce,pdt_img,pdt_bigimg,pdt_thumb,hits,price,showcommentlink,marketprice,addtime,edittime,onsale,disabled,ishtml,urlruleid,linkurl,listorder  FROM ".TABLE_PRODUCT." WHERE disabled=0  AND onsale=1 $condition ORDER BY $ordertype $limit ","CACHE");
 	while($r = $db->fetch_array($result))
 	{
 		$addtime = $r['addtime'];
@@ -127,6 +127,8 @@ function product_thumb($templateid = '',$catid = 0,$brand_id =0 , $child = 1, $p
 		$r['marketprice'] = strval($r['marketprice'])==='0.00' ? $LANG['unknown'] : $r['marketprice'];
 		$r['pdt_description'] = str_cut($r['pdt_description'] , $descriptionlen, '...');
 		$r['pdt_img'] = imgurl($r['pdt_img']);
+		$r['pdt_bigimg'] = imgurl($r['pdt_bigimg']);
+		$r['pdt_thumb'] = imgurl($r['pdt_thumb']);
 		if($showalt) $r['alt'] = $LANG['product'].':'.$r['pdt_name'].'&#10;'.$LANG['add'].':'.date('Y-m-d',$addtime).'&#10;'.$LANG['hits'].':'.$r['hits'];
 		if($showcatname)
 		{
@@ -186,7 +188,7 @@ function product_slide($templateid = '',$catid = 0,$brand_id =0 , $child = 1, $p
 	$flash_links = 'imgLink0';
 	$flash_texts = 'imgtext0';
 	$products = array();
-	$result = $db->query("SELECT productid,catid,pdt_name,style,introduce,hits,pdt_img,addtime,arrposid,listorder,ishtml,urlruleid,linkurl FROM ".TABLE_PRODUCT." WHERE disabled=0 AND pdt_img!='' $condition ORDER BY $ordertype $limit ","CACHE");
+	$result = $db->query("SELECT productid,catid,pdt_name,style,introduce,hits,pdt_img,pdt_bigimg,pdt_thumb,addtime,arrposid,listorder,ishtml,urlruleid,linkurl FROM ".TABLE_PRODUCT." WHERE disabled=0 AND pdt_img!='' $condition ORDER BY $ordertype $limit ","CACHE");
 	while($r = $db->fetch_array($result))
 	{
 		$r['pdt_name'] = addslashes(str_cut($r['pdt_name'], $titlelen, '...'));

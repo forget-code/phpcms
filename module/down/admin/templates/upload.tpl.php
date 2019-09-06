@@ -5,7 +5,7 @@ include admintpl('header');
 <script type="text/javascript">
 	window.onload=function(){
 	var h = <?=$upnum?>*20+30;
-	parent.$('upload').height = h;
+	parent.$('uploads').height = h;
 }
 </script>
 <table width="100%" cellpadding="0" cellspacing="0"  height="100%">

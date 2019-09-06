@@ -1,0 +1,6 @@
+{loop $movies $movie}
+<li>
+{$movie[type]} ·<a href="{$movie[linkurl]}" class="tag_title_link">{$movie[stitle]}</a>
+{if $datetype}[<span class="datetime">{$movie[adddate]}</span>]{/if}
+</li>
+{/loop}

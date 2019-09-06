@@ -11,7 +11,7 @@ include admintpl('header');
   <tr>
     <td class="tablerowhighlight" colspan=2>第二步：确认模块信息</td>
   </tr>
-   <form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&installdir=<?=$module?>&confirminstall=1" method="post" name="myform">
+   <form action="?mod=<?=$mod?>&file=<?=$file?>&action=<?=$action?>&confirminstall=1" method="post" name="myform">
     <tr> 
       <td width="30%" class="tablerow"><b>模块名称</b></td>
       <td class="tablerow">

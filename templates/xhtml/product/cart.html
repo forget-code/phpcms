@@ -1,0 +1,77 @@
+{template 'product','header'}
+<link href="{$skindir}/mall.css" rel="stylesheet" type="text/css">
+<div  id="censent">
+  <div id="mallleft">
+    <div class="gwmall boxmargin" ><a href="{$MOD[linkurl]}cart.php" target="_blank"><img src="{$skindir}/images/ckgwc.gif" class="wztp" /></a><img src="{$skindir}/images/gwaw.gif" class="wztp" />
+    <div class="rhgm"><img src="{$skindir}/images/gwli.gif" />&nbsp;如何购买&nbsp;<img src="{$skindir}/images/gwli.gif" />&nbsp;如何购买</div>
+    </div>
+    <div class="mbtleft">
+      <div>浏览过的商品</div> 
+    </div>
+    <div class="boxmargin xianmall">
+    <div  class="mallx1">
+<!--浏览过的商品列表-->
+<div class="product_liulan" id="visitedproduct">
+正在加载浏览过的商品列表......
+</ul></div>
+    </div>
+    <div id="clear"></div>
+    </div> 
+  </div>
+  <div id="mallright">
+  <div class="search_c1"> 
+<!--搜索开始-->
+<ul>
+<form name="myform" action="{$MOD[linkurl]}search.php" method="get">
+<li class="c4">搜索：</li><li>
+<select name="searchtype">
+<option value="pdt_name">按商品名称</option>
+<option value="pdt_No">按商品编号</option>
+<option value="introduce">按商品介绍</option>
+</select></li>
+<li class="c4">关键字：</li>
+<li><input class="c2" name="keyword" type="text" /></li>
+<li class="c4">价格范围：</li>
+<li><input class="c3" name="fromprice" type="text" />-<input class="c3" name="toprice" type="text" /></li>
+<li><input type="hidden" name="dosubmit" value="1" />
+<input type="hidden" name="search" value="1" />
+<input src="{$skindir}/images/ss.gif" alt="搜索" type="image" /></li>
+<li class="c4"><a href="{$MOD[linkurl]}search.php" class="red">详细</a></li>
+</form></ul>
+<!--搜索结束-->
+</div>
+    <div class="mbtleft">
+      <div><em class="btys">当前位置：<a href="{PHPCMS_PATH}product/">商城首页</a> >> 购物车</em></div> 
+    </div>
+	
+
+<div class="xianmall boxmargin mallx1">
+<div style="margin-top:15px;clear:both"></div>
+<ul class="gwcbtn">
+<li class="px_1">序号</li><li class="px_2">您选择商品</li><li class="px_2">商品编号</li><li class="px_3">市场价</li><li class="px_3">本店价</li><li class="px_3">您的价格</li><li class="px_1">数量</li>
+<li class="px_3">金额</li><li class="px_3">操作</li>
+
+</ul>
+<form action="?" onSubmit="return checkform();" method="POST">
+<input type="hidden" name="action" value="modifynum">
+<!--{loop $pdt_carts $i $v}-->  
+
+<ul class="px">
+<li class="px_1"><?=++$i?></li><li class="px_2"><a href="{$v[linkurl]}" target="_blank">{$v[pdt_name]}</a></li><li class="px_2">{$v[pdt_No]}</li><li class="px_3"><s>{$v[marketprice]}</s></li><li class="px_3">{$v[price]}</li><li class="px_3"><font color='red'>{$v[member_price]}</font></li><li class="px_1"><input type='text' name='pdt_number[{$v[cart_id]}][]' Id='pdt_number'  value='{$v[pdt_number]}' size="3"/></li>
+<li class="px_3">{$v[pdt_amount]}</li><li class="px_3"><a href='{$MOD[linkurl]}cart.php?action=delete&productid={$v[productid]}'>删除该商品</a></li><br style="clear:both;" />
+</ul>
+<!--{/loop}-->
+
+<div class="gwctb">
+<ul>
+<li>总金额：￥{$total_mount} 折扣：{$discount} 您应付：￥{$member_mount}</li>
+<li><input type="image" src="{$skindir}/images/xgsl.gif" value="修改数量" name="dosubmit">&nbsp;
+<a href="{$MOD[linkurl]}payment.php?num={count($pdt_carts)}"><img src="{$skindir}/images/qsyt.gif" /></a>&nbsp;
+<a href="{$MOD[linkurl]}"><img src="{$skindir}/images/jxgw.gif" /></a>&nbsp;&nbsp;&nbsp;</li></ul></div>
+   <div id="clear"></div>
+  <div>
+  </div>
+  </div>
+  </div></div>
+  <script type="text/javascript" src="{$MOD[linkurl]}visited.php?productid=0&visitednum={$MOD[visitednum]}"></script>
+{template 'phpcms','footer'}

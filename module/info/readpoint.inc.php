@@ -13,5 +13,5 @@ unset($info);
 
 if(!$_userid) showmessage($LANG['please_login'], $MODULE['member']['linkurl'].'login.php?forward='.urlencode($PHP_URL));
 point_diff($_username, $readpoint, $title.'(channelid='.$channelid.',infoid='.$infoid.')', $_userid.'-'.$channelid.'-'.$infoid);
-header('location:'.$linkurl);
+header('location:'.linkurl($linkurl));
 ?>

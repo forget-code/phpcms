@@ -1,0 +1,16 @@
+<table cellpadding="0" cellspacing="0" class="tag_box">
+{loop $companys $i $company}
+{if $i%$cols==0}<tr>{/if}
+<td height="24" width="{$width}">
+{if $datetype}<span class="datetime f_r">{$company[adddate]}</span>{/if} 
+<a href="{$company[linkurl]}" {$target} class="tag_title_link">
+{$company[companyname]}
+{if $showhits}({$company[hits]}){/if}</a><BR>
+{$company[introduce]}
+</td>
+{if $i%$cols==($cols-1)}</tr>{/if}
+{/loop}
+</table>
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

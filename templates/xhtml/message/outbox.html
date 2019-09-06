@@ -1,0 +1,51 @@
+{template 'phpcms','header'}
+<table cellspacing="0" cellpadding="0" class="member">
+<tr>
+<td valign="top" class="left">
+{template 'member','left'}
+</td>
+<td width="10">
+</td>
+<td class="right" valign="top">
+{template 'message','message_catlist'}
+<div class="memberborder_1">
+<div class="memberborder_2">
+  <h1>发件箱</h1>
+
+<form action="{$PHP_SELF}" method="post" onsubmit="return frmChk();">
+<table cellpadding="0" cellspacing="0" class="righttable">
+  <tbody>
+	<tr>
+		<td width="8%" class="td_center">删除</td>
+		<td width="57%" class="td_center">标题</td>
+		<td width="15%" class="td_center">发送到</td>
+		<td width="20%" class="td_center">时间</td>
+	</tr>
+{if $outboxnum > 0}
+{loop $outbox $value}
+	<tr onmouseover="this.className='mrowbg2';" onmouseout="this.className='mrowbg1';">
+		<td width="8%" class="td_center"><input id="mid" type="checkbox" name="mid[]" value="{$value[0]}" onclick="delCheck();"></td>
+		<td width="57%" class="td_left"><a href="{$MOD[linkurl]}show.php?folder=outbox&mid={$value[0]}" target="_self" title="查看消息内容">{$value[2]}</a></td>
+		<td width="15%" class="td_center">{$value[1]}</td>
+		<td width="20%" class="td_center">{date('Y-m-d H:i:s', $value[3])}</td>
+	</tr>
+{/loop}
+</tbody></table><script src="{PHPCMS_PATH}templates/xhtml/message/mutexbtn.js" language="javascript" type="text/javascript"></script>
+<table cellpadding="0" cellspacing="0" class="righttable">
+  <tbody>
+	<tr>
+		<td width="50%" class="td_center"><input id="checkAll" type="button" value="全选" onclick="selectAll();">&nbsp;<input id="checkOther" type="button" value="反选" disabled onclick="selOther();">&nbsp;<input id="cancel" type="button" value="取消选择" disabled onclick="noCheck();"></td>
+		<td width="50%" class="td_center"><input id="quite" type="checkbox" name="quite" value="1" disabled>彻底删除&nbsp;&nbsp;<input id="subBtn" type="submit" name="dosubmit" value="删除消息" disabled title="将该消息放入回收站"></td>
+	</tr>
+  </tbody>
+</table></form>
+{/if}
+{template 'message','numalert'}
+</div></div>
+    </td>
+	</tr>
+  </table>
+		</div></td>
+	</tr>
+</tbody></table>
+{template 'phpcms','footer'}

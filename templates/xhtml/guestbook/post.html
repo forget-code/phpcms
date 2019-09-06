@@ -1,0 +1,145 @@
+{template 'phpcms','header'}
+
+<script language = 'JavaScript'>
+function changeimage()
+{
+  document.myform.headimg.value=document.myform.Image.value;
+  document.myform.showimages.src='{PHPCMS_PATH}images/guestbook/face/'+document.myform.Image.value+'.gif';
+}
+function Checkgb()
+{
+    if(document.myform.username.value==''){
+      alert('姓名不能为空！');
+      document.myform.username.focus();
+      return(false) ;
+    }
+  if(document.myform.username.value.length>30){
+    alert('姓名太长了');
+    document.myform.username.focus();
+    return(false);
+  }
+  if(document.myform.title.value==''){
+    alert('主题不能为空！');
+    document.myform.title.focus();
+    return(false);
+  }
+  if(document.myform.title.value.length>100){
+    alert('主题不能超过30字符！');
+    document.myform.title.focus();
+    return(false);
+  }
+	{if $MOD['enablecheckcode']}
+
+	  if(document.myform.checkcodestr.value==''){
+		alert('请输入您的验证码！');
+		document.myform.checkcodestr.focus();
+		return(false);
+	  }
+
+	{/if}
+}
+</script>
+<link href="{PHPCMS_PATH}images/guestbook/guestbook.css" rel="stylesheet" type="text/css" />
+<div id="censent">
+<div id="bt11">&nbsp;当前位置:<a href="{PHPCMS_PATH}">网站首页</a>&gt;&gt;{$position}</div>
+<div class="liuyan"><ul><li class="d_1"><a href="{$MODULE[guestbook][linkurl]}index.php?keyid={$keyid}">留言首页</a></li><li class="d_1"><a href="{$MODULE[guestbook][linkurl]}post.php?keyid={$keyid}">签写留言</a></li>
+<li class="d_2"><form method="get" name="search" action="{$MODULE[guestbook][linkurl]}index.php?keyid={$keyid}">
+	
+	<input name='keyid' type='hidden' value='{$keyid}'>
+
+	关键字：
+	<input name='keywords' type='text' size='30' value='{$keyword}'>&nbsp;
+	<input type="radio" name="srchtype" value="0" {if (!$srchtype)} checked {/if}> 标题 	
+	<input type="radio" name="srchtype" value="1" {if ($srchtype==1)} checked {/if}> 内容	
+	<input type="radio" name="srchtype" value="2" {if ($srchtype==2)} checked {/if}> 会员
+	<input name='submit' type='submit' value='留言搜索'>
+	
+  </form></li>
+</ul>
+</div></div>
+
+
+<table width="978"  border="0" align="center" cellpadding="0" cellspacing="0" class="d_xian">
+<tr height="1" bgcolor="#C0C0C0">
+<td> </td>
+</tr>
+<tr>
+<td>
+	<table width="100%"  border="0" cellspacing="3" cellpadding="3" align="center">
+	<tr>
+	<form name="myform" method="post" action="{$MOD[linkurl]}post.php" onSubmit="return Checkgb()">
+	<input type="hidden" value="{$keyid}" name="keyid">
+	<td align="right" width="10%" bgcolor="#F5F5F5"> <font color="red">*</font> 姓名：</td>
+	<td><input name="username" type="text" id="username" size="25" value="{$_username}"></td>
+	<td rowspan="4" width="700">
+	 <input type="hidden" value="01" name="headimg"> 
+	 <img height="90" src="{PHPCMS_PATH}images/guestbook/face/01.gif" width="80" style="border:#000000 1px solid" name="showimages" alt="点击选择头像" /><br>
+	<select onchange=changeimage(); size=1 name=Image>
+	<Option value=01>请选择头像</Option> 
+	<Option value=01>01</Option> 
+	<Option value=02>02</Option> 
+	<Option value=03>03</Option> 
+	<Option value=04>04</Option> 
+	<Option value=05>05</Option> 
+	<Option value=06>06</Option> 
+	<Option value=07>07</Option> 
+	<Option value=08>08</Option> 
+	<Option value=09>09</Option> 
+	<Option value=10>10</Option> 
+	</Select>	</td>
+	</tr>
+	<tr>
+	<td align="right" bgcolor="#F5F5F5">性别：</td>
+	<td  colspan="2"><input type="radio" name="gender" value="1" checked style="border:0">
+	男
+	<input type="radio" name="gender" value="0" style="border:0">
+	女</td>
+	</tr>
+	<tr>
+	<td align="right" bgcolor="#F5F5F5">邮件：</td>
+	<td><input name="email" type="text" id="email" size="25"></td>
+	</tr>
+	<tr>
+	<td align="right" bgcolor="#F5F5F5">QQ：</td>
+	<td><input name="qq" type="text" id="qq" size="25"></td>
+	</tr>
+	<tr>
+	<td align="right" bgcolor="#F5F5F5">主页：</td>
+	<td><input name="homepage" type="text" id="homepage" size="25"></td>
+	</tr>
+	<tr>
+	<td align="right" bgcolor="#F5F5F5"> <font color="red">*</font>标题：</td>
+	<td colspan="2"><input name="title" type="text" id="title" size="50" ></td>
+	</tr>
+	<tr>
+	<td align="right" bgcolor="#F5F5F5"> <font color="red">*</font> 内容：</td>
+	<td  colspan="2">
+<textarea name="content" id="content" cols="80" rows="10"></textarea>
+{editor("content","editor",550,400)}	</td>
+	</tr>
+	<tr>
+	<td align="right" bgcolor="#F5F5F5">隐藏：</td>
+	<td  colspan="2"><input type="radio" name="hidden" value="1" style="border:0">
+	是
+	<input type="radio" name="hidden" value="0" checked style="border:0">
+	否</td>
+	</tr>
+	<!--{if $MOD['enablecheckcode']}-->
+	<tr>
+	<td align="right" bgcolor="#F5F5F5"> <font color="red">*</font> 验证码：</td>
+	<td  colspan="2"><input name="checkcodestr" type="text" size="4">
+<img src="{PHPCMS_PATH}checkcode.php" id="checkcode" onClick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/></td>
+	</tr>
+	<!--{/if}-->
+	<tr bgcolor="#F5F5F5">
+	<td align="right">&nbsp;</td>
+	<td align="center"  colspan="2"><input type="submit" name="dosubmit" value=" 提交 ">&nbsp;&nbsp;
+	<input type="reset" name="Reset" value=" 重置 "></td>
+	</tr>
+	</form>
+	</table></td>
+</tr>
+</table></td>
+</tr>
+</table>
+{template 'phpcms','footer'}

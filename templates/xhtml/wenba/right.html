@@ -1,0 +1,67 @@
+    <script>
+        function showContentwhy(id)
+        {
+        for (var i = 0;i < 3;i++)
+        {
+        var navwhy = document.getElementById("navwhy" + i);
+        var articlecontentwhy = document.getElementById("articlecontentwhy" + i);
+        if (i == id)
+        {
+        navwhy.className = 'whyoff';
+        articlecontentwhy.style.display = "";
+        }
+        else
+        {
+        navwhy.className = 'whyon';        
+        articlecontentwhy.style.display = "none";
+        }
+        }
+        }
+        </script>
+      <div class="boxmargin ">
+        <div class="whyicbot">
+<p class="whyoff" onMouseOver="showContentwhy('0')"  id="navwhy0">热点问题</p>
+<p class="whyon" onMouseOver="showContentwhy('1')" id="navwhy1">热门主题</p>
+<p class="whyon" onMouseOver="showContentwhy('2')"id="navwhy2">最新主题</p>
+</div>
+<div class="xianwhy2" >
+<dl>
+<div class="whytopic" id="articlecontentwhy0"><ul>
+{tag_栏目热点问题}
+</ul>
+</div>
+</dl>
+<dl>
+<div class="whytopic" id="articlecontentwhy1" style="display:none;"><ul>
+{tag_推荐问题}
+</ul></div>
+</dl>
+<dl>
+<div class="whytopic" id="articlecontentwhy2" style="display:none;"><ul>
+{tag_最新问题}
+</ul></div>
+</dl>
+</div>
+      </div>
+   <div class="boxmargin xianwhy2">
+     <div class="whybtbg"><span style="float:right;padding-right:5px;"><a href="{$MOD[linkurl]}scorelist.php?option=week">更多</a></span>上周积分排行榜</div>
+<div class="whytopic1"><ul>
+{tag_上周积分排行榜}
+</ul>
+</div>
+   </div>
+<div class="boxmargin xianwhy2">
+     <div class="whybtbg"><span style="float:right;padding-right:5px;"><a href="{$MOD[linkurl]}scorelist.php?option=month">更多</a></span>上月积分排行榜</div>
+<div class="whytopic1"><ul>
+{tag_上月积分排行榜}
+</ul>
+</div>
+   </div>
+<div class="boxmargin xianwhy2">
+     <div class="whybtbg"><span style="float:right;padding-right:5px;"><a href="{$MOD[linkurl]}scorelist.php?option=all">更多</a></span>总积分排行榜</div>
+<div class="whytopic1">
+<ul>
+{tag_总积分排行榜}
+</ul>
+</div>
+</div>

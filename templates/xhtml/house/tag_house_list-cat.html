@@ -1,0 +1,18 @@
+<div class="homen1">
+    <ul>
+  {loop $houses $i $house}
+    <li class="homeny1"><strong><a href="{$house[linkurl]}" title="{$house[name]}" {$target}>{$house[cut_name]}</a></strong>({$house[isinter]})</li><!--名称 -->
+    <li class="homeny2">{$house[address]}</li><!--区域 -->
+    <li class="homeny3">{$house[infocatname]}{$house[housetype]}</li><!--户型 -->
+    <li  class="homeny2">{if $house['price']}{$house[price]}{$PARS[unit][$house[unit]]}{else}面议{/if}</li><!--价格 -->
+    <li class="homeny4">{$house[addtime]}</li><!--时间 -->
+{/loop}
+<div style="clear:both"></div>
+
+  </ul>
+  <div style="clear:both"></div>
+</div>
+
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

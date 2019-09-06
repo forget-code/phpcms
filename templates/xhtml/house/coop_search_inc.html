@@ -1,0 +1,44 @@
+<div class="house_right_top">
+  <!--<h5>合租搜索</h5> -->
+  <ul>
+    <form action="{$PHPCMS['siteurl']}{$MOD['moduledir']}/search.php" method="GET" name="search_coop">
+      <li> <span>对方条件：</span>
+      <select name="havehouse" id="havehouse">
+        <option value="-1">不限</option>
+        <option value="1">有房</option>
+        <option value="0">没房</option>
+      </select>
+         </li>
+      <li> <span>区&nbsp;&nbsp;&nbsp;&nbsp;域：</span>
+        {$area_select('areaid', '不限', '', '')} </li>
+      <li><span>对方信息：</span>
+        <select name="yourgender" id="yourgender">
+        <option value="0">不限</option>
+        <option value="1">男</option>
+        <option value="2">女</option>
+        <option value="3">情侣</option>
+      </select>
+        </li>
+      <li> <span>价&nbsp;&nbsp;&nbsp;&nbsp;格：</span>
+        <input name="fromprice" type="text" size="5">～<input name="toprice" type="text" size="5">元</li>
+      <li> <span>发布时间：</span>
+
+        <select name="publishtime" id="publishtime">
+        <option value="0">全部</option>
+        <option value="7">一星期</option>
+        <option value="15">半月</option>
+        <option value="30">一个月</option>
+      </select>
+        </li>
+      <li> <span>关&nbsp;键&nbsp;字：</span>
+        <input type="hidden" name="search" value="1">
+        <input type="hidden" name="action" value="coop">
+        <input name="keywords" type="text" id="keywords" size="16" height="9">
+      </li>
+      <li class="cndq">
+        <input name="dosubmit" type="image" class="btn" value=" 搜索 " src="{$skindir}/house_new/images/home/search.gif" align="absmiddle" />
+        <a href="{$PHPCMS['siteurl']}{$MOD['moduledir']}/search.php?action=coop">高级</a>
+      </li>
+    </form>
+  </ul>
+</div>

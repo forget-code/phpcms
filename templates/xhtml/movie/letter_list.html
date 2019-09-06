@@ -1,0 +1,57 @@
+{template 'phpcms','header'}
+<link href="{$skindir}/movie.css" rel="stylesheet" type="text/css">
+<div id="censent">
+  <div id="movecenl">
+    <div class="movebtleft"><div><span>&nbsp;</span>最新影视</div></div>
+    <div class="movenr" >
+<ul>
+{tag_侧栏最新影视}
+</ul>
+    <div id="clear"></div>
+    </div><div class="mvoecbot boxmargin "></div>
+  </div>
+  <div id="movecenr">
+<div class="boxmargin" id="bt11">当前位置：<a href="{$CHA[linkurl]}">频道首页</a> >> <a href="{$CHA[linkurl]}letter.php">按字母浏览首页</a> >></div>
+<div class="layout search boxmargin boxl">
+<script language="JavaScript" src="{PHPCMS_PATH}data/js/search.js"></script>
+</div>
+<div class="searchzm">
+<img src="{$skindir}/images/szm.gif" width="65" height="20" />
+<a href="{$CHA[linkurl]}letter.php?letter=a" target="_self" >A</a>
+<a href="{$CHA[linkurl]}letter.php?letter=b" target="_self" >B</a>
+<a href="{$CHA[linkurl]}letter.php?letter=c" target="_self" >C</a>
+<a href="{$CHA[linkurl]}letter.php?letter=d" target="_self" >D</a>
+<a href="{$CHA[linkurl]}letter.php?letter=e" target="_self" >E</a>
+<a href="{$CHA[linkurl]}letter.php?letter=f" target="_self" >F</a>
+<a href="{$CHA[linkurl]}letter.php?letter=g" target="_self" >G</a>
+<a href="{$CHA[linkurl]}letter.php?letter=h" target="_self" >H</a>
+<a href="{$CHA[linkurl]}letter.php?letter=i" target="_self" >I</a>
+<a href="{$CHA[linkurl]}letter.php?letter=j" target="_self" >J</a>
+<a href="{$CHA[linkurl]}letter.php?letter=k" target="_self" >K</a>
+<a href="{$CHA[linkurl]}letter.php?letter=l" target="_self" >L</a>
+<a href="{$CHA[linkurl]}letter.php?letter=m" target="_self" >M</a>
+<a href="{$CHA[linkurl]}letter.php?letter=n" target="_self" >N</a>
+<a href="{$CHA[linkurl]}letter.php?letter=o" target="_self" >O</a>
+<a href="{$CHA[linkurl]}letter.php?letter=p" target="_self" >P</a>
+<a href="{$CHA[linkurl]}letter.php?letter=q" target="_self" >Q</a>
+<a href="{$CHA[linkurl]}letter.php?letter=r" target="_self" >R</a>
+<a href="{$CHA[linkurl]}letter.php?letter=s" target="_self" >S</a>
+<a href="{$CHA[linkurl]}letter.php?letter=t" target="_self" >T</a>
+<a href="{$CHA[linkurl]}letter.php?letter=u" target="_self" >U</a>
+<a href="{$CHA[linkurl]}letter.php?letter=v" target="_self" >V</a>
+<a href="{$CHA[linkurl]}letter.php?letter=w" target="_self" >W</a>
+<a href="{$CHA[linkurl]}letter.php?letter=x" target="_self" >X</a>
+<a href="{$CHA[linkurl]}letter.php?letter=y" target="_self" >Y</a>
+<a href="{$CHA[linkurl]}letter.php?letter=z" target="_self" >Z</a>
+</div>
+{loop $letters $letter}
+	<div class="moviecat_title">
+	<div class="moviecat_name">{$letter} </div>
+	<div class="moviecat_url"><a href="{$CHA[linkurl]}letter.php?letter={$letter}" class="moviemore">更多 >> </a></div></div>
+	{tag_字母终级调用列表}
+{/loop}
+
+</div>
+</div>
+</div>
+{template 'phpcms','footer'}

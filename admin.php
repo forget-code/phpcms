@@ -3,6 +3,7 @@ define('IN_ADMIN', TRUE);
 $rootdir = dirname(__FILE__);
 require $rootdir.'/admin/include/global.func.php';
 require $rootdir.'/include/common.inc.php';
+$session = new phpcms_session();
 require PHPCMS_ROOT.'/languages/'.$CONFIG['adminlanguage'].'/phpcms_admin.lang.php';
 require_once PHPCMS_ROOT.'/include/version.inc.php';
 require_once PHPCMS_ROOT.'/include/formselect.func.php';

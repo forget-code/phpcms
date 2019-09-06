@@ -1,0 +1,96 @@
+<div class="fc_sousuo">
+<form action="search.php" name="search_house" target="_blank">
+<ul><li>搜索：</li><li><select name="infocat" id="infocat">
+          <option value="1">出租</option>
+          <option value="2">求租</option>
+          <option value="4">出售</option>
+          <option value="5">求购</option>
+          <option value="6">置换</option>
+        </select>
+
+       <select name='areaid' id=select2><option value='0'>区域</option></select>
+
+        <select name="type1p" id="infocat">
+          <option value="0" selected>室</option>
+          <option value="一" >一</option>
+          <option value="二" >二</option>
+          <option value="三" >三</option>
+          <option value="四">四</option>
+          <option value="五">五</option>
+          <option value="六">六</option>
+          <option value="七">七</option>
+          <option value="八">八</option>
+          <option value="九">九</option>
+          <option value="十">十</option>
+        </select>
+
+        <select name="type2p" id="type3p">
+          <option value="0" selected>厅</option>
+          <option value="一">一</option>
+          <option value="二">二</option>
+          <option value="三">三</option>
+          <option value="四">四</option>
+          <option value="五">五</option>
+          <option value="六">六</option>
+          <option value="七">七</option>
+          <option value="八">八</option>
+          <option value="九">九</option>
+          <option value="十">十</option>
+</select>
+
+        <select name="type3p" id="type3p">
+          <option value="0"  selected >卫</option>
+          <option value="一">一</option>
+          <option value="二">二</option>
+          <option value="三">三</option>
+          <option value="四">四</option>
+          <option value="五">五</option>
+</select>
+
+  <select name="propertytype" id="select2">
+            <option value="" selected>物业类型</option>
+             
+            <option value="1" >普通住宅</option>
+             
+            <option value="2" >平房</option>
+             
+            <option value="3" >多层</option>
+             
+            <option value="4" >小高层</option>
+             
+            <option value="5" >高层</option>
+             
+            <option value="6" >跃层</option>
+             
+            <option value="7" >别墅</option>
+             
+            <option value="8" >公寓</option>
+             
+            <option value="9" >民房</option>
+             
+            <option value="10" >其它</option>
+             
+           
+    </select>
+
+<select name="isinter" id="infocat">
+              <option value="0">来源</option>
+              <option value="2">中介</option>
+              <option value="1">个人</option>
+            </select>
+
+    <select name="type1p" id="select2">
+          <option value="0" selected>发布时间</option>
+          <option name="searchtime" type="radio" value="" checked>全部</option>
+          <option name="searchtime" type="radio" value="7">一星期</option>
+          <option name="searchtime" type="radio" value="15">半月</option>
+          <option name="searchtime" type="radio" value="30">一个月</option>
+        </select></li>
+<li><input name="keywords" type="text" id="keywords" size="20"></li>
+  <li><input type="hidden" name="search" value="1">
+  <input type="hidden" name="action" value="house">
+  <input class="btn" type="image" src="/6/templates/xhtml/skins/xhtml/house_new/images/home/search.gif" name="dosubmit" value=" 搜索 " align="absmiddle"/>
+  <a href="/6/house/search.php?action=house">高级</a></li>
+</ul>
+</form><div style="clear:both;"></div>
+</div>

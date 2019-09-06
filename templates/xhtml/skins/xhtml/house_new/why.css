@@ -1,0 +1,365 @@
+.wbtleft {
+	height: 27px;
+	background-image: url(images/why/wbtl.gif);
+	background-repeat: no-repeat;
+	background-position: left top;
+	line-height: 27px;
+	padding-left: 10px;
+}
+.wbtleft div {
+	background-image: url(images/why/wbtr.gif);
+	background-repeat: no-repeat;
+	background-position: right top;
+	color: #0277BC;
+	font-weight: bold;
+	font-size: 14px;
+	line-height: 27px;
+}
+.wbtbg{
+	color: #0277BC;
+	float: right;
+	font-size: 15px;
+	font-weight: normal;
+	padding-right: 10px;
+	line-height: 27px;
+}
+.wbtbg img {
+	vertical-align: bottom;
+	padding-bottom: 5px;
+	margin-left: 5px;
+}
+.xianwhy{
+	background-image: url(images/mbotbg.gif);
+	background-repeat: repeat-x;
+	background-position: bottom;
+	border: 1px solid #BECFE3;
+}
+.wtop {
+	background-image: url(images/why/top.gif);
+	width: 235px;
+	height: 35px;
+	background-repeat: no-repeat;
+	line-height: 35px;
+	color: #0376B9;
+}
+.wtop img {
+	margin-right: 17px;
+	margin-left: 15px;
+}
+.whylist {
+	margin-top: 8px;
+	margin-right: 8px;
+	margin-bottom: 10px;
+	margin-left: 8px;
+	font-size: 14px;
+	color: #02456C;
+}
+.whylist li {
+	line-height: 28px;
+	background-image: url(images/why/bgx1.gif);
+	background-repeat: repeat-x;
+	background-position: bottom;
+	padding-left: 3px;
+}
+.whylist span {
+	float: right;
+	padding-right: 15px;
+	color: #0178BC;
+}
+.jjwtwtop {
+	height: 31px;
+	background-image: url(images/why/wnjjwt.gif);
+	width: 595px;
+	background-position: left;
+	line-height: 31px;
+}
+.jjwtwtop a {
+	margin-left: 28px;
+	margin-right: 27px;
+}
+.wtkuang {
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 10px;
+	line-height: 25px;
+	color: #666666;
+	background-color: #F3F6FB;
+	margin: 1px;
+}
+.xianwhyn {
+	border: 1px solid #BECFE3;
+	padding-bottom: 10px;
+}
+.wdwtn {
+	line-height: 25px;
+	padding: 5px;
+	color: #2F2F2F;
+	margin: 8px;
+	background-image: url(images/movelibg.gif);
+	background-repeat: repeat-x;
+	background-position: bottom;
+}
+.kuangimg {
+	margin-right: 150px;
+	padding-top: 4px;
+}
+
+.wtkuang .wt {
+	font-size: 15px;
+	font-weight: 600;
+	color: #585858;
+	line-height: 30px;
+}
+#whyleftn strong {
+	color: #FF3300;
+	font-size: 18px;
+}
+#whyleftn em {
+	color: #F3680C;
+}
+
+
+.whylist a {
+	color: #02456C;
+	
+}
+.whylist a:hover {text-decoration: underline;
+}
+.whyml {
+	line-height: 20px;
+	margin-right: 17px;
+	margin-bottom: 17px;
+	margin-left: 17px;
+}
+.xianwhy2 {
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-left-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-right-color: #D9B29C;
+	border-bottom-color: #D9B29C;
+	border-left-color: #D9B29C;
+	border-top-width: 0px;
+}
+.whytopic {
+	padding-top: 6px;
+	padding-bottom: 6px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+.whybtbg {
+	height: 24px;
+	background-color: #FEF5F0;
+	border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-top-style: solid;
+	border-bottom-style: solid;
+	border-top-color: #D9B29C;
+	border-bottom-color: #D9B29C;
+	line-height: 26px;
+	color: #3A3A3A;
+	font-size: 13px;
+	font-weight: 600;
+	padding-left: 12px;
+}
+
+.whytopic ul {
+	list-style-type: none;
+	font-size: 12px;
+	background-image: url(images/why/li23.gif);
+	background-repeat: no-repeat;
+}
+.wntop {
+	background-image: url(images/why/wntop.gif);
+	background-repeat: no-repeat;
+	background-position: top;
+	height: 5px;
+}
+.wnbottem {
+	background-image: url(images/why/wnbottem.gif);
+	background-repeat: no-repeat;
+	background-position: bottom;
+	height: 5px;
+}
+.wnmiddle h2 {
+	line-height: 30px;
+	color: #333333;
+	font-weight: 400;
+	font-size: 13px;
+	padding-left: 20px;
+}
+.wndhn {
+	line-height: 22px;
+	padding-right: 10px;
+	padding-bottom: 10px;
+	padding-left: 14px;
+}
+.wndhn a {
+	margin-right: 12px;
+}
+
+.wnmiddle {
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #ABC6E6;
+	border-left-width: 1px;
+	border-left-style: solid;
+	border-left-color: #ABC6E6;
+}
+
+.whytopic li {
+	padding-left:23px;
+	height:24px;
+	overflow:hidden;
+	line-height: 15px;
+	list-style-type: none;
+}
+
+.whyicbot {
+	height:26px;
+	border-top-width: 1px;
+	border-right-width: 0px;
+	border-bottom-width: 0px;
+	border-left-width: 1px;
+	border-top-style: solid;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-left-style: solid;
+	border-top-color: #D9B29C;
+	border-right-color: #D9B29C;
+	border-bottom-color: #D9B29C;
+	border-left-color: #D9B29C;
+	line-height: 23px;
+}
+.whyicbot .whyon {
+	float: left;
+	text-align: center;
+	color: #5B514B;
+	width:73px;
+	text-align:center;
+	height:23px;
+	cursor: pointer;
+	background-color: #FEF5F0;
+	border-right-width: 1px;
+	border-bottom-width: 1px;
+	border-right-style: solid;
+	border-bottom-style: solid;
+	border-right-color: #D9B29C;
+	border-bottom-color: #D9B29C;
+}
+.whyicbot .whyoff {
+	float: left;
+	width:73px;
+	text-align:center;
+	cursor: pointer;
+	font-weight:bold;
+	height: 23px;
+	border-right-width: 1px;
+	border-right-style: solid;
+	border-right-color: #D9B29C;
+	color: #5B514B;
+}
+.whyml ul {
+	margin-top: 10px;
+}
+
+.whylist img {
+
+}
+#whyleftn {
+	width: 748px;
+	float: left;
+}
+#whyrightn {
+	width: 223px;
+	float: right;
+}
+
+#whyleft {
+	width: 235px;
+	float: left;
+}
+#whyright {
+	float: right;
+	width: 737px;
+	clear: none;
+}
+#whyright .whyl {
+	width: 506px;
+	float: left;
+}
+#whyright .whyr {
+	width: 223px;
+	float: right;
+}
+.whytopic1 {
+	margin:0px;
+	padding:8px;
+	
+}
+.whytopic1 ul {
+	font-size: 12px;
+	padding:0px;
+	margin:0px;
+}
+.whytopic1 ul li {
+	display:inline;
+}
+.whytopic1 ul li a{
+	display:block;
+	float:left;
+	margin:4px 4px;
+	width:48px;
+}
+
+.whytopic1 ul li a:link,.whytopic1 ul li a:visited,.whytopic1 ul li a:hover{
+	color:#013780;
+}
+.left_top_box{
+	padding:4px;
+}
+.left_top_box input{
+	color:#000;
+}
+.left_top_box select{
+	border:1px solid #BCBCBC;
+	margin:2px 0px;
+	width:100px;
+	color:#000;
+}
+.left_top_box ul li{ margin:4px; color:#666666;
+}
+#house_search{
+	padding:0 0 8px 9px;
+}
+#house_search select{
+	border:1px solid #999999;
+	margin:2px 0px;
+	width:100px;
+	color:#000;
+}
+.house_right_top{
+	padding:4px;
+}
+.house_right_top select{
+	border:1px solid #999999;
+	margin:2px 0px;
+	width:100px;
+	color:#000;
+}
+.house_right_top ul li span{
+	float:left;
+	width:74px;
+}
+.house_right_top ul li{
+	margin:4px; color:#666666;
+}
+.cndq{
+	background:#999999;
+	display:block;
+	clear:both;
+	padding-left:75px;
+}

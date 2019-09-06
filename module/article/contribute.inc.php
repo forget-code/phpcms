@@ -61,7 +61,7 @@ else
 	   header('Location:'.$PHPCMS['siteurl'].$CHA['channeldir'].'/contribute.php?'.$PHP_QUERYSTRING);
 	   exit;
 	}
-	
+	$CHA['enablecontribute'] or showmessage($LANG['not_allowed_to_add_an_article'], 'goback');
 	require_once PHPCMS_ROOT."/include/formselect.func.php";
 	require PHPCMS_ROOT."/include/tree.class.php";
 	$tree = new tree();

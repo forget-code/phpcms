@@ -1,0 +1,47 @@
+<div id="centent">
+
+<div id="rightpbox">
+<div class="cpnrr">
+<h3>
+  <div>产品详细页</div>
+</h3>
+<ul class="cpzsgd">
+{if $product['thumb']}<img src="{$product[thumb]}" width="150" height="100" />{/if}
+</ul>
+<ul><li>产品名称： {$product[title]} <a href="{$orderurl}companyid-{$companyid}/label-product/item-{$productid}.html" target="_blank">
+			<font color="#FF0000">[我要订购]</font></a> <a href="{$guestbookurl}companyid-{$companyid}/label-product/item-{$productid}.html" target="_blank">
+			<font color="#FF0000">[我要询价]</font></a></li>  
+<li>浏览次数： <span id="hits">0</span></li> 
+<li>产品型号： {$product[model]}</li> 
+<li>产品价格： {$product[price]} 元（单价）</li>     
+<li>详细说明： {$product[introduce]} </li>
+<li>联系方式： {$product[linkman]} </li>
+<li>联系电话： {$product[phone]}</li> 
+<li> &nbsp;&nbsp;E-mail： {$product[email]}</li>
+<li>联系地址： {$product[address]}</li>
+ </ul>
+ </div>
+<div style="clear:both"></div></div>
+ <div id="lefepbox">
+<h2><div>热点导航</div></h2>
+<ul class="rddh">
+  {loop $m_user $ms}
+  <li><a href="{$ms[url]}">- {$ms[menutitle]}</a></li>
+{/loop}
+</ul>
+<h2>
+<div>热门产品</div>
+</h2>
+<ul class="xwzx">
+  {tag_企业产品页热门产品}
+</ul>
+<h2><span><a href="{$salesurl}">更多</a></span>
+<div>促销信息</div>
+</h2>
+<ul class="xwzx">
+{tag_企业主页促销列表}
+</ul>
+</div>
+</div>
+<script type="text/javascript" src="{$PHPCMS['siteurl']}yp/web/show_js.php?label=product&item={$productid}"></script>
+{template 'yp','com_xhtml-footer'}

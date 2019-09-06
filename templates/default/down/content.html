@@ -103,7 +103,9 @@
 {/if}
       </td>
       </tr>
+
     </table>
+
 	<table width="100%" align="center" cellpadding="0" cellspacing="0">
       <tr>
         <td height="10"></td>
@@ -112,7 +114,10 @@
   <div class="cat_title">
     <div class="cat_name">软件介绍</div>
     <div class="cat_url"><a href="#" class="more"></a></div></div>
-	{$introduce}</div>
+	{$introduce}
+
+</div>
+{if $MODULE[digg]}<p align="center">{tag_点击标签样式一}</p>{/if}
   <div class="cat_title">
     <div class="cat_name">相关下载</div>
 	<div class="cat_url"><a href="#" class="more"></a></div>
@@ -130,6 +135,10 @@
         {tag_推荐下载}
 	<div class="rightcats"><h1>下载排行</h1></div>
         {tag_下载排行}
+{if $MODULE[digg]}
+<div class="rightcats"><h1>下载DIGG日排行</h1><h2><a href="{PHPCMS_PATH}/digg/list.php?digg_mod={$mod}&digg_catid={$catid}" class="more">更多</a></h2></div>
+{tag_今日下载DIGG列表}
+{/if}
 	</td>
   </tr>
 </table>

@@ -1,0 +1,9 @@
+{loop $articles $i $article}
+<li>{if $datetype}<span> {$article[adddate]} </span>{/if}
+{if $showcatname}<a href="{$article[catlinkurl]}"{$target}>[{$article[catname]}]</a>{/if}
+·<a href="{$article[linkurl]}" title="{$article[title]}" {$target}>{$article[stitle]}</a>
+</li>
+{/loop}
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

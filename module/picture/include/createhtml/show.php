@@ -18,6 +18,7 @@ if(is_array($TEMP['fields'][$tablename]))
 	foreach($TEMP['fields'][$tablename] as $k=>$v)
 	{
 		$myfield = $v['name'];
+		$$myfield = "<a href='".linkurl($$myfield)."' title='".$v['title']."' id='".$v['name']."' target='_blank'/>".linkurl($$myfield)."</a>";
 		$fields[] = array('title'=>$v['title'],'value'=>$$myfield);
 	}
 }
@@ -70,14 +71,13 @@ foreach($urls as $k=>$url)
 		}
 		else
 		{
-			$r['src'] = $thumb_exists ? imgurl($PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$MOD['upload_dir'].'/'.$url[1]) : imgurl($url[1]);
-			$r['thumb'] = $thumb_exists ? dirname($r['src']).'/thumb_'.basename($r['src']) : linkurl($r['src']);
+			$r['src'] = imgurl($PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$MOD['upload_dir'].'/'.$url[1]);
+			$r['thumb'] = $thumb_exists ? dirname($r['src']).'/thumb_'.basename($r['src']) : $r['src'];
 		}
 	}
 	$r['href'] = linkurl(item_url('url', $catid, $ishtml, $urlruleid, $htmldir, $prefix, $pictureid, $addtime, $r['id']));
 	$pictureurls[] = $r;
 }
-
 $thumb_maxwidth = isset($MOD['thumb_maxwidth']) ? $MOD['thumb_maxwidth'] : 200;
 $img_maxwidth = isset($MOD['img_maxwidth']) ? $MOD['img_maxwidth'] : 550;
 $skinid = $skinid ? $skinid : $CAT['defaultitemskin'];

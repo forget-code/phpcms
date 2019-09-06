@@ -1,0 +1,8 @@
+{loop $products $i $product}
+<li><a href="{$product['linkurl']}" {$target}><img src="{$product[thumb]}" width="{$imgwidth}" height="{$imgheight}" alt="{$product[alt]}" /></a><span><a href="{$product['linkurl']}" {$target}>{$product[stitle]}</a></span></li>
+</td>
+{if $introducelen}&nbsp;&nbsp;{$product[introduce]}{/if}
+{/loop}
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

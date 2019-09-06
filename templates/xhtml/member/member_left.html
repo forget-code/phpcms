@@ -1,0 +1,78 @@
+<h1>{$username}的个人资料</h1>
+<table cellpadding="0" cellspacing="0" class="righttable">
+  <tr>
+   <td class="pic" align="center"><img id="UserFace" src="{$userface}" width="{$facewidth}" height="{$faceheight}"></td>
+  </tr>
+  <tr>
+   <td> 
+             <table cellSpacing=0 cellPadding=0 width="100%">
+                <tr>
+                  <td width="60" class="td_right">姓名：</td>
+                  <td width="150" class="td_left">{$truename}</td>
+                </tr>
+                <tr>
+                  <td class="td_right">性别：</td>
+                  <td class="td_left">{$gender}</td>
+                </tr>
+                <tr>
+                  <td class="td_right">生日：</td>
+                  <td class="td_left">{$birthday}</td>
+                </tr>
+                <tr>
+                  <td class="td_right">所在地：</td>
+                  <td class="td_left">{$province}-{$city}</td>
+                </tr>
+                <tr>
+                  <td class="td_right">地址：</td>
+                  <td class="td_left">{$address}</td>
+                </tr>
+                <tr>
+                  <td class="td_right">邮编：</td>
+                  <td class="td_left">{$postid}</td>
+                </tr>
+                <tr>
+                  <td class="td_right">电话：</td>
+                  <td>{$telephone}</td>
+                </tr>
+                <tr>
+                  <td class="td_right">主页：</td>
+                  <td class="td_left"><a href="{$homepage}" target="_blank">{$homepage}</a></td>
+                </tr>
+{if $showemail}
+                <tr>
+                  <td class="td_right">邮件：</td>
+                  <td class="td_left"><a href="{$MODULE[mail][linkurl]}sendmail.php?mailto={$email}" target="_blank">{$email}</a></td>
+                </tr>
+{/if}
+                <tr>
+                  <td class="td_right">QQ：</td>
+                  <td class="td_left"><a href="http://wpa.qq.com/msgrd?V=1&Uin={$qq}&Site={$PHP_DOMAIN}&Menu=yes" title="点击QQ交谈" target="_blank">{$qq}</a></td>
+                </tr>
+                <tr>
+                  <td class="td_right">MSN：</td>
+                  <td class="td_left">{$msn}</td>
+                </tr>
+                <tr>
+                  <td class="td_right">ICQ：</td>
+                  <td class="td_left">{$icq}</td>
+                </tr>
+                <tr>
+                  <td class="td_right">SKYPE：</td>
+                  <td class="td_left">{$skype}</td>
+                </tr>
+                <tr>
+                  <td class="td_right">支付宝：</td>
+                  <td class="td_left">{$alipay}</td>
+                </tr>
+                <tr>
+                  <td class="td_right">贝宝：</td>
+                  <td class="td_left">{$paypal}</td>
+                </tr>
+                <tr>
+                  <td class="td_right">签名：</td>
+                  <td class="td_left">{$sign}</td>
+                </tr>
+      </table>
+    </td>
+  </tr>
+</table>

@@ -6,7 +6,6 @@ $submenu = array
 	array($LANG['add_job'], "?mod=".$mod."&file=".$file."&action=add"),
 	array($LANG['job_manage'], "?mod=".$mod."&file=".$file."&action=manage"),
 	array("<font color=red>".$LANG['load_job']."</font>", "?mod=".$mod."&file=".$file."&action=jobin"),
-	array("<font color=red>".$LANG['phpcms_job_share']."</font>".$LANG['online_install'], "http://www.phpcms.cn/spider/rulelist.php?type=1&file=".$PHP_DOMAIN.$PHP_SELF)
 );
 $menu = adminmenu($LANG['spider_job_manage'], $submenu);
 

@@ -1,0 +1,24 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$head[title]}-{$PHPCMS[sitename]}</title>
+<link href="{$skindir}/style.css" rel="stylesheet" type="text/css">
+<body>
+  <table width="100%" align="center" cellpadding="2" cellspacing="1" class="tableborder" style="margin:5px;">
+  <th colspan="4">表情图片选择</th>
+<?php
+$i=0;
+foreach($SMILIES as $smile=>$listorder)
+{
+$smile = PHPCMS_PATH.$smile;
+$fname = basename($smile);
+$fname = substr($fname,0,strrpos($fname,'.'));
+if($i%4==0) echo "<tr align=\"center\">";
+?>
+<td height="26"><a href='#' onClick="window.returnValue='[<?=$fname?>]';window.close();"><img src="{$smile}" onMouseover="this.style.cursor = 'pointer';" border="0" /></a></td>
+<?php
+if($i%4==3) echo "</tr>";
+$i++;
+}
+?>
+</table>

@@ -31,6 +31,19 @@ function SelectPic(){
     $('thumb').value=s[0];
   }
 }
+function CutPic(){
+  var thumb=$('thumb').value;
+	if(thumb=='')
+	{
+		alert('请先上传标题图片');
+		$('thumb').focus();
+		return false;
+	}
+  var arr=Dialog('corpandresize/ui.php?<?=$PHPCMS[siteurl]?>'+thumb,'',700,500);
+  if(arr!=null){
+    $('thumb').value=arr;
+  }
+}
 function SelectKeywords(){	
   var s=Dialog('?mod=phpcms&file=keywords&keyid=<?=$channelid?>&select=1','',700,500);
   if(s!=null){
@@ -118,6 +131,7 @@ function doKeywords(ID)
       <td class="tablerow">标题图片</td>
       <td class="tablerow" title="如果设置标题图片，则可以在首页以及栏目页以图片方式链接到文章"><input name="article[thumb]" type="text" id="thumb" size="53" value="<?=$thumb?>">  <input type="button" value="上传图片" onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&channelid=<?=$channelid?>&uploadtext=thumb&type=thumb&width=<?=$MOD['thumb_width']?>&height=<?=$MOD['thumb_height']?>','upload','350','350')">
 	   <input name="fromupload" type="button" id="fromupload" value="从已经上传的图片中选择" onclick="SelectPic()" style="width:150px;"/>
+	   <input name="cutpic" type="button" id="cutpic" value="裁剪图片" onclick="CutPic()"/>
       </td>
     </tr>
 
@@ -143,8 +157,12 @@ function doKeywords(ID)
 		<input type="checkbox" name="addcopyfrom" value="1" <?php if($MOD['copyfrom_add']){ ?>checked<?php } ?>> 添加至来源列表中
 		=&gt;<a href="###" onclick="SelectCopyfrom();">更多来源</a></td>
     </tr>
-
-
+ <tr> 
+      <td class="tablerow">内容摘要</td>
+      <td class="tablerow">
+    <textarea name="article[introduce]" cols="90" rows="5"><?=$introduce?></textarea>
+    </td>
+    </tr>
     <tr> 
       <td class="tablerow" title="此项可在模块配置设置">文章内容<br/><br/><br/><input name="save_remotepic" type="checkbox"  value="1" >保存远程图片<br/><font color="red">自动下载内容中的远程图片</font><br/><br/>
 	  <input name="add_introduce" type="checkbox"  value="1" >是否截取内容<br><input type="text" name="introcude_length" value="<?=$MOD['introcude_length']?>" size="3">字符至内容摘要
@@ -180,6 +198,13 @@ function doKeywords(ID)
 自动分页时的每页大约字符数（包含HTML标记）<strong> <input name="article[maxcharperpage]" type="text" id="maxcharperpage" size="8" maxlength="8" value="<?=$maxcharperpage?>"></strong>
    </td>
     </tr>
+    </tr>
+	<tr> 
+      <td class="tablerow">转向链接</td>
+      <td class="tablerow">
+       <input type="text" name="article[linkurl]" id="linkurl"  size="50" maxlength="255"<? if(!$islink) { ?>disabled<? } ?> value="<? if($islink) { ?><?=$linkurl?><? } ?>"><input name="article[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" <? if($islink) { ?>checked<? } ?>><font color="#FF0000">转向链接</font>
+	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
+     </td>
     </tr>
     <tr> 
       <td class="tablerow">推荐位置</td>
@@ -236,24 +261,11 @@ function doKeywords(ID)
 </table>
     </td>
     </tr>
-    <tr> 
-      <td class="tablerow">内容摘要</td>
-      <td class="tablerow">
-    <textarea name="article[introduce]" cols="70" rows="5"><?=$introduce?></textarea>
-    </td>
-    </tr>
+   
 	<tr> 
       <td class="tablerow">添加日期</td>
-      <td class="tablerow"><?=date_select('article[addtime]', $addtime)?>&nbsp;格式：yyyy-mm-dd</td>
+      <td class="tablerow"><?=date_select('article[addtime]', $addtime,'%Y-%m-%d %H:%M:%S')?></td>
     </tr>
-   <tr> 
-      <td class="tablerow">转向链接</td>
-      <td class="tablerow">
-       <input type="text" name="article[linkurl]" id="linkurl"  size="50" maxlength="255"<? if(!$islink) { ?>disabled<? } ?> value="<? if($islink) { ?><?=$linkurl?><? } ?>"><input name="article[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" <? if($islink) { ?>checked<? } ?>><font color="#FF0000">转向链接</font>
-	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
-     </td>
-    </tr>
-	
     <tr> 
       <td class="tablerow">是否生成</td>
       <td class="tablerow"><input type="radio" name="article[ishtml]" value="1" <?php if($ishtml==1) {?>checked <?php } ?>  onclick="$('htmlrule').style.display='';$('htmldir').style.display='';$('htmlprefix').style.display='';$('phprule').style.display='none';"> 是 <input type="radio" name="article[ishtml]" value="0" <?php if($ishtml==0) {?>checked <?php } ?> onclick="$('htmlrule').style.display='none';$('htmldir').style.display='none';$('htmlprefix').style.display='none';$('phprule').style.display='';"> 否</td>

@@ -3,34 +3,26 @@
   0 => 
   array (
     'order' => '1',
-    'title' => '专稿：《门徒》北京首映 三大帅哥比拼人气',
+    'title' => '美媒:面对中国反航母弹道导弹 干涉台海风险',
     'style' => '',
-    'url' => 'http://ent.163.com/07/0210/10/36VAFE4A00031H2L.html',
-    'image' => 'http://cimg2.163.com/photo/0003/2007-02-09/36U3GJ5900B50003.jpg',
+    'url' => 'http://war.163.com/08/0116/08/42AJPBR400011MTO.html',
+    'image' => 'http://download.phpcms.cn/phpcms2007sp6/uploadfile/200801/20080122045144360.jpg',
   ),
   1 => 
   array (
     'order' => '2',
-    'title' => '麦蒂难阻小牛主场17连胜 火箭平新赛季最低分',
+    'title' => '中国超级武装机器兽问世',
     'style' => '',
-    'url' => 'http://sports.163.com/special/000526J8/rockets0210.html',
-    'image' => 'http://cimg2.163.com/sports/2007/2/10/20070210124056ab841.jpg',
+    'url' => 'http://news.163.com/photo/02NM0001/4078.html',
+    'image' => 'http://download.phpcms.cn/phpcms2007sp6/uploadfile/200801/20080122044424941.jpg',
   ),
   2 => 
   array (
     'order' => '3',
-    'title' => '胡锦涛抵达维多利亚对塞舌尔进行国事访问',
-    'style' => 'color:#0000FF;font-weight:bold;',
-    'url' => 'http://news.163.com/07/0209/21/36U15VVJ000120GU.html',
-    'image' => 'http://cimg2.163.com/catchpic/D/D4/D40F14E9E7732F20C9220584536BF1F7.jpg',
-  ),
-  3 => 
-  array (
-    'order' => '4',
-    'title' => '沙祖康担任联合国负责经济和社会事务的副秘书长',
-    'style' => 'color:#FF0000;',
-    'url' => 'http://news.163.com/07/0210/06/36UUSAJ8000120GU.html',
-    'image' => 'http://cimg2.163.com/cnews/2007/2/10/2007021006500571fc3.jpg',
+    'title' => '广东始兴县发现疑为嫦娥一号火箭整流罩(组图)',
+    'style' => '',
+    'url' => 'http://news.163.com/08/0116/09/42AO7U5D0001124J.html',
+    'image' => 'http://download.phpcms.cn/phpcms2007sp6/uploadfile/200801/20080122045109725.jpg',
   ),
 );
 ?>

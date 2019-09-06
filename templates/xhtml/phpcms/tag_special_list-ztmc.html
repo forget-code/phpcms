@@ -1,0 +1,10 @@
+{loop $specials $i $special}
+<li>
+{if $i<=2}<strong>{intval($i+1)}&nbsp;</strong>{else}<em>{intval($i+1)}&nbsp;</em>{/if}
+<a href='{$special[linkurl]}' target='_blank' title='{$special[alt]}'>{$special[specialname]}</a>
+</li>
+{/loop}
+
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

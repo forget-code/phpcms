@@ -1,0 +1,77 @@
+{template 'yp','header'}
+<!--主体标签-->
+<table width="920" cellpadding="0"  cellspacing="0" bgcolor="#FFFFFF" align="center">
+<tr><td height="10"></td></tr>
+  <tr>
+    <td width="680" valign="top">
+<!--位置导航-->
+    <div class="position">当前位置：<a href="{$MOD[linkurl]}">黄页首页</a> >> <a href="{$MOD[linkurl]}job.php">人才招聘</a></div>
+     <div class="cat_box_1">
+	 <div class="cat_title"><div class="cat_title-1"></div>
+	     <div class="cat_name">{$station}</div><div class="cat_title-2"></div>
+	   </div>
+     </div>
+<table cellpadding="3" cellspacing="1" class="tag_box" width="100%">
+<tr bgcolor="#CCFFCC" align="center">
+	<td>联系人</td>
+	<td>工作性质</td>
+	<td>性别</td>
+	<td>工作年限</td>
+	<td>期望待遇</td>
+	<td>毕业学校</td>
+	<td>所学专业</td>
+	<td>期待地区</td>
+</tr >
+{loop $applys $i $apply}
+{if $i%2==0}<tr bgcolor="#F1F3F5" align="center" onmouseout="this.style.backgroundColor='#F1F3F5'"  onmouseover="this.style.backgroundColor='#BFDFFF';this.style.cursor='hand'" onclick="window.window.open('{$apply[linkurl]}')">{/if}
+<td height="24"><a href="{$apply[linkurl]}" target="_blank">{$apply[linkman]} </a></td>
+<td>{$apply[worktype]}</td>
+<td>{if $apply[sex]==1}男{elseif $apply[sex]==2}女{else}女{/if}</td>
+<td>{$apply[experience]}年</td>
+<td>{if $apply[pay]}{$apply[pay]}{else}面议{/if}</td>
+<td>{$apply[school]}</td>
+<td>{$apply[specialty]}</td>
+<td>{$apply[area]}</td>
+   
+
+</td>
+{if $i%2==1}</tr>{/if}
+{/loop}
+</table>
+<div class="pages">{$pages}</div>
+</div>
+</td>
+    <td width="10"></td>
+    <td width="240" valign="top" class="right_bg">
+	<table border="0" cellpadding="0" cellspacing="0" bgcolor="#F27000" class="ta2">
+            <tr>
+              <td width="270" align="left" valign="top" bgcolor="#FFFFFF"><table width="50" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="left" valign="top"><table width="271" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="227" height="24" background="{$skindir}/yp/index_45.jpg"><table width="84" border="0" cellpadding="0" cellspacing="0" class="ta3">
+                          <tr>
+                            <td width="5"><img src="{$skindir}/yp/index_40.jpg" width="5" height="24" /></td>
+                            <td width="76" background="{$skindir}/yp/index_41.jpg">人才招聘</td>
+                            <td width="4" align="right"><img src="{$skindir}/yp/index_43.jpg" width="4" height="24" /></td>
+                          </tr>
+                      </table></td>
+                      <td width="44" align="center" valign="middle" background="{$skindir}/yp/index_45.jpg"><img src="{$skindir}/yp/index_48.jpg" width="36" height="11" /></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"></td>
+                    </tr>
+                  </table></td>
+                </tr>
+                <tr>
+                  <td >{tag_人才推荐}</td>
+                </tr>
+              </table></td>
+            </tr>
+          </table>
+<!--推荐文章js调用-->
+
+	</td>
+  </tr>
+</table>
+{template 'yp','footer'}

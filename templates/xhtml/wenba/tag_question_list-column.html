@@ -1,0 +1,30 @@
+<div class="wbtleft"><div>共有{$ques}{$total}项</div> 
+    </div>
+    <div class="boxmargin xianwhy">
+<ul class="whylist">
+<li><span class="span_sj"><b>提问时间</b></span><span class="span_gds"><b>回答数</b></span><span class="span_zt"><b>状态</b></span><b>标 题</b></li>
+<!--{loop $question $i $g}-->
+<li>
+<span class="span_sj">{$g[adddate]}</span>
+<span class="span_gds">{$g['answercount']}</span>
+<!--{if $g['status']==1}-->
+			<span class="span_zt">解决中</span>
+			<!--{elseif $g['status']==2}-->
+			<span class="span_zt">已解决</span>
+			<!--{elseif $g['status']==3}-->
+			<span class="span_zt">投票中</span>
+			<!--{else}-->
+			<span class="span_zt">已关闭</span>
+			<!--{/if}-->
+<!--显示栏目和标题-->
+{if $showcatname}&nbsp;&nbsp;[<a href="{$MODULE['wenba']['linkurl']}browse.php?catid={$g['catid']}" class="lgy">{$g['catname']}
+</a>]{/if}
+<a href="{$MODULE['wenba']['linkurl']}question.php?qid={$g['qid']}" {$target}>{$g['title']}</a></li>
+<!--{if $g['score']}-->
+<font style="font-size: 12px" color="#FC670E">赏</font><font style="font-size: 12px; font-weight: 700" color="#E41807">{$g['score']}</font><font style="font-size: 12px" color="#FC670E">分</font>
+<!--{/if}--> 
+<!--{/loop}-->
+</ul>{if $pages}
+<div class="pages">{$pages}</div>
+{/if}
+</div></div>

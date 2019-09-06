@@ -1,0 +1,9 @@
+{php $k=count($jobs)-1;}
+{loop $jobs $i $job}
+{if $i%3==0}<ul class="yp_job{if $i%2!=1} yp_job_bg{/if}">{/if}
+<li>{if $datetype}<span class="datetime f_r">{$job[adddate]}</span>{/if}
+ <a href="{$job[url]}" class="yp_link_1" target="_blank">{$job[companyname]}</a>
+<br />诚招：{if $showstationname}[{$job[station]}]{/if}<a href="{$job[linkurl]}" title="{$job[title]}" {$target} class="tag_title_link">{$job[stitle]}</a>
+{if $showhits}({$job[hits]}){/if}</li>
+{if $i==$k || $i%3==2}</ul>{/if}
+{/loop}

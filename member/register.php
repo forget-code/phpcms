@@ -85,6 +85,7 @@ if($dosubmit)
 				$action = 'login';
 				extract($info);
 				require MOD_ROOT.'/passport/'.$PHPCMS['passport_file'].'.php';
+				if(isset($MODULE['yp']) && $member_type == 'enterprise') $url = $MODULE['yp']['linkurl'].'register.php';
 				header('location:'.$url);
 				exit;
 			}

@@ -1,0 +1,8 @@
+{loop $products $i $product}
+<li>{if $datetype}<span class="datetime f_r">{$product[adddate]}</span>{/if}·
+{if $showcatname}<a href="{$product[catlinkurl]}"{$target}><em>[{$product[catname]}]</em></a>{/if}
+   <a href="{$product[linkurl]}" title="{$product[title]}" {$target} class="tag_title_link">{str_replace('...','',$product[stitle])}</a></li> 
+{/loop}
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

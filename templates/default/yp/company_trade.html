@@ -1,0 +1,83 @@
+{template 'yp','header'}
+<!--主体标签-->
+<table width="960" cellpadding="0"  cellspacing="0">
+  <tr>
+    <td width="760" valign="top">
+<!--位置导航-->
+  <div class="position">当前位置：<a href="{$MOD[linkurl]}">黄页首页</a> >> <a href="{$MOD[linkurl]}company.php">企业库</a> >> {$item}</div>
+     <div class="cat_box_1">
+	 <div class="cat_title">
+	     <div class="cat_name">最新企业</div>
+		 <div class="cat_url">商铺分类:{$pattern}</div>
+     </div>
+
+<div style="text-align:left;margin-left:15px;">{tag_按行业分类列表}</div>
+     </div>	
+<!--搜索框-->
+
+
+</td>
+    <td width="10"></td>
+    <td width="210" valign="top" class="right_bg">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td height="5"></td>
+  </tr>
+</table>
+
+	<table border="0" width="100%" id="table20" cellpadding="0" cellspacing="0" style="border-collapse: collapse" height="80">
+			<tr>
+				<td height="37" background="{$skindir}/yp/index.14.gif"><table align=center border="0" width="95%" id="table21" cellpadding="0" cellspacing="0" style="border-collapse: collapse" height="12">
+					<tr>
+						<td ><span style="font-size: 11pt">&nbsp;&nbsp;<b style="margin-left:10px;">推荐企业</b>&nbsp;</span></td>
+					</tr>
+				</table>
+			  </td>
+			</tr>
+			<tr>
+				<td background="{$skindir}/yp/index.15.gif">
+				<table border="0" width="100%" id="table22" height="126" cellpadding="5" cellspacing="0" style="border-collapse: collapse">
+					<tr>
+						<td valign="top">{tag_推荐企业}</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+			<tr>
+				<td height="9"><img border="0" src="{$skindir}/yp/index.16.gif"></td>
+			</tr>
+		</table>
+		<TABLE>
+		<TR>
+			<TD height="5"></TD>
+		</TR>
+		</TABLE>
+<!--推荐文章js调用-->
+
+<table border="0" width="100%" id="table20" cellpadding="0" cellspacing="0" style="border-collapse: collapse" height="80">
+			<tr>
+				<td height="37" background="{$skindir}/yp/index.14.gif"><table align=center border="0" width="95%" id="table21" cellpadding="0" cellspacing="0" style="border-collapse: collapse" height="12">
+					<tr>
+						<td ><span style="font-size: 11pt">&nbsp;&nbsp;<b style="margin-left:10px;">点击排行</b>&nbsp;</span></td>
+					</tr>
+				</table>
+			  </td>
+			</tr>
+			<tr>
+				<td background="{$skindir}/yp/index.15.gif">
+				<table border="0" width="100%" id="table22" height="126" cellpadding="5" cellspacing="0" style="border-collapse: collapse">
+					<tr>
+						<td valign="top">{tag_推荐企业}</td>
+					</tr>
+				</table>
+				</td>
+			</tr>
+			<tr>
+				<td height="9"><img border="0" src="{$skindir}/yp/index.16.gif"></td>
+			</tr>
+		</table>
+
+	</td>
+  </tr>
+</table>
+{template 'phpcms','footer'}

@@ -1,0 +1,76 @@
+{template 'yp','header'}
+<link href="{$skindir}/yp/yellow.css" rel="stylesheet" type="text/css" />
+<!--主体标签-->
+<div id="censent"><!--content-->
+  <div  id="rightproduct">
+    <script>
+        function showContentynp(id)
+        {
+        for (var i = 0;i < 3;i++)
+        {
+        var nynvap = document.getElementById("nynvap" + i);
+        var articleContentynp = document.getElementById("articleContentynp" + i);
+        if (i == id)
+        {
+        nynvap.className = 'ybton';
+        articleContentynp.style.display = "";
+        }
+        else
+        {
+        nynvap.className = 'ybtoff';        
+        articleContentynp.style.display = "none";
+        }
+        }
+        }
+        </script> 
+    <div><p class="ybton" onClick="showContentynp('0')" id="nynvap0">推荐产品</p><p class="ybtoff" onClick="showContentynp('1')" id="nynvap1">产品展示</p><p class="ybtoff" onClick="showContentynp('2')" id="nynvap2">产品展示</p></div>
+<div class="ynrrbox clearfix" id="articleContentynp0">
+<ul>
+{tag_黄页-产品页-最新产品}
+</ul>
+ <div id="clear"></div>
+    </div>
+    <div class="ynrrbox clearfix" id="articleContentynp1" style="display:none;">
+    <ul >
+{tag_黄页-产品页-推荐产品}
+</ul><div id="clear"></div>
+    </div> 
+    <div class="ynrrbox clearfix" id="articleContentynp2" style="display:none;">
+    <ul >
+{tag_黄页-产品页-热点产品}
+    </ul><div id="clear"></div>
+    </div>
+<div class="search" style="margin:8px 0 8px 0;">
+<form name="myform" action="{$MOD[linkurl]}search.php" method="get">
+关键字： 
+<input name="keyword" id="keyword" type="text" size="51" value="{$keyword}"> 
+所属栏目: {$category_select}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="hidden" name="searchtype" value="product">
+<input type="hidden" name="search" value="1">
+<input type="submit" value="立即搜索" class="btn" />
+</form>
+  </div>
+<div class="banneryn"><script language="javascript" src="{PHPCMS_PATH}data/js.php?id=4"></script></div>
+<!--自定义栏目开始-->
+{php $j=0;}
+{loop $childcats $i $cat}
+{if !$cat[parentid]}
+<div class="ynewnn_1"{if $i%2==0} style="margin-right:8px"{/if}>
+<div class="btnyn_1"><span><a href="{$cat[linkurl]}">更多</a></span>{$cat[catname]}</div>
+<ul class="ynewlst">
+{tag_企业产品首页栏目自定义列表} 
+</ul></div>
+{/if}
+{php $j++;}
+{/loop}
+<!--自定义栏目结束-->
+  </div><div id="leftproduct">
+    <div class="yleftbox boxmargin">
+<h4>产品分类</h4>
+<div class="ynr">{loop $CATEGORY $cats}{if !$cats[parentid]}<h6><a href="{$cats[linkurl]}">{$cats[catname]}</a></h6>
+<ul>{loop $CATEGORY $childcats} {if $childcats[parentid]==$cats[catid]}<a href="{$childcats[linkurl]}" class="yellow_link_1">{$childcats[catname]}</a> {/if}{/loop}</ul>{/if}{/loop}
+</div>
+    </div>
+</div>
+  </div>
+{template 'phpcms','footer'}

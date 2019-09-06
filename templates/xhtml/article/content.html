@@ -1,0 +1,94 @@
+{template 'phpcms','header'}
+<script type="text/javascript">
+function fontZoom(size)
+{
+   $('endText').style.fontSize=size+'px';
+}
+</script>
+<div id="censent">
+  <!--content-->
+  <div id="left">
+    <div class="sxg8">
+      <div id="bt11">当前位置：<a href="{$channelurl}">{$channelname}首页</a> >> {$position} {$title}</div>
+    </div>
+    <!--位置导航-->
+    <div id="xwlbn" >
+      <!-- 文章标题 -->
+      <div class="theTitle">
+        <div class="btt">{$title} {if $paginationtype && $page}({$page}){/if}</div>
+        <!--主标题-->
+        <div style="clear:both"></div>
+        <!--文章属性-->
+        <div class="text"> {$adddate}&nbsp;&nbsp;作者：<a href="{$MODULE[member][linkurl]}member.php?username={$username}" class="member_url">{$author}</a>&nbsp;&nbsp;来源：<a href="{$copyfromurl}" target="_blank">{$copyfromname}</a>&nbsp;&nbsp;{if $MOD['show_hits']}浏览次数：<span id="hits">{$hits}</span>&nbsp;&nbsp;{/if}文字大小：【<a href="javascript:fontZoom(16)">大</a>】【<a href="javascript:fontZoom(14)">中</a>】【<a href="javascript:fontZoom(12)">小</a>】 </div>
+      </div>{if $introduce}
+      <div class="endSummary">
+        <ul>
+          <li> <span id="digest">　　{$introduce}</span>
+            <!--简介信息-->
+            <!--{if $keys}<div class="introduce"><strong>关键字：</strong>{loop $keys $key}<a href="{$channelurl}search.php?searchtype=keywords&keywords={urlencode($key)}&search=1" target="_blank">{$key}</a>{/loop}</div>{/if} -->
+          </li>
+        </ul>
+      </div>{/if}
+      <div id="endText">{$content}
+        <!--自定义字段//-->
+        {if count($fields)} {loop $fields $v}
+        <div>{$v[title]}：{$v[value]}</div>
+        {/loop} {/if}
+        <!--自定义字段\\-->
+        {tag_点击标签样式三}
+        <div style="margin-top:14px"> </div>
+      </div>
+      <!--内容区域-->
+      <div align="center">{$pages}</div>
+      <!--分页-->
+      <!--       <div class="mar_10"><span class="font_1">本文引用地址：</span>&nbsp;<span class="border_2"><a href="{$itemurl}">{$itemurl}</a></span> </div> -->
+      {if $MOD['show_pre_and_next']}
+      <div class="border_1" id="pre_and_next"></div>
+      {/if}
+      <!--上下文-->
+    </div>
+    <div class="fjdes">
+      <div id="bt11">本文引用地址：<a href="{$itemurl}">{$itemurl}</a></div>
+    </div>
+<div class="fjdes">
+      <div id="bt11">相关文章</div>
+<div class="news_xgwz">{tag_相关文章列表}</div>
+    </div>
+
+    <script type="text/javascript" src="{$MODULE['comment']['linkurl']}list_js.php?keyid={$channelid}&itemid={$articleid}&commentnum=10&ordertype=1&title={$urlencode($title)}"></script>
+</div>
+  <div id="right">
+    <div class="boxmargin"><script language="javascript" src="{PHPCMS_PATH}data/js/6.js"></script></div>
+    <div class="layout">
+      <ul class="xw-1">
+        <li class="xw-left">
+          <div class="xw-onn"id="bgnew"><span>推荐文章</span></div>
+        </li>
+        <li class="xw-right">更多</li>
+      </ul>
+      <div class="xian boxmargin boxr">
+        <ul class="List-1">
+          {tag_推荐文章列表}
+        </ul>
+      </div>
+    </div>
+    <div class="layout">
+      <ul class="xw-1">
+        <li class="xw-left">
+          <div class="xw-onn"id="bgnew"><span>热点文章</span></div>
+        </li>
+        <li class="xw-right">更多</li>
+      </ul>
+      <div class="xian boxmargin boxr">
+        <ul class="List-1">
+          {tag_热点文章列表}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{if $MOD['show_hits'] || $MOD['show_pre_and_next']}
+<script type="text/javascript" src="{$channelurl}show_js.php?itemid={$itemid}"></script>
+{/if}
+
+{template 'phpcms','footer'}

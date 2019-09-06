@@ -1,0 +1,29 @@
+<table border="1" cellpadding="0" style="border-collapse: collapse" id="table2" height="93" width="560" bordercolor="#E3E3E3">
+{loop $products $i $product}
+{if $i%$cols==0}<tr>{/if}
+		<td width="82" height="22" align="center"><span style="font-size: 12px">产品名称：</span></td>
+		<td width="320" height="22" style="padding-left: 10px;"><b><a href="{$product[linkurl]}" title="{$product[title]}" {$target} class="tag_title_link">
+		<font color="#FFA215">{$product[stitle]}</font></a></b></td>
+		<td width="153" rowspan="4" align="center">
+		<img border="0" src="{$product[thumb]}" width="141" height="74"></td>
+	</tr>
+	<tr>
+		<td width="82" height="22" align="center"><span style="font-size: 12px">型&nbsp;&nbsp;&nbsp; 号：</span></td>
+		<td width="320" style="padding-left: 10px;">{$product[model]}</td>
+	</tr>
+	<tr>
+		<td width="82" height="22" align="center"><span style="font-size: 12px">价&nbsp;&nbsp;&nbsp; 格：</span></td>
+		<td width="320" height="24" style="padding-left: 10px;">{$product[price]}</td>
+	</tr>
+	<tr>
+		<td width="82" align="center" height="22">
+		<span style="font-size: 12px">说&nbsp;&nbsp;&nbsp; 明：</span></td>
+		<td width="320" style="padding-left: 10px;">{$product[introduce]}</td>
+	</tr>
+	{if $i%$cols==($cols-1)}<tr><td width="424" align="center" height="7" colspan="3"></td>
+</tr>{/if}
+{/loop}
+</table>
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

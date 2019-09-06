@@ -2,7 +2,7 @@
 <!--{loop $guestbooks $i $g}-->
 <!--{if $i%$cols==0}--><tr><!--{/if}-->
 <td height="20" >
-<a href="{$MOD['linkurl']}index.php?gid={$g['gid']}" {$target}>{$g['title']}</a>
+<a href="{$MODULE['guestbook']['linkurl']}index.php?gid={$g['gid']}" {$target}>{$g['title']}</a>
 <!--{if $showusername}-->[作者:{$g['username']}]<!--{/if}-->
 <!--{if $datetype}-->[<span class="datetime">{$g['addtime']}</span>]<!--{/if}-->
 </td>

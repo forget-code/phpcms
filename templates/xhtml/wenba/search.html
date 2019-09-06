@@ -1,0 +1,33 @@
+{template 'wenba','header'}
+<link href="{$skindir}/search.css" rel="stylesheet" type="text/css" />
+<link href="{$skindir}/why.css" rel="stylesheet" type="text/css" />
+<div id="censent">
+<div align="left" id="bt11" ><a href="">问吧</a> &gt;&gt; 搜索结果</div>
+{if $word}
+<div class="ssjg">您输入的关键词<strong><font color=red>{$word}</font></strong>，共搜索到<font color=red>{$num}</font>个结果</div>{/if}
+  <div class="b3 bcb mb12">
+<div class="boxmargin xianwhy">
+<ul class="whylist">
+	<li><span class="span_sj"><b>提问时间</b></span><span class="span_gds"><b>回答数</b></span><span class="span_zt"><b>状态</b></span><b>标 题</b></li>
+</ul>
+<!--{loop $search_list $search}-->
+<ul class="whylist">
+		<li><span class="span_sj">{$search['asktime']}</span><span class="span_gds">{$search['answercount']}</span><span class="span_zt">	<!--{if $search['status']==1}-->
+	<img src="{$PHPCMS[siteurl]}images/icn_time.gif">
+	<!--{elseif $search['status']==2}-->
+	<img src="{$PHPCMS[siteurl]}images/icn_ok.gif">
+	<!--{elseif $search['status']==3}-->
+	<img src="{$PHPCMS[siteurl]}images/icn_vote.gif">
+	<!--{else}-->
+	<img src="{$PHPCMS[siteurl]}images/icn_cancel.gif">
+	<!--{/if}--></span><a href="{$PHPCMS[siteurl]}{$MOD[moduledir]}/question.php?qid={$search['qid']}">{$search['title']}</a></li>
+</ul>
+<!--{/loop}-->
+</div>
+{if $pages}
+<br />
+<div align="center">{$pages}</div>
+{/if}
+</div>
+</div>
+{template 'phpcms','footer'}

@@ -41,12 +41,12 @@ if($action == 'setting')
 	}
 	else
 	{
-		$receiveurl = linkurl($MOD['linkurl'], 1).'payonline_receive.php';
 
 		$settings = array();
 		$result = $db->query("SELECT * FROM ".TABLE_PAY_SETTING." ORDER BY id");
 		while($r = $db->fetch_array($result))
 		{
+			$receiveurl = linkurl($MOD['linkurl'], 1).$r['paycenter'].".php";
 			if($r['receiveurl'] == '') $r['receiveurl'] = $receiveurl;
 			$settings[] = $r;
 		}

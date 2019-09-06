@@ -1,0 +1,35 @@
+{template 'house','header'}
+<div id="content" style="margin-top:5px;">
+  <div class="house_left">
+    <div class="left_top_box_top"></div>
+	<div class="left_top_box">
+      <h5>单位信息</h5>
+	  <ul>
+	    <li><strong>名称：</strong><a href="?username={$username}">{$my_house_corpname}</a></li>
+        <li><strong>联系人：</strong>{$truename}</li>
+        <li><strong>最近上线：</strong>{$lastlogintime}</li>
+        <li><strong>电话：</strong>{$telephone}</li>
+        <li><strong>手机：</strong>{$mobile}</li>
+        <li><strong>E-mail：</strong>{$email}</li>
+		{if $qq}
+        <li><strong>QQ：</strong> <a href="http://wpa.qq.com/msgrd?V=1&Uin={$qq}&Menu=yes" title="点击咨询" target="_blank"><img src="http://wpa.qq.com/pa?p=1:{$qq}:4" border="0" align="absmiddle" />{$qq}</a></li>
+		{/if}
+        <li><strong>MSN：</strong><a href="msnim:chat?contact={$msn}" title="点击咨询&#10;MSN：{$msn}" target="_blank">{$msn}</a></li>
+        <li><strong>网站：</strong><a href="{$homepage}" target="_blank">{$homepage}</a></li>
+        <li><strong>地址：</strong>{$address}</li>
+        <li><strong>邮编：</strong>{$postid}</li>
+		<li><a href="?username={$username}"><strong>查看信息列表>></strong></a></li>
+	  </ul>
+	</div>
+    <div class="left_top_box_bottom"></div>
+  </div>
+
+  <div class="house_wright">
+      <div id="house_wright_list">
+	  <center><strong>{$my_house_corpname}介绍</strong></center>
+      {$my_house_introduce}
+	  </div>
+</div>
+</div>
+
+{template 'phpcms','footer'}

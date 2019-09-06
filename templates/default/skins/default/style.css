@@ -351,11 +351,14 @@ border-top:1px solid #eee;
 border-bottom:1px solid #eee;
 }
 /*发表评论*/
-.comment_icon,.favorites_icon,.friend_icon,.print_icon,.close_icon,.top_icon{
-padding-left:25px;
+.comment_icon,.favorites_icon,.friend_icon,.print_icon,.close_icon,.error_icon,.top_icon{
+padding-left:20px;
 height:20px;
 line-height:20px;
-width:90px;
+width:70px;
+}
+.error_icon{
+background: url(images/error_icon.png) no-repeat 0 0;
 }
 .comment_icon{
 background: url(images/comment.png) no-repeat 0 0;

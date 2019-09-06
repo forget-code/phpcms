@@ -1,0 +1,54 @@
+{template 'yp','header'}
+<link href="{$skindir}/yp/yellow.css" rel="stylesheet" type="text/css" />
+<div id="censent"><!--content-->
+  <div  id="rightyellow">
+    <div class="boxmargin">
+      <div class="rnewlbox">
+  <ul class="ynewlst">
+  {tag_找买家最新推荐}
+{tag_频道首页推荐文章}
+</ul>
+      </div>
+    <div class="rnewrbox ">
+      <div class="ynewleft"><div><span>&nbsp;&nbsp;</span>推荐找买家</div></div>
+      <div class="ynewm">
+<ul class="ynewlst bt123">
+{tag_企业找买家页面推荐}
+</ul></div>
+   <div  class="ynewb"></div>
+    </div></div>
+    <div class="banneryn"><script language="javascript" src="{PHPCMS_PATH}data/js.php?id=4"></script></div>
+<!--自定义栏目开始-->
+{php $j=0;}
+{loop $TRADE $i $cat}
+{if !$cat[parentid]}
+<div class="ynewnn"{if $i%2!=0} style="margin-right:8px"{/if}>
+<div class="btnyn"><span><a href="{$cat[linkurl]}">更多</a></span>{$cat[tradename]}</div>
+<ul class="ynewlst">
+{tag_求购首页自定义列表}
+</ul></div>
+{/if}
+{php $j++;}
+{/loop}
+<!--自定义栏目结束-->
+  </div>
+  <div id="leftyellow">
+    
+    <div class="yleftbox boxmargin">
+      <h4>找买家分类</h4>
+ <div class="ynr">{loop $TRADE $trade}{if !$trade[parentid]}<h6><a href="{$trade[linkurl]}">{$trade[tradename]}</a></h6>
+<ul>{loop $TRADE $j $childcats}{if $childcats[parentid]==$trade[tradeid]}
+<a href="{$childcats[linkurl]}">{$childcats[tradename]}</a>{/if}{/loop}</ul>{/if}{/loop}
+</div>
+
+    </div>
+    <div class="yleftbox boxmargin">
+      <h4>热点找买家</h4>
+      <div class="ynr">
+   <ul class="ynewlst">
+{tag_找买家首页热点}</ul>
+      </div>
+    </div>
+  </div>
+</div>
+{template 'phpcms','footer'}

@@ -1,0 +1,22 @@
+<div style="clear:both"></div>
+<div id="bottem">
+    <div id="yqlj">{tag_全站单网页}
+    <li><hr / color="#cccccc"  width="750px" size="1"></li>
+    <li>{$PHPCMS['copyright']} <!--{if debuginfo()}--></li>
+    <li>Processed in {$debuginfo[time]} second(s), {$debuginfo[queries]} queries<!--{if $PHPCMS['enablegzip']}-->, Gzip enabled<!--{/if}--> <!--{/if}--></li>
+	<!--{if $PHPCMS['enabletm']}-->
+	<li>{include PHPCMS_ROOT.'/data/cache/tm.html'}</li>
+	<!--{/if}-->
+    <li>
+	<!--{if isset($MODULE['stat'])}-->
+	<script type="text/javascript" src="{$MODULE[stat][linkurl]}stat.php"></script>&nbsp;&nbsp;&nbsp;
+	<!--{/if}-->
+	<a href="http://www.miibeian.gov.cn/" target="_blank">{$PHPCMS[icpno]}</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.phpcms.cn/" id="bqxx" target="_blank">Powered by Phpcms 2007</a>
+	</div>
+</div>
+<script type="text/javascript" src="{PHPCMS_PATH}include/js/Std_StranJF.Js"></script>
+<!--{if $PHPCMS['enable53kf']}-->
+<script language="javascript">document.write("<scr"+"ipt language=\"javascript\" src=\"http://www.53kf.com/kf.php?arg={$PHPCMS['kf_arg']}&style={$PHPCMS['kf_style']}&copartner=phpcms&charset={$CONFIG['charset']}&keyword="+escape(document.referrer)+"\"></scr"+"ipt>");</script>
+<!--{/if}-->
+</body>
+</html>

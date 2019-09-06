@@ -1,0 +1,1 @@
+{loop $movies $i $movie}<li><a href="{$movie['linkurl']}" {$target}><img src="{$movie[thumb]}" width="{$imgwidth}" height="{$imgheight}" alt="{$movie[alt]}" /></a><br><a href="{$movie['linkurl']}" title="{$movie['title']}" {$target} class="tag_title_link">{str_replace('...','',$movie[stitle])}</a></li>{/loop}

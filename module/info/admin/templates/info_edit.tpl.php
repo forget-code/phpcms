@@ -28,6 +28,19 @@ function SelectPic(){
     $('thumb').value=s[0];
   }
 }
+function CutPic(){
+  var thumb=$('thumb').value;
+	if(thumb=='')
+	{
+		alert('请先上传缩略图');
+		$('thumb').focus();
+		return false;
+	}
+  var arr=Dialog('corpandresize/ui.php?<?=$PHPCMS[siteurl]?>'+thumb,'',700,500);
+  if(arr!=null){
+    $('thumb').value=arr;
+  }
+}
 function SelectKeywords(){	
   var s=Dialog('?mod=phpcms&file=keywords&keyid=<?=$channelid?>&select=1','',700,500);
   if(s!=null){
@@ -101,6 +114,7 @@ function doKeywords(ID)
       <td class="tablerow">缩略图</td>
       <td class="tablerow"><input name="info[thumb]" type="text" id="thumb" size="58" value="<?=$thumb?>">  <input type="button" value="上传图片" onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&channelid=<?=$channelid?>&uploadtext=thumb&type=thumb&width=<?=$MOD['thumb_width']?>&height=<?=$MOD['thumb_height']?>','upload_thumb','350','350')">
 	   <input name="fromupload" type="button" id="fromupload" value="从已经上传的图片中选择" onclick="SelectPic()" style="width:150px;"/>
+	   <input name="cutpic" type="button" id="cutpic" value="裁剪图片" onclick="CutPic()"/>
       </td>
     </tr>
 
@@ -124,7 +138,10 @@ function doKeywords(ID)
 	</table>
    </td>
     </tr>
-
+	<tr> 
+      <td class="tablerow">截至日期</td>
+      <td class="tablerow"><?=date_select('info[endtime]', $endtime,'%Y-%m-%d %H:%M:%S')?>&nbsp;留空表示不限</td>
+    </tr>
     <tr> 
       <td class="tablerow">地址</td>
       <td class="tablerow"><input name="info[address]" type="text" id="address" size="40" maxlength="30" value="<?=$address?>"></td>
@@ -149,7 +166,13 @@ function doKeywords(ID)
       <td class="tablerow">QQ</td>
       <td class="tablerow"><input name="info[qq]" type="text" id="qq" size="40" value="<?=$qq?>"></td>
     </tr>
-
+<tr> 
+      <td class="tablerow">转向链接</td>
+      <td class="tablerow">
+       <input type="text" name="info[linkurl]" id="linkurl"  size="50" maxlength="255"<? if(!$islink) { ?>disabled<? } ?> value="<? if($islink) { ?><?=$linkurl?><? } ?>"><input name="info[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" <? if($islink) { ?>checked<? } ?>><font color="#FF0000">转向链接</font>
+	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
+     </td>
+    </tr>
     <tr> 
       <td class="tablerow">推荐位置</td>
       <td class="tablerow">
@@ -187,23 +210,10 @@ function doKeywords(ID)
   </tr>
 
 	<tr> 
-      <td class="tablerow">添加日期</td>
-      <td class="tablerow"><?=date_select('info[addtime]', $addtime)?>&nbsp;格式：yyyy-mm-dd</td>
+      <td width="15%" class="tablerow">添加日期</td>
+      <td class="tablerow"><?=date_select('info[addtime]', $addtime,'%Y-%m-%d %H:%M:%S')?>&nbsp;格式：yyyy-mm-dd</td>
     </tr>
 
-	<tr> 
-      <td class="tablerow">截至日期</td>
-      <td class="tablerow"><?=date_select('info[endtime]', $endtime)?>&nbsp;格式：yyyy-mm-dd 留空表示不限</td>
-    </tr>
-
-   <tr> 
-      <td class="tablerow">转向链接</td>
-      <td class="tablerow">
-       <input type="text" name="info[linkurl]" id="linkurl"  size="50" maxlength="255"<? if(!$islink) { ?>disabled<? } ?> value="<? if($islink) { ?><?=$linkurl?><? } ?>"><input name="info[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" <? if($islink) { ?>checked<? } ?>><font color="#FF0000">转向链接</font>
-	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
-     </td>
-    </tr>
-	
     <tr> 
       <td class="tablerow">是否生成</td>
       <td class="tablerow"><input type="radio" name="info[ishtml]" value="1" <?php if($ishtml==1) {?>checked <?php } ?>  onclick="$('htmlrule').style.display='';$('htmldir').style.display='';$('htmlprefix').style.display='';$('phprule').style.display='none';"> 是 <input type="radio" name="info[ishtml]" value="0" <?php if($ishtml==0) {?>checked <?php } ?> onclick="$('htmlrule').style.display='none';$('htmldir').style.display='none';$('htmlprefix').style.display='none';$('phprule').style.display='';"> 否</td>

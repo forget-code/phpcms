@@ -1,0 +1,21 @@
+<table cellpadding="0" cellspacing="0" class="basicinfomation">
+      <tr>
+        <td><img src="{$skindir}/images/member_2.jpg" alt="会员管理中心" width="160" height="29" /></td>
+      </tr>
+      <tr>
+        <td class="basicinfomation_content">
+		<li><a href="{$MODULE[member][linkurl]}index.php"><font color="blue">{$_username}</font></a> 欢迎光临！</li>
+        <li>您是：<font color="red">{$GROUP[groupname]}</font></li>
+          {if $_chargetype}<li>计费方式：有效期</li>
+          <li>剩余天数：{$validdatenum}</li>
+		  {else}
+          <li>计费方式：扣点数</li>
+		  <li>可用点数：{$_point}点</li>
+		  {/if}
+          <li>可用资金：{$_money}元</li>
+		  </td>
+      </tr>
+      <tr>
+        <td><img src="{$skindir}/images/member_1.gif" alt="" width="160" height="9" /></td>
+      </tr>
+</table>

@@ -46,7 +46,7 @@ else
 	$record = $total_pv = $row['num'];
 	if ($record > 0)
 	{
-		$res = $db -> query("SELECT COUNT(*) AS numpv,rdomain FROM ".TABLE_STAT_VPAGES." WHERE rdomain IN ('$engine') AND TO_DAYS(ftime) BETWEEN TO_DAYS('$fdate') AND TO_DAYS('$ldate') GROUP BY rdomain ORDER BY numpv DESC");
+		$res = $db -> query("SELECT COUNT(*) AS numpv,rdomain FROM ".TABLE_STAT_VPAGES." WHERE rdomain IN ($engine) AND TO_DAYS(ftime) BETWEEN TO_DAYS('$fdate') AND TO_DAYS('$ldate') GROUP BY rdomain ORDER BY numpv DESC");
 		$maxpv = 0;
 		$resault = array();
 		while ($row = $db->fetch_row($res))

@@ -1,0 +1,125 @@
+{template 'product','header'}
+<link href="{$skindir}/mall.css" rel="stylesheet" type="text/css">
+<div  id="censent">
+  <div id="mallleft">
+    <div class="gwmall boxmargin" ><a href="{$MOD[linkurl]}cart.php" target="_blank"><img src="{$skindir}/images/ckgwc.gif" class="wztp" /></a><img src="{$skindir}/images/gwaw.gif" class="wztp" />
+    <div class="rhgm"><img src="{$skindir}/images/gwli.gif" />&nbsp;如何购买&nbsp;<img src="{$skindir}/images/gwli.gif" />&nbsp;如何购买</div>
+    </div>
+    <div class="mbtleft">
+      <div>浏览过的商品</div> 
+    </div>
+    <div class="boxmargin xianmall">
+    <div  class="mallx1">
+<!--浏览过的商品列表-->
+<div class="product_liulan" id="visitedproduct">
+<ul>
+正在加载浏览过的商品列表......
+</ul></div>
+    </div>
+    <div id="clear"></div>
+    </div>
+  </div>
+  <div id="mallright">
+  <div class="search_c1"> 
+<!--搜索开始-->
+<ul>
+<form name="myform" action="{$MOD[linkurl]}search.php" method="get">
+<li class="c4">搜索：</li><li>
+<select name="searchtype">
+<option value="pdt_name">按商品名称</option>
+<option value="pdt_No">按商品编号</option>
+<option value="introduce">按商品介绍</option>
+</select></li>
+<li class="c4">关键字：</li>
+<li><input class="c2" name="keyword" type="text" /></li>
+<li class="c4">价格范围：</li>
+<li><input class="c3" name="fromprice" type="text" />-<input class="c3" name="toprice" type="text" /></li>
+<li><input type="hidden" name="dosubmit" value="1" />
+<input type="hidden" name="search" value="1" />
+<input src="{$skindir}/images/ss.gif" alt="搜索" type="image" /></li>
+<li class="c4"><a href="{$MOD[linkurl]}search.php" class="red">详细</a></li>
+</form></ul>
+<!--搜索结束-->
+</div>
+    <div class="mbtleft">
+      <div><em class="btys">当前位置：<a href="{PHPCMS_PATH}product/">商城首页</a> >>确认订单</em></div> 
+    </div>
+	
+
+<div class="xianmall boxmargin mallx1">
+<div style="margin-top:15px;clear:both"></div>
+ <form action="{$MOD[linkurl]}order.php?action=add" method="post">
+<table cellspacing="0" cellpadding="0" width="100%" class="righttable">
+  <tbody>
+    <tr>
+      <td class="td_center" width="40%">您选择购买的商品</td>
+      <td class="td_center" width="20%">价格</td>
+      <td class="td_center" width="20%">数量</td>
+      <td class="td_center" width="20%">金额</td>
+    </tr>
+    <!--{loop $pdt_carts $v}-->
+    <tr>
+      <td class="td_center" height="30">{$v[pdt_name]}</td>
+      <td class="td_center">{$v[price]}</td>
+      <td class="td_center">{$v[pdt_number]}</td>
+      <td class="td_center">{$v[pdt_amount]}</td>
+    </tr>
+    <!--{/loop}-->
+    <tr>
+      <td class="td_right" colspan="4">总金额： {$total_mount}</td>
+    </tr>
+    <tr>
+      <td class="td_right" colspan="4">&nbsp;您的折扣：<strong>{$discount}</strong> 折扣后应收：￥<strong>{$total_mount}</strong></td>
+    </tr>
+  </tbody>
+</table>
+<div class="cat_box_1">
+  <div class="cat_title">
+    <h1 align="left">收货信息</h1>
+  </div>
+  <div align="left">
+    <table cellspacing="0" cellpadding="0" width="100%" class="righttable">
+      <tbody>
+        <tr>
+          <td class="td_right" width="11%">收货人姓名:</td>
+          <td class="td_left" width="36%">{$checkaddress[truename]}</td>
+          <td class="td_right" width="13%">省/市/区:</td>
+          <td class="td_left" width="40%">{$checkaddress[province]}{$checkaddress[city]}{$checkaddress[area]}</td>
+        </tr>
+        <tr>
+          <td class="td_right" width="11%">邮件地址:</td>
+          <td class="td_left" width="36%">{$checkaddress[email]}</td>
+          <td class="td_right" width="13%">电 话:</td>
+          <td class="td_left" width="40%">{$checkaddress[telephone]}</td>
+        </tr>
+        <tr>
+          <td class="td_right" width="11%">邮政编码:</td>
+          <td class="td_left" width="36%">{$checkaddress[postid]}</td>
+          <td class="td_right" width="13%">手机:</td>
+          <td class="td_left" width="40%">{$checkaddress[mobile]}</td>
+        </tr>
+        <tr>
+          <td class="td_right" width="11%">详细地址:</td>
+          <td class="td_left" colspan="3">{$checkaddress[address]}</td>
+        </tr>
+        <tr>
+          <td class="td_right">备注信息:</td>
+          <td class="td_left" colspan="3">{$checkaddress[note]}</td>
+        </tr>
+        <tr>
+          <td colspan="4">&nbsp;</td>
+        </tr>
+        <tr>
+          <td class="td_center" colspan="4"><input type="submit" name="submit" value="确认订单" /></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div id="clear"></div>
+  <div>
+  </div>
+  </div>
+  </div></div>
+  <script type="text/javascript" src="{$MOD[linkurl]}visited.php?productid=0&visitednum={$MOD[visitednum]}"></script>
+{template 'phpcms','footer'}

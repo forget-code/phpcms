@@ -1,0 +1,56 @@
+{template "phpcms","header"}
+<table cellspacing="0" cellpadding="0" class="member">
+<tr>
+<td valign="top" class="left">
+{template "member","left"}
+</td>
+<td width="10" valign="top">
+</td>
+<td class="right" valign="top">
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>充值卡充值</h1>
+<form name="myform" action="{$MOD[linkurl]}paycard.php" method="post">
+  <table cellpadding="2" cellspacing="1" class="righttable">
+    <tr>
+      <td width="120" class="td_right">用户名：</td>
+      <td class="td_left">{$_username}</td>
+    </tr>
+    <tr >
+      <td class="td_right">资金余额：</td>
+      <td class="td_left">{$_money} 元</td>
+    </tr>
+    <tr >
+      <td class="td_right">可用积分：</td> 
+     <td class="td_left">{$_credit} 分</td>
+    </tr>
+    <tr >
+      <td class="td_right">可用点数：</td>
+      <td class="td_left">{$_point} 点</td>
+    </tr>
+    <tr >
+      <td class="td_right">有效天数：</td>
+      <td class="td_left">开始计算日期：{$_begindate}&nbsp;&nbsp;&nbsp;&nbsp;有效期：无限期<br>
+      </td>
+    </tr>
+    <tr>
+      <td class="td_right">充值卡卡号：</td>
+      <td class="td_left"> <input name="cardid" type="text" maxLength="20" size="20"> </td>
+    </tr>
+    <tr>
+      <td class="td_right">充值卡密码：</td>
+      <td class="td_left"> <input name="password" type="password" maxLength="10" size="20"> </td>
+    </tr>
+    <tr>
+      <td class="td_right"></td>
+      <td height="40" class="td_left">
+        <input name="dosubmit" type="submit" id="submit" value=" 确定充值 ">
+      </td>
+    </tr>
+  </table>
+</form>
+</div></div>
+</td>
+</tr>
+</table>
+{template "phpcms","footer"}

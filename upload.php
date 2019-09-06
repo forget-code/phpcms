@@ -1,6 +1,5 @@
 <?php
-require './include/common.inc.php';
-
+require dirname(__FILE__).'/include/common.inc.php';
 if(!$keyid || (!array_key_exists($keyid, $MODULE) && !array_key_exists($keyid, $CHANNEL))) showmessage($LANG['illegal_operation']);
 
 $type = isset($type) ? $type : '';
@@ -12,6 +11,11 @@ if(is_numeric($keyid))
 	$CHA = cache_read('channel_'.$keyid.'.php');
 	if($CHA['uploadfiletype']) $uploadfiletype = $CHA['uploadfiletype'];
 	if($CHA['maxfilesize']) $maxfilesize = $CHA['maxfilesize'];
+	if($CHA['module'] == 'picture')
+	{
+		$picture_setting = cache_read('picture_setting.php');
+		$CHA['uploaddir'] = $picture_setting['upload_dir'];
+	}
 	$uploaddir = $PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$CHA['uploaddir'];
 }
 elseif($keyid)

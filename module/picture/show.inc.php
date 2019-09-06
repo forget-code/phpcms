@@ -29,6 +29,8 @@ if(is_array($myfields))
 	foreach($myfields as $k=>$v)
 	{
 		$myfield = $v['name'];
+		if($v['inputtool']=='imageupload' || $v['inputtool']=='fileupload')
+		$$myfield = "<a href='".linkurl($$myfield)."' title='".$v['title']."' id='".$v['name']."' target='_blank'/>".linkurl($$myfield)."</a>";
 		$fields[] = array('title'=>$v['title'],'value'=>$$myfield);
 	}
 }
@@ -74,7 +76,7 @@ foreach($urls as $k=>$url)
 	}
 	else
 	{
-		$thumb_exists = file_exists(PHPCMS_ROOT.'/'.$PHPCMS['uploaddir'].'/'.$CHA['channeldir'].'/'.$MOD['upload_dir'].'/'.dirname($url[1]).'/thumb_'.basename($url[1])) ? true : false;
+		$thumb_exists = file_exists(PHPCMS_ROOT.dirname($url[1]).'/thumb_'.basename($url[1])) ? true : false;
 		if($MOD['show_mode'])
 		{
 			$r['src'] = $CHA['linkurl'].'show_pic.php?src='.$url[1];
@@ -140,7 +142,7 @@ else
 		}
 	}
 }
-
+$head['keywords'] = $keywords;
 include template($mod, $templateid);
 if(!$readpoint && !$arrgroupidview) phpcache();
 ?>

@@ -2,7 +2,7 @@
 require '../include/common.inc.php';
 ?>
 <html>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8 echo $CONFIG['charset'];?>"/>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $CONFIG['charset'];?>"/>
 <link rel="stylesheet" type="text/css" href="<?php echo PHPCMS_PATH;?>editor/css/dialog.css"/>
 <body>
 <?php
@@ -29,9 +29,9 @@ if($dosubmit)
 	}
 	$fileext = fileext($_FILES['uploadfile']['name']);
 	$exts = array('php','php3','asp','aspx','cgi','jsp','pl','cfg');
-	if(!preg_match("/^(".$ext[$do].")$/i",$fileext)) msg("ä¸å…è®¸ä¸Šä¼ è¯¥æ ¼å¼æ–‡ä»¶");
-	if(!preg_match("/^(".$up['uploadfiletype'].")$/i",$fileext)) msg("ä¸å…è®¸ä¸Šä¼ è¯¥æ ¼å¼æ–‡ä»¶");
-	if(in_array($fileext, $exts)) msg('éæ³•åç¼€ï¼');
+	if(!preg_match("/^(".$ext[$do].")$/i",$fileext)) msg("²»ÔÊĞíÉÏ´«¸Ã¸ñÊ½ÎÄ¼ş");
+	if(!preg_match("/^(".$up['uploadfiletype'].")$/i",$fileext)) msg("²»ÔÊĞíÉÏ´«¸Ã¸ñÊ½ÎÄ¼ş");
+	if(in_array($fileext, $exts)) msg('·Ç·¨ºó×º£¡');
 
 	include PHPCMS_ROOT.'/include/attachment.class.php';
 	session_start();
@@ -43,32 +43,31 @@ if($dosubmit)
 	is_dir(PHPCMS_ROOT.'/'.$filepath) or dir_create(PHPCMS_ROOT.'/'.$filepath);
 	require_once PHPCMS_ROOT.'/include/upload.class.php';
 	$filearray = array('file'=>$_FILES['uploadfile']['tmp_name'],'name'=>$_FILES['uploadfile']['name'],'size'=>$_FILES['uploadfile']['size'],'type'=>$_FILES['uploadfile']['type'],'error'=>$_FILES['uploadfile']['error']);
-		$filename = isset($rename) ? '' : $_FILES['uploadfile']['name'];
-		$up['maxfilesize'] = isset($up['maxfilesize']) ? $up['maxfilesize'] : 0;
-		$upload = new upload($filearray, $filename, $filepath, $up['uploadfiletype'], 1, $up['maxfilesize']);
-		if($upload->up())
+	$up['maxfilesize'] = isset($up['maxfilesize']) ? $up['maxfilesize'] : 0;
+	$upload = new upload($filearray, '', $filepath, $up['uploadfiletype'], 1, $up['maxfilesize']);
+	if($upload->up())
+	{
+		if($do == 'img')
 		{
-			if($do == 'img')
+			include PHPCMS_ROOT.'/include/watermark.class.php';
+			$water_pos = $PHPCMS['water_pos'];
+			$wm = new watermark(PHPCMS_ROOT.'/'.$upload->saveto, 10, $water_pos);
+			if($PHPCMS['water_type']==1)
 			{
-				include PHPCMS_ROOT.'/include/watermark.class.php';
-				$water_pos = $PHPCMS['water_pos'];
-				$wm = new watermark(PHPCMS_ROOT.'/'.$upload->saveto, 10, $water_pos);
-				if($PHPCMS['water_type']==1)
-				{
-					$wm->text($PHPCMS['water_text'], $upload->saveto, $PHPCMS['water_fontcolor'], $PHPCMS['water_fontsize'], $PHPCMS['water_font']);
-				}
-				elseif($PHPCMS['water_type']==2)
-				{
-					$wm->image(PHPCMS_ROOT.'/'.$PHPCMS['water_image'], PHPCMS_ROOT.'/'.$upload->saveto);
-				}
+				$wm->text($PHPCMS['water_text'], $upload->saveto, $PHPCMS['water_fontcolor'], $PHPCMS['water_fontsize'], $PHPCMS['water_font']);
 			}
-			$att->addfile($upload->saveto);
-			msg('ä¸Šä¼ æˆåŠŸ!', PHPCMS_PATH.$upload->saveto);
+			elseif($PHPCMS['water_type']==2)
+			{
+				$wm->image(PHPCMS_ROOT.'/'.$PHPCMS['water_image'], PHPCMS_ROOT.'/'.$upload->saveto);
+			}
 		}
-		else
-		{
-			msg('ä¸Šä¼ å¤±è´¥!');
-		}
+		$att->addfile($upload->saveto);
+		msg('ÉÏ´«³É¹¦!', PHPCMS_PATH.$upload->saveto);
+	}
+	else
+	{
+		msg('ÉÏ´«Ê§°Ü!');
+	}
 }
 else
 {
@@ -79,24 +78,24 @@ function $(ID) { return document.getElementById(ID); }
 function Check(){
 	var v = $('uploadfile').value;
 	if(!v){
-		alert('è¯·é€‰æ‹©æ–‡ä»¶');
+		alert('ÇëÑ¡ÔñÎÄ¼ş');
 		return false;
 	}
 	var fileext = v.substring(v.lastIndexOf('.')+1, v.length);
 	fileext = fileext.toLowerCase();
 	if(fileext.length>4 || fileext.length<2){
-		alert('æ— æ•ˆçš„æ–‡ä»¶åœ°å€');
+		alert('ÎŞĞ§µÄÎÄ¼şµØÖ·');
 		$('uploadfile').value = '';
 		return false;
 	}
 	var do_allow = "<?=$ext[$do]?>";
 	var allow = "<?=$up['uploadfiletype']?>";
 	if(do_allow.indexOf(fileext) == -1){
-		alert('æ ¼å¼é”™è¯¯');
+		alert('¸ñÊ½´íÎó');
 		return false;
 	}
 	if(allow.indexOf(fileext) == -1){
-		alert('æœ¬ç«™ä¸å…è®¸ä¸Šä¼ æ­¤æ ¼å¼æ–‡ä»¶');
+		alert('±¾Õ¾²»ÔÊĞíÉÏ´«´Ë¸ñÊ½ÎÄ¼ş');
 		return false;
 	}
 	$('upload').submit();
@@ -105,8 +104,7 @@ function Check(){
 <form name="upload" id="upload" method="post" enctype="multipart/form-data" action="<?php echo PHPCMS_PATH;?>editor/upload.php?do=<?php echo $do;?>&keyid=<?php echo $keyid;?>">
 <input type="hidden" name="dosubmit" value="1"/>
 <input type="file" name="uploadfile" size="8" id="uploadfile"/>
-<input type="button" value="ä¸Šä¼ " onclick="Check();"/>
-<input type="checkbox" name="rename" value="1" checked/>é‡å‘½å
+<input type="button" value="ÉÏ´«" onclick="Check();"/>
 </form>
 <body>
 </html>

@@ -1,5 +1,4 @@
 <?php
-
 require './include/common.inc.php';
 
 if(isset($linkid)) $linkid = intval($linkid);

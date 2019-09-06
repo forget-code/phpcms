@@ -1,0 +1,129 @@
+{template 'house','header'}
+{include PHPCMS_ROOT.'/data/house_search_inc.html'}
+<div id="content">
+  <div class="house_left">
+    <div class="left_top_box_top"></div>
+    {include PHPCMS_ROOT.'/data/building_search_inc.html'}
+     <div class="fod">
+	    <ul>
+          <li class="s" onMouseOver="fod(this,'foda1')"><a href="{$MOD[display_list_url]}" class="selectli1"><span>推荐楼盘</span></a></li>
+          <li onMouseOver="fod(this,'foda1')"><a href="{$MOD[display_list_url]}"><span>热门楼盘</span></a></li>
+		  <li onMouseOver="fod(this,'foda1')"><a href="{$MOD[display_list_url]}"><span>特价楼盘</span></a></li>
+	    </ul>
+      </div>
+      <div class="fodinfo">
+        <div id="foda1">
+          <div class="dis">
+            <ul>
+			  {tag_房产首页推荐楼盘}
+			</ul>
+          </div>
+          <div class="undis">
+            <ul>
+              {tag_房产首页热门楼盘}
+            </ul>
+          </div>
+		  <div class="undis">
+            <ul>
+              {tag_房产首页特价楼盘}
+            </ul>
+          </div>
+        </div>
+	  </div>
+
+	  <div class="fod">
+	    <ul>
+          <li class="s" onMouseOver="fod(this,'foda2')"><a href="{$MOD[linkurl]}" class="selectli1"><span>地区分类</span></a></li>
+          <li onMouseOver="fod(this,'foda2')"><a href="{$MOD[linkurl]}"><span>房产中介</span></a></li>
+          <li onMouseOver="fod(this,'foda2')"><a href="{$MOD[linkurl]}"><span>物业排行</span></a></li>
+	    </ul>
+      </div>
+      <div class="fodinfo">
+        <div id="foda2">
+          <div class="dis">
+		  <ul>
+		  <li>
+			{loop $AREA $are}
+			  {if !$are[parentid]}<a href="{$MOD[linkurl]}listdisplay.php?areaid={$are[areaid]}">{$are[areaname]}</a>&nbsp;{/if}
+			 {/loop}
+		    </li>
+			</ul>
+          </div>
+          <div class="undis">
+            <ul>
+			  {tag_最新房产中介}
+			</ul>
+          </div>
+          <div class="undis">
+            <ul>
+              {tag_房产排行}
+            </ul>
+          </div>
+        </div>
+	  </div>
+	  <div class="fod">
+	    <ul>
+          <li class="s" onMouseOver="fod(this,'foda3')"><a href="{$CAT[1][linkurl]}" class="selectli1"><span>出&nbsp;租</span></a></li>
+          <li onMouseOver="fod(this,'foda3')"><a href="{$CAT[2][linkurl]}"><span>求&nbsp;租</span></a></li>
+		  <li onMouseOver="fod(this,'foda3')"><a href="{$CAT[3][linkurl]}"><span>合&nbsp;租</span></a></li>
+	    </ul>
+      </div>
+      <div class="fodinfo">
+        <div id="foda3" style="height:258px;">
+          <div class="dis">
+            <ul>
+			  {tag_房产首页出租}
+			</ul>
+          </div>
+          <div class="undis">
+            <ul>
+              {tag_房产首页求租}
+            </ul>
+          </div>
+		  <div class="undis">
+            <ul>
+              {tag_房产首页合租}
+            </ul>
+          </div>
+        </div>
+	  </div>
+	<div class="left_top_box_bottom"></div>
+  </div>
+
+  <div class="house_wright">
+
+      <div class="position">
+	    <span>当前位置：<a href="{$MOD[linkurl]}">房产首页</a> &gt;&gt; <a href="{$MOD[display_list_url]}">楼盘列表信息</a></span>
+		<ul>
+		  <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=1">发布出租</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=2">发布求租</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=3">发布合租</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=4">发布出售</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=5">发布求购</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=6">发布置换</a></li>
+		  <li><a href="{$MOD[linkurl]}displaymgr.php?action=add">发布楼盘</a></li>
+		</ul>
+	  </div>
+      <!--下载列表-->
+      {tag_楼盘信息列表}</td>
+</div>
+</div>
+{template 'house','footer'}
+<script language="JavaScript" type="text/JavaScript">
+<!--
+function MM_findObj(n, d) { //v4.01
+  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
+    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
+  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+  if(!x && d.getElementById) x=d.getElementById(n); return x;
+}
+
+function MM_showHideLayers() { //v6.0
+  var i,p,v,obj,args=MM_showHideLayers.arguments;
+  for (i=0; i<(args.length-2); i+=3) if ((obj=MM_findObj(args[i]))!=null) { v=args[i+2];
+    if (obj.style) { obj=obj.style; v=(v=='show')?'visible':(v=='hide')?'hidden':v; }
+    obj.visibility=v; }
+}
+//-->
+</script>

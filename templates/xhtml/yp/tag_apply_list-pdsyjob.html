@@ -1,0 +1,22 @@
+<div class="yp_job_rc">
+<ul class="yp_job_rc_zhong">
+<li class="c_1">姓名</li>
+<li class="c_1">性别</li>
+<li class="c_2">欲从事</li>
+<li class="c_3">工作年限</li>
+<li class="c_4">毕业学院</li>
+<li class="c_5">所学专业</li>
+<li class="c_5">日期</li>
+</ul>
+{loop $applys $i $apply}
+<ul class="yp_job_rc_ul">
+<li class="c_1"><a href="{$apply[linkurl]}" {$target} class="tag_title_link">{$apply[username]}</a></li>
+<li class="c_1">{if $apply[gender]==1}男{else}女{/if}</li>
+<li class="c_2"><a href="{$apply[linkurl]}" {$target} class="tag_title_link">{$apply[station]}</a></li>
+<li class="c_3">{if $showexperience}{$apply[experience]}年{/if}</li>
+<li class="c_4">{if $showschool}[{$apply[school]}]{/if}</li>
+<li class="c_5">{if $showspecialty}[{$apply[specialty]}]{/if}</li>
+<li class="c_5">{if $datetype}{$apply[adddate]}{/if}</li>
+</ul>{/loop}
+<div style="clear:"></div>
+</div>

@@ -1,0 +1,25 @@
+<table width="575" border="0" cellpadding="1">
+  <tr>
+    <td height="24" align="center" bgcolor="#b6e0fa">职位</td>
+    <td align="center" bgcolor="#b6e0fa">性别</td>
+    <td align="center" bgcolor="#b6e0fa">人数</td>
+    <td align="center" bgcolor="#b6e0fa">学历</td>
+    <td align="center" bgcolor="#b6e0fa">经验</td>
+    <td align="center" bgcolor="#b6e0fa">性质</td>
+    <td align="center" bgcolor="#b6e0fa">待遇</td>
+    <td align="center" bgcolor="#b6e0fa">所在地</td>
+  </tr>
+{loop $jobs $i $job}<tr>
+    <td height="24" bgcolor="#D9EFFD" style="padding-left: 8px;"><a href="{$job[linkurl]}" target="_blank">{$job[title]}</a></td>
+    <td bgcolor="#D9EFFD" align="center">{if $job[sex]==1}男{elseif $job[sex]==2}女{else}不限{/if}</td>
+    <td bgcolor="#D9EFFD" align="center">{$job[employ]}</td>
+    <td bgcolor="#D9EFFD" align="center">{$job[degree]}</td>
+    <td bgcolor="#D9EFFD" align="center">{$job[experience]}</td>
+    <td bgcolor="#D9EFFD" align="center">{$job[worktype]}</td>
+    <td bgcolor="#D9EFFD" align="center">{$job[pay]}</td>
+    <td bgcolor="#D9EFFD" align="center">{$job[province]}</td>
+</tr>{/loop}
+</table>
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

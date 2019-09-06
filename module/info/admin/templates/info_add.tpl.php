@@ -32,6 +32,19 @@ function SelectPic(){
     $('thumb').value=s[0];
   }
 }
+function CutPic(){
+  var thumb=$('thumb').value;
+	if(thumb=='')
+	{
+		alert('请先上传缩略图');
+		$('thumb').focus();
+		return false;
+	}
+  var arr=Dialog('corpandresize/ui.php?<?=$PHPCMS[siteurl]?>'+thumb,'',700,500);
+  if(arr!=null){
+    $('thumb').value=arr;
+  }
+}
 function SelectKeywords(){	
   var s=Dialog('?mod=phpcms&file=keywords&keyid=<?=$channelid?>&select=1','',700,500);
   if(s!=null){
@@ -56,8 +69,6 @@ function doKeywords(ID)
 <table width="100%" height="25" border="0" cellpadding="3" cellspacing="0" class="tableborder">
   <tr>
     <td class="tablerow"> <img src="<?=PHPCMS_PATH?>admin/skin/images/pos.gif" align="absmiddle" alt="当前位置" > 当前位置：<a href="?mod=<?=$mod?>&file=<?=$file?>&action=main&channelid=<?=$channelid?>">信息首页</a> &gt;&gt; <a href="?mod=<?=$mod?>&file=<?=$file?>&action=add&catid=<?=$catid?>&channelid=<?=$channelid?>">添加信息</a> &gt;&gt; <?=$CAT['catname']?> &gt;&gt; </td>
-    <td class="tablerow" align="right">&nbsp;&nbsp;<?php echo $category_jump; ?>
-	  &nbsp;&nbsp;</td>
   </tr>
 </table>
 
@@ -76,8 +87,7 @@ function doKeywords(ID)
 </tr>
 </table>
 
-<form action="?mod=<?=$mod?>&file=<?=$file?>&action=add&channelid=<?=$channelid?>&catid=<?=$catid?>&dosubmit=1" method="post" name="myform" onsubmit="return doCheck();">
-<input type="hidden" name="info[catid]" value="<?=$catid?>" />
+<form action="?mod=<?=$mod?>&file=<?=$file?>&action=add&channelid=<?=$channelid?>&dosubmit=1" method="post" name="myform" onsubmit="return doCheck();">
 <input type="hidden" name="info[username]" value="<?=$_username?>" />
 <table cellpadding="2" cellspacing="1" class="tableborder">
   <tbody id="Tabs0" style="display:">
@@ -86,7 +96,7 @@ function doKeywords(ID)
   </tr>
     <tr> 
       <td width="15%" class="tablerow">所属栏目</td>
-      <td class="tablerow"><font color="#FF0000"><?=$CAT['catname']?></font></td>
+      <td class="tablerow"><?=$this_category?></td>
     </tr>
     <tr> 
       <td class="tablerow">标题 <font color="#FF0000">*</font></td>
@@ -101,6 +111,7 @@ function doKeywords(ID)
       <td class="tablerow">缩略图</td>
       <td class="tablerow"><input name="info[thumb]" type="text" id="thumb" size="58">  <input type="button" value="上传图片" onclick="javascript:openwinx('?mod=<?=$mod?>&file=uppic&channelid=<?=$channelid?>&uploadtext=thumb&type=thumb&width=<?=$MOD['thumb_width']?>&height=<?=$MOD['thumb_height']?>','upload_thumb','350','350')">
 	   <input name="fromupload" type="button" id="fromupload" value="从已经上传图片中选择" onclick="SelectPic()" style="width:150px;"/>
+	   <input name="cutpic" type="button" id="cutpic" value="裁剪图片" onclick="CutPic()"/>
       </td>
     </tr>
 
@@ -131,7 +142,7 @@ function doKeywords(ID)
 
 	<tr> 
       <td class="tablerow">截至日期</td>
-      <td class="tablerow"><?=date_select('info[endtime]')?>&nbsp;格式：yyyy-mm-dd 留空表示不限</td>
+      <td class="tablerow"><?=date_select('info[endtime]','','%Y-%m-%d %H:%M:%S')?>&nbsp;留空表示不限</td>
     </tr>
 
 
@@ -159,7 +170,13 @@ function doKeywords(ID)
       <td class="tablerow">QQ</td>
       <td class="tablerow"><input name="info[qq]" type="text" id="qq" size="40"></td>
     </tr>
-
+<tr> 
+      <td class="tablerow">转向链接</td>
+      <td class="tablerow">
+       <input type="text" name="info[linkurl]" id="linkurl"  size="50" maxlength="255" disabled value="http://"><input name="info[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" ><font color="#FF0000">转向链接</font>
+	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
+     </td>
+    </tr>
     <tr> 
       <td class="tablerow">推荐位置</td>
       <td class="tablerow">
@@ -192,20 +209,10 @@ function doKeywords(ID)
   <tr>
     <th colspan=2>高级设置</th>
   </tr>
-
 	<tr> 
-      <td class="tablerow">添加日期</td>
-      <td class="tablerow"><?=date_select('info[addtime]', $today)?>&nbsp;格式：yyyy-mm-dd</td>
+      <td width="15%" class="tablerow">添加日期</td>
+      <td class="tablerow"><?=date_select('info[addtime]', $today,'%Y-%m-%d %H:%M:%S')?>&nbsp;格式：yyyy-mm-dd</td>
     </tr>
-
-    <tr> 
-      <td class="tablerow">转向链接</td>
-      <td class="tablerow">
-       <input type="text" name="info[linkurl]" id="linkurl"  size="50" maxlength="255" disabled value="http://"><input name="info[islink]" type="checkbox" id="islink" value="1" onclick="ruselinkurl();" ><font color="#FF0000">转向链接</font>
-	   <br/><font color="#FF0000">如果使用转向链接则点击标题就直接跳转而内容设置无效</font>
-     </td>
-    </tr>
-	
     <tr> 
       <td class="tablerow">是否生成</td>
       <td class="tablerow"><input type="radio" name="info[ishtml]" value="1" <?php if($CAT['ishtml']==1) {?>checked <?php } ?>  onclick="$('htmlrule').style.display='';$('htmlprefix').style.display='';$('htmldir').style.display='';$('phprule').style.display='none';"> 是 <input type="radio" name="info[ishtml]" value="0" <?php if($CAT['ishtml']==0) {?>checked <?php } ?> onclick="$('htmlrule').style.display='none';$('htmldir').style.display='none';$('htmlprefix').style.display='none';$('phprule').style.display='';"> 否</td>

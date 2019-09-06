@@ -70,7 +70,7 @@ if($dosubmit)
 	$article['catid'] = $catid;
 	$article['editor'] = $_username;
 	$article['urlruleid'] = $article['ishtml'] ? $html_urlrule : $php_urlrule;
-	$article['addtime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $article['addtime']) ? strtotime($article['addtime'].' '.date('H:i:s',$PHP_TIME)) : $PHP_TIME;
+	$article['addtime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})/', $article['addtime']) ? strtotime($article['addtime']) : $PHP_TIME;	
 	$article['edittime'] = $PHP_TIME;
 	if(isset($article['arrposid']))
 	{
@@ -123,7 +123,7 @@ else
 {
 	@extract(new_htmlspecialchars($art->get_one()));
 	$CAT = cache_read("category_$catid.php");
-	$addtime = date('Y-m-d',$addtime);
+	$addtime = date('Y-m-d H:i:s',$addtime);
 	$type_select = type_select('article[typeid]', $LANG['type'], $typeid);
 	$style_edit = style_edit("article[style]", $style);
 	$keywords_select = keywords_select($channelid);

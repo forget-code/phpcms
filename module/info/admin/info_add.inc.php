@@ -31,8 +31,8 @@ if($dosubmit)
 	$info['ip'] = $PHP_IP;
 	$info['username'] = $info['editor'] = $info['checker'] = $_username;
 	$info['urlruleid'] = $info['ishtml'] ? $html_urlrule : $php_urlrule;
-	$info['addtime'] = $info['edittime'] = $info['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $info['addtime']) ? strtotime($info['addtime'].' '.date('H:i:s',$PHP_TIME)) : $PHP_TIME;
-	$info['endtime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $info['endtime']) ? strtotime($info['endtime'].' '.date('H:i:s',$PHP_TIME)) : 0;
+	$info['addtime'] = $info['edittime'] = $info['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})/', $info['addtime']) ? strtotime($info['addtime']) : $PHP_TIME;
+	$info['endtime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})/', $info['endtime']) ? strtotime($info['endtime']) : 0;
 	if(isset($info['arrposid']))
 	{
 		$arrposid = $info['arrposid'];
@@ -76,11 +76,11 @@ if($dosubmit)
 }
 else
 {
-	$today=date('Y-m-d',$PHP_TIME);
+	$today=date('Y-m-d H:i:s',$PHP_TIME);
 	$type_select = type_select('info[typeid]', $LANG['type']);
 	$style_edit = style_edit("info[style]","");
 	$keywords_select = keywords_select($channelid);
-	$category_jump = category_select('catid', $LANG['switch_to_other_category'], 0, "onchange=\"if(this.value!=''){location='?mod=$mod&file=$file&action=add&job=$job&channelid=$channelid&mode=$mode&areaid=$areaid&catid='+this.value;}\"");
+	$this_category = str_replace("<option value='0'></option>",'',category_select('catid','',$catid));
 	$showgroup = showgroup('checkbox','info[arrgroupidview][]');
 	$showskin = showskin('info[skinid]');
 	$showtpl = showtpl($mod,'content','info[templateid]');

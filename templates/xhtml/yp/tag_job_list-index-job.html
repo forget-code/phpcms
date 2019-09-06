@@ -1,0 +1,6 @@
+{loop $jobs $i $job}
+<ul><li class="zxzpbt">{if $datetype}<span class="datetime f_r">{$job[adddate]}</span>{/if}
+<a href="{$job[url]}" target="_blank">{$job[companyname]}</a></li> 
+<li class="zxzpnr">诚招：{if $showstationname}[{$job[station]}]{/if}<a href="{$job[linkurl]}" title="{$job[title]}" {$target}">{$job[stitle]}</a>
+{if $showhits}({$job[hits]}){/if}</li>
+</ul>{/loop}

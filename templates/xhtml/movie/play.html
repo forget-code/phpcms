@@ -1,0 +1,28 @@
+<html>
+<head>
+<title>{$title}</title>
+<style type="text/css">
+<!--
+body {
+	margin-left: 0px;
+	margin-top: 0px;
+	margin-right: 0px;
+	margin-bottom: 0px;
+	overflow:hidden;
+}
+
+-->
+</style>
+<script language="javascript" src="{PHPCMS_PATH}include/js/prototype.js"></script>
+<script>
+window.onunload=function()
+{
+   var pars = "serverid={$serverid}";
+   var myAjax = new Ajax.Request('{$channelurl}onunload.php', {method: 'get', parameters: pars});
+}
+</script>
+</head>
+<body oncontextmenu='return false' ondragstart='return false' onselectstart ='return false' onselect='document.selection.empty()' oncopy='document.selection.empty()' onbeforecopy='return false'>
+{$code}
+</body>
+</html>

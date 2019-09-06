@@ -1,0 +1,11 @@
+<!--{loop $members $i $member}-->
+<div class="web_2"><ul>
+<li class="c_1">·<a href="{$MOD[linkurl]}web.php?username={$member[username]}" title="{$member[my_house_corpname]}"  {$target} class="tag_title_link">{$member[my_house_corpname]}</a></li>
+<li class="c_2 center">{$member[truename]}</li>
+<li class="c_2">{$member[telephone]}</li>
+<li class="c_4">{$member[address]}</li>
+<li class="c_5 center">{$member[lastlogintime]}</li>
+<li class="c_5 center">{$member[regdate]}</li>
+   </ul></div><!--{/loop}-->
+   <br style="clear:both">
+{if $pages}<div class="pages_1">{$pages}</div>{/if}

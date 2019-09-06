@@ -4,12 +4,19 @@ include admintpl('header');
 ?>
 <script type="text/javascript" src="<?=PHPCMS_PATH?>include/js/MyCalendar.js"></script> 
 <script language="javascript">
-     var i=1;
+<!--
      function AddItem()
-     { 
-        i++;
-		if(i>50)
-		{
+	{
+		if(!$F('hitem')){
+			var i=1;
+		 }
+		 else{
+			var hitem = $F('hitem');
+			hitem++
+			$('hitem').value=hitem;
+			var i = $F('hitem');
+		 }
+		if(i>50) {
 			alert("!maxoptions!");
 			return;
 		}
@@ -19,7 +26,9 @@ include admintpl('header');
     { 
         i = 1;
 		$('voteitem').innerHTML="<table cellpadding='0' cellspacing='0' border='0' width='100%'><tr><td class='tablerow' align='left' width='20%'>选项"+i+"</td><td class='tablerow' width='80%'><input name='voteoption[]' type='text' size='50' maxlength='100'></td></tr></table>";
+		$('hitem').value=1;
     }
+	//-->
 </script>
 <?=$menu?>
 <table cellpadding="2" cellspacing="1" class="tableborder">
@@ -35,12 +44,12 @@ include admintpl('header');
 		  <tr>
             <td class="tablerow" align="left">起始日期</td>
             <td class="tablerow"><?=date_select('fromdate', $fromdate)?>
-                <font color="#FF0000">*</font> 格式：yyyy-mm-dd</td>
+                <font color="#FF0000">*</font></td>
           </tr>
           <tr>
             <td class="tablerow" align="left">截止日期</td>
             <td class="tablerow"><?=date_select('todate', $todate)?>
-                <font color="#FF0000">*</font> 留空为不限制, 格式：yyyy-mm-dd</td>
+                <font color="#FF0000">*</font></td>
           </tr>
           <tr >
             <td class="tablerow" align="left">类型</td>
@@ -55,6 +64,7 @@ include admintpl('header');
             <td class="tablerow">
               <input type="button" value="添加选项" name="addoption" onClick="AddItem();">
               <input type="button" value="清除选项" name="resetoption" onClick="ResetItem();">
+			  <input type="hidden" value="1" id="hitem" name="hitem">
             </td>
           </tr>
   <tr>

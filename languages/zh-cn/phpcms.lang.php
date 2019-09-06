@@ -113,4 +113,6 @@ $LANG['is_date'] = '必须是合法日期格式：yyyy-mm-dd';
 $LANG['is_unique'] = '不能重复';
 $LANG['color'] = '颜色';
 $LANG['bold'] = '加粗';
+$LANG['re_select'] = '重选';
+$LANG['out_of_services_period'] = '服务期已过，请续费！';
 ?>

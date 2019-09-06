@@ -1,0 +1,48 @@
+<table width="100%" border="0" align="center" cellpadding="1" cellspacing="1">
+<!--{loop $products $k $product}-->
+<!--{if $k%$cols==0}--><tr><!--{/if}-->
+<td height="20" width="{$width}">
+		<table width="100%" border="0" align="center" cellpadding="1" cellspacing="1">
+		<tr>
+			<td width="{$imgwidth}"><a href="{$product[linkurl]}" title="{$product[pdt_name]}" {$target}><img src="{$product[pdt_thumb]}" width="{$imgwidth}" height="{$imgheight}" border="1" {if $showalt} alt="{$product[alt]}" {/if} hspace="10" /></a></td>
+		</tr>
+		<tr>
+		  <td height="16"><!--{if $showcatname}-->
+		  [<a href="{$product[catlinkurl]}" {$target} >{$product[catname]}</a>]
+		    <!--{/if}-->
+            <!--{if $showtitle}-->
+          <a href="{$product[linkurl]}" title="{$product[pdt_name]}" {$target}><h1>{$product[cut_pdt_name]}</h1></a>
+		  <!--{/if}-->
+		  
+		  		  <!--{if $showmarketprice}-->
+		  <span class="product_2">市场价格:<s>{$product[marketprice]}</s></span><br />		 
+		  <!--{/if}-->
+		  <!--{if $showprice}-->
+		  <span class="product_2">会员价格:{$product[price]}</span><br />
+		  <!--{/if}-->
+		  <!--{if $showcartlink|| $showviewlink}-->
+		  <span class="product_2"><!--{if $showcartlink}-->
+		    <a href="{$MODULE[product][linkurl]}cart.php?productid={$v[productid]}&action=add"><img src="{$skindir}/images/buy.gif" alt="购买商品" width="63" height="18" border="0" /></a>
+		        <!--{/if}-->
+		      &nbsp;
+                <!--{if $showviewlink}-->
+                <a href="{$product[linkurl]}" {$target}><img src="{$skindir}/images/fav.gif" alt="查看商品" width="63" height="18" border="0" /></a>
+                <!--{/if}--></span><br />
+		  <!--{/if}-->
+		  <!--{if $MOD['showcompare']}-->
+<span class="product_2">		  
+		      <input name="button" type="button" class="btncompare" onClick="addtocompare({$product[productid]},'{$product[pdt_name]}',true,{$product[pro_id]});" value="添加到对比栏">		    
+          </span><br />
+		  <!--{/if}-->
+		  </td>
+		  </tr>	
+	</table>
+</td>
+<!--{if $k%$cols==($cols-1)}--></tr><!--{/if}-->
+<!--{/loop}-->
+<!--{if $pages}-->
+<tr>
+<td class="pages" colspan="10">{$pages}</td>
+</tr>
+<!--{/if}-->
+</table>

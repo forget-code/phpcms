@@ -1,0 +1,71 @@
+{template 'phpcms','header'}
+<link href="{$skindir}/movie.css" rel="stylesheet" type="text/css">
+<div id="censent">
+<div id="movecenl">
+  <div class="movebtleft">
+    <div><span><a href="{$cat_url}">更多</a></span>最新影视</div>
+  </div>
+  <div class="movenr" >
+    <ul>
+      {tag_侧栏最新影视}
+    </ul>
+    <div id="clear"></div>
+  </div>
+  <div class="mvoecbot boxmargin "></div>
+  <div class="movebtleft">
+    <div><span><a href="{$cat_url}">&nbsp;</a></span>影视排行</div>
+  </div>
+  <div class="movenr">
+    <ul>
+      {tag_侧栏最新影视}
+    </ul>
+    <div style="clear:both"></div>
+  </div>
+  <div class="mvoecbot boxmargin "></div>
+</div>
+<div id="movecenr">
+  <div class="boxmargin" id="bt11"><a href="{$channelurl}">{$channelname}首页</a> >>&nbsp;{$position}&nbsp;{$title}</div>
+  <div class="layout search boxmargin boxl">
+    <script language="JavaScript" src="{PHPCMS_PATH}data/js/search.js"></script>
+  </div>
+  <div class="mxiannr boxmargin"><img src="{$thumb}" border="0" width="204" height="230" />
+    <h3>{$title}</h3>
+    </a>
+    <ul>
+      <li>主&nbsp;&nbsp;&nbsp;&nbsp;演：{$my_actor} </li>
+      <li>国家/地区：{$areaType}</li>
+      <li>发布时间：{$adddate}</li>
+      <li>点播次数：<span id="totalview">0</span>（今日：<span id="todayview">0</span>，本周：<span id="weekview">0</span>，本月：<span id="monthview">0</span>）</li>
+      <li>评分等级：{$stars}</li>
+      <li>发布人：<a href="{$MODULE[member][linkurl]}member.php?username={$username}" class="member_url">{$username}</a> </li>
+    </ul>
+    <div style="clear:both"></div>
+  </div>
+  <div class="zxgk">
+    <ul><span>在线观看</span>
+      {loop $movieUrls $movieUrl}
+      <li><a href="javascript:openwinx('{$channelurl}play.php?itemid={$movieid}&id={$movieUrl['id']}','play','620','400')">{$movieUrl['txt']}</a></li>
+      {/loop}
+      <div style="clear:both;"></div>
+    </ul>
+  </div>
+  {if $allowdown}
+  <div class="xzdy">{loop $movieUrls $movieUrl}
+    <div><a href="javascript:openwinx('{$channelurl}down.php?itemid={$movieid}&id={$movieUrl['id']}','down','620','400')">{$movieUrl['txt']}</a>{/loop} </div>
+  </div>
+  {/if}
+  <div class="introduce">
+    <h2>详细介绍:</h2>
+	<p>{$introduce}</p></div>
+  <div id="bt11">相关影视</div>
+  <ul class="linkmv">
+  {tag_相关影视}
+  </ul>
+  <div class="boxmargin" id="bt11">本文引用地址:&nbsp;<a href="{$itemurl}">{$itemurl}</a></div>
+  <div id="down-jies" style ="margin-top:15px">
+    <script type="text/javascript" src="{$MODULE['comment']['linkurl']}list_js.php?keyid={$channelid}&itemid={$movieid}&commentnum=10&ordertype=1&title={$urlencode($title)}"></script>
+  </div>
+</div>
+<script type="text/javascript" src="{$channelurl}show_js.php?itemid={$itemid}"></script>
+<br />
+{template 'phpcms','footer'}

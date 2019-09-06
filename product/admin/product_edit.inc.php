@@ -77,7 +77,10 @@ if(isset($submit))
 	}
 	
 	$pdt['linkurl'] = item_url('url', $pdt['catid'], $pdt['ishtml'], $pdt['urlruleid'], $pdt['htmldir'], $pdt['prefix'], $productid, $pdt['addtime']);
-
+	if(strpos($pdt['pdt_img'],'http')===false)
+	{
+		$pdt['pdt_thumb'] = str_replace(basename($pdt['pdt_img']),'thumb_'.basename($pdt['pdt_img']),$pdt['pdt_img']);
+	}
 	//更新SQL
 	$sql = $s = "";
 	foreach($pdt as $key=>$value)
@@ -91,6 +94,9 @@ if(isset($submit))
 	//生成html
 	if($pdt['ishtml'])
 	{
+		$catid = $pdt['catid'];
+		createhtml('index');
+		createhtml('list');
 		createhtml('show');
 	}
 	

@@ -1,0 +1,346 @@
+{template 'yp','header'}
+
+<table width="920" height="48" border="0" align="center" cellpadding="0" cellspacing="0" style="border-collapse: collapse;margin-bottom: 6px;font-size:12px;" >
+<tr>
+	<td background="{$skindir}/yp/top.ht2.gif">
+	<form name="myform" action="{$MOD[linkurl]}search.php" method="get">
+	<input type="radio" class="radio" name="searchtype" value="article" checked>
+		企业新闻
+		<input type="radio" class="radio" name="searchtype" value="product" >		
+		 产品库
+		 <input type="radio" class="radio" name="searchtype" value="company" > 
+		 企业库
+		 <input type="radio" class="radio" name="searchtype" value="buy" > 
+		 找买家
+		 <input type="radio" class="radio" name="searchtype" value="sales" > 
+		 找促销
+<input name="keyword" id="keyword" type="text" size="30" value="{$keyword}">&nbsp;&nbsp;&nbsp;&nbsp;
+<input type="hidden" name="search" value="1">
+<input type="submit" value="立即搜索" class="btn" />
+	
+	</td>
+</tr>
+</table>
+<table width="920" height="350" border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+  <tr>
+    <td align="left" valign="top"><table width="241" height="506" border="0" cellpadding="0" cellspacing="0" style="margin-right: 6px;float: left;">
+      <tr>
+        <td align="left" valign="top"><table width="89" height="69" border="0" cellpadding="0" cellspacing="0" class="ta2_1">
+          <tr>
+            <td align="left" valign="top"><table width="271" height="207" border="0" align="center" cellpadding="0" cellspacing="0">
+              <tr>
+                <td height="207" align="center">{tag_黄页频道首页幻灯片}</td>
+              </tr>
+              
+            </table></td>
+          </tr>
+        </table>
+          <table border="0" style="padding-bottom: 8px;" cellpadding="0" cellspacing="0" bgcolor="#F27000" class="ta2">
+            <tr>
+              <td width="270" align="left" valign="top" bgcolor="#FFFFFF"><table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td height="24" align="left" valign="top"><table width="271" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="227" height="24" background="{$skindir}/yp/index_45.jpg"><table width="84" border="0" cellpadding="0" cellspacing="0" class="ta3">
+                          <tr>
+                            <td width="5"><img src="{$skindir}/yp/index_40.jpg" width="5" height="24" /></td>
+                            <td width="76" background="{$skindir}/yp/index_41.jpg">推荐企业</td>
+                            <td width="4" align="right"><img src="{$skindir}/yp/index_43.jpg" width="4" height="24" /></td>
+                          </tr>
+                      </table></td>
+                      <td width="44" align="center" valign="middle" background="{$skindir}/yp/index_45.jpg"><a href="job.php"><img src="{$skindir}/yp/index_48.jpg" width="36" height="11" border="0" /></a></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"></td>
+                    </tr>
+                  </table></td>
+                </tr>
+                <tr>
+                  <td valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse">
+					<tr>
+						<td width="32" class="yp-sztr"></td>
+						<td width="239" valign="top">{tag_黄页首页推荐企业}</td>
+					</tr>
+					</table>
+					</td>
+                </tr>
+              </table></td>
+            </tr>
+          </table>
+<!-- 开始 -->
+<table height="224" border="0" cellpadding="0" cellspacing="0" bgcolor="#F27000" class="ta2">
+            <tr>
+              <td width="270" height="192" align="left" valign="top" bgcolor="#FFFFFF"><table width="50" height="221" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td height="24" align="left" valign="top"><table width="271" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="227" height="24" background="{$skindir}/yp/index_45.jpg"><table width="84" border="0" cellpadding="0" cellspacing="0" class="ta3">
+                          <tr>
+                            <td width="5"><img src="{$skindir}/yp/index_40.jpg" width="5" height="24" /></td>
+                            <td width="76" background="{$skindir}/yp/index_41.jpg">
+							产品分类</td>
+                            <td width="4" align="right"><img src="{$skindir}/yp/index_43.jpg" width="4" height="24" /></td>
+                          </tr>
+                      </table></td>
+                      <td width="44" align="center" valign="middle" background="{$skindir}/yp/index_45.jpg"><a href="job.php"><img src="{$skindir}/yp/index_48.jpg" width="36" height="11" border="0" /></a></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"></td>
+                    </tr>
+                  </table></td>
+                </tr>
+                <tr>
+                  <td height="197" valign="top"><table border="0" width="100%" cellpadding="3" cellspacing="1" style="border-collapse: collapse" id="table51">
+					{loop $CATEGORY $cats}
+					<tr>
+						<td valign="top" >
+							{if !$cats[parentid]}<a href="{$cats[linkurl]}"><font color="#CC0000">{$cats[catname]}</font></a><BR>
+							{/if}
+							{loop $CATEGORY $childcats}
+								{if $childcats[parentid]==$cats[catid]} <a href="{$childcats[linkurl]}">{$childcats[catname]}</a> {/if}
+							{/loop}						</td>
+					</tr>
+					{/loop}
+				  </table></td>
+                </tr>
+              </table></td>
+            </tr>
+          </table>
+<!-- 结束 -->        
+          <table border="0" cellpadding="0" cellspacing="0" bgcolor="#F27000" class="ta2">
+            <tr>
+              <td width="270" align="left" valign="top" bgcolor="#FFFFFF"><table width="50" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td align="left" valign="top"><table width="271" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="227" height="24" background="{$skindir}/yp/index_45.jpg"><table width="84" border="0" cellpadding="0" cellspacing="0" class="ta3">
+                          <tr>
+                            <td width="5"><img src="{$skindir}/yp/index_40.jpg" width="5" height="24" /></td>
+                            <td width="76" background="{$skindir}/yp/index_41.jpg">友情链接</td>
+                            <td width="4" align="right"><img src="{$skindir}/yp/index_43.jpg" width="4" height="24" /></td>
+                          </tr>
+                      </table></td>
+                      <td width="44" align="center" valign="middle" background="{$skindir}/yp/index_45.jpg"><img src="{$skindir}/yp/index_48.jpg" width="36" height="11" /></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"></td>
+                    </tr>
+                  </table></td>
+                </tr>
+                <tr>
+                  <td valign="top">{tag_网站首页图片链接}</td>
+                </tr>
+              </table></td>
+            </tr>
+          </table></td>
+      </tr>
+    </table><table height="552" border="0" cellpadding="0" cellspacing="0">
+        <tr valign="top">
+          <td style="margin-bottom: 6px;"> <table width="322" height="381" border="0" cellpadding="0" cellspacing="0" class="ta2_11">
+        <tr>
+          <td width="320" height="23" align="left" valign="top" background="{$skindir}/yp/index_23.jpg" bgcolor="#FFFFFF" class="ta2_13"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td width="224" height="24"><table width="112" border="0" cellpadding="0" cellspacing="0" class="ta4">
+                    <tr>
+                      <td width="5"><img src="{$skindir}/yp/index_40.jpg" width="5" height="24" /></td>
+                      <td width="103" background="{$skindir}/yp/index_41.jpg">
+						企业最新新闻</td>
+                      <td width="4" align="right"><img src="{$skindir}/yp/index_43.jpg" width="4" height="24" /></td>
+                    </tr>
+                </table></td>
+                <td width="76" align="center" valign="middle"><span class="STYLE1 STYLE8"><a href="{$PHPCMS[siteurl]}yp/admin.php">
+				我要发布</a></span></td>
+              </tr>
+              <tr>
+                <td colspan="2"></td>
+              </tr>
+          </table></td>
+        </tr>
+        <tr>
+          <td height="354" align="left" valign="top" bgcolor="#FFFFFF">
+			<table width="100%" height="354" border="0" cellpadding="0" cellspacing="0" bgcolor="#F5F5F5">
+            <tr>
+              <td height="244" align="left" valign="top" bgcolor="fafafa">
+				<table width="99%" border="0" cellspacing="0" cellpadding="0" height="74">
+                <tr>
+                  <td width="96" height="74" align="center">
+					{tag_黄页图片新闻}
+					</td>
+                  <td bgcolor="fafafa" align="center">
+					<table width="216" height="74" border="0" cellpadding="0" cellspacing="1" bgcolor="#E3E3E3" class="tt44">
+                    <tr>
+                      <td width="210" height="70" align="center" valign="middle" bgcolor="#F5F5F5">{tag_企业推荐新闻}</td>
+                    </tr>
+                  </table></td>
+                </tr>
+              </table>{tag_企业新闻首页列表}</td>
+            </tr>
+            <tr>
+              <td height="88" align="left" valign="top" bgcolor="fafafa"  style="padding-left: 8px;">
+				{tag_新闻图片列表}</td>
+            </tr>
+          </table></td>
+        </tr>
+      </table>
+      <table height="177" border="0" cellpadding="0" cellspacing="0" class="tt22">
+        <tr>
+          <td width="329" height="23" align="left" valign="top" bgcolor="#FFFFFF"><table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="c95d00" class="tat">
+            <tr>
+              <td height="23" background="{$skindir}/yp/index_26.jpg"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td width="84%" height="23">&nbsp;<font color="#FFFFFF" style="font-size: 14px"><b>网站公告</b></font></td>
+                  <td width="16%" align="center" valign="middle"><a href="{$MODULE[announce][linkurl]}index.php?keyid=yp"><img src="{$skindir}/yp/index_29.jpg" width="38" height="13" border="0" /></a></td>
+                </tr>
+              </table></td>
+            </tr>
+          </table></td>
+        </tr>
+        <tr>
+          <td height="141" valign="top" bgcolor="#FFFFFF">{tag_网站首页最新公告}</td>
+        </tr>
+      </table>
+      <table height="204" border="0" cellpadding="0" cellspacing="0" class="tt22">
+        <tr>
+          <td width="329" height="23" align="left" valign="top" bgcolor="#FFFFFF"><table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="c95d00" class="tat">
+              <tr>
+                <td height="23" background="{$skindir}/yp/index_26.jpg"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="84%" height="23">&nbsp;<font color="#FFFFFF" style="font-size: 14px"><b>最新加盟</b></font></td>
+                      <td width="16%" align="center" valign="middle"><a href="{$MOD[linkurl]}company.php"><img src="{$skindir}/yp/index_29.jpg" width="38" height="13" border="0" /></a></td>
+                    </tr>
+                </table></td>
+              </tr>
+          </table></td>
+        </tr>
+        <tr>
+          <td height="178" valign="top" bgcolor="#FFFFFF">{tag_最新企业}</td>
+        </tr>
+      </table></td>
+        </tr>
+        <tr valign="top">
+          <td height="165"><table width="100%"  style="margin-bottom: 6px;margin-top: 6px;" height="178" border="0" cellpadding="0" cellspacing="1" bgcolor="#E1E1E1">
+            <tr>
+              <td height="23" align="left" valign="top" background="{$skindir}/yp/index_23.jpg" bgcolor="#FFFFFF"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td height="23"><table width="100%" border="0" cellpadding="0" cellspacing="0" class="ta22">
+                    <tr>
+                      <td width="276" height="24"><table width="112" border="0" cellpadding="0" cellspacing="0" class="ta4">
+                          <tr>
+                            <td width="5"><img src="{$skindir}/yp/index_40.jpg" width="5" height="24" /></td>
+                            <td width="103" background="{$skindir}/yp/index_41.jpg">名品展示</td>
+                            <td width="4" align="right"><img src="{$skindir}/yp/index_43.jpg" width="4" height="24" /></td>
+                          </tr>
+                      </table></td>
+                      <td width="42" align="center" valign="middle"><a href="product.php"><img src="{$skindir}/yp/index_48.jpg" width="36" height="11" border="0" /></a></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"></td>
+                    </tr>
+                  </table></td>
+                  <td><table width="100%" border="0" cellpadding="0" cellspacing="0" class="ta22">
+                    <tr>
+                      <td width="263" height="24"><table width="112" border="0" cellpadding="0" cellspacing="0" class="ta4">
+                          <tr>
+                            <td width="5"><img src="{$skindir}/yp/index_40.jpg" width="5" height="24" /></td>
+                            <td width="103" background="{$skindir}/yp/index_41.jpg">最新产品</td>
+                            <td width="4" align="right"><img src="{$skindir}/yp/index_43.jpg" width="4" height="24" /></td>
+                          </tr>
+                      </table></td>
+                      <td width="47" align="center" valign="middle"><a href="{$MOD[linkurl]}product.php"><img src="{$skindir}/yp/index_48.jpg" width="36" height="11" border="0" /></a></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"></td>
+                    </tr>
+                  </table></td>
+                </tr>
+              </table></td>
+            </tr>
+            <tr>
+              <td height="151" align="left" valign="top" bgcolor="#FFFFFF"><table width="100%" border="0" cellpadding="0" cellspacing="0" class="tt33">
+                <tr>
+                  <td width="50%" valign="top" class="tt33">{tag_黄页首页名品展示}</td>
+                  <td width="50%" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td>{tag_黄页首页产品列表}</td>
+    <td>{tag_黄页首页产品图片}</td>
+  </tr>
+</table>
+</td>
+                </tr>
+              </table></td>
+            </tr>
+          </table>
+<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;margin-bottom: 6px;">
+                <tr>
+                  <td width="118"><script>
+	function showContent(id)
+	{
+		for (var i = 0;i < 2;i++)
+		{
+			var nav = document.getElementById("nav" + i);
+			var articlecontent = document.getElementById("articlecontent" + i);
+			if (i == id)
+			{
+				nav.className = 'bg_nav';
+				articlecontent.style.display = "";
+			}
+			else
+			{
+				nav.className = 'bg_nav_current';
+				articlecontent.style.display = "none";
+			}
+		}
+	}
+  </script>
+                      <div class="nav_1">
+                        <li style="CURSOR: pointer;" onmouseover="showContent('0')" id="nav0" class="bg_nav">促&nbsp;&nbsp;&nbsp;销</li>
+                        <li style="CURSOR: pointer;" onmouseover="showContent('1')" id="nav1" class="bg_nav_current">求&nbsp;&nbsp;购</li>
+                      </div></td>
+                </tr>
+                <tr>
+                  <td colspan="2" valign="top" class="hy-3"><div class="showbox">
+                      <div id="articlecontent0">{tag_黄页首页促销图片列表}</div>
+                    <div id="articlecontent1" style="display:none;">{tag_黄页首页求购}</div>
+                  </div></td>
+                </tr>
+            </table>
+		  <!--招聘-->
+<table width="100%" border="0" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                <tr>
+                  <td width="118"><script>
+	function showContente(id)
+	{
+		for (var i = 0;i < 2;i++)
+		{
+			var nave = document.getElementById("nave" + i);
+			var articlecontente = document.getElementById("articlecontente" + i);
+			if (i == id)
+			{
+				nave.className = 'bg_nav';
+				articlecontente.style.display = "";
+			}
+			else
+			{
+				nave.className = 'bg_nav_current';
+				articlecontente.style.display = "none";
+			}
+		}
+	}
+  </script>
+                      <div class="nav_1">
+                        <li style="CURSOR: pointer;" onmouseover="showContente('0')" id="nave0" class="bg_nav">企业招聘</li>
+                        <li style="CURSOR: pointer;" onmouseover="showContente('1')" id="nave1" class="bg_nav_current">个人求职</li>
+                      </div></td>
+                </tr>
+                <tr>
+                  <td colspan="2" valign="top" class="hy-3"><div class="showbox">
+                      <div id="articlecontente0">{tag_黄页首页最新招聘列表}</div>
+                    <div id="articlecontente1" style="display:none;">{tag_黄页频道首页求职}</div>
+                  </div></td>
+                </tr>
+            </table><!--结束--></td>
+        </tr>
+      </table></td>
+  </tr>
+</table>
+{template 'yp','footer'}

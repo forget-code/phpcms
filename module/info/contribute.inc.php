@@ -56,6 +56,7 @@ else
 	   header('Location:'.$PHPCMS['siteurl'].$CHA['channeldir'].'/contribute.php?'.$PHP_QUERYSTRING);
 	   exit;
 	}
+	$CHA['enablecontribute'] or showmessage($LANG['current_channel_not_allow_submit_info'], 'goback');
 	require_once PHPCMS_ROOT."/include/formselect.func.php";
 	require PHPCMS_ROOT."/include/tree.class.php";
 	$tree = new tree();

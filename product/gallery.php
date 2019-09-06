@@ -1,11 +1,10 @@
 <?php 
-
 include_once './include/common.inc.php';
 
 if(!$productid) showmessage($LANG['illegal_id']);
 $productid = intval($productid);
 
-$pdt = $db->get_one("SELECT pdt_name,pdt_img FROM ".TABLE_PRODUCT." WHERE productid=".$productid);
+$pdt = $db->get_one("SELECT pdt_name,pdt_img,pdt_bigimg FROM ".TABLE_PRODUCT." WHERE productid=".$productid);
 if(!$pdt) showmessage($LANG['product_not_exist']);
 if(!$pdt['pdt_img']) $pdt['pdt_img'] = "images/nopic.gif";
 

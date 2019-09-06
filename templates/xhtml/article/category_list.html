@@ -1,0 +1,57 @@
+{template 'phpcms','header'}
+<!--主体标签-->
+<div id="censent"><!--content-->
+  <div id="left">
+    <div id="bt11">&nbsp;当前位置：<a href="{$channelurl}">{$channelname}首页</a> >> {$position}</div>
+    <div></div>
+<div id="tpxwlb-1" class="bgcss">
+        {tag_栏目列表页图文列表}
+<div style="clear:both"></div>
+</div>
+<!--jieshu-->
+{tag_终极栏目页文章列表}
+  </div>
+    <div id="right">
+        <div   class="boxmargin"><script language="javascript" src="{PHPCMS_PATH}data/js/6.js"></script></div>
+        <div  class="layout">
+            <ul class="xw-1">
+                <li class="xw-left">
+                    <div class="xw-onn"id="bgnew"><span>推荐文章</span></div>
+                </li>
+            	<li class="xw-right"><a href="{$CHA[linkurl]}search.php?catid={$catid}&elite=1&search=1" class="more">更多</a></li>
+            </ul>
+            <div class="xian boxmargin">
+                <ul class="List-1">
+                    {tag_推荐文章列表}
+                </ul>
+        	</div>
+        </div>
+        <div class="layout">
+            <ul class="xw-1">
+                <li class="xw-left">
+                    <div class="xw-onn"id="bgnew"><span>热点文章</span></div>
+                </li>
+                <li class="xw-right"><a href="{$CHA[linkurl]}search.php?catid={$catid}&ordertype=3&search=1" class="more">更多</a></li></ul>
+                <div class="xian boxmargin">
+                    <ul class="List-1">
+                        {tag_热点文章列表}
+                    </ul>
+                </div>
+     		</div>
+
+         <div  class="layout">
+            <ul class="xw-1">
+            <li class="xw-left">
+            <div class="xw-onn" id="bgnew"><span>今日DIGG排行</span></div>
+            </li>
+            <li class="xw-right"><a href="<?=PHPCMS_PATH?>digg/list.php?digg_mod=<?=$mod?>&digg_catid=<?=$catid?>">更多</a></li></ul>
+            <div class="xian boxmargin">
+            <ul class="digg_listt">
+               {tag_今日文章DIGG列表}
+			</ul>
+            </div>
+            </div>
+
+    </div>
+</div>
+{template 'phpcms','footer'}

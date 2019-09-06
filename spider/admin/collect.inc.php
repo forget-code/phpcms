@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 defined('IN_PHPCMS') or exit('Access Denied');
 
 require PHPCMS_ROOT.'/include/tree.class.php';
@@ -116,28 +116,29 @@ switch($action)
 		 		$selectvalue.= "document.getElementById('textUin".$r['Field']."').value='".str_replace("[".$LANG['current_time']."]",date("Y-m-d H:i:s",time()),$itemvalue)."';\r\n";
 			}
 			//载入自定义字段 从文件中
-			$Labeltpl="<input style=\"width:220px;height:20px;\"  onkeydown=\"if(event.keyCode==13)saveUinList(value)\" id=\"textUinlabelname\" name=\"art[userfieldlabelname]\" >".
+			$Labeltpl="<input style=\"width:220px;height:20px;\" id=\"textUinlabelname\" name=\"art[userfieldlabelname]\" >".
 					"<span style=\"position:absolute;margin:1px 1px 1px -6px\">".
-					"<select style=\"margin-left:-202px;width:220px;\" id=\"uinSelectorlabelname\" onchange=\"document.getElementById('textUinlabelname').value=value;saveUinList(value)\">".
+					"<select style=\"margin-left:-202px;width:220px;\" id=\"uinSelectorlabelname\" onchange=\"document.getElementById('textUinlabelname').value=value;\">".
 					"<option selected>---".$LANG['input_or_select_droplist']."---</option>".
 					"[".$LANG['auto_generate_label']."]</select></span>";
 					
 			//载入自定义字段
 			$fieldManual = array();
 			$fieldnames = '';
-			$_FIELDS = cache_read("field_".$channelid.".php");	
+			$_FIELDS = cache_read($CONFIG['tablepre']."article_".$channelid."_fields.php");
 			if($_FIELDS)
 			{			
 				foreach($_FIELDS as $value)
 				{
-					$label = str_replace("labelname",$value['fieldname'],$Labeltpl);
+					$label = str_replace("labelname",$value['name'],$Labeltpl);
 					$label = str_replace("[".$LANG['auto_generate_label']."]",$option,$label);
-					$fieldManual[] = array('fieldname'=>$value['fieldname'],'title'=>$value['title'],'label'=>$label);
-					$fieldnames.= $value['fieldname'].",";
+
+					$fieldManual[] = array('fieldname'=>$value['name'],'title'=>$value['title'],'label'=>$label);
+					$fieldnames.= $value['name'].",";
+					//$itemvalue.=$r['UserValue'];
+		 			$selectvalue.="document.getElementById('textUin".$value['name']."').value='".$value['defaultvalue']."';\r\n";
 				}
-			}
-			
-	
+			}	
 			//下面载入三项设置 发布时保存当前配置，倒序发布，发布成功后删除原采集内容
 			$result=$db->query("Select * FROM ".TABLE_SPIDER_OUT." Where CMS='set'");
 			while($r=$db->fetch_array($result))
@@ -146,14 +147,6 @@ switch($action)
 		 		$tu = ($itemvalue==1) ? "true" : "false";
 		 		$selectvalue.="document.getElementById('".$r['Field']."').value='$itemvalue';\r\n";
 		 		$selectvalue.="document.getElementById('".$r['Field']."').checked=".$tu.";\r\n";
-			}
-			
-			//从数据库中得到自定义字段用户标签信息
-			$result=$db->query("Select * FROM ".TABLE_SPIDER_OUT." Where CMS='FieldManual'");
-			while($r = $db->fetch_array($result))
-			{
-		 		$itemvalue=$r['UserValue'];
-		 		$selectvalue.="document.getElementById('textUin".$r['Field']."').value='".$itemvalue."';\r\n";
 			}
 			$selectvalue.="</script>\r\n";		
 		
@@ -314,7 +307,7 @@ switch($action)
 						 $db->query("UPDATE ".TABLE_SPIDER_URLS." Set IsOut=1 WHERE Id=".$contentid);	
 					}	
 				}	
-			}	
+			}
 			if($ckset['ckdeletepre']==1) //删除原来数据
 			{
 				$query = "Delete From ".TABLE_SPIDER_URLS." Where Spidered=1 and JobId=".$jobid;

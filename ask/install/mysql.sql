@@ -1,4 +1,4 @@
-INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`,`publishdate`, `installdate`, `updatedate`) VALUES ('咨询', 'ask', 'ask', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn', 'phpcms@163.com', '咨询', '咨询', '咨询', 'a:2:{s:14:"enablegroupids";a:2:{i:0;s:1:"7";i:1;s:1:"8";}s:15:"enablecheckcode";s:1:"1";}', 0, '0000-00-00', '0000-00-00', '0000-00-00');
+INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`,`publishdate`, `installdate`, `updatedate`) VALUES ('咨询', 'ask', 'ask', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn', 'phpcms@163.com', '咨询', '咨询', '咨询', '', 0, '0000-00-00', '0000-00-00', '0000-00-00');
 
 DROP TABLE IF EXISTS `phpcms_ask`;
 CREATE TABLE `phpcms_ask` (

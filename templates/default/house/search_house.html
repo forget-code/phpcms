@@ -1,0 +1,227 @@
+{template 'house','header'}
+<body>
+<script language="javascript">
+function CheckForm(){
+	if($F('fromprice')!='' && !Common.isnumber($F('fromprice')))
+	{
+		alert('价格必须为整/小数');
+		$('fromprice').focus();
+		return FALSE;
+	}
+	if($F('toprice')!='' && !Common.isnumber($F('toprice')))
+	{
+		alert('价格必须为整/小数');
+		$('toprice').focus();
+		return FALSE;
+	}
+}
+</script>
+<div class="search">
+<div class="position">
+	    <span>当前位置：<a href="{$MOD[linkurl]}">房产首页</a> &gt;&gt; 房产信息搜索</span>
+		<ul>
+		  <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=1">发布出租</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=2">发布求租</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=3">发布合租</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=4">发布出售</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=5">发布求购</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=6">发布置换</a></li>
+		  <li><a href="{$MOD[linkurl]}displaymgr.php?action=add">发布楼盘</a></li>
+		</ul>
+	  </div>
+	    <!--{if $search}-->
+<div style="height:30px;valign:middle"><!--{if $keywords}-->您输入的关键词<strong><font color="red">{$keywords}</font></strong>，<!--{/if}-->共找到<font color="red">{$number}</font>个结果</div>
+ <table width="100%" cellspacing="1" cellpadding="0">
+	<tr>
+	<td>
+	<table width="100%"  cellspacing="1" cellpadding="1" style="border:1px solid #cccccc; display:">
+        <tr style="background:#EEEEEE; ">
+          <td class="search_l" style="text-align:center;">物业名称/地址</td>
+          <td width="8%" class="search_l" style="text-align:center;">区域</td>
+		  <td width="6%" class="search_l" style="text-align:center;">类别</td>
+          <td width="13%" class="search_l" style="text-align:center;">房型</td>
+          <td width="8%" class="search_l" style="text-align:center;">面积</td>
+          <td width="7%" class="search_l" style="text-align:center;">楼层</td>
+          <td width="6%" class="search_l" style="text-align:center;">装修</td>
+          <td width="10%" class="search_l" style="text-align:center;">价格</td>
+          <td width="10%" class="search_l" style="text-align:center;">发布时间</td>
+        </tr>
+		<!---{loop $searchs $house}-->
+        <tr style="background:#F9F9F9;text-align:center;">
+          <td class="search_l" style="text-align:left;"><a href="{$house[linkurl]}" target="_blank">·{$house[name]} {$house[address]}</a></td>
+		  <td class="search_l"><a href="{$change_url('areaid', $house['areaid'], $PHP_URL)}" title="查看{$house[areaname]}的全部房产信息">{$house[areaname]}</a></td>
+		  <td class="search_l"><a href="{$change_url('infocat', $house[infocat], $PHP_URL)}" title="查看全部{$house[infocatname]}信息">{$house[infocatname]}</a></td>
+          <td class="search_l">{$house[housetype]}</td>
+          <td class="search_l">{$house[buildarea]}㎡</td>
+          <td class="search_l">{$house[currentfloor]}/{$house[totalfloor]}</td>
+          <td class="search_l"><a href="{$change_url('decorate', $house[decorate], $PHP_URL)}" title="查看全部的{$house[decoratename]}信息">{$house[decoratename]}</a></td>
+          <td class="search_l">{if $house['price']}{$house[price]}{$PARS[unit][$house[unit]]}{else}面议{/if}</td>
+          <td class="search_l">{$house[addtime]}</td>
+        </tr>
+		<!---{/loop}-->
+        <tr bgcolor="#F1F2F3">
+          <td height="30" colspan="9"  class="pages">{$pages}</td>
+        </tr>
+	  </table>	
+	</td>
+	</tr>
+	<!--{/if}-->
+</table>
+<div style="height:10px"></div>
+ <table width="100%"  cellspacing="2" cellpadding="5" style="border:1px solid #dddddd; display:">
+   <form name="myform" action="{$PHPCMS[siteurl]}{$MOD[moduledir]}/search.php" method="get" onSubmit="return CheckForm();">
+     <tr>
+       <td width="100%" class="search_l" style="text-align:left;"><strong>分类：</strong>
+	   <input name="infocat" type="radio" value="1" {if $infocat==1}checked{/if}>出租&nbsp;
+	   <input name="infocat" type="radio" value="2" {if $infocat==2}checked{/if}>求租&nbsp;
+       <input name="infocat" type="radio" value="4" {if $infocat==4}checked{/if}>出售&nbsp;
+       <input name="infocat" type="radio" value="5" {if $infocat==5}checked{/if}>求购&nbsp;
+       <input name="infocat" type="radio" value="6" {if $infocat==6}checked{/if}>置换
+      </td>
+      </tr>
+     <tr>
+       <td class="search_l"  style="text-align:left;">
+        <strong>区域：</strong>
+	   {if is_numeric($areaid) && $areaid>0}<span onclick="this.style.display='none';$('select_area').style.display='';" style="cursor:pointer;"><?=$AREA[$areaid]['areaname']?> <font color="red">点击重选</font></span><span id="select_area" style="display:none;">{/if}
+       {$ajax_area_select('areaid', $mod, $areaid)}
+	   </td>
+      </tr>
+     <tr>
+       <td class="search_l"  style="text-align:left;">
+       <strong>房型：</strong>
+		<select name="type1p" id="type1p">
+          <option value="0" {if 0===$type1p} selected{/if}>不限</option>
+          <option value="一" {if $type1p==='一'} selected{/if}>一</option>
+          <option value="二" {if '二'===$type1p} selected{/if}>二</option>
+          <option value="三" {if '三'===$type1p} selected{/if}>三</option>
+          <option value="四" {if '四'===$type1p} selected{/if}>四</option>
+          <option value="五" {if '五'===$type1p} selected{/if}>五</option>
+          <option value="六" {if '六'===$type1p} selected{/if}>六</option>
+          <option value="七" {if '七'===$type1p} selected{/if}>七</option>
+          <option value="八" {if '八'===$type1p} selected{/if}>八</option>
+          <option value="九" {if '九'===$type1p} selected{/if}>九</option>
+          <option value="十" {if '十'===$type1p} selected{/if}>十</option>
+        </select>
+室
+<select name="type2p" id="type2p">
+  <option value="0" {if 0===$type2p} selected{/if}>不限</option>
+  <option value="一" {if '一'===$type2p} selected{/if}>一</option>
+  <option value="二" {if '二'===$type2p} selected{/if}>二</option>
+  <option value="三" {if '三'===$type2p} selected{/if}>三</option>
+  <option value="四" {if '四'===$type2p} selected{/if}>四</option>
+  <option value="五" {if '五'===$type2p} selected{/if}>五</option>
+  <option value="六" {if '六'===$type2p} selected{/if}>六</option>
+  <option value="七" {if '七'===$type2p} selected{/if}>七</option>
+  <option value="八" {if '八'===$type2p} selected{/if}>八</option>
+  <option value="九" {if '九'===$type2p} selected{/if}>九</option>
+  <option value="十" {if '十'===$type2p} selected{/if}>十</option>
+</select>
+厅
+<select name="type3p" id="type3p">
+  <option value="0"  {if 0===$type3p} selected{/if}>不限</option>
+  <option value="一" {if '一'===$type3p} selected{/if}>一</option>
+  <option value="二" {if '二'===$type3p} selected{/if}>二</option>
+  <option value="三" {if '三'===$type3p} selected{/if}>三</option>
+  <option value="四" {if '四'===$type3p} selected{/if}>四</option>
+  <option value="五" {if '五'===$type3p} selected{/if}>五</option>
+</select>
+卫
+<select name="type4p">
+  <option value="0"  {if 0===$type4p} selected{/if}>不限</option>
+  <option value="〇" {if '〇'==$type4p} selected{/if}>〇</option>
+  <option value="一" {if '一'==$type4p} selected{/if}>一</option>
+  <option value="二" {if '二'==$type4p} selected{/if}>二</option>
+  <option value="三" {if '三'==$type4p} selected{/if}>三</option>
+  <option value="四" {if '四'==$type4p} selected{/if}>四</option>
+  <option value="五" {if '五'==$type4p} selected{/if}>五</option>
+</select>
+阳台
+	   </td>
+      </tr>
+     <tr>
+       <td class="search_l" style="text-align:left;">
+         <strong>价格：</strong> 
+         <input name="fromprice" type="text" id="fromprice" size="5" value="{$fromprice}">
+         ～
+         <input name="toprice" type="text"  id="toprice" size="5" value="{$toprice}">元/月(元)
+	   </td>
+      </tr>
+     <tr>
+       <td class="search_l"  style="text-align:left;">
+	     <strong>房产类型：</strong>
+         <select name="propertytype" id="propertytype" >
+           <option value="" selected>-- 请选择 --</option>           
+             {loop $PARS['type'] $k $v}             
+             <option value="{$v}" {if $v==$propertytype} selected{/if}>{$k}</option>           
+             {/loop}           
+         </select>
+         &nbsp;&nbsp;&nbsp;&nbsp;
+		 <strong>装潢程度：</strong>
+         <select name="decorate" id="decorate">
+           <option value="" selected>-- 请选择 --</option>
+           {loop $PARS['decorate'] $k $v}  
+           <option value="{$v}"  {if $v==$decorate} selected{/if}>{$k}</option>
+           {/loop}
+         </select>
+         &nbsp;&nbsp;&nbsp;
+		  <strong>房屋朝向：</strong>
+          <select name="towards" id="towards">
+              <option value="" selected>-- 请选择 --</option>   
+             {loop $PARS['towards'] $k $v}             
+             <option value="{$v}" {if $v==$towards} selected{/if}>{$k}</option>   
+             {/loop}         
+          </select>
+        </td>
+     </tr>
+     <tr>
+       <td class="search_l"  style="text-align:left;"><strong>发布时间：</strong>
+	    <input name="publishtime" type="radio" value="0" {if !$publishtime}checked{/if}> 全部 
+        <input name="publishtime" type="radio" value="2" {if $publishtime==2}checked{/if}>近两天
+        <input name="publishtime" type="radio" value="7" {if $publishtime==7}checked{/if}>一星期
+		<input name="publishtime" type="radio" value="10" {if $publishtime==10}checked{/if}>十天
+		<input name="publishtime" type="radio" value="15" {if $publishtime==15}checked{/if}>半月
+		<input name="publishtime" type="radio" value="30" {if $publishtime==30}checked{/if}>一个月
+		<input name="publishtime" type="radio" value="60" {if $publishtime==60}checked{/if}>两个月&nbsp;&nbsp;&nbsp;
+      </td>
+      </tr>
+     <tr>
+       <td class="search_l" style="text-align:left;">
+		<strong>来源：</strong>
+	    <input name="isinter" type="radio" value="0" {if $isinter==0}checked{/if}> 全部 
+        <input name="isinter" type="radio" value="1" {if $isinter==1}checked{/if}> 个人
+        <input name="isinter" type="radio" value="2" {if $isinter==2}checked{/if}> 中介
+	   </td>
+      </tr>
+	  <tr>
+       <td class="search_l" style="text-align:left;"><strong>关键字：</strong>
+	   <input name="keywords" type="text" size="30" value="{$keywords}">
+* 多个关键词之间用空格隔开	   </td>
+      </tr>
+     <tr>
+       <td class="search_l" >
+        <strong>排序方式：</strong>
+           <select name="ordertype">
+             <option value="0" {if $ordertype==0}selected{/if}>房产信息排序</option>
+             <option value="1" {if $ordertype==1}selected{/if}>价格降序</option>
+             <option value="2" {if $ordertype==2}selected{/if}>价格升序</option>
+			 <option value="3" {if $ordertype==3}selected{/if}>面积降序</option>
+             <option value="4" {if $ordertype==4}selected{/if}>面积升序</option>
+             <option value="5" {if $ordertype==5}selected{/if}>发布时间降序</option>
+             <option value="6" {if $ordertype==6}selected{/if}>发布时间升序</option>
+             <option value="7" {if $ordertype==7}selected{/if}>浏览次数降序</option>
+             <option value="8" {if $ordertype==8}selected{/if}>浏览次数升序</option>
+           </select>
+		</td>
+     </tr>
+     <tr>
+       <td class="search_l" style="text-align:left;">
+         <input type="hidden" name="search" value="1">
+	     <input type="hidden" name="action" value="house">
+         <input name="dosubmit" type="submit" class="btn" value="立即搜索" />
+        <input name="button" type="button" class="btn" onClick="window.location='search.php?action=house'" value="重新搜索" /> 
+	   </td>
+      </tr>
+   </form>
+ </table>
+ </div>
+{template 'house','footer'}

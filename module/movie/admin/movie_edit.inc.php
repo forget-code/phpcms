@@ -24,7 +24,7 @@ if($dosubmit)
 	$movie['catid'] = $catid;
 	$movie['editor'] = $movie['checker'] = $_username;
 	$movie['urlruleid'] = $movie['ishtml'] ? $html_urlrule : $php_urlrule;
-	$movie['addtime'] = $movie['edittime'] = $movie['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $movie['addtime']) ? strtotime($movie['addtime'].' '.date('H:i:s',$PHP_TIME)) : $PHP_TIME;
+	$movie['addtime'] = $movie['edittime'] = $movie['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})/', $movie['addtime']) ? strtotime($movie['addtime']) : $PHP_TIME;
 	if(!$movie['onlineview']) $movie['onlineview'] = 0;
 	if(!$movie['allowdown']) $movie['allowdown'] = 0;
 	foreach($url AS $k=>$v)
@@ -86,7 +86,7 @@ else
 {
 	extract(new_htmlspecialchars($d->get_one()));
 	$CAT = cache_read('category_'.$catid.'.php');
-	$addtime = date('Y-m-d',$addtime);
+	$addtime = date('Y-m-d H:i:s',$addtime);
 	$type_select = type_select('movie[typeid]', $LANG['type_select'], $typeid);
 	$style_edit = style_edit("movie[style]", $style);
 	$keywords_select = keywords_select($channelid);

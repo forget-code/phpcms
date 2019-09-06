@@ -26,7 +26,7 @@ if($dosubmit)
 	$movie['catid'] = $catid;
 	$movie['username'] = $movie['editor'] = $movie['checker'] = $_username;
 	$movie['urlruleid'] = $movie['ishtml'] ? $html_urlrule : $php_urlrule;
-	$movie['addtime'] = $movie['edittime'] = $movie['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $movie['addtime']) ? strtotime($movie['addtime'].' '.date('H:i:s',$PHP_TIME)) : $PHP_TIME;
+	$movie['addtime'] = $movie['edittime'] = $movie['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})/', $movie['addtime']) ? strtotime($movie['addtime']) : $PHP_TIME;
 	foreach($url AS $k=>$v)
 	{
 		$movie['movieurls'] .= $txt[$k].'|'.$v."^";
@@ -77,11 +77,11 @@ if($dosubmit)
 }
 else
 {
-	$today = date('Y-m-d',$PHP_TIME);
+	$today = date('Y-m-d H:i:s',$PHP_TIME);
 	$type_select = type_select('movie[typeid]', $LANG['type_select']);
 	$style_edit = style_edit("movie[style]","");
 	$keywords_select = keywords_select($channelid);
-	$category_jump = category_select('catid', $LANG['to_other_category'], 0, "onchange=\"if(this.value!=''){location='?mod=$mod&file=$file&action=add&job=$job&channelid=$channelid&mode=$mode&catid='+this.value;}\"");
+	$this_category = str_replace("<option value='0'></option>",'',category_select('catid','',$catid));
 	$showgroup = showgroup('checkbox','movie[arrgroupidview][]');
 	$showskin = showskin('movie[skinid]');
 	$showtpl = showtpl($mod,'content','movie[templateid]');
@@ -91,23 +91,23 @@ else
 	$position = $pos->checkbox('movie[arrposid][]');
 	
 	$player_select = "<select name='movie[playerid]' id='playerid'><option value='0'>".$LANG['choose_player']."</option>";
-	$result = $db->query("SELECT * FROM ".TABLE_MOVIE_PLAYER." WHERE disabled = 1");
+	$result = $db->query("SELECT SQL_CACHE * FROM ".TABLE_MOVIE_PLAYER." WHERE disabled = 1");
 	while($r=$db->fetch_array($result))
-		{
-			if($MOD['playerid'] == $r['playerid'])	$selected = 'selected';
-			$player_select .= "<option value='".$r['playerid']."' ".$selected.">".$r['subject']."</option>";
-			$selected = '';
-		}
+	{
+		if($MOD['playerid'] == $r['playerid'])	$selected = 'selected';
+		$player_select .= "<option value='".$r['playerid']."' ".$selected.">".$r['subject']."</option>";
+		$selected = '';
+	}
 	$player_select .= "</select>";
 	
 	$server_select = "<select name='movie[serverid]' ><option value='0'>".$LANG['choose_server']."</option>";
-	$result = $db->query("SELECT * FROM ".TABLE_MOVIE_SERVER);
+	$result = $db->query("SELECT SQL_CACHE * FROM ".TABLE_MOVIE_SERVER);
 	while($r=$db->fetch_array($result))
-		{
-			if($MOD['serverid'] == $r['serverid'])	$selected = 'selected';
-			$server_select .= "<option value='".$r['serverid']."' ".$selected.">".$r['servername']."|".$r['onlineurl']."</option>";
-			$selected = '';
-		}
+	{
+		if($MOD['serverid'] == $r['serverid'])	$selected = 'selected';
+		$server_select .= "<option value='".$r['serverid']."' ".$selected.">".$r['servername']."|".$r['onlineurl']."</option>";
+		$selected = '';
+	}
 	$server_select .= "</select>";
 	include admintpl($mod.'_add');
 }

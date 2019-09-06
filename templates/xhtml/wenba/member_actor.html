@@ -1,0 +1,61 @@
+{template 'wenba','header'}
+<table cellspacing="0" cellpadding="0" border="0" class="member">
+<tr>
+<td valign="top" class="left">
+{template "member","left"}</td>
+<td width="10" valign="top">
+</td>
+<td valign="top" class="right">
+<div class="clearboth"></div>
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>欢迎</h1>
+ <table width="98%"  border="0" cellspacing="0" cellpadding="0" class="con pad10L">
+<tr>
+<td height="100%" valign="top">
+   
+<form name="myform" action="?dosubmit=1" method="post" id="myform">
+<table width="90%" border="0" cellpadding="0" cellspacing="0">
+<tr> 
+      <td colspan="2" >每个用户都会有一套属于自己的积分、等级和头衔。您可以通过问答等操作不断增加积分，同时您的等级和头衔也会随积分不断晋升。我们特地为您量身订做了五套角色系列，请您选择一套您最喜欢的角色，从此您的头衔便会按照此角色系列不断晋升，虚拟形象也会发生相应的变化。<br>
+<img src="{$PHPCMS[siteurl]}images/tips.gif" width="16" height="16">请注意，男生和女生的形象不同哦！ 您可以修改个人信息来选择性别。（如果没有选择性别，就默认为男生^^）        </td>
+</tr>
+</table>
+<br>  
+    
+  <table width="90%" height="24" border="0"  cellpadding="0" cellspacing="0">
+	{loop $TYPES $i $type}
+	<tbody style="background-color:#F7F7F7;">
+	<tr valign="middle">
+      <td height="36" colspan="7" class="tx"><input id="actor" type="radio" name="actor" value="{$i}" {if $actortype==$i}checked{/if}> 
+              <label for="magic"><strong>{$type}</strong></label></td>
+      </tr>
+	  {loop $actors[$i] $key $value}
+    {if $key%3==0}<tr>{/if}
+      <td width="35" nowrap>{$value[grade]}</td>
+      <td nowrap>{$value[actor]}</td>
+    {if $key%3==2}</tr>{/if}
+	{/loop}
+	</tbody>
+	{/loop}
+  </table>
+<br><hr size="1" color="#DBDBDB" width="95%" align="center">
+<br>
+<table width="30%" border="0" align="center" cellpadding="0" cellspacing="0">
+  <tr>
+    <td colspan="2">
+<input type="submit"  value="提　交"  class="bnsrh"></td>
+  </tr>
+</table>
+<br>
+</form>
+
+  </td>
+</tr>
+</table>
+</div></div>
+</td>
+</tr>
+ </tbody>
+</table>
+{template 'phpcms','footer'}

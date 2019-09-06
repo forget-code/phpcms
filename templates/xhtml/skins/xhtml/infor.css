@@ -1,0 +1,101 @@
+.flashinfor {float:right;}
+#infor_top {
+width:416px;
+line-height: 18px;
+padding: 0;
+list-style-type:none;
+border: 1px solid #C8DEEA;
+background-color: #F8FCFE;
+}
+.area_dh {
+	border: 1px solid #FFEAD2;
+	background-color: #FFF7EE;
+	padding-left: 15px;
+}
+#jhxxinfor {width:410px;line-height:18px;float:left;list-style-type:none;padding:0;}
+.city {
+	padding-top: 10px;
+	padding-right: 5px;
+	padding-bottom: 0;
+	padding-left: 5px;
+}
+.city li {float:left;line-height:21px;text-align:center;}
+#rightinfor {border:0;width:666px;float:right;margin:8 8 0 3 ;}
+#leftinfor {border:0;width:303px;float:left;clear:none;}
+.xianinfor {float:left;border:solid #dadada;border-width:1px;}
+#articlecontent0 .infornew {float:left;width:330px;}
+.housexx li {display:inline;margin-right:10px;line-height:21px;}
+.housexx li a{white-space: nowrap;}
+.housexx h2 {width:280px;line-height:25px;height:25px;color:#FFF;font-weight:400;
+border-style:solid;background: url(images/xxinfor.gif) no-repeat right;
+}
+.biaoti {
+	background-color: #FFF9DD;
+	line-height: 24px;
+	font-size: 13px;
+	font-weight: normal;
+	height: 24px;
+	
+}
+.housexx a:link,.housexx a:visited{cursor:pointer;}
+.housexx h2 span {background-image: url(images/btt.gif);background-repeat: no-repeat;float: left;
+background-position: left;padding-right: 6px;padding-left: 6px;
+}
+.housexx {padding:5px;}
+.infornew h3 {
+	width:289px;
+	height:25px;
+	line-height:30px;
+	background:url(images/xxlibg.gif) repeat-x bottom;
+	text-indent:13px;
+	color:#000;
+	padding-left: 16px;
+	margin:0px 8px;
+}
+.infornew {
+	background-image: url(images/lixx.gif);
+	background-repeat: no-repeat;
+	background-position: 13px 8px;
+width: 770px;
+}
+.infornew ul{width: 310px;}
+
+#articlecontent0 .nrinfor {color:#494949;}
+#articlecontent0 .ieeinfor .ipinfor {float:left;width:290px;margin-right: 10px;margin-bottom: 10px;margin-left: 10px;
+}
+#articlecontent0 .nrinfor h3 {height:42px;line-height:42px;font-size:18px;color:#5B5B5B;text-indent:15px;font-weight: bold;margin-left: 12px;background-image: url(images/inforbt.gif);background-repeat: no-repeat;background-position: 0px 14px;}
+.infortp {border:1px solid #DEDEDE;padding:3px;}
+#articlecontent0 .nrinfor p {line-height:25px;font-size:14px;text-indent:2em;padding:10px 4px;}
+#articlecontent0 .nrinfor h2 {line-height:25px;height:25px;color:#494949;padding-left:25px;background-color:#F3F3F3;font-size:13px;font-weight: 400;}
+#articlecontent0 .ieeinfor h3 {line-height:23px;height:23px;font-weight:400;color:#FFF;background:url(images/ieeinfor.gif) no-repeat center;text-indent:15px;}
+#articlecontent0 .ieeinfor .ipinfor ul {color:#666;line-height:23px;font-size:14px;border:1px solid #F58019;padding:17px;}
+.infor_lanmu {
+	line-height: 22px;
+	font-size: 13px;
+	color: #666666;
+	background-color: #FFFAF4;
+	padding: 8px;
+	border: 1px solid #FFE7CE;
+	margin-top: 6px;
+	margin-bottom: 6px;
+}
+.infor_lanmu li{
+	float:left;
+	margin-right: 8px;
+	margin-left: 8px;
+	color: #0000FF;
+}
+h3 span{
+	float:right;
+	font-weight: normal;
+	font-size: 12px;
+}
+/*终极列表链接*/
+.info_link_1 {line-height: 26px;}
+.info_link_1 a,info_link_1 a:visited {color:#0062CE;font-size: 14px;}
+.info_link_1 a:hover {color:#FF6600;}
+
+#bt111 {background-color:#F1F7FC;height:25px;width:100%;line-height:25px;border-top: 1px solid #d7e4ee;border-bottom: 1px solid #d7e4ee;text-indent: 15px;font-size: 12px;color: #FF6600;}
+#bt111 strong {font-size: 13px;}
+#bt111 a {color: #FF6600;}
+#down-jies {color: #013780; padding:10px 4px; color:#333333;}

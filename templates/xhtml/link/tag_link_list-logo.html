@@ -1,0 +1,7 @@
+<!--{loop $links $i $link}-->
+<li style="width:{$width}"><!--{if $linktype}--><a href="{$link[url]}" onclick="ajaxlink('{$link[linkid]}')" target="_blank"><img src="{$link[logo]}" width="88" height="31" border="0" alt="网站名称：{$link[name]} &#10;简介：{$link[introduce]} 
+{if $showhits}&#10;点击：{$link[hits]}次 {/if}"></a>
+<!--{else}-->
+<a href="{$link[url]}" onclick="ajaxlink('{$link[linkid]}')" target="_blank" title="简介：{$link[introduce]} {if $showhits}&#10;点击：{$link[hits]}次 {/if}">{$link[name]}</a>
+<!--{/if}--></li>
+<!--{/loop}-->

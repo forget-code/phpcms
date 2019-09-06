@@ -1,0 +1,14 @@
+DELETE FROM phpcms_module WHERE `module`='wenba';
+DROP TABLE IF EXISTS `phpcms_wenba_actor`;
+DROP TABLE IF EXISTS `phpcms_wenba_answer`;
+DROP TABLE IF EXISTS `phpcms_wenba_credit`;
+DROP TABLE IF EXISTS `phpcms_wenba_question`;
+DROP TABLE IF EXISTS `phpcms_wenba_response`;
+DROP TABLE IF EXISTS `phpcms_wenba_vote`;
+DELETE FROM `phpcms_channel` WHERE `channelname`='问吧';
+DELETE FROM `phpcms_menu` WHERE `name`='修改头衔';
+DELETE FROM `phpcms_menu` WHERE `name`='我的提问';
+ALTER TABLE `phpcms_member` DROP `totalonline`;
+ALTER TABLE `phpcms_member` DROP `answercounts`;
+ALTER TABLE `phpcms_member` DROP `acceptcount`;
+ALTER TABLE `phpcms_member` DROP `actortype`;

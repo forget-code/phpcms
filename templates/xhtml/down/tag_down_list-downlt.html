@@ -1,0 +1,15 @@
+{loop $downs $i $down}
+<li style="width:{$width}">
+	{if $datetype}<span>{$down[adddate]}</span>{/if}
+	<em>{intval($i+1)}</em>
+	{if $showcatname}<a href="{$down[catlinkurl]}"{$target}>[{$down[catname]}]</a>{/if} 
+	{$down[type]} <a href="{$down[linkurl]}" title="{$down[title]}" {$target}>{$down[stitle]}</a>
+	{if $showdowns}({$down[totaldowns]}){/if}
+	{if $showauthor}[作者:{$down[author]}]{/if}
+	{if $introducelen}<br/>{$down[introduce]}{/if}
+</li>
+{/loop}
+
+{if $pages}
+	<div class="pages">{$pages}</div>
+{/if}

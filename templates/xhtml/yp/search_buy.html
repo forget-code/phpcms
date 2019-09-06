@@ -1,0 +1,69 @@
+{template 'yp','header'}
+<link href="{$skindir}/search.css" rel="stylesheet" type="text/css" />
+<div id="censent">
+  <div class="search33 boxmargin"><h6  id="bt11" class="boxmargin">黄页搜索</h6>
+		<form name="myform" action="{$MOD[linkurl]}search.php" method="get">
+		<ul class="hhh1"><li>搜索范围</li><li>包含的关键字</li><li> 所属栏目</li><li>更新时间</li><li>排序方式</li></ul>
+		<ul class="hhh2"><li>
+		<input type="radio" class="radio" name="searchtype" value="article" onclick="location='?searchtype=article'">
+		企业新闻
+		<input type="radio" class="radio" name="searchtype" value="product" onclick="location='?searchtype=product'">		
+		 产品库
+		 <input type="radio" class="radio" name="searchtype" value="company" onclick="location='?searchtype=company'"> 
+		 企业库
+		 <input type="radio" class="radio" name="searchtype" value="buy" checked> 
+		 找买家
+		 <input type="radio" class="radio" name="searchtype" value="sales" onclick="location='?searchtype=sales'"> 
+		 找促销
+		 </li>
+		<li><input name="keyword" id="keyword" type="text" size="30" value="{$keyword}"> 
+		  * 多个关键词之间用空格隔开</li>
+		  <li>{$buy_selected}</li>
+		<li>
+		<select name="searchfrom">
+		<option value="0" {if !$searchfrom}selected{/if}>全部时间</option>
+		<option value="1" {if $searchfrom==1}selected{/if}>1 天前</option>
+		<option value="2" {if $searchfrom==2}selected{/if}>2 天前</option>
+		<option value="7" {if $searchfrom==7}selected{/if}>1 周前</option>
+		<option value="30" {if $searchfrom==30}selected{/if}>1 个月前</option>
+		<option value="90" {if $searchfrom==90}selected{/if}>3 个月前</option>
+		<option value="180" {if $searchfrom==180}selected{/if}>6 个月前</option>
+		<option value="365" {if $searchfrom==365}selected{/if}>1 年前</option>
+		</select>
+		<input type="radio" class="radio" name="before" value="0" {if !$before}checked{/if}> 之后
+		<input type="radio" class="radio" name="before" value="1" {if $before}checked{/if}> 之前
+		</li>
+		<li>
+		<select name="ordertype">
+		<option value="0" {if $ordertype==0}selected{/if}>按ID排序排序</option>
+		<option value="1" {if $ordertype==1}selected{/if}>更新时间降序</option>
+		<option value="2" {if $ordertype==2}selected{/if}>更新时间升序</option>
+		<option value="3" {if $ordertype==3}selected{/if}>浏览次数降序</option>
+		<option value="4" {if $ordertype==4}selected{/if}>浏览次数升序</option>
+		</select>
+		<li style="padding-left:25px;">
+	            <input type="hidden" name="search" value="1">
+	            <input type="submit" value="立即搜索" class="btn" />
+	            <input type="button" onClick="window.location='search.php'" value="重新搜索" class="btn" />		
+</li></ul>
+		</form>
+	<div style="clear:both"></div>	
+	<!--{if $search}-->
+  <div class="ssjg">您输入的关键词<strong><font color=red>{$keyword}</font></strong>，共搜索到<font color=red>{$number}</font>个结果</div>
+  </div>
+	<!--{loop $searchs $rs}-->
+	<div class="wznn"><div><p>[{$rs[addtime]}]</p><strong>
+	<a href="{$rs[linkurl]}" target="_blank" class="searchtitle">{$rs[title]}</a> </strong></div>
+	<!--{if $rs['thumb']}-->
+	<img src="{$imgurl($rs['thumb'])}">
+	<!--{/if}-->
+	<!--{if $rs['introduce']}-->
+	{$rs[introduce]}
+	<!--{/if}-->
+	</div>
+	<!--{/loop}-->
+	<div class="pages">{$pages}</div>
+	<!--{/if}-->
+
+</div>
+{template 'phpcms','footer'}

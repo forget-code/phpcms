@@ -1,0 +1,31 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>点卡数变化邮件模板</title>
+</head>
+<body>
+<table cellpadding="2" cellspacing="1">
+  <tr>
+    <th>这封邮件是来自{$PHPCMS['sitename']}的点卡数变化确认邮件</th>
+  </tr>
+	<tr>
+	<th>&nbsp;</th>
+	</tr>
+	<tr>
+	 <td height="35">您的帐户于{$date('Y-m-d H:i:s',$PHP_TIME)}时间在我们的网站点卡数发生了变化，请确认</td>
+	</tr>
+	<tr>
+	  <td height="35">变化点数：{$number}点 </td>
+	</tr>
+	<tr>
+	  <td height="35">剩余点数：{$point}点</td>
+	</tr>
+	<tr>
+	  <td height="35">如果该操作不是您进行的，请联系我们</td>
+	</tr>
+	<tr>
+	  <td height="35"><a href="{$PHP_SITEURL}" target="_blank">{$PHPCMS[sitename]}</a><br />{$PHP_SITEURL}</td>
+	</tr>
+</table>
+</body>
+</html>

@@ -22,10 +22,9 @@ function link_list($templateid = '', $typeid = '', $linktype = 0, $linknum = 100
 			}
 			$links[]=$r;
 		}
+		$width = ceil(100/$cols).'%';
 		$templateid = $templateid ? $templateid : "tag_link_list";
 		include template('link',$templateid);
 	}
-	
 }
-
 ?>

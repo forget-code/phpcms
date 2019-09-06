@@ -79,7 +79,10 @@ if(isset($submit))
 		$arrposid = $pdt['arrposid'];
 		$pdt['arrposid'] = ','.implode(',', $arrposid).',';
 	}
-	
+	if(strpos($pdt['pdt_img'],'http')===false)
+	{
+		$pdt['pdt_thumb'] = str_replace(basename($pdt['pdt_img']),'thumb_'.basename($pdt['pdt_img']),$pdt['pdt_img']);
+	}
 	$keys = $values = $s = "";
 	foreach($pdt as $key => $value)
 	{
@@ -127,6 +130,9 @@ if(isset($submit))
 	
 	if($pdt['ishtml'])
 	{
+		$catid = $pdt['catid'];
+		createhtml('index');
+		createhtml('list');
 		createhtml('show');
 	}
 	

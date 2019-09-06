@@ -260,12 +260,12 @@ function movie_slide($templateid = '', $channelid = 2, $catid = 0, $child = 1, $
 
 function movie_related($templateid = '', $channelid = 2, $keywords = '', $movieid = 0, $movienum = 10, $titlelen = 30, $datetype = 0)
 {
-	global $db,$PHP_TIME;
+	global $db,$PHP_TIME, $skindir;
 	if(!$keywords) return '';
 	$datetypes = array('', 'Y-m-d', 'm-d', 'Y/m/d', 'Y.m.d', 'Y-m-d H:i:s', 'Y-m-d H:i');
 	$channelid = intval($channelid);
 	$movieid = intval($movieid);
-	$keywords = str_replace(',', '+', $keywords);
+	$keywords = str_replace(',', '+', addslashes($keywords));
 	$movienum++;
 	$movies = array();
 	$result = $db->query("SELECT movieid,catid,typeid,title,style,addtime,linkurl FROM ".channel_table('movie', $channelid)." WHERE status=3 AND MATCH (keywords) AGAINST ('$keywords' IN BOOLEAN MODE) ORDER BY listorder DESC,movieid DESC LIMIT 0,$movienum ","CACHE");

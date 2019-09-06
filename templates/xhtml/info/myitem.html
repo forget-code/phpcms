@@ -1,0 +1,348 @@
+{template 'phpcms','header'}
+<script type="text/javascript">
+// 表单提交检测
+function doCheck(){
+	// 检测表单的有效性
+	// 如：标题不能为空，内容不能为空，等等....
+	if ($('catid').value=='0'){
+		alert('指定的栏目不允许添加信息！只允许在其子栏目中添加信息。');
+		$('catid').focus();
+		return false;
+	}
+	if ($('title').value=='') {
+		alert('对不起，标题不能为空！');
+        $('title').focus();
+		return false;
+	}
+	if ($('author').value=='') {
+		alert('对不起，联系人不能为空！');
+        $('author').focus();
+		return false;
+	}
+	if ($('telephone').value=='') {
+		alert('对不起，电话不能为空！');
+        $('telephone').focus();
+		return false;
+	}
+
+	{if $MOD['check_code']}
+	if ($('checkcodestr').value=='') {
+		alert("请输入验证码！");
+		$('checkcodestr').focus();
+		return false;
+	}
+	{/if}
+
+}
+</script>
+
+<table align="center" cellspacing="0" cellpadding="0" border="0" width="980">
+<tr>
+<td valign="top" class="left">
+{template "member","left"}</td>
+<td width="10" valign="top">
+</td>
+<td valign="top" class="right">
+<div class="membercatslist">
+<ul>
+<li><a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=add"><span>发表信息</span></a></li>
+<li><a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=manage&status=3"><span>已通过</span></a></li>
+<li><a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=manage&status=1"><span>待审核</span></a></li>
+</ul>
+</div>
+<div class="clearboth"></div>
+<div class="memberborder_1">
+<div class="memberborder_2">
+{if $action=='add'}
+<h1>发布信息</h1>
+<form action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=add" method="post" name="myform" onsubmit="return doCheck();">
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tbody>
+<tr>
+<td width="15%" class="td_right"><strong>类别</strong></td>
+<td class="td_left">{$category_select}</td>
+</tr>
+<tr>
+<td class="td_right"><strong>地区</strong></td>
+<td class="td_left">{ajax_area_select('areaid', $channelid)}
+</td>
+</tr>
+<tr>
+<td class="td_right"><strong>标题</strong><font color="red">*</font></td>
+<td class="td_left">{$type_select} <input type="text" name="title" size="50"> </td>
+</tr>
+<tr>
+<td class="td_right"><strong>截至日期</strong></td>
+<td class="td_left">{$date_select('endtime')}&nbsp;留空表示不限</td>
+</tr>
+<tr> 
+<td class="td_right"><strong>标题图片</strong> </td>
+<td class="td_left">
+<input name="thumb" type="text" id="thumb" size="50"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=thumb&type=thumb&width=150&height=150','upload','360','300')">          </td>
+</tr>
+<tr>
+<td class="td_right"><strong>内容</strong><font color="red">*</font></td>
+<td class="td_left">
+<textarea name="content" id="content" cols="100" rows="25"></textarea>{$editor("content",$MOD['editor_mode'],$MOD['editor_width'],$MOD['editor_height'])}
+</td>
+</tr>
+<tr>
+<td class="td_right"><strong>联系人</strong><font color="red">*</font></td>
+<td class="td_left"><input type="text" name="author" size="40" value="{$_username}"></td>
+</tr>
+<tr>
+<td class="td_right"><strong>电话</strong><font color="red">*</font></td>
+<td class="td_left"><input type="text" name="telephone" size="40" value="{$_telephone}"></td>
+</tr>
+<tr>
+<td class="td_right"><strong>地址</strong></td>
+<td class="td_left"><input type="text" name="address" size="40" value="{$_address}"></td>
+</tr>
+<tr>
+<td class="td_right"><strong>E-mail</strong></td>
+<td class="td_left"><input type="text" name="email" size="40" value="{$_email}"></td>
+</tr>
+<tr>
+<td class="td_right"><strong>MSN</strong></td>
+<td class="td_left"><input type="text" name="msn" size="40" value="{$_msn}"></td>
+</tr>
+<tr>
+<td class="td_right"><strong>Q Q</strong></td>
+<td class="td_left"><input type="text" name="qq" size="40" value="{$_qq}"></td>
+</tr>
+{$fields}
+{if $MOD['check_code']}
+    <tr> 
+      <td class="td_right"><strong>验证码</strong></td>
+      <td class="td_left"><input name="checkcodestr" type="text" size="15" id="checkcodestr">
+	  <img src="{PHPCMS_PATH}checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/></td>
+    </tr>
+{/if}
+<tr>
+<td class="td_right"></td>
+<td class="td_left">
+<input type="submit" name="dosubmit" value="发布信息">
+</td>
+</tr>
+</tbody>
+</table>
+</form>
+<!--//--->
+
+{elseif $action=='edit'}
+<h1>编辑信息</h1>
+<form action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=edit&infoid={$infoid}" method="post" name="myform" onsubmit="return doCheck();">
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tbody>
+   <tr> 
+      <td class="td_right" width="15%"> <strong>所属栏目</strong> </td>
+      <td class="tablerow" width="85%">
+{$category_select}
+<font color='#FF0000'>*</font>
+</td>
+    </tr>
+
+	<tr>
+<td class="td_right"><strong>地区</strong></td>
+<td class="td_left">
+<span onclick="this.style.display='none';$('select_area').style.display='';" style="cursor:pointer;">{$AREA[$areaid]['areaname']} <font color="red">点击重选</font></span><span id="select_area" style="display:none;">{$ajax_area_select('areaid',$channelid, $areaid)}</span>
+</td>
+</tr>
+
+    <tr> 
+      <td class="td_right"><strong>标题</strong></td>
+      <td class="td_left">{$type_select} 
+<input name="title" type="text" id="title" size="50" value="{$title}">
+<font color="#FF0000">*</font>
+    </td>
+    </tr>
+	
+	<tr>
+	<td class="td_right"><strong>截至日期</strong></td>
+	<td class="td_left">{$date_select('endtime', $endtime)}&nbsp;留空或填0表示不限</td>
+	</tr>
+
+    <tr> 
+<td class="td_right"><strong>标题图片</strong> </td>
+<td class="td_left">
+<input name="thumb" type="text" id="thumb" size="50" value="{$thumb}"> <input type="button" value="上传图片" onclick="javascript:openwinx('{PHPCMS_PATH}upload.php?keyid={$channelid}&uploadtext=thumb&type=thumb&width=150&height=150','upload','360','300')">          </td>
+</tr>
+
+
+    <tr> 
+      <td class="td_right"><strong>内容</strong> </td>
+      <td class="td_left">
+		<textarea name="content" id="content" cols="100" rows="25">{$content}</textarea>
+		{$editor("content",$MOD['editor_mode'],$MOD['editor_width'],$MOD['editor_height'])}
+   </td>
+    </tr>
+<tr>
+<td class="td_right"><strong>联系人</strong><font color="red">*</font></td>
+<td class="td_left"><input type="text" name="author" size="40" value="{$author}"></td>
+</tr>
+<tr>
+<td class="td_right"><strong>电话</strong><font color="red">*</font></td>
+<td class="td_left"><input type="text" name="telephone" size="40" value="{$telephone}"></td>
+</tr>
+<tr>
+<td class="td_right"><strong>地址</strong></td>
+<td class="td_left"><input type="text" name="address" size="40" value="{$address}"></td>
+</tr>
+<tr>
+<td class="td_right"><strong>E-mail</strong></td>
+<td class="td_left"><input type="text" name="email" size="40" value="{$email}"></td>
+</tr>
+<tr>
+<td class="td_right"><strong>MSN</strong></td>
+<td class="td_left"><input type="text" name="msn" size="40" value="{$msn}"></td>
+</tr>
+<tr>
+<td class="td_right"><strong>Q Q</strong></td>
+<td class="td_left"><input type="text" name="qq" size="40" value="{$qq}"></td>
+</tr>
+{$fields}
+
+{if $MOD['check_code']}
+    <tr> 
+      <td class="td_right"><strong>验证码</strong></td>
+      <td class="td_left"><input name="checkcodestr" type="text" size="15" id="checkcodestr">
+	  <img src="{PHPCMS_PATH}checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/></td>
+    </tr>
+{/if}
+    <tr> 
+      <td class="td_center" colspan="2"><input type="submit" name="dosubmit" value="编辑信息"></td>
+    </tr>
+</tbody>
+  </table>
+</form>
+{elseif $action=='preview'}
+<h1>{$title}</h1>
+<table cellpadding="3" cellspacing="1" class="righttable">
+<tbody>
+  <tr>
+    <td class="td_right" width="15%"><strong>栏目</strong></td>
+	<td class="td_left">{$catname}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>标题</strong></td>
+	<td class="td_left">{$title}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>地区</strong></td>
+    <td class="td_left"><a href="{$AREA[$areaid]['linkurl']}">{$AREA[$areaid]['areaname']}</a></td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>发布日期</strong></td>
+    <td class="td_left">{$adddate}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>截至日期</strong></td>
+    <td class="td_left">{$enddate}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>标题图片</strong></td>
+    <td class="td_left"><a href="{$thumb}" target="_blank">{$thumb}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>内容</strong></td>
+    <td class="td_left">{$content}</td>
+  </tr>
+  <tr>
+    <td class="td_right"><strong>联系人</strong></td>
+    <td class="td_left">{$author}</td>
+  </tr>
+  <tr>
+<td class="td_right"><strong>电话</strong><font color="red">*</font></td>
+<td class="td_left">{$telephone}</td>
+</tr>
+<tr>
+<td class="td_right"><strong>地址</strong></td>
+<td class="td_left">{$address}</td>
+</tr>
+<tr>
+<td class="td_right"><strong>E-mail</strong></td>
+<td class="td_left">{$email}</td>
+</tr>
+<tr>
+<td class="td_right"><strong>MSN</strong></td>
+<td class="td_left">{$msn}</td>
+</tr>
+<tr>
+<td class="td_right"><strong>Q Q</strong></td>
+<td class="td_left">{$qq}</td>
+</tr>
+  {loop $fields $f}
+    <tr>
+    <td class="td_right"><strong>{$f[title]}</strong></td>
+    <td class="td_left">{$f[value]}</td>
+  </tr>
+  {/loop}
+  <tr>
+   <td class="td_right"> </td>
+    <td class="td_left"  align="right">
+	<a href="#" onclick="javascript:history.go(-1);">返回</a>
+	<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=edit&infoid={$infoid}">编辑</a>
+	<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=delete&infoid={$infoid}">删除</a>	
+	</td>
+  </tr>
+</tbody>
+</table>
+
+{elseif $action=='manage'}
+<h1>信息管理 [ {if $status==3}已通过{elseif $status==1}待审核{elseif $status==0}草稿{elseif $status==2}退稿{/if} ]</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
+<tbody>
+<tr align="center">
+<td width="8%"  class="td_center">ID</td>
+<td class="td_center">标题</td>
+<td width="15%" class="td_center">栏目</td>
+<td width="12%" class="td_center">发表时间</td>
+<td width="10%" class="td_center">点击</td>
+<td width="15%" class="td_center">管理操作</td>
+</tr>
+
+{loop $infos  $info}
+<tr align="center" onmouseout="this.style.backgroundColor='#ffffff'" onmouseover="this.style.backgroundColor='#EBF6FB'" bgColor="#ffffff">
+<td class="td_center">{$info[infoid]}</td>
+<td class="td_left">&nbsp;{if $info[type]}{$info[type]} {/if}{if $info['status']==3}<a href="{$info['linkurl']}" target="_blank">{else}<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=preview&infoid={$info[infoid]}">{/if}{$info['title']}</a>
+</td>
+<td class="td_center"><a href="{$info['catlinkurl']}" target="_blank">{$info['catname']}</a></td>
+<td class="td_center">{$info['adddate']}</td>
+<td class="td_center">{$info['hits']}</td>
+<td class="td_center">{if $status==3}<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=update&infoid={$info[infoid]}">刷新</a> | {/if}<a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=edit&infoid={$info[infoid]}">编辑</a> | <a href="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php?action=delete&infoid={$info[infoid]}">删除</a></td>
+</tr>
+{/loop}
+</tbody>
+</table>
+
+<div class="pages">{$pages}</div>
+<form name="search" action="{$PHPCMS[siteurl]}{$CHA[channeldir]}/myitem.php">
+<table width="100%" cellpadding="0" cellspacing="0" class="righttable">
+ <tbody>
+  <tr>
+    <td height="30" class="td_center">
+    <input name="status" type="hidden" value="{$status}">
+	<select name="srchtype">
+	<option value="0" {if $searchtype==0}selected{/if}> 标题 </option>
+	<option value="2" {if $searchtype==1}selected{/if}> 作者 </option>
+	</select>&nbsp;
+	<input name="keywords" type="text" size="30" value="{$keywords}">&nbsp;
+	{$category_select}&nbsp;
+	<select name="ordertype">
+	<option value="0" {if $ordertype==0}selected{/if}>信息排序排序</option>
+	<option value="1" {if $ordertype==1}selected{/if}>更新时间降序</option>
+	<option value="2" {if $ordertype==2}selected{/if}>更新时间升序</option>
+	<option value="3" {if $ordertype==3}selected{/if}>浏览次数降序</option>
+	<option value="4" {if $ordertype==4}selected{/if}>浏览次数升序</option>
+	</select>
+	<input type="submit" value="信息搜索"></td>
+  </tr>
+</table>
+</form>
+{/if}
+</div></div>
+</td>
+</tr>
+ </tbody>
+</table>
+{template 'phpcms','footer'}

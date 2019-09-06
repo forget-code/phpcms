@@ -78,6 +78,12 @@ include admintpl('header');
 <td  class="tablerow"><?=$old?>岁</td>
 </tr>
 <tr>
+<td  class="tablerowhighlight" align="right">等级：</td>
+<td  class="tablerow"><?=$grade?></td>
+<td  class="tablerowhighlight" align="right">头衔：</td>
+<td  class="tablerow"><?=$actor?></td>
+</tr>
+<tr>
 <td  class="tablerowhighlight" align="right">证件类型：</td>
 <td  class="tablerow"><?=$idtype?></td>
 <td  class="tablerowhighlight" align="right">证件号码：</td>

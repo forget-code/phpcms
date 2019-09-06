@@ -12,7 +12,9 @@ if($dosubmit)
 		}
 		else
 		{
-			$db->query("UPDATE ".TABLE_POSITION." SET name='$name[$id]',listorder='$listorder[$id]',keyid='$keyid[$id]' WHERE posid=$id");
+			$keyid = 'keyid'.$id;
+			$keyid = $$keyid;
+			$db->query("UPDATE ".TABLE_POSITION." SET name='$name[$id]',listorder='$listorder[$id]',keyid='$keyid' WHERE posid=$id");
 		}
 	}
 	if($newname)

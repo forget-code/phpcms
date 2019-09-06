@@ -11,6 +11,8 @@ class db_mysql
 	* @var resource
 	*/
 	var $connid;
+	var $search = array('/union(\s*(\/\*.*\*\/)?\s*)+select/i', '/load_file(\s*(\/\*.*\*\/)?\s*)+\(/i', '/into(\s*(\/\*.*\*\/)?\s*)+outfile/i');
+	var $replace = array('union &nbsp; select', 'load_file &nbsp; (', 'into &nbsp; outfile');
 
 	/**
 	* 整型变量用来计算被执行的sql语句数量
@@ -38,7 +40,9 @@ class db_mysql
 		// 当mysql版本为4.1以上时，启用数据库字符集设置
 		if($this->version() > '4.1' && $CONFIG['dbcharset'])
         {
-			mysql_query("SET NAMES '".$CONFIG['dbcharset']."'" , $this->connid);
+			$serverset = $CONFIG['dbcharset'] ? "character_set_connection='$CONFIG[dbcharset]',character_set_results='$CONFIG[dbcharset]',character_set_client=binary" : '';
+			$serverset .= $this->version() > '5.0.1' ? ((empty($serverset) ? '' : ',')." sql_mode='' ") : '';
+			$serverset && mysql_query("SET $serverset", $this->connid);
 		}
 		// 当mysql版本为5.0以上时，设置sql mode
 		if($this->version() > '5.0') 
@@ -124,6 +128,13 @@ class db_mysql
 	function num_rows($query) 
 	{
 		return mysql_num_rows($query);
+	}
+
+	function escape($string)
+	{
+		if(!is_array($string)) return str_replace(array('\n', '\r'), array(chr(10), chr(13)), mysql_real_escape_string(preg_replace($this->search, $this->replace, $string), $this->connid));
+		foreach($string as $key=>$val) $string[$key] = $this->escape($val);
+		return $string;
 	}
 
 	/**

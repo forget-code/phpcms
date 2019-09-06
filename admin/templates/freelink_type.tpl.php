@@ -24,15 +24,17 @@ include admintpl('header');
 	foreach($types as $id=>$type)
 	{ 
 ?>
-<tr align="left" onmouseout="this.style.backgroundColor='#F1F3F5'" onmouseover="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5'> 
+<tr align="left" onMouseOut="this.style.backgroundColor='#F1F3F5'" onMouseOver="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5'> 
 <td align="center"><input type="checkbox" name="type[<?=$id?>][delete]" value="1" /></td>
 <td align="center"><input type="hidden" name="type[<?=$id?>][name]" value="<?=$type['name']?>"><a href="?mod=<?=$mod?>&file=<?=$file?>&action=manage&type=<?=urlencode($type['name'])?>" title="点击管理该分类的链接"><?=$type['name']?></a></td>
 <td align="center"><input type="text" name="type[<?=$id?>][number]" value="<?=$type['number']?>" size="3"></td>
 <td align="center">
 <select name="type[<?=$id?>][showtype]">
-<option value="freelink_list" <?=($type['showtype'] == 'freelink_list' ? 'selected' : '')?>>文字链接</option>
+<option value="freelink_list" <?=($type['showtype'] == 'freelink_list' ? 'selected' : '')?>>文字链接1</option>
+<option value="freelink_list-wbtj" <?=($type['showtype'] == 'freelink_list-wbtj' ? 'selected' : '')?>>文字链接2</option>
 <option value="freelink_thumb" <?=($type['showtype'] == 'freelink_thumb' ? 'selected' : '')?>>图片链接</option>
 <option value="freelink_slide" <?=($type['showtype'] == 'freelink_slide' ? 'selected' : '')?>>幻灯片链接</option>
+<option value="freelink_slide-3d" <?=($type['showtype'] == 'freelink_slide-3d' ? 'selected' : '')?>>幻灯片3d-flash</option>
 </select>
 </td>
 <td align="center"><input type="text" name="type[<?=$id?>][width]" value="<?=$type['width']?>" size="3"></td>
@@ -44,15 +46,17 @@ include admintpl('header');
 	}
 $n = $id+1;
 ?>
-<tr align="left" onmouseout="this.style.backgroundColor='#F1F3F5'" onmouseover="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5'>
+<tr align="left" onMouseOut="this.style.backgroundColor='#F1F3F5'" onMouseOver="this.style.backgroundColor='#BFDFFF'" bgColor='#F1F3F5'>
 <td align="right">增加：</td>
 <td align="center"><input type="text" name="type[<?=$n?>][name]" size="15"></td>
 <td align="center"><input type="text" name="type[<?=$n?>][number]" size="3" value="5"></td>
 <td align="center">
 <select name="type[<?=$n?>][showtype]">
-<option value="freelink_list">文字链接</option>
+<option value="freelink_list">文字链接1</option>
+<option value="freelink_list-wbtj">文字链接2</option>
 <option value="freelink_thumb">图片链接</option>
 <option value="freelink_slide">幻灯片链接</option>
+<option value="freelink_slide-3d">幻灯片3d-flash</option>
 </select>
 </td>
 <td align="center"><input type="text" name="type[<?=$n?>][width]" size="3" value="200"></td>

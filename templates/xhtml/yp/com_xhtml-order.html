@@ -1,0 +1,131 @@
+<script language="javascript">
+<!--
+function CheckForm()
+{
+	if ($F('linkman') == "")
+	{
+		alert("用户名不能为空！")
+		Field.focus('linkman');
+		return false
+	}
+	if ($F('telephone') == "")
+	{
+		alert("电话不能为空！")
+		Field.focus('telephone');
+		return false
+	}
+	
+	if ($F('email') == "")
+	{
+		alert("Email地址不能为空！")
+		Field.focus('email');
+		return false
+	}
+	else
+	{
+		var mail = $F('email');
+		if(!RegExp(/^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]+$/).test(mail))
+		{
+			alert("Email 地址错误，请检查")
+			Field.focus('email');
+			return false
+		}
+	}
+	if ($F('content') == "")
+	{
+		alert("内容不能为空！")
+		Field.focus('content');
+		return false
+	}
+}
+
+function countprice(number,price)
+{
+	var total = parseInt(number)*price;
+	var totals = Math.round(total*Math.pow(10,2))/Math.pow(10,2);
+	$('totalprice').innerHTML= totals+" 元";
+}
+//-->
+</script>
+<div id="centent">
+<div id="rightpbox">
+<h3 ><div>在线订购</div></h3>
+<div> 
+  <form action="{$orderurl}index.html" method="post" name="myform" id="myform" onsubmit='return CheckForm();'>
+  <ul class="guest">
+	  <li class="formorder2"><strong>订购物品：</strong></li>
+	  <li class="formorder2"><strong>单价：</strong></li>
+  </ul>
+  <ul class="guest">
+	  <li class="">{$title}</li>
+	  <li class=""><input name="number" id="number" type="text" size="10" title="只能为整数" value="1" onBlur="countprice(this.value,'{$price}');"></li>
+  </ul>
+  <ul class="guest">
+	  <li class="formorder2"><strong>订购数量：</strong></li>
+	  <li class="formorder2"><strong>总计：</strong></li>
+  </ul>
+  <ul class="guest">
+	  <li class=""><input name="number" id="number" type="text" size="10" title="只能为整数" value="1" onBlur="countprice(this.value,'{$price}');"></li>
+	  <li class=""><span id="totalprice" >{$price} 元</span></li>
+  </ul>
+ <ul class="guest1">
+	  <li><strong>订购要求：</strong><br /><textarea name="content" id="content" rows="6" cols="50"></textarea></li>
+  </ul>
+  
+<ul class="guest1">
+	  <li class=""><strong>您的联系方式：</strong></li>
+  </ul>
+  <ul class="guest">
+	  <li><strong>订购人：</strong></li>
+	  <li><strong>联系电话：</strong></li>
+	  <li><strong>所在单位：</strong></li>
+  </ul>
+  <ul class="guest">
+	  <li><input name="linkman" id="linkman" type="text" size="20" maxlength="10" value="{$_username}"/> * </li>
+	  <li><input name="telephone" id="telephone" type="text" size="20" maxlength="50" value="{$telephone}"/> * </li>
+	  <li><input name="unit" id="unit" type="text" size="20" value="{$unit}"> * </li>
+  </ul>
+  <ul class="guest">
+	  <li class="guestform3"><strong>传真：</strong></li>
+	  <li class="guestform3"><strong>QQ：</strong></li>
+	  <li class="guestform3"><strong>MSN：</strong></li>
+  </ul>
+  <ul class="guest">
+	  <li><input name="fax" id="fax" type="text" size="20" value="{$fax}"> </li>
+	  <li><input name="qq2" id="qq2" type="text" size="20" maxlength="9" value="{$qq}"/> </li>
+	  <li><input name="msn2" id="msn2" type="text" size="20" value="{$msn}" /> </li>
+  </ul>
+  <ul class="guest1">
+	  <li class=""><strong>Email：</strong>&nbsp;&nbsp;&nbsp;&nbsp;<input name="email" id="email" type="text" size="20" value="{$_email}"/> * </li>
+  </ul>
+  <ul class="guest">
+  <li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name="dosubmit" type="submit" value=" 提交订单 " />
+                  <input name="companyid" type="hidden" value="{$product[companyid]}" />
+				  <input name="item" type="hidden" value="{$item}" />
+				  <input name="label" type="hidden" value="{$label}" /></li>
+  </ul></form>
+  </div>
+<div></div>
+</div>
+<div id="lefepbox4">
+<h2><div>热点导航</div></h2>
+<ul class="rddh">
+  {loop $m_user $ms}
+  <li><a href="{$ms[url]}">- {$ms[menutitle]}</a></li>
+{/loop}
+</ul>
+<h2><span><a href="{$producturl}index.html">更多</a></span>
+<div>热门产品</div>
+</h2>
+<ul class="xwzx">
+{tag_企业产品页热门产品}
+</ul> 
+<h2><span><a href="{$salesurl}index.html">更多</a></span>
+<div>促销信息</div>
+</h2>
+<ul class="xwzx">
+{tag_企业主页促销列表}</ul>
+</div>
+<div style="clear:both"></div>
+</div>
+{template 'yp','com_xhtml-footer'}

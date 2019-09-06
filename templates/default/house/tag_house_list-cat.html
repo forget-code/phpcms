@@ -1,0 +1,13 @@
+{loop $houses $i $house}
+<div class="house_wright_list">
+<ul class="name">
+<li><strong><a href="{$house[linkurl]}" title="{$house[name]}" {$target}>·{$house[cut_name]}</a></strong>({$house[isinter]})</li>
+<li>{$house[address]}</li>
+</ul>
+<ul class="area"><li><a href="{$MOD['linkurl']}{$AREA[$house[areaid]][linkurl]}&infocat={$house[infocat]}">{$AREA[$house[areaid]][areaname]}</a></li></ul>
+<ul class="type"><li>{$house[infocatname]}{$house[housetype]}</li></ul>
+<ul class="price red b"><li>{if $house['price']}{$house[price]}{$PARS[unit][$house[unit]]}{else}面议{/if}</li></ul>
+<ul class="time"><li>{$house[addtime]}</li></ul>
+</div>
+{/loop}
+{if $pages}<div class="pages">{$pages}</div>{/if}

@@ -1,0 +1,7 @@
+<!--{loop $products $k $product}-->
+<li class="cpnnn"><a href="{$product[linkurl]}" title="{$product[pdt_name]}" {$target}><img src="{$product[pdt_thumb]}" width="{$imgwidth}" height="{$imgheight}" border="0" {if $showalt} alt="{$product[alt]}" {/if} hspace="10" />
+</a><span><!--{if $showtitle}--><a href="{$product[linkurl]}" title="{$product[pdt_name]}" {$target} class="tag_title_link">{$product[cut_pdt_name]}</a><!--{/if}-->
+<br /><!--{if $showprice}-->价格:{$product[price]}<!--{/if}--> </span></li><!--{/loop}-->
+<!--{if $pages}-->
+<div class="pages STYLE1">{$pages}</div>
+<!--{/if}-->

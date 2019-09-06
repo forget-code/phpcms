@@ -57,8 +57,6 @@ window.onload = function()
 			 <!--自定义字段-->
 <!--分页--><div class="td_center">{$pages}</div>
         <h3>责任编辑：<a href="{$MODULE[member][linkurl]}member.php?username={$checker}" class="member_url">{$checker}</a></h3>
-
-		
 <div class="mar_10"><span class="font_1">本文引用地址：</span>&nbsp;<span class="border_2"><a href="{$itemurl}">{$itemurl}</a></span> </div>
 
 <!--上下文-->
@@ -70,7 +68,8 @@ window.onload = function()
 <input type="hidden" name="title" value="推荐《{$title}》" />
 <input type="hidden" name="content" value="<a href={$itemurl} target=_blank>{$title}<br/>{$itemurl}</a>" />
 </form>
-  <a href="#comment" class="comment_icon">发表评论</a>　<a href="javascript:window.external.addFavorite(window.location,'{$title}')" class="favorites_icon">加入收藏</a>　<a href="javascript:$('sendmail').submit();" class="friend_icon">告诉好友</a>　<a href="javascript:window.print();" class="print_icon">打印本页</a>　<a href="javascript:window.close()" class="close_icon">关闭窗口</a>　<a href="#top" class="top_icon">返回顶部</a></div>
+{if $MODULE[digg]}{tag_点击标签样式一}{/if}
+  <a href="#comment" class="comment_icon">发表评论</a>　<a href="javascript:window.external.addFavorite(window.location,'{$title}')" class="favorites_icon">加入收藏</a>　<a href="javascript:$('sendmail').submit();" class="friend_icon">告诉好友</a>　<a href="javascript:window.print();" class="print_icon">打印本页</a>　<a href="javascript:window.close()" class="close_icon">关闭窗口</a>　{if $MODULE[error_report]}<a href="javascript:openwinx('{PHPCMS_PATH}error_report/error_report.php?keyid={$channelid}&report_mod={$mod}&title='+document.title+'&error_link=('+window.location.href+')','error','450','340')" class="error_icon">报告错误</a> {/if}<a href="#top" class="top_icon">返回顶部</a></div>
 <!--相关文章列表-->
 <div class="cat_title">
   <div class="cat_name">相关文章</div>
@@ -87,6 +86,10 @@ window.onload = function()
       {tag_推荐文章列表}
 	<div class="rightcats"><h1>热点文章</h1><h2><a href="{$channelurl}search.php?catid={$catid}&ordertype=3&search=1" class="more">更多</a></h2></div>
       {tag_热点文章列表}
+{if $MODULE[digg]}
+<div class="rightcats"><h1>今日文章DIGG排行</h1><h2><a href="{PHPCMS_PATH}/digg/list.php?digg_mod={$mod}&digg_catid={$catid}" class="more">更多</a></h2></div>
+{tag_今日文章DIGG列表}
+{/if}
 	</td>
   </tr>
 </table>

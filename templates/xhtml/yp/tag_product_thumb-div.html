@@ -1,0 +1,2 @@
+{loop $products $i $product}<li class="ypiclist"><a href="{$product['linkurl']}" {$target}><img src="{$product[thumb]}" width="{$imgwidth}" height="{$imgheight}" alt="{$product[alt]}" /></a>
+<a href="{$product['linkurl']}" title="{$product['title']}" {$target}>{str_replace('...','',$product[stitle])}</a></li>{/loop}

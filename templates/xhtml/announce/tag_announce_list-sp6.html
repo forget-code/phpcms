@@ -1,0 +1,4 @@
+{loop $announces $announce}
+<p><a href="{$announce['linkurl']}" {if $target}target="_blank"{/if}>{$announce['title']}</a>{if $showauthor}[发布人：<a href="{PHPCMS_PATH}member/member.php?username={$announce['username']}" target="_blank">{$announce['username']}</a>]{/if}{if $datetype}{$announce['addtime']}{/if}</p>
+{/loop}
+{if $pages}{$pages}{/if}

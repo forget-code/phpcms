@@ -1,0 +1,44 @@
+{template "phpcms","header"}
+<table cellspacing="0" cellpadding="0" class="member">
+<tr>
+<td valign="top" class="left">
+{template "member","left"}
+</td>
+<td width="10">
+</td>
+<td class="right" valign="top">
+{template "union","menu"}
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>注册用户</h1>
+<table cellpadding="2" cellspacing="1" class="righttable">
+  <tr align="center">
+    <td width="15%" class="td_center">用户名</td>
+    <td width="15%" class="td_center">姓名</td>
+    <td width="20%" class="td_center">E-mail</td>
+    <td width="10%" class="td_center">消费额</td>
+    <td width="20%" class="td_center">注册时间</td>
+    <td width="20%" class="td_center">最后登录</td>
+  </tr>
+ {loop $users $user}
+  <tr align="center">
+    <td class="td_center">{$user[username]}</td>
+    <td class="td_center">{$user[truename]}</td>
+    <td class="td_center">{$user[email]}</td>
+    <td class="td_center">{$user[payment]}元</td>
+    <td class="td_center">{$user[regtime]}</td>
+    <td class="td_center">{$user[lastlogintime]}</td>
+  </tr>
+  {/loop}
+</table>
+<table width="100%" height="25" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td align="center">{$pages}</td>
+  </tr>
+</table>
+</div></div>
+
+</td>
+</tr>
+</table>
+{template "phpcms","footer"}

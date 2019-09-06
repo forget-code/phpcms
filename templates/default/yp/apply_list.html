@@ -1,0 +1,98 @@
+{template 'yp','header'}
+<script language="javascript">
+<!--
+function CheckForm()
+{
+	if ($('keyword').value == "" || $('keyword').value == '输入岗位名称')
+	{
+		alert("关键字不能为空！")
+		Field.clear('keyword')
+		Field.focus('keyword');
+		return false
+	}
+}
+-->
+</script>
+<table width="920" height="48" border="0" align="center" cellpadding="0" cellspacing="0" style="border-collapse: collapse;margin-bottom: 6px;" style="font-size:12px;">
+<tr>
+	<td background="{$skindir}/yp/top.ht2.gif"><table border="0" cellpadding="0" cellspacing="0">
+  <form name="myform" action="{$MOD[linkurl]}job.php" method="get" onSubmit='return CheckForm();'><tr>
+    <td width="13">　</td>
+    <td width="832">
+	<span style="float:right;"><input type="button" value="我要求职" onclick="window.location.href='{$MOD[linkurl]}myitem.php'" style="CURSOR: hand"> <input type="button" value="我要招聘" onclick="window.location.href='{$MOD[linkurl]}admin.php'" style="CURSOR: hand"> </span>
+	<span style="font-size:12px;">关键字：</span>
+      <input name="keyword" id="keyword" type="text" value="输入岗位名称" onfocus="this.value=''"/> 
+      <span id="select_area">
+      {area_select('areaid', '请选择地区', $areaid)}
+	&nbsp;
+	<select name="searchfrom">
+	<option value="1" >1 天内</option>
+	<option value="3" >3 天内</option>
+	<option value="7" >1 周内</option>
+	<option value="10" >10 天内</option>
+	<option value="20" >20 天内</option>
+	<option value="30" selected>1 个月内</option>
+	<option value="60" >2 个月内</option>
+	<option value="90" >3 个月内</option>
+	</select>
+      <input name="action" type="hidden" value="search"/>
+      <input name="dosubmit" type="submit" value=" 搜 索 "/>
+	
+	  </td>
+  </tr>
+  </form>
+</table>
+</td>
+</tr>
+</table>
+
+<!--主体标签-->
+<table align=center width="920" cellpadding="0"  cellspacing="0" bgcolor="#FFFFFF">
+  <tr>
+    <td width="680" valign="top">
+<!--位置导航-->
+    <div class="position">当前位置：<a href="">黄页首页</a> >> 人才招聘</div>
+     <div class="cat_box_1">
+	 <div class="cat_title"><div class="cat_title-1"></div>
+	     <div class="cat_name">最新求职</div><div class="cat_title-2"></div>
+	    </div>
+     </div>
+
+{tag_求职列表}
+     </div>	
+
+</td>
+    <td width="10"></td>
+    <td width="240" valign="top" class="right_bg"><!--推荐文章js调用-->
+<table border="0" cellpadding="0" cellspacing="0" bgcolor="#F27000" class="ta2">
+            <tr>
+              <td width="270" align="left" valign="top" bgcolor="#FFFFFF"><table width="50" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td height="24" align="left" valign="top"><table width="271" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                      <td width="227" height="24" background="{$skindir}/yp/index_45.jpg"><table width="84" border="0" cellpadding="0" cellspacing="0" class="ta3">
+                          <tr>
+                            <td width="5"><img src="{$skindir}/yp/index_40.jpg" width="5" height="24" /></td>
+                            <td width="76" background="{$skindir}/yp/index_41.jpg">点击排行</td>
+                            <td width="4" align="right"><img src="{$skindir}/yp/index_43.jpg" width="4" height="24" /></td>
+                          </tr>
+                      </table></td>
+                      <td width="44" align="center" valign="middle" background="{$skindir}/yp/index_45.jpg"><img src="{$skindir}/yp/index_48.jpg" width="36" height="11" /></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"></td>
+                    </tr>
+                  </table></td>
+                </tr>
+                <tr>
+                  <td>{tag_推荐企业}</td>
+                </tr>
+              </table></td>
+            </tr>
+      </table>
+
+
+	</td>
+  </tr>
+</table>
+{template 'yp','footer'}

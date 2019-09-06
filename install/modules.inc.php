@@ -1,5 +1,5 @@
 <?php 
-$PHPCMS_VERSION_NAME = 'PHPCMS2007 SP4';
+$PHPCMS_VERSION_NAME = 'PHPCMS2007 SP6';
 $PHPCMS_VERSION_BUILD_TIME = PHPCMS_RELEASE;
 $PHPCMS_CHANNELS = array(
 						'name'=>array('article','picture','down','info','movie'),
@@ -13,9 +13,9 @@ $PHPCMS_CHANNELS = array(
 										 )
 						);
 $PHPCMS_MODULES = array(
-						'name'=>array('ads','product','comment','vote','link','stat','spider','message','pay','ask','mail', 'bill','formguide','page','guestbook','mypage','announce','union'),
-						'modulename'=>array('广告','商城','评论','投票','友情链接','统计','采集','短消息','支付','咨询','邮件订阅', '推广奖励','表单向导','单网页','留言本','自定义网页','公告','联盟'),
-						'modules'=>array('ads'=>'广告','product'=>'商城','comment'=>'评论','vote'=>'投票','link'=>'友情链接','stat'=>'统计','spider'=>'采集','message'=>'短消息','pay'=>'支付','ask'=>'咨询','mail'=>'邮件订阅','bill'=>'推广奖励','formguide'=>'表单向导','page'=>'单网页','guestbook'=>'留言本','mypage'=>'自定义网页','announce'=>'公告','union'=>'联盟'),
+						'name'=>array('ads','product','comment','vote','link','stat','spider','message','pay','ask','mail', 'bill','formguide','page','guestbook','mypage','announce','union','error_report','yp','house','wenba','digg'),
+						'modulename'=>array('广告','商城','评论','投票','友情链接','统计','采集','短消息','支付','咨询','邮件订阅', '推广奖励','表单向导','单网页','留言本','自定义网页','公告','联盟','错误报告','企业黄页','房产','问吧','顶一下'),
+						'modules'=>array('ads'=>'广告','product'=>'商城','comment'=>'评论','vote'=>'投票','link'=>'友情链接','stat'=>'统计','spider'=>'采集','message'=>'短消息','pay'=>'支付','ask'=>'咨询','mail'=>'邮件订阅','bill'=>'推广奖励','formguide'=>'表单向导','page'=>'单网页','guestbook'=>'留言本','mypage'=>'自定义网页','announce'=>'公告','union'=>'联盟','error_report'=>'错误报告','yp'=>'企业黄页','house'=>'房产','wenba'=>'问吧','digg'=>'顶一下'),
 						'introduce'=>array('可自由设置广告位、尺寸、价格，可向广告位投放图片、文字、FLASH、弹窗、漂浮等各种常见类型的广告，支持广告上线和下线时间设置，支持广告展示和点击次数统计，支持前台查看广告报价和购买广告。',//广告
 						 '可以创建基于分类（无限级），品牌和商品类型的栏目，可以设置各种类型商品的参数属性，支持绑定域名，任意商品可以选择按频道、栏目、文章来决定是否生成html（可自定义路径），支持商品发布、修改、删除、移动、排序、推荐位置、支持商品搜索，会员在线订购、在线付款，查看订单状态，后台管理员处理订单，打印订单，完成配送，支持商品上下架和产品图片相册，商品对比等',//商城
 						 '可以对任意频道和模块里的任意内容附加评论，支持评论中加入表情图标（自定义表情图标），可对单一评论回复和投鲜花鸡蛋，支持是否开启评论，游客回复等',//评论
@@ -33,7 +33,12 @@ $PHPCMS_MODULES = array(
 						 '访问者可以发表留言咨询，管理员可在后台进行回复，实现访可与管理员的互动交流',//留言本
 						 '由于现有的页面都是开发人员根据一定的需求模型设计的，可能难以满足网站的个性化需求；因此网站管理员可以通过此功能自己定义网页，并通过模板和中文标签来控制该页面的内容，不需要php代码编写就可以扩展功能满足个性需求',//自定义网页
 						 '实现全站公告管理',//公告
-						 '推广联盟是一个专业的电子商务网站营销平台，可以根据访问IP、注册用户和销售额给联盟成员分成。'//联盟
+						 '推广联盟是一个专业的电子商务网站营销平台，可以根据访问IP、注册用户和销售额给联盟成员分成。',//联盟
+						 '通过网友反馈来及时的处理错误信息',//错误报告
+						 '具有企业新闻，企业产品，促销，企业库，求职，招聘，企业独立二级域名',//企业黄页
+						 '可以发布和搜索出租、求租、出售、求购、置换、合租信息，可以发布和搜索新楼盘信息，可以自由设置是否生成html，控制浏览权限及收费',//房产
+						 '问答模块',//问吧
+						 '顶过之后，才知道，什么是受关注的',//顶一下
 						 )
 					  );
 ?>

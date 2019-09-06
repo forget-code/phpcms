@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>{$head[title]}|{$PHPCMS[sitename]}</title>
+<meta name="keywords" content="{$head[keywords]}">
+<meta name="description" content="{$head[description]}">
+<meta name="generator" content="Phpcms {$PHPCMS[version]}">
+<link href="{PHPCMS_PATH}favicon.ico" rel="shortcut icon">
+<link href="{$skindir}/css.css" rel="stylesheet" type="text/css" />
+<link href="{$skindir}/house_new/mall.css" rel="stylesheet" type="text/css" />
+<link href="{$skindir}/house_new/why.css" rel="stylesheet" type="text/css" />
+<link href="{$skindir}/house_new/home.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{PHPCMS_PATH}data/js/config.js"></script>
+<script type="text/javascript" src="{PHPCMS_PATH}include/js/common.js"></script>
+<script type="text/javascript" src="{PHPCMS_PATH}include/js/prototype.js"></script>
+<script language="javascript" src="{$skindir}/house_new/menu.js"></script>
+</head>
+<body  {if isset($enableprotect) && $enableprotect}oncontextmenu='return false' ondragstart='return false' onselectstart ='return false' onselect='document.selection.empty()' oncopy='document.selection.empty()' onbeforecopy='return false'{/if}>
+<div class="top_bg"><div class="top_shijian"><!--时间--><script language="JavaScript" src="{PHPCMS_PATH}include/js/time.js"></script></div>
+<script language="javascript" src="{$MODULE[member][linkurl]}login.php?action=js"></script></div>
+<div id="hd"><!--top-->
+    <div id="top">
+        <div id="logo"><a href="{PHPCMS_PATH}"><img src="{$imgurl($PHPCMS['logo'])}"></a></div>
+      <div id="topbanner"><script language="javascript" src="{PHPCMS_PATH}data/js.php?id=1"></script></div>  
+        <div id="dl">
+【<a id="StranLink">繁体中文</a>】<br />
+【<a href="#" onClick="this.style.behavior='url(#default#homepage)';this.setHomePage ('{$PHPCMS['siteurl']}');">设为首页</a>】<br />
+【<a href="#" onClick="window.external.addFavorite('{$PHP_SITEURL}','{$PHPCMS['sitename']}')">加入收藏</a>】</div>
+  </div>
+ <div id="Nav-head">
+<ul>
+<li class="nav-off" onmouseover="show_menu(0);" id="menu_0">
+<a href="{$PHP_SITEURL}"><p>首页</p></a></li>
+{loop $CHANNEL $cid $chan}
+	<li class="nav-off" onmouseover="show_menu({$cid});" id="menu_{$cid}">
+	<a href="{$chan[linkurl]}"><p>{$chan[channelname]}</p></a>
+</li>{/loop}
+</ul>
+</div>
+
+<div class="Nav-Bottom" id="sub_menu"></div>
+
+<div id="menu_cont_0" style="display:none;">
+<span>{tag_全站头部置顶}</span>
+</div>
+
+<!--{loop $CHANNEL $channel}-->
+<div id="menu_cont_{$channel['channelid']}" style="display:none;">
+<span>
+<a href="{$channel['linkurl']}">{$channel['channelname']}首页</a>
+{php if($channel[module]=='product' || $channel[module]=='wenba') $tempchinnalid=$channel[module];else $tempchinnalid=$channel[channelid];}
+{php if($channel[module]=='house') $tempsid=$channel[channelid];}
+{tag_导航菜单循环}
+{if $channel[module]=='movie'}<span><a href="{$channel['linkurl']}letter.php" >按字母浏览</a></span>
+{elseif !$channel[islink]}<span><a href="{$channel['linkurl']}special/" >专题</a></span><span><a href="{$channel['linkurl']}type.php" >类别</a></span>
+{elseif $channel[module]=='yp'}
+<span><a href="{$channel['linkurl']}article.php" >企业新闻</a></span>
+<span><a href="{$channel['linkurl']}company.php" >企业库</a></span>
+<span><a href="{$channel['linkurl']}product.php" >产品库</a></span>
+<span><a href="{$channel['linkurl']}job.php" >人才招聘</a></span>
+<span><a href="{$channel['linkurl']}buy.php" >找买家</a></span>
+<span><a href="{$channel['linkurl']}sales.php" >找促销</a></span>
+{elseif $channel[module]=='house'} &nbsp;
+<span><a href="{$channel['linkurl']}listinfo.php?infocat=1" >出租</a></span>
+<span><a href="{$channel['linkurl']}listinfo.php?infocat=2" >求租</a></span>
+<span><a href="{$channel['linkurl']}listinfo.php?infocat=3" >合租</a></span>
+<span><a href="{$channel['linkurl']}listinfo.php?infocat=4" >出售</a></span>
+<span><a href="{$channel['linkurl']}listinfo.php?infocat=5" >求购</a></span>
+<span><a href="{$channel['linkurl']}listinfo.php?infocat=6" >置换</a></span>
+<span><a href="{$channel['linkurl']}listdisplay.php" >新楼盘</a></span>
+<span><a href="{$channel['linkurl']}web.php" >中介列表</a></span>
+<span><a href="{$channel['linkurl']}displaymgr.php?action=add" >发布楼盘</a></span>
+{/if}
+<span><a href="{$channel['linkurl']}search.php" class="white">搜索</a></span>
+</span>
+</div>
+<!--{/loop}-->
+
+
+</div>
+
+<script type="text/javascript">
+var tID={$tempsid};
+function show_menu(ID){
+  if(ID!=tID){
+    $('sub_menu').innerHTML = '&nbsp;'+$('menu_cont_'+ID).innerHTML;
+    $('menu_'+ID).className = 'nav-on';
+    $('menu_'+tID).className = 'nav-off';
+    tID=ID;
+  }else{
+    $('menu_'+ID).className = 'nav-on';
+    $('sub_menu').innerHTML = '&nbsp;'+$('menu_cont_'+ID).innerHTML;    
+  }
+}
+show_menu({$tempsid});
+</script>

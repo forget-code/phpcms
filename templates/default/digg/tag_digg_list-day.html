@@ -1,0 +1,20 @@
+<div class="jinri">今日关注度最高{$all_cats['catname']}</div>
+{loop $digg_list  $list}
+<!--顶列表开始-->
+<div class="xia_8px">
+    	<dl class="bg" style="margin-right:8px;">
+		{if getcookie($list['mod'].$list['digg_channel'].$list['text_id'])!=$list['text_id']}
+		<div id="diggDivDo_{$list['mod']}_{$list['digg_channel']}_{$list['text_id']}"><p>{$list['digg_hits']}</p><span style="cursor:hand" onClick="getAjax('{PHPCMS_PATH}digg/digg_add.php?','channelid={$list['digg_channel']}&digg_mod={$list['mod']}&id={$list['text_id']}&con=2','diggDivDo_{$list['mod']}_{$list['digg_channel']}_{$list['text_id']}')">顶一下</span><div>
+		{else}
+		<div id="diggDivDo_{$list['mod']}_{$list['digg_channel']}_{$list['text_id']}"><p>{$list['digg_hits']}</p><a href="{PHPCMS_PATH}{$list['digg_link']}">查看</a><div>
+		{/if}
+		</dl>
+            <dl class="list">
+            <h2><a href="{PHPCMS_PATH}{$list['digg_link']}">{$list['digg_title']}</a></h2>
+            <dt>{$list['digg_text']}</dt>
+            <dd>评论：<span class="ys">{$list['digg_comment']}次</span> 点击：<span class="ys">{$list['hits']}次</span> 频道：<span class="ys">{$CHANNEL[$list['digg_channel']]['channelname']}</span></dd>
+        </dl>
+    </div>
+<!--分割-->
+{/loop}
+<div class="pages">{$pages}<div>

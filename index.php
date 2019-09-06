@@ -1,6 +1,5 @@
 <?php 
-require './include/common.inc.php';
-
+require dirname(__FILE__).'/include/common.inc.php';
 if($PHPCMS['ishtml'] == 1 && file_exists(PHPCMS_ROOT.'/'.$PHPCMS['index'].'.'.$PHPCMS['fileext']))
 {
 	header('location:'.$PHPCMS['index'].'.'.$PHPCMS['fileext']);

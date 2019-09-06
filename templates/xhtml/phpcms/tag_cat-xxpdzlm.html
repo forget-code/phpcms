@@ -1,0 +1,12 @@
+<div class="down-topr">
+<ul>
+<!--{loop $subcat $i $cat}-->
+{if $i<count($subcat)/2}<li><a href="{$cat[linkurl]}">{$cat[catname]}</a></li>{/if}
+<!--{/loop}--></ul>
+</div>
+<div class="down-topr">
+<ul>
+<!--{loop $subcat $i $cat}-->
+{if $i>=count($subcat)/2}<li><a href="{$cat[linkurl]}">{$cat[catname]}</a></li>{/if}
+<!--{/loop}--></ul>
+</div>

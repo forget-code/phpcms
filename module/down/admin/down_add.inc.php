@@ -55,14 +55,13 @@ if($dosubmit)
 	$down['filesize'] = $down['filesize'] ? ($filesizetype ? $down['filesize'].' '.$filesizetype : bytes2x($down['filesize'])) : $LANG['unknown'];
 	$down['username'] = $down['editor'] = $down['checker'] = $_username;
 	$down['urlruleid'] = $down['ishtml'] ? $html_urlrule : $php_urlrule;
-	$down['addtime'] = $down['edittime'] = $down['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $down['addtime']) ? strtotime($down['addtime'].' '.date('H:i:s',$PHP_TIME)) : $PHP_TIME;
+	$down['addtime'] = $down['edittime'] = $down['checktime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})/', $down['addtime']) ? strtotime($down['addtime']) : $PHP_TIME;
 	if($down['homepage'] =='' || $down['homepage'] == 'http://www.') $down['homepage'] = '';
 	if(isset($down['arrposid']))
 	{
 		$arrposid = $down['arrposid'];
 		$down['arrposid'] = ','.implode(',', $arrposid).',';
 	}
-
 	$field->check_form();
 
 	$downid = $d->add($down);
@@ -100,11 +99,11 @@ if($dosubmit)
 }
 else
 {
-	$today=date('Y-m-d',$PHP_TIME);
+	$today=date('Y-m-d H:i:s',$PHP_TIME);
 	$type_select = type_select('down[typeid]', $LANG['type']);
 	$style_edit = style_edit("down[style]","");
 	$keywords_select = keywords_select($channelid);
-	$category_jump = category_select('catid', $LANG['to_other_category'], 0, "onchange=\"if(this.value!=''){location='?mod=$mod&file=$file&action=add&job=$job&channelid=$channelid&mode=$mode&catid='+this.value;}\"");
+	$this_category = str_replace("<option value='0'></option>",'',category_select('catid','',$catid));
 	$showgroup = showgroup('checkbox','down[arrgroupidview][]');
 	$showskin = showskin('down[skinid]');
 	$showtpl = showtpl($mod,'content','down[templateid]');

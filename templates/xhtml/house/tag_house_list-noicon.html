@@ -1,0 +1,14 @@
+<!--{loop $houses $i $house}-->
+<li>
+<!--{if $datetype}--> <span>{$house[addtime]}</span><!--{/if}-->
+<!--{if $showareaname}-->[<a href="{$MODULE[house][linkurl]}area.php?areaid={$house[areaid]}">{$AREA[$house[areaid]][areaname]}</a>] 
+<!--{/if}-->
+<a href="{$house[linkurl]}" title="{$house[name]}"  {$target}>{$house[cut_name]}</a>
+<!--{if $showhits}-->({$house[hits]}次)<!--{/if}-->
+<!--{if $showprice}--> 价格：{if $house['price']}{$house[price]}{$PARS[unit][$house[unit]]}{else}面议{/if}<!--{/if}-->
+<!--{if $descriptionlen}--><span class="tag_description">&nbsp;&nbsp;&nbsp;&nbsp;{$house[introduce]}</span><!--{/if}-->
+</li>
+<!--{/loop}-->
+<!--{if $pages}-->
+<div class="pages">{$pages}</div>
+<!--{/if}-->

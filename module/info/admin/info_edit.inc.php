@@ -26,8 +26,8 @@ if($dosubmit)
 	$info['ip'] = $PHP_IP;
 	$info['editor'] = $_username;
 	$info['urlruleid'] = $info['ishtml'] ? $html_urlrule : $php_urlrule;
-	$info['addtime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $info['addtime']) ? strtotime($info['addtime'].' '.date('H:i:s',$PHP_TIME)) : $PHP_TIME;
-	$info['endtime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})/', $info['endtime']) ? strtotime($info['endtime'].' '.date('H:i:s',$PHP_TIME)) : 0;
+	$info['addtime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})/', $info['addtime']) ? strtotime($info['addtime']) : $PHP_TIME;
+	$info['endtime'] = preg_match('/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2}) ([0-9]{2}):([0-9]{2}):([0-9]{2})/', $info['endtime']) ? strtotime($info['endtime']) : 0;
 	$info['edittime'] = $PHP_TIME;
 	if(isset($info['arrposid']))
 	{
@@ -81,8 +81,8 @@ else
 {
 	extract(new_htmlspecialchars($inf->get_one()));
 	$CAT = cache_read("category_$catid.php");
-	$addtime = date('Y-m-d',$addtime);
-	$endtime = $endtime ? date('Y-m-d',$endtime) : '';
+	$addtime = date('Y-m-d H:i:s',$addtime);
+	$endtime = $endtime ? date('Y-m-d H:i:s',$endtime) : '';
 	$type_select = type_select('info[typeid]', $LANG['type'], $typeid);
 	$style_edit = style_edit("info[style]", $style);
 	$keywords_select = keywords_select($channelid);

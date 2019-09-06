@@ -1,0 +1,8 @@
+{loop $products $i $product}
+<li><span>{if $datetype}{$product[adddate]}{/if}</span>·{if $showcatname}<a href="{$product[catlinkurl]}"{$target}>[{$product[catname]}]</a>{/if}
+<a href="{$product[linkurl]}" title="{$product[title]}" {$target}>{$product[stitle]}</a> {if $showhits}({$product[hits]}){/if}
+{if $introducelen}<br/>{$product[introduce]}{/if}</li>
+{/loop}
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

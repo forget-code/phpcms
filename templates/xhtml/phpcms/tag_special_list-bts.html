@@ -1,0 +1,7 @@
+{loop $specials $i $special}
+<li><span>{$special[adddate]}</span><a href='{$special[linkurl]}' target='_blank' title='{$special[alt]}'>·{$special[specialname]}</a></li>
+{/loop}
+<div style="clear:both"></div></ul>
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

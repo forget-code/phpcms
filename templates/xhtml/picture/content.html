@@ -1,0 +1,131 @@
+{template 'phpcms','header'}
+<link href="{$skindir}/photo.css" rel="stylesheet" type="text/css">
+<script language=javascript type="text/javascript">
+function fontZoom(size)
+{
+	$('contents').style.fontSize=size+'px'
+}
+</script>
+<div id="censent">
+  <!--content-->
+  <div id="left">
+    <div id="bt11">当前位置：<a href="{$channelurl}">{$channelname}首页</a> >> {$position} <a href="{$itemurl}">{$title}</a></div>
+    <div id="xwlbn" >
+      <!-- 文章标题 -->
+      <div class="theTitle">
+        <!--主标题-->
+        <div class="btt">{$title}</div>
+        <!--文件属性-->
+        <div class="text">发布日期：{$adddate}　来源：<a href="{$copyfromurl}" target="_blank">{$copyfromname}</a>　浏览次数：<span id="hits">0</span> 文字大小：【<a href="javascript:fontZoom(16)">大</a>】【<a href="javascript:fontZoom(14)">中</a>】【<a href="javascript:fontZoom(12)">小</a>】 </div>
+      </div>
+      <div id="contents">
+        <!--图片列表 -->
+        <div class="boxl boxmargin" id="articlecontentb0">
+          <div id="content" align="center">
+            <!--I start -->
+            {$purview_message}
+            {if $ispage && !$purview_message}
+            <div class="td_center_1"><img src="{$img_src}" alt="{$img_alt}" id="Img" {if !$MOD['show_mode']}onclick="window.open(this.src);"  style="cursor:pointer"{/if} /></div>
+            <div class="td_center_1">{$pages}</div>
+            <script type="text/javascript">
+			window.onload = function()
+			{
+				if($('Img').width>{$img_maxwidth})
+				{
+					$('Img').height=parseInt($('Img').height*{$img_maxwidth}/$('Img').width);
+					$('Img').width={$img_maxwidth};
+				}
+			}
+			</script>
+            {else}
+            <!--自定义字段//-->
+            <ul class="izj">
+              {loop $fields $v}
+              <li>{$v[title]}：{$v[value]}</li>
+              {/loop}
+            </ul>
+            <!--自定义字段\\-->
+            <div class="tutu"> {loop $pictureurls $i $pic} <span style="padding:0 5px;"><a href="{$pic[href]}"><img src="{$pic[thumb]}" alt="{$pic[alt]}" id="img_{$pic[id]}"/></a></span> {if $i%3==2}<br />
+              {/if}
+              {/loop} </div>
+            <script type="text/javascript">
+function ImgZoom(Id)//重新设置图片大小 防止撑破表格
+{
+	var w = $(Id).width;
+	var m = {$thumb_maxwidth};
+	if(w < m)
+	{
+		return;
+	}
+	else
+	{
+		var h = $(Id).height;
+		$(Id).height = parseInt(h*m/w);
+		$(Id).width = m;
+	}
+}
+window.onload = function()
+{
+	var Imgs = $("content").getElementsByTagName("img");
+	var i=0;
+	for(;i<Imgs.length;i++)
+	{
+		ImgZoom(Imgs[i]);
+	}
+}
+</script>
+            {/if}
+            <!-- Istop -->
+          </div>
+        </div>
+        <div id="bt111"><span class="STYLE1">图片介绍</span></div>
+        <div id="down-jies">
+          <div class="endSummary fjj">
+            <ul>
+              <li>
+                <!--简介 -->
+                <span id="digest"> {$introduce} {tag_点击标签样式三}</span> </li>
+            </ul>
+          </div>
+        </div>
+        <div id="bt111"><span class="STYLE1">相关图片</span></div>
+        <div id="down-jies">{tag_相关图片}</div>
+        <div id="down-jies">
+          <script type="text/javascript" src="{$MODULE['comment']['linkurl']}list_js.php?keyid={$channelid}&itemid={$pictureid}&commentnum=10&ordertype=1&title={$urlencode($title)}"></script>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="right">
+    <div class="boxmargin"><script language="javascript" src="{PHPCMS_PATH}data/js/8.js"></script></div>
+    <div class="layout">
+      <ul class="xw-1">
+        <li class="xw-left">
+          <div class="xw-onn"><span>&nbsp;推荐图片</span></div>
+        </li>
+        <li class="xw-right"><a href="{$channelurl}search.php?catid={$catid}&elite=1&search=1" class="more">更多</a></li>
+      </ul>
+      <div class="xian boxr boxmargin">
+        <ul class="phtoph">
+          {tag_图片栏目_推荐标题列表}
+        </ul>
+      </div>
+    </div>
+    <div class="layout">
+      <ul class="xw-1">
+        <li class="xw-left">
+          <div class="xw-onn"><span>&nbsp;热点图片</span></div>
+        </li>
+        <li class="xw-right"><a href="{$channelurl}search.php?catid={$catid}&ordertype=3&search=1" class="more">更多</a></li>
+      </ul>
+      <div class="xian boxr boxmargin">
+        <ul class="phtoph">
+          {tag_图片频道_热点标题列表}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<script type="text/javascript" src="{$channelurl}show_js.php?itemid={$pictureid}"></script>
+{template 'phpcms','footer'}

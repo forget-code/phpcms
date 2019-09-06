@@ -1,0 +1,24 @@
+{template 'phpcms','header'}
+<link href="{$skindir}/movie.css" rel="stylesheet" type="text/css">
+
+<div id="censent">
+  <div id="movecenl">
+    <div class="movebtleft"><div><span><a href="{$linkurl}">更多</a></span>{$catname}</div></div>
+    <div class="movenr" >
+<ul>
+{tag_侧栏最新影视}
+</ul>
+    <div id="clear"></div>
+    </div><div class="mvoecbot boxmargin "></div>
+  </div>
+  <div id="movecenr">
+<div class="boxmargin" id="bt11"><a href="{$channelurl}">{$channelname}首页</a> >> {$position} {$title}</div>
+<div class="layout search boxmargin boxl">
+<script language="JavaScript" src="{PHPCMS_PATH}data/js/search.js"></script>
+</div>
+<div class="introduce">{tag_频道子栏目列表}</div>
+{tag_影视大栏目影片列表}
+  </div>
+</div>
+</div>
+{template 'phpcms','footer'}

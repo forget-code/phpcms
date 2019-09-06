@@ -81,6 +81,7 @@ switch($action)
 		}
 		else
 		{
+			@extract($db->get_one("SELECT telephone AS _telephone,msn AS _msn,qq AS _qq,address AS _address FROM ".TABLE_MEMBER_INFO." WHERE userid='$_userid'"));
 			$fields = $field->get_form('<tr><td class="td_right"><strong>$title</strong></td><td class="td_left">$input $tool $note</td></tr>');
 			$type_select = type_select('typeid', $LANG['type']);
 			$info_province = isset($province) ? trim(urldecode($province)) : $PHPCMS['province'];

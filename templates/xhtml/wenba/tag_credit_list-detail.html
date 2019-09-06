@@ -1,0 +1,31 @@
+<table class="tlp4" id="tl" cellspacing="0" width="100%" border="0">
+<tr>
+	<td class="nl" nowrap="nowrap" align="center" height="30" width="5%">&nbsp;&nbsp;排名</td>
+	<td class="nl" nowrap="nowrap" align="center" width="15%">用户名</td>
+	<td class="nl" nowrap="nowrap" align="center" width="10%">积分</td>
+	<td class="nl" nowrap="nowrap" align="center" width="10%">等级</td>
+	<td class="nl" nowrap="nowrap" align="center" width="15%">在线时间</td>
+	<td class="nl" nowrap="nowrap" align="center" width="15%">最后登录</td>
+	<td class="nl" nowrap="nowrap" align="center" width="10%">登陆次数</td>
+	<td class="nl" nowrap="nowrap" align="center" width="10%">回答数</td>
+	<td class="nl" nowrap="nowrap" align="center" width="10%">回答被采纳数</td>
+	</tr>
+<!--{loop $creditlist $i $g}-->
+<!--{if $i%$cols==0}--><tr align="center"><!--{/if}-->
+<td >{$j}</td>
+<td ><a href="{$MODULE['member']['linkurl']}member.php?username={$g['username']}">{$g['username']}</a></td>
+<td >{$g['credit']}</td>
+<td >{$g['grade']} {$g['actor']}</td>
+<td >{$g['totalonline_hour']}时{$g['totalonline_minute']}分</td>
+<td >{$g['lastlogintime']}</td>
+<td >{$g['logintimes']}</td>
+<td >{$g['answercounts']}</td>
+<td >{$g['acceptcount']}</td>
+{php $j++;}
+<!--{if $i%$cols==($cols-1)}--></tr><!--{/if}-->
+<!--{/loop}-->
+</table>
+
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

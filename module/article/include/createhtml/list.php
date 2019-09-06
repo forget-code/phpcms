@@ -52,13 +52,18 @@ else
 	$page = 1;
 }
 
+for($n = $page; $n <= $pagenumber; $n++)
+{
+	$filenames[$n] = PHPCMS_ROOT.'/'.cat_url('path', $catid, $n);
+}
+
 for(; $page <= $pagenumber; $page++)
 {
-	$filename = PHPCMS_ROOT.'/'.cat_url('path', $catid, $page);
 	ob_start();
 	include template($mod, $templateid);
 	$data = ob_get_contents();
 	ob_clean();
+	$filename = $filenames[$page];
 	file_put_contents($filename,$data);
 	@chmod($filename, 0777);
 	if($page == 1 && !$child)

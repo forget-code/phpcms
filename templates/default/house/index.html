@@ -1,0 +1,136 @@
+{template 'house','header'}
+{include PHPCMS_ROOT.'/data/house_search_inc.html'}
+<div id="content">
+  <div class="house_left">
+    <div class="left_top_box_top"></div>
+	{include PHPCMS_ROOT.'/data/building_search_inc.html'}
+	 <div class="fod">
+	    <ul>
+          <li class="s" onMouseOver="fod(this,'foda1')"><a href="{$MOD[linkurl]}listdisplay.php" class="selectli1"><span>今日推荐</span></a></li>
+          <li onMouseOver="fod(this,'foda1')"><a href="{$MOD[linkurl]}listdisplay.php"><span>热门楼盘</span></a></li>
+		  <li onMouseOver="fod(this,'foda1')"><a href="{$MOD[linkurl]}listdisplay.php"><span>特价楼盘</span></a></li>
+	    </ul>
+      </div>
+      <div class="fodinfo">
+        <div id="foda1">
+          <div class="dis">
+            <ul>
+			  {tag_房产首页推荐楼盘}
+			</ul>
+          </div>
+          <div class="undis">
+            <ul>
+              {tag_房产首页热门楼盘}
+            </ul>
+          </div>
+		  <div class="undis">
+            <ul>
+              {tag_房产首页特价楼盘}
+            </ul>
+          </div>
+        </div>
+	  </div>
+	  <div class="fod">
+	    <ul>
+          <li class="s" onMouseOver="fod(this,'foda2')"><a href="{$MOD[linkurl]}" class="selectli1"><span>地区分类</span></a></li>
+          <li onMouseOver="fod(this,'foda2')"><a href="{$MOD[linkurl]}"><span>房产中介</span></a></li>
+          <li onMouseOver="fod(this,'foda2')"><a href="{$MOD[linkurl]}"><span>物业排行</span></a></li>
+	    </ul>
+      </div>
+      <div class="fodinfo">
+        <div id="foda2">
+          <div class="dis">
+		  <ul>
+		  <li>
+			{loop $AREA $are}
+			  {if !$are[parentid]}<a href="{PHPCMS_PATH}{$are[linkurl]}" target="_blank">{$are[areaname]}</a>&nbsp;{/if}
+			 {/loop}
+		    </li>
+			</ul>
+          </div>
+          <div class="undis">
+            <ul>
+			  {tag_最新房产中介}
+			</ul>
+          </div>
+          <div class="undis">
+            <ul>
+              {tag_房产排行}
+            </ul>
+          </div>
+        </div>
+	  </div>
+	<div class="left_top_box_bottom"></div>
+  </div>
+  <div class="house_middle">
+    <div class="middle_top_box">
+	  <ul>{tag_推荐楼盘}</ul>
+	  <ul>
+	    <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=1">发布出租</a></li>
+	    <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=2">发布求租</a></li>
+	    <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=3">发布合租</a></li>
+	    <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=4">发布出售</a></li>
+	    <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=5">发布求购</a></li>
+	    <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=6">发布置换</a></li>
+	  </ul>
+	  <div class="ann"><!-- 房产公告位置 --></div>
+	</div>
+	<div class="middle_box_top"><h5>最新楼盘介绍</h5><a href="{$MOD[linkurl]}listdisplay.php">更多</a></div>
+	<div class="middle_box">
+	  {tag_首页滚动新楼盘}
+	</div>
+	<div class="middle_box_bottom"></div>
+	<div class="middle_box_top"><h5>楼房出售</h5><a href="{$MOD[linkurl]}listinfo.php?infocat=4">更多</a></div>
+	<div class="middle_box">
+	  {tag_房产首页出售}
+	</div>
+	<div class="middle_box_bottom"></div>
+	<div class="middle_box_top"><h5>楼房求购</h5><a href="{$MOD[linkurl]}listinfo.php?infocat=5">更多</a></div>
+	<div class="middle_box">
+	  {tag_房产首页求购}
+	</div>
+	<div class="middle_box_bottom"></div>
+	<div class="middle_fod">
+	    <ul>
+          <li class="s" onMouseOver="fod(this,'foda3')"><a href="{$CAT[1][linkurl]}" class="selectli1"><span>出&nbsp;租</span></a></li>
+          <li onMouseOver="fod(this,'foda3')"><a href="{$CAT[2][linkurl]}"><span>求&nbsp;租</span></a></li>
+		  <li onMouseOver="fod(this,'foda3')"><a href="{$CAT[3][linkurl]}"><span>合&nbsp;租</span></a></li>
+		  <li onMouseOver="fod(this,'foda3')"><a href="{$CAT[6][linkurl]}"><span>置&nbsp;换</span></a></li>
+	    </ul>
+      </div>
+      <div class="middle_fodinfo">
+        <div id="foda3">
+          <div class="dis">
+            <ul>
+			  {tag_房产首页出租}
+			</ul>
+          </div>
+          <div class="undis">
+            <ul>
+              {tag_房产首页求租}
+            </ul>
+          </div>
+		  <div class="undis">
+            <ul>
+              {tag_房产首页合租}
+            </ul>
+          </div>
+		  <div class="undis">
+            <ul>
+              {tag_房产首页置换}
+            </ul>
+          </div>
+        </div>
+	  </div>
+  </div>
+  <div class="house_right">
+    {include PHPCMS_ROOT.'/data/coop_search_inc.html'}
+	<div class="house_right_box">
+	  <h5>受关注热房</h5>
+	  <ul>
+	    {tag_房产首页热门}
+	  </ul>
+	</div>
+  </div>
+</div>
+{template 'house','footer'}

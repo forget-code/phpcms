@@ -1,0 +1,15 @@
+<ul><form id="member_login" name="member_login" action="{$MOD[linkurl]}login.php" method="post">
+<li>用户名：</li><li><input type="text" name="username" id="username" size="12" class="inp" /></li>
+<li>密码：</li><li><input id="username" type="password" size="12" value="" name="password" /></li>
+<li><!--{if $MOD['enablecheckcodeoflogin']}-->验证码：<input name="checkcodestr" type="text" id="username" size="4" class="inp" /> <img src="{PHPCMS_PATH}checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/><!--{/if}--></li>
+<li>
+<select name="cookietime" id="cookietime" class="inp" >
+<option value="0" {$select[0]}>不保存</option>
+<option value="86400" {$select[86400]}>保存一天</option>
+<option value="2592000" {$select[2592000]}>保存一月</option>
+<option value="31536000" {$select[31536000]}>保存一年</option>
+</select></li>
+<li>
+<input type="submit" value="登 录" name="dosubmit" /></li>
+<li><a href="{$MOD[linkurl]}register.php">免费注册</a> | <a href="{$MOD[linkurl]}getpassword.php">忘记密码</a></li>
+</form></ul>

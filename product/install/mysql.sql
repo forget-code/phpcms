@@ -1,4 +1,4 @@
-INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('商城', 'product', 'product', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn/', 'phpcms@163.com', '产品展示、产品订购、在线支付', '许可协议内容', '使用帮助内容', 'a:27:{s:6:"ishtml";s:0:"";s:18:"cat_html_urlruleid";s:0:"";s:19:"item_html_urlruleid";s:1:"1";s:17:"cat_php_urlruleid";s:0:"";s:18:"item_php_urlruleid";s:1:"1";s:9:"seo_title";s:6:"商城";s:12:"seo_keywords";s:6:"商城";s:15:"seo_description";s:6:"商城";s:10:"templateid";s:0:"";s:6:"skinid";s:7:"default";s:9:"uploaddir";s:10:"pdt_upload";s:12:"enableupload";s:1:"1";s:14:"uploadfiletype";s:23:"jpg|gif|rar|png|zip|txt";s:10:"thumbwidth";s:3:"150";s:11:"thumbheight";s:3:"120";s:7:"maxpage";s:2:"28";s:8:"pagesize";s:2:"30";s:11:"issendemail";s:0:"";s:10:"visitednum";s:1:"6";s:15:"showsearchtable";s:1:"1";s:19:"showsearchintroduce";s:1:"1";s:18:"searchintroducenum";s:3:"200";s:11:"showcompare";s:1:"1";s:10:"enable_rss";s:1:"1";s:8:"rss_mode";s:1:"1";s:7:"rss_num";s:2:"50";s:10:"rss_length";s:3:"200";}', 0, '0000-00-00', '0000-00-00', '0000-00-00');
+INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('商城', 'product', 'product', '', 0, 0, 0, '1.0.0', 'phpcms团队', 'http://www.phpcms.cn/', 'phpcms@163.com', '产品展示、产品订购、在线支付', '许可协议内容', '使用帮助内容', '', 0, '0000-00-00', '0000-00-00', '0000-00-00');
 
 DROP TABLE IF EXISTS `phpcms_product`;
 CREATE TABLE `phpcms_product` (
@@ -16,6 +16,7 @@ CREATE TABLE `phpcms_product` (
   `pdt_unit` varchar(20) NOT NULL default '',
   `introduce` text NOT NULL,
   `pdt_img` varchar(255) NOT NULL default '',
+  `pdt_bigimg` varchar(255) NOT NULL default '',
   `pdt_thumb` varchar(255) NOT NULL default '',
   `hits` int(8) NOT NULL default '0',
   `comments` int(10) unsigned NOT NULL default '0',
@@ -161,7 +162,7 @@ CREATE TABLE `phpcms_product_property` (
 
 INSERT INTO `phpcms_product_property` (`pro_id`, `pro_name`, `disabled`) VALUES (1, '手机', 0);
 INSERT INTO `phpcms_menu` (`position`, `name`, `title`, `url`, `target`, `style`, `listorder`, `arrgroupid`, `arrgrade`, `username`) VALUES ('member_menu', '我的订单', '', 'product/myorder.php', '_self', '', 17, '', '', '');
-INSERT INTO `phpcms_channel` (`module`, `channelname`, `style`, `channelpic`, `introduce`, `seo_title`, `seo_keywords`, `seo_description`, `listorder`, `islink`, `channeldir`, `channeldomain`, `disabled`, `templateid`, `skinid`, `items`, `comments`, `categorys`, `specials`, `hits`, `enablepurview`, `arrgroupid_browse`, `purview_message`, `point_message`, `enablecontribute`, `enablecheck`, `emailofreject`, `emailofpassed`, `enableupload`, `uploaddir`, `maxfilesize`, `uploadfiletype`, `linkurl`, `setting`, `ishtml`, `cat_html_urlruleid`, `item_html_urlruleid`, `special_html_urlruleid`, `cat_php_urlruleid`, `item_php_urlruleid`, `special_php_urlruleid`) VALUES ('article', '商城', '', '', '', '', '', '', 30, 1, '', '', 0, '0', '0', 0, 0, 0, 0, 0, 0, '', '', '', 1, 1, '', '', 1, 'uploadfile', 1024000, 'gif|jpg', 'product/', '', 1, 0, 0, 0, 0, 0, 0);
+INSERT INTO `phpcms_channel` (`module`, `channelname`, `style`, `channelpic`, `introduce`, `seo_title`, `seo_keywords`, `seo_description`, `listorder`, `islink`, `channeldir`, `channeldomain`, `disabled`, `templateid`, `skinid`, `items`, `comments`, `categorys`, `specials`, `hits`, `enablepurview`, `arrgroupid_browse`, `purview_message`, `point_message`, `enablecontribute`, `enablecheck`, `emailofreject`, `emailofpassed`, `enableupload`, `uploaddir`, `maxfilesize`, `uploadfiletype`, `linkurl`, `setting`, `ishtml`, `cat_html_urlruleid`, `item_html_urlruleid`, `special_html_urlruleid`, `cat_php_urlruleid`, `item_php_urlruleid`, `special_php_urlruleid`) VALUES ('product', '商城', '', '', '', '', '', '', 30, 1, '', '', 0, '0', '0', 0, 0, 0, 0, 0, 0, '', '', '', 1, 1, '', '', 1, 'uploadfile', 1024000, 'gif|jpg', 'product/', '', 1, 0, 0, 0, 0, 0, 0);
 
 
 INSERT INTO `phpcms_menu` ( `position`, `name`, `title`, `url`, `target`, `style`, `listorder`, `arrgroupid`, `arrgrade`, `username`) VALUES ('admin_quick_add', '添加商品', '商品管理首页', '?mod=product&file=product&action=main', '_self', '', 0, '1', '0,1', '');

@@ -1,7 +1,7 @@
 <?php
 function info_list($templateid = '', $channelid = 4, $catid = 0, $child = 1, $specialid = 0, $page = 0, $infonum = 10, $titlelen = 30, $introducelen = 0, $areaid = 0, $typeid = 0, $posid = 0, $datenum = 0, $ordertype = 0, $datetype = 0, $showcatname = 0, $showauthor = 0, $showhits = 0, $target = 0, $cols = 1, $username = '') 
 {
-	global $db, $PHP_TIME, $CONFIG, $CHANNEL, $CHA, $CATEGORY, $MODULE, $FIELD, $TEMP, $AREA, $LANG;
+	global $db, $PHP_TIME, $CONFIG, $CHANNEL, $CHA, $CATEGORY, $MODULE, $FIELD, $TEMP, $AREA, $LANG, $skindir;
 	$temp_id = 0;
 	if($page == 0 && defined('CREATEHTML'))
 	{
@@ -102,7 +102,7 @@ function info_list($templateid = '', $channelid = 4, $catid = 0, $child = 1, $sp
 
 function info_thumb($templateid = '', $channelid = 4, $catid = 0, $child = 1, $specialid = 0, $page = 0, $infonum = 10, $titlelen = 20, $introducelen = 0, $areaid = 0, $typeid = 0, $posid = 0, $datenum = 0, $ordertype = 0, $datetype = 0, $showalt = 0, $target = 0, $imgwidth = 100, $imgheight = 100, $cols = 1, $username = '')
 {
-	global $db, $PHP_TIME, $CONFIG, $CHANNEL, $CHA, $CATEGORY, $AREA, $FIELD, $TEMP;
+	global $db, $PHP_TIME, $CONFIG, $CHANNEL, $CHA, $CATEGORY, $AREA, $FIELD, $TEMP, $skindir;
 	$temp_id = 0;
 	if($page == 0 && defined('CREATEHTML'))
 	{
@@ -195,7 +195,7 @@ function info_thumb($templateid = '', $channelid = 4, $catid = 0, $child = 1, $s
 
 function info_slide($templateid = '', $channelid = 4, $catid = 0, $child = 1, $specialid = 0, $infonum = 5, $titlelen = 30, $typeid = 0, $posid = 0, $datenum = 0, $ordertype = 0, $imgwidth = 200, $imgheight = 180, $timeout = 5, $effectid = -1, $username = '')
 {
-	global $db, $PHP_TIME, $CONFIG, $CHANNEL, $CHA, $CATEGORY, $AREA, $FIELD;
+	global $db, $PHP_TIME, $CONFIG, $CHANNEL, $CHA, $CATEGORY, $AREA, $FIELD, $skindir;
 	if(!isset($CHA) || $CHA['channelid'] != $channelid) channel_setting($channelid);
 	if(!isset($AREA)) $AREA = cache_read('areas_'.$channelid.'.php');
 	$ordertypes = array('listorder DESC, infoid DESC', 'edittime DESC', 'edittime ASC', 'hits DESC', 'hits ASC', 'comments DESC', 'comments ASC');
@@ -267,11 +267,11 @@ function info_slide($templateid = '', $channelid = 4, $catid = 0, $child = 1, $s
 
 function info_related($templateid = '', $channelid = 4, $keywords = '', $infoid = 0, $infonum = 10, $titlelen = 30, $datetype = 0)
 {
-	global $db, $PHP_TIME, $CONFIG, $FIELD;
+	global $db, $PHP_TIME, $CONFIG, $FIELD, $skindir;
 	if(!$keywords) return '';
 	$datetypes = array('', 'Y-m-d', 'm-d', 'Y/m/d', 'Y.m.d', 'Y-m-d H:i:s', 'Y-m-d H:i');
 	$infoid = intval($infoid);
-	$keywords = str_replace(',', '+', $keywords);
+	$keywords = str_replace(',', '+', addslashes($keywords));
 	$infonum++;
 	$tablename = $CONFIG['tablepre'].'info_'.$channelid;
 	$infos = array();

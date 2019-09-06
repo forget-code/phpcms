@@ -1,4 +1,4 @@
-INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('邮件订阅', 'mail', 'mail', '', 0, 0, 0, '1.0.0', 'phpcms', 'www.phpcms.cn', 'phpcms@163.com', '邮件订阅', '', '', 'a:2:{s:6:"maxnum";s:2:"10";s:11:"ischeckcode";s:1:"1";}', 0, '0000-00-00', '0000-00-00', '0000-00-00');
+INSERT INTO `phpcms_module` (`name`, `module`, `moduledir`, `moduledomain`, `iscore`, `iscopy`, `isshare`, `version`, `author`, `site`, `email`, `introduce`, `license`, `faq`, `setting`, `disabled`, `publishdate`, `installdate`, `updatedate`) VALUES ('邮件订阅', 'mail', 'mail', '', 0, 0, 0, '1.0.0', 'phpcms', 'www.phpcms.cn', 'phpcms@163.com', '邮件订阅', '', '', '', 0, '0000-00-00', '0000-00-00', '0000-00-00');
 DROP TABLE IF EXISTS `phpcms_mail`;
 CREATE TABLE `phpcms_mail` (
   `mailid` int(10) unsigned NOT NULL auto_increment,

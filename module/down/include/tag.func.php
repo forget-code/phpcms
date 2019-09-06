@@ -1,7 +1,7 @@
 <?php
 function down_list($templateid = '', $channelid = 2, $catid = 0, $child = 1, $specialid = 0, $page = 0, $downnum = 10, $titlelen = 30, $introducelen = 0, $typeid = 0, $posid = 0, $datenum = 0, $ordertype = 0, $datetype = 0, $showcatname = 0, $showauthor = 0, $showdowns = 0, $target = 0, $cols = 1, $username = '') 
 {
-	global $db, $mod, $PHP_TIME, $CONFIG, $CHANNEL, $CHA, $CATEGORY, $MODULE, $FIELD, $TEMP;
+	global $db, $mod, $PHP_TIME, $CONFIG, $CHANNEL, $CHA, $CATEGORY, $MODULE, $FIELD, $TEMP, $skindir;
 	$temp_id = 0;
 	if($page == 0 && defined('CREATEHTML'))
 	{
@@ -91,7 +91,7 @@ function down_list($templateid = '', $channelid = 2, $catid = 0, $child = 1, $sp
 
 function down_thumb($templateid = '', $channelid = 2, $catid = 0, $child = 1, $specialid = 0, $page = 0, $downnum = 10, $titlelen = 20, $introducelen = 0, $typeid = 0, $posid = 0, $datenum = 0, $ordertype = 0, $datetype = 0, $showalt = 0, $target = 0, $imgwidth = 100, $imgheight = 100, $cols = 1, $username = '')
 {
-	global $db, $PHP_TIME, $CONFIG, $CHANNEL, $CHA, $CATEGORY, $FIELD, $TEMP;
+	global $db, $PHP_TIME, $CONFIG, $CHANNEL, $CHA, $CATEGORY, $FIELD, $TEMP, $skindir;
 	$temp_id = 0;
 	if($page == 0 && defined('CREATEHTML'))
 	{
@@ -178,7 +178,7 @@ function down_thumb($templateid = '', $channelid = 2, $catid = 0, $child = 1, $s
 
 function down_slide($templateid = '', $channelid = 2, $catid = 0, $child = 1, $specialid = 0, $downnum = 5, $titlelen = 30, $typeid = 0, $posid = 0, $datenum = 0, $ordertype = 0, $imgwidth = 200, $imgheight = 180, $timeout = 5, $effectid = -1, $username = '')
 {
-	global $db, $PHP_TIME, $CONFIG, $CHANNEL, $CHA, $CATEGORY, $FIELD;
+	global $db, $PHP_TIME, $CONFIG, $CHANNEL, $CHA, $CATEGORY, $FIELD, $skindir;
 	if(!isset($CHA) || $CHA['channelid'] != $channelid) channel_setting($channelid);
 	$ordertypes = array('listorder DESC, edittime DESC', 'edittime DESC', 'downid ASC', 'totaldowns DESC', 'totaldowns ASC', 'comments DESC', 'comments ASC');
 	$specialid = intval($specialid);
@@ -249,11 +249,11 @@ function down_slide($templateid = '', $channelid = 2, $catid = 0, $child = 1, $s
 
 function down_related($templateid = '', $channelid = 2, $keywords = '', $downid = 0, $downnum = 10, $titlelen = 30, $datetype = 0)
 {
-	global $db, $PHP_TIME, $CONFIG, $MODULE, $FIELD;
+	global $db, $PHP_TIME, $CONFIG, $MODULE, $FIELD, $skindir;
 	if(!$keywords) return '';
 	$datetypes = array('', 'Y-m-d', 'm-d', 'Y/m/d', 'Y.m.d', 'Y-m-d H:i:s', 'Y-m-d H:i');
 	$downid = intval($downid);
-	$keywords = str_replace(',', '+', $keywords);
+	$keywords = str_replace(',', '+', addslashes($keywords));
 	$downnum++;
 	$tablename = $CONFIG['tablepre'].'down_'.$channelid;
 	$downs = array();

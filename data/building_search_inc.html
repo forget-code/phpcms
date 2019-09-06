@@ -1,0 +1,55 @@
+	<div class="left_top_box">
+      <!--<h5>新楼盘搜索</h5> -->
+  <ul>
+    <form action="search.php?action=building" method="GET" name="search_building">
+        <li>
+所属区域：
+<select name='areaid' style="width:120px;"><option value='0'>不限</option></select>
+        </li>
+<li>
+物业类型：
+         <select name="propertytype" id="propertytype3" >
+          <option value="" selected>不限</option> 
+          
+  <option value="1" >普通住宅</option>
+  
+  <option value="2" >平房</option>
+  
+  <option value="3" >多层</option>
+  
+  <option value="4" >小高层</option>
+  
+  <option value="5" >高层</option>
+  
+  <option value="6" >跃层</option>
+  
+  <option value="7" >别墅</option>
+  
+  <option value="8" >公寓</option>
+  
+  <option value="9" >民房</option>
+  
+  <option value="10" >其它</option>
+  
+
+          </select>
+        </li>
+<li>
+价格范围： <input name="fromprice" type="text" id="fromprice" size="5">～<input name="toprice" type="text"id="toprice" size="5">元
+        </li>
+<li>
+搜索项目： <select name="searchtype" id="searchtype">
+          <option value="name">楼盘名称</option>
+          <option value="address">楼盘地址</option>
+          <option value="develop">开发商</option>
+          </select>
+        </li>
+<li>
+          <input type="hidden" name="search" value="1">
+  <input type="hidden" name="action" value="building">
+          <input name="keywords" type="text" id="keywords" size="10" height="9">
+          <input class="btn" type="image" src="/6/templates/xhtml/skins/xhtml/house_new/images/home/search.gif" name="dosubmit" value=" 搜索 " align="absmiddle"/> <a href="/6/house/search.php?action=building">高级</a>
+        </li>
+        </form>
+      </ul>
+</div>

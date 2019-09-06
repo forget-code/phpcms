@@ -2,7 +2,7 @@
 function formguide($templateid='',$formid)
 {
 	global $db,$MOD,$MODULE;
-	$formid = (!isset($formid)||$formid=='') ? 0 : $formid;
+	$formid = (!isset($formid)||$formid=='') ? 0 : intval($formid);
 	$query = "SELECT * FROM ".TABLE_FORMGUIDE." WHERE formid=$formid limit 1";
 	$r = $db->get_one($query);
 	if(!$r)

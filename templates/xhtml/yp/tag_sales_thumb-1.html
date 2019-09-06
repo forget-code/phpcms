@@ -1,0 +1,22 @@
+<table width="100%"  cellpadding="0" cellspacing="0">
+{loop $products $i $product}
+{if $i%$cols==0}<tr>{/if}
+<td width="{$width}" >
+	<table width="100%"  cellpadding="0" cellspacing="3">
+	<tr>
+	<td align="center"><a href="{$product['linkurl']}" {$target}><img src="{$product[thumb]}" width="{$imgwidth}" height="{$imgheight}" alt="{$product[alt]}" class="img-3" /></a></td>
+	</tr>
+	{if $introducelen}
+	<tr>
+	<td><span class="tag_description">&nbsp;&nbsp;&nbsp;&nbsp;{$product[introduce]}</span>
+	</td>
+	</tr>
+	{/if}
+	</table>
+</td>
+{if $i%$cols==($cols-1)}</tr>{/if}
+{/loop}
+</table>
+{if $pages}
+<div class="pages">{$pages}</div>
+{/if}

@@ -1,6 +1,6 @@
 <?php 
 define('SHOWJS', 1);
-require './include/common.inc.php';
+require dirname(__FILE__).'/include/common.inc.php';
 require PHPCMS_ROOT.'/templates/'.$CONFIG['defaulttemplate'].'/html.php';
 
 if(!isset($html[$tag])) showmessage($LANG['tag_not_exists']);

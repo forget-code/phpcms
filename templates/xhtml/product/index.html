@@ -1,0 +1,102 @@
+{template 'product','header'}
+<link href="{$skindir}/mall.css" rel="stylesheet" type="text/css">
+<div id="censent">
+  <div id="mallleft">
+    <div class="mbtleft"><div>商品目录</div> </div>
+    <div class="boxmargin xianmall">
+<!--商品分类列表-->
+<!--{loop $childcats $i $cat}-->
+<div  class="mlmall mallx1 mall_link">
+<strong><a href="{$cat['linkurl']}">{$cat[catname]}</a></strong>
+<p><!--{loop $subcats[$i] $k $c}--><a href="{$c['linkurl']}">{$c[catname]}</a><!--{/loop}--></p>
+</div><!--{/loop}-->
+    </div>
+    <div class="gwmall boxmargin" ><a href="{$MOD[linkurl]}cart.php" target="_blank"><img src="{$skindir}/images/ckgwc.gif" 
+class="wztp" /></a><img src="{$skindir}/images/gwaw.gif" class="wztp" />
+    <div class="rhgm"><img src="{$skindir}/images/gwli.gif" />&nbsp;如何购买&nbsp;<img src="{$skindir}/images/gwli.gif" 
+/>&nbsp;如何购买</div>
+    </div>
+    <div class="mbtleft">
+      <div><span class="mallbtbg"></span>热点商品</div> 
+    </div>
+    <div class="boxmargin xianmall">
+    <div  class="mall_link-1 mallx1 malllist">
+    <ul>
+{tag_热门商品}
+    </ul>
+   </div>
+    </div> 
+  </div>
+  <div id="mallright">
+    <div  class="malll">
+      <div class="boxmargin">
+{tag_3dflash}
+</div>
+<div class="search_c1"> 
+<!--搜索开始-->
+<ul>
+<form name="myform" action="{$MOD[linkurl]}search.php" method="get">
+<li class="c4">搜索：</li><li>
+<select name="searchtype">
+<option value="pdt_name">按商品名称</option>
+<option value="pdt_No">按商品编号</option>
+<option value="introduce">按商品介绍</option>
+</select></li>
+<li class="c4">关键字：</li>
+<li><input class="c2" name="keyword" type="text" /></li>
+<li class="c4">价格范围：</li>
+<li><input class="c3" name="fromprice" type="text" />-<input class="c3" name="toprice" type="text" /></li>
+<li><input type="hidden" name="dosubmit" value="1" />
+<input type="hidden" name="search" value="1" />
+<input src="{$skindir}/images/ss.gif" alt="搜索" type="image" /></li>
+<li class="c4"><a href="{$MOD[linkurl]}search.php" class="red">详细</a></li>
+</form></ul>
+<!--搜索结束-->
+</div>
+<div class="mbtleft"><div><span class="mallbtbg"></span>精品推荐</div> </div>
+<div class="xianmall boxmargin clearfix">
+<div class="mnrbot"><ul>
+{tag_精品推荐}
+</ul>
+ <div  style="clear:both"></div> </div></div>
+ <div class="mbtleft"><div><span class="mallbtbg"></span>特价产品</div> </div>
+ <div class="xianmall boxmargin clearfix">
+<div ><ul class="mnrbot">
+{tag_特价产品}
+</ul>
+ <div  style="clear:both"></div> </div>
+ </div>
+ <div class="mbtleft"><div><span class="mallbtbg"></span>最新产品</div> </div>
+ <div class="xianmall boxmargin clearfix">
+<div ><ul class="mnrbot">{tag_最新产品}</ul>
+ <div  style="clear:both"></div> </div>
+ </div>
+</div>
+    <div  class="mallr"><div>
+      <div class="xianmall1 boxmargin alinkc"><img src="{$skindir}/images/sqzx.gif" / class="mimgtop">&nbsp;<img 
+src="{$skindir}/images/fxzx.gif" / class="mimgtop"><a href="{$MOD[linkurl]}myorder.php"><img src="{$skindir}/images/ddzx.gif" / class="mimgtop"></a>&nbsp;<img 
+src="{$skindir}/images/tszx.gif" / class="mimgtop"><div  style="clear:both"></div></div>
+
+      </div>
+      <div class="mbtleft"><div><span class="mallbtbg"><a href="{$MODULE[announce][linkurl]}index.php?keyid={$mod}">更多
+</a></span> 商城公告</div></div>
+<div class="boxmargin xianmall">
+    <div  class="malllist">
+{tag_商城首页最新公告}
+   </div>
+    </div>
+
+      <div class="boxmargin"><script language="javascript" src="{PHPCMS_PATH}data/js/10.js"></script></div>
+      <div class="mbtleft"><div  class="alinkc"><img src="{$skindir}/images/rmsp.gif" /></div> 
+      </div>
+      <div class="xianmall boxmargin">
+        <div>
+          <div class="rmsplist"><ul>
+{tag_热卖产品}
+</ul></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{template 'phpcms','footer'}

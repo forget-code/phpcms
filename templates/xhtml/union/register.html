@@ -1,0 +1,135 @@
+{template "phpcms","header"}
+<script LANGUAGE="javascript">
+<!--
+function CheckForm()
+{
+    if(document.myform.truename.value=="")
+	{
+	  alert("请填写姓名！")
+	  document.myform.truename.focus()
+	  return false
+	 }
+    if(document.myform.alipay.value=="")
+	{
+	  alert("请填写支付宝帐号！")
+	  document.myform.alipay.focus()
+	  return false
+	 }
+    if(document.myform.telephone.value=="")
+	{
+	  alert("请填写联系电话！")
+	  document.myform.telephone.focus()
+	  return false
+	 }
+    if(document.myform.mobile.value=="")
+	{
+	  alert("请填写手机号！")
+	  document.myform.mobile.focus()
+	  return false
+	 }
+    if(document.myform.address.value=="")
+	{
+	  alert("请填写地址！")
+	  document.myform.address.focus()
+	  return false
+	 }
+    if(document.myform.postid.value=="")
+	{
+	  alert("请填写邮编！")
+	  document.myform.postid.focus()
+	  return false
+	 }
+    if(document.myform.qq.value=="")
+	{
+	  alert("请填写QQ号！")
+	  document.myform.qq.focus()
+	  return false
+	 }
+    if(document.myform.homepage.value=="")
+	{
+	  alert("请填写主页！")
+	  document.myform.homepage.focus()
+	  return false
+	 }
+	{if $MOD['enablecheckcode']}
+    if(document.myform.checkcode.value=="")
+	{
+	  alert("请填写验证码！")
+	  document.myform.checkcode.focus()
+	  return false
+	 }
+	{/if}
+}
+//-->
+</script>
+<table cellspacing="0" cellpadding="0" class="member">
+<tr>
+<td valign="top" class="left">
+{template "member","left"}
+</td>
+<td width="10">
+</td>
+<td class="right" valign="top">
+{template "union","menu"}
+<div class="memberborder_1">
+<div class="memberborder_2">
+<h1>申请加入推广联盟</h1>
+<form name="myform" method="post" action="{$MOD[linkurl]}register.php" onSubmit="return CheckForm();">
+<table cellpadding="2" cellspacing="1" class="righttable">
+  <tr>
+    <td class="td_left" width="20%">用户名：</td>
+    <td class="td_left">{$_username}</td>
+  </tr>
+  <tr>
+    <td class="td_left">姓名：</td>
+    <td class="td_left"><input name="truename" type="text" id="truename" size="20" value="{$truename}" /> <font color="red">*</font></td>
+  </tr>
+  <tr>
+    <td class="td_left">支付宝帐号：</td>
+    <td class="td_left"><input name="alipay" type="text" id="alipay" size="20" maxlength="50" value="{$alipay}" /> <font color="red">* 请认真填写，我们将通过支付宝帐号付款！</font></td>
+  </tr>
+  <tr>
+    <td class="td_left">电话：</td>
+    <td class="td_left"><input name="telephone" type="text" id="telephone" size="20" value="{$telephone}" /> <font color="red">*</font></td>
+  </tr>
+  <tr>
+    <td class="td_left">手机：</td>
+    <td class="td_left"><input name="mobile" type="text" id="mobile" size="20" value="{$mobile}" /> <font color="red">*</font></td>
+  </tr>
+  <tr>
+    <td class="td_left">地址：</td>
+    <td class="td_left"><input name="address" type="text" id="address" size="50" value="{$address}" /> <font color="red">*</font></td>
+  </tr>
+  <tr>
+    <td class="td_left">邮编：</td>
+    <td class="td_left"><input name="postid" type="text" id="postid" size="10" value="{$postid}" /> <font color="red">*</font></td>
+  </tr>
+  <tr>
+    <td class="td_left">主页：</td>
+    <td class="td_left"><input name="homepage" type="text" id="homepage" size="20" value="{$homepage}" /> <font color="red">*</font></td>
+  </tr>
+  <tr>
+    <td class="td_left">QQ号码：</td>
+    <td class="td_left"><input name="qq" type="text" id="qq" size="20" maxlength="20" value="{$qq}" /> <font color="red">*</font></td>
+  </tr>
+	{if $MOD['enablecheckcode']}
+    <tr> 
+      <td class="td_left">验证码：</td>
+      <td class="td_left"><input name="checkcode" type="text" size="4" id="checkcode">
+	  <img src="{PHPCMS_PATH}checkcode.php" id="checkcode" onclick="this.src='{PHPCMS_PATH}checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/></td>
+    </tr>
+	{/if}
+  <tr>
+    <td class="td_left" width="20%">&nbsp;</td>
+    <td class="td_left">
+        <input type="submit" name="dosubmit" value=" 确 定 " class="btn" />&nbsp;&nbsp;
+        <input type="reset" name="reset" value=" 清 除 " class="btn" /></td>
+  </tr>
+  </table>
+</form>
+</div></div>
+
+</td>
+</tr>
+</table>
+{template "phpcms","footer"}

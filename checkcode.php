@@ -1,11 +1,6 @@
 <?php
-error_reporting(E_ERROR | E_WARNING | E_PARSE);
-define('PHPCMS_ROOT', str_replace("\\", '/', dirname(__FILE__)));
-
-require PHPCMS_ROOT.'/config.inc.php';
-
-if($CONFIG['sessionsavepath']) session_save_path($CONFIG['sessionsavepath']);
-session_start();
+require dirname(__FILE__).'/include/common.inc.php';
+$session = new phpcms_session();
 
 $enablegd = 1;
 $funcs = array('imagecreatetruecolor','imagecolorallocate','imagefill','imagestring','imageline','imagerotate','imagedestroy','imagecolorallocatealpha','imageellipse','imagepng');

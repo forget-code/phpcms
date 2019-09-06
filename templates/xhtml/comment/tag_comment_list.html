@@ -1,0 +1,12 @@
+<!--{loop $comments $comment}--><div class="pinglun">
+<div class="c_1">网友：<!--{if $comment['username']}--><a href="{PHPCMS_PATH}member/member.php?username={$comment[username]}" title="查看该用户资料" ><!--{$comment[username]}--></a> <!--{else}-->{$comment[ip]}<!--{/if}-->&nbsp;发布于：{$comment[addtime]} &nbsp;评分：{$comment[score]}
+{if !$info}
+&nbsp;<a href="#content" onclick="reply('{PHPCMS_PATH}',{if !$MOD['ischeckreply'] && !$_userid}'guest'{else}{$comment['cid']}{/if});" title="引用回复该篇评论">回复</a>&nbsp;
+<a href="javascript:addone('flower',{$comment[cid]});"><img src="{PHPCMS_PATH}images/comment/flower.gif" alt="我赞成该观点，给他投鲜花" border="0"></a> 鲜花<span id="flower{$comment[cid]}">{$comment[support]}</span>朵&nbsp;
+<a href="javascript:addone('egg',{$comment[cid]});"><img src="{PHPCMS_PATH}images/comment/egg.gif" alt="我反对该观点，给他扔鸡蛋" border="0"></a> 臭蛋<span id="egg{$comment[cid]}">{$comment[against]}</span>个{/if}</div>
+<div class="c_2">{$comment[content]}</div>
+</div>
+<!--{/loop}-->
+<!--{if isset($pages)}-->
+<div class="pages">{$pages}</div>
+<!--{/if}-->

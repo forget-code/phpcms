@@ -1,0 +1,15 @@
+<ul class="list1">
+<!--{loop $movies $i $movie}-->
+<!--{php $j=$i+1;}-->
+<li><span {if $j<4}class="topnum"{/if}>{$j}</span>
+{if $datetype}<span class="datetime f_r">{$movie[adddate]}</span>{/if}{if $showcatname}<a href="{$movie[catlinkurl]}"{$target}>[{$movie[catname]}]</a>{/if}<a href="{$movie[linkurl]}" title="{$movie[title]}" {$target}>{$movie[stitle]}</a>
+{if $showmovies}({$movie[totalmovies]}){/if}
+{if $showauthor}[作者:{$movie[author]}]{/if}
+{if $introducelen}<br/>{$movie[introduce]}{/if}
+</li>
+<!--{/loop}-->
+</ul>
+
+<!--{if $pages}-->
+<div class="pages">{$pages}</div>
+<!--{/if}-->

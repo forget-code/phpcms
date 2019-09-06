@@ -1,0 +1,46 @@
+{template 'house','header'}
+<div id="content" style="margin-top:5px;">
+  <div class="house_left">
+    <div class="left_top_box_top"></div>
+	<div class="left_top_box">
+      <h5>单位信息</h5>
+	  <ul>
+		<li>{$my_house_introduce}</li>
+	    <li><strong>名称：</strong>{$my_house_corpname}</li>
+        <li><strong>联系人：</strong>{$truename}</li>
+        <li><strong>电话：</strong>{$telephone}</li>
+        <li><a href="?username={$username}&detail=1"><strong>查看中介详情>></strong></a></li>
+	  </ul>
+	</div>
+    <div class="left_top_box_bottom"></div>
+  </div>
+
+  <div class="house_wright">
+
+      <div class="position">
+	    <span>当前位置：<a href="{$MOD[linkurl]}">房产首页</a> &gt;&gt; 中介主页 &gt;&gt; {$my_house_corpname}</span>
+		<ul>
+		  <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=1">发布出租</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=2">发布求租</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=3">发布合租</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=4">发布出售</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=5">发布求购</a></li>
+	      <li><a href="{$MOD[linkurl]}frontmgr.php?action=add&type=6">发布置换</a></li>
+		  <li><a href="{$MOD[linkurl]}displaymgr.php?action=add">发布楼盘</a></li>
+		</ul>
+	  </div>
+	  <div id="house_wright_name">
+        <ul>
+          <li class="name">名称</li>
+          <li class="area">区域</li>
+          <li class="type">&nbsp;&nbsp;&nbsp;&nbsp;户&nbsp;&nbsp;&nbsp;型</li>
+          <li class="price">价&nbsp;格</li>
+          <li class="time">&nbsp;登记时间</li>
+        </ul>
+	  </div>
+      <div id="house_wright_list">
+      {tag_中介房产信息列表}
+	  </div>
+</div>
+</div>
+{template 'house','footer'}

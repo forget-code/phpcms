@@ -1,0 +1,98 @@
+BODY {
+	FONT-SIZE: 12px
+}
+TD {
+	FONT-SIZE: 12px
+}
+TH {
+	FONT-SIZE: 12px
+}
+BODY {
+	MARGIN: 0px
+}
+.color_0A578B {
+	COLOR: #0a578b
+}
+.color_F18D21 {
+	COLOR: #f18d21
+}
+.bordertop {
+	BORDER-TOP: #4e95c5 1px solid
+}
+.borderbott {
+	BORDER-BOTTOM: #4e95c5 1px solid
+}
+.border_l_r {
+	BORDER-RIGHT: #4e95c5 1px solid; BORDER-LEFT: #4e95c5 1px solid
+}
+.borbotxx {
+	BORDER-BOTTOM: #a9a9a9 1px dashed
+}
+A:link {
+	TEXT-DECORATION: none
+}
+A:visited {
+	TEXT-DECORATION: none
+}
+A:hover {
+	TEXT-DECORATION: underline
+}
+A:active {
+	TEXT-DECORATION: none
+}
+A.alan:link {
+	COLOR: #0a578b
+}
+A.alan:visited {
+	COLOR: #0a578b
+}
+A.alan:hover {
+	COLOR: #0a578b
+}
+A.alan:active {
+	COLOR: #0a578b
+}
+A.ahuang:link {
+	COLOR: #f18d21
+}
+A.ahuang:visited {
+	COLOR: #f18d21
+}
+A.ahuang:hover {
+	COLOR: #f18d21
+}
+A.ahuang:active {
+	COLOR: #f18d21
+}
+A:link {
+	COLOR: #000000
+}
+A:visited {
+	COLOR: #000000
+}
+A:hover {
+	COLOR: #990000
+}
+A:active {
+	COLOR: #0000ff
+}
+A.com_c:link {
+	COLOR: #075a92
+}
+A.com_c:visited {
+	COLOR: #075a92
+}
+A.com_c:hover {
+	COLOR: #ff7200
+}
+A.com_c:active {
+	COLOR: #ff7200
+}
+.delline {
+	TEXT-DECORATION: line-through
+}
+.column_b {
+font-size:13px;
+font-weight:bold;
+color:#ffffff;
+}

@@ -1,5 +1,5 @@
 <?php 
-require './include/common.inc.php';
+require dirname(__FILE__).'/include/common.inc.php';
 if(isset($gd) && $gd==1 && $auth)
 {
 	header ("Content-type: image/png");

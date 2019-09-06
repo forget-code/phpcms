@@ -35,11 +35,11 @@ include admintpl('header');
 if($keyid)
 {
 	echo is_numeric($keyid) ? $CHANNEL[$keyid]['channelname'] : $MODULE[$keyid]['name'];
-	echo "<input type='hidden' name='keyid[$id]' value='{$pos['keyid']}'>";
+	echo "<input type='hidden' name='keyid".$id."' value='{$pos['keyid']}'>";
 }
 else
 {
-    echo keyid_select("keyid[$id]", "", $pos['keyid']);
+    echo keyid_select("keyid".$id, "", $pos['keyid']);
 }
 ?>
 </td>

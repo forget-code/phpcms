@@ -28,7 +28,7 @@ document.myform.submit();
     <tr>
     <td height='18' class="tablerowhighlight" >&nbsp;&nbsp;文件名&nbsp;&nbsp;</td>
     <td width='55' class="tablerowhighlight" align="center">大小</td>
-    <td width='180' class="tablerowhighlight" >&nbsp;类型&nbsp;&nbsp;</td>
+    <td width='80' class="tablerowhighlight" >&nbsp;类型&nbsp;&nbsp;</td>
     <td width='140' class="tablerowhighlight" align="center">上次修改时间&nbsp;&nbsp;</td>
     </tr>
 <?php
@@ -40,9 +40,9 @@ if(is_array($listdirs))
 <tr onMouseOut="this.style.backgroundColor='#F1F3F5'" onMouseOver="this.style.backgroundColor='#BFDFFF'" bgcolor="#F1F3F5">
 <td align='left' height='20'><img src='images/ext/dir.gif'>
 <a href='?mod=<?=$mod?>&file=<?=$file?>&channelid=<?=$channelid?>&type=<?=$type?>&parentdir=<?=$currentdir?>&currentdir=<?=$ldir['path']?>&realdir=<?=$realdir?>'><?=$ldir['name']?></a></td>
- <td width='55' align='right'><?=$ldir['size']?>&nbsp;</td>
- <td width='180'>&nbsp;<?=$ldir['type']?></td>
- <td width='140'><?=$ldir['mtime']?></td>
+ <td align='right'><?=$ldir['size']?>&nbsp;</td>
+ <td>&nbsp;<?=$ldir['type']?></td>
+ <td><?=$ldir['mtime']?></td>
 </tr>
 <?php
        }
@@ -56,10 +56,11 @@ if(is_array($listfiles))
 	{
 ?>
 <tr onMouseOut="this.style.backgroundColor='#F1F3F5';hideTooltip('dHTMLADPreview');" onMouseOver="this.style.backgroundColor='#BFDFFF';ShowADPreview('<?=$lfile['preview']?>');" bgcolor="#F1F3F5">
-<td align='left' height='20'><?php if($type!="thumb"){ ?><img src='<?=PHPCMS_PATH?>images/ext/<?=$lfile['ext']?>.gif' width='24' height='24'><?php } ?><a href='#' onClick="window.returnValue='<?=$lfile['path']?>|<?=$lfile['size']?>|<?=PHPCMS_PATH?>|<?=$lfile['ext']?>.gif';window.close();"><?=$lfile['name']?></a></td>
- <td width='60'><?=$lfile['size']?>&nbsp;K</td>
- <td width='180'>&nbsp;<?=$lfile['type']?></td>
- <td width='140'><?=$lfile['mtime']?></td>
+<td align='left' height='20'><?php if($type!="thumb"){ ?><img src='<?=PHPCMS_PATH?>images/ext/<?=$lfile['ext']?>.gif' width='24' height='24'><?php } ?><a href='#' onClick="window.returnValue='<?=$lfile['path']?>|<?=$lfile['size']?>|<?=PHPCMS_PATH?>|<?=$lfile['ext']?>.gif';window.close();"><?=$lfile['name']?></a>
+| <a href="<?=$PHPCMS['siteurl']?>corpandresize/ui.php?<?php echo $PHPCMS['siteurl'].$lfile['path'];?>"><strong>剪切图片</strong></a></td>
+ <td><?=$lfile['size']?>&nbsp;K</td>
+ <td>&nbsp;<?=$lfile['type']?></td>
+ <td><?=$lfile['mtime']?></td>
 </tr>
 <?php
        }

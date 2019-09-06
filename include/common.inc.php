@@ -1,37 +1,22 @@
 <?php
 $mtime = explode(' ', microtime());
 $phpcms_starttime = $mtime[1] + $mtime[0];
-unset($LANG, $_REQUEST, $HTTP_ENV_VARS, $HTTP_POST_VARS, $HTTP_GET_VARS, $HTTP_POST_FILES, $HTTP_COOKIE_VARS);
+unset($LANG, $HTTP_ENV_VARS, $HTTP_POST_VARS, $HTTP_GET_VARS, $HTTP_POST_FILES, $HTTP_COOKIE_VARS);
 set_magic_quotes_runtime(0);
 define('IN_PHPCMS', TRUE);
 define('PHPCMS_ROOT', str_replace("\\", '/', substr(dirname(__FILE__), 0, -8)));
 require PHPCMS_ROOT.'/include/global.func.php';
 
-$search_arr = array("/ union /i","/ select /i","/ update /i","/ outfile /i","/ or /i");
-$replace_arr = array('&nbsp;union&nbsp;','&nbsp;select&nbsp;','&nbsp;update&nbsp;','&nbsp;outfile&nbsp;','&nbsp;or&nbsp;');
-$_POST = strip_sql($_POST);
-$_GET = strip_sql($_GET);
-$_COOKIE = strip_sql($_COOKIE);
-unset($search_arr, $replace_arr);
-
-$magic_quotes_gpc = get_magic_quotes_gpc();
-if(!$magic_quotes_gpc)
-{
-	$_POST = new_addslashes($_POST);
-	$_GET = new_addslashes($_GET);
-}
-@extract($_POST, EXTR_OVERWRITE);
-@extract($_GET, EXTR_OVERWRITE);
-unset($_POST, $_GET);
 
 require PHPCMS_ROOT.'/config.inc.php';
 require PHPCMS_ROOT.'/languages/'.$CONFIG['language'].'/phpcms.lang.php';
 
 define('PHPCMS_PATH', $CONFIG['rootpath']);
 define('PHPCMS_CACHEDIR', $CONFIG['cachedir']);
+define('ALLOWED_HTMLTAGS', '<a><p><br><hr><h1><h2><h3><h4><h5><h6><font><u><i><b><strong><div><span><ol><ul><li><img><table><tr><td><map>');
+
 $CONFIG['enablephplog'] ? set_error_handler('phpcms_error') : error_reporting(E_ERROR | E_WARNING | E_PARSE);
-if($CONFIG['sessionsavepath']) session_save_path($CONFIG['sessionsavepath']);
-session_start();
+
 if(function_exists('date_default_timezone_set')) date_default_timezone_set($CONFIG['timezone']);
 header('Content-type: text/html; charset='.$CONFIG['charset']);
 if(getenv('HTTP_CLIENT_IP') && strcasecmp(getenv('HTTP_CLIENT_IP'), 'unknown'))
@@ -63,6 +48,37 @@ $PHP_SITEURL = $PHP_SCHEME.$PHP_DOMAIN.$PHP_PORT.PHPCMS_PATH;
 $PHP_URL = $PHP_SCHEME.$PHP_DOMAIN.$PHP_PORT.$PHP_SELF.($PHP_QUERYSTRING ? '?'.$PHP_QUERYSTRING : '');
 $db_file = $db_class = 'db_'.$CONFIG['database'];
 
+require PHPCMS_ROOT.'/include/'.$db_file.'.class.php';
+require PHPCMS_ROOT.'/include/tag.func.php';
+require PHPCMS_ROOT.'/include/extension.inc.php';
+
+
+if(!@include PHPCMS_ROOT.'/include/session_'.$CONFIG['database'].'.class.php')
+{
+	if($CONFIG['sessionsavepath']) session_save_path($CONFIG['sessionsavepath']);
+	session_start();
+}
+
+$db = new $db_class;
+$db->connect($CONFIG['dbhost'], $CONFIG['dbuser'], $CONFIG['dbpw'], $CONFIG['dbname'], $CONFIG['pconnect']);
+$db->iscache = $CONFIG['dbiscache'];
+$db->expires = $CONFIG['dbexpires'];
+
+$magic_quotes_gpc = get_magic_quotes_gpc();
+
+if($_REQUEST)
+{
+	if($magic_quotes_gpc)
+	{
+		$_REQUEST = new_stripslashes($_REQUEST);	
+		if($_COOKIE) $_COOKIE = new_stripslashes($_COOKIE);
+	}
+	if(!defined('IN_ADMIN')) $_REQUEST = filter_xss($_REQUEST, ALLOWED_HTMLTAGS);
+	@extract($db->escape($_REQUEST), EXTR_SKIP);	
+	if($_COOKIE) $db->escape($_COOKIE);
+	unset($_REQUEST);
+}
+
 if(!defined('IN_ADMIN'))
 {
 	if($CONFIG['dbiscache']) $db_file .= '_cache';
@@ -80,17 +96,8 @@ if(!defined('IN_ADMIN'))
 	if($PHP_QUERYSTRING && preg_match("/^(.*)\.(htm|html|shtm|shtml)$/", $PHP_QUERYSTRING, $urlvar))
 	{
 		parse_str(str_replace(array('/', '-', ' '), array('&', '=', ''), $urlvar[1]));
-	}
-	
+	}	
 }
-
-require PHPCMS_ROOT.'/include/'.$db_file.'.class.php';
-require PHPCMS_ROOT.'/include/tag.func.php';
-require PHPCMS_ROOT.'/include/extension.inc.php';
-$db = new $db_class;
-$db->connect($CONFIG['dbhost'], $CONFIG['dbuser'], $CONFIG['dbpw'], $CONFIG['dbname'], $CONFIG['pconnect']);
-$db->iscache = $CONFIG['dbiscache'];
-$db->expires = $CONFIG['dbexpires'];
 
 if(!cache_read('table.php'))
 {
@@ -118,7 +125,6 @@ elseif($mod != 'phpcms')
 	$MOD = cache_read($mod.'_setting.php');
 	@include PHPCMS_ROOT.'/languages/'.(defined('IN_ADMIN') ? $CONFIG['adminlanguage'].'/'.$mod.'_admin.lang.php' : $CONFIG['language'].'/'.$mod.'.lang.php');
 }
-
 if(!isset($forward)) $forward = $PHP_REFERER;
 $dosubmit = isset($dosubmit) ? 1 : 0;
 $channelid = isset($channelid) ? intval($channelid) : 0;
@@ -164,5 +170,6 @@ if($phpcms_auth)
 		}
 	}
 }
+if(isset($page)) $page = max(intval($page), 1);
 unset($db_class, $db_file, $phpcms_auth, $phpcms_auth_key, $memberinfo);
 ?>
