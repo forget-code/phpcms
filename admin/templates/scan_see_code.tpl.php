@@ -42,7 +42,7 @@ include admin_tpl('header');
  </tr>
  <tr>
  <td></td>
- <td><input type="hidden" name="file_path" value="<?=$file_path?>"><input type="submit" value="修改"> <input type="button" onclick="location.href='?mod=phpcms&file=safe&action=scan_table'" value="返回扫描列表"></td>
+ <td> <input type="button" onclick="location.href='?mod=phpcms&file=safe&action=scan_table'" value="返回扫描列表"></td>
  </tr>
 </table>
 </form>

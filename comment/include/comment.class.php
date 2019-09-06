@@ -58,8 +58,8 @@ class comment {
 	  */
 	  function ajaxupdate( $field, $id )
       {
-
-          $sql = "UPDATE $this->_comment_table SET {$field} = {$field} +1 WHERE `commentid` = '$id' ";
+		  $field = safe_replace($field);
+          $sql = "UPDATE $this->_comment_table SET `{$field}` = `{$field}` +1 WHERE `commentid` = '$id' ";
 		  $this->db->query($sql);
 		  $sql2 = "SELECT {$field} FROM $this->_comment_table WHERE `commentid` = '$id' ";
 		  return $this->db->get_one($sql2);

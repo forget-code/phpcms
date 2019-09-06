@@ -39,8 +39,10 @@ switch($action)
 	case 'edit_answer':
 	if($dosubmit)
 	{
+		$posts = array();
 		if(strlen($answertext) > 10000) showmessage('回答字数不能超过10000个字符');
 		$posts['message'] = $M['use_editor'] ? filter_xss($answertext) : strip_tags($answertext);
+		
 		$answer->edit($pid, $posts, $_userid);
 		showmessage($LANG['operation_success'], $forward);
 	}
@@ -49,6 +51,7 @@ switch($action)
 	case 'edit_ask':
 	if($dosubmit)
 	{
+		$info = $posts = array();
 		$info['title'] = htmlspecialchars($title);
 		if(strlen($title)<2) showmessage($LANG['title_is_short']);
 		$posts['message'] = $M['use_editor'] ? filter_xss($message) : strip_tags($message);

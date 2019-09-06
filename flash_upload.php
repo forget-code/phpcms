@@ -5,6 +5,7 @@ if($PHPSESSID)
 	session_id($PHPSESSID);
 	session_start();
 }
+$modelid = intval($modelid);
 if($auth) set_cookie('auth', $auth);
 if(!get_cookie('cookietime') && $cookietime) set_cookie('cookietime', $cookietime);
 require_once 'admin/model_field.class.php';

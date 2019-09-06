@@ -133,13 +133,6 @@ switch ($action)
 		include(admin_tpl('scan_see_code'));
 	break;
 	
-	case 'edit_code':
-		if (file_put_contents(PHPCMS_ROOT.$file_path, stripcslashes($code)))
-		{
-			showmessage('修改成功！');
-		}
-	break;
-	
 	case 'del_file':
 		$file_path = urldecode($files);
 		if (empty($file_path)) 
