@@ -112,7 +112,7 @@ swfobject.embedSWF("{$flash_info['flashurl']}", "ku6uploader", "450", "45", "10.
             	<ul class="clr col3" id="ulic">
 				{if !empty($infos)}
 				{loop $infos $info}
-                    <li><div class="w9"><a href="javascript:void(0);" title="{$info['title']}" data-vid="{$info['vid']}" onclick="a_click(this);"><span></span><img src="{$info['picpath']}" width="90" height="51" /></a><p>{str_cut($info['title'], 18)}</p></div></li>
+                    <li><div class="w9"><a href="javascript:void(0);" title="{$info['title']}" data-vid="{$info['vid']}" onclick="a_click(this);"><span></span><img src="{if $info['picpath']}{$info['picpath']}{else}{IMG_PATH}admin_img/bfqicon1.jpg{/if}" width="90" height="51" /></a><p>{str_cut($info['title'], 18)}</p></div></li>
 				{/loop}
 				{else}
 					&nbsp;&nbsp;&nbsp;&nbsp;视频库中没有您的视频，请先上传视频！

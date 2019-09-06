@@ -59,7 +59,6 @@ function safe_replace($string) {
 	$string = str_replace("{",'',$string);
 	$string = str_replace('}','',$string);
 	$string = str_replace('\\','',$string);
-	$string = remove_xss($string);
 	return $string;
 }
 
@@ -141,7 +140,7 @@ function format_js($string, $isjs = 1) {
  		$str = preg_replace ( '/\<([\/]?)script([^\>]*?)\>/si', '&lt;\\1script\\2&gt;', $str );
 		$str = preg_replace ( '/\<([\/]?)iframe([^\>]*?)\>/si', '&lt;\\1iframe\\2&gt;', $str );
 		$str = preg_replace ( '/\<([\/]?)frame([^\>]*?)\>/si', '&lt;\\1frame\\2&gt;', $str );
-		$str = preg_replace ( '/]]\>/si', ']] >', $str );
+		$str = str_replace ( 'javascript:', 'javascript：', $str );
  	}
 	return $str;
 }

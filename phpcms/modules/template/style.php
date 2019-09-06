@@ -79,7 +79,7 @@ class style extends admin {
 			if (pc_base::load_config('system', 'charset') == 'gbk') {
 				$code = array_iconv($code, 'utf-8', 'gbk');
 			}
-			echo $this->filepath.$code['dirname'].DIRECTORY_SEPARATOR.'config.php';
+			//echo $this->filepath.$code['dirname'].DIRECTORY_SEPARATOR.'config.php';
 			if (!file_exists($this->filepath.$code['dirname'].DIRECTORY_SEPARATOR.'config.php')) {
 				if (@is_writable($this->filepath.$code['dirname'].DIRECTORY_SEPARATOR)) {
 					@mkdir($this->filepath.$code['dirname'].DIRECTORY_SEPARATOR, 0755, true);

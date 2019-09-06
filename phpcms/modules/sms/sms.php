@@ -7,6 +7,7 @@ pc_base::load_app_func('global','sms');
 class sms extends admin {
 
 	function __construct() {
+		parent::__construct();
 		$this->log_db = pc_base::load_model('sms_report_model');
 		$this->module_db = pc_base::load_model('module_model');
 		$this->member_db = pc_base::load_model('member_model');

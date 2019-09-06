@@ -89,7 +89,7 @@ class content_model extends model {
 		$this->update($systeminfo,array('id'=>$id));
 		//更新URL地址
 		if($data['islink']==1) {
-			$urls[0] = $_POST['linkurl'];
+			$urls[0] = trim_script($_POST['linkurl']);
 		} else {
 			$urls = $this->url->show($id, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix'],$inputinfo,'add');
 		}

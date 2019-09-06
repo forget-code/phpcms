@@ -942,6 +942,7 @@ artDialog.fn = artDialog.prototype = {
 		: that.position(config.left, config.top);
 		
 		that.zIndex().focus();
+
 		config.lock && that.lock();
 		
 		that._addEvent();
@@ -949,6 +950,7 @@ artDialog.fn = artDialog.prototype = {
 		_box = null;
 		
 		config.init && config.init.call(that, window);
+		
 		return that;
 	},
 	
@@ -985,9 +987,11 @@ artDialog.fn = artDialog.prototype = {
 				iframe.src = url;
 				that.DOM.content.css('padding', "5px 0px");
 				that.DOM.content.css('height', that.config.height);
+				
 				msg = iframe;
 			};
 		that._elemBack && that._elemBack();
+		
 		wrap.style.width = 'auto';
 		
 		if (msg === undefined) return content;
@@ -1015,6 +1019,9 @@ artDialog.fn = artDialog.prototype = {
 			$content.html('');
 			content.appendChild(msg);
 			msg.style.display = 'block';
+			//content.focus();
+			//alert('1');
+			
 			if (isIframe) art.PHPCMS_API[that.config.id] = msg.contentWindow
 		};
 		
@@ -1154,11 +1161,12 @@ artDialog.fn = artDialog.prototype = {
 			maxHeight = _$window.height() - wrap[0].offsetHeight + main[0].offsetHeight;
 			scaleHeight = that._toNumber(height, maxHeight);
 			height = scaleHeight;
-			
+			//alert(height);
 			if (typeof height === 'number') {
 				style.height = Math.max(that.config.minHeight, height) + 'px';
 			} else if (typeof height === 'string') {
 				style.height = height;
+				//height === 'auto' && wrap.css('height', 'auto');
 			};
 		};
 		
@@ -1329,7 +1337,7 @@ artDialog.fn = artDialog.prototype = {
 		
 		// 清空除this.DOM之外临时对象，恢复到初始状态，以便使用单例模式
 		for (var i in that) {
-			if (that.hasOwnProperty(i) && i !== 'DOM') delete that[i];
+			if (that.hasOwnProperty(i)) delete that[i];
 		};
 		
 		// 移除HTMLElement或重用
@@ -1650,6 +1658,7 @@ artDialog.fn = artDialog.prototype = {
 		
 		if (test) {
 			// IE6~7 window.onresize bug
+			
 			newSize = that._winSize =  _$window.width() * _$window.height();
 			if (oldSize === newSize) return;
 		};

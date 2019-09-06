@@ -100,7 +100,7 @@ class attachments {
 				$height = intval($_GET['height']);
 			}
 			if (isset($_GET['file']) && !empty($_GET['file'])) {
-				$_GET['file'] = str_ireplace(';','','php',$_GET['file']);
+				$_GET['file'] = str_ireplace(array(';','php'),'',$_GET['file']);
 				if(is_image($_GET['file'])== false || stripos($_GET['file'],'.php')!==false) exit();
 				if (strpos($_GET['file'], pc_base::load_config('system', 'upload_url'))!==false) {
 					$file = $_GET['file'];

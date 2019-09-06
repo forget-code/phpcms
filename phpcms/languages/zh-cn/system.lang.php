@@ -6,7 +6,7 @@ translation save at the array:$LANG
 */
 
 $LANG['no_language'] = '缺少语言包';
-$LANG['website_manage'] = 'phpcmsV9 - 后台管理中心';
+$LANG['website_manage'] = 'phpcms V9 - 后台管理中心';
 $LANG['lockscreen'] = '锁屏';
 $LANG['submit'] = '提 交';
 $LANG['yes'] = '是';

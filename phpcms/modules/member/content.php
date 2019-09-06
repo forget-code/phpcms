@@ -49,7 +49,7 @@ class content extends foreground {
 			$fields = array_keys($fields);
 			$info = array();
 			foreach($_POST['info'] as $_k=>$_v) {
-				if(in_array($_k, $fields)) $info[$_k] = htmlspecialchars($_v);
+				if(in_array($_k, $fields)) $info[$_k] = trim_script(htmlspecialchars($_v));
 			}
 			$post_fields = array_keys($_POST['info']);
 			$post_fields = array_intersect_assoc($fields,$post_fields);
@@ -64,8 +64,9 @@ class content extends foreground {
 				$info['status'] = 1;
 			}
 			$info['username'] = $memberinfo['username'];
+			if(isset($info['title'])) $info['title'] = safe_replace($info['title']);
 			$this->content_db->siteid = $siteid;
-
+			
 			$id = $this->content_db->add_content($info);
 			//检查投稿奖励或扣除积分
 			if ($info['status']==99) {

@@ -49,7 +49,8 @@ class index {
 
 			$logo = safe_replace(strip_tags($_POST['logo']));
 			$name = safe_replace(strip_tags($_POST['name']));
-			$url = safe_replace(strip_tags($_POST['url'])); 
+			$url = safe_replace(strip_tags($_POST['url']));
+			$url = trim_script($url);
  			if($_POST['linktype']=='0'){
  				$sql = array('siteid'=>$siteid,'typeid'=>intval($_POST['typeid']),'linktype'=>intval($_POST['linktype']),'name'=>$name,'url'=>$url);
  			}else{

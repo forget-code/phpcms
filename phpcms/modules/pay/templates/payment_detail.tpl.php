@@ -19,9 +19,7 @@ $(function(){
 <table width="100%" class="table_form" id="taobao">
 <tr><td>
 <img src="<?php echo IMG_PATH;?>taobao_log.png">支付宝为国内领先的支付平台!<br>
-PHPCMS联合支付宝推出优惠套餐：无预付/年费，单笔费率阶梯0.7%-1.2%，无流量限制。交易越多，费率越低！<br><br>
 <a href="https://www.alipay.com/" style="color:red;" target="_blank">了解详情</a>  <a href="http://help.alipay.com/support/help_detail.htm?help_id=241435" style="color:red;" target="_blank">如何签约</a><br><br>
-<a href=" http://fun.alipay.com/xtsz/phpcms.htm" target="_blank" title="点击申请"><img src="<?php echo IMG_PATH;?>taobao_sq.jpg"></a><br>
 已经签约的用户，可直接在下方填写相关账号信息即可。
 </td></tr>
 </table>

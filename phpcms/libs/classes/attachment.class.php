@@ -114,6 +114,7 @@ class attachment {
 				@chmod($savefile, 0644);
 				@unlink($file['tmp_name']);
 				$file['name'] = iconv("utf-8",CHARSET,$file['name']);
+				$file['name'] = safe_replace($file['name']);
 				$uploadedfile = array('filename'=>$file['name'], 'filepath'=>$filepath, 'filesize'=>$file['size'], 'fileext'=>$fileext, 'fn'=>$file['fn']);
 				$thumb_enable = is_array($thumb_setting) && ($thumb_setting[0] > 0 || $thumb_setting[1] > 0 ) ? 1 : 0;	
 				$image = new image($thumb_enable,$this->siteid);				

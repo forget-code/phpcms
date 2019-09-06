@@ -34,8 +34,7 @@ $LANG['choose_videoes']						=	'选择视频';
 $LANG['tags']								=	'标签';
 $LANG['separated_by_spaces']				=	'多个用空格隔开';
 $LANG['video_id']							=	'视频ID';
-$LANG['subscribe_notic']					=	'请到 v.ku6vms.com 申请开通帐号，申请地址：<a href="http://v.ku6vms.com/" target="_blank">http://v.ku6vms.com/</a>
-<br />订阅说明：订阅是将ku6的视频入库到本系统的功能。设置订阅后，ku6vms定时向设置的栏目及推荐位中添加ku6的推荐视频。';
+$LANG['subscribe_notic']					=	'欢迎使用！';
 $LANG['pass_settings']						=	'通行证设置';
 $LANG['vms_sn']								=	'身份识别码';
 $LANG['vms_skey']							=	'加密密钥';

@@ -35,9 +35,7 @@ function toggle(object) {
 			//已经加入播放菜单则设置COOKIE,直接跳转至播放页面
    			var list_array = player_list.split("|"); 
 			var player=new Array();
-			if(){
-			
-			}
+
 			for(var i=0;i<list_array.length;i++) {
  				player = list_array[i].split("@"); 
 				if(id == player[2]){

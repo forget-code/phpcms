@@ -24,7 +24,8 @@
 </tr>
 <tr>
 <td  width="120">sms_passwd <font color="#C0C0C0">(<?php echo L('sms_key')?>)</font></td> 
-<td><label><input type="input" id="sms_key" name="setting[sms_key]" value="<?php echo $this->sms_setting[sms_key]?>" size="50"></label></td>
+<td><label><input type="input" id="sms_key" name="setting[sms_key]" value="<?php echo $this->sms_setting[sms_key]?>" size="50">
+<input type="hidden" name="pc_hash" value="<?php echo $_GET['pc_hash'];?>" size="50"></label></td>
 </tr>
 
 
