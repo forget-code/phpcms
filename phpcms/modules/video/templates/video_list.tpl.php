@@ -12,7 +12,7 @@
 <div class="explain-col search-form">
 <select name="type" ><option value=""><?php echo L('please_select')?></option><option value="1" <?php if ($_GET['type']==1) {?>selected<?php }?>><?php echo L('video_id');?></option><option value="2" <?php if ($_GET['type']==2) {?>selected<?php }?>><?php echo L('video_title')?></option></select> <input type="text" value="<?php echo $_GET['q']?>" class="input-text" name="q"> 
 <?php echo L('addtime')?>  <?php echo form::date('start_addtime',$_GET['start_addtime'])?><?php echo L('to')?>   <?php echo form::date('end_addtime',$_GET['end_addtime'])?> 
-<?php echo form::select($trade_status,$status,'name="status"', L('all_status'))?>  
+<?php echo form::select($trade_status,$status,'name="status"', L('all_status'))?> <label title="<?php echo L('site_upload');?>"><?php echo L('original');?> <input type="checkbox" name="userupload" value="1" id="userupload"<?php if($userupload){ ?> checked<?php }?>></label> &nbsp;&nbsp;
 <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
 </div>
 </form>
@@ -36,7 +36,7 @@ if(is_array($infos)){
 ?>   
 	<tr>
 	<td align="center"><?php echo $info['videoid']?></td>
-	<td><?php echo $info['title']?> </td>
+	<td><?php echo $info['title']?> <?php if($info['userupload']){?><img src="<?php echo IMG_PATH; ?>yc.jpg" height="16"><?php }?></td>
 	<td align="center"><?php echo $info['vid'];?></td>
 	<td align="center"><?php echo date('Y-m-d H:i', $info['addtime'])?></td>
 	<td align="center"><?php echo $info['keywords']?></td>

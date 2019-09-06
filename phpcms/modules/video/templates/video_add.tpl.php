@@ -71,7 +71,7 @@ function checkform() {
 //-->
 </SCRIPT>
 <script type="text/javascript">
-var flashvars = { m: "1", un: "<?php echo $flash_info['un'];?>", up: "<?php echo $flash_info['up'];?>", c: "vms", t: "1", n: "js4swf", k: "190000" ,ms:"39",s: "8000000"};
+var flashvars = { m: "1", u: "<?php echo $flash_info['userid'];?>", ctime: "<?php echo $flash_info['passport_ctime'];?>", sig:"<?php echo $flash_info['passport_sig'];?>", c: "vms", t: "1", n: "js4swf", k: "190000" ,ms:"39",s: "8000000"};
 var params = { allowScriptAccess: "always" , wmode: "transparent"};
 var attributes = { };
 //swfobject.embedSWF("http://player.ku6cdn.com/default/podcast/upload/201104261840/ku6uploader.swf", "ku6uploader", "450", "45", "10.0.0", null, flashvars, params, attributes);
@@ -88,7 +88,7 @@ $(function(){
 </script>
 <div class="pad-10">
 <div class="common-form">
-<form name="myform" action="?m=video&c=video&a=<?php echo $_GET['a']?>" method="post" id="myform" enctype="multipart/form-data" onsubmit="return checkform()">
+<form name="myform" action="?m=video&c=video&a=<?php echo $_GET['a']?>" method="post" id="myform" enctype="multipart/form-data" onsubmit="return checkform()"><input type="hidden" name="userupload" value="1">
 <table width="100%" class="table_form">
 	<tr>
 		<td width="120"><?php echo L('choose_videoes');?></td> 

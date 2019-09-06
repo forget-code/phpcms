@@ -39,7 +39,7 @@ class push extends admin {
 					$info[$id] = $c->get_content($_POST['catid'], $id);
 				}
 			}
-			$_GET['add_action'] = $_GET['add_action'] ? $_GET['add_action'] : $_GET['action'];
+			$_GET['add_action'] = $_GET['add_action'] ? $_GET['add_action'] : $_GET['action']; 
 			$this->push->$_GET['add_action']($info, $_POST);
 			showmessage(L('success'), '', '', 'push');
 		} else {

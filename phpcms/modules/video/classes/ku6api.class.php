@@ -501,6 +501,23 @@ class ku6api {
 	}
 	
 	/**
+	 * Function member_login_vms
+	 * 登陆后台同时登陆vms
+	 * @param array $data
+	 */
+	public function member_login_vms() {
+		//构造post数据
+		$postdata = array();
+		$postdata['method'] = 'SynLogin';
+		//向vms post数据，并获取返回值
+		if ($data = $this->post($postdata)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
+	/**
 	 * Function http
 	 * 执行http post数据到接口
 	 * @param array $datas post数据参数 如：array('method'=>'AlbumVideoList', 'p'=>1, 's'=>6,....)
@@ -545,6 +562,7 @@ class ku6api {
 		//构造post数据
 		$postdata['method'] = 'GetVid';
 		$postdata['vid'] = $vid;
+		$postdata['url'] = APP_PATH . 'api.php?op=video_api';
 		//向vms post数据，并获取返回值
 		if ($data = $this->post($postdata)) {
 			return true;
@@ -553,6 +571,47 @@ class ku6api {
 		}
 	}
 
+	/**
+	 * Function Preview
+	 * 向vms请求vid
+	 * @param string $vid vid
+	 */
+	public function Preview($vid = '') {
+		if (!$vid) return false;
+		//构造post数据
+		$postdata['method'] = 'Preview';
+		$postdata['vid'] = $vid;
+		//向vms post数据，并获取返回值
+ 		if ($data = $this->post($postdata)) {
+			return $data;
+		} else { 
+  			return false;
+		}
+	}
+	
+	/**
+	 * Function Ku6search
+	 * 向vms请求搜索
+	 * @param string $vid vid
+	 */
+	public function Ku6search($keyword,$pagesize,$page,$len,$fenlei,$fq) { 
+		//构造post数据
+		$postdata['method'] = 'search';
+		$postdata['pagesize'] = $pagesize;
+		$postdata['keyword'] = $keyword;
+		$postdata['page'] = $page;
+		$postdata['fenlei'] = $fenlei;
+		$postdata['len'] = $len;
+		$postdata['fq'] = $fq;
+		
+ 		//向vms post数据，并获取返回值
+ 		if ($data = $this->post($postdata)) { 
+  			return $data;
+		} else { 
+ 			echo '没有返回数据！';exit;
+   			return false;
+		}
+	}
 	/**
 	 * Function get_sitename
 	 * 获取站点名称

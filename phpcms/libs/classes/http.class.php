@@ -80,9 +80,10 @@ class http {
 		} else {
 			$out .= "Connection: Close\r\n\r\n";
 		}
-		if($timeout > ini_get('max_execution_time')) @set_time_limit($timeout);
+ 		if($timeout > ini_get('max_execution_time')) @set_time_limit($timeout);
 		$fp = @fsockopen($host, $port, $errno, $errstr, $timeout);
-		if(!$fp) {
+		$this->post = '';
+ 		if(!$fp) {
 			$this->errno = $errno;
 			$this->errstr = $errstr;
 			return false;

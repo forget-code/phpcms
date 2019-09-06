@@ -9,6 +9,7 @@
 			$ku6api = new ku6api($setting['sn'], $setting['skey']);
 			pc_base::load_app_class('v', 'video', 0);
 			$v_class =  new v($video_store_db);
+			$GLOBALS[$field] = '';
 			foreach ($_POST[$post_f] as $_k => $v) {
 				if (!$v['vid'] && !$v['videoid']) unset($_POST[$post_f][$_k]);
 				$info = array();
@@ -25,6 +26,7 @@
 					$info['addtime'] = SYS_TIME;
 					$info['keywords'] = $info['tag'];
 					unset($info['cid'], $info['tag']);
+					$info['userupload'] = 1;
 					$videoid = $v_class->add($info);
 					$GLOBALS[$field][] = array('videoid' => $videoid, 'listorder' => $v['listorder']);
 				} else {

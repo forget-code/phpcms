@@ -35,6 +35,7 @@ function copy_text(matter){
     </div>
     </div>
     	<div class="plbox">   
+		
 {if $video[vid]!=""}
 <embed id="video_player" name="video_player" src="{pc_base::load_config('ku6server', 'player_url')}{$video['vid']}/style/{$video_cache['style_projectid']}/" height="460" width="622" quality="high" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1&api=1&adss=0" type="application/x-shockwave-flash"></embed>
 {else}
@@ -83,7 +84,7 @@ function copy_text(matter){
 				 {pc:comment action="bang" siteid="$siteid" cache="3600"}
             	<ul class="content list blue f14 row-2">
 				{loop $data $r}
-                	<li>·<a href="{$r[url]}" target="_blank">{str_cut($r[title], 40)}</a><span>({$r[total]})</span></li>
+                	<li>·<a href="{$r[url]}" target="_blank">{str_cut($r[title], 34)}</a><span>({$r[total]})</span></li>
 					{/loop}
                 </ul>
 				{/pc}

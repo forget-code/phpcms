@@ -323,9 +323,10 @@ class category extends admin {
 		$categorys = getcache('category_content_'.$this->siteid,'commons');
 		$modelid = $categorys[$catid]['modelid'];
 		$items = getcache('category_items_'.$modelid,'commons');
-		if($items[$catid]) showmessage(L('category_does_not_allow_delete'));
-		$this->delete_child($catid);
+		//if($items[$catid]) showmessage(L('category_does_not_allow_delete'));
+		$this->delete_child($catid, $modelid);
 		$this->db->delete(array('catid'=>$catid));
+		$this->delete_category_video($catid, $modelid);
 		$this->cache();
 		showmessage(L('operation_success'),HTTP_REFERER);
 	}
@@ -333,16 +334,31 @@ class category extends admin {
 	 * 递归删除栏目
 	 * @param $catid 要删除的栏目id
 	 */
-	private function delete_child($catid) {
+	private function delete_child($catid, $modelid) {
 		$catid = intval($catid);
 		if (empty($catid)) return false;
 		$r = $this->db->get_one(array('parentid'=>$catid));
 		if($r) {
 			$this->delete_child($r['catid']);
 			$this->db->delete(array('catid'=>$r['catid']));
+			$this->delete_category_video($r['catid'], $modelid);
 		}
 		return true;
 	}
+	/**
+	 * 删除栏目分类下的视频
+	 * @param $catid 要删除视频的栏目id
+	 */
+	private function delete_category_video($catid, $modelid) {
+		$content_model = pc_base::load_model('content_model');
+		$content_model->set_model($modelid);
+		$result = $content_model->select(array('catid'=>$catid), 'id');
+		if (is_array($result) && !empty($result)) {
+			foreach ($result as $key=>$val) {
+				$content_model->delete_content($val['id'],$fileurl,$catid);				
+			}
+		}
+	}	
 	/**
 	 * 更新缓存
 	 */

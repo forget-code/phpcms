@@ -54,6 +54,10 @@ class video_for_ck {
 		if ($title) {
 			$where .= ' AND `title` LIKE \'%'.$title.'%\'';
 		}
+		$userupload = intval($_GET['userupload']);
+		if ($userupload) {
+			$where .= ' AND `userupload`=1';
+		}
 		$page = $_GET['page'];
 		$pagesize = 6;
 		$infos = $this->db->listinfo($where, 'videoid DESC', $page, $pagesize);
@@ -95,6 +99,7 @@ class video_for_ck {
 		if (strtolower(CHARSET)=='gbk') {
 			$data = array_iconv($data, 'utf-8', 'gbk');
 		}
+		$data['userupload'] = intval($_GET['userupload']);
 		$videoid = $this->v->add($data);
 		$vid_url = $data['vid'];
 		

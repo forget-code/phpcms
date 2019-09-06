@@ -947,7 +947,7 @@ class index extends foreground {
 			$username = iconv('utf-8', CHARSET, $username);
 			$username = addslashes($username);
 		}
-		
+		$username = safe_replace($username);
 		//首先判断会员审核表
 		$this->verify_db = pc_base::load_model('member_verify_model');
 		if($this->verify_db->get_one(array('username'=>$username))) {

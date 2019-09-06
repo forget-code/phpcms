@@ -20,12 +20,12 @@
 	function switchStylestyle(styleName)
 	{
 		var ifrm = $("#rightMain").contents();
-		$('link[@rel*=style][title]').each(function(i) 
+		$('link[rel*=style][title]').each(function(i) 
 		{
 			this.disabled = true;
 			if (this.getAttribute('title') == styleName) this.disabled = false;
 		});
-		ifrm.find('link[@rel*=style][title]').each(function(i) 
+		ifrm.find('link[rel*=style][title]').each(function(i) 
 		{
 			this.disabled = true;
 			if (this.getAttribute('title') == styleName) this.disabled = false;

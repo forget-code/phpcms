@@ -13,7 +13,7 @@
 <table width="100%" cellspacing="0" class="search-form">
     <tbody>
 		<tr>
-		<td><div class="explain-col"><?php echo L('video_title');?>  <input type="text" value="<?php echo $title?>" class="input-text" name="name">  <?php echo L('upload_time');?> <?php echo form::date('starttime',$_GET['starttime'])?>- <?php echo form::date('endtime',$_GET['endtime'])?>  <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
+		<td><div class="explain-col"> <?php echo L('video_title');?>  <input type="text" value="<?php echo $title?>" class="input-text" name="name">  <?php echo L('upload_time');?> <?php echo form::date('starttime',$_GET['starttime'])?>- <?php echo form::date('endtime',$_GET['endtime'])?> <label title="<?php echo L('site_upload');?>"><?php echo L('original');?> <input type="checkbox" name="userupload" value="1" id="userupload"<?php if($userupload){ ?> checked<?php }?>></label>  <input type="submit" value="<?php echo L('search')?>" class="button" name="dosubmit">
 		</div>
 		</td>
 		</tr>

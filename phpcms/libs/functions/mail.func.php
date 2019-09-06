@@ -34,6 +34,9 @@ function sendmail($toemail, $subject, $message, $from='',$cfg = array(), $sitena
 		$cfg = getcache('common','commons');
 		$from = $cfg['mail_from'];
 		$mail_type = $cfg['mail_type']; //邮件发送模式
+		if($cfg['mail_user']=='' || $cfg['mail_password'] ==''){
+			return false;
+		}
 		$mail= Array (
 			'mailsend' => 2,
 			'maildelimiter' => 1,

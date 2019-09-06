@@ -9,6 +9,9 @@ $menu_db->insert(array('name'=>'video_delete', 'parentid'=>$parentid, 'm'=>'vide
 $menu_db->insert(array('name'=>'setting_video', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'setting', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
 $menu_db->insert(array('name'=>'subscribe_manage', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'subscribe_list', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
 $menu_db->insert(array('name'=>'sub_delete', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'sub_del', 'data'=>'', 'listorder'=>0, 'display'=>'0'));
+$menu_db->insert(array('name'=>'import_ku6_video', 'parentid'=>$parentid, 'm'=>'video', 'c'=>'video', 'a'=>'import_ku6video', 'data'=>'', 'listorder'=>0, 'display'=>'1'));
+
+
 if (module_exists('special')) {
 	$special_db = pc_base::load_model('special_model');
 	if( !$special_db->field_exists('aid') ){
@@ -128,5 +131,5 @@ $content = str_replace('*position4*',$position_4,$content);
 
 file_put_contents($tpl_file,$content);
 
-$language = array('video_manage'=>'视频库管理', 'manage_video'=>'视频管理', 'video_add'=>'添加视频','video_edit'=>'修改视频', 'video_delete'=>'删除视频', 'setting_video'=>'视频设置', 'subscribe_manage'=>'订阅管理', 'sub_delete'=>'删除订阅', 'album_import'=>'视频专辑导入');
+$language = array('video_manage'=>'视频库管理', 'manage_video'=>'视频管理', 'video_add'=>'添加视频','video_edit'=>'修改视频', 'video_delete'=>'删除视频', 'setting_video'=>'视频设置', 'subscribe_manage'=>'订阅管理', 'sub_delete'=>'删除订阅', 'album_import'=>'视频专辑导入', 'import_ku6_video'=>'导入KU6视频');
 ?>

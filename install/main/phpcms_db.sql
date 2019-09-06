@@ -5258,6 +5258,7 @@ CREATE TABLE IF NOT EXISTS `phpcms_video_store` (
   `picpath` char(120) NOT NULL,
   `size` char(20) NOT NULL,
   `timelen` mediumint(9) NOT NULL DEFAULT '0',
+  `userupload` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`videoid`),
   KEY `videoid` (`videoid`,`status`)
 ) TYPE=MyISAM;
@@ -5271,4 +5272,5 @@ INSERT INTO `phpcms_menu` (`id`, `name`, `parentid`, `m`, `c`, `a`, `data`, `lis
 (1581, 'setting_video', 1576, 'video', 'video', 'setting', '', 0, '1'),
 (1582, 'subscribe_manage', 1576, 'video', 'video', 'subscribe_list', '', 0, '1'),
 (1583, 'sub_delete', 1576, 'video', 'video', 'sub_del', '', 0, '0'),
-(1584, 'album_import', 868, 'special', 'album', 'import', '', 0, '1');
+(1584, 'album_import', 868, 'special', 'album', 'import', '', 0, '1'),
+(1585, 'import_ku6_video', 1576, 'video', 'video', 'import_ku6video', '', 0, '1');

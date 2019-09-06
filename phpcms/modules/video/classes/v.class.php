@@ -29,8 +29,8 @@ class v {
 	 */
 	public function add($data = array()) {
 		if (is_array($data) && !empty($data)) {
-			$info['status'] = 1;
-			$info['userid'] = defined('IN_ADMIN') ? 0 : param::get_cookie('_userid');
+			$data['status'] = 1;
+			$data['userid'] = defined('IN_ADMIN') ? 0 : param::get_cookie('_userid');
 			$vid = $this->db->insert($data, true);
 			return $vid ? $vid : false; 
 		} else {

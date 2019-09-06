@@ -43,7 +43,7 @@
         	<ul class="clr col4 col5"> 
 			{php $urlrule = video_makeurlrule();}
   			{php $sql = video_filters_sql($modelid,$catid);$y=1;$listorder = array(1=>'price ASC', 'price DESC', 'updatetime ASC', 'updatetime DESC');}
- 			{pc:content action="lists" where="$sql" catid="$catid" num="15" order="id DESC" moreinfo="1" page="$page" urlrule="$urlrule"}
+ 			{pc:content action="lists" where="$sql" catid="$catid" num="15" order="listorder DESC" moreinfo="1" page="$page" urlrule="$urlrule"}
 			{php $nums=count($data)}
  			{loop $data $v}	
 			<!-- 获取视频详细信息 -->

@@ -43,6 +43,18 @@ $LANG['vms_style']							=	'调用方案编号';
 $LANG['default_video_to_cat']				=	'默认视频入库栏目';
 $LANG['addtime']							=	'添加时间';
 $LANG['video_api_url']						=	'Open Api返回地址';
+$LANG['import_ku6video']					=	'导入KU6视频';
 $LANG['vms_sn_skey_error']					=	'身份识别码或加密密钥配置错误';
 $LANG['subscribe_for_default']				=	'默认用户不允许订阅';
+$LANG['original']							=	'原创';
+$LANG['site_upload']						=	'本站上传';
+
+$LANG['all']								=	'全部';
+$LANG['ku6video_ku6vid']					=	'KU6vid';
+$LANG['ku6video_fenlei']					=	'视频分类';
+$LANG['ku6video_srctype']					=	'视频质量';
+$LANG['ku6video_time']						=	'视频时长';
+$LANG['import_select_ku6video']				=	'导入所选视频'; 
+$LANG['ku6video_preview']					=	'点击预览该视频'; 
+$LANG['ku6video_edittitle']					=	'点击可修改标题哦！'; 
 ?>

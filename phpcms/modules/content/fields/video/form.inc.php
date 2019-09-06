@@ -177,7 +177,7 @@ alert(evt.msg);
 
 </SCRIPT>
 <script type="text/javascript">
-var flashvars = { m: "1", un: "'.$flash_info['un'].'", up: "'.$flash_info['up'].'", c: "vms", t: "1", n: "js4swf", k: "190000" ,ms:"39",s: "8000000"};
+var flashvars = { m: "1", u: "'.$flash_info['userid'].'", ctime: "'.$flash_info['passport_ctime'].'", sig:"'.$flash_info['passport_sig'].'", c: "vms", t: "1", n: "js4swf", k: "190000" ,ms:"39",s: "8000000"};
 var params = { allowScriptAccess: "always" , wmode: "transparent"};
 var attributes = { };
 //swfobject.embedSWF("http://player.ku6cdn.com/default/podcast/upload/201104261840/ku6uploader.swf", "ku6uploader", "450", "45", "10.0.0", null, flashvars, params, attributes);

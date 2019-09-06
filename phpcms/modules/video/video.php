@@ -67,6 +67,10 @@ class video extends admin {
 			$status = intval($_GET['status']);
 			$where .= ' AND `status`=\''.$status.'\'';
 		}
+		$userupload = intval($_GET['userupload']);
+		if ($userupload) {
+			$where .= ' AND `userupload`=1';
+		}
 		$infos = $this->db->listinfo($where, 'videoid DESC', $page, $pagesize);
 		$pages = $this->db->pages;
 		include $this->admin_tpl('video_list');		
@@ -91,6 +95,7 @@ class video extends admin {
 			}
 			$data['vid'] = $get_data['vid'];
 			$data['addtime'] = SYS_TIME;
+			$data['userupload'] = intval($_POST['userupload']);
 			$videoid = $this->v->add($data);
 			if ($videoid) {
 				showmessage(L('operation_success'), 'index.php?m=video&c=video&a=init&meunid='.$_GET['meunid']);
@@ -268,8 +273,9 @@ class video extends admin {
 				$sub['catid'] = intval($sub['catid']);
 				$sub['posid'] = intval($sub['posid']);
 				$result = $this->ku6api->subscribe($sub);
-				if (!$result) showmessage(L('subscribe_set_failed'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid']);
-				else showmessage(L('operation_success'), 'index.php?m=video&c=video&a=subscribe_list');
+				if ($result['check'] == 6) showmessage(L('subscribe_for_default')); 
+				if ($result['code'] == 200) showmessage(L('operation_success'), 'index.php?m=video&c=video&a=subscribe_list');
+				else showmessage(L('subscribe_set_failed'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid']);
 			} else {
 				showmessage(L('please_choose_catid_and_channel'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid']);
 			}
@@ -321,6 +327,10 @@ class video extends admin {
 			$endtime = strtotime($_GET['endtime']);
 			$where .= " AND `addtime` <= '$endtime'";
 		}
+		if ($_GET['userupload']) {
+			$userupload = intval($_GET['userupload']);
+			$where .= " AND `userupload`=1";
+		}
 		$show_header = 1;
 		$infos = $this->db->listinfo($where, '`videoid` DESC', $page, $pagesize, '', 5);
 		$pages = $this->db->pages;
@@ -358,7 +368,133 @@ class video extends admin {
 		$att_arr_exist = str_replace(array($json_str,'||||'), array('','||'), $att_arr_exist);
 		$att_arr_exist = preg_replace('/^\|\|||\|\|$/i', '', $att_arr_exist);
 		param::set_cookie('att_json',$att_arr_exist);
-	}	
+	}
+
+	/**
+	* 导入KU6视频
+	*/
+	public function import_ku6video(){
+		pc_base::load_sys_class('format','',0);
+		$do = isset($_GET['do']) ? $_GET['do'] : '';
+		$ku6url = isset($_GET['ku6url']) ? $_GET['ku6url'] : '';
+		$time = isset($_GET['time']) ? $_GET['time'] : '';
+		$keyword = isset($_GET['keyword']) ? $_GET['keyword'] : '*:*';
+		$len = isset($_GET['len']) ? $_GET['len'] : '';//时长s:小于4分钟 I:大于4分钟
+		$fenlei = isset($_GET['fenlei']) ? $_GET['fenlei'] : '*:*';//搜索分类
+		$srctype = isset($_GET['srctype']) ? $_GET['srctype'] : '*:*';//视频质量 
+		$videotime = isset($_GET['videotime']) ? $_GET['videotime'] : '*:*';//视频质量 
+ 		$page = isset($_GET['page']) ? $_GET['page'] : '1';
+		$pagesize = 7;
+ 		$list = array();
+		$fq = '';
+		
+		if(CHARSET!='utf-8'){
+			$keyword = iconv('gbk', 'utf-8', $keyword);
+		}
+		$keyword = urlencode($keyword);
+		//增加搜索条件 
+		if ($fenlei !== '*:*' && $fenlei!='') {
+				$keyword .= '%20categoryid:' . $fenlei;
+		}
+		//视频质量条件 
+		if ($srctype !== '*:*' && $srctype!='') {
+				if ($srctype == '1') {
+					$keyword .= '%20srctype:[0%20TO%201]';				
+				} elseif ($srctype == '2') {
+					$keyword .= '%20srctype:[2%20TO%203]';				
+				} elseif ($srctype == '3') {
+					$keyword .= '%20srctype:[4%20TO%207]';				
+				}
+		}
+		
+		if($videotime!=''){
+			if($videotime == '1'){
+				$fq .= '[0%20TO%20600]';
+			}elseif($videotime == '2'){
+				$fq .= '[600%20TO%201800]';
+			}elseif($videotime == '3'){
+				$fq .= '[1800%20TO%203600]';
+			}elseif($videotime == '4'){
+				$fq .= '[3600%20TO%20*]';
+			}
+ 		}
+  		$data = $this->ku6api->Ku6search($keyword,$pagesize,$page,$len,$fenlei,$fq); 
+ 		$totals = $data['data']['response']['numFound'];
+		$list = $data['data']['response']['docs'];
+		//获取视频大小接口
+		if(isset($list) && is_array($list) && count($list) > 0) {
+			foreach ($list as $key=>$v) {
+				$spaceurl = "http://v.ku6.com/fetchVideo4Player/1/$v[vid].html";
+				$spacejson = file_get_contents($spaceurl);
+				$space = json_decode($spacejson, 1);	 
+				$list[$key]['size'] = $space['data']['videosize'];
+				$list[$key]['uploadTime']  = substr($v['uploadtime'], 0, 10); 
+				//判断那些已经导入过本机系统 $vidstr .= ',\''.$v['vid'].'\'';
+			}
+		}   
+		//选择站点和栏目进行导入
+		$sitelist = getcache('sitelist','commons');
+		
+		//分类数组
+		$fenlei_array = array('101000'=>'资讯','102000'=>'体育','103000'=>'娱乐','104000'=>'电影','105000'=>'原创','106000'=>'广告','107000'=>'美女','108000'=>'搞笑','109000'=>'游戏','110000'=>'动漫','111000'=>'教育','113000'=>'生活','114000'=>'汽车','115000'=>'房产','116000'=>'音乐','117000'=>'电视','118000'=>'综艺','125000'=>'女生','126000'=>'记录','127000'=>'科技','190000'=>'其它');
+		//视频质量
+		$srctype_array = array('1'=>'流畅','2'=>'标清','3'=>'高清');
+ 		$videotime_array = array('1'=>'短视频','2'=>'普通视频','3'=>'中视频','4'=>'长视频');
+		
+		//本机视频栏目
+		$categoryrr = $this->get_category();
+  		include $this->admin_tpl('import_ku6video');   
+ 	}
+
+	/**
+	* 搜索视频浏览 
+	*/
+	public function preview_ku6video(){
+		$ku6vid = $_GET['ku6vid'];
+ 		$data = $this->ku6api->Preview($ku6vid);
+   		include $this->admin_tpl('priview_ku6video');
+	}
+	
+	/**
+	* 获取站点栏目数据
+	*/
+	public function get_category(){
+  		$siteid = get_siteid();//直取SITEID值
+		$sitemodel_field = pc_base::load_model('sitemodel_field_model');
+		$result = $sitemodel_field->select(array('formtype'=>'video', 'siteid'=>$siteid), 'modelid');
+		if (is_array($result)) {
+			$models = '';
+			foreach ($result as $r) {
+				$models .= $r['modelid'].',';
+			}
+		}
+		$models = substr(trim($models), 0, -1);
+		$cat_db = pc_base::load_model('category_model');
+		if ($models) {
+			$where = '`modelid` IN ('.$models.') AND `type`=0 AND `siteid`=\''.$siteid.'\'';
+			$result = $cat_db->select($where, '`catid`, `catname`, `parentid`, `siteid`, `child`');
+			if (is_array($result)) { 
+				$data = $return_data = $categorys = array(); 
+				$tree = pc_base::load_sys_class('tree');   
+				$data = $return_data = $categorys = array(); 
+				$tree = pc_base::load_sys_class('tree');//factory::load_class('tree', 'utils');
+ 				$string = '<select name="select_category" id="select_category" onchange="select_pos(this)">';
+				$string .= "<option value=0>请选择分类</option>";
+				foreach ($result as $r) {
+					$r['html_disabled'] = "";
+					if ($r['child']) {
+						$r['html_disabled'] = "disabled";
+					} 
+					$categorys[$r['catid']] = $r;
+				}
+				$str  = $str2 = "<option value=\$catid \$html_disabled \$selected>\$spacer \$catname</option>"; 			     $tree->init($categorys);
+				$string .= $tree->get_tree_category(0, $str, $str2);
+ 				$string .= '</select>';
+				return $string;//不使用前台js调用，使用return ;
+			}
+ 		}
+		return array();
+	}
 }
 
 ?>

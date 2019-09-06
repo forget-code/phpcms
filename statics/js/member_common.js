@@ -61,7 +61,7 @@ function remove_div(id) {
 }
 
 function select_catids() {
-	$('#addbutton').attr('disabled','');
+	$('#addbutton').attr('disabled',false);
 
 }
 
