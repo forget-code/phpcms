@@ -74,7 +74,7 @@ class content
 		return $data;
 	}
 
-	function add($data,$cat_selected = 0, $isimport = 0)
+	function add($data, $cat_selected = 0, $isimport = 0)
 	{
 		global $_userid, $_username,$CATEGORY, $MODEL;
         if(!$this->set_catid($data['catid'])) return false;
@@ -88,23 +88,27 @@ class content
 		if(!$systeminfo['username']) $systeminfo['username'] = $_username;
 		if(!$systeminfo['userid']) $systeminfo['userid'] = $_userid;
 
-			if($data['inputtime'])
-			{
-				$systeminfo['inputtime'] = strtotime($data['inputtime']);
-			}
-			else
-			{
-				$systeminfo['inputtime'] = TIME;
-			}
-			if($data['updatetime'])
-			{
-				$systeminfo['updatetime'] = strtotime($data['updatetime']);
-			}
-			else
-			{
-				$systeminfo['updatetime'] = TIME;
-			}
-
+		if($data['inputtime'])
+		{
+			$systeminfo['inputtime'] = strtotime($data['inputtime']);
+		}
+		else
+		{
+			$systeminfo['inputtime'] = TIME;
+		}
+		if($data['updatetime'])
+		{
+			$systeminfo['updatetime'] = strtotime($data['updatetime']);
+		}
+		else
+		{
+			$systeminfo['updatetime'] = TIME;
+		}
+		if(isset($data['paginationtype']))
+		{
+			$modelinfo['paginationtype'] = $data['paginationtype'];
+			$modelinfo['maxcharperpage'] = $data['maxcharperpage'];
+		}
 		$this->db->insert($this->table, $systeminfo);
 		$contentid = $this->db->insert_id();
         $modelinfo['contentid'] = $contentid;
@@ -115,7 +119,9 @@ class content
 		}
 		else
 		{
-			$url = $this->url->show($contentid, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix']);
+			$info = $this->url->show($contentid, 0, $systeminfo['catid'], $systeminfo['inputtime'], $data['prefix']);
+			$url = $info[1];
+			unset($info);
 		}
         $this->db->query("UPDATE `$this->table` SET `url`='$url' WHERE `contentid`=$contentid");
         $this->db->query("UPDATE `$this->table_category` SET `items`=`items`+1 WHERE `catid`='".$data['catid']."'");
@@ -144,15 +150,19 @@ class content
 		}
 		$content_update = new content_update($this->modelid, $contentid);
 		$content_update->update($data);
-
-		if(!$isimport) $this->log_write($contentid);
+		if(!$isimport) $this->log_write($contentid, '', '', $data['islink']);
 		return $contentid;
 	}
 
 	function edit($contentid, $data)
 	{
-		global $MODEL;
+		global $MODEL,$old_catid,$PHPCMS;
         if(!$this->set_catid($data['catid'])) return false;
+		if($old_catid && $old_catid!=$data['catid'])
+		{
+			$html = load('html.class.php');
+			$html->delete($contentid, $this->model_table);
+		}
 		require_once CACHE_MODEL_PATH.'content_input.class.php';
         require_once CACHE_MODEL_PATH.'content_update.class.php';
 		if(!$MODEL[$this->modelid]['isrelated']) $this->is_update_related = 0;
@@ -161,6 +171,19 @@ class content
 		$inputinfo = $content_input->get($data);
 		$systeminfo = $inputinfo['system'];
 		$modelinfo = $inputinfo['model'];
+		if(isset($data['paginationtype']))
+		{
+			$modelinfo['paginationtype'] = $data['paginationtype'];
+			$modelinfo['maxcharperpage'] = $data['maxcharperpage'];
+		}
+		if($data['inputtime'])
+		{
+			$systeminfo['inputtime'] = strtotime($data['inputtime']);
+		}
+		else
+		{
+			$systeminfo['inputtime'] = TIME;
+		}
 		$systeminfo['updatetime'] = TIME;
 		unset($systeminfo['status']);
 		if($data['islink']==1)
@@ -169,7 +192,10 @@ class content
 		}
 		else
 		{
-			 $systeminfo['url'] = $this->url->show($contentid, 0, 0, 0, $data['prefix']);
+			$prefix = $data['prefix'] ? $data['prefix'] : ($PHPCMS['enable_urlencode'] ? hash_string($contentid) : $contentid);
+			$info = $this->url->show($contentid, 0, $data['catid'], $systeminfo['inputtime'], $prefix);
+			$systeminfo['url'] = $info[1];
+			unset($info);
 		}
 		$this->db->update($this->table, $systeminfo, "`contentid`=$contentid $this->userid_sql");
 		if($modelinfo) $this->db->update($this->model_table, $modelinfo, "`contentid`=$contentid");
@@ -177,7 +203,7 @@ class content
 		$content_update = new content_update($this->modelid, $contentid);
 		$content_update->update($data);
 
-		$this->log_write($contentid);
+		$this->log_write($contentid, '', '', $data['islink']);
 		return true;
 	}
 
@@ -240,14 +266,14 @@ class content
 		return $output->get($data);
 	}
 
-	function log_write($contentid, $handle = '', $is_admin = 0)
+	function log_write($contentid, $handle = '', $is_admin = 0, $islink = 99)
 	{
 		if($is_admin) $this->ishtml = 1;
-
+		if(!isset($islink)) $islink = 99;
 		if($this->ishtml && ($handle == '' || $handle == 99))
 		{
 			if(!is_object($this->html)) $this->html = load('html.class.php');
-			$this->html->show($contentid, $this->is_update_related);
+			if($islink==99) $this->html->show($contentid, $this->is_update_related);
 		}
 		$this->search_api($contentid);
 		$this->log->set('contentid', $contentid);
@@ -324,6 +350,11 @@ class content
 			if($data)
 			{
 				$this->set_catid($data['catid']);
+				if($this->ishtml) 
+				{
+					$html = load('html.class.php');
+					$html->delete($contentid, $this->model_table);
+				}
 				$this->db->query("DELETE `$this->table`,`$this->model_table` FROM `$this->table`,`$this->model_table` WHERE $this->table.contentid=$this->model_table.contentid AND $this->table.contentid=$contentid $this->userid_sql");
                 $this->db->query("UPDATE `$this->table_category` SET `items`=`items`-1 WHERE `catid`='".$data['catid']."'");
 				if($this->db->affected_rows())
@@ -331,6 +362,11 @@ class content
 					$this->db->query("DELETE FROM `$this->table_count` WHERE `contentid`=$contentid");
 					$this->db->query("DELETE FROM `$this->table_position` WHERE `contentid`=$contentid");
 					$this->db->query("DELETE FROM `$this->table_tag` WHERE `contentid`=$contentid");
+					if(!is_object($attachment))
+					{
+						require_once 'attachment.class.php';
+						$attachment = new attachment('phpcms', $data['catid']);
+					}
 					$attachment->delete("`contentid`=$contentid");
 					if(isset($MODULE['digg']))
 					{
@@ -350,8 +386,8 @@ class content
 						$search = load('search.class.php', 'search', 'include');
 						$search->delete($data['searchid']);
 					}
+					$this->db->query("DELETE FROM ".DB_PRE."collect WHERE `contentid`='$contentid'");
 				}
-				if($this->ishtml) @unlink(PHPCMS_ROOT.$data['url']);
 				$this->log_write($contentid, 'delete');
 			}
 		}
@@ -413,6 +449,7 @@ class content
 
 	function status($contentid, $status, $is_admin = 0)
 	{
+		global $MODULE, $presentpoint,$catid;
 		if(!$contentid) return false;
 		$status = intval($status);
 		$contentids = implodeids($contentid);
@@ -421,6 +458,23 @@ class content
 		{
 			foreach($contentid as $id)
 			{
+				if($status==99 && isset($MODULE['pay']))
+				{
+					if(!$presentpoint && !$catid)
+					{
+							$cinfo = $this->get($id);
+							$r = $this->db->get_one("SELECT setting FROM `".DB_PRE."category` WHERE `catid`='$cinfo[catid]'");
+							$setting = string2array($r['setting']);
+							$presentpoint = $setting['presentpoint'];
+							$catid = $cinfo['catid'];
+					}
+					if($catid && $presentpoint)
+					{
+						$api_msg = $presentpoint > 0 ? '投稿奖励' : '发布信息扣点';
+						if(!is_object($pay_api)) $pay_api = load('pay_api.class.php', 'pay', 'api');
+						$pay_api->update_exchange('phpcms', 'point', $presentpoint, $api_msg, $cinfo['userid']);
+					}
+				}
 				$this->log_write($id, $status,$is_admin);
 			}
 		}
@@ -429,6 +483,13 @@ class content
 			$this->log_write($contentid, $status,$is_admin);
 		}
 		return $is_update;
+	}
+
+	function get_contentid($title)
+	{
+		$info = $this->db->get_one("SELECT `contentid` FROM `$this->table` WHERE `title`='$title'");
+		if($info['contentid']) return TRUE;
+		else return FALSE;
 	}
 
 	function get_status($processid)
@@ -450,13 +511,136 @@ class content
 		{
 			if(!is_array($id)) return false;
 			$ids = implode(',',$id);
-			$this->db->query("UPDATE $this->table SET catid='$targetcatid' WHERE catid IN($ids)");
+			$r = $this->db->select("SELECT `contentid` FROM `$this->table` WHERE `catid` IN ($ids)", 'contentid');
+			$contentids = array_keys($r);
+			array_map(array($this, 'move'), $contentids, array_fill(0, count($contentids), $targetcatid));
 		}
 		else
 		{
-			$this->db->query("UPDATE $this->table SET catid='$targetcatid' WHERE contentid IN ($id)");
+			if(strpos($id, ',')!==false)
+			{
+				$contentids = explode(',', $id);
+				array_map(array($this, 'move'), $contentids, array_fill(0, count($contentids), $targetcatid));
+			}
+			$contentid = intval($id);
+			$r = $this->db->get_one("SELECT `catid`, `islink` FROM `$this->table` WHERE `contentid`=$contentid");
+			$this->db->query("UPDATE `$this->table_category` SET `items`=`items`-1 WHERE `catid`=$r[catid]");
+			$this->set_catid($r['catid']);
+			if($this->ishtml && !$r['islink'])
+			{
+				if(!is_object($html))
+				{
+					$html = load('html.class.php');
+				}
+				$html->delete($contentid, $this->model_table);
+			}
+			$this->db->query("UPDATE `$this->table` SET `catid`='$targetcatid' WHERE `contentid`=$contentid");
+			$info = $this->url->show($contentid, 0, $targetcatid);
+			$this->db->query("UPDATE `$this->table` SET `url`='$info[1]' WHERE `contentid`=$contentid");
+			$this->db->query("UPDATE `$this->table_category` SET `items`=`items`+1 WHERE `catid`=$targetcatid");
+			$this->log_write($contentid);
 		}
 		return true;
+	}
+
+	function get_posid($contentid = 0, $posid = 0)
+	{
+		return $this->db->get_one("SELECT * FROM `".DB_PRE."content_position` WHERE `contentid`=$contentid AND `posid`=$posid");
+	}
+
+	function add_posid($contentid = 0, $posid = 0)
+	{
+		$contentid = intval($contentid);
+		$posid = intval($posid);
+		if(!$contentid || !$posid) return false;
+		$this->db->query("INSERT INTO `".DB_PRE."content_position` (`contentid`, `posid`) VALUES ('$contentid', '$posid')");
+		$this->db->query("UPDATE $this->table SET `posids`=1 WHERE `contentid`=$contentid");
+		return true;
+	}
+
+	function add_typeid($contentid = 0, $typeid = 0)
+	{
+		$contentid = intval($contentid);
+		$typeid = intval($typeid);
+		if(!$contentid || !$typeid) return false;
+		$this->db->query("UPDATE $this->table SET `typeid`=$typeid WHERE `contentid`=$contentid");
+		return true;
+	}
+
+	function update_search($catid, $i)
+	{
+		$info = $this->db->get_one("SELECT `contentid` FROM `$this->table` WHERE `catid`='$catid' AND `status`=99 ORDER BY `contentid` DESC LIMIT $i, 1");
+		$this->search_api($info['contentid']);
+		return true;
+	}
+
+	function inspect($contentid, $passname = '')
+	{
+		global $MODEL;
+		if(!$passname) return false;
+		require_once 'admin/process.class.php';
+		if(is_array($contentid))
+		{
+			foreach($contentid as $c)
+			{
+				$r = $this->get($c);
+				$this->set_catid($r['catid']);
+				$workflowid = $MODEL[$this->modelid]['workflowid'];
+				if(${prco.$workflowid})
+				{
+					$PROCESS = ${prco.$workflowid};
+				}
+				else
+				{
+					${prco.$workflowid} = $PROCESS = cache_read('process_'.$workflowid.'.php');
+				}
+				$PROCESS = array_keys($PROCESS);
+				$re = $this->db->get_one("SELECT `processid` FROM `".DB_PRE."process` WHERE `workflowid`=$workflowid AND `passstatus`=$r[status]");
+				if(!$re)
+				{
+					$processid = array_shift($PROCESS);
+				}
+				else
+				{
+					foreach($PROCESS AS $key => $pro)
+					{
+						if($pro==$re['processid'])
+						{
+							$key++;
+							$processid = $PROCESS[$key];
+							break;
+						}
+					}
+				}
+				$p = new process($workflowid);
+				$allow_status = $p->get_process_status($processid);
+				$contentids = $this->contentid($c, 0, $allow_status);
+				$process = $p->get($processid, $passname);
+				$this->status($contentids, $process['passstatus']);
+				unset($p);
+			}
+		}
+		return true;
+	}
+
+	function get_pro_status()
+	{
+		global $priv_role;
+		$status = array();
+		$STATUS = $this->db->select("SELECT `status`, `name` FROM `".DB_PRE."status` WHERE `status`>2 AND `status`!=99");
+		foreach($STATUS as $S)
+		{
+			$process = $this->db->select("SELECT `processid` FROM `".DB_PRE."process_status` WHERE `status`=$S[status]");
+			foreach($process as $p)
+			{
+				if($priv_role->check('processid', $p['processid']))
+				{
+					$status[] = $S;
+					break;
+				}
+			}
+		}
+		return $status;
 	}
 }
 ?>

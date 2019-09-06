@@ -84,5 +84,26 @@ class guestbook
 		return $gip;
 	}
 
+	function get_face()
+	{
+		$face = $t = '';
+		$face .= '<ul>';
+		foreach(glob(PHPCMS_ROOT.'images/face/*.gif') AS $i)
+		{
+			$headname = basename($i, ".gif");
+			$headpath = basename($i);
+			if($headname=='01')
+			{
+				$t = 'checked';
+			}
+			else
+			{
+				$t = '';
+			}
+			$face .= '<li><img src="images/face/'.$headpath.'"><p><input type="radio" value="'.$headname.'" name="guestbook[head]" '.$t.'></p></li>';
+		}
+		$face .= '</ul>';
+		return $face;
+	}
 }
 ?>

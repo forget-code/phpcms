@@ -77,7 +77,14 @@ include admin_tpl('header');
   </tbody>
 
   <tbody id='Tabs1' style='display:none'>
-    <tr>
+	<tr>
+      <th width="35%"><strong>切换分页方式</strong></th>
+      <td>
+  <label onclick="javascript:$('#pagemode').hide();"><input type='radio' name='setting[pagemode]' value='1'  <?php if($pagemode){ ?>checked <?php } ?>> 多页显示方式</label>&nbsp;&nbsp;&nbsp;&nbsp;
+  <label onclick="javascript:$('#pagemode').show();"><input type='radio' name='setting[pagemode]' value='0'  <?php if(!$pagemode){ ?>checked <?php } ?>> 上下分页方式</label>
+  </td>
+    </tr>
+    <tr id="pagemode" style="display:<?php if($pagemode) echo 'none';?>">
       <th width="35%"><strong>分页代码</strong><br />可自定义分页html代码， {$name} 格式的字符串是变量</th>
       <td><textarea name='setting[pageshtml]' cols='60' rows='5' id='pageshtml' style="width:100%;height:130px"><?=$pageshtml?></textarea></td>
     </tr>

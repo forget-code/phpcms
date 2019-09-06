@@ -74,6 +74,10 @@ foreach($patterns as $p)
       <td><input type="radio" name="info[isunique]" value="1" <?=($isunique ? 'checked' : '')?> /> 是 <input type="radio" name="info[isunique]" value="0" <?=($isunique ? '' : 'checked')?> /> 否</td>
     </tr>
 	<tr>
+      <th><strong>作为基本信息</strong><br />本选项只在添加、修改信息时起作用，选“是”则在信息的基本选项中显示，否则在高级选项中显示</th>
+      <td><input type="radio" name="info[isbase]" value="1" <?=($isbase ? 'checked' : '')?> /> 是 <input type="radio" name="info[isbase]" value="0" <?=($isbase ? '' : 'checked')?> /> 否</td>
+    </tr>
+	<tr>
       <th><strong>作为搜索条件</strong></th>
       <td><input type="radio" name="info[issearch]" value="1" <?=($issearch ? 'checked' : '')?> /> 是 <input type="radio" name="info[issearch]" value="0"  <?=($issearch ? '' : 'checked')?> /> 否</td>
     </tr>

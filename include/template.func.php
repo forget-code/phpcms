@@ -105,10 +105,13 @@ function get_parse($str)
 	if(!isset($dbname)) $dbname = '';
 	if(!isset($sql)) $sql = '';
 	if(!isset($rows)) $rows = 0;
+	if(!isset($urlrule)) $urlrule = '';
+	if(!isset($catid)) $catid = 0;
+	if(!isset($distinctfield)) $distinctfield = '';
 	if(!isset($return) || !preg_match("/^\w+$/i", $return)) $return = 'r';
 	if(isset($page))
 	{
-	    $str = "<?php \$ARRAY = get(\"$sql\", $rows, $page, \"$dbname\", \"$dbsource\");\$DATA=\$ARRAY['data'];\$total=\$ARRAY['total'];\$count=\$ARRAY['count'];\$pages=\$ARRAY['pages'];unset(\$ARRAY);foreach(\$DATA AS \$n=>\${$return}){\$n++;?>";
+	    $str = "<?php \$ARRAY = get(\"$sql\", $rows, $page, \"$dbname\", \"$dbsource\", \"$urlrule\",\"$distinctfield\",\"$catid\");\$DATA=\$ARRAY['data'];\$total=\$ARRAY['total'];\$count=\$ARRAY['count'];\$pages=\$ARRAY['pages'];unset(\$ARRAY);foreach(\$DATA AS \$n=>\${$return}){\$n++;?>";
 	}
 	else
 	{

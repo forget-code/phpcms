@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2008 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: cache.php 12126 2008-01-11 09:40:32Z heyond $
+	$Id: cache.php 846 2008-12-08 05:37:05Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -21,6 +21,11 @@ class cachemodel {
 
 	var $db;
 	var $base;
+	var $map;
+
+	function __construct(&$base) {
+		$this->cachemodel($base);
+	}
 
 	function cachemodel(&$base) {
 		$this->base = $base;
@@ -33,7 +38,7 @@ class cachemodel {
 	}
 
 	//public
-	function updatedata($module = '', $cachefile = '') {
+	function updatedata($cachefile = '') {
 		if($cachefile) {
 			foreach((array)$this->map[$cachefile] as $modules) {
 				$s = "<?php\r\n";
@@ -44,9 +49,8 @@ class cachemodel {
 				$s .= "\r\n?>";
 				@file_put_contents(UC_DATADIR."./cache/$cachefile.php", $s);
 			}
-		}
-		foreach((array)$this->map as $file=>$modules) {
-			if(!$module || ($module && in_array($module, $modules))) {
+		} else {
+			foreach((array)$this->map as $file => $modules) {
 				$s = "<?php\r\n";
 				foreach($modules as $m) {
 					$method = "_get_$m";
@@ -67,7 +71,7 @@ class cachemodel {
 		$data = $this->db->fetch_all("SELECT * FROM ".UC_DBTABLEPRE."badwords");
 		$return = array();
 		if(is_array($data)) {
-			foreach($data as $k=>$v) {
+			foreach($data as $k => $v) {
 				$return['findpattern'][$k] = $v['findpattern'];
 				$return['replace'][$k] = $v['replacement'];
 			}
@@ -82,6 +86,7 @@ class cachemodel {
 		$apps2 = array();
 		if(is_array($apps)) {
 			foreach($apps as $v) {
+				$v['extra'] = unserialize($v['extra']);
 				$apps2[$v['appid']] = $v;
 			}
 		}

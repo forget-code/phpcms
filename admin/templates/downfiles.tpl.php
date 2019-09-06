@@ -37,6 +37,7 @@ function parenth(flag) {
 		<form name="upload" method="post" action="?mod=phpcms&file=downfiles&&dosubmit=1" enctype="multipart/form-data">
 		<input type="hidden" name="MAX_FILE_SIZE" value="<?=UPLOAD_MAXSIZE?>" />
 		<input type="hidden" name="height" id="height" value="25">
+		<input type="hidden" name="catid" id="catid" value="<?=$catid?>">
 		<tr>
 		<td width="400">
 		<div id='file_uploaded'>

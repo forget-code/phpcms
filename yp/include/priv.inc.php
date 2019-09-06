@@ -1,0 +1,22 @@
+<?php 
+return array('all'=>array('name'=>'模块管理', 'file'=>'', 'action'=>''),
+			 'mcom'=>array('name'=>'管理公司', 'file'=>'company', 'action'=>'manage'),
+			 'mcomd'=>array('name'=>'管理公司', 'file'=>'company', 'action'=>'delete'),
+			 'mpdt'=>array('name'=>'产品管理', 'file'=>'product', 'action'=>'manage'),
+			 'mpdte'=>array('name'=>'产品修改', 'file'=>'product', 'action'=>'edit'),
+			 'mpdtd'=>array('name'=>'产品删除', 'file'=>'product', 'action'=>'delete'),
+			 'mbuy'=>array('name'=>'商机管理', 'file'=>'buy', 'action'=>'manage'),
+			 'mbuye'=>array('name'=>'商机修改', 'file'=>'buy', 'action'=>'edit'),
+			 'mbuyd'=>array('name'=>'商机删除', 'file'=>'buy', 'action'=>'delete'),
+			 'mnews'=>array('name'=>'新闻管理', 'file'=>'news', 'action'=>'manage'),
+			 'mnewm'=>array('name'=>'新闻移动', 'file'=>'news', 'action'=>'move'),
+			 'mnewse'=>array('name'=>'新闻修改', 'file'=>'news', 'action'=>'edit'),
+			 'mnewsd'=>array('name'=>'新闻删除', 'file'=>'news', 'action'=>'delete'),
+			 'mcert'=>array('name'=>'管理证书', 'file'=>'certificate', 'action'=>'manage'),
+			 'mcerte'=>array('name'=>'修改证书', 'file'=>'certificate', 'action'=>'edit'),
+			 'mcertd'=>array('name'=>'删除证书', 'file'=>'certificate', 'action'=>'delete'),
+			 'view'=>array('name'=>'模块配置', 'file'=>'setting', 'action'=>''),
+			 'mcategory'=>array('name'=>'分类管理', 'file'=>'category', 'action'=>''),
+			 'manage'=>array('name'=>'公司模板管理', 'file'=>'template', 'action'=>''),
+			);
+?>

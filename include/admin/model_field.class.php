@@ -131,6 +131,7 @@ class model_field
 
 	function exists($field)
 	{
+		if($field=='paginationtype' || $field=='maxcharperpage') return TRUE;
 		return array_key_exists($field, $this->fields);
 	}
 }

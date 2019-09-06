@@ -4,6 +4,7 @@ class content_update
 	var $modelid;
 	var $fields;
 	var $contentid;
+	var $data;
 
     function __construct($modelid, $contentid)
     {
@@ -22,6 +23,7 @@ class content_update
 	function update($data)
 	{
 		$info = array();
+		$this->data = $data;
 		foreach($data as $field=>$value)
 		{
 			if(!isset($this->fields[$field])) continue;

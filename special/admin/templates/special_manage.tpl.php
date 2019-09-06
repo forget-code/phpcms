@@ -33,6 +33,8 @@ include admin_tpl('header');
 <table cellpadding="0" cellspacing="1" class="table_list">
     <caption><?=$typeid ? $types[$typeid]['name'] : ''?> 专题列表</caption>
 <tr>
+<th width="30">ID</th>
+<th>排序</th>
 <th>专题信息</th>
 <th width="60">操作</th>
 </tr>
@@ -42,6 +44,8 @@ if(is_array($data)){
 		if(!$r['thumb']) $r['thumb'] = 'images/nopic.gif';
 ?>
 <tr>
+<td><?=$r['specialid']?></td>
+<td><input type='text' name='listorder[<?=$r['specialid']?>]' value="<?=$r['listorder']?>" size="4"></td>
 <td>
 <div style="margin-bottom:5px;height:20px;font-size:16px;font-weight:bold;border-bottom:1px dotted #ccc"><a href="<?=$r['url']?>" target="_blank"><?=output::style($r['title'], $r['style'])?></a></div>
 <div>

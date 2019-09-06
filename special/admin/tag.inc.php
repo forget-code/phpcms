@@ -99,6 +99,16 @@ switch($action)
 			include admin_tpl('tag_preview', 'phpcms');
 		}
 		break;
+	case 'checktag':
+		if(isset($t->TAG[$value]))
+		{
+			exit('该标签已经存在');
+		}
+		else
+		{
+			exit('success');
+		}
+		break;
 }
 
 function get_var($string)

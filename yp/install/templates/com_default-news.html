@@ -1,0 +1,52 @@
+{template 'yp','com_default-header'}
+<!--主体-->
+<div class="main_all"> 
+<div id="main">
+  <!--右侧-->
+  <div id="right">
+    <p id="position"><strong>当前位置</strong>：{$position}</p>
+    <h3>{$system_name[$category]}</h3>
+    <div class="box p_l_20">
+      <ul class="txt_list">
+{get sql="SELECT id,title,content,userid,updatetime FROM `phpcms_yp_news` WHERE userid='$userid' AND status=99 ORDER BY id DESC" rows="15" page="$page" urlrule="$urlrule"}
+<li><span>{date('Y年m月d日',$r[updatetime])}</span><a href="{show_url('news',$r[id])}">{$r[title]}</a></li>
+{/get}
+      </ul>
+      <div class="cb"></div>
+     <div id="pages">{$pages}</div>  
+    </div>
+  </div>
+  <!--左侧-->
+  <div id="left">
+{if $m_user}
+	<h3>热点导航</h3>
+	<div class="hot_nav">
+		  <ul>
+	{loop $m_user $ms}
+	  <li><a href="{$ms[url]}">{$ms[catname]}</a></li>
+	{/loop}
+		  </ul>
+		</div>
+{/if}
+	<h3>热点新闻</h3>
+    <div class="box">
+      <ul>
+		{get sql="SELECT * FROM `phpcms_yp_news` `n` , `phpcms_yp_count` `ct` WHERE `n`.`userid`='$userid' AND `n`.status=99 AND `n`.`id` = `ct`.`id` AND `ct`.`model` = 'news'  ORDER BY `ct`.hits DESC" rows="10"}
+		<li><a href="{show_url('news',$r[id])}" title="{$r[title]}">{str_cut($r[title],28,'')}</a></li>
+		{/get}
+      </ul>
+    </div>
+    <h3>站内搜索</h3>
+    <form class="box" action="{$M['url']}web/query.php">
+      <input type="text" name="q" size="16"/><input name="search" type="submit" id="search" value="搜索"/><br/>
+	  <input type="radio" name="type" checked="checked" value="product"/>商品<input type="radio" name="type" value="buy"/>商机<input value="news" type="radio" name="type"/>新闻<input type="hidden" value="search" name="action" /><input name="userid" value="{$userid}" type="hidden" />
+    </form>
+
+  </div>
+  <div class="cb"></div>
+</div>
+</div>
+<!--尾部-->
+<div id="foot">{$companyname}<br/> 地址：{$address}</div>
+</body>
+</html>

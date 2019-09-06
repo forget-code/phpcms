@@ -380,7 +380,7 @@ switch($action)
 	case 'delete':
 		$tagname = preg_replace("/^[^{]*[{]?tag_([^}]+)[}]?.*/", "\\1", $tagname);
         $t->delete($tagname);
-		showmessage('操作成功！', "?mod=$mod&file=$file&action=manage&module=$module");
+		showmessage('操作成功！', "?mod=$mod&file=$file&action=manage&module=$module&type=$type");
 		break;
 	case 'ajax_category':
 		$parentid = max(intval($parentid), 0);

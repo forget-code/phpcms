@@ -1,0 +1,183 @@
+{template 'yp','center_header'}
+<div id="main">
+{template "yp","center_left"}
+{if $action=='edit'}
+<div id="right">
+<table cellpadding="0" cellspacing="1" class="table_info">
+<caption>
+提示信息
+</caption>
+<tr>
+<td> 贵公司的资料上网后会受到其他客户及工商质检部门等多方关注，请如实填写！因此虚假信息产生的相关责任，将由贵公司自行承担！
+<br/>
+</td>
+</tr>
+</table>
+<form action="{URL}" method="post" name="myform"  enctype="multipart/form-data" >
+<table cellpadding="0" cellspacing="1" class="table_form" style="*margin-top:10px;">
+	<caption>修改公司信息</caption>
+    {loop $forminfos $field $info}
+	<tr> 
+      <th width="20%"> {if $info['star']} <font color="red">*</font>{/if} <strong>{$info[name]}</strong><br />
+	  {$info[tips]}
+	  </th>
+      <td>{$info[form]} </td>
+    </tr>
+	{/loop}
+	<tr><th width="20%">  <strong>企业成立时间</strong></th>
+	<td><input name="byear" type="text" size="4" value="{$byear}"> 年
+<select name="bmonth" id="bmonth">
+{loop $montharr $month}
+ <option value="{$month}" {if $month==$bmonth}selected{/if}>{$month}</option>
+{/loop}
+</select> 月 
+</td>
+    </tr>
+	<tr><th width="20%">  <strong>员工人数</strong></th>
+	<td>
+<select name="employnum" id="employnum">
+<option value="{$company_user_infos[employnum]}"  >{$company_user_infos[employnum]} 人</option>
+<option value="1-5"  >5 人以下 </option>
+<option value="5-10" >5-10 人 </option>
+<option value="11-50" >11-50 人 </option>
+<option value="51-100" >51-100 人 </option>
+<option value="101-500" >101-500 人 </option>
+<option value="501-1000" >501-1000 人 </option>
+<option value="1000以上" >1000以上 </option>
+</select></td>
+    </tr>
+	<tr><th width="20%">  <strong>年营业额</strong></th>
+<td>
+<select name="turnover" id="turnover"  >
+<option value="{$company_user_infos[turnover]}"  >{$company_user_infos[turnover]}</option>
+<option value="100万以下"  >100万以下</option>
+<option value="100万-250万"   >100万-250万</option>
+<option value="250万-500万" >250万-500万</option>
+<option value="500万-1000万"  >500万-1000万</option>
+<option value="1000万-5000万"  >1000万-5000万</option>
+<option value="5000万-1亿"   >5000万-1亿</option>
+<option value="1亿-10亿"  >1亿-10亿</option>
+<option value="10亿以上"  >10亿以上</option>
+</select>
+</td>
+    </tr>
+    <tr> 
+      <td></td>
+      <td> 
+	  <input type="hidden" name="forward" value="{$forward}"> 
+	  <input type="submit" name="dosubmit" value=" 确定 "> 
+      <input type="reset" name="reset" value=" 清除 ">
+	  </td>
+    </tr>
+</table>
+</form>
+</div>
+{elseif $action=='basic'}
+<div id="right">
+<form action="{URL}" method="post" name="myform"  enctype="multipart/form-data" >
+<table cellpadding="0" cellspacing="1" class="table_form" >
+	<caption>修改基本信息</caption>
+	<tr><th width="20%">  <strong>公司Logo：</strong></th>
+	<td><input type="text" name="logo" id="logo" size="50" value="{$company_user_infos[logo]}" onclick="$('#logo_div').css('display','')" onblur="$('#logo_div').css('display','none')"> <input type="button" name="logo_upimage" id="logo_upimage" value="上传图片" style="width:60px" onclick="javascript:openwinx('{PHPCMS_PATH}yp/upload.php?uploadtext=logo','upload','450','350')">
+	<div id='logo_div' style='background-color: #fff;border:#006699 solid 1px;position:absolute;z-index:10;padding:5px;display:none;'>
+	<img src="{$company_user_infos[logo]}"></div>
+	<div id='banner_div' style='background-color: #fff;border:#006699 solid 1px;position:absolute;z-index:10;padding:5px;display:none;right:0px;'>
+	<img src="{if $company_user_infos[banner]}{$company_user_infos[banner]}{else}yp/images/banner.jpg{/if}"></div>
+	
+	</td>
+    </tr>
+	<tr>
+<th width="20%"><strong>Banner：</strong></th>
+<td><input type="text" name="banner" id="banner" size="50" value="{$company_user_infos[banner]}" onclick="$('#banner_div').css('display','')" onblur="$('#banner_div').css('display','none')"> <input type="button" name="thumb_upimage" id="thumb_upimage" value="上传图片" style="width:60px" onclick="javascript:openwinx('{PHPCMS_PATH}yp/upload.php?uploadtext=banner','upload','450','350')"/> 留空则显示默认</td>
+</tr>
+	<tr><th width="20%">  <strong>联系人：</strong></th>
+	<td><input name="linkman" type="text" size="15" value="{$company_user_infos[linkman]}"></td>
+    </tr>
+	<tr><th width="20%">  <strong>Email：</strong></th>
+	<td><input name="email" type="text" size="30" value="{$company_user_infos[email]}"></td>
+    </tr>
+	<tr><th width="20%">  <strong>联系电话：</strong></th>
+	<td><input name="telephone" type="text" size="15" value="{$company_user_infos[telephone]}"></td>
+    </tr>
+	<tr><th width="20%">  <strong>公司简介：</strong></th>
+	<td>
+<textarea name="introduce" id="introduce" style="display:none">{$company_user_infos[introduce]}</textarea>
+	{form::editor('introduce','basic','100%',200,0)}
+</td>
+    </tr>
+    <tr> 
+      <td></td>
+      <td> 
+	  <input type="hidden" name="forward" value="{$forward}"> 
+	  <input type="submit" name="dosubmit" value=" 确定修改 "> 
+	  </td>
+    </tr>
+</table>
+</form>
+</div>
+{else}
+	  <div id="right">	
+		<table cellpadding="0" cellspacing="1" class="table_info">
+		  <caption><h5>提示信息</h5></caption>
+		  <tr>
+			<td> 贵公司的资料上网后会受到其他客户及工商质检部门等多方关注，请如实填写！因此虚假信息产生的相关责任，将由贵公司自行承担！
+			</td>
+		  </tr>
+		</table>
+		{if $M[enableSecondDomain] && !$company_user_infos[sitedomain]} <div class="box_2">您还没有属于自己的二级域名，请在这里输入：<B>http://<input type="text" name="sitedomain" onblur="checksitedomain(this.value)">.{$M[secondDomain]}</B></div>
+		<SCRIPT LANGUAGE="JavaScript">
+		<!--
+			function checksitedomain(sitedomain)
+			{
+				$.get('{BUSINESSDIR}?file=company&action=checksitedomain&sitedomain='+sitedomain, function(data){
+					if(data==1)
+					{
+						alert('您的域名为：http://'+sitedomain+'.{$M[secondDomain]} 请牢记');
+					}
+					else
+					{
+						alert(data);
+					}
+				});
+			}
+		//-->
+		</SCRIPT>
+		{/if}
+		
+        <div class="blank10"></div>
+		<table cellpadding="0" cellspacing="1" class="table_info table_none">
+		  <tr>
+			<td class="bg_yellow">
+			{if !$company_user_infos[status]}
+			<font color="#3300FF">您的公司信息正在审核中...  您可以继续等待审核，或者直接电话联系我们。</font>
+			<BR> {/if}
+			对详细资料修改，请 <a class="red f13 b" href="{BUSINESSDIR}?file=company&action=edit">点击这里</a>
+			<BR> 修改联系方式、企业简介和 Logo，请 <a class="red f13 b" href="{BUSINESSDIR}?file=company&action=basic">点击这里</a>
+			</td>
+		  </tr>
+		</table>
+		
+		<table cellpadding="0" cellspacing="1" class="table_form" id="m_t10">
+     <caption>公司信息</caption>
+	 {loop $forminfos $field $info}
+     <tr>
+        <th width="15%">{$field}：</th>        
+        <td>{$info}</td>
+     </tr>
+	 {/loop}
+    </table>
+
+	  </div>
+{/if}
+	</div>
+	<div class="clear"></div>
+{template 'phpcms','footer'}
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+$().ready(function() {
+  $('form').checkForm(1);
+});
+//-->
+</SCRIPT>
+<script type="text/javascript" src="images/js/form.js"></script>
+<script type="text/javascript" src="images/js/validator.js"></script>

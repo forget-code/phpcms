@@ -1,0 +1,297 @@
+{template 'yp', 'header'}
+<div id="main">
+  <div id="right">
+  <div id="position"><strong>当前位置：</strong><a href="yp/">企业黄页</a><a href="yp/job.php">企业招聘</a>高级搜索</div>
+  <h3 class="bt mar_10">人才搜索</h3>
+  <div class="box hr_search">
+  <form name="myform" method="get" action="yp/job.php">
+  <table cellpadding="0" cellspacing="1" class="search_term">
+    <tr>
+      <th width="35%">应聘岗位类别</th>
+      <td><span class="select-type"><select style="width:160px;" name="station">
+          <option>不限</option>
+          {loop $types $type}
+		  <option value="{$type['typeid']}">{$type['name']}</option>
+		  {/loop}
+          </select></span>
+      </td>
+      </tr>
+      <tr>
+      <th width="35%">学历</th>
+      <td><span class="select-type"><select style="width:160px;" name="degree">
+		<option value="不限">不限</option>
+		<option value="高中">高中</option>
+		<option value="大专">大专</option>
+		<option value="本科">本科</option>
+		<option value="研究生">研究生</option>
+		<option value="硕士">硕士</option>
+		<option value="博士">博士</option>
+          </select></span>
+      </td>
+      </tr>   
+	<tr>
+      <th width="35%">期望工作地点</th>
+      <td><span class="select-type"><select style="width:160px;" name="workplace">
+            <option value="不限">不限</option>
+			<option value='江苏,浙江,上海'>江浙沪</option>
+			<option value='广州,深圳,中山,珠海,佛山,东莞,惠州'>珠三角</option>
+			<option value='香港,澳门,台湾'>港澳台</option>
+			<option value='海外'>海外</option>
+			<option value='北京'>北京</option>
+			<option value='上海'>上海</option>
+			<option value='杭州'>杭州</option>
+			<option value='广州'>广州</option>
+			<option value='深圳'>深圳</option>
+			<option value='南京'>南京</option>
+			<option value='武汉'>武汉</option>
+			<option value='天津'>天津</option>
+			<option value='成都'>成都</option>
+			<option value='哈尔滨'>哈尔滨</option>
+			<option value='重庆'>重庆</option>
+			<option value='宁波'>宁波</option>
+			<option value='无锡'>无锡</option>
+			<option value='济南'>济南</option>
+			<option value='苏州'>苏州</option>
+			<option value='温州'>温州</option>
+			<option value='青岛'>青岛</option>
+			<option value='沈阳'>沈阳</option>
+			<option value='福州'>福州</option>
+			<option value='西安'>西安</option>
+			<option value='长沙'>长沙</option>
+			<option value='合肥'>合肥</option>
+			<option value='南宁'>南宁</option>
+			<option value='南昌'>南昌</option>
+			<option value='郑州'>郑州</option>
+			<option value='厦门'>厦门</option>
+			<option value='大连'>大连</option>
+			<option value='常州'>常州</option>
+			<option value='石家庄'>石家庄</option>
+			<option value='东莞'>东莞</option>
+			<option value='安徽'>安徽</option>
+			<option value='福建'>福建</option>
+			<option value='甘肃'>甘肃</option>
+			<option value='广东'>广东</option>
+			<option value='广西'>广西</option>
+			<option value='贵州'>贵州</option>
+			<option value='海南'>海南</option>
+			<option value='河北'>河北</option>
+			<option value='黑龙江'>黑龙江</option>
+			<option value='河南'>河南</option>
+			<option value='湖北'>湖北</option>
+			<option value='湖南'>湖南</option>
+			<option value='江苏'>江苏</option>
+			<option value='江西'>江西</option>
+			<option value='吉林'>吉林</option>
+			<option value='辽宁'>辽宁</option>
+			<option value='内蒙古'>内蒙古</option>
+			<option value='宁夏'>宁夏</option>
+			<option value='青海'>青海</option>
+			<option value='山东'>山东</option>
+			<option value='山西'>山西</option>
+			<option value='陕西'>陕西</option>
+			<option value='四川'>四川</option>
+			<option value='新疆'>新疆</option>
+			<option value='西藏'>西藏</option>
+			<option value='云南'>云南</option>
+			<option value='浙江'>浙江</option>
+			<option value='other'>其它</option>
+          </select></span>
+      </td>
+      </tr>
+      <tr>
+      <th width="35%">工作经验</th>
+      <td><span class="select-type"><select style="width:160px;" name="experience">
+        <option value="不限">不限</option>
+		<option value="1">1年</option>
+		<option value="2">2年</option>
+		<option value="3">3年</option>
+		<option value="4">4年</option>
+		<option value="5">5年</option>
+		<option value="6">6年以上</option>
+        </select></span>
+      </td>
+      </tr>
+    <tr>
+      <th></th>
+       <td> 
+        <input type="submit" value="立即搜索" style="margin-right:5px;" />
+		<input type="hidden" value="1" name="stype"/><input type="hidden" value="searchlist" name="action"/>
+       <input type="reset" value="重新搜索" />
+       </td>
+    </tr>
+      </table>
+      </form>
+  </div>
+    <h3 class="bt mar_10">搜索工作</h3>
+    <div class="box hr_search">
+    <form name="myform" method="get" action="">
+  <table cellpadding="0" cellspacing="1" class="search_term">
+   <tr>
+      <th width="35%">招聘岗位类别</th>
+      <td><span class="select-type"><select style="width:160px;" name="station">
+          <option>不限</option>
+          {loop $types $type}
+		  <option value="{$type['typeid']}">{$type['name']}</option>
+		  {/loop}
+          </select></span>
+      </td>
+      </tr>
+         <tr>
+      <th width="35%">学历</th>
+      <td><span class="select-type"><select style="width:160px;" name="degree">
+        <option value="不限">不限</option>
+		<option value="高中">高中</option>
+		<option value="大专">大专</option>
+		<option value="本科">本科</option>
+		<option value="研究生">研究生</option>
+		<option value="硕士">硕士</option>
+		<option value="博士">博士</option>
+          </select></span>
+      </td>
+      </tr>
+    <tr>
+      <th width="35%">发布日期</th>
+      <td><span class="select-type"><select style="width:160px;" name="inputtime">
+          <option value="不限">不限</option>
+          <option value="1">一天内</option>
+          <option value="3">3天内</option>
+          <option value="7">一周内</option>
+          <option value="30">一个月内</option>
+          </select></span>
+      </td>
+      </tr>
+      <tr>
+      <th width="35%">工作地点</th>
+      <td><span class="select-type"><select style="width:160px;" name="workplace">
+			<option value="不限">不限</option>
+			<option value='江苏,浙江,上海'>江浙沪</option>
+			<option value='广州,深圳,中山,珠海,佛山,东莞,惠州'>珠三角</option>
+			<option value='香港,澳门,台湾'>港澳台</option>
+			<option value='海外'>海外</option>
+			<option value='北京'>北京</option>
+			<option value='上海'>上海</option>
+			<option value='杭州'>杭州</option>
+			<option value='广州'>广州</option>
+			<option value='深圳'>深圳</option>
+			<option value='南京'>南京</option>
+			<option value='武汉'>武汉</option>
+			<option value='天津'>天津</option>
+			<option value='成都'>成都</option>
+			<option value='哈尔滨'>哈尔滨</option>
+			<option value='重庆'>重庆</option>
+			<option value='宁波'>宁波</option>
+			<option value='无锡'>无锡</option>
+			<option value='济南'>济南</option>
+			<option value='苏州'>苏州</option>
+			<option value='温州'>温州</option>
+			<option value='青岛'>青岛</option>
+			<option value='沈阳'>沈阳</option>
+			<option value='福州'>福州</option>
+			<option value='西安'>西安</option>
+			<option value='长沙'>长沙</option>
+			<option value='合肥'>合肥</option>
+			<option value='南宁'>南宁</option>
+			<option value='南昌'>南昌</option>
+			<option value='郑州'>郑州</option>
+			<option value='厦门'>厦门</option>
+			<option value='大连'>大连</option>
+			<option value='常州'>常州</option>
+			<option value='石家庄'>石家庄</option>
+			<option value='东莞'>东莞</option>
+			<option value='安徽'>安徽</option>
+			<option value='福建'>福建</option>
+			<option value='甘肃'>甘肃</option>
+			<option value='广东'>广东</option>
+			<option value='广西'>广西</option>
+			<option value='贵州'>贵州</option>
+			<option value='海南'>海南</option>
+			<option value='河北'>河北</option>
+			<option value='黑龙江'>黑龙江</option>
+			<option value='河南'>河南</option>
+			<option value='湖北'>湖北</option>
+			<option value='湖南'>湖南</option>
+			<option value='江苏'>江苏</option>
+			<option value='江西'>江西</option>
+			<option value='吉林'>吉林</option>
+			<option value='辽宁'>辽宁</option>
+			<option value='内蒙古'>内蒙古</option>
+			<option value='宁夏'>宁夏</option>
+			<option value='青海'>青海</option>
+			<option value='山东'>山东</option>
+			<option value='山西'>山西</option>
+			<option value='陕西'>陕西</option>
+			<option value='四川'>四川</option>
+			<option value='新疆'>新疆</option>
+			<option value='西藏'>西藏</option>
+			<option value='云南'>云南</option>
+			<option value='浙江'>浙江</option>
+			<option value='other'>其它</option>
+          </select></span>
+      </td>
+      </tr>
+	  <th width="35%">工作经验</th>
+      <td><span class="select-type"><select style="width:160px;" name="experience">
+        <option value="不限">不限</option>
+		<option value="1">1年</option>
+		<option value="2">2年</option>
+		<option value="3">3年</option>
+		<option value="4">4年</option>
+		<option value="5">5年</option>
+		<option value="6">6年以上</option>
+        </select></span>
+      </td>
+      </tr>
+       <tr>
+      <th width="35%">关键字</th>
+      <td>
+       <input name="q" class="input_blur" value="公司或者职位关键字" type="text" style="width:156px;" onblur="javascript:job.clearTxt(this)" onfocus="javascript:job.clearTxt(this,true)"/>
+      </td>
+      </tr>
+    <tr>
+      <th></th>
+       <td> 
+       <input type="submit" value="立即搜索" style="margin-right:5px;" />
+	   <input type="hidden" value="0" name="stype"/><input type="hidden" value="searchlist" name="action"/>
+       <input type="reset" value="重新搜索" />
+       </td>
+    </tr>
+      </table>
+      </form>
+    </div>
+  </div>
+  <!--right结束-->
+  <div id="left">
+    <div class="box_t">
+      <h3>职位分类列表</h3>
+    </div>
+    <div class="box_c">
+    <table width="222" border="0" cellspacing="0" cellpadding="0" class="table_list">
+	{get sql="SELECT count(*) AS number,j.station,t.name FROM phpcms_yp_job j,phpcms_type t WHERE t.typeid = j.station AND j.status = '99' GROUP BY j.station ORDER BY t.listorder DESC"}
+		<tr>
+		<td><a href="{job_list_url(0,$r['station'],0)}">{$r['name']}</a>（{$r['number']}）</td>
+		</tr>
+	{/get}  
+	</table>
+    </div>
+    <div class="box_b"></div>
+    </div>
+  </div>
+<script type="text/javascript">
+var job = new Object();
+job.show = function(id1,id2)
+{
+	$("#"+id1).show();
+	$("#"+id2).hide();
+	$("#"+id1+"l").removeClass("s1");
+	$("#"+id2+"l").addClass("s1");
+	if(id1=="speople")$("#stype").val(1);
+	else $("#stype").val(0);
+}
+
+job.clearTxt = function(obj,bool)
+{
+	if(obj.value == '公司或者职位关键字' && bool)obj.value = '';
+	if(obj.value == '' && !bool)obj.value = '公司或者职位关键字';
+}
+</script>
+{template 'yp', 'footer'}

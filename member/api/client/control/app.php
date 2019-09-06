@@ -1,29 +1,50 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2008 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: domain.php 12126 2008-01-11 09:40:32Z heyond $
+	$Id: app.php 884 2008-12-16 01:13:31Z monkey $
 */
 
 !defined('IN_UC') && exit('Access Denied');
 
 class appcontrol extends base {
 
+	function __construct() {
+		$this->appcontrol();
+	}
+
 	function appcontrol() {
-		$this->base();
+		parent::__construct();
 		$this->load('app');
 	}
 
 	function onls() {
-		$applist = $_ENV['app']->get_apps('appid, type, name, url, tagtemplates');
+		$this->init_input();
+		$applist = $_ENV['app']->get_apps('appid, type, name, url, tagtemplates, viewprourl, synlogin');
 		$applist2 = array();
 		foreach($applist as $key => $app) {
-			$app['tagtemplates'] = uc_unserialize($app['tagtemplates']);
+			$app['tagtemplates'] = $this->unserialize($app['tagtemplates']);
 			$applist2[$app['appid']] = $app;
 		}
 		return $applist2;
+	}
+
+	//note public 提供给安装程序的接口，需要校验 Founder 帐号密码
+	function onadd() {
+	}
+
+	function onucinfo() {
+	}
+
+	function _random($length, $numeric = 0) {
+	}
+
+	function _generate_key() {
+	}
+
+	function _format_notedata($notedata) {
 	}
 }
 

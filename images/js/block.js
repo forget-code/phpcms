@@ -29,6 +29,7 @@ $(document).ready(function(){
 
 function set_block_float_div()
 {
+  
   $(".block_float_div").attr("style", "position:absolute;z-index:100;border:#cccccc solid 1px;background-color:#FFFF66;filter:Alpha(opacity=40);-moz-opacity:0.4;-khtml-opacity:0.4;opacity:0.4;cursor:pointer;display:none");
   $(".block_float_div").mouseover(function(){
 	  $(this).css("background-color", "#FFFF99");
@@ -37,7 +38,8 @@ function set_block_float_div()
 	  $(this).css("background-color", "#FFFF66");
   });
   $(".block_float_div").click(function(){
-	  $('.jqmWindow').show();
+		fliterBlock.create();
+	  $('.jqmWindow').show();	  
       block_iframe.location = admin_url+'?mod=phpcms&file=block&action=update&ajax=1&blockid='+$(this).attr('blockid');
       $('#blockname').html('修改碎片['+$(this).attr('blockname')+']');
   });
@@ -66,6 +68,7 @@ function set_block_float_div()
 
 function set_tag_float_div()
 {
+  
   $(".tag_float_div").attr("style", "position:absolute;z-index:100;border:#cccccc solid 1px;background-color:#99FFFF;filter:Alpha(opacity=30);-moz-opacity:0.3;-khtml-opacity:0.3;opacity:0.3;cursor:pointer;display:none");
   $(".tag_float_div").mouseover(function(){
 	  $(this).css("background-color", "#EEFFFF");
@@ -73,8 +76,9 @@ function set_tag_float_div()
   $(".tag_float_div").mouseout(function(){
 	  $(this).css("background-color", "#99FFFF");
   });
-  $(".tag_float_div").click(function(){
-	  $('.jqmWindow').show();
+  $(".tag_float_div").click(function(){	
+		fliterBlock.create();
+	  $('.jqmWindow').show();	  
       block_iframe.location = admin_url+'?mod='+$(this).attr('module')+'&file=tag&action=edit&ajax=1&tagname='+$(this).attr('tagname');
       $('#blockname').html('修改标签['+$(this).attr('tagname')+']');
   });
@@ -122,8 +126,9 @@ function get_html(blockid)
 
 function close_window()
 {
-	$("#block_iframe").attr('src', 'fckeditor/index.html');
+	$("#block_iframe").attr('src', 'fckeditor/index.html');	
 	$(".jqmWindow").hide();
+	fliterBlock.remove();
 }
 
 function tag_preview(tagname, data)
@@ -139,11 +144,31 @@ function tag_save(tagname, data)
 	$('#tag_'+tagname).html(data);
     set_tag_float_div();
 	set_block_float_div();
-	close_window();
+	close_window();	
 	return true;
 }
 
 function parent_file_list(obj)
 {
 	block_iframe.parent_file_list(obj);
+}
+
+var fliterBlock = 
+{
+	create : function()
+	{
+		if(!document.getElementById('jqmWindowfliter'))
+		{
+			var width = Math.max(document.documentElement.scrollWidth, document.documentElement.clientWidth) + 'px';
+			var	height = Math.max(document.documentElement.scrollHeight, document.documentElement.clientHeight) + 'px';
+			$('.jqmWindow').before("<div id='jqmWindowfliter' style='postion:absolute;width:"+width+";height:"+height+";left:0px;position:absolute;top:0px;background-color:#FFFFFF;opacity:0.5;filter:alpha(opacity=50)'></div>");
+		}
+		else $("#jqmWindowfilter").show();
+	},
+	remove : function()
+	{
+		var t = document.getElementById('jqmWindowfliter');
+		if(t)t.parentNode.removeChild(t);
+	}
+
 }

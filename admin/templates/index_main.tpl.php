@@ -135,7 +135,24 @@ th{ font-size:12px; background: url(admin/skin/images/bg_table.jpg) repeat-x 0 -
   </div>
   <div id="admin_main_2_2">
     <h3><span id="memo_mtime" style="float:right; padding-right:10px;"></span>我的备忘录</h3>
-    <div class="bdr"><textarea name="data" id="memo_data" class="inputtext" style="height:170px;width:99%;margin:5px; padding:5px" onblur='$.post("?mod=phpcms&file=memo&action=set", { data: this.value }, function(data){$("#memo_mtime").html(data);});'></textarea></div>
+    <div class="bdr"><textarea name="data" id="memo_data" class="inputtext" style="height:173px;width:99%;margin:5px; padding:5px" onblur='$.post("?mod=phpcms&file=memo&action=set", { data: this.value }, function(data){$("#memo_mtime").html(data);});'></textarea></div>
+
+	<table cellpadding="0" cellspacing="1">
+	<caption>Phpcms 授权信息</caption>
+		<tr>
+			<td width="60" height="25" class="align_r">版本号</td>
+			<td class="align_l">Phpcms <?=PHPCMS_VERSION?>（<?=PHPCMS_RELEASE?>）</td>
+		</tr>
+		<tr>
+			<td height="25" class="align_r">授权类型</td>
+			<td class="align_l" id="phpcms_license"></td>
+		</tr>
+		<tr>
+			<td height="25" class="align_r">序列号</td>
+			<td class="align_l" id="phpcms_sn"></td>
+		</tr>
+	</table>
+
 	<table cellpadding="0" cellspacing="1">
 	<caption>安全小卫士</caption>
 	<?php if(DEBUG) {?>
@@ -169,80 +186,6 @@ th{ font-size:12px; background: url(admin/skin/images/bg_table.jpg) repeat-x 0 -
 	<?php } ?>
 	</table>
 
-	<table cellpadding="0" cellspacing="1">
-	<caption>Phpcms 授权信息</caption>
-		<tr>
-			<td width="60" class="align_r">版本号</td>
-			<td class="align_l">Phpcms <?=PHPCMS_VERSION?>（<?=PHPCMS_RELEASE?>）</td>
-		</tr>
-		<tr>
-			<td class="align_r">授权类型</td>
-			<td class="align_l" id="phpcms_license"></td>
-		</tr>
-		<tr>
-			<td class="align_r">序列号</td>
-			<td class="align_l" id="phpcms_sn"></td>
-		</tr>
-	</table>
-	<table cellpadding="0" cellspacing="1">
-	<caption>会员模型统计信息</caption>
-		<tr>
-			<th>统计</th>
-			<th>总数</th>
-			<th>今日</th>
-			<th>昨日</th>
-			<th>本周</th>
-			<th>本月</th>
-
-		</tr>	
-		<?php 
-		ksort($MODEL);
-		foreach($MODEL as $modelid=>$model)
-		{
-			if($model['modeltype'] == 0) continue;
-		?>
-		<tr>
-			<td><a href="?mod=member&file=member&action=manage&modelid=<?=$modelid?>"><?=$model['name']?></a></td>
-			<td><?=$stat->count_member("`modelid`=$modelid")?></td>
-			<td><?=$stat->count('member_info', 'regtime', 'today',array(DB_PRE."member_cache",'userid',"a.userid=m.userid AND m.`modelid`=$modelid"))?></td>
-			<td><?=$stat->count('member_info', 'regtime', 'yesterday',array(DB_PRE."member_cache",'userid',"a.userid=m.userid AND m.`modelid`=$modelid"))?></td>
-			<td><?=$stat->count('member_info', 'regtime', 'week',array(DB_PRE."member_cache",'userid',"a.userid=m.userid AND m.`modelid`=$modelid"))?></td>
-			<td><?=$stat->count('member_info', 'regtime', 'month',array(DB_PRE."member_cache",'userid',"a.userid=m.userid AND m.`modelid`=$modelid"))?></td>
-		</tr>
-		<?php
-		}
-		?>
-	</table>
-
-	<table cellpadding="0" cellspacing="1">
-	<caption>会员组统计信息</caption>
-		<tr>
-			<th>统计</th>
-			<th>总数</th>
-			<th>今日</th>
-			<th>昨日</th>
-			<th>本周</th>
-			<th>本月</th>
-
-		</tr>
-		
-	<?php 
-		ksort($GROUP);
-		foreach($GROUP as $groupid=>$groupname)
-		{
-	?>
-		<tr>
-			<td><a href="?mod=member&file=member&action=manage&groupid=<?=$groupid?>"><?=$groupname?></a></td>	
-			<td><?=$stat->count_member("`groupid`=$groupid")?></td>
-			<td><?=$stat->count('member_info', 'regtime', 'today',array(DB_PRE."member_cache",'userid',"a.userid=m.userid AND m.`groupid`=$groupid"))?></td>
-			<td><?=$stat->count('member_info', 'regtime', 'yesterday',array(DB_PRE."member_cache",'userid',"a.userid=m.userid AND m.`groupid`=$groupid"))?></td>
-			<td><?=$stat->count('member_info', 'regtime', 'week', array(DB_PRE."member_cache",'userid',"a.userid=m.userid AND m.`groupid`=$groupid"))?></td>
-			<td><?=$stat->count('member_info', 'regtime', 'month',array(DB_PRE."member_cache",'userid',"a.userid=m.userid AND m.`groupid`=$groupid"))?></td>
-		</tr>
-	<?php
-		}
-	?>
-	</table>
   </div>
 </div>
 <?php 

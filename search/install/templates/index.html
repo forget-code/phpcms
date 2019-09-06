@@ -48,6 +48,7 @@ body{ background-image:none;}
       <input type="text" name="q" size="48" id="q"/>
       <input type="submit" name="s" id="button" value="搜索" />
     </li>
+	<li><strong>热门关键字:</strong>{get sql="SELECT `tag` FROM phpcms_keyword ORDER BY hits DESC" rows="6"}<a href="javascript:$('#q').val('{$r[tag]}');void(0);">{$r['tag']}</a> {/get}</li>
   </ul>
 </form>
 </div>

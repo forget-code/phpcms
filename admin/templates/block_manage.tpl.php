@@ -3,6 +3,9 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
+<div class="button_box">
+<span class="button_style" style="width:100px;margin-left:10px;"><a href='?mod=phpcms&file=block&action=list'>栏目模式</a></span>
+</div>
 <form method="post" name="myform" action="?mod=<?=$mod?>&file=<?=$file?>&action=manage">
 <table cellpadding="0" cellspacing="1" class="table_list">
     <caption>碎片管理</caption>

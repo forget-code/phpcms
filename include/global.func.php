@@ -731,13 +731,21 @@ function areapos($areaid, $urlrule = '')
 	return $pos;
 }
 
-function subtype($module = 'phpcms')
+function subtype($module = 'phpcms', $modelid = 0)
 {
 	global $TYPE;
 	$subtype = array();
+	$modelid = intval($modelid);
 	foreach($TYPE as $id=>$type)
 	{
-		if($type['module'] == $module) $subtype[$id] = $type;
+		if($modelid)
+		{
+			if($type['module'] == $module && $type['modelid']==$modelid) $subtype[$id] = $type;
+		}
+		else
+		{
+			if($type['module'] == $module) $subtype[$id] = $type;
+		}
 	}
 	return $subtype;
 }
@@ -753,14 +761,14 @@ function template($module = 'phpcms', $template = 'index', $istag = 0)
 	return $compiledtplfile;
 }
 
-function thumb($imgurl, $width = 100, $height = 100 ,$autocut = 1)
+function thumb($imgurl, $width = 100, $height = 100 ,$autocut = 1, $smallpic = 'images/nopic_small.gif')
 {
 	global $image;
-	if(empty($imgurl)) return 'images/nopic_small.gif';
+	if(empty($imgurl)) return $smallpic;
 	if(!extension_loaded('gd') || strpos($imgurl, '://')) return $imgurl;
 	if(!file_exists(PHPCMS_ROOT.$imgurl)) return 'images/nopic.gif';
 	$newimgurl = dirname($imgurl).'/thumb_'.$width.'_'.$height.'_'.basename($imgurl);
-	if(file_exists($newimgurl)) return $newimgurl;
+	if(file_exists(PHPCMS_ROOT.$newimgurl)) return $newimgurl;
 	if(!is_object($image))
 	{
 		require_once 'image.class.php';
@@ -775,7 +783,7 @@ function ssi($file)
 	return (SHTML && defined('CREATEHTML')) ? '<!--#include virtual="'.PHPCMS_PATH.$file.'"-->' : @file_get_contents(PHPCMS_ROOT.$file);
 }
 
-function get($sql, $rows = 0, $page = 0, $dbname = '', $dbsource = '')
+function get($sql, $rows = 0, $page = 0, $dbname = '', $dbsource = '', $urlrule = '', $distinct_field = '', $catid = 0)
 {
 	if(!$sql) return false;
 	if($dbsource)
@@ -812,11 +820,15 @@ function get($sql, $rows = 0, $page = 0, $dbname = '', $dbsource = '')
 			$r = $db->get_one("SELECT COUNT(*) AS `count` ".stristr($sql, 'from'));
 			$total = $r['count'];
 		}
+		elseif($distinct_field)
+		{
+			$total = cache_count("SELECT COUNT(distinct $distinct_field) AS `count` ".stristr($sql, 'from'));
+		}
 		else
 		{
 			$total = cache_count("SELECT COUNT(*) AS `count` ".stristr($sql, 'from'));
 		}
-		$pages = pages($total, $page, $rows);
+		$pages = pages($total, $page, $rows, $urlrule, '', $catid);
 	}
 	elseif($rows > 0)
 	{
@@ -888,6 +900,14 @@ function get_sql_catid($catid)
 	return $CATEGORY[$catid]['child'] ? " AND `catid` IN(".$CATEGORY[$catid]['arrchildid'].") " : " AND `catid`=$catid ";
 }
 
+function get_sql_areaid($areaid)
+{
+	global $AREA;
+	$areaid = intval($areaid);
+	if(!isset($AREA[$areaid])) return false;
+	return $AREA[$areaid]['child'] ? " AND `areaid` IN (".$AREA[$areaid]['arrchildid'].") " : " AND `areaid`=$areaid";
+}
+
 function get_sql_in($string, $s = ' ')
 {
 	$array = array_map('trim', explode($s, $string));
@@ -895,42 +915,128 @@ function get_sql_in($string, $s = ' ')
 	return "'".implode("','", $array)."'";
 }
 
-function pages($total, $page = 1, $perpage = 20, $urlrule = '', $array = array(), $catid = 0)
+function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(), $catid = 0) 
 {
 	global $PHPCMS;
-	if($total < 1) return '';
-	if($urlrule == '') $urlrule = url_par('page={$page}');
-	$pages = ceil($total/$perpage);
-	$page = min($pages, $page);
-	$prepage = $page - 1;
-	$prepage = max($prepage, 1);
-	$nextpage = $page+1;
-	$nextpage = min($nextpage, $pages);
-	if($catid)
+	if($PHPCMS['pagemode'] && $num > $perpage)
 	{
-		$url = load('url.class.php');
-		$firstpage = $url->category($catid, 1, 1);
-		$prepage = $url->category($catid, $prepage, 1);
-		$nextpage = $url->category($catid, $nextpage, 1);
-        $lastpage = $url->category($catid, $pages, 1);
-		$urlpre = $url->category($catid, '', 1);
+		$multipage = '';
+		if($num > $perpage)
+		{
+			$page = 11;
+			$offset = 4;
+			$pages = ceil($num / $perpage);
+			$from = $curr_page - $offset;
+			$to = $curr_page + $offset;
+			$more = 0;
+			if($page >= $pages)
+			{
+				$from = 2;
+				$to = $pages-1;
+			}
+			else
+			{
+				if($from <= 1)
+				{
+					$to = $page-1;
+					$from = 2;
+				} 
+				elseif($to >= $pages)
+				{ 
+					$from = $pages-($page-2);  
+					$to = $pages-1;  
+				} 
+				$more = 1;
+			} 
+			if($urlrule == '') $urlrule = url_par('page={$page}');
+			$url = load('url.class.php');
+
+			$multipage .= '总数：<b>'.$num.'</b>&nbsp;&nbsp;';
+			
+			if($curr_page>0)
+			{
+				$multipage .= $catid ? '<a href="'.$url->category($catid, $curr_page-1, 1).'">上一页</a>' : '<a href="'.pageurl($urlrule, $curr_page-1, $array).'">上一页</a>';
+				if($curr_page==1)
+				{
+					$multipage .= '<u><b>1</b></u> ';
+				}
+				if($curr_page>6 && $more)
+				{
+					$multipage .= $catid ? '<a href="'.$url->category($catid, 1, 1).'">1</a>..' : '<a href="'.pageurl($urlrule, 1, $array).'">1</a>..';
+				}
+				else
+				{
+					$multipage .= $catid ? '<a href="'.$url->category($catid, 1, 1).'">1</a>' : '<a href="'.pageurl($urlrule, 1, $array).'">1</a> ';
+				}
+			}
+			for($i = $from; $i <= $to; $i++) 
+			{ 
+				if($i != $curr_page) 
+				{ 
+					$multipage .= $catid ? '<a href="'.$url->category($catid, $i, 1).'">'.$i.'</a> ' : '<a href="'.pageurl($urlrule, $i, $array).'">'.$i.'</a> '; 
+				}
+				else
+				{ 
+					$multipage .= ' <u><b>'.$i.'</b></u> '; 
+				} 
+			} 
+			if($curr_page<$pages)
+			{
+				if($curr_page<$pages-5 && $more)
+				{
+					$multipage .= $catid ? '..<a href="'.$url->category($catid, $pages, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1).'">下一页</a>' : '..<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">下一页</a>';
+				}
+				else
+				{
+					$multipage .= $catid ? '<a href="'.$url->category($catid, $pages, 1).'">'.$pages.'</a> <a href="'.$url->category($catid, $curr_page+1, 1).'">下一页</a>' : '<a href="'.pageurl($urlrule, $pages, $array).'">'.$pages.'</a> <a href="'.pageurl($urlrule, $curr_page+1, $array).'">下一页</a>';
+				}
+			}
+			elseif($curr_page==$pages)
+			{
+				$multipage .= ' <u><b>'.$pages.'</b></u><a href="'.pageurl($urlrule, $curr_page, $array).'">下一页</a>';
+			}
+		} 
+		return $multipage;
 	}
 	else
 	{
-		$firstpage = pageurl($urlrule, 1, $array);
-		$prepage = pageurl($urlrule, $prepage, $array);
-		$nextpage = pageurl($urlrule, $nextpage, $array);
-        $lastpage = pageurl($urlrule, $pages, $array);
-		$urlpre = pageurl($urlrule, '', $array);
+		$total = $num;
+		$page = $curr_page;
+		if($num < 1) return '';
+		if($urlrule == '') $urlrule = url_par('page={$page}');
+		$pages = ceil($total/$perpage);
+		
+		$page = min($pages, $page);
+		$prepage = $page - 1;
+		$prepage = max($prepage, 1);
+		$nextpage = $page+1;
+		$nextpage = min($nextpage, $pages);
+		if($catid)
+		{
+			$url = load('url.class.php');
+			$firstpage = $url->category($catid, 1, 1);
+			$prepage = $url->category($catid, $prepage, 1);
+			$nextpage = $url->category($catid, $nextpage, 1);
+			$lastpage = $url->category($catid, $pages, 1);
+			$urlpre = $url->category($catid, '', 1);
+		}
+		else
+		{
+			$firstpage = pageurl($urlrule, 1, $array);
+			$prepage = pageurl($urlrule, $prepage, $array);
+			$nextpage = pageurl($urlrule, $nextpage, $array);
+			$lastpage = pageurl($urlrule, $pages, $array);
+			$urlpre = pageurl($urlrule, '', $array);
+		}
+		$data = str_replace('"', '\"', $PHPCMS['pageshtml']);
+		eval("\$url = \"$data\";");
+		return $url;
 	}
-	$data = str_replace('"', '\"', $PHPCMS['pageshtml']);
-	eval("\$url = \"$data\";");
-	return $url;
 }
 
 function pageurl($urlrule, $page, $array = array())
 {
-	extract($array, EXTR_SKIP);
+	@extract($array, EXTR_SKIP);
 	if(strpos($urlrule, '|'))
 	{
 		$urlrules = explode('|', $urlrule);
@@ -976,6 +1082,7 @@ function keyid_get($keyid)
 {
 	global $db;
 	list($module, $tablename, $titlefield, $id) = explode('-', $keyid);
+	if(!$tablename) return false;
 	$tablename = DB_PRE.$tablename;
 	$keyfield = $db->get_primary($tablename);
 	return $db->get_one("SELECT `$titlefield` AS title,`url` FROM `$tablename` WHERE `$keyfield`='$id'");
@@ -1219,5 +1326,60 @@ function phpcms_error($errno, $errmsg, $filename, $linenum, $vars)
 	$err .= "</errorentry>\n\n";
 	error_log($err, 3, PHPCMS_ROOT.'/data/php_error_log.xml');
 	@chmod(PHPCMS_ROOT.'/data/php_error_log.xml', 0777);
+}
+
+function contentpage($content = '', $maxpage = 10000)
+{
+	if($content=='') return $content;
+	$html = array('div', 'span', 'p', 'a', 'h', 'ul', 'ol', 'li', 'table', 'form', 'script', 'strong', 'dl', 'dt', 'dd');
+	$ar_content = explode('<', $content);
+	$data = array();
+	$i = $show_time = 0;
+	if(is_array($ar_content))
+	{
+		foreach($ar_content as $y => $c)
+		{
+			if($y == 0)
+			{
+				$data[$i] = $c;
+ 				if(strlen(strip_tags($c))>=$maxpage)
+				{
+					$i++;
+				}
+				continue;
+			}
+			$data[$i] .= '<'.$c;
+			if($tag=='' && $show_time==0)
+			{
+				foreach($html as $h)
+				{
+					if(strpos($c, $h)===0)
+					{
+						$tag = $h;
+						$show_time++;
+						break;
+					}
+				}
+			}
+			elseif($show_time && $tag)
+			{
+				if(strpos($c, $tag)===0)
+				{
+					$show_time++;
+				}
+				if(strpos($c, '/'.$tag)===0)
+				{
+					$show_time--;
+					if($show_time==0) $tag = '';
+				}
+			}
+			if(strlen(strip_tags($data[$i]))>=$maxpage && $show_time==0)
+			{
+				$i++;
+			}
+		}
+	}
+	$data = implode('[page]', $data);
+	return $data;
 }
 ?>

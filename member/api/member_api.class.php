@@ -18,7 +18,7 @@ class member_api
 		$this->table = DB_PRE.'member';
 		$this->table_cache = DB_PRE.'member_cache';
 		$this->table_info = DB_PRE.'member_info';
-		$this->member_fields = array('username'=>'username', 'email'=>'email', 'groupid'=>'groupid', 'modelid'=>'modelid', 'amount'=>'amount', 'message'=>'message', 'point'=>'point', 'areaid'=>'areaid', 'disabled'=>'disabled');
+		$this->member_fields = array('username'=>'username', 'email'=>'email', 'groupid'=>'groupid', 'modelid'=>'modelid', 'amount'=>'amount', 'message'=>'message', 'point'=>'point', 'areaid'=>'areaid', 'disabled'=>'disabled','touserid'=>'touserid');
 		foreach($MODEL as $modelid=>$model)
 		{
 			if($model['modeltype'] == 2)
@@ -102,7 +102,7 @@ class member_api
 	function add($info, $import = 0)
 	{
 		global $M;		
-		$member_fields = array('userid', 'username','password','email','groupid','areaid','amount','point','modelid');
+		$member_fields = array('userid', 'username','password','email','groupid','areaid','amount','point','modelid','touserid');//modify by skyz
 		if($info['groupid'])
 		{
 			$info['groupid'] = intval($info['groupid']);

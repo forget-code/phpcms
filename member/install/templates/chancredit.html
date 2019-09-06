@@ -24,10 +24,7 @@
     	<th width="20%"><strong>支出：</strong></th>
     	<td>
         	<input type="text" name="fromcredit" id="fromcredit" require="true" datatype="require|number|ajax" url="{$M[url]}changecredit.php?action=checkcredit" param="" msg="支出不能为空！|支出格式必须为整数|" msgid="err" /> 
-        	<select name="fromcreditid" id="fromcreditid">
-            	<option value="1" title="点数">点数</option>
-                <option value="2" title="金钱">金钱</option>
-            </select>
+			 <?=form::select($creditsrcOption, 'fromcreditid', 'fromcreditid')?>
             <span id="err"></span>
         </td>
     </tr>

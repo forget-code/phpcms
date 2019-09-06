@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2008 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: pm.php 12126 2008-01-11 09:40:32Z heyond $
+	$Id: pm.php 908 2008-12-26 07:27:51Z monkey $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -13,6 +13,9 @@ class pmmodel {
 
 	var $db;
 	var $base;
+	function __construct(&$base) {
+		$this->pmmodel($base);
+	}
 
 	function pmmodel(&$base) {
 		$this->base = $base;
@@ -24,11 +27,15 @@ class pmmodel {
 	}
 
 	function get_pm_by_pmid($uid, $pmid) {
-		$arr = array();
-		$arr = $this->db->fetch_all("SELECT * FROM ".UC_DBTABLEPRE."pms WHERE related='$pmid' AND (msgtoid='$uid' OR msgfromid='$uid') ORDER BY dateline");
-		if(!$arr) {
-			$arr = $this->db->fetch_all("SELECT * FROM ".UC_DBTABLEPRE."pms WHERE pmid='$pmid' AND (msgtoid IN ('$uid','0') OR msgfromid IN ('0', '$uid'))");
-		}
+		$arr = $this->db->fetch_all("SELECT * FROM ".UC_DBTABLEPRE."pms WHERE pmid='$pmid' AND (msgtoid IN ('$uid','0') OR msgfromid='$uid')");
+		return $arr;
+	}
+
+	function get_pm_by_touid($uid, $touid, $starttime, $endtime) {
+		$arr1 = $this->db->fetch_all("SELECT * FROM ".UC_DBTABLEPRE."pms WHERE msgfromid='$uid' AND msgtoid='$touid' AND dateline>='$starttime' AND dateline<'$endtime' AND related>'0' AND delstatus IN (0,2) ORDER BY dateline");
+		$arr2 = $this->db->fetch_all("SELECT * FROM ".UC_DBTABLEPRE."pms WHERE msgfromid='$touid' AND msgtoid='$uid' AND dateline>='$starttime' AND dateline<'$endtime' AND related>'0' AND delstatus IN (0,1) ORDER BY dateline");
+		$arr = array_merge($arr1, $arr2);
+		uasort($arr, 'pm_datelinesort');
 		return $arr;
 	}
 
@@ -44,9 +51,22 @@ class pmmodel {
 		return $arr;
 	}
 
-	function set_pm_status($uid, $pmid) {
-		$this->db->query("UPDATE ".UC_DBTABLEPRE."pms SET new='0' WHERE pmid='$pmid' AND (msgfromid='$uid' AND new='2' OR msgtoid='$uid' AND new='1')", 'UNBUFFERED');
-		$this->db->query("UPDATE ".UC_DBTABLEPRE."pms SET new='0' WHERE msgtoid='$uid' AND related='$pmid'", 'UNBUFFERED');
+	function set_pm_status($uid, $touid, $pmid = 0, $status = 0) {
+		if(!$status) {
+			$oldstatus = 1;
+			$newstatus = 0;
+		} else {
+			$oldstatus = 0;
+			$newstatus = 1;
+		}
+		if($touid) {
+			$ids = is_array($touid) ? $this->base->implode($touid) : $touid;
+			$this->db->query("UPDATE ".UC_DBTABLEPRE."pms SET new='$newstatus' WHERE msgfromid IN ($ids) AND msgtoid='$uid' AND new='$oldstatus'", 'UNBUFFERED');
+		}
+		if($pmid) {
+			$ids = is_array($pmid) ? $this->base->implode($pmid) : $pmid;
+			$this->db->query("UPDATE ".UC_DBTABLEPRE."pms SET new='$newstatus' WHERE pmid IN ($ids) AND msgtoid='$uid' AND new='$oldstatus'", 'UNBUFFERED');
+		}
 	}
 
 	function get_pm_num() {
@@ -55,30 +75,23 @@ class pmmodel {
 	function get_num($uid, $folder, $filter = '') {
 		switch($folder) {
 			case 'newbox':
-				$sql = "SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE msgfromid='$uid' AND msgtoid>0 AND new='2' AND related='0' AND folder='inbox' AND delstatus='0'";
-				$num1 = $this->db->result_first($sql);
-				$sql = "SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE msgtoid='$uid' AND new='1' AND related='0' AND folder='inbox' AND delstatus='0'";
-				$num2 = $this->db->result_first($sql);
-				return $num1 + $num2;
+				$sql = "SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE msgtoid='$uid' AND (related='0' AND msgfromid>'0' OR msgfromid='0') AND folder='inbox' AND new='1'";
+				$num = $this->db->result_first($sql);
+				return $num;
+			case 'outbox':
 			case 'inbox':
 				if($filter == 'newpm') {
-					$filteradd = "msgtoid='$uid' AND folder='inbox' AND new='1' AND delstatus='0'";
+					$filteradd = "msgtoid='$uid' AND (related='0' AND msgfromid>'0' OR msgfromid='0') AND folder='inbox' AND new='1'";
 				} elseif($filter == 'systempm') {
-					$filteradd = "msgtoid='$uid' AND folder='inbox' AND msgfromid='0'";
+					$filteradd = "msgtoid='$uid' AND msgfromid='0' AND folder='inbox'";
+				} elseif($filter == 'privatepm') {
+					$filteradd = "msgtoid='$uid' AND related='0' AND msgfromid>'0' AND folder='inbox'";
 				} elseif($filter == 'announcepm') {
-					$filteradd = "msgtoid='0' AND folder='inbox' AND delstatus!='2'";
+					$filteradd = "msgtoid='0' AND folder='inbox'";
 				} else {
-					$filteradd = "msgtoid='$uid' AND folder='inbox' AND delstatus!='2'";
+					$filteradd = "msgtoid='$uid' AND related='0' AND folder='inbox'";
 				}
-				$sql = "SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE related='0' AND $filteradd";
-				break;
-			case 'outbox':
-				if($filter == 'newpm') {
-					$filteradd = "msgfromid='$uid' AND msgtoid>0 AND folder='inbox' AND new='2' AND delstatus='0'";
-				} else {
-					$filteradd = "msgfromid='$uid' AND msgtoid>0 AND folder='inbox' AND delstatus!='1'";
-				}
-				$sql = "SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE related='0' AND $filteradd";
+				$sql = "SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE $filteradd";
 				break;
 			case 'savebox':
 				break;
@@ -91,45 +104,31 @@ class pmmodel {
 		$ppp = $ppp ? $ppp : 10;
 		switch($folder) {
 			case 'newbox':
-				$array = $this->get_pm_list($uid, $pmnum, 'inbox', 'newpm', 0, 10);
-				$array1 = $this->get_pm_list($uid, $pmnum, 'outbox', 'newpm', 0, 10);
-				$array = array_merge($array, $array1);
-				$count = count($array);
-				for($i = 0;$i < $count - 1;$i++) {
-					for($j = 1;$j < $count;$j++) {
-						if($array[$i]['dbdateline'] < $array[$j]['dbdateline']) {
-							$tmp = $array[$i];
-							$array[$i] = $array[$j];
-							$array[$j] = $tmp;
-						}
-					}
-				}
-				return array_slice($array, 0, 10);
+				$folder = 'inbox';
+				$filter = 'newpm';
+			case 'outbox':
 			case 'inbox':
 				if($filter == 'newpm') {
-					$filteradd = "msgtoid='$uid' AND folder='inbox' AND new='1' AND delstatus='0'";
+					$filteradd = "pm.msgtoid='$uid' AND (pm.related='0' AND pm.msgfromid>'0' OR pm.msgfromid='0') AND pm.folder='inbox' AND pm.new='1'";
 				} elseif($filter == 'systempm') {
-					$filteradd = "msgtoid='$uid' AND folder='inbox' AND msgfromid=0";
+					$filteradd = "pm.msgtoid='$uid' AND pm.msgfromid='0' AND pm.folder='inbox'";
+				} elseif($filter == 'privatepm') {
+					$filteradd = "pm.msgtoid='$uid' AND pm.related='0' AND pm.msgfromid>'0' AND pm.folder='inbox'";
 				} elseif($filter == 'announcepm') {
-					$filteradd = "msgtoid='0' AND folder='inbox' AND delstatus!='2'";
+					$filteradd = "pm.msgtoid='0' AND pm.folder='inbox'";
 				} else {
-					$filteradd = "msgtoid='$uid' AND folder='inbox' AND delstatus!='2'";
+					$filteradd = "pm.msgtoid='$uid' AND pm.related='0' AND pm.folder='inbox'";
 				}
+				$sql = "SELECT pm.*,m.username as msgfrom FROM ".UC_DBTABLEPRE."pms pm
+					LEFT JOIN ".UC_DBTABLEPRE."members m ON pm.msgfromid = m.uid
+					WHERE $filteradd ORDER BY pm.dateline DESC LIMIT $start, $ppp";
+				break;
+			case 'searchbox':
+				$filteradd = "msgtoid='$uid' AND folder='inbox' AND message LIKE '%".(str_replace('_', '\_', addcslashes($filter, '%_')))."%'";
 				$sql = "SELECT * FROM ".UC_DBTABLEPRE."pms
-					WHERE related='0' AND $filteradd ORDER BY dateline DESC LIMIT $start, $ppp";
+					WHERE $filteradd ORDER BY dateline DESC LIMIT $start, $ppp";
 				break;
 			case 'savebox':
-				break;
-			case 'outbox':
-				if($filter == 'newpm') {
-					$filteradd = "p.msgfromid='$uid' AND p.folder='inbox' AND p.new='2' AND p.delstatus='0'";
-				} else {
-					$filteradd = "p.msgfromid='$uid' AND p.msgtoid>0 AND p.folder='inbox' AND p.delstatus!='1'";
-				}
-				$sql = "SELECT p.*, m.username AS msgto FROM ".UC_DBTABLEPRE."pms p
-					LEFT JOIN ".UC_DBTABLEPRE."members m ON m.uid=p.msgtoid
-					WHERE p.related='0' AND $filteradd
-					ORDER BY p.dateline DESC LIMIT $start, $ppp";
 				break;
 		}
 		$query = $this->db->query($sql);
@@ -151,6 +150,7 @@ class pmmodel {
 			if($filter == 'announcepm') {
 				unset($data['msgfromid'], $data['msgfrom']);
 			}
+			$data['touid'] = $uid == $data['msgfromid'] ? $data['msgtoid'] : $data['msgfromid'];
 			$array[] = $data;
 		}
 		if($folder == 'inbox') {
@@ -160,42 +160,52 @@ class pmmodel {
 	}
 
 	function sendpm($subject, $message, $msgfrom, $msgto, $related = 0) {
-		$_CACHE = $this->base->cache('badwords');
+		if($msgfrom['uid'] && $msgfrom['uid'] == $msgto) {
+			return 0;
+		}
+		//note 过滤关键词
+		$_CACHE['badwords'] = $this->base->cache('badwords');
 		if($_CACHE['badwords']['findpattern']) {
 			$subject = @preg_replace($_CACHE['badwords']['findpattern'], $_CACHE['badwords']['replace'], $subject);
 			$message = @preg_replace($_CACHE['badwords']['findpattern'], $_CACHE['badwords']['replace'], $message);
 		}
 
+		$box = 'inbox';
 		$subject = trim($subject);
 		if($subject == '' && !$related) {
-			$subject = $this->base->cutstr(trim($message), 50);
-			if($subject == '') {
-				return 0;
-			}
+			$subject = $this->removecode(trim($message), 75);
 		} else {
-			$subject = $this->base->cutstr(trim($subject), 75, '');
+			$subject = $this->base->cutstr(trim($subject), 75, ' ');
 		}
-		$new = 1;
-		if(!$related) {
-			$this->db->query("INSERT INTO ".UC_DBTABLEPRE."pms (msgfrom,msgfromid,msgtoid,folder,new,subject,dateline,related,message) VALUES
-				('".$msgfrom['username']."','".$msgfrom['uid']."','$msgto','inbox','$new','$subject','".$this->base->time."','0','$message')");
-			$lastpmid = $related = $this->db->insert_id();
-		} else {
-			$arr = $this->db->fetch_all("SELECT * FROM ".UC_DBTABLEPRE."pms WHERE pmid='$related' AND related='0'");
-			$arr = $arr[0];
-			if($arr['message']{0} != "\t") {
-				$arr = uc_addslashes($arr, 1);
-				$this->db->query("UPDATE ".UC_DBTABLEPRE."pms SET message='\t".$this->removecode($arr['message'], 200)."', related='0' WHERE pmid='$related'");
-				$this->db->query("INSERT INTO ".UC_DBTABLEPRE."pms (msgfrom, msgfromid, msgtoid, folder, new, subject, dateline, message, delstatus, related)
-					VALUES ('$arr[msgfrom]', '$arr[msgfromid]', '$arr[msgtoid]', '$arr[folder]', '$arr[new]', '$arr[subject]', '$arr[dateline]', '$arr[message]', '$arr[delstatus]', '$related')");
+
+		if($msgfrom['uid']) {
+			$sessionexist = $this->db->result_first("SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE msgfromid='$msgfrom[uid]' AND msgtoid='$msgto' AND folder='inbox' AND related='0'");
+			if(!$sessionexist || $sessionexist > 1) {
+				if($sessionexist > 1) {
+					$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pms WHERE msgfromid='$msgfrom[uid]' AND msgtoid='$msgto' AND folder='inbox' AND related='0'");
+				}
+				$this->db->query("INSERT INTO ".UC_DBTABLEPRE."pms (msgfrom,msgfromid,msgtoid,folder,new,subject,dateline,related,message,fromappid) VALUES
+					('".$msgfrom['username']."','".$msgfrom['uid']."','$msgto','$box','1','$subject','".$this->base->time."','0','$message','".$this->base->app['appid']."')");
+				$lastpmid = $this->db->insert_id();
+			} else {
+				$this->db->query("UPDATE ".UC_DBTABLEPRE."pms SET subject='$subject', message='$message', dateline='".$this->base->time."', new='1', fromappid='".$this->base->app['appid']."'
+					WHERE msgfromid='$msgfrom[uid]' AND msgtoid='$msgto' AND folder='inbox' AND related='0'");
 			}
-			$this->db->query("INSERT INTO ".UC_DBTABLEPRE."pms (msgfrom,msgfromid,msgtoid,folder,new,subject,dateline,related,message) VALUES
-				('".$msgfrom['username']."','".$msgfrom['uid']."','$msgto','inbox','$new','$subject','".$this->base->time."','$related','$message')");
+			if(!$savebox) {
+				$sessionexist = $this->db->result_first("SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE msgfromid='$msgto' AND msgtoid='$msgfrom[uid]' AND folder='inbox' AND related='0'");
+				if($msgfrom['uid'] && !$sessionexist) {
+					$this->db->query("INSERT INTO ".UC_DBTABLEPRE."pms (msgfrom,msgfromid,msgtoid,folder,new,subject,dateline,related,message,fromappid) VALUES
+						('".$msgfrom['username']."','$msgto','".$msgfrom['uid']."','$box','0','$subject','".$this->base->time."','0','$message','0')");
+				}
+				$this->db->query("INSERT INTO ".UC_DBTABLEPRE."pms (msgfrom,msgfromid,msgtoid,folder,new,subject,dateline,related,message,fromappid) VALUES
+					('".$msgfrom['username']."','".$msgfrom['uid']."','$msgto','$box','1','$subject','".$this->base->time."','1','$message','".$this->base->app['appid']."')");
+				$lastpmid = $this->db->insert_id();
+			}
+		} else {
+			$this->db->query("INSERT INTO ".UC_DBTABLEPRE."pms (msgfrom,msgfromid,msgtoid,folder,new,subject,dateline,related,message,fromappid) VALUES
+				('".$msgfrom['username']."','".$msgfrom['uid']."','$msgto','$box','1','$subject','".$this->base->time."','0','$message','".$this->base->app['appid']."')");
 			$lastpmid = $this->db->insert_id();
-			$new = $arr['msgfromid'] == $msgfrom['uid'] ? 1 : 2;
 		}
-		$new = $msgto ? $new : 0;
-		$this->db->query("UPDATE ".UC_DBTABLEPRE."pms SET delstatus='0', new='$new', dateline='".$this->base->time."' WHERE pmid='$related'", 'UNBUFFERED');
 		$this->db->query("REPLACE INTO ".UC_DBTABLEPRE."newpm (uid) VALUES ('$msgto')");
 		return $lastpmid;
 	}
@@ -204,49 +214,57 @@ class pmmodel {
 		$this->db->query("DELETE FROM ".UC_DBTABLEPRE."newpm WHERE uid='$uid'");
 	}
 
-	function check_newpm($uid) {
-		$newpm = $this->db->result_first("SELECT count(*) FROM ".UC_DBTABLEPRE."newpm WHERE uid='$uid'");
-		return $newpm;
+	function check_newpm($uid, $more) {
+		if($more < 2) {
+			$newpm = $this->db->result_first("SELECT count(*) FROM ".UC_DBTABLEPRE."newpm WHERE uid='$uid'");
+			if($newpm) {
+				$newpm = $this->db->result_first("SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE (related='0' AND msgfromid>'0' OR msgfromid='0') AND msgtoid='$uid' AND folder='inbox' AND new='1'");
+				if($more) {
+					$newprvpm = $this->db->result_first("SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE related='0' AND msgfromid>'0' AND msgtoid='$uid' AND folder='inbox' AND new='1'");
+					return array('newpm' => $newpm, 'newprivatepm' => $newprvpm);
+				} else {
+					return $newpm;
+				}
+			}
+		} else {
+			$newpm = $this->db->result_first("SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE (related='0' AND msgfromid>'0' OR msgfromid='0') AND msgtoid='$uid' AND folder='inbox' AND new='1'");
+			$newprvpm = $this->db->result_first("SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE related='0' AND msgfromid>'0' AND msgtoid='$uid' AND folder='inbox' AND new='1'");
+			if($more == 2 || $more == 3) {
+				$annpm = $this->db->result_first("SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE related='0' AND msgtoid='0' AND folder='inbox'");
+				$syspm = $this->db->result_first("SELECT count(*) FROM ".UC_DBTABLEPRE."pms WHERE related='0' AND msgtoid='$uid' AND folder='inbox' AND msgfromid='0'");
+			}
+			if($more == 2) {
+				return array('newpm' => $newpm, 'newprivatepm' => $newprvpm, 'announcepm' => $annpm, 'systempm' => $syspm);
+			} if($more == 4) {
+				return array('newpm' => $newpm, 'newprivatepm' => $newprvpm);
+			} else {
+				$pm = $this->db->fetch_first("SELECT pm.dateline,pm.msgfromid,m.username as msgfrom,pm.message FROM ".UC_DBTABLEPRE."pms pm LEFT JOIN ".UC_DBTABLEPRE."members m ON pm.msgfromid = m.uid WHERE (pm.related='0' OR pm.msgfromid='0') AND pm.msgtoid='$uid' AND pm.folder='inbox' ORDER BY pm.dateline DESC LIMIT 1");
+				return array('newpm' => $newpm, 'newprivatepm' => $newprvpm, 'announcepm' => $annpm, 'systempm' => $syspm, 'lastdate' => $pm['dateline'], 'lastmsgfromid' => $pm['msgfromid'], 'lastmsgfrom' => $pm['msgfrom'], 'lastmsg' => $pm['message']);
+			}
+		}
 	}
 
-	function deletepm($uid, $folder, $pmids) {
-		$pmsadd = '';
+	function deletepm($uid, $pmids) {
+		$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pms WHERE msgtoid='$uid' AND pmid IN (".$this->base->implode($pmids).")");
+		$delnum = $this->db->affected_rows();
+		return $delnum;
+	}
+
+	function deleteuidpm($uid, $ids) {
 		$delnum = 0;
-		$pmsadd = "pmid IN (".$this->base->implode($pmids).")";
-		$pmsradd = "related IN (".$this->base->implode($pmids).")";
-		if($pmsadd) {
-			if($folder == 'inbox') {
-				$sql = "folder='inbox' AND msgtoid='$uid' AND $pmsadd AND (delstatus=1 OR msgfromid=0)";
-				$msg_field = 'msgtoid';
-				$deletestatus = 2;
-			} elseif($folder == 'outbox') {
-				$sql = "folder='inbox' AND msgfromid='$uid' AND $pmsadd AND delstatus=2";
-				$msg_field = 'msgfromid';
-				$deletestatus = 1;
-			} elseif($folder == 'newbox') {
-				$query = $this->db->query("SELECT pmid, new FROM ".UC_DBTABLEPRE."pms WHERE $pmsadd");
-				$finbox = $foutbox = array();
-				while($data = $this->db->fetch_array($query)) {
-					if($data['new'] == 1) {
-						$finbox[] = $data['pmid'];
-					} else {
-						$foutbox[] = $data['pmid'];
-					}
-				}
-				$finboxnum = $this->deletepm($uid, 'inbox', $finbox);
-				$foutboxnum = $this->deletepm($uid, 'outbox', $foutbox);
-				$delnum = $finboxnum + $foutboxnum;
-				return $delnum;
-			}
-			$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pms WHERE $sql", 'UNBUFFERED');
-			$delnum = $this->db->affected_rows();
-			if($delnum) {
-				$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pms WHERE $pmsradd", 'UNBUFFERED');
-			}
-			if($deletestatus) {
-				$this->db->query("UPDATE ".UC_DBTABLEPRE."pms SET delstatus='$deletestatus' WHERE $msg_field='$uid' AND $pmsadd", 'UNBUFFERED');
-				$delnum += $this->db->affected_rows();
-			}
+		if($ids) {
+			$delnum = 1;
+			$deluids = $this->base->implode($ids);
+			$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pms
+				WHERE msgfromid IN ($deluids) AND msgtoid='$uid' AND folder='inbox' AND related='0'", 'UNBUFFERED');
+			$this->db->query("UPDATE ".UC_DBTABLEPRE."pms SET delstatus=2
+				WHERE msgfromid IN ($deluids) AND msgtoid='$uid' AND folder='inbox' AND delstatus=0", 'UNBUFFERED');
+			$this->db->query("UPDATE ".UC_DBTABLEPRE."pms SET delstatus=1
+				WHERE msgtoid IN ($deluids) AND msgfromid='$uid' AND folder='inbox' AND delstatus=0", 'UNBUFFERED');
+			$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pms
+				WHERE msgfromid IN ($deluids) AND msgtoid='$uid' AND delstatus=1 AND folder='inbox'", 'UNBUFFERED');
+			$this->db->query("DELETE FROM ".UC_DBTABLEPRE."pms
+				WHERE msgtoid IN ($deluids) AND msgfromid='$uid' AND delstatus=2 AND folder='inbox'", 'UNBUFFERED');
 		}
 		return $delnum;
 	}
@@ -270,16 +288,82 @@ class pmmodel {
 		return $this->db->affected_rows();
 	}
 
-	function removecode($str, $length) {
-		$bbcodes = 'b|i|u|color|size|font|align|list|indent|url|email|code|img|float';
-		$str = $this->base->cutstr(strip_tags(preg_replace(array(
-				"/\[quote].*\[\/quote]/siU",
-				"/\[($bbcodes)=?.*\]/iU",
-				"/\[\/($bbcodes)\]/i",
-			), '', $str)), $length);
-		return trim($str);
+	function update_blackls($uid, $username, $action = 1) {
+		$username = !is_array($username) ? array($username) : $username;
+		if($action == 1) {
+			if(!in_array('{ALL}', $username)) {
+				$usernames = $this->base->implode($username);
+				$query = $this->db->query("SELECT username FROM ".UC_DBTABLEPRE."members WHERE username IN ($usernames)");
+				$usernames = array();
+				while($data = $this->db->fetch_array($query)) {
+					$usernames[addslashes($data['username'])] = addslashes($data['username']);
+				}
+				if(!$usernames) {
+					return 0;
+				}
+				$blackls = addslashes($this->db->result_first("SELECT blacklist FROM ".UC_DBTABLEPRE."memberfields WHERE uid='$uid'"));
+				if($blackls) {
+					$list = explode(',', $blackls);
+					foreach($list as $k => $v) {
+						if(in_array($v, $usernames)) {
+							unset($usernames[$v]);
+						}
+					}
+				}
+				if(!$usernames) {
+					return 1;
+				}
+				$listnew = implode(',', $usernames);
+				$blackls .= $blackls !== '' ? ','.$listnew : $listnew;
+			} else {
+				$blackls = addslashes($this->db->result_first("SELECT blacklist FROM ".UC_DBTABLEPRE."memberfields WHERE uid='$uid'"));
+				$blackls .= ',{ALL}';
+			}
+		} else {
+			$blackls = addslashes($this->db->result_first("SELECT blacklist FROM ".UC_DBTABLEPRE."memberfields WHERE uid='$uid'"));
+			$list = $blackls = explode(',', $blackls);
+			foreach($list as $k => $v) {
+				if(in_array($v, $username)) {
+					unset($blackls[$k]);
+				}
+			}
+			$blackls = implode(',', $blackls);
+		}
+		$this->db->query("UPDATE ".UC_DBTABLEPRE."memberfields SET blacklist='$blackls' WHERE uid='$uid'");
+		return 1;
 	}
 
+	function removecode($str, $length) {
+		return trim($this->base->cutstr(preg_replace(array(
+				"/\[(email|code|quote|img)=?.*\].*?\[\/(email|code|quote|img)\]/siU",
+				"/\[\/?(b|i|url|u|color|size|font|align|list|indent|float)=?.*\]/siU",
+				"/\r\n/",
+			), '', $str), $length));
+	}
+
+	function count_pm_by_fromuid($uid, $timeoffset = 86400) {
+		$dateline = $this->base->time - intval($timeoffset);
+		return $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."pms WHERE msgfromid='$uid' AND dateline>'$dateline'");
+	}
+
+	function is_reply_pm($uid, $touids) {
+		$touid_str = implode("', '", $touids);
+		$pm_reply = $this->db->fetch_all("SELECT msgfromid, msgtoid FROM ".UC_DBTABLEPRE."pms WHERE msgfromid IN ('$touid_str') AND msgtoid='$uid' AND related=1", 'msgfromid');
+		foreach($touids as $val) {
+			if(!isset($pm_reply[$val])) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+}
+
+function pm_datelinesort($a, $b) {
+	if ($a['dateline'] == $b['dateline']) {
+		return 0;
+	}
+	return ($a['dateline'] < $b['dateline']) ? -1 : 1;
 }
 
 ?>

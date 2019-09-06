@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2008 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: domain.php 12126 2008-01-11 09:40:32Z heyond $
+	$Id: domain.php 848 2008-12-08 05:43:39Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -13,6 +13,10 @@ class domainmodel {
 
 	var $db;
 	var $base;
+
+	function __construct(&$base) {
+		$this->domainmodel($base);
+	}
 
 	function domainmodel(&$base) {
 		$this->base = $base;
@@ -27,7 +31,7 @@ class domainmodel {
 	}
 
 	function get_total_num() {
-     		$data = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."domains");
+		$data = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."domains");
 		return $data;
 	}
 
@@ -39,12 +43,12 @@ class domainmodel {
 
 	function delete_domain($arr) {
 		$domainids = $this->base->implode($arr);
-     		$this->db->query("DELETE FROM ".UC_DBTABLEPRE."domains WHERE id IN ($domainids)");
+		$this->db->query("DELETE FROM ".UC_DBTABLEPRE."domains WHERE id IN ($domainids)");
 		return $this->db->affected_rows();
 	}
 
 	function update_domain($domain, $ip, $id) {
-     		$this->db->query("UPDATE ".UC_DBTABLEPRE."domains SET domain='$domain', ip='$ip' WHERE id='$id'");
+		$this->db->query("UPDATE ".UC_DBTABLEPRE."domains SET domain='$domain', ip='$ip' WHERE id='$id'");
 		return $this->db->affected_rows();
 	}
 }

@@ -10,6 +10,12 @@ defined('IN_PHPCMS') or exit('Access Denied');
 <script language="javascript" src="images/js/jquery.min.js"></script>
 <script language="javascript" src="images/js/common.js"></script>
 <script language="JavaScript" src="images/js/login.js"></script>
+<script text='text/javascript'>
+if (top.location != self.location)
+{
+	top.location=self.location;
+}
+</script>
 <style type="text/css">
 <!--
 *{margin:0; padding:0;}
@@ -35,7 +41,7 @@ input {	font-family:"宋体";	font-size:12px;	border:1px solid #dcdcdc;height:18
 <?php } ?>
       <li style=" padding-left:48px;">
 	    <input type="hidden" name="cookietime" value="0" />
-	    <input type="hidden" name="forward" value="<?=$forward?>">
+	    <input type="hidden" name="forward" value="?">
 	    <input type="submit" name="dosubmit" value=" 登录 " class="btn"> 
 	    <input type="reset" name="reset" value=" 清除 " class="btn">
       </li>

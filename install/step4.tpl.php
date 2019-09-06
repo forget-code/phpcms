@@ -17,7 +17,7 @@ foreach($PHPCMS_MODULES['name'] as  $i=>$module)
 {
 	if($j%5==0) echo "<tr >";
 ?>
-<td onmouseout="document.getElementById('introducetd').style.color='#ffff00';document.getElementById('introducetd').innerHTML='移动鼠标指针查看相应模块的描述';" onmouseover="showdescription('<font color=#ffffff><?=addslashes($PHPCMS_MODULES['introduce'][$i])?></font>');"><input type="checkbox" name="selectmod[]" value="<?=$module?>" checked><?=$PHPCMS_MODULES['modulename'][$i]?>模块</td>
+<td onmouseout="document.getElementById('introducetd').style.color='#ffff00';document.getElementById('introducetd').innerHTML='移动鼠标指针查看相应模块的描述';" onmouseover="showdescription('<font color=#ffffff><?=addslashes($PHPCMS_MODULES['introduce'][$i])?></font>');"><input type="checkbox" name="selectmod[]" value="<?=$module?>" checked <?php if($module=='pay'){?>disabled<?php } ?>><?=$PHPCMS_MODULES['modulename'][$i]?>模块</td>
 <?php
 	if($j%5==4) echo "</tr>";
 $j++;

@@ -1,0 +1,62 @@
+{template 'yp','com_default-header'}
+<!--主体-->
+<div class="main_all">
+<div id="main">
+  <!--右侧-->
+  <div id="right">
+    <p id="position"><strong>当前位置</strong>：{$position}</p>
+    <h3>{$system_name[$category]}</h3>
+    <div class="box">
+      <div id="pro_show" class="f_r">
+        <h2>{$title}</h2>
+        <ul>
+          <li>所属分类：{$CATEGORY[$catid][catname]}</li>
+		  <li>产品型号：{$standard}</li>
+          <li>产品价格：{if $price}{$price} 元/{$quantifier}{else}<a href="{$siteurl}/category-guestbook/label-product/id-{$id}.html">我要询价</a>{/if}</li></li>
+          <li>计量单位：{$quantifier}</li>
+          <li>更新时间：{date('Y-m-d',$updatetime)}
+		  </li>
+		  <li><a href="{$siteurl}/category-guestbook/label-product/id-{$id}.html"><img src="yp/images/xunjia.gif" alt="我要询价" align="absmiddle" border="0"/></a> <span id="favoriteid">
+		  <script type="text/javascript" id="callback_js"></script>
+		  <script language="JavaScript" src="{$PHPCMS[siteurl]}yp/collect.php?userid={$userid}&title={$title}&returnid=favoriteid&callback_js=callback_js&referer={urlencode(URL)}"></script></span></li>
+        </ul>
+      </div>
+      <div id="pro_pic" class="f_l"><img src="{thumb($thumb,210,240)}" alt="{$title}" width="210"/></div>
+      <div class="cb"></div>
+      <h4>详细说明</h4>
+      <div class="box_1">{$content}</div>
+    </div>
+  </div>
+  <!--左侧-->
+   <div id="left">
+{if $m_user}
+	<h3>热点导航</h3>
+	<div class="hot_nav">
+		  <ul>
+	{loop $m_user $ms}
+	  <li><a href="{$ms[url]}">{$ms[catname]}</a></li>
+	{/loop}
+		  </ul>
+		</div>
+{/if}
+	<h3>热点产品</h3>
+    <div class="box">
+      <ul>
+		{get sql="SELECT * FROM `phpcms_yp_product` `p` , `phpcms_yp_count` `ct` WHERE `p`.`userid`='$userid' AND `p`.status=99 AND `p`.`id` = `ct`.`id` AND `ct`.`model` = 'product'  ORDER BY `ct`.hits DESC" rows="10"}
+		<li><a href="{show_url('product',$r[id])}" title="{$r[title]}">{str_cut($r[title],28,'')}</a></li>
+		{/get}
+      </ul>
+    </div>
+    <h3>站内搜索</h3>
+    <form class="box" action="{$M['url']}web/query.php">
+      <input type="text" name="q" size="16"/><input name="search" type="submit" id="search" value="搜索"/><br/>
+	  <input type="radio" name="type" checked="checked" value="product"/>商品<input type="radio" name="type" value="buy"/>商机<input value="news" type="radio" name="type"/>新闻<input type="hidden" value="search" name="action" /><input name="userid" value="{$userid}" type="hidden" />
+    </form>  
+  </div>
+  <div class="cb"></div>
+</div>
+</div>
+<!--尾部-->
+<div id="foot">{$companyname}<br/> 地址：{$address}</div>
+</body>
+</html>

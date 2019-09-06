@@ -1,0 +1,128 @@
+{template 'yp','com_default-header'}
+<!--主体-->
+<div class="main_all"> 
+<div id="main">
+  <!--右侧-->
+  <div id="right">
+    <p id="position"><strong>当前位置</strong>：{$position}</p>
+    <h3>{$system_name[$category]}</h3>
+    <div class="box p_l_20">
+      <ul>
+<form action="{$M[url]}web/query.php" method="post" name="myform" id="myform" onsubmit='return CheckForm();'>
+<ul class="guest"> 
+ <li class="guestform">您的姓名：</li>
+ <li class="guestform">公司传真：</li>
+ <li class="guestform">联系电话：</li>
+ <li class="guestform" style="text-align:right;"> Email：</li>
+</ul>
+<ul class="guest"> 
+ <li><input name="new_username" id="new_username" type="text" size="20" maxlength="10" value="{$_username}" {if $_username}readonly{/if}/> *</li>
+ <li><input name="new_fax" id="new_fax" type="text" size="20"> </li>
+ <li><input name="new_telephone" id="new_telephone" type="text" size="20" maxlength="50" value=""/> *</li>
+ <li><input name="new_email" id="new_email" type="text" size="20" value="{$_email}"/></li>
+</ul>
+<div class="w_120"></div>
+<ul class="guest"> 
+ 
+ <li class="guestform"> 所在单位：</li>
+ <li class="guestform" style="text-align:right;"> QQ：</li>
+ <li class="guestform" style="text-align:right;"> MSN：</li>
+
+</ul>
+<ul class="guest"> 
+ 
+ <li><input name="new_unit" id="new_unit" type="text" size="20"> * </li>
+ <li><input name="new_qq" id="new_qq" type="text" size="20" maxlength="9" value=""/> </li>
+ <li><input name="new_msn" id="new_msn" type="text" size="20" value=""></li></ul>
+ <div class="clear"></div>
+<ul class="guest" >
+<li>留言内容：<br />
+<textarea name="new_content" id="new_content" rows="6" cols="54"></textarea>
+<br />验证码：<input name="checkcodestr" type="text" size="4" id="code" require="true" datatype="require"  msgid="ccode" msg="验证码必须填写">
+<img src="checkcode.php" id="checkcode" onclick="this.src='checkcode.php?id='+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/>
+<br /><br /><input name="dosubmit" type="submit" value=" 提交留言 " />
+<input name="userid" type="hidden" value="{$userid}" />
+<input name="action" type="hidden" value="guestbook" />
+<input name="label" type="hidden" value="{$label}" />
+<input name="forwardpage" type="hidden" value="{$forward}" />
+<input name="id" type="hidden" value="{$id}" />
+
+</li></ul></form>
+<div class="cb"></div>
+     
+    </div>
+  </div>
+  <!--左侧-->
+  <div id="left">
+{if $m_user}
+	<h3>热点导航</h3>
+	<div class="hot_nav">
+		  <ul>
+	{loop $m_user $ms}
+	  <li><a href="{$ms[url]}">{$ms[catname]}</a></li>
+	{/loop}
+		  </ul>
+		</div>
+{/if}
+	<h3>最新消息</h3>
+    <div class="box">
+      <ul>
+{get sql="SELECT * FROM `phpcms_yp_news` WHERE `userid`='$userid' AND status=99 ORDER BY id DESC" rows="10"}
+<li><a href="{show_url('news',$r[id])}" title="{$r[title]}">{str_cut($r[title],28,'')}</a></li>
+{/get}
+      </ul>
+    </div>
+	<h3>站内搜索</h3>
+    <form class="box" action="{$M['url']}web/query.php">
+      <input type="text" name="q" size="16"/><input name="search" type="submit" id="search" value="搜索"/><br/>
+	  <input type="radio" name="type" checked="checked" value="product"/>商品<input type="radio" name="type" value="buy"/>商机<input value="news" type="radio" name="type"/>新闻<input type="hidden" value="search" name="action" /><input name="userid" value="{$userid}" type="hidden" />
+    </form>
+  </div>
+  <div class="cb"></div>
+</div>
+</div>
+<script type="text/javascript">
+var CheckForm = function()
+{
+	var us = $(":input[name='new_username']");
+	var ph = $(":input[name='new_telephone']");
+	var un = $(":input[name='new_unit']");
+	var cnt = $("textarea#new_content");
+	var ch = $(":input[name='checkcodestr']");
+	if(us.val().length <3 || us.val().length > 20)
+	{
+		alert('请输入正确的用户名');
+		us.select();
+		return false;
+	}
+	else if(!ph.val().match(/^((\(\d{2,3}\))|(\d{3}\-))?(\(0\d{2,3}\)|0\d{2,3}-)?[1-9]\d{6,7}(\-\d{1,4})?$/i))
+	{
+		alert('请输入正确的电话号码');
+		ph.select();
+		return false;
+	}
+	else if(un.val().length < 1)
+	{
+		alert('请输入单位名称');
+		un.select();
+		return false;
+	}
+	else if(cnt.val().length < 1)
+	{
+		alert('请输入留言内容');
+		cnt.select();
+		return false;
+	}
+	else if(ch.val().length != 4)
+	{
+		alert('请输入验证码');
+		ch.select();
+		return false;
+	}
+	else return true;
+}
+</script>
+<!--尾部-->
+<div id="foot">{$companyname}<br/> 地址：{$address}</div>
+</body>
+</html>

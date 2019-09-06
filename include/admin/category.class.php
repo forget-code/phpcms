@@ -102,6 +102,33 @@ class category
 		return true;
 	}
 
+	function update_child($catid)
+	{
+		global $CATEGORY, $setting, $priv_groupid, $priv_roleid, $priv_role, $priv_group, $MODEL;
+		if(!$catid) return FALSE;
+		$cat_childs = $CATEGORY[$catid]['arrchildid'];
+		$cat_child = explode(',', $cat_childs);
+		$t = $catids = '';
+		foreach($cat_child as $cid)
+		{
+			if($CATEGORY[$catid]['modelid']==$CATEGORY[$cid]['modelid'] && $cid!=$catid)
+			{
+				$catids .= $t.$cid;
+				setting_set($this->table, "catid=$cid", $setting);
+				$priv_group->update('catid', $cid, $priv_groupid);
+				$priv_role->update('catid', $cid, $priv_roleid);
+				$t = ',';
+			}
+		}
+		if($catids)
+		{
+			$this->db->query("UPDATE `".DB_PRE."content` c, `".DB_PRE.'c_'.$MODEL[$CATEGORY[$catid]['modelid']]['tablename']."` cc   SET `template`='$setting[template_show]' WHERE c.`contentid`=cc.`contentid` AND `catid` IN ($catids) ");
+		}
+		$this->repair();
+		$this->cache();
+		return true;
+	}
+
 	function link($catid, $category)
 	{
 		$this->db->update($this->table, $category, "catid=$catid");
@@ -118,7 +145,7 @@ class category
 
 	function delete($catid)
 	{
-		global $MODEL,$MODULE;
+		global $MODEL,$MODULE, $c;
 		if(!array_key_exists($catid, $this->category)) return false;
 		@set_time_limit(600);
 		$arrparentid = $this->category[$catid]['arrparentid'];
@@ -126,37 +153,11 @@ class category
 		$catids = explode(',', $arrchildid);
 		if($this->category[$catid]['type'] == 0)
 		{
-			if(isset($MODULE['search']) || isset($MODULE['comment']))
+			$result = $this->db->query("SELECT contentid,searchid FROM ".DB_PRE."content WHERE catid IN($arrchildid)");
+			while($r = $this->db->fetch_array($result))
 			{
-				$sids = array();
-				$result = $this->db->query("SELECT contentid,searchid FROM ".DB_PRE."content WHERE catid IN($arrchildid)");
-				while($r = $this->db->fetch_array($result))
-				{
-					if(isset($MODULE['comment']))
-					{
-						$keyid = 'phpcms-content-title-'.$r['contentid'];
-						$this->db->query("DELETE FROM ".DB_PRE."comment WHERE keyid='$keyid'");
-					}
-					$sids[] = $r['searchid'];
-				}
-				if(isset($MODULE['search']) && $sids)
-				{
-					$this->search = load('search.class.php', 'search', 'include');
-					foreach($sids as $searchid)
-					{
-						$this->search->delete($searchid, 'searchid');
-					}
-				}
+				$c->delete($r['contentid']);
 			}
-			if(isset($MODULE['digg']))
-            {
-                $data = $this->db->select("SELECT `contentid` FROM `".DB_PRE."content` WHERE `catid` IN($arrchildid)", 'contentid');
-                if($data)
-				{
-					$contentids = implode(',', array_keys($data));
-					$this->db->query("DELETE `".DB_PRE."digg`,`".DB_PRE."digg_log` FROM `".DB_PRE."digg`,`".DB_PRE."digg_log` WHERE `".DB_PRE."digg`.contentid=`".DB_PRE."digg_log`.contentid AND `".DB_PRE."digg`.contentid IN($contentids)");
-				}
-            }
 			foreach($catids as $id)
 			{
 				$modelid = $this->category[$id]['modelid'];
@@ -414,46 +415,68 @@ class category
 			{
 				$categorys_c[$r['catid']] = $r;
 			}
-			if(!$categorys_c[$catid]['parentid'])
+			if($data['parentid']==0 || (preg_match('/:\/\//', $url) && (substr_count($url, '/')==2)))
 			{
 				$this->db->query("UPDATE `$this->table` SET url='$url' WHERE catid=$catid");
-				$arrchildid = $data['arrchildid'];
-				$arrchild = explode(',',$arrchildid);
-				foreach($arrchild AS $k)
-				{
-					$parentdir = $second_domain = '';
-					if($categorys_c[$k]['modelid'])
-					{
-						if($k == $catid || !$MODEL[$categorys_c[$k]['modelid']]['ishtml'] || $categorys_c[$k]['type'] == 2) continue;
-					}
-					else
-					{
-						$child_array_data = $this->get($k);
-						if($k == $catid || !$child_array_data['ishtml'] || $categorys_c[$k]['type'] == 2) continue;	
-					}
-					$arrparentid = $categorys_c[$k]['arrparentid'];
-					$arrparentid = explode(',',$arrparentid);
-					array_shift($arrparentid);
-					if(preg_match('/:\/\//',$categorys_c[$arrparentid[0]]['url']))
-					{
-						$second_domain = $categorys_c[$arrparentid[0]]['url'];
-						array_shift($arrparentid);
-					}
-					foreach($arrparentid AS $p)
-					{
-						$parentdir .= $categorys_c[$p]['catdir'].'/';
-					}
-					$caturl = $second_domain.'/'.$parentdir.$categorys_c[$k]['catdir'].'/';
-					$this->db->query("UPDATE `$this->table` SET url='$caturl' WHERE catid=$k");
-				}
 			}
-			else
+			$arrchildid = $data['arrchildid'];
+			$arrchild = explode(',',$arrchildid);
+			$bound = array();
+			foreach($arrchild AS $k)
 			{
-				$this->db->query("UPDATE `$this->table` SET url='$url' WHERE catid=$catid");
+				$parentdir = $second_domain = $parentid_arr = '';
+				if($categorys_c[$k]['modelid'])
+				{
+					if(!$MODEL[$categorys_c[$k]['modelid']]['ishtml'])
+					{
+						$caturl = $this->u->category($k);
+						$this->db->query("UPDATE `$this->table` SET url='$caturl' WHERE catid=$k");
+						continue;
+					}
+					if($k == $catid || $categorys_c[$k]['type'] == 2) continue;
+				}
+				else
+				{
+					$child_array_data = $this->get($k);
+					if(!$child_array_data['ishtml'])
+					{
+						$caturl = $this->u->category($k);
+						$this->db->query("UPDATE `$this->table` SET url='$caturl' WHERE catid=$k");
+						continue;
+					}
+					if($k == $catid || $categorys_c[$k]['type'] == 2) continue;	
+				}
+				if(preg_match('/:\/\//', $categorys_c[$k]['url']) && (substr_count($categorys_c[$k]['url'], '/')==2) && ($catid!=$k))
+				{
+					$bound = array_merge($bound, array_diff(explode(',', $categorys_c[$k]['arrchildid']),$bound));
+					if(in_array($k, $bound)) continue;
+				}
+				$arrparentid = $categorys_c[$k]['arrparentid'];
+				$arrparentid = explode(',',$arrparentid);
+				array_shift($arrparentid);
+				$count = intval(count($arrparentid)-1);
+				for($i=$count; $i>=0; $i--)
+				{
+					if(preg_match('/:\/\//',$categorys_c[$arrparentid[$i]]['url']) && substr_count($categorys_c[$arrparentid[$i]]['url'], '/')==2)
+					{
+						$second_domain = $categorys_c[$arrparentid[$i]]['url'];
+						break;
+					}
+					$parentid_arr[] = $arrparentid[$i];
+				}
+				if(is_array($parentid_arr))
+				{
+					$cou = count($parentid_arr)-1;
+					for($y=$cou; $y>=0; $y--)
+					{
+						$parentdir .= $categorys_c[$parentid_arr[$y]]['catdir'].'/';
+					}
+				}
+				$caturl = $second_domain ? $second_domain.'/'.$parentdir.$categorys_c[$k]['catdir'].'/' : $parentdir.$categorys_c[$k]['catdir'];
+				$this->db->query("UPDATE `$this->table` SET url='$caturl' WHERE catid=$k");
 			}
 			unset($url);
 		}
-		
 		return $url;
 	}
 

@@ -21,5 +21,6 @@ CREATE TABLE IF NOT EXISTS `phpcms_link` (
 ) TYPE=MyISAM;
 
 INSERT INTO `phpcms_type` (`typeid`, `module`, `name`, `style`, `typedir`, `description`, `thumb`, `url`, `template`, `listorder`) VALUES (1, 'link', '默认分类', '', '', '', '', '', '', 0);
-INSERT INTO `phpcms_link` (`linkid`, `typeid`, `linktype`, `style`, `name`, `url`, `logo`, `introduce`, `username`, `listorder`, `elite`, `passed`, `addtime`, `hits`) VALUES (1, 1, 1, '', 'phpcms', 'http://www.phpcms.cn', 'http://www.phpcms.cn/images/friendsitelogo.gif', '', '', 0, 1, 1, 1225078629, 0);
-INSERT INTO `phpcms_link` (`linkid`, `typeid`, `linktype`, `style`, `name`, `url`, `logo`, `introduce`, `username`, `listorder`, `elite`, `passed`, `addtime`, `hits`) VALUES (2, 1, 1, '', '酷溜网', 'http://www.ku6.com', 'http://img1.c0.ku6.cn/css/www/v2/img/logo.jpg', '', '', 0, 1, 1, 1225078838, 0);
+INSERT INTO `phpcms_link` (`linkid`, `typeid`, `linktype`, `style`, `name`, `url`, `logo`, `introduce`, `username`, `listorder`, `elite`, `passed`, `addtime`, `hits`) VALUES (1, 1, 0, '', 'PHPCMS', 'http://www.phpcms.cn', '', '', '', 0, 1, 1, 1225078629, 0);
+INSERT INTO `phpcms_link` (`linkid`, `typeid`, `linktype`, `style`, `name`, `url`, `logo`, `introduce`, `username`, `listorder`, `elite`, `passed`, `addtime`, `hits`) VALUES (2, 1, 0, '', '酷6网', 'http://www.ku6.com', '', '', '', 0, 1, 1, 1225078838, 0);
+INSERT INTO `phpcms_link` (`linkid`, `typeid`, `linktype`, `style`, `name`, `url`, `logo`, `introduce`, `username`, `listorder`, `elite`, `passed`, `addtime`, `hits`) VALUES (3, 1, 0, '', '2760导航', 'http://www.2760.com/', '', '', '', 0, 1, 1, 1225078838, 0);

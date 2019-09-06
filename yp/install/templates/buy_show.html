@@ -1,0 +1,109 @@
+{template 'yp', 'header'}
+<div id="main">
+  <div id="right">
+    <div id="position"><strong>当前位置：</strong><a href="{$M[url]}">企业黄页</a><a href="{$M[url]}buy.php">商机</a>商机信息</div>
+    <div class="mar_10">
+      <div class="f_r" style="width:360px;">
+        <h1 id="p_name">{$rs['title']}{if ($rs['inputtime']+3600*24*$rs['period'] < time())}   [ 已过期 ]{/if}</h1>
+        <ul class="d_list" style="clear:both">
+          <li>所属分类：<a href="{list_url('buy',$rs[catid])}">{$CATEGORY[$rs['catid']][catname]}</a>　浏览量：{$rs['hits']}次</li>
+          {if $rs['tid'] == 2}
+		  <li>接受价格：{if $rs['price']}￥{$rs['price']}元左右/{$rs[quantifier]}{else}<a href="{company_url($c[userid],$c[sitedomain])}/category-guestbook/label-buy/id-{$rs['id']}.html">与我联系</a>{/if}</a></li>
+		  {else}
+		  <li>　单　价：{if $rs['price']}{$rs[price]}元/{$rs[quantifier]}{else}<a href="{company_url($c[userid],$c[sitedomain])}/category-guestbook/label-buy/id-{$rs['id']}.html">我要询价</a>{/if}</li>
+          {/if}
+		  {if $rs[standard]}<li>产品型号：{$rs[standard]}</li>{/if}
+		  <li>　类　型：<a href="{$M[url]}buy.php?tid={$rs['tid']}">{if $rs['tid'] == 1}供应{elseif $rs['tid'] == 2}求购{elseif $rs['tid'] == 3}二手{elseif $rs['tid'] == 4}促销{/if}</a></li>
+          <li>发布时间：{date("Y-m-d",$rs['inputtime'])}　　更新时间：{date("Y-m-d",$rs['updatetime'])}</li>
+		  {if $rs[period]}<li>有效期限：{$rs[period]}天</li>{/if}
+        </ul>
+        <div class="btn_box">
+		<script type="text/javascript" id="callback_js"></script>
+		<script language="JavaScript" src="{$PHPCMS[siteurl]}yp/collect.php?userid={$rs[userid]}&title={$rs[title]}&callback_js=callback_js&referer={urlencode(URL)}"></script>
+		
+		<a href="{company_url($rs[userid],$rs[sitedomain])}" class="btn_01 white">查看企业首页</a><div class="clear"></div></div>
+      </div>
+      <div id="Product_Intro_Left" style="width:360px;" class="f_l">
+        <div id="Product_BigImage" class="jqzoom"><img alt="{$rs['title']}" src="{thumb($rs['thumb'],349,260)}" width="349" height="260"/></div>
+        <div class="clear align_c mar_10"><img alt="点此查看大图" src="{$M[url]}images/zoom.gif" />&nbsp; <a target="_blank"  href="{thumb($rs['thumb'],349,260)}">点此查看大图</a></div>
+      </div>
+    </div>
+    <div class="clear bg_10"></div>
+    <div class="tit_1">
+      <h3>商机介绍</h3>
+    </div>
+    <div class="clear"></div>
+    <div class="pro_intro">　　
+      <p>{$rs['content']}</p>
+    </div>
+    <div class="bk_10"></div>
+    <div class="tit_1">
+      <h3>企业信息</h3>
+    </div>
+    <div class="clear"></div>
+    <div>
+      <div class="f_r" style="width:400px;margin-right:20px;">
+        <ul class="d_list">
+          <li>　公司名称：{$c['companyname']}</li>
+		  <li>　　联系人：{$c['linkman']}</li> 
+		  <li>　联系电话：{magic_image($c['telephone'])}</li> 
+		  <li>　电子邮箱：{magic_image($c['email'])}</li> 
+          <li>　公司类型：{$c['genre']}</li>
+          <li>　地　　址：{$c['address']}</li>          
+          <li>　公司网站：<a href="{$company_url($c['userid'])}">{company_url($c['userid'])}</a></li>
+		  <li>　<a href="{company_url($c['userid'])}">查看公司详情</a></li>
+        </ul>
+      </div>
+      <div class="f_l"><div class="blank20"></div><img src="{$c['logo']}" alt="公司标志" width="240" onerror="this.src='images/nopic_small.gif'"/></div>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <div id="left">
+    <div class="box_t">
+      <h3>产品库大类列表</h3>
+    </div>
+    <div class="box_c">
+      <ul class="text_list w_100">
+        {get sql="SELECT catname,catid FROM `phpcms_category` WHERE module = 'yp' AND parentid = '0' ORDER BY listorder ASC"}
+        <li><a href="{list_url('product',$r['catid'])}"">{$r['catname']}</a></li>
+		{/get}
+      </ul>
+      <div class="clear"></div>
+    </div>
+    <div class="box_b"></div>
+    <div class="bk_10"></div>
+    <div class="box_t">
+      <h3>浏览过的产品</h3>
+    </div>
+    <div class="box_c">
+      <ul class="pic_list_1">
+      {if $prowhere}
+	  {get sql="SELECT id,title,thumb FROM `phpcms_yp_product` WHERE id IN ($prowhere) AND status = '99' ORDER BY FIND_IN_SET(id,'$prowhere')" rows="10"}
+	  <li><a href="{show_url('product',$r['id'])}"><img src="{thumb($r['thumb'],48,48,1,'images/no_pic_50_50.gif')}" alt="" width="48" height="48"/></a><a href="{show_url('product',$r['id'])}" title="{$r['title']}">{$r['title']}</a></li>
+	  {/get}
+	  {else}
+	  <li>您还没有浏览过任何商品</li>
+	  {/if}
+      </ul>
+      <div class="clear"></div>
+    </div>
+    <div class="box_b"></div>
+    <div class="bk_10"></div>
+    <div class="box_t">
+      <h3>最新产品</h3>
+    </div>
+    <div class="box_c">
+      <ul class="pic_list">
+        {get sql="SELECT p.id,p.title,p.thumb,c.companyname,p.userid FROM `phpcms_yp_product` `p`,`phpcms_member_company` `c` WHERE c.userid = p.userid AND p.status = '99' ORDER BY id DESC" rows="10"}
+			<li>
+				<img src="{thumb($r['thumb'],48,48,1,'images/no_pic_50_50.gif')}" alt="" width="48" height="48"/>
+				<a href="{show_url('product',$r['id'])}" title="{$r['title']}"><strong>{str_cut($r['title'],20,'')}</strong></a>
+				<span><a href="{company_url($r['userid'])}" title="{$r['companyname']}">{str_cut($r['companyname'],20,'')}</a></span>
+			</li>
+		{/get}
+      </ul>
+    </div>
+    <div class="box_b"></div>
+  </div>
+</div>
+{template 'yp', 'footer'}

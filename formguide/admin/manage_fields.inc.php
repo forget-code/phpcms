@@ -40,6 +40,7 @@ switch ($action)
 				extract($setting);
 				extract($info);
 				require_once MOD_ROOT.'admin/include/fields/'.$formtype.'/field_add.inc.php';
+				require_once MOD_ROOT.'admin/include/createhtml.php';
 				showmessage('操作成功！', $forward);
 			}
 			else
@@ -63,6 +64,7 @@ switch ($action)
 				extract($setting);
 				extract($info);
 				require_once MOD_ROOT.'admin/include/fields/'.$formtype.'/field_edit.inc.php';
+				require_once MOD_ROOT.'admin/include/createhtml.php';
 				showmessage('操作成功！', $forward);
 			}
 			else

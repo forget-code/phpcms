@@ -17,5 +17,5 @@ $db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `d
 
 
 $db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES('".$member_1."', '财务管理', '', 'pay/', '', '', '', '', '', '', 0, 0, 0, 0, 'pay');");
-$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$member_0.", '财务管理', '', 'pay/', '', 'right', '', '', '', '', 0, 0, 0, 0, 'member');");
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(".$member_0.", '财务管理', '', 'pay/', '', 'right', '', '', '', '', 0, 0, 0, 0, 'pay');");
 ?>

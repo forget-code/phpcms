@@ -127,6 +127,45 @@ class attachment
 		return $aids;
 	}
 
+	function update_intr($contentid, $value = '', $length = 200)
+	{
+		$length = min(intval($length), 255);
+		$value = trim($value);
+		if($value)
+		{
+			$des = $this->db->get_one("SELECT `description` FROM ".DB_PRE."content WHERE `contentid`='$contentid'");
+			if(trim($des['description'])) return TRUE;
+			if(strpos($value, '<p>')!==false)
+			{
+				$sen_occ = strpos($value, '</p>');
+				$value = substr($value, 0, $sen_occ+3);
+			}
+			elseif(strpos($value, '<br'))
+			{
+				$sen_occ = strpos($value, '<br');
+				$value = substr($value, 0, $sen_occ);
+			}
+			$description = str_cut(str_replace("\n", '', strip_tags($value)), $length, '');
+			$this->db->query("UPDATE ".DB_PRE."content SET `description`='$description' WHERE `contentid`='$contentid'");
+		}
+		return TRUE;
+	}
+
+	function update_thumb($contentid, $aid = 1)
+	{
+		$aid = max(intval($aid), 1);
+		$id = $this->db->get_one("SELECT `thumb` FROM ".DB_PRE."content WHERE `contentid`=$contentid");
+		if($id['thumb']) return true;
+		$aid--; 
+		$info = $this->db->get_one("SELECT `filepath` FROM `$this->table` WHERE `contentid`='$contentid' ORDER BY `aid` ASC LIMIT $aid, 1");
+		if($info['filepath'])
+		{
+			if(strpos($info['filepath'], '://') === false) $path = UPLOAD_URL.$info['filepath'];
+			$this->db->query("UPDATE ".DB_PRE."content SET `thumb`='$path' WHERE `contentid`='$contentid'");
+		}
+		return true;
+	}
+
 	function download($field, $value, $ext = 'gif|jpg|jpeg|bmp|png', $absurl = '', $basehref = '')
 	{
 		
@@ -250,6 +289,12 @@ class attachment
 		return $this->db->query("UPDATE `$this->table` SET `listorder`=$listorder WHERE `aid`=$aid");
 	}
 
+	function description($aid, $description)
+	{
+		$aid = intval($aid);
+		return $this->db->query("UPDATE `$this->table` SET `description`='$description' WHERE `aid`=$aid");
+	}
+
 	function get_thumb($image)
 	{
 		return str_replace('.', '_thumb.', $image);
@@ -358,7 +403,7 @@ class attachment
 		$surl = trim($surl);
 		if($surl=='') return '';
 		//判断文档相对于当前的路径
-		$urls = @parse_url($absurl);
+		$urls = @parse_url(SITE_URL);
 		$HomeUrl = $urls['host'];
 		$BaseUrlPath = $HomeUrl.$urls['path'];
 		$BaseUrlPath = preg_replace("/\/([^\/]*)\.(.*)$/",'/',$BaseUrlPath);

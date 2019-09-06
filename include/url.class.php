@@ -91,6 +91,16 @@ class url
 		}
 		if(!isset($this->CATEGORY[$catid])) return false;
         $C = cache_read('category_'.$catid.'.php', '', 1);
+		$tag = 0;
+		if(preg_match('/:\/\//',$C['url']))
+		{
+			$tag = 1;
+			$arr_url = preg_split('/\//', $C['url']);
+			$domain = 'http://'.$arr_url[2];
+			$domain1 = 'http://'.$arr_url[2].'/';
+			$info = $this->db->get_one("SELECT * FROM `".DB_PRE."category` WHERE `url` IN ('$domain', '$domain1') LIMIT 1");
+			$crootdir = $info['parentdir'].$info['catdir'].'/';
+		}
 		$categorydir = $C['parentdir'].$C['catdir'];
 		$catdir = $C['catdir'];
 		$fileext = $this->PHPCMS['fileext'];
@@ -113,7 +123,20 @@ class url
 			}
 		}
 		eval("\$url = \"$urlrule\";");
-		return $url;
+		if($tag)
+		{
+			if(!(strpos($url, $crootdir)===0))
+			{
+				$url = $crootdir.$url;
+			}
+			$url_a[0] = $url;
+			$url_a[1] = $domain1.str_replace($crootdir, '', $url);
+		}
+		else
+		{
+			$url_a[0] = $url_a[1] = $url;
+		}
+		return $url_a;
 	}
 
 	function show_pages($page, $pagenumber, $pageurls)
@@ -121,11 +144,11 @@ class url
 		$pages = '';
 		for($i=1; $i<=$pagenumber; $i++)
 		{
-			$pages .= $page == $i ? '<span>'.$i.'</span>' : '<a href="'.$pageurls[$i].'">'.$i.'</a>';        
+			$pages .= $page == $i ? '<span>'.$i.'</span>' : '<a href="'.$pageurls[$i][1].'">'.$i.'</a>';        
 		}
 		$prepage = max($page-1, 1);
 		$nextpage = min($page+1, $pagenumber);
-		return '<a href="'.$pageurls[$prepage].'">上一页</a>'.$pages.'<a href="'.$pageurls[$nextpage].'">下一页</a>';
+		return '<a href="'.$pageurls[$prepage][1].'">上一页</a>'.$pages.'<a href="'.$pageurls[$nextpage][1].'">下一页</a>';
 	}
 
 	function update($contentid,$url)

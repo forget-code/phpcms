@@ -10,7 +10,16 @@ function Dialog(url,name,w,h)
 
 function redirect(url)
 {
-	if(url.lastIndexOf('/.') > 0) url = url.replace(/\/(\.[a-zA-Z]+)([0-9]+)$/g, "/$2$1");
+	if(url.lastIndexOf('/.') > 0)
+	{
+		url = url.replace(/\/(\.[a-zA-Z]+)([0-9]+)$/g, "/$2$1");
+	}
+	else if(url.match(/\/([a-z\-]+).html([0-9]+)$/)) {
+		url = url.replace(/\/([a-z\-]+).html([0-9]+)$/, "/$1/page-$2.html");
+	}
+	else if(url.match(/\/([a-z]+).html([0-9]+)$/)) {
+		url = url.replace(/\/([a-z]+).html([0-9]+)$/, "/$1-$2.html");
+	}
 	if(url.indexOf('://') == -1 && url.substr(0, 1) != '/' && url.substr(0, 1) != '?') url = $('base').attr('href')+url;
 	location.href = url;
 }
@@ -288,7 +297,7 @@ function FilePreview(Url, IsShow)
 	Obj = document.getElementById('FilePreview');
 	if(IsShow)
 	{
-		Obj.style.left = event.clientX;
+		Obj.style.left = event.clientX+80;
 		Obj.style.top = event.clientY+20;
 		Obj.innerHTML = "<img src='"+Url+"'>";
 		Obj.style.display = 'block';
@@ -382,3 +391,51 @@ function is_ie()
 		$("body").prepend('<div id="MM_msie" style="border:#FF7300 solid 1px;padding:10px;color:#FF0000">本功能只支持IE浏览器，请用IE浏览器打开。<div>');
 	}
 }
+
+function select_catids()
+{
+	$('#addbutton').attr('disabled','');
+
+}
+
+function transact(update,fromfiled,tofiled)
+{
+	if(update=='delete')
+	{
+		var fieldvalue = $('#'+tofiled).val();
+
+		$("select[@id="+tofiled+"] option").each(function()
+		{
+		   if($(this).val() == fieldvalue){
+			$(this).remove();
+		   }
+		});
+	}
+	else
+	{
+		var fieldvalue = $('#'+fromfiled).val();
+		var have_exists = 0;
+		var len = $("select[@id="+tofiled+"] option").length;
+		if(len>5)
+		{
+			alert('最多添加 6 项');
+			return false;
+		}
+		$("select[@id="+tofiled+"] option").each(function()
+		{
+		   if($(this).val() == fieldvalue){
+			have_exists = 1;
+			alert('已经添加到列表中');
+			return false;
+		   }
+		});
+		if(have_exists==0)
+		{
+			fieldvalue = "<option value='"+fieldvalue+"'>"+fieldvalue+"</option>"
+			$('#'+tofiled).append(fieldvalue);
+			$('#deletebutton').attr('disabled','');
+		}
+		
+	}
+}
+var set_show = false;

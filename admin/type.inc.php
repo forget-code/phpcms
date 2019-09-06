@@ -25,6 +25,12 @@ switch($action)
 		}
 		else
 		{
+			$models = '<select name="info[modelid]" id="modelid">';
+			foreach($MODEL as $mid => $m)
+			{
+				$models .= '<option value="'.$mid.'">'.$m['name'].'</option>';
+			}
+			$models .= '</select>';
 			include admin_tpl('type_add');
 		}
 		break;
@@ -46,6 +52,20 @@ switch($action)
 			$info = $type->get($typeid);
 			if(!$info) showmessage('指定的类别不存在！');
 			extract($info);
+			$models = '<select name="info[modelid]" id="modelid">';
+			foreach($MODEL as $mid => $m)
+			{
+				if($mid==$modelid)
+				{
+					$t = 'selected';
+				}
+				else
+				{
+					$t = '';
+				}
+				$models .= '<option value="'.$mid.'" '.$t.'>'.$m['name'].'</option>';
+			}
+			$models .= '</select>';
 			include admin_tpl('type_edit');
 		}
 		break;

@@ -1,0 +1,178 @@
+{template 'yp','center_header'}
+<style type="text/css">
+<!--
+.span_color {
+line-height: 19px;height:19px;float:left;width:30px;padding-left:16px;display:block;padding-top:5px;*line-height:22px;*height:22px;*width:34px;*padding-left:10px;*padding-top:0px;}
+-->
+</style>
+<div id="main">
+{template "yp","center_left"}
+
+{if $action=='answer'}
+<div id="right">
+<table cellpadding="0" cellspacing="1" class="table_form">
+	<caption>详细信息</caption>
+	{if $info[id]}
+	<tr> 
+      <th width="20%"><strong>询价对象：</strong>
+	  </th>
+      <td>{$title} </td>
+    </tr>
+	<tr> 
+      <th width="20%"><strong>询价页面：</strong>
+	  </th>
+      <td><a href="{$info[forwardpage]}">{$info[forwardpage]}</a> </td>
+    </tr>
+	{/if}
+	<tr> 
+      <th width="20%"><strong>姓名：</strong>
+	  </th>
+      <td>{$info[username]} </td>
+    </tr>
+	<tr> 
+      <th width="20%"><strong>所在单位：</strong>
+	  </th>
+      <td>{$info[unit]} </td>
+    </tr>
+	{if $info[fax]}
+	<tr> 
+      <th width="20%"><strong>公司传真：</strong>
+	  </th>
+      <td>{$info[fax]} </td>
+    </tr>
+	{/if}
+	<tr> 
+      <th width="20%"><strong>联系电话：</strong>
+	  </th>
+      <td>{$info[telephone]} </td>
+    </tr>
+	{if $info[qq]}
+	<tr> 
+      <th width="20%"><strong>QQ：</strong>
+	  </th>
+      <td>{$info[qq]} </td>
+    </tr>
+	{/if}
+	{if $info[msn]}
+	<tr> 
+      <th width="20%"><strong>MSN：</strong>
+	  </th>
+      <td>{$info[msn]} </td>
+    </tr>
+	{/if}
+	<tr> 
+      <th width="20%"><strong>Email：</strong>
+	  </th>
+      <td>{$info[email]} </td>
+    </tr>
+	<tr> 
+      <th width="20%"><strong>留言内容：</strong>
+	  </th>
+      <td>{$info[content]} </td>
+    </tr>
+<form action="{URL}" method="post" name="myform"  enctype="multipart/form-data" >
+	<tr> 
+      <th width="20%"><strong>标记该留言：</strong>
+	  </th>
+      <td>
+<span class="span_color bg14"><input type="radio" name="style" value="c14" > </span>
+<span class="span_color bg12"><input type="radio" name="style" value="c12" > </span>
+<span class="span_color bg13"><input type="radio" name="style" value="c13" > </span>
+<span class="span_color bg3"><input type="radio" name="style" value="c3" > </span>
+<span class="span_color bg6"><input type="radio" name="style" value="c6" > </span>
+<span class="span_color bg8"><input type="radio" name="style" value="c8" > </span>
+	  </td>
+    </tr>
+<tr> 
+      <td></td>
+      <td> 
+	  <input type="hidden" name="forward" value="{$forward}"> 
+	  <input type="hidden" name="id" value="{$info[gid]}"> 
+	  <input type="submit" name="dosubmit" value=" 确定 "> 
+	  </td>
+    </tr>
+</form>
+</table>
+
+</div>
+{else}
+	  <div id="right">
+		<div class="clear"></div>
+		<table cellpadding="0" cellspacing="1" class="table_list">
+		  <caption>管理留言</caption>
+		  <tr>
+			<th width="30"><input type="checkbox" onclick="javascript:checkall(this)"/></th>
+			<th>留言摘要</th>
+			<th width="100">留言人</th>
+			<th width="110">留言时间</th>
+			<th width="50">状态</th>
+			<th width="130">操作</th>
+		  </tr>
+		{loop $infos $info}
+		<tr>
+			<th width="30"><input type="checkbox" name="gid[]" value="{$info[gid]}"/></th>
+			<td class="align_left">
+			<a href="javascript:showMsgCnt('{$info[gid]}'{if $info[status] == 0},false{else},true{/if})"><span class="{$info[style]}">{str_cut($info[content],150,'...')}</span></a>
+			</td>
+			<td>{$info[username]}</td>
+			<td>{date('Y-m-d H:i',$info[addtime])}</td>
+			<td>{if $info[status]==0}<font color="red">未读</font>{else}<font color="#009900">已读</font>{/if}</td>
+			<td><a href="{BUSINESSDIR}?file={$file}&action=answer&id={$info[gid]}">详情</a>{if $info[vid]} | <a href="{$MODULE[message][url]}send.php?userid={$info[vid]}" target="_blank" title="短消息">短消息</a>{/if} | <a href="javascript:confirmurl('{BUSINESSDIR}?file={$file}&action=delete&gid={$info[gid]}','确认删除此留言吗？')">删除</a></td>
+		</tr>	
+		<tr id="cnt{$info[gid]}" style="display:none">			
+			<td colspan="6" class="align_left"><p>{$info[content]}</p></td>
+		</tr>
+		{/loop}
+		<tr>
+			<th width="30"><input type="checkbox" onclick="javascript:checkall(this)"/></th>
+			<td colspan="5" class="align_left"><input type="button" value="删除所选" onclick="javascript:buttondo(true)"/> <input type="button" value="标记为已读" onclick="javascript:buttondo(false)"/></td>
+		</tr>
+		</table>
+		<div id="pages">{$pages}</div>
+		<table cellpadding="0" cellspacing="1" class="table_info">
+		  <caption>
+		  提示信息
+		  </caption>
+		  <tr>
+			<td> 您可以通过标记不同的颜色来区分留意的重要性。
+	<br/>
+			</td>
+		  </tr>
+		</table>
+	  </div>
+{/if}
+	</div>
+	<div class="clear"></div>
+	<script>
+	var showMsgCnt = function(obj,bool)
+	{
+		var c= obj;
+		obj = 'cnt'+obj;
+		
+		var t = $("#"+obj);
+		if(!bool)$.get('{BUSINESSDIR}?file={$file}&action=answer&id='+c);
+		if(t.css("display") != "none")t.hide();
+		else t.show();
+	}
+	
+	var checkall = function(obj)
+	{
+		$("input[name='gid[]']").attr('checked',obj.checked);
+	}
+	
+	var buttondo = function(bool)
+	{
+		var par;
+		if(bool)
+		{
+			par = 'batmethod=delete';
+		}
+		else
+		{
+			par = 'batmethod=bookmark';
+		}
+		$("input[name='gid[]']").each(function(){ if(this.checked)par += '&gid[]='+this.value});
+		$.get('{BUSINESSDIR}?file={$file}&action=batdo&'+par+'&jsrand='+Math.random(),function(data){ if(data=='ok')window.location.reload();});
+	}
+	</script>
+{template 'phpcms','footer'}

@@ -1,0 +1,135 @@
+{template 'yp','center_header'}
+<style type="text/css">
+#right{margin-top:0px;}
+</style>
+<div id="main">
+{template "yp","center_left"}
+{if $action=='add'}
+<div id="right">
+
+<form action="{URL}"  method="post" name="myform"  enctype="multipart/form-data" >
+<table cellpadding="0" cellspacing="1" class="table_form">
+  <caption>添加证书</caption>
+<tr>
+<th width="20%"><strong>证书名称</strong></th>
+<td><input type="text" name="title" size="30" require="true" datatype="limit" min="3" max="80" msg='证书名称必须为3到80位'></td>
+</tr>
+<tr>
+<th width="20%"><strong>发证机构</strong></th>
+<td><input type="text" name="organization" size="30" require="true" datatype="limit" min="3" max="80" msg='发证机构必须为3到80位'></td>
+</tr>
+<tr>
+<th width="20%"><strong>证书图片</strong></th>
+<td><input type="text" name="thumb" id="thumb" size="50" require="true" datatype="limit" min="5" msg='请上传证书'>  <input type="button" name="thumb_upload" id="thumb_upload" value="上传图片" style="width:60px" onclick="javascript:openwinx('{PHPCMS_PATH}yp/upload.php?uploadtext=thumb','upload','450','350')"/></td>
+</tr>
+
+<tr>
+<th width="20%"><strong>生效日期</strong></th>
+<td><input type="text" name="effecttime" id="effecttime" size="15" require="true" datatype="limit" min="3" msg='请填写生效日期'> 格式：2000年10月12号</td>
+</tr>
+<tr>
+<th width="20%"><strong>截至日期</strong></th>
+<td><input type="text" name="endtime" id="endtime" size="15" require="true" datatype="limit" min="3" msg='请填写截至日期'> 格式：2000年10月12号</td>
+</tr>
+<tr> 
+<td></td>
+<td> 
+
+<input type="submit" name="dosubmit" value=" 立刻添加 "> 
+</td>
+</tr>
+</table>
+</form>
+	  </div>
+	</div>
+{elseif $action=='edit'}
+<div id="right">
+
+<form action="{URL}"  method="post" name="myform"  enctype="multipart/form-data" >
+<table cellpadding="0" cellspacing="1" class="table_form">
+  <caption>修改证书</caption>
+<tr>
+<th width="20%"><strong>证书名称</strong></th>
+<td><input type="text" name="title" size="30" value="{$info[title]}" require="true" datatype="limit" min="3" max="80" msg='证书名称必须为3到80位'></td>
+</tr>
+<tr>
+<th width="20%"><strong>发证机构</strong></th>
+<td><input type="text" name="organization" size="30" value="{$info[organization]}" require="true" datatype="limit" min="3" max="80" msg='发证机构必须为3到80位'></td>
+</tr>
+<tr>
+<th width="20%"><strong>证书图片</strong></th>
+<td><input type="text" name="thumb" id="thumb" size="50" value="{$info[thumb]}" require="true" datatype="limit" min="5" msg='请上传证书'>  <input type="button" name="thumb_upload" id="thumb_upload" value="上传图片" style="width:60px" onclick="javascript:openwinx('{PHPCMS_PATH}yp/upload.php?uploadtext=thumb','upload','450','350')"/></td>
+</tr>
+
+<tr>
+<th width="20%"><strong>生效日期</strong></th>
+<td><input type="text" name="effecttime" id="effecttime" size="15" value="{$info[effecttime]}" require="true" datatype="limit" min="3" msg='请填写生效日期'></td>
+</tr>
+<tr>
+<th width="20%"><strong>截至日期</strong></th>
+<td><input type="text" name="endtime" id="endtime" size="15" value="{$info[endtime]}" require="true" datatype="limit" min="3" msg='请填写截至日期'></td>
+</tr>
+<tr> 
+<td></td>
+<td> 
+<input type="hidden" name="id" value="{$id}"> 
+<input type="hidden" name="forward" value="{$forward}"> 
+<input type="submit" name="dosubmit" value=" 确定修改 "> 
+</td>
+</tr>
+</table>
+</form>
+{if $info[status]==1}
+<table cellpadding="0" cellspacing="1" class="table_info" style="*margin-top:10px;">
+  <caption>
+  提示信息
+  </caption>
+  <tr>
+<td> 主意：您当前的证书为已经审核状态，修改企业证书后，需要重新审核
+<br/>
+</td>
+  </tr>
+</table>
+{/if}
+	  </div>
+	</div>
+{else}
+<div id="right">
+
+<div class="tag_1"><a href="{BUSINESSDIR}?file=certificate" class="s_3">管理证书</a><a href="{BUSINESSDIR}?file=certificate&action=add">添加证书</a></div>
+
+<table cellpadding="0" cellspacing="1" class="table_list">
+ 
+  <tr>
+<th width="125">图片</th>
+<th >证书名称</th>
+<th >发证机构</th>
+<th width="80">审核状态</th>
+<th width="110">操作</th>
+  </tr>
+{loop $infos $info}
+<tr>
+<td class="align_center">
+<img src="{$info[thumb]}" width="120">
+</td>
+<td>{$info[name]}</td>
+<td>{$info[organization]}</td>
+<td>{if $info[status]==1}已通过{elseif $info[status]==2}未通过{else}待审核{/if}</td>
+<td><a href="{BUSINESSDIR}?file=certificate&action=edit&id={$info[id]}">修改</a> | <a href="javascript:confirmurl('{BUSINESSDIR}?file=certificate&action=delete&id={$info[id]}','确认要删除此证书吗？')">删除</a></td>
+</tr>
+{/loop}
+</table>
+	  </div>
+	</div>
+{/if}
+<div class="clear"></div>
+{template 'phpcms','footer'}
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+$().ready(function() {
+  $('form').checkForm(1);
+});
+//-->
+</SCRIPT>
+<script type="text/javascript" src="images/js/form.js"></script>
+<script type="text/javascript" src="images/js/validator.js"></script>

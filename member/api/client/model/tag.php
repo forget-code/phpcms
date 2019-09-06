@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2008 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: tag.php 12126 2008-01-11 09:40:32Z heyond $
+	$Id: tag.php 753 2008-11-14 06:48:25Z cnteacher $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -13,6 +13,10 @@ class tagmodel {
 
 	var $db;
 	var $base;
+
+	function __construct(&$base) {
+		$this->tagmodel($base);
+	}
 
 	function tagmodel(&$base) {
 		$this->base = $base;
@@ -31,7 +35,8 @@ class tagmodel {
 
 	function updatedata($appid, $data) {
 		$appid = intval($appid);
-		$data = uc_unserialize($data);
+		include_once UC_ROOT.'lib/xml.class.php';
+		$data = xml_unserialize($data);
 		$this->base->load('app');
 		$data[0] = addslashes($data[0]);
 		$datanew = array();

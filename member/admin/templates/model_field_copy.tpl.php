@@ -76,6 +76,10 @@ foreach($patterns as $p)
       <td><input type="radio" name="info[islist]" value="1" <?=($islist ? 'checked' : '')?> /> 是 <input type="radio" name="info[islist]" value="0"  <?=($islist ? '' : 'checked')?> /> 否</td>
     </tr>
 	<tr> 
+      <th><strong>是否在用户资料中显示</strong></th>
+      <td><input type="radio" name="info[isshow]" <?=($isshow ? 'checked' : '')?> value="1"> 是 <input type="radio" name="info[isshow]" value="0" <?=($isshow ? '' : 'checked')?>> 否</td>
+    </tr>
+	<tr> 
       <th><strong>作为标签默认读取字段</strong></th>
       <td><input type="radio" name="info[isselect]" <?=($isselect ? 'checked' : '')?> value="1"> 是 <input type="radio" name="info[isselect]" value="0" <?=($isselect ? '' : 'checked')?>> 否</td>
     </tr>

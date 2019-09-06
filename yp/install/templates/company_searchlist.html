@@ -1,0 +1,81 @@
+{template 'yp', 'header'}
+<div id="main">
+  <div id="right">
+    <div id="position"><strong>当前位置：</strong><a href="yp/">企业黄页</a><a href="yp/company.php">企业</a>搜索结果</div>
+	<div class="bk_10"></div>
+    <div class="gsxx_1">
+      <span class="gsjs">公司信息</span>
+      <span class="zczj">公司类型</span>
+	  <span class="area">所在地</span>
+    </div>
+    <div class="clear"></div>
+	{get sql="SELECT DISTINCT c.* FROM `phpcms_member_company` `c`,`phpcms_yp_relation` `r` WHERE $where" rows="20" distinctfield="\c.userid" page="$page" urlrule="$M[url]company.php?action=searchlist&areaname=$areaname&catid=$catid&genre=$genre&q=$q|$M[url]company.php?action=searchlist&areaname=$areaname&catid=$catid&genre=$genre&q=$q&page=\\$page"}
+	<dl class="list_1">
+      <dt><strong><a href="{company_url($r['userid'])}">{$r[companyname]}</a><img src="yp/images/gold.gif" alt="会员级别" width="16" height="16"/></strong><span class="zczj">{$r['genre']}</span><span class="area">{$r[areaname]}</span></dt>
+      <dd><strong>公司简介：</strong>{str_cut($r['introduce'],120)} </dd>
+      <dd><strong>主营：</strong>{substr($r['catids'],1,-1)}</dd>
+    </dl>
+	{/get}
+    <div id="pages">{$pages}</div>
+  </div>
+  <div id="left">
+    <div class="box_t">
+      <h3>产品库大类列表</h3>
+    </div>
+    <div class="box_c">
+      <ul class="text_list w_100">
+	  {get sql="SELECT catname,catid FROM `phpcms_category` WHERE module = 'yp' AND parentid = '0' ORDER BY listorder ASC"}
+	  <li><a href="{$M[url]}company.php?pagesize=20&listtype={$listtype}&areaname={$areaname}&catid={$r[catid]}">{$r['catname']}</a></li>
+	  {/get}
+      </ul>
+      <div class="clear"></div>
+    </div>
+    <div class="box_b"></div>
+    <div class="bk_10"></div>
+    <div class="box_t">
+      <h3>浏览过的产品</h3>
+    </div>
+    <div class="box_c">
+      <ul class="pic_list_1">
+      {if $prowhere}
+	  {get sql="SELECT id,title,thumb FROM `phpcms_yp_product` WHERE id IN ($prowhere) ORDER BY FIND_IN_SET(id,'$prowhere')" rows="10"}
+	  <li><a href="{show_url('product',$r['id'])}"><img src="{thumb($r['thumb'],48,48)}" alt="" width="48" height="48"/></a><a href="{show_url('product',$r['id'])}" title="{$r['title']}">{$r['title']}</a></li>
+	  {/get}
+	  {else}
+	  <li>您还没有浏览过任何商品</li>
+	  {/if}
+      </ul>
+      <div class="clear"></div>
+    </div>
+    <div class="box_b"></div>
+    <div class="bk_10"></div>
+    <div class="box_t">
+      <h3>最新产品</h3>
+    </div>
+    <div class="box_c">
+      <ul class="pic_list">
+        {get sql="SELECT p.id,p.title,p.thumb,c.companyname,p.userid FROM `phpcms_yp_product` `p`,`phpcms_member_company` `c` WHERE c.userid = p.userid ORDER BY id DESC" rows="10"}
+			<li>
+				<img src="{thumb($r['thumb'],48,48)}" alt="" width="48" height="48"/>
+				<a href="{show_url('product',$r['id'])}" title="{$r['title']}"><strong>{str_cut($r['title'],20,'')}</strong></a>
+				<span><a href="{company_url($r['userid'])}" title="{$r['companyname']}">{$r['companyname']}</a></span>
+			</li>
+		{/get}
+      </ul>
+    </div>
+    <div class="box_b"></div>
+    <div class="bk_10"></div>
+    <div class="box_t">
+      <h3>推荐产品</h3>
+    </div>
+    <div class="box_c">
+      <ul class="pic_list">
+        {get sql="SELECT p.id,p.title,p.thumb,c.companyname,p.userid FROM `phpcms_yp_product` `p`,`phpcms_member_company` `c` WHERE c.userid = p.userid AND p.elite = 1 ORDER BY id DESC" rows="10"}
+			<li><img src="{thumb($r['thumb'],48,48)}" alt="" width="48" height="48"/><a href="{show_url('product',$r[id])}"><strong>{str_cut($r['title'],20,'')}</strong></a><a href="{company_url($r['userid'])}"><span>{$r['companyname']}</span></a></li>
+		{/get}
+      </ul>
+    </div>
+    <div class="box_b"></div>
+  </div>
+</div>
+{template 'yp', 'footer'}

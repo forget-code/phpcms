@@ -25,6 +25,7 @@ function previewimage()
   <tr>
      <td>
 	         <input type="hidden" name="modelid" value="<?=$modelid?>">
+			 <input type="hidden" name="catid" value="<?=$catid?>">
 	         <input type="hidden" name="fieldid" value="<?=$fieldid?>">
              <input name="<?=$uploadtext?>" type="file" size="15" onchange="previewimage()">
              <input type="hidden" name="oldname">
@@ -45,9 +46,9 @@ function previewimage()
 <img id="previewpic" onload="setpicWH(this,300,300)">
 <script type="text/javascript">
 <!--
-if(window.opener.myform.<?=$uploadtext?>.value)
+if($(window.opener.document).find("form[@name='myform'] #<?=$uploadtext?>").val())
 {
-	$("#previewpic").attr("src", window.opener.myform.<?=$uploadtext?>.value); 
+    $("#previewpic").attr("src", $(window.opener.document).find("form[@name='myform'] #<?=$uploadtext?>").val()); 
 }
 else
 {

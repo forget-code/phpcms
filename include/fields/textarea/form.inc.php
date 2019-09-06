@@ -2,5 +2,14 @@
 	{
 		extract($fieldinfo);
 		if(!$value) $value = $defaultvalue;
-		return form::textarea('info['.$field.']', $field, $value, $rows, $cols, $css, $formattribute);
+		if($checkcharacter && $maxlength)
+		{
+			$formattribute .= ' onkeyup="checkLength(this, \''.$field.'\', \''.$maxlength.'\');"';
+		}
+		$html = '';
+		if($value)
+		{
+			$html = '<script type="text/javascript">checkLength(document.getElementById(\''.$field.'\'), \''.$field.'\', \''.$maxlength.'\');</script>';
+		}
+		return form::textarea('info['.$field.']', $field, $value, $rows, $cols, $css, $formattribute, $checkcharacter, $maxlength).$html;
 	}

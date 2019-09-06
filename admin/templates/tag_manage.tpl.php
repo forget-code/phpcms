@@ -65,7 +65,7 @@ foreach($tags AS $tagname=>$tag)
 <td class="align_c">
 <input type='text' value="<script type='text/javascript' src='<?=SITE_URL?>api/js.php?tagname=<?=urlencode($tagname)?>'></script>" size='30' onDblClick="clipboardData.setData('text',this.value); alert(this.value +'已复制到剪贴板');">
 </td>
-<td class="align_c"><a href="?mod=<?=$mod?>&file=tag&action=preview&module=<?=$module?>&tagname=<?=urlencode($tagname)?>">预览</a> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&module=<?=$module?>&modelid=<?=$tag[modelid]?>&tagname=<?=urlencode($tagname)?>">修改</a> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=copy&module=<?=$module?>&type=<?=$type?>&tagname=<?=urlencode($tagname)?>">复制</a> | <a href="###" onClick="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=delete&module=<?=$module?>&tagname=<?=urlencode($tagname)?>','确认删除标签 {tag_<?=$tagname?>} 吗？如果您在模板中使用了此标签或JS调用，则请不要删除！')">删除</a></td>
+<td class="align_c"><a href="?mod=<?=$mod?>&file=tag&action=preview&module=<?=$module?>&tagname=<?=urlencode($tagname)?>">预览</a> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&module=<?=$module?>&modelid=<?=$tag[modelid]?>&tagname=<?=urlencode($tagname)?>">修改</a> | <a href="?mod=<?=$mod?>&file=<?=$file?>&action=copy&module=<?=$module?>&type=<?=$type?>&tagname=<?=urlencode($tagname)?>">复制</a> | <a href="###" onClick="javascript:confirmurl('?mod=<?=$mod?>&file=<?=$file?>&action=delete&module=<?=$module?>&type=<?=$type?>&tagname=<?=urlencode($tagname)?>','确认删除标签 {tag_<?=$tagname?>} 吗？如果您在模板中使用了此标签或JS调用，则请不要删除！')">删除</a></td>
 </tr>
 <?php 
 }

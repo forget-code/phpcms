@@ -34,12 +34,13 @@ class special
 	{
 		global $_userid,$_username;
 		if(!is_array($info) || empty($info['title'])) return false;
-		$info['url'] = $this->M['url'].$this->url->show($specialid, $info['filename'], $info['typeid']);
         $info['createtime'] = TIME;
         $info['userid'] = $_userid;
         $info['username'] = $_username;
 		$this->db->insert($this->table, $info);
 		$specialid = $this->db->insert_id();
+		$url = $this->M['url'].$this->url->show($specialid, $info['filename'], $info['typeid']);
+		$this->db->query("UPDATE `$this->table` SET `url`='$url' WHERE `specialid`=$specialid");
 		return $specialid;
 	}
 
@@ -138,6 +139,12 @@ class special
 		$specialid = intval($specialid);
 		$value = $value == 1 ? 1: 0;
 		return $this->db->query("UPDATE `$this->table` SET `elite`='$value' WHERE `specialid`=$specialid");
+	}
+
+	function get_id($where)
+	{
+		if(!$where) return false;
+		return $this->db->get_one("SELECT `specialid` FROM `$this->table` WHERE 1 $where");
 	}
 
 	function disable($specialid, $value)

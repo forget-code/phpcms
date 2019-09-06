@@ -1,24 +1,34 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2008 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: tag.php 12126 2008-01-11 09:40:32Z heyond $
+	$Id: tag.php 753 2008-11-14 06:48:25Z cnteacher $
 */
 
 !defined('IN_UC') && exit('Access Denied');
 
 class tagcontrol extends base {
 
+	function __construct() {
+		$this->tagcontrol();
+	}
+
 	function tagcontrol() {
-		$this->base();
+		parent::__construct();
+		$this->init_input();
 		$this->load('tag');
 		$this->load('misc');
 	}
 
-	function ongettag($arr) {
-		@extract($arr, EXTR_SKIP);//appid, tagname, nums
+	function ongettag() {
+		$appid = $this->input('appid');
+		$tagname = $this->input('tagname');
+		$nums = $this->input('nums');
+		if(empty($tagname)) {
+			return NULL;
+		}
 		$return = $apparray = $appadd = array();
 
 		if($nums && is_array($nums)) {

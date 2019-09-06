@@ -1,6 +1,7 @@
 @import url('color.css');
 body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,   
 form,fieldset,input,textarea,p,blockquote,th,td {padding:0; margin:0;}
+label input{vertical-align: middle;}
 html, body { height:100%;} /* 同时设置html是为了兼容FF */
 body { font-size: 12px; color: black; line-height: 150%; background-color:#fff; text-align: center; height:100%; width:98%;}
 img { border:0;}

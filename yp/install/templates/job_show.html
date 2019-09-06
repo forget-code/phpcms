@@ -1,0 +1,103 @@
+{template 'yp', 'header'}
+<div id="main">
+  <div id="right">
+    <div id="position"><strong>当前位置：</strong><a href="yp/">企业黄页</a><a href="yp/job.php">企业招聘</a>职位信息</div>
+    <div class="mar_10">
+        <h1 id="p_name">{$rs['title']}{if ($rs['updatetime']+3600*24*$rs['period'] < time())}   [ 已过期 ]{/if}</h1><span class="two_button"></a><a href="javascript:void(0)" onclick="javascript:postapply({$jobid});"><img src="templates/default/yp/images/job_join.gif" /></a><a href="javascript:void(0)" onclick="javascript:favorapply({$jobid});"><img src="templates/default/yp/images/job_shou.gif" /></a></span>
+    </div>
+    <div class="clear"></div>
+    <div class="pro_intro">
+	<p>
+		{$rs['content']}
+	</p>
+      <table cellpadding="0" cellspacing="1" width="700" class="table_2">
+        <tr>
+          <th>招聘人数</th>
+          <td>{intval($rs['employ'])}人</td>
+          <th>工作性质</th>
+          <td>{$rs['worktype']}</td>
+        </tr>
+        <tr>
+          <th>性别要求</th>
+          <td>{$rs['sex']}</td>
+          <th>学历要求</th>
+          <td>{$rs['degree']}</td>
+        </tr>
+        <tr>
+          <th>薪资</th>
+          <td>{if $rs['pay']}{$rs['pay']}元/月{else}面议{/if}</td>
+          <th>工作地点</th>
+          <td>{$rs['workplace']}</td>
+        </tr>
+		<tr>
+          <th>发布时间</th>
+          <td>{date("Y.m.d",$rs['inputtime'])}</td>
+          <th>有效期</th>
+          <td>{$rs['period']}天</td>
+        </tr>
+      </table>
+    </div>
+    <div class="bk_10"></div>
+    <div class="tit_1">
+      <h3>公司联系方式</h3>
+    </div>
+    <div class="clear"></div>
+    <div>
+      <div class="f_r" style="width:400px;">
+        <ul class="d_list">
+          <li>　公司名称：{$c['companyname']}</li>
+		  <li>　　联系人：{$c['linkman']}</li> 
+		  <li>　联系电话：{magic_image($c['telephone'])}</li> 
+		  <li>　电子邮箱：{magic_image($c['email'])}</li> 
+          <li>　公司类型：{$c['genre']}</li>
+          <li>　　地　址：{$c['address']}</li>          
+          <li>　公司网站：<a href="{company_url($c['userid'])}">{company_url($c['userid'])}</a></li>
+		  <li>　<a href="{company_url($c['userid'])}">查看公司详情</a></li>
+        </ul>
+      </div>
+      <div class="f_l"><img src="{$c['logo']}" alt="公司标志" width="240" onerror="this.src='images/nopic_small.gif'"/></div>
+      <div class="clear"></div>
+    </div>
+  </div>
+  <div id="left">
+    <div class="box_t">
+      <h3>职位分类列表</h3>
+    </div>
+    <div class="box_c">
+      <table width="222" border="0" cellspacing="0" cellpadding="0" class="table_list">
+	{get sql="SELECT count(*) AS number,j.station,t.name FROM phpcms_yp_job j,phpcms_type t WHERE t.typeid = j.station AND j.status = '99' GROUP BY station ORDER BY t.listorder DESC"}
+		<tr>
+		<td><a href="{job_list_url(0,$r['station'],0)}">{$r['name']}</a>（{$r['number']}）</td>
+		</tr>
+	{/get}  
+	</table>
+      <div class="clear"></div>
+    </div>
+    <div class="box_b"></div>
+    <div class="bk_10"></div>
+    <div class="box_t">
+      <h3>最新更新简历</h3>
+    </div>
+    <div class="box_c">
+      <ul class="text_list">
+        {get sql="SELECT truename,applyid,specialty FROM `phpcms_yp_apply` WHERE status = '3' ORDER BY edittime DESC" rows="15"}
+			<li><a href="yp/apply.php?applyid={$r['applyid']}">{$r['truename']}</a> {$r['specialty']}</li>
+		{/get}
+      </ul>
+      <div class="clear"></div>
+    </div>
+    <div class="box_b"></div>
+  </div>
+</div>
+<script type="text/javascript">
+var postapply =  function(jobid)
+{
+	$.get("{$M[url]}myjob.php",{'action':'postapply','jobid':jobid,'ran':Math.random()},function(data){if(data == '-2')alert('非法参数');else if(data == "-1")alert('请先建立您的简历');else if(data == "1")alert("简历投递成功");else if(data == '0') alert("您已经申请过这个职位了");else if(data == '-3') alert("这个职位已经过期了");else{alert('请您先登录');$(":text[name='username']").select();}});
+}
+
+var favorapply =  function(jobid)
+{
+	$.get("{$M[url]}myjob.php",{'action':'favorapply','jobid':jobid,'ran':Math.random()},function(data){if(data == '-2')alert('非法参数');else if(data == "-1")alert('请先建立您的简历');else if(data == "1")alert("职位收藏成功");else if(data == '0')  alert("您已经收藏过这个职位了");else{alert('请您先登录');$(":text[name='username']").select();}});
+}
+</script>
+{template 'yp', 'footer'}

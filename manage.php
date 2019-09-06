@@ -67,8 +67,8 @@ switch($action)
 			if($dosubmit)
 			{
 				if(!$MODEL[$modelid]['ischeck']) $info['status'] = 99;
-				$contentid = $c->add($info) ;
-				if($contentid && isset($MODULE['pay']) && $presentpoint)
+				$contentid = $c->add($info);
+				if($contentid && isset($MODULE['pay']) && $presentpoint && $info['status']==99)
 				{
 					$api_msg = $presentpoint > 0 ? '投稿奖励' : '发布信息扣点';
 					$pay_api = load('pay_api.class.php', 'pay', 'api');

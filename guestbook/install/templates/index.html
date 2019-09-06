@@ -24,7 +24,7 @@
     <ul>
       <li class="guestbook_person">
         <ol>
-          <li><img src="images/nophoto.gif" alt="" width="108" height="108" /><br />
+          <li><img src="images/face/{$r['head']}.gif" /><br />
             {$r[username]}</li>
           <li><a class="mysite" href="{$r[homepage]}" title="访问主页">主页</a>&nbsp;<a class="email" href="mailto:{$r[email]}" title="登录邮箱">信箱</a>&nbsp;<a class="qq" href="http://wpa.qq.com/msgrd?V=1&Uin={$r['qq']}&Site={$_SERVER[HTTP_HOST]}&Menu=yes" title="点击对话">QQ</a></li>
         </ol>

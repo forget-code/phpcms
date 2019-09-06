@@ -31,7 +31,6 @@ if(!class_exists('model_member_field'))
 {
 	MOD_ROOT.'admin/include/model_member_field.class.php';
 }
-
 if($dosubmit)
 {
 	$inputinfo = $member_input->get($info);
@@ -39,6 +38,14 @@ if($dosubmit)
 	$modelinfo['userid'] = $_userid;
 	$member_update->update($modelinfo);
 	$member->edit_model($_modelid, $modelinfo);
+	foreach($MODEL AS $modelid=>$value)
+	{
+		if($modelid == $_modelid && $value['modeltype']==2 && $value['tablename'] == 'company')
+		{
+			$yp_setting = cache_read('module_yp.php');
+			showmessage('注册成功，即将进入商务中心', SITE_URL.'yp/'.$yp_setting['businessdir'].'/');
+		}
+	}
 	showmessage($LANG['operation_success'], SITE_URL);
 }
 else

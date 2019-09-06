@@ -22,9 +22,8 @@
 {php $types = cache_read('search_type.php');}
   <div class="f_r">
      <form name="site_search" action="{$MODULE[search][url]}" target="_blank">
-	  <input type="hidden" name="type" value="all"/>
       <input type="text" name="q" size="20" class="input_blur"/>
-      <select>
+      <select name='type'>
         <option value="all">全部</option>
 		{loop $types $k $name}
         <option value="{$k}">{$name}</option>

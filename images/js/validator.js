@@ -354,7 +354,23 @@ jQuery.fn.checkForm = function(m){
 			elements.eq(errIndex[0]).focus().select();
 			return false;
 		}
-
+		if(document.getElementById('video_uploader') && !upLoading)
+		{
+			uploadFile();
+			return false;
+		}
+		if($('#f_filed_1') && set_show==false)
+		{
+			$("select[@id=catids] option").each(function()
+			{
+				$(this).attr('selected','selected');
+			});
+		}
+		if($('#hava_checked').val()==0)
+		{
+			YP_checkform();
+			return false;
+		}
 		return true;
 	});
 }

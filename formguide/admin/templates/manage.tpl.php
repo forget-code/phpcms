@@ -33,7 +33,10 @@ include admin_tpl('header');
 			<th style="width:100px;">
 				<strong><a href="<?=($order=='addtime ASC')?url_par("order=addtime DESC"):url_par("order=addtime ASC")?>" title="按创建时间排序">创建时间</a></strong>
 			</th>
-			<th style="width:300px;">
+			<th width="15%">
+				<strong>调用</strong>
+			</th> 
+			<th style="width:150px;">
 				<strong>管理操作</strong>
 			</th>
 		</tr>
@@ -51,7 +54,8 @@ include admin_tpl('header');
 			</td>
 			<td><?=str_cut($info[introduce], 20)?></td>
 			<td class="align_c"><?=$info[addtime]?></td>
-			<td class="align_c" style="width:360px;">
+			<td class="align_c"><input type="text" value="{cache_read('<?=$info[formid]?>.html', CACHE_FORM)}"></td>
+			<td class="align_c" style="width:180px;">
 			<a href="?mod=<?=$mod?>&file=view&action=manage&formid=<?=$info[formid]?>" title="信息列表">信息列表</a> | 
             <a href="?mod=<?=$mod?>&file=manage_fields&action=add&formid=<?=$info[formid]?>" title="添加字段">添加字段</a> |
 			<a href="?mod=<?=$mod?>&file=manage_fields&action=manage&formid=<?=$info[formid]?>" title="管理字段">管理字段</a> | 

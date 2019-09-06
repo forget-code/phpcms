@@ -35,7 +35,7 @@ function loginshow()
 	var auth = getcookie('auth');
 	if(auth != null)
 	{
-		$('#logined_username').html(getcookie('username'));
+		$('#logined_username').html(unescape(getcookie('username')));
 		$('#div_login').hide();
 		$('#div_logined').show();
 	}

@@ -73,6 +73,10 @@ include admin_tpl('header');
       <th><strong>会员注册协议：</strong></th>
       <td><textarea name='setting[reglicense]' cols='60' rows='20' id='reglicense' style="width:100%"><?=$reglicense?></textarea></td>
     </tr>
+	<tr>
+      <th><strong>保留会员名设置：</strong></th>
+      <td><textarea name='setting[preserve]' cols='30' rows='3' id='reglicense' style="width:50%"><?=$preserve?></textarea>&nbsp;&nbsp;<font style="color:#f00">用户名之间用英文“,”隔开。</font></td>
+    </tr>
     <tr>
       <th><strong>模块访问网址（URL）：</strong></th>
       <td>

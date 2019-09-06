@@ -36,12 +36,12 @@ if($action == 'register')
 
 	}
 	$userid = '';
-	$r = $member->get($uid);
+	$r = $member->get_by_touserid($uid);//modify by skyz
 	if(!$r)
 	{
 		require_once MOD_ROOT.'api/member_api.class.php';
 		$member_api = new member_api();
-		$memberinfo['userid'] = $uid;
+		$memberinfo['touserid'] = $uid;//modify by skyz
 		$userid = $member_api->add($memberinfo);
 	}
 }
@@ -49,8 +49,39 @@ elseif ($action == 'login')
 {
     $username = trim($username);
     $password = trim($password);
+	$phpcmsUsername=$username;
+	$phpcmsPassword=$password;
 	list($uid, $username, $uc_password, $email) =  uc_call("uc_user_login", array($username, $password));
-
+	/*增加用户自动导入功能*/
+	if($uid==-1){
+		$_userid = $member->get_userid($phpcmsUsername);
+		$_userInfo=$member->get($_userid, '`userid`,`username`,`email`,`password`', 0);
+		if($_userInfo['userid']>0){
+			$md5_password = $member->password($phpcmsPassword);
+			if($_userInfo['password'] != $md5_password)
+			{
+				if($r['password'] == substr($md5_password, 8, 16))
+				{
+					//兼容动易论坛
+					$uid = uc_call("uc_user_register", array($_userInfo['username'], $phpcmsPassword, $_userInfo['email']));
+					if($uid<=0){
+						showmessage('用户不存在,或者被删除');
+					}
+				}
+				else
+				{
+					showmessage('用户不存在,或者被删除');
+					return FALSE;
+				}
+			}else{
+				$uid = uc_call("uc_user_register", array($_userInfo['username'], $phpcmsPassword, $_userInfo['email']));
+				if($uid<=0){
+					showmessage('用户不存在,或者被删除');
+				}
+			}
+		}
+		list($uid, $username, $uc_password, $email) =  uc_call("uc_user_login", array($phpcmsUsername, $phpcmsPassword));
+	}
 	if( $uid == -1 )
 	{
 		showmessage('用户不存在,或者被删除');
@@ -60,12 +91,12 @@ elseif ($action == 'login')
 		showmessage('密码错误',$MODULE['member']['url'].'login.php');
 	}
     $code = uc_call('uc_user_synlogin', array($uid));
-	$result = $member->get_userid($username);
-	if(!$result && $uid != 1 && $uid > 0)
+	$phpcms_userid = $member->get_userid($username);
+	if($phpcms_userid<=0 && $uid > 0)
 	{
 		require_once MOD_ROOT.'api/member_api.class.php';
 		$member_api = new member_api();
-		$arr_member['userid'] = $uid;
+		$arr_member['touserid'] = $uid;//modify by skyz
 		$arr_member['registertime'] = TIME;
 		$arr_member['lastlogintime'] = TIME;
 		$arr_member['username'] = $username;
@@ -73,6 +104,12 @@ elseif ($action == 'login')
 		$arr_member['email'] = $email;
 		$arr_member['modelid'] = 10;
 		$member_api->add($arr_member);
+	}else if($phpcms_userid>0 && $uid > 0){
+		require_once MOD_ROOT.'api/member_api.class.php';
+		$member_api = new member_api();
+		$arr_member=array();
+		$arr_member['touserid'] = $uid;//modify by skyz
+		$member_api->set($phpcms_userid,$arr_member);
 	}
 }
 elseif ($action == 'logout')

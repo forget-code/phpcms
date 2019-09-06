@@ -33,3 +33,5 @@ li.guestbook_text{ width:780px; float:right; padding:10px; word-wrap:break-word;
 .table_form th{ text-align:right; padding:2px 5px; width:15%; font-weight:normal;}
 .table_form td{text-align:left; padding:2px 5px; width:85%;}
 th.form_th{ font-weight:bold; color:red;}
+.table_form ul{width:500px;}
+.table_form li{float:left; text-align:center;margin-right:13px;padding-left:7px;margin-bottom:5px;}

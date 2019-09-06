@@ -1,0 +1,72 @@
+{template 'yp','com_default-header'}
+<style type="text/css">
+.table_list{ margin:0 auto; width:100%; *margin-top:6px;}
+th{text-align:center; background:#f6ffff;}
+th,td{padding:0px; height:24px; line-height:24px; border:1px solid #d3ebff; font-size:12px;color:#2b89c1;text-align:center}
+td{padding:8px;}
+.certificate1{width:130px;}
+.certificate2{width:200px;}
+.certificate3{width:108px;}
+</style>
+<!--主体-->
+<div class="main_all"> 
+<div id="main">
+  <!--右侧-->
+  <div id="right">
+    <p id="position"><strong>当前位置</strong>：{$position}</p>
+<table  width="746px"cellpadding="0" cellspacing="1" class="table_list">
+ 
+  <tr>
+<th width="130" class="certificate1">图片</th>
+<th width="200" class="certificate2">证书名称</th>
+<th width="200" class="certificate2">发证机构</th>
+<th width="108" class="certificate3">生效时间</th>
+<th width="108" class="certificate3">截止日期</th>
+  </tr>
+{get sql="SELECT * FROM `phpcms_yp_cert` WHERE `userid`='$userid' AND status=1" rows="50"}
+<tr>
+<td width="130" align="center" valign="middle" bgcolor="#FFFFFF">
+<a href="{$r[thumb]}"><img border="0" src="{$r[thumb]}" width="120"/></a></td>
+<td width="200" bgcolor="#FFFFFF">{$r[name]}</td>
+<td width="200" bgcolor="#FFFFFF">{$r[organization]}</td>
+<td width="108" bgcolor="#FFFFFF">{$r[effecttime]}</td>
+<td width="108" bgcolor="#FFFFFF">{$r[endtime]}</td>
+</tr>
+{/get}
+</table>
+<div class="cb"></div>
+     
+    </div>
+  <!--左侧-->
+  <div id="left">
+{if $m_user}
+	<h3>热点导航</h3>
+	<div class="hot_nav">
+		  <ul>
+	{loop $m_user $ms}
+	  <li><a href="{$ms[url]}">{$ms[catname]}</a></li>
+	{/loop}
+		  </ul>
+		</div>
+{/if}
+	<h3>最新消息</h3>
+    <div class="box">
+      <ul>
+{get sql="SELECT * FROM `phpcms_yp_news` WHERE `userid`='$userid' AND status=99 ORDER BY id DESC" rows="10"}
+<li><a href="{show_url('news',$r[id])}" title="{$r[title]}">{str_cut($r[title],28,'')}</a></li>
+{/get}
+      </ul>
+    </div>
+	<h3>站内搜索</h3>
+    <form class="box" action="{$M['url']}web/query.php">
+      <input type="text" name="q" size="16"/><input name="search" type="submit" id="search" value="搜索"/><br/>
+	  <input type="radio" name="type" checked="checked" value="product"/>商品<input type="radio" name="type" value="buy"/>商机<input value="news" type="radio" name="type"/>新闻<input type="hidden" value="search" name="action" /><input name="userid" value="{$userid}" type="hidden" />
+    </form>
+  </div>
+  <div class="cb"></div>
+</div>
+</div>
+<!--尾部-->
+<div id="foot">{$companyname}<br/> 地址：{$address}</div>
+</body>
+</html>

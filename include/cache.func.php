@@ -42,7 +42,7 @@ function cache_common()
 	$db->free_result($result);
 	$CACHE['MODEL'] = $data;
 	$data = array();
-	$result = $db->query("SELECT `catid`,`module`,`type`,`modelid`,`catname`,`style`,`image`,`catdir`,`url`,`parentid`,`arrparentid`,`parentdir`,`child`,`arrchildid`,`items`,`ismenu` FROM `".DB_PRE."category` WHERE 1 ORDER BY `listorder`,`catid`");
+	$result = $db->query("SELECT `catid`,`module`,`type`,`modelid`,`catname`,`style`,`image`,`catdir`,`url`,`parentid`,`arrparentid`,`parentdir`,`child`,`arrchildid`,`items`,`citems`,`pitems`,`ismenu`,`letter` FROM `".DB_PRE."category` WHERE 1 ORDER BY `listorder`,`catid`");
 	while($r = $db->fetch_array($result))
 	{
 		$r['url'] = url($r['url']);
@@ -51,7 +51,7 @@ function cache_common()
 	$db->free_result($result);
 	$CACHE['CATEGORY'] = $data;
 	$data = array();
-	$result = $db->query("SELECT `typeid`,`module`,`name`,`style`,`typedir`,`url` FROM `".DB_PRE."type` WHERE 1 ORDER BY `listorder`,`typeid`");
+	$result = $db->query("SELECT `typeid`,`modelid`,`module`,`name`,`style`,`typedir`,`url` FROM `".DB_PRE."type` WHERE 1 ORDER BY `listorder`,`typeid`");
 	while($r = $db->fetch_array($result))
 	{
 		$data[$r['typeid']] = $r;

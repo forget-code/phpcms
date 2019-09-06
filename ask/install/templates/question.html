@@ -11,7 +11,7 @@
 	<form name="myform" method="post" action="{$M[url]}question.php?" onSubmit="return checkform(this);">
       <tr>
         <th width="90">您的问题</th>
-        <td><input type="text" name="info[title]" id="title" value="{$title}" size="50" {if $M[publish_code]}onclick="$('#reg_code').load('{$M[url]}question.php', {action:'getcheckcode'});"{/if}></td>
+        <td><input type="text" name="info[title]" id="title" value="{$title}" size="50"></td>
       </tr>
       <tr>
         <th style="vertical-align:top">问题补充</th>
@@ -65,7 +65,7 @@
       {if $M[publish_code]}
       <tr>
   	    <th>验证码</th>
-    	<td id="reg_code">
+    	<td id="reg_code">{form::checkcode('checkcodestr',5)}
         </td>
       </tr>
       {/if}

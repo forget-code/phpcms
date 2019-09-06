@@ -1,35 +1,59 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2008 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: db.class.php 12126 2008-01-11 09:40:32Z heyond $
+	$Id: db.class.php 753 2008-11-14 06:48:25Z cnteacher $
 */
 
+/**
+	CREATE TABLE `sqlcache` (
+                `sqlid` char(6) NOT NULL default '',
+                `data` char(100) NOT NULL,
+                `expiry` int(10) unsigned NOT NULL,
+                PRIMARY KEY  (`sqlid`),
+                KEY(expiry)
+               ) Type=MyISAM
+
+*/
 
 class db {
 	var $querynum = 0;
 	var $link;
 	var $histories;
-	var $time;
+
+	var $dbhost;
+	var $dbuser;
+	var $dbpw;
+	var $dbcharset;
+	var $pconnect;
 	var $tablepre;
+	var $time;
+
+	var $goneaway = 5;//note 最多重试几次
 
 	function connect($dbhost, $dbuser, $dbpw, $dbname = '', $dbcharset = '', $pconnect = 0, $tablepre='', $time = 0) {
-		$this->time = $time;
+		$this->dbhost = $dbhost;
+		$this->dbuser = $dbuser;
+		$this->dbpw = $dbpw;
+		$this->dbname = $dbname;
+		$this->dbcharset = $dbcharset;
+		$this->pconnect = $pconnect;
 		$this->tablepre = $tablepre;
+		$this->time = $time;
+
 		if($pconnect) {
 			if(!$this->link = mysql_pconnect($dbhost, $dbuser, $dbpw)) {
 				$this->halt('Can not connect to MySQL server');
 			}
 		} else {
-			if(!$this->link = mysql_connect($dbhost, $dbuser, $dbpw, 1)) {
+			if(!$this->link = mysql_connect($dbhost, $dbuser, $dbpw)) {
 				$this->halt('Can not connect to MySQL server');
 			}
 		}
 
 		if($this->version() > '4.1') {
-
 			if($dbcharset) {
 				mysql_query("SET character_set_connection=".$dbcharset.", character_set_results=".$dbcharset.", character_set_client=binary", $this->link);
 			}
@@ -59,11 +83,11 @@ class db {
 		return $this->fetch_array($query);
 	}
 
-	function fetch_all($sql) {
+	function fetch_all($sql, $id = '') {
 		$arr = array();
 		$query = $this->query($sql);
 		while($data = $this->fetch_array($query)) {
-			$arr[] = $data;
+			$id ? $arr[$data[$id]] = $data : $arr[] = $data;
 		}
 		return $arr;
 	}
@@ -134,7 +158,17 @@ class db {
 	}
 
 	function halt($message = '', $sql = '') {
-		exit($message.'<br /><br />'.$sql.'<br /> '.mysql_error());
+		$error = mysql_error();
+		$errorno = mysql_errno();
+		if($errorno == 2006 && $this->goneaway-- > 0) {
+			$this->connect($this->dbhost, $this->dbuser, $this->dbpw, $this->dbname, $this->dbcharset, $this->pconnect, $this->tablepre, $this->time);
+			$this->query($sql);
+		} else {
+			$s = '<b>Error:</b>'.$error.'<br />';
+			$s .= '<b>Errno:</b>'.$errorno.'<br />';
+			$s .= '<b>SQL:</b>:'.$sql;
+			exit($s);
+		}
 	}
 }
 

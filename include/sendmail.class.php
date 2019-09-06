@@ -52,21 +52,24 @@ class sendmail
 
 	function smtp($email_to, $email_subject, $email_message, $email_from = '', $headers = '')
 	{
-		if(!$fp = fsockopen($this->server, $this->port, $errno, $errstr, 30))
+		if(!$fp = fsockopen($this->server, $this->port, $errno, $errstr, 10))
 		{
 			$this->errorlog('SMTP', "($this->server:$this->port) CONNECT - Unable to connect to the SMTP server", 0);
+			return false;
 		}
 		stream_set_blocking($fp, true);
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != '220')
 		{
 			$this->errorlog('SMTP', "$this->server:$this->port CONNECT - $lastmessage", 0);
+			return false;
 		}
 		fputs($fp, "EHLO Phpcms\r\n");
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != 220 && substr($lastmessage, 0, 3) != 250)
 		{
 			$this->errorlog('SMTP', "($this->server:$this->port) HELO/EHLO - $lastmessage", 0);
+			return false;
 		}
 		while(1)
 		{
@@ -81,18 +84,21 @@ class sendmail
 		if(substr($lastmessage, 0, 3) != 334)
 		{
 			$this->errorlog('SMTP', "($this->server:$this->port) AUTH LOGIN - $lastmessage", 0);
+			return false;
 		}
 		fputs($fp, base64_encode($this->user)."\r\n");
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != 334)
 		{
 			$this->errorlog('SMTP', "($this->server:$this->port) USERNAME - $lastmessage", 0);
+			return false;
 		}
 		fputs($fp, base64_encode($this->password)."\r\n");
 		$lastmessage = fgets($fp, 512);
 		if(substr($lastmessage, 0, 3) != 235)
 		{
 			$this->errorlog('SMTP', "($this->server:$this->port) PASSWORD - $lastmessage", 0);
+			return false;
 		}
 		fputs($fp, "MAIL FROM: <".preg_replace("/.*\<(.+?)\>.*/", "\\1", $email_from).">\r\n");
 		$lastmessage = fgets($fp, 512);
@@ -103,6 +109,7 @@ class sendmail
 			if(substr($lastmessage, 0, 3) != 250)
 			{
 				$this->errorlog('SMTP', "($this->server:$this->port) MAIL FROM - $lastmessage", 0);
+				return false;
 			}
 		}
 		$email_tos = array();
@@ -119,6 +126,7 @@ class sendmail
 					fputs($fp, "RCPT TO: <".preg_replace("/.*\<(.+?)\>.*/", "\\1", $touser).">\r\n");
 					$lastmessage = fgets($fp, 512);
 					$this->errorlog('SMTP', "($this->server:$this->port) RCPT TO - $lastmessage", 0);
+					return false;
 				}
 			}
 		}

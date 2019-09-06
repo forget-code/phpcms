@@ -26,7 +26,6 @@ switch($action)
 		else
 		{
 			$placeid = intval($placeid);
-			if(!$priv_role->check('p_adsid', $placeid, 'input', $roleid)) showmessage($LANG['not_add_rights'], 'goback');
 			$place = array();
 			$places = array();
 			if(!$placeid) $places[0] = '请选择广告位';
@@ -76,7 +75,6 @@ switch($action)
             $adsid = intval($adsid);
             $_ads = $places = array();
             $_ads = $c_ads->get_info($adsid);
-            if(!$priv_role->check('p_adsid', $_ads['placeid'], 'manage', $roleid)) showmessage($LANG['not_edit_rights'], 'goback');
             include admin_tpl('ads_edit');
         }
 	break;

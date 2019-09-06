@@ -16,7 +16,7 @@ switch($action)
 				$tag_config['number'] = $tag_config['announcenum'];
 				$tag_config['page'] = 0;
 				$tag_config['type'] = $mod;
-				$tag_config['sql'] = "SELECT * FROM ".DB_PRE."announce ORDER BY announceid DESC";
+				$tag_config['sql'] = "SELECT * FROM ".DB_PRE."announce WHERE fromdate<NOW() AND (todate>NOW() OR todate='0000-00-00') ORDER BY announceid DESC";
 				$t->update($tagname, $tag_config);	
 				showmessage($LANG['operation_success'],"?mod=$mod&file=$file&action=manage");		
 			}
@@ -37,7 +37,7 @@ switch($action)
 				$tag_config['number'] = $tag_config['linknum'];
 				$tag_config['page'] = 0;
 				$tag_config['type'] = $mod;
-				$tag_config['sql'] = "SELECT * FROM ".DB_PRE."announce ORDER BY announceid DESC";
+				$tag_config['sql'] = "SELECT * FROM `".DB_PRE."announce` WHERE `fromdate`<NOW() AND (`todate`>NOW() OR `todate`='0000-00-00') ORDER BY announceid DESC";
 				$t->update($tagname, $tag_config);
 				showmessage($LANG['operation_success'],"?mod=$mod&file=$file&action=manage");
 			}
@@ -57,7 +57,7 @@ switch($action)
 				$tag_config['number'] = $tag_config['announcenum'];
 				$tag_config['page'] = 0;
 				$tag_config['type'] = $mod;
-				$tag_config['sql'] = "SELECT * FROM ".DB_PRE."announce ORDER BY announceid DESC";
+				$tag_config['sql'] = "SELECT * FROM ".DB_PRE."announce WHERE `fromdate`<NOW() AND (`todate`>NOW() OR `todate`='0000-00-00') ORDER BY announceid DESC";
 				$t->update($tagname, $tag_config);
 				if($ajax)
 				{

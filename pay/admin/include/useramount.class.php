@@ -87,7 +87,7 @@ class useramount
 		{
 			$module = 'pay'; $type= 'amount'; $note = '用户充值';
 			$info		= $this->get_one($id);
-			$number		= $info['quantity'];
+			$number		= $info['amount'];
 			$userid		= $info['userid'];
 			$username	= $info['username'];
 			if($this->pay->update_exchange($module, $type, $number, $note, $userid))

@@ -1,0 +1,209 @@
+{template 'yp', 'header'}
+<div id="main">
+  <div id="right">
+    <div id="position"><strong>当前位置：</strong><a href="{$M[url]}">企业黄页</a><a href="{$M[url]}product.php">产品</a></div>
+    <!--{if $catid}-->
+	<dl id="catlist">
+      <dt>{$catname}</dt>
+	  <!--{loop $arrchildid $cid $c}-->
+		<dd><a href="{list_url('product',$cid)}">{$c[catname]}</a><span>({$CATEGORY[$cid][pitems]})</span></dd>
+	   <!--{/loop}-->
+    </dl>
+	<!--{/if}-->
+    <div class="bk_10"></div>
+    <div id="hy">
+      <div class="f_r" id="show_num"><span>每页显示信息数量</span><a href="{$M[url]}product.php?view_type={$view_type}&catid={$catid}&pagesize=20&areaname={$areaname}&order={$order}">20</a><a href="{$M[url]}product.php?view_type={$view_type}&catid={$catid}&pagesize=40&areaname={$areaname}&order={$order}">40</a><a href="{$M[url]}product.php?view_type={$view_type}&catid={$catid}&pagesize=60&areaname={$areaname}&order={$order}">60</a></div>
+      <ul>
+        <li class="on_1">所有产品</li>
+        <li><a href="{$M[url]}product.php?view_type=2&catid={$catid}&pagesize={$pagesize}&areaname={$areaname}&order={$order}"><span class="tw{if $view_type==2}_1{/if}">图片</span></a><a href="{$M[url]}product.php?view_type=1&catid={$catid}&pagesize={$pagesize}&areaname={$areaname}&order={$order}"><span class="wz{if $view_type==1}_1{/if}">图文</span></a><a href="{$M[url]}product.php?view_type=3&catid={$catid}&pagesize={$pagesize}&areaname={$areaname}&order={$order}"><span class="tp{if $view_type==3}_1{/if}">文字</span></a></li>
+      </ul>
+    </div>
+    <div class="gsxx_1">
+      <span class="gsjs">产品信息</span>
+      <span class="zczj">
+	  {if $order}<a href="{$M[url]}product.php?view_type={$view_type}&catid={$catid}&pagesize={$pagesize}&areaname={$areaname}&order=0">↑</a>{else}<a href="{$M[url]}product.php?view_type={$view_type}&catid={$catid}&pagesize={$pagesize}&areaname={$areaname}&order=1">↓</a>{/if}单价（元）</span>
+      <span class="area">
+	  <form name='myform' id='myform' method="get">
+		<input type="hidden" name="pagesize" value="{$pagesize}">
+		<input type="hidden" name="catid" value="{$catid}">
+		<input type="hidden" name="view_type" value="{$view_type}">
+		<input type="hidden" name="order" value="{$order}">
+		<select name="areaname" id="areaname" onchange="my_submit(this.form);">
+		<option value=""> 所在地</option>
+		<option value='江苏,浙江,上海'>江浙沪</option>
+		<option value='广州,深圳,中山,珠海,佛山,东莞,惠州'>珠三角</option>
+		<option value='香港,澳门,台湾'>港澳台</option>
+		<option value='海外'>海外</option>
+		<option value='北京'>北京</option>
+		<option value='上海'>上海</option>
+		<option value='杭州'>杭州</option>
+		<option value='广州'>广州</option>
+		<option value='深圳'>深圳</option>
+		<option value='南京'>南京</option>
+		<option value='武汉'>武汉</option>
+		<option value='天津'>天津</option>
+		<option value='成都'>成都</option>
+		<option value='哈尔滨'>哈尔滨</option>
+		<option value='重庆'>重庆</option>
+		<option value='宁波'>宁波</option>
+		<option value='无锡'>无锡</option>
+		<option value='济南'>济南</option>
+		<option value='苏州'>苏州</option>
+		<option value='温州'>温州</option>
+		<option value='青岛'>青岛</option>
+		<option value='沈阳'>沈阳</option>
+		<option value='福州'>福州</option>
+		<option value='西安'>西安</option>
+		<option value='长沙'>长沙</option>
+		<option value='合肥'>合肥</option>
+		<option value='南宁'>南宁</option>
+		<option value='南昌'>南昌</option>
+		<option value='郑州'>郑州</option>
+		<option value='厦门'>厦门</option>
+		<option value='大连'>大连</option>
+		<option value='常州'>常州</option>
+		<option value='石家庄'>石家庄</option>
+		<option value='东莞'>东莞</option>
+		<option value='安徽'>安徽</option>
+		<option value='福建'>福建</option>
+		<option value='甘肃'>甘肃</option>
+		<option value='广东'>广东</option>
+		<option value='广西'>广西</option>
+		<option value='贵州'>贵州</option>
+		<option value='海南'>海南</option>
+		<option value='河北'>河北</option>
+		<option value='黑龙江'>黑龙江</option>
+		<option value='河南'>河南</option>
+		<option value='湖北'>湖北</option>
+		<option value='湖南'>湖南</option>
+		<option value='江苏'>江苏</option>
+		<option value='江西'>江西</option>
+		<option value='吉林'>吉林</option>
+		<option value='辽宁'>辽宁</option>
+		<option value='内蒙古'>内蒙古</option>
+		<option value='宁夏'>宁夏</option>
+		<option value='青海'>青海</option>
+		<option value='山东'>山东</option>
+		<option value='山西'>山西</option>
+		<option value='陕西'>陕西</option>
+		<option value='四川'>四川</option>
+		<option value='新疆'>新疆</option>
+		<option value='西藏'>西藏</option>
+		<option value='云南'>云南</option>
+		<option value='浙江'>浙江</option>
+		<option value="">所有地区</option>
+		<option value='other'>其它</option>
+        </select>
+		</form>
+      </span>
+    </div>
+    <div class="clear"></div>
+    <!--图文列表开始-->
+	{if $view_type == 1}
+    <div id="show_0">
+{get sql="$sql" rows="$pagesize" page="$page" urlrule="$urlrule"}
+	<dl class="list_1 list_2">
+      <dt><strong><a href="{show_url('product',$r[id])}"><samp class="{$r['style']}">{$r[title]}</samp></a></strong><span class="zczj">{if $r['price']}{$r[price]}元{else}<a href="{company_url($r['userid'],$r[sitedomain])}/category-guestbook/label-product/id-{$r['id']}.html">我要询价</a>{/if}</span><span class="area"><a href="{$M[url]}product.php?pagesize=20&catid=0&view_type=1&order=&areaname={urlencode($r[areaname])}">{$r[areaname]}</a></span></dt>
+      <dd class="pic"><a href="{show_url('product',$r[id])}"><img src="{thumb($r[thumb],126,80)}" alt="产品图片" width="120" height="80"/></a></dd>
+      <dd><strong>产品简介：</strong>{str_cut(strip_tags($r[content]),180,'..')}</dd>
+      <dd><span class="time f_r">{date('Y-m-d H:i',$r[inputtime])}</span><strong>生产商：</strong><a href="{company_url($r[userid],$r[sitedomain])}">{$r[companyname]}</a></dd>
+    </dl>
+{/get}
+   </div>
+	{elseif $view_type==3}
+    <!--图文列表结束-->
+
+    <!--文字列表开始-->
+    <div id="show_1">
+	<ul class="text_list_f14">
+{get sql="$sql" rows="$pagesize" page="$page" urlrule="$urlrule"}
+      <li><span class="good_name"><a href="{show_url('product',$r[id])}"><samp class="{$r['style']}">{$r[title]}</a></samp></span><span class="company_name"><a href="{company_url($r[userid])}"><samp> {$r[companyname]} </samp></a></span><span class="good_money"> {if $r['price']}{$r[price]}元{else}<a href="{company_url($r['userid'])}/category-guestbook/label-product/id-{$r['id']}.html">我要询价</a>{/if}</span> <span class="time f_r">{date('Y-m-d H:i',$r[inputtime])}</span>
+    	 </li>
+         <div class="clear"></div>
+{/get}
+    </ul>
+    </div>
+	{elseif $view_type==2}
+    <!--文字列表结束-->
+    <!--图片列表开始-->
+    <div id="show_2">
+    <ul class="s_pic_list">
+{get sql="$sql" rows="$pagesize" page="$page" urlrule="$urlrule"}
+	<li><a href="{show_url('product',$r[id])}"><img src="{thumb($r[thumb],126,80)}" alt="{$r[title]}" width="126" height="80"/><samp class="{$r['style']}">{$r[title]}</samp></a></li>
+{/get}
+    </ul>
+    </div>
+	{/if}
+    <!--图片列表结束-->
+     <div id="pages">{$pages}</div>
+  </div>
+  <div id="left">
+    <div class="box_t">
+      <h3>产品库大类列表</h3>
+    </div>
+    <div class="box_c">
+      <ul class="text_list w_100">
+	  <!--{loop $CAT $cid $c}-->
+        <li><a href="{list_url('product',$c['catid'])}">{$c['catname']}</a></li>
+	  <!--{/loop}-->
+      </ul>
+      <div class="clear"></div>
+    </div>
+    <div class="box_b"></div>
+    <div class="bk_10"></div>
+    <div class="box_t">
+      <h3>浏览过的产品</h3>
+    </div>
+    <div class="box_c">
+      <ul class="pic_list_1">
+	  {if $prowhere}
+		  {get sql="SELECT id,title,thumb FROM `phpcms_yp_product` WHERE id IN ($prowhere) AND status = '99' ORDER BY FIND_IN_SET(id,'$prowhere')" rows="10"}
+		  <li><a href="{show_url('product',$r[id])}"><img src="{thumb($r['thumb'],48,48,1,'images/no_pic_50_50.gif')}" alt="" width="48" height="48"/></a><a href="{show_url('product',$r[id])}" title="{$r['title']}">{$r['title']}</a></li>
+		  {/get}
+	  {else}
+	  <li>您还没有浏览过任何商品</li>
+	  {/if}
+      </ul>
+      <div class="clear"></div>
+    </div>
+    <div class="box_b"></div>
+    <div class="bk_10"></div>
+    <div class="box_t">
+      <h3>最新产品</h3>
+    </div>
+    <div class="box_c">
+      <ul class="pic_list">
+        {get sql="SELECT p.id,p.title,p.thumb,c.companyname,p.userid FROM `phpcms_yp_product` `p`,`phpcms_member_company` `c` WHERE c.userid = p.userid AND p.status = '99' ORDER BY id DESC" rows="10"}
+			<li>
+				<img src="{thumb($r['thumb'],48,48,1,'images/no_pic_50_50.gif')}" alt="" width="48" height="48"/>
+				<a href="{show_url('product',$r[id])}" title="{$r['title']}"><strong>{str_cut($r['title'],20,'')}</strong></a>
+				<span><a href="{company_url($r[userid],$r[sitedomain])}" title="{$r['companyname']}">{str_cut($r['companyname'],20,'')}</a></span>
+			</li>
+		{/get}
+      </ul>
+    </div>
+    <div class="box_b"></div>
+    <div class="bk_10"></div>
+    <div class="box_t">
+      <h3>推荐产品</h3>
+    </div>
+    <div class="box_c">
+      <ul class="pic_list">
+        {get sql="SELECT p.id,p.title,p.thumb,c.companyname,p.userid FROM `phpcms_yp_product` `p`,`phpcms_member_company` `c` WHERE c.userid = p.userid AND p.elite = 1 AND p.status = '99' ORDER BY id DESC" rows="10"}
+			<li><img src="{thumb($r['thumb'],48,48,1,'images/no_pic_50_50.gif')}" alt="" width="48" height="48"/><a href="{show_url('product',$r[id])}"><strong>{str_cut($r['title'],20,'')}</strong></a><a href="{company_url($r['userid'])}"><span>{str_cut($r['companyname'],20,'')}</span></a></li>
+		{/get}
+      </ul>
+    </div>
+    <div class="box_b"></div>
+  </div>
+</div>
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+function my_submit(form)
+{
+	form.submit();
+}
+$("#areaname").children().each(function(){  if (this.value == '{if $areaname}{urldecode($areaname)}{else}0{/if}')this.selected = true;});
+//-->
+</SCRIPT>
+{template 'yp', 'footer'}

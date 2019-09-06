@@ -20,7 +20,7 @@ include admin_tpl('header');
   </tr>
   <tr>
     <th><strong>数据库密码：</strong></th>
-    <td><input type="text" name="info[dbpw]" id="dbpw" value="<?=$dbpw?>" size="15" /></td>
+    <td><input type="password" name="info[dbpw]" id="dbpw" value="<?=$dbpw?>" size="15" /></td>
   </tr>
   <tr>
     <th><strong>数据库名：</strong></th>

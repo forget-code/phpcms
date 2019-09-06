@@ -194,7 +194,7 @@ class answer
 		if(!$id || !$pid || !$userid) return false;
 		$r = $this->db->get_one("SELECT count(voteid) AS num FROM ".DB_PRE."ask_vote WHERE askid=$id AND userid=$userid");
 		if($r['num']>0) return false;
-		$this->db->query("UPDATE $this->table_posts SET votecount=votecount+1 WHERE pid=$id");
+		$this->db->query("UPDATE $this->table_posts SET votecount=votecount+1 WHERE pid=$pid");
 		if($M['vote_give_credit'])
 		{
 			$maxnum = floor($M['vote_max_credit']/$M['vote_give_credit']);

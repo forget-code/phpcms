@@ -116,7 +116,7 @@ FCKConfig.ToolbarSets["default"] = [
 ] ;
 
 FCKConfig.ToolbarSets["full"] = [
-	['Source','Save','Preview'],
+	['Source','Preview'],
 	['Bold','Italic','Underline','StrikeThrough','-','TextColor','BGColor'],
 	['Cut','Copy','Paste','PasteText','PasteWord'],
 	['Undo','Redo','-','Find','Replace','-','SelectAll','RemoveFormat'],

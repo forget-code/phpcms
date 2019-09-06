@@ -183,8 +183,8 @@ class image
 				$wy = ($source_h - $height) / 2;
 				break;
 			case 6:
-				$wx = ($source_w - $width) / 2;
-				$wy = $source_h - $height;
+				$wx = $source_w - $width;
+				$wy = ($source_h - $height) / 2;
 				break;
 			case 7:
 				$wx = 0;

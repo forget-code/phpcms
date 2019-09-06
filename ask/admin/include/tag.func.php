@@ -3,7 +3,10 @@ function tag_ask($array = array())
 {
 	if(!$array['mode'])
 	{
-		if($array['catid']) $sql .= " AND catid='$array[catid]'";
+		if($array['catid'])
+		{
+			$sql .= '".get_sql_catid('.$array['catid'].')."';
+		}
 		if($array['userid']) $sql .= " AND userid='$array[userid]'";
 		if($array['flag'] != -1) $sql .= " AND flag='$array[flag]'";
 		if($array['status']== -1)

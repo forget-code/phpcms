@@ -31,15 +31,19 @@ switch($action)
 			{
 				showmessage('密码不正确', $forward);
 			}
-			$orgcredit = $member->get($_userid, $credit);
+			$orgcredit = $member->get($_userid, $credit.',`touserid`');
 			if($orgcredit[$credit] < $fromcredit)
 			{
 				showmessage('超过你所有的最大值', $forward);
 			}
+			if($orgcredit['touserid']<=0)
+			{
+				showmessage('用户整合出错,请检查', $forward);
+			}
 			$inputCredit = $fromcredit;
 			$key = $toappid.'|'.$tocreditid;
 			$fromcredit = floor($fromcredit / $outcredit[$key]['ratio']);
-			$ucresult = uc_call('uc_credit_exchange_request', array($_userid, $fromcreditid, $tocreditid, $toappid, $fromcredit));
+			$ucresult = uc_call('uc_credit_exchange_request', array($orgcredit['touserid'], $fromcreditid, $tocreditid, $toappid, $fromcredit));
 			if(!$ucresult)
 			{
 				showmessage('API有误，请检查', $forward);
@@ -53,6 +57,15 @@ switch($action)
 			foreach($outcredit as $keyid=>$item)
 			{
 				$arr_select[$keyid] = $item['title'];
+			}
+			$phpcmsCreditSrcOption=array(
+				'1'=>'点数',
+				'2'=>'金钱'
+			);
+			$creditsrcOption=array();
+			foreach($outcredit as $item)
+			{
+				$creditsrcOption[$item['creditsrc']] = $phpcmsCreditSrcOption[$item['creditsrc']];
 			}
 			include template($mod, 'chancredit');
 		}

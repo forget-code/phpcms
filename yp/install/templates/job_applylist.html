@@ -1,0 +1,181 @@
+{template 'yp', 'header'}
+<div id="main">
+  <div id="right">
+    <div id="position"><strong>当前位置：</strong><a href="yp/">企业黄页</a><a href="yp/job.php">企业招聘</a>人才列表</div>
+    <h3 class="bt mar_10">简历筛选</h3>
+    <div class="box_1">
+    <dl>
+      <dt>更新时间</dt>
+      <dd><a {if $inputtime == 0}class="selectlink"{/if} href="{apply_list_url(0,$experience,$genre)}">所有</a></dd>
+      <dd><a {if $inputtime == 1}class="selectlink"{/if} href="{apply_list_url(1,$experience,$genre)}">今天</a></dd>
+      <dd><a {if $inputtime == 7}class="selectlink"{/if} href="{apply_list_url(7,$experience,$genre)}">近一周</a></dd>
+      <dd><a {if $inputtime == 30}class="selectlink"{/if} href="{apply_list_url(30,$experience,$genre)}">近一月</a></dd>
+    </dl>
+        <dl>
+      <dt>工作经验</dt>
+      <dd><a {if $experience == '0'}class="selectlink"{/if} href="{apply_list_url($inputtime,0,$genre)}">所有</a></dd>
+      <dd><a {if $experience == 1}class="selectlink"{/if} href="{apply_list_url($inputtime,1,$genre)}">一年以上</a></dd>
+	  <dd><a {if $experience == 2}class="selectlink"{/if} href="{apply_list_url($inputtime,2,$genre)}">二年以上</a></dd>
+      <dd><a {if $experience == 3}class="selectlink"{/if} href="{apply_list_url($inputtime,3,$genre)}">三年以上</a></dd>
+      <dd><a {if $experience == 5}class="selectlink"{/if} href="{apply_list_url($inputtime,5,$genre)}">五年以上</a></dd>
+    </dl>
+        <dl>
+      <dt>学历要求</dt>
+      <dd><a {if $genre == '0'}class="selectlink"{/if} href="{apply_list_url($inputtime,$experience,0)}">所有</a></dd>
+      <dd><a {if $genre == '初中'}class="selectlink"{/if}  href="{apply_list_url($inputtime,$experience,"初中")}">初中</a></dd>
+      <dd><a {if $genre == '高中'}class="selectlink"{/if}  href="{apply_list_url($inputtime,$experience,"高中")}">高中(含中专)</a></dd>
+      <dd><a {if $genre == '专科'}class="selectlink"{/if}  href="{apply_list_url($inputtime,$experience,"专科")}">专科（含高职)</a></dd>
+      <dd><a {if $genre == '本科'}class="selectlink"{/if}  href="{apply_list_url($inputtime,$experience,"本科")}">本科</a></dd>
+      <dd><a {if $genre == '硕士'}class="selectlink"{/if}  href="{apply_list_url($inputtime,$experience,"硕士")}">硕士</a></dd>
+      <dd><a {if $genre == '博士'}class="selectlink"{/if}  href="{apply_list_url($inputtime,$experience,"博士")}">博士</a></dd>
+    </dl>
+    <div class="clear"></div>
+    </div>
+   <div class="bk_10"></div>
+<table width="728" border="0" cellspacing="0" cellpadding="0" class="table_list">
+  <tr>
+    <th>姓名</th>
+    <th>性别</th>
+    <th>学历</th>
+    <th>专业</th>
+	<th>工作经验</th>
+    <th width="100">更新日期</th>
+  </tr>
+  {get sql="SELECT applyid,edittime, truename,gender,experience, edulevel, specialty  FROM `phpcms_yp_apply` WHERE $where AND status = '3' ORDER BY experience DESC" rows="15" page="$page" urlrule="$M[url]job.php?action=applylist&inputtime=$inputtime&experience=$experience&genre=$genre|$M[url]job.php?action=applylist&inputtime=$inputtime&experience=$experience&genre=$genre&page=\\$page"}
+  <tr>
+    <td><a href="yp/apply.php?applyid={$r['applyid']}"><samp class="{$r['style']}">{$r['truename']}</samp></a></td>
+	<td>{if $r['gender']}女{else}男{/if}</td>
+    <td>{$r['edulevel']}</td>
+    <td>{$r['specialty']}</td>
+	<td>{intval($r['experience'])}年</td>
+    <td>{date("Y.m.d",$r['edittime'])}</td>
+  </tr>
+{/get}
+</table>
+    <div class="clear"></div>
+    <div id="pages">{$pages}</div>
+  </div>
+  <div id="left">
+    <div class="box_t">
+      <p class="job_tag"><a href="javascript:void(0)" onclick="javascript:job.show('sjob','speople');" id="sjobl">找工作</a><a  href="javascript:void(0)" onclick="javascript:job.show('speople','sjob');" id="speoplel" class="s1">找人才</a></p>
+    </div>
+    <form action="yp/job.php" method="get" class="box_c">
+      <ul class="form_01">
+        <li><input type="hidden" name="action" value="searchlist" /><span class="select-type"><select name="station" style="width:200px;">
+          <option>选择岗位类别</option>
+		  {loop $types $type}
+		  <option value="{$type['typeid']}">{$type['name']}</option>
+		  {/loop}
+        </select></span></li>
+        <li><span class="select-type"><select name="degree" style="width:200px;">
+          <option value="">选择学历</option>
+		  <option value="不限">不限</option>
+		  <option value="高中">高中</option>
+		  <option value="大专">大专</option>
+		  <option value="本科">本科</option>
+		  <option value="研究生">研究生</option>
+		  <option value="硕士">硕士</option>
+		  <option value="博士">博士</option>
+          </select></span></li>
+        <li>
+          <span class="select-type"><select name="workplace" style="width:200px;">
+            <option value="" selected="selected">所有地区</option>
+            <option value="海外">海外</option>
+            <option value="江苏,浙江,上海">江浙沪</option>
+            <option value="北京">北京</option>
+            <option value="上海">上海</option>
+            <option value="浙江" city="杭州">杭州</option>
+            <option value="广东" city="广州">广州</option>
+            <option value="广东" city="深圳">深圳</option>
+            <option value="广东" city="东莞">东莞</option>
+            <option value="江苏" city="南京">南京</option>
+            <option value="江苏" city="苏州">苏州</option>
+            <option value="江苏" city="无锡">无锡</option>
+            <option value="湖北" city="武汉">武汉</option>
+            <option value="天津" city="">天津</option>
+            <option value="山东" city="济南">济南</option>
+            <option value="四川" city="成都">成都</option>
+            <option value="重庆">重庆</option>
+            <option value="浙江" city="宁波">宁波</option>
+            <option value="浙江" city="温州">温州</option>
+            <option value="浙江" city="金华">金华</option>
+            <option value="福建" city="福州">福州</option>
+            <option value="福建" city="厦门">厦门</option>
+            <option value="广东" city="中山">中山</option>
+            <option value="陕西" city="西安">西安</option>
+            <option value="河南" city="郑州">郑州</option>
+            <option value="江苏" city="常州">常州</option>
+            <option value="湖南" city="长沙">长沙</option>
+            <option value="安徽" city="合肥">合肥</option>
+            <option value="广西" city="南宁">南宁</option>
+            <option value="江西" city="南昌">南昌</option>
+            <option value="辽宁" city="大连">大连</option>
+            <option value="山东" city="青岛">青岛</option>
+            <option value="辽宁" city="沈阳">沈阳</option>
+            <option value="河北" city="石家庄">石家庄</option>
+            <option value="黑龙江" city="哈尔滨">哈尔滨</option>
+            <option value="吉林" city="长春">长春</option>
+            <option value="山西" city="太原">太原</option>
+            <option value="HK">香港</option>
+            <option value="TW">台湾</option>
+          </select></span>
+        </li>
+        <li><span class="select-type"><select name="inputtime" style="width:200px;">
+        <option>更新时间</option>
+		<option value="不限">不限</option>
+          <option value="1">一天内</option>
+          <option value="3">3天内</option>
+          <option value="7">一周内</option>
+          <option value="30">一个月内</option>
+        </select></span></li>
+        <li><span class="select-type"><select name="experience" style="width:200px;">
+        <option>工作经验</option>
+		<option value="不限">不限</option>
+		<option value="1年">1年</option>
+		<option value="2年">2年</option>
+		<option value="3年">3年</option>
+		<option value="4年">4年</option>
+		<option value="5年">5年</option>
+		<option value="6年以上">6年以上</option>
+        </select></span></li>
+        <li><input type="submit" value="搜索" /><input type="hidden" name="stype" id="stype" value="0" />
+        <a href="yp/myjob.php?action=add" id="sjob">免费发布个人简历</a><a href="yp/myjob.php?action=add" id="speople" style="display:none;">免费发布企业信息</a></li>
+      </ul>
+      <div class="clear"></div>
+    </form>
+    <div class="box_b"></div>
+    <div class="bk_10"></div>
+    <div class="box_t">
+      <h3>最新职位</h3>
+    </div>
+    <div class="box_c">
+    <table width="220" border="0" cellspacing="0" cellpadding="0" class="table_list">
+	<tr>
+	{get sql="SELECT title, id, employ FROM phpcms_yp_job WHERE status = '99' ORDER BY updatetime DESC" rows="10"}
+    <td><a href="{show_url('job',$r[id])}">{$r['title']}</a> ({$r['employ']}人)</td>
+    </tr>
+	{/get}
+</table>
+    </div>
+    <div class="box_b"></div>
+  </div>
+</div>
+<script type="text/javascript">
+var job = new Object();
+job.show = function(id1,id2)
+{
+	$("#"+id1).show();
+	$("#"+id2).hide();
+	$("#"+id1+"l").removeClass("s1");
+	$("#"+id2+"l").addClass("s1");
+	if(id1=="speople")$("#stype").val(1);
+	else $("#stype").val(0);
+}
+
+job.clearTxt = function(obj,bool)
+{
+	if(obj.value == '公司或者职位关键字' && bool)obj.value = '';
+	if(obj.value == '' && !bool)obj.value = '公司或者职位关键字';
+}
+</script>
+{template 'yp', 'footer'}

@@ -58,7 +58,7 @@ include admin_tpl('header');
         <td><?=$a->size($att['filesize'])?></td>
         <td class="align_c"><?=date('Y-m-d h:i:s', $att['uploadtime'])?></td>
         <td class="align_c"><a href="<?=member_view_url($att['userid'])?>"><?=username($att['userid'])?></a></td>
-        <td class="align_c"><a href="<?=content_url($att['contentid'])?>">原文</a></td>
+        <td class="align_c"><?php if($att['contentid']) {?><a href="<?=content_url($att['contentid'])?>">原文</a><?php }?></td>
     </tr>
 <?php 
 	}

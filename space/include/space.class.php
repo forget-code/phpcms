@@ -245,5 +245,18 @@
 			global $LANG;
 			return $LANG[$this->msg()];
 		}
+
+		function get_collect($page)
+		{
+			global $_userid;
+			$page = max($page, 1);
+			$pagesize = 20;
+			$num = $this->db->get_one("SELECT COUNT(*) AS n FROM ".DB_PRE."collect cc, ".DB_PRE."content c WHERE c.`contentid`=cc.`contentid` AND cc.`userid`='$_userid' AND `status`=99");
+			$total = $num['n'];
+			$data['pages'] = pages($total, $page, $pagesize);
+			$offset = ($page-1)*$pagesize;
+			$data['collect'] = $this->db->select("SELECT c.contentid, id, c.title, c.catid, url, cc.addtime FROM .".DB_PRE."content c, ".DB_PRE."collect cc WHERE c.`contentid`=cc.`contentid` AND cc.`userid`='$_userid' AND `status`=99 ORDER BY id DESC LIMIT $offset, $pagesize");
+			return $data;
+		}
 	}
 ?>

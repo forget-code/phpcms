@@ -41,7 +41,7 @@ areaid_load(0);
 <option value='contentid' <?=$field == 'contentid' ? 'selected' : ''?> >ID</option>
 </select>
 <input type="text" name="q" value="<?=$q?>" size="15" />&nbsp;
-发布时间：<?=form::date('inputdate_start', $inputdate_start)?> - <?=form::date('inputdate_end', $inputdate_end)?>&nbsp;
+发布时间：<?=form::date('inputdate_start')?> - <?=form::date('inputdate_end')?>&nbsp;
 <input type="submit" name="dosubmit" value=" 查询 " />
 </td>
 </tr>
@@ -78,7 +78,7 @@ if(is_array($infos)){
 <td><input type="checkbox" name="contentid[]" value="<?=$info['contentid']?>" id="content_<?=$info['contentid']?>" /></td>
 <td><input type="text" name="listorders[<?=$info['contentid']?>]" value="<?=$info['listorder']?>" size="3" /></td>
 <td><?=$info['contentid']?></td>
-<td><a href="<?=$info['url']?>" target="_blank"><?=output::style($info['title'], $info['style'])?></a> <?=$info['thumb'] ? '<font color="red">图</font>' : ''?>&nbsp;<?=$info['posids']?'<font color="green">荐</font>': ''?></td>
+<td><a href="<?=$info['url']?>" target="_blank"><?=output::style($info['title'], $info['style'])?></a> <?=$info['thumb'] ? '<font color="red">图</font>' : ''?>&nbsp;<?=$info['posids']?'<font color="green">荐</font>': ''?>&nbsp;<?=$info['typeid']?'<font color="blue">类</font>': ''?></td>
 <td class="align_c"><?=$STATUS[$info['status']]?></td>
 <td class="align_c"><a href="<?=$CATEGORY[$info['catid']]['url']?>" target="_blank"><?=$CATEGORY[$info['catid']]['catname']?></a></td>
 <td class="align_c"><a href="?mod=member&file=member&action=view&userid=<?=$info['userid']?>"><?=$info['username']?></td>

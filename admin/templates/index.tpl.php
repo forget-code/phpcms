@@ -51,11 +51,14 @@ body {
 </div>
 <div id="admin_left">
   <div id="inner" class="inner">
-    <h4><em style="float:right"><img src="admin/skin/images/refresh.gif" onClick="javascript:menu_refresh()" width="16" height="25" id="menurefresh" alt="刷新" title="刷新" /><img src="admin/skin/images/up.gif" id="up" width="19" height="23" border="0" alt="向上" /> <img src="admin/skin/images/down.gif" id="down" width="25" height="23" border="0" alt="向下" /></em><span id="menu_name">我的面板</span></h4>
+    <h4><em style="float:right"><img src="admin/skin/images/refresh.gif" onClick="javascript:menu_refresh()" width="16" height="25" id="menurefresh" alt="刷新" title="刷新" />
 	<?php
-	if($PHPCMS[enablegetscrollbar])
-	{
-	?>
+	if(!$PHPCMS['enablegetscrollbar']) { ?>
+	<img src="admin/skin/images/up.gif" id="up" width="19" height="23" border="0" alt="向上" /> <img src="admin/skin/images/down.gif" id="down" width="25" height="23" border="0" alt="向下" />
+	<?php } ?>
+	</em><span id="menu_name">我的面板</span></h4>
+	<?php
+	if($PHPCMS['enablegetscrollbar']) { ?>
     <div id="tree_box" class="p_r" style="top:10px; left:6px;" >
       <div id="tree" class="tree p_a" style="top:34px;overflow:auto;overflow-x:hidden;"></div>
     <?php
@@ -83,7 +86,6 @@ body {
         <a href="javascript:add_menu()" title="添加常用操作"><img src="admin/skin/images/icon_1.gif" title="添加常用操作" height="22" width="22" /></a>
 		<a href="javascript:search_menu()"><img src="admin/skin/images/icon_2.gif" title="菜单搜索" height="22" width="22"  /></a>
 		<a href="?mod=phpcms&file=safe&action=start" target="right" onclick="show_div(this)"><img src="admin/skin/images/icon_3.gif" title="扫描木马" height="22" width="22"  /></a>
-		<a href="?mod=phpcms&file=upgrade&action=index" target="right" onclick="show_div(this)"><img src="admin/skin/images/icon_5.gif" title="在线升级" height="22" width="22"  /></a>
 		<a href="javascript:get_memo()" onclick="show_div('memo')"><img src="admin/skin/images/icon_7.gif" title="备忘录" height="22" width="22" /></a>
 		<a href="javascript:help_url();show_div(this)"><img src="admin/skin/images/icon_6.gif" title="使用帮助，按F2也可以打开帮助" height="22" width="22"  /></a>
 	</span>

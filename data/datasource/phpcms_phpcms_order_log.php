@@ -1,6 +1,6 @@
 <?php
  return array (
-  'logid' =>'ID'
+  'logid' =>'ID',
   'orderid' =>'订单ID',
   'laststatus' =>'上次订单状态',
   'status' =>'订单状态',

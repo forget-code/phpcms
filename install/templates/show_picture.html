@@ -96,7 +96,10 @@ overflow:hidden;
       <script type="text/javascript" src="data/moodrank/1.js"></script>
       {/if}
       {if isset($MODULE[digg])}
-      {template 'digg','show'}
+      <div id="digg_div"></div>
+	  <script  type="text/javascript">var contentid = {$contentid}; var catid = {$catid}</script>
+	  <script type="text/javascript" id="calldigg_js"></script>
+      <script type="text/javascript" src="{$MODULE[digg][url]}digg.php?contentid={$contentid}&catid={$catid}"></script>
       {/if}
       <!--快速链接-->
 	<div class="clear"></div>

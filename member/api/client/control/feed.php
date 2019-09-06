@@ -1,28 +1,48 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2008 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: feed.php 12126 2008-01-11 09:40:32Z heyond $
+	$Id: feed.php 883 2008-12-16 00:51:21Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
 
 class feedcontrol extends base {
 
-	function feedcontrol() {
-		$this->base();
+	function __construct() {
+		$this->feedcontrol();
 	}
 
-	function onadd($arr) {
+	function feedcontrol() {
+		parent::__construct();
+		$this->init_input();
+	}
+
+	function onadd() {
 		$this->load('misc');
-		@extract($arr, EXTR_SKIP);//$appid, $icon, $appid, $uid, $username, $title_template, $title_data, $body_template, $body_data, $body_general, $target_ids, $image_1, $image_1_link, $image_2, $image_2_link, $image_3, $image_3_link, $image_4, $image_4_link
-		$title_template = $this->_parsetemplate($title_template);
-		$body_template = $this->_parsetemplate($body_template);
+		$appid = intval($this->input('appid'));
+		$icon = $this->input('icon');
+		$uid = intval($this->input('uid'));
+		$username = $this->input('username');
+		$body_data = $_ENV['misc']->array2string($this->input('body_data'));
+		$title_data = $_ENV['misc']->array2string($this->input('title_data'));
+
+		$title_template = $this->_parsetemplate($this->input('title_template'));
+		$body_template = $this->_parsetemplate($this->input('body_template'));
+		$body_general = $this->input('body_general');
+		$target_ids = $this->input('target_ids');
+		$image_1 = $this->input('image_1');
+		$image_1_link = $this->input('image_1_link');
+		$image_2 = $this->input('image_2');
+		$image_2_link = $this->input('image_2_link');
+		$image_3 = $this->input('image_3');
+		$image_3_link = $this->input('image_3_link');
+		$image_4 = $this->input('image_4');
+		$image_4_link = $this->input('image_4_link');
+
 		$hash_template = md5($title_template.$body_template);
-		$body_data = $_ENV['misc']->array2string($body_data);
-		$title_data = $_ENV['misc']->array2string($title_data);
 		$hash_data = md5($title_template.$title_data.$body_template.$body_data);
 		$dateline = $this->time;
 		$this->db->query("INSERT INTO ".UC_DBTABLEPRE."feeds SET appid='$appid', icon='$icon', uid='$uid', username='$username',
@@ -33,22 +53,33 @@ class feedcontrol extends base {
 		return $this->db->insert_id();
 	}
 
-	function onget($arr) {
-		@extract($arr, EXTR_SKIP);//limit
+	//note private 删除事件
+	function ondelete() {
+		$start = $this->input('start');
+		$limit = $this->input('limit');
+		$end = $start + $limit;
+		$this->db->query("DELETE FROM ".UC_DBTABLEPRE."feeds WHERE feedid>'$start' AND feedid<'$end'");
+	}
+
+	//note public 取得事件的接口, 取完以后是否删除?
+	function onget() {
 		$this->load('misc');
-		$feedlist = $this->db->fetch_all("SELECT * FROM ".UC_DBTABLEPRE."feeds ORDER BY feedid LIMIT $limit");
+		$limit = intval($this->input('limit'));
+		$delete = $this->input('delete');
+		$feedlist = $this->db->fetch_all("SELECT * FROM ".UC_DBTABLEPRE."feeds ORDER BY feedid DESC LIMIT $limit");
 		if($feedlist) {
-			foreach($feedlist as $key=>$feed) {
+			$maxfeedid = $feedlist[0]['feedid'];
+			foreach($feedlist as $key => $feed) {
 				$feed['body_data'] = $_ENV['misc']->string2array($feed['body_data']);
 				$feed['title_data'] = $_ENV['misc']->string2array($feed['title_data']);
 				$feedlist[$key] = $feed;
 			}
 		}
+		//note 删除过期的feed
 		if(!empty($feedlist)) {
-			$maxfeed = array_pop($feedlist);
-			$maxfeedid = $maxfeed['feedid'];
-			$feedlist = array_merge($feedlist, array($maxfeed));
-			$this->_delete(0, $maxfeedid);
+			if(!isset($delete) || $delete) {
+				$this->_delete(0, $maxfeedid);
+			}
 		}
 		return $feedlist;
 	}

@@ -1,0 +1,55 @@
+/*********************************/
+/*                               */
+/*  此样式为用户可自定义样式表   */
+/*                               */
+/*********************************/
+/*修改全局定义属性*/
+body{ color:#333; background:#000;}
+/*区块定义*/
+#head,#main,#foot,#top{background:#fff; border:5px solid #fff;}
+/*头部定义*/
+#top{ height:50px; line-height:50px; background:url(../images/bg_1.jpg) left -50px repeat-x;}
+#top h1{background:url(../images/bg_1.jpg) 0 0 no-repeat; clear:left; padding-left:30px;}
+#top span{background:url(../images/bg_1.jpg) right -100px no-repeat; padding-right:10px;}
+/*导航menu样式*/
+#menu{ background:url(../images/bg_1.gif) left -66px repeat-x; border:1px solid #87CCF1;}
+#menu li{float:left;}
+#menu a{font-size:14px; width:100px; text-align:center; color:#2B89C1;}
+#menu a:hover{ background:#fff; border:1px solid #87CCF1; border-width:0 1px; width:98px; font-weight:bold;}
+/*h3标题*/
+#left h3,#right h3{background:#d9effa; border:1px solid #87CCF1; border-bottom-width:0; color:#2B89C1;}
+/*底部定义*/
+#foot{ background:#f4f4f4;border-top:1px solid #87CCF1;line-height:30px;}
+/*边框*/
+.hot_nav,.box{border:1px solid #87CCF1; border-top-width:0; background:#fff;}
+#content{ border:1px solid #87CCF1;}
+/*左边文字列表*/
+.box ul{padding-left:6px;}
+.box ul li a:link{color:#333;}
+.box ul li a:visited{color:#333;}
+.box ul li a:hover{color:#1192df; text-decoration:underline;}
+/*热点导航*/
+.hot_nav{padding:2px 0;margin-bottom:10px;}
+.hot_nav ul{margin:0;padding:0;width:100%;}
+.hot_nav li{text-indent:10px;width:100%;}
+.hot_nav li a{display:block;height:25px;line-height:25px;}
+.hot_nav li a:hover{background:url(../images/hot_nav_hover_bg.gif) no-repeat;height:25px;width:198px;}
+/*当前位置定义*/
+#position{border:1px solid #87CCF1;}
+#position a{}
+/*公司简介图文混排定义*/
+#info{zoom:1; overflow:hidden;}
+#info img{ float:left; margin-right:20px;}
+#info p{ clear:right; text-indent:24px; line-height:24px;}
+/*文字列表日期*/
+.txt_list li span{float:right;color:#999999;font-size:12px;}
+
+/*图片列表*/
+.pic_list{ padding:5px 0 10px 0px;}
+.pic_list li{ width:100px;padding-right:11px;*padding-right:15px;margin:0 3px 0 0;_margin:0;line-height:20px;float:none;display:inline;display: -moz-inline-stack;/*FF2--FF私有属性*/
+display: inline-block;/*FF3*//*IE*/zoom: 1; /*MS haslayout*/*display: inline;vertical-align:top}
+.pic_list li img{ padding:1px; border:1px solid #ccc; display:block; margin-bottom:3px;}
+.pic_list li a:hover img{border:1px solid #9fd3ff;}
+.pic_list li strong{display:block;}
+/*内容页发布日期*/
+#content h2 span {color:#999999;font-size:12px;}

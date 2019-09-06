@@ -1,74 +1,50 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2008 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: db.class.php 12126 2008-01-11 09:40:32Z heyond $
+	$Id: xml.class.php 846 2008-12-08 05:37:05Z zhaoxiongfei $
 */
 
-function xml_unserialize(&$xml) {
-	$xml_parser = new XML();
+function xml_unserialize(&$xml, $isnormal = FALSE) {
+	$xml_parser = new XML($isnormal);
 	$data = $xml_parser->parse($xml);
 	$xml_parser->destruct();
-	$arr = xml_format_array($data);
-	return $arr['root'];
+	return $data;
 }
 
-function xml_serialize(&$data, $htmlon = 0, $level = 1) {
+function xml_serialize($arr, $htmlon = FALSE, $isnormal = FALSE, $level = 1) {
+	$s = $level == 1 ? "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\r\n<root>\r\n" : '';
 	$space = str_repeat("\t", $level);
-	$cdatahead = $htmlon ? '<![CDATA[' : '';
-	$cdatafoot = $htmlon ? ']]>' : '';
-	$s = '';
-	if(!empty($data)) {
-		foreach($data as $key=>$val) {
-			if(!is_array($val)) {
-				$val = "$cdatahead$val$cdatafoot";
-				if(is_numeric($key)) {
-					$s .=  "$space<item_$key>$val</item_$key>";
-				} elseif($key === '') {
-					$s .= '';
-				} else {
-					$s .= "$space<$key>$val</$key>";
-				}
-			} else {
-				if(is_numeric($key)) {
-					$s .=  "$space<item_$key>".xml_serialize($val, $htmlon, $level+1)."$space</item_$key>";
-				} elseif($key === '') {
-					$s .= '';
-				} else {
-					$s .= "$space<$key>".xml_serialize($val, $htmlon, $level+1)."$space</$key>";
-				}
-			}
+	foreach($arr as $k => $v) {
+		if(!is_array($v)) {
+			$s .= $space."<item id=\"$k\">".($htmlon ? '<![CDATA[' : '').$v.($htmlon ? ']]>' : '')."</item>\r\n";
+		} else {
+			$s .= $space."<item id=\"$k\">\r\n".xml_serialize($v, $htmlon, $isnormal, $level + 1).$space."</item>\r\n";
 		}
 	}
 	$s = preg_replace("/([\x01-\x09\x0b-\x0c\x0e-\x1f])+/", ' ', $s);
-	return ($level == 1 ? "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><root>" : '').$s.($level == 1 ? '</root>' : '');
-}
-
-function xml_format_array($arr, $level = 0) {
-	foreach((array)$arr as $key=>$val) {
-		if(is_array($val)) {
-			$val = xml_format_array($val, $level + 1);
-		}
-		if(is_string($key) && strpos($key, 'item_') === 0) {
-			$arr[intval(substr($key, 5))] = $val;
-			unset($arr[$key]);
-		} else {
-			$arr[$key] = $val;
-		}
-	}
-	return $arr;
+	return $level == 1 ? $s."</root>" : $s;
 }
 
 class XML {
+
 	var $parser;
 	var $document;
-	var $parent;
 	var $stack;
+	var $data;
 	var $last_opened_tag;
+	var $isnormal;
+	var $attrs = array();
+	var $failed = FALSE;
 
-	function XML() {
+	function __construct($isnormal) {
+		$this->XML($isnormal);
+	}
+
+	function XML($isnormal) {
+		$this->isnormal = $isnormal;
 		$this->parser = xml_parser_create('ISO-8859-1');
 		xml_parser_set_option($this->parser, XML_OPTION_CASE_FOLDING, false);
 		xml_set_object($this->parser, $this);
@@ -83,54 +59,48 @@ class XML {
 	function parse(&$data) {
 		$this->document = array();
 		$this->stack	= array();
-		$this->parent   = &$this->document;
-		return xml_parse($this->parser, $data, true) ? $this->document : NULL;
+		return xml_parse($this->parser, $data, true) && !$this->failed ? $this->document : '';
 	}
 
 	function open(&$parser, $tag, $attributes) {
-		$this->data = '';
-		$this->last_opened_tag = $tag;
-		if(is_array($this->parent) and array_key_exists($tag,$this->parent)) {
-			if(is_array($this->parent[$tag]) and array_key_exists(0,$this->parent[$tag])) {
-				$key = count_numeric_items($this->parent[$tag]);
-			}else{
-				if(array_key_exists($tag.'_attr',$this->parent)) {
-					$arr = array('0_attr'=>&$this->parent[$tag.'_attr'], &$this->parent[$tag]);
-					unset($this->parent[$tag.'_attr']);
-				} else {
-					$arr = array(&$this->parent[$tag]);
-				}
-				$this->parent[$tag] = &$arr;
-				$key = 1;
+		$this->failed = FALSE;
+		if(!$this->isnormal) {
+			if(isset($attributes['id']) && !is_string($this->document[$attributes['id']])) {
+				$this->document  = &$this->document[$attributes['id']];
+			} else {
+				$this->failed = TRUE;
 			}
-			$this->parent = &$this->parent[$tag];
 		} else {
-			$key = $tag;
+			if(!is_string($this->document[$tag])) {
+				$this->document  = &$this->document[$tag];
+			} else {
+				$this->failed = TRUE;
+			}
 		}
-		if($attributes) {
-			$this->parent[$key.'_attr'] = $attributes;
-		}
-		$this->parent  = &$this->parent[$key];
-		$this->stack[] = &$this->parent;
+		$this->stack[] = &$this->document;
+		$this->last_opened_tag = $tag;
+		$this->attrs = $attributes;
 	}
 
 	function data(&$parser, $data) {
-		if($this->last_opened_tag != NULL)
-			$this->data .= $data;
+		if($this->last_opened_tag != NULL) {
+			$this->data = $data;
+		} else {
+			$this->data = '';
+		}
 	}
 
 	function close(&$parser, $tag) {
 		if($this->last_opened_tag == $tag) {
-			$this->parent = $this->data;
+			$this->document = $this->data;
 			$this->last_opened_tag = NULL;
 		}
 		array_pop($this->stack);
-		if($this->stack) $this->parent = &$this->stack[count($this->stack)-1];
+		if($this->stack) {
+			$this->document = &$this->stack[count($this->stack)-1];
+		}
 	}
-}
 
-function count_numeric_items(&$array) {
-	return is_array($array) ? count(array_filter(array_keys($array), 'is_numeric')) : 0;
 }
 
 ?>

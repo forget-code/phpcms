@@ -21,6 +21,10 @@
   <form name="myform" method="post" action="{$M['url']}post.php" onSubmit="return check()">
     <table cellspacing="3" cellpadding="3" class="table_form">
       <tbody>
+		<tr>
+			<th>&nbsp;头像选择：</th>
+			<td colspan="2">{$face}</td>
+		</tr>
         <tr>
           <th><font color="red">*</font>&nbsp;姓　名：</th>
           <td colspan="2"><input name="guestbook[username]" type="text" size="25" value="{$_username}" require="true" datatype="require" msg="<font color='red'>姓名不能为空</font>"></td>

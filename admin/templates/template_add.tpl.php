@@ -2026,7 +2026,7 @@ function get_fields(val)
 			if(data)
 			{
 				$.each(data,function(i,n){
-					var str = '<tr><td>'+(n.nickname ? n.nickname : n.field)+'</td><td>'+n.type+(n.num ? '('+n.num+')' : '')+'</td><td class="align_c"><input type="checkbox" value="'+n.field+'" id="checkbox_'+n.field+'" style="border:0px"></td><td class="align_c"><select name="func" d="'+n.field+'"><option value="="';
+					var str = '<tr><td>'+(n.nickname ? n.nickname+' ('+n.field+')' : n.field)+'</td><td>'+n.type+(n.num ? '('+n.num+')' : '')+'</td><td class="align_c"><input type="checkbox" value="'+n.field+'" id="checkbox_'+n.field+'" style="border:0px"></td><td class="align_c"><select name="func" d="'+n.field+'"><option value="="';
 					if($.inArray(n.type,types)>=0){str += ' selected';}
 					str += '>=</option><option value=">">></option><option value=">=">>=</option> <option value="<"><</option><option value="<="><=</option><option value="!=">!=</option><option value="LIKE"';
 					if($.inArray(n.type,types)<0){str += ' selected';}

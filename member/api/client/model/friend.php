@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2008 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: friend.php 12126 2008-01-11 09:40:32Z heyond $
+	$Id: friend.php 773 2008-11-26 08:45:08Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -13,6 +13,10 @@ class friendmodel {
 
 	var $db;
 	var $base;
+
+	function __construct(&$base) {
+		$this->friendmodel($base);
+	}
 
 	function friendmodel(&$base) {
 		$this->base = $base;
@@ -77,6 +81,25 @@ class friendmodel {
 			return $data;
 		} else {
 			return array();
+		}
+	}
+
+	function is_friend($uid, $friendids, $direction = 0) {
+		$friendid_str = implode("', '", $friendids);
+		$sqladd = '';
+		if($direction == 0) {
+			$sqladd = "uid='$uid'";
+		} elseif($direction == 1) {
+			$sqladd = "uid='$uid' AND friendid IN ('$friendid_str') AND direction='1'";
+		} elseif($direction == 2) {
+			$sqladd = "friendid='$uid' AND uid IN ('$friendid_str') AND direction='1'";
+		} elseif($direction == 3) {
+			$sqladd = "uid='$uid' AND friendid IN ('$friendid_str') AND direction='3'";
+		}
+		if($this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."friends WHERE $sqladd") == count($friendids)) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 }

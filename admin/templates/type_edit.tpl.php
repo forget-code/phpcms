@@ -7,6 +7,10 @@ include admin_tpl('header');
 <table cellpadding="0" cellspacing="1" class="table_form">
     <caption>修改类别</caption>
 	<tr> 
+      <th><strong>所属模型</strong></th>
+      <td><?=$models?> </td>
+    </tr>
+	<tr> 
       <th><strong>类别名称</strong></th>
       <td><input type="text" name="info[name]" value="<?=$name?>" size="30"> <?=form::style('info[style]', $style)?> <font color="red">*</font></td>
     </tr>

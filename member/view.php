@@ -16,6 +16,14 @@ if(!class_exists('member_output'))
 $data = $member->get_model_info($userid, $modelid);
 $member_output = new member_output($modelid, $userid);
 $forminfos = $member_output->get($data);
+if($userid != $_userid)
+{
+	$models = cache_read($modelid.'_fields.inc.php', CACHE_MODEL_PATH);
+	foreach($forminfos as $f)
+	{
+		if($models[$f]['isshow']!=1) unset($forminfos[$f]);
+	}
+}
 $avatar = avatar($userid);
 if($regtime) $regtime = date('Y-m-d H:m:i', $regtime);
 if($lastlogintime) $lastlogintime = date('Y-m-d H:m:i', $lastlogintime);

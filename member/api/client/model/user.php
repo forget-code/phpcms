@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2008 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: user.php 12126 2008-01-11 09:40:32Z heyond $
+	$Id: user.php 878 2008-12-15 03:27:41Z zhaoxiongfei $
 */
 
 !defined('IN_UC') && exit('Access Denied');
@@ -13,6 +13,10 @@ class usermodel {
 
 	var $db;
 	var $base;
+
+	function __construct(&$base) {
+		$this->usermodel($base);
+	}
 
 	function usermodel(&$base) {
 		$this->base = $base;
@@ -40,16 +44,16 @@ class usermodel {
 	}
 
 	function check_mergeuser($username) {
-		$data = $this->db->result_first("SELECT count(*) FROM ".UC_DBTABLEPRE."mergemembers WHERE appid='".UC_APPID."' AND username='$username'");
+		$data = $this->db->result_first("SELECT count(*) FROM ".UC_DBTABLEPRE."mergemembers WHERE appid='".$this->base->app['appid']."' AND username='$username'");
 		return $data;
 	}
 
 	function check_usernamecensor($username) {
-		$_CACHE = $this->base->cache('badwords');
+		$_CACHE['badwords'] = $this->base->cache('badwords');
 		$censorusername = $this->base->get_setting('censorusername');
 		$censorusername = $censorusername['censorusername'];
 		$censorexp = '/^('.str_replace(array('\\*', "\r\n", ' '), array('.*', '|', ''), preg_quote(($censorusername = trim($censorusername)), '/')).')$/i';
-		$usernamereplaced = $_CACHE['badwords']['findpattern'] ? @preg_replace($_CACHE['badwords']['findpattern'], $_CACHE['badwords']['replace'], $username) : $username;
+		$usernamereplaced = isset($_CACHE['badwords']['findpattern']) && !empty($_CACHE['badwords']['findpattern']) ? @preg_replace($_CACHE['badwords']['findpattern'], $_CACHE['badwords']['replace'], $username) : $username;
 		if(($usernamereplaced != $username) || ($censorusername && preg_match($censorexp, $username))) {
 			return FALSE;
 		} else {
@@ -83,8 +87,9 @@ class usermodel {
 		}
 	}
 
-	function check_emailexists($email) {
-		$email = $this->db->result_first("SELECT email FROM  ".UC_DBTABLEPRE."members WHERE email='$email'");
+	function check_emailexists($email, $username = '') {
+		$sqladd = $username !== '' ? "AND username<>'$username'" : '';
+		$email = $this->db->result_first("SELECT email FROM  ".UC_DBTABLEPRE."members WHERE email='$email' $sqladd");
 		return $email;
 	}
 
@@ -98,18 +103,18 @@ class usermodel {
 		return $user['uid'];
 	}
 
-	function add_user($username, $password, $email, $uid = 0) {
+	function add_user($username, $password, $email, $uid = 0, $questionid = '', $answer = '') {
 		$salt = substr(uniqid(rand()), -6);
 		$password = md5(md5($password).$salt);
-		$sqladd = $uid ? 'uid=\''.intval($uid).'\',' : '';
-		//$appid = UC_APPID;
+		$sqladd = $uid ? "uid='".intval($uid)."'," : '';
+		$sqladd .= $questionid > 0 ? " secques='".$this->quescrypt($questionid, $answer)."'," : " secques='',";
 		$this->db->query("INSERT INTO ".UC_DBTABLEPRE."members SET $sqladd username='$username', password='$password', email='$email', regip='".$this->base->onlineip."', regdate='".$this->base->time."', salt='$salt'");
 		$uid = $this->db->insert_id();
 		$this->db->query("INSERT INTO ".UC_DBTABLEPRE."memberfields SET uid='$uid'");
 		return $uid;
 	}
 
-	function edit_user($username, $oldpw, $newpw, $email, $ignoreoldpw = 0) {
+	function edit_user($username, $oldpw, $newpw, $email, $ignoreoldpw = 0, $questionid = '', $answer = '') {
 		$data = $this->db->fetch_first("SELECT username, uid, password, salt FROM ".UC_DBTABLEPRE."members WHERE username='$username'");
 
 		if($ignoreoldpw) {
@@ -125,6 +130,13 @@ class usermodel {
 
 		$sqladd = $newpw ? "password='".md5(md5($newpw).$data['salt'])."'" : '';
 		$sqladd .= $email ? ($sqladd ? ',' : '')." email='$email'" : '';
+		if($questionid !== '') {
+			if($questionid > 0) {
+				$sqladd .= ($sqladd ? ',' : '')." secques='".$this->quescrypt($questionid, $answer)."'";
+			} else {
+				$sqladd .= ($sqladd ? ',' : '')." secques=''";
+			}
+		}
 		if($sqladd || $emailadd) {
 			$this->db->query("UPDATE ".UC_DBTABLEPRE."members SET $sqladd WHERE username='$username'");
 			return $this->db->affected_rows();
@@ -136,6 +148,7 @@ class usermodel {
 	function delete_user($uidsarr) {
 		$uidsarr = (array)$uidsarr;
 		$uids = $this->base->implode($uidsarr);
+		//note 保护用户
 		$arr = $this->db->fetch_all("SELECT uid FROM ".UC_DBTABLEPRE."protectedmembers WHERE uid IN ($uids)");
 		$puids = array();
 		foreach((array)$arr as $member) {
@@ -145,6 +158,9 @@ class usermodel {
 		if($uids) {
 			$this->db->query("DELETE FROM ".UC_DBTABLEPRE."members WHERE uid IN($uids)");
 			$this->db->query("DELETE FROM ".UC_DBTABLEPRE."memberfields WHERE uid IN($uids)");
+			//note 删除用户头像 注意:此处client 和server 不同
+			uc_user_deleteavatar($uidsarr);
+			//note 加到通知队列
 			$this->base->load('note');
 			$_ENV['note']->add('deleteuser', "ids=$uids");
 			return $this->db->affected_rows();
@@ -154,7 +170,7 @@ class usermodel {
 	}
 
 	function get_total_num($sqladd = '') {
-     		$data = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."members $sqladd");
+		$data = $this->db->result_first("SELECT COUNT(*) FROM ".UC_DBTABLEPRE."members $sqladd");
 		return $data;
 	}
 
@@ -173,6 +189,10 @@ class usermodel {
 			$arr[] = $user['uid'];
 		}
 		return $arr;
+	}
+
+	function quescrypt($questionid, $answer) {
+		return $questionid > 0 && $answer != '' ? substr(md5($answer.md5($questionid)), 16, 8) : '';
 	}
 
 }

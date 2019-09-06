@@ -41,7 +41,7 @@ include admin_tpl('header');
     </tr>
 	<tr>
       <th><strong>专题页文件名</strong></th>
-      <td><input type="text" name="info[filename]" id="filename" value="<?=$filename?>" size="25" regexp="^[a-z0-9_]+$" require="true" datatype="limit|custom" min="1" max="50"  msg="字符长度范围必须为1到50位|只能为数字、和字母，下划线" msgid="msgid4"> <font color="#ff0000">.<?=$PHPCMS['fileext']?></font><span id="msgid4"></span></td>
+      <td><input type="text" name="info[filename]" id="filename" value="<?=$filename?>" size="25" regexp="^[a-z0-9_]+$" require="true" datatype="limit|ajax" min="1" max="50" url="?mod=<?=$mod?>&file=<?=$file?>&action=checkname&specialid=<?=$specialid?>" msg="字符长度范围必须为1到50位|" msgid="msgid4"> <font color="#ff0000">.<?=$PHPCMS['fileext']?></font><span id="msgid4"></span></td>
     </tr>
 	<tr> 
       <th><strong>管理权限</strong></th>

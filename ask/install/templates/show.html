@@ -84,9 +84,9 @@
         <ul>
           <li><span id="answermessage{$info[pid]}">{$info[message]}</span></li>
           <li>
-		{if $status==3 && $userid==$_userid && $flag==0}
+		{if $status==3 && $userid==$_userid}
 			<input type="submit" value="采纳答案" onclick="redirect('{$M[url]}query.php?action=accept_answer&id={$id}&pid={$info[pid]}');"/>
-		{elseif $status==3 && $_userid==$info[userid] && $flag==0}
+		{elseif $status==3 && $_userid==$info[userid]}
 <input type="button" value="修复答案" onclick="show_edit_answer(0,{$info[pid]})" id="button_edit"/>
 <div id="edit_answer" style="display:none">
 <p>

@@ -14,7 +14,7 @@ include admin_tpl('header');
 <tr>
 <td class="align_c">
 <?php 
-if($model_field->exists('typeid')) echo form::select_type('phpcms', 'typeid','typeid','类别', $typeid);
+if($model_field->exists('typeid')) echo form::select_type('phpcms', 'typeid','typeid','类别', $typeid, '', $modelid);
 ?>
 
 <?php if($model_field->exists('areaid')){ ?>
@@ -45,7 +45,7 @@ areaid_load(0);
 <option value='contentid' <?=$field == 'contentid' ? 'selected' : ''?> >ID</option>
 </select>
 <input type="text" name="q" value="<?=$q?>" size="20" />&nbsp;
-发布时间：<?=form::date('inputdate_start', $inputdate_start)?> - <?=form::date('inputdate_end', $inputdate_end)?>&nbsp;
+发布时间：<?=form::date('inputdate_start')?> - <?=form::date('inputdate_end')?>&nbsp;
 <input type="submit" name="dosubmit" value=" 查询 " />
 </td>
 </tr>
@@ -73,8 +73,8 @@ if(is_array($infos)){
 <td><input type="checkbox" name="contentid[]" value="<?=$info['contentid']?>" id="content_<?=$info['contentid']?>" /></td>
 <td class="align_c"><input type="text" name="listorders[<?=$info['contentid']?>]" value="<?=$info['listorder']?>" size="4" /></td>
 <td><?=$info['contentid']?></td>
-<td><a href="<?=$info['url']?>" target="_blank"><?=output::style($info['title'], $info['style'])?></a> <?=$info['thumb'] ? '<font color="red">图</font>' : ''?>&nbsp;<?=$info['posids']?'<font color="green">荐</font>': ''?></td>
-<td class="align_c" title="总点击量：<?=$r['hits']?><?="\n"?>今日点击：<?=$r['hits_day']?><?="\n"?>本周点击：<?=$r['hits_week']?><?="\n"?>本月点击：<?=$r['hits_month']?>"><?=$r['hits']?></td>
+<td><a href="<?=$info['url']?>" target="_blank"><?=output::style($info['title'], $info['style'])?></a> <?=$info['thumb'] ? '<font color="red">图</font>' : ''?>&nbsp;<?=$info['posids']?'<font color="green">荐</font>': ''?>&nbsp;<?=$info['typeid']?'<font color="blue">类</font>': ''?></td>
+<td class="align_c" title="总点击量：<?=$r['hits']?>&#10;今日点击：<?=$r['hits_day']?>&#10;本周点击：<?=$r['hits_week']?>&#10;本月点击：<?=$r['hits_month']?>"><?=$r['hits']?></td>
 <td class="align_c"><a href="?mod=member&file=member&action=view&userid=<?=$info['userid']?>"><?=$info['username']?></td>
 <td class="align_c"><?=date('Y-m-d H:i', $info['updatetime'])?></td>
 <td class="align_c">
@@ -93,7 +93,7 @@ if(is_array($infos)){
 <span style="width:60px"><a href="###" onclick="javascript:$('input[type=checkbox]').attr('checked', true)">全选</a>/<a href="###" onclick="javascript:$('input[type=checkbox]').attr('checked', false)">取消</a></span>
 		<input type="button" name="listorder" value=" 排序 " onclick="myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=listorder&catid=<?=$catid?>&processid=<?=$processid?>&forward=<?=urlencode(URL)?>';myform.submit();"> 
 		<input type="button" name="delete" value=" 删除 " onclick="myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=cancel&catid=<?=$catid?>&processid=<?=$processid?>&forward=<?=urlencode(URL)?>';myform.submit();"> 
-		<input type="button" name="move" value=" 批量移动 " onclick="myform.action='?mod=<?=$mod?>&file=content_all&action=move&catid=<?=$catid?>&processid=<?=$processid?>&forward=<?=urlencode(URL)?>';myform.submit();"> 
+		<input type="button" name="move" value=" 批量移动 " onclick="myform.action='?mod=<?=$mod?>&file=content_all&action=move&catid=<?=$catid?>&processid=<?=$processid?>&forward=<?=urlencode(URL)?>';myform.submit();"> <?php if(array_key_exists('posids', $model_field->fields) && !check_in($_roleid, $model_field->fields['posids']['unsetroleids'])) {?>批量添加至推荐位：<?=form::select($POS, 'posid', 'posid', '', '', '', "onchange=\"myform.action='?mod={$mod}&file={$file}&action=posid&catid={$catid}&processid={$processid}';myform.submit();\"")?> <?php } ?> <?php if(array_key_exists('typeid', $model_field->fields) && !check_in($_roleid, $model_field->fields['typeid']['unsetroleids'])) {?>批量添加至类别：<?=form::select_type('phpcms', 'typeid', '', '请选择', '', "onchange=\"myform.action='?mod={$mod}&file={$file}&action=typeid&catid={$catid}&processid={$processid}';myform.submit();\"", $modelid)?> <?php }?>
 </div>
 <div id="pages"><?=$c->pages?></div>
 </form>

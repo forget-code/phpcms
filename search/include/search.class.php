@@ -50,6 +50,7 @@ class search
 	function add($title, $content, $url)
 	{
 		$data = $this->segment($title.$content);
+		$data = $title.' '.$data;
 		$data = $this->db->escape($data);
 		$this->db->query("INSERT INTO `$this->table`(`type`, `data`) VALUES('$this->type', '$data')");
 		$searchid = $this->db->insert_id();
@@ -60,9 +61,10 @@ class search
 	function update($searchid, $title, $content, $url)
 	{
 		$data = $this->segment($title.$content);
+		$data = $title.' '.$data;
 		$data = $this->db->escape($data);
 		$this->db->query("UPDATE `$this->table` SET `type`='$this->type',`data`='$data' WHERE `searchid`='$searchid'");
-		if($this->db->affected_rows() == 0) return false;
+		//if($this->db->affected_rows() == 0) return false;
 		$this->set_data($searchid, array('title'=>$title, 'content'=>$content, 'url'=>$url));
 		return true;
 	}
@@ -103,7 +105,13 @@ class search
 			}
 			else
 			{
+				$tag = '\''.$q.'\'';
 				if(strlen($q) > 4) $q = $this->segment($q);
+				foreach(explode(' ', $q) as $a)
+				{
+					$tag .= ',\''.$a.'\'';
+				}
+				$this->db->query("UPDATE `".DB_PRE."keyword` SET `hits`=`hits`+1 WHERE `tag` IN ($tag)");
 				$where = " MATCH(`data`) AGAINST('$q') ";
 			}
 		}

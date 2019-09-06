@@ -60,12 +60,23 @@ class priv_role
 
 	function module()
 	{
-		global $mod, $file, $action, $MODULE, $catid;
+		global $mod, $file, $action, $MODULE, $catid, $contentid;
 		if($this->issuperadmin || ($this->ischiefeditor && (in_array($file,array('content','category','block','position','html','url','content_all')) || $mod == 'special')) || ($this->isdesigner && ($file == 'template' || $file == 'tag'))) return true;
 		$privs = cache_read('priv.inc.php', PHPCMS_ROOT.$MODULE[$mod]['path'].'include/');
 		if(!$privs) return true;
 		if($this->check('module', $mod, 'all')) return true;
 		if($catid && $this->check('catid', $catid, $action)) return true;
+		if($action=='inspect' && $file=='content_all') return true;
+		if($contentid)
+		{
+			require_once 'admin/content.class.php';
+			$c = new content();
+			$r = $c->get($contentid);
+			if($r['status']>2 && $r['status']<99 && $this->check('catid', $catid, 'check'))
+			{
+				return true;
+			}
+		}
 
 		$publish_files = cache_read('publish_priv.inc.php', PHPCMS_ROOT.'include/');	
 		if(in_array($file,array_keys($publish_files)) && ($publish_files[$file]=='' || in_array($action,$publish_files[$file]))) return true;

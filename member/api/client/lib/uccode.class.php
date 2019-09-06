@@ -1,10 +1,10 @@
 <?php
 
 /*
-	[UCenter] (C)2001-2008 Comsenz Inc.
+	[UCenter] (C)2001-2009 Comsenz Inc.
 	This is NOT a freeware, use is subject to license terms
 
-	$Id: uccode.class.php 12126 2008-01-11 09:40:32Z heyond $
+	$Id: uccode.class.php 753 2008-11-14 06:48:25Z cnteacher $
 */
 
 class uccode {
@@ -68,7 +68,7 @@ class uccode {
 				"/\[img\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies",
 				"/\[img=(\d{1,4})[x|\,](\d{1,4})\]\s*([^\[\<\r\n]+?)\s*\[\/img\]/ies"
 			), array(
-				"\$this->bbcodeurl('\\1', '<img src=\"%s\" border=\"0\" onclick=\"zoom(this, this.src)\" onload=\"attachimg(this, \'load\')\" alt=\"\" />')",
+				"\$this->bbcodeurl('\\1', '<img src=\"%s\" border=\"0\" alt=\"\" />')",
 				"\$this->bbcodeurl('\\3', '<img width=\"\\1\" height=\"\\2\" src=\"%s\" border=\"0\" alt=\"\" />')"
 			), $message);
 		}

@@ -39,7 +39,7 @@ $().ready(function() {
 <input name="module" type="hidden" value="<?=$module?>">
 <input name="type" type="hidden" value="<?=$type?>">
 <input type="hidden" name="isadd" value="1">
-<input name="forward" type="hidden" value="<?=$forward?>">
+<input name="forward" type="hidden" value="?mod=phpcms&file=tag&action=manage&module=<?=$module?>&type=<?=$type?>">
 <table cellpadding="0" cellspacing="1" class="table_form">
     <caption>添加<?=$types[$type]?>标签</caption>
     <tr>

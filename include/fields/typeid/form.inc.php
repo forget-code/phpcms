@@ -2,5 +2,5 @@
 	{
 		extract($fieldinfo);
 		if(!$value) $value = $defaultvalue;
-		return form::select_type('phpcms', 'info['.$field.']', $field, '请选择', $value, '');
+		return form::select_type('phpcms', 'info['.$field.']', $field, '请选择', $value, '', $this->modelid);
 	}

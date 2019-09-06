@@ -48,7 +48,10 @@
       <script type="text/javascript" src="data/moodrank/1.js"></script>
       {/if}
       {if isset($MODULE[digg])}
-      {template 'digg','show'}
+	  <div id="digg_div"></div>
+	  <script  type="text/javascript">var contentid = {$contentid}; var catid = {$r['catid']}</script>
+	  <script type="text/javascript" id="calldigg_js"></script>
+      <script type="text/javascript" src="{$MODULE[digg][url]}digg.php?contentid={$contentid}&catid={$r[catid]}"></script>
       {/if}
 	<div class="clear"></div>
     <div class="box" style="margin-top:1%;">
@@ -73,7 +76,7 @@
       <p id="text_1" style="margin-top:1%;">
         {if isset($MODULE[error_report])}<a href="javascript:$('#errors').submit();">[错误报告]</a>{/if} 
         {if isset($MODULE[mail])}<a href="javascript:$('#sendmail').submit();">[推荐]</a>{/if} 
-        <a href="javascript:myAddPanel('{$title}',window.location.href)">[收藏]</a>
+        <a href="member/collect.php?contentid={$contentid}&action=add">[收藏]</a>
         <a href="javascript:window.print();">[打印]</a> <a href="javascript:window.close();">[关闭]</a> 
         <a href="{SITE_URL}{$url}#top">[返回顶部]</a> </p>
 
@@ -93,7 +96,7 @@
             <textarea cols="100" rows="8" name="comment" id="comment" onfocus="reply_clearfield()" onblur="reply_restoration()"></textarea>
           </li>
           <li style="text-align:left;margin-left:2%;margin-top:1%;">
-            <span id="checker"></span>
+            <span id="checker"><script type="text/javascript" id="checkcode_id" src="{$MODULE[comment][url]}?action=ajaxcheckcode"></script></span>
             <input id="dosubmit" name="dosubmit" type="submit" value="发表评论" />
           </li>
         </ul>
@@ -126,20 +129,7 @@
             if ($('#comment').val() == "我也来说两句！") 
             {
                 $('#comment').val("");   
-            }            
-            $.ajax({
-                 type: "POST",
-                 url: "{$MODULE[comment][url]}?action=ajaxcheckcode",
-                 data:   "",
-                 dataType: "html",
-                 success: function(msg)
-                 {
-                    if(msg)
-                    {
-                        $('#checker').html("验证码："+msg+"&nbsp;");
-                    }                    
-                 } 
-             });
+            }
         }
         function checkForm()
         {

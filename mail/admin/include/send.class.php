@@ -21,7 +21,7 @@ class send
 
     function send_many($num = '',$MultiEmail = array(), $title, $content, $fromemail)
 	{
-		$maxnum = !empty($maxnum) ? intval($maxnum) : 10;
+		$maxnum = !empty($num) ? intval($num) : 10;
 		$MultiEmail = str_replace("\r", "", $MultiEmail);
 		$MultiEmail = str_replace("\n", ",", $MultiEmail);
 		$MultiEmail = explode(",", $MultiEmail);
@@ -35,7 +35,8 @@ class send
 			}
 		}
 		$temp_mail = implode(',', $toemail);
-        return $this->mail->send($temp_mail, stripslashes($title), stripslashes($content), $fromemail);
+		$result = $this->mail->send($temp_mail, stripslashes($title), stripslashes($content), $fromemail);
+        return $result;
 	}
 
     function send_file($file, $start)

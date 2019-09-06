@@ -22,7 +22,7 @@ switch($action)
 		if($dosubmit)
 		{
 			if(!$member->add($info)) showmessage($member->msg());
-			showmessage('添加成功', $forward);
+			showmessage('添加成功', '?mod=member&file=member&action=manage');
 		}
 		else
 		{
@@ -55,6 +55,11 @@ switch($action)
 				$member_update = new member_update($info['modelid'], $info['userid']);
     			$member_update->update($modelinfo);
 				$member->edit_model($info['modelid'], $modelinfo);
+			}
+			if($MODEL[$info['modelid']]['tablename'] == 'company')
+			{
+				$endtime = strtotime($endtime);
+				$db->query("UPDATE ".DB_PRE."member_company SET `endtime`='$endtime' WHERE `userid`='$userid'");
 			}
 			showmessage($LANG['operation_success'], $forward);
 		}
@@ -139,7 +144,7 @@ switch($action)
 			showmessage('非法操作', $forward);
 		}
 		$member->delete($userid);
-		showmessage($LANG['operation_success'], $forward);
+		showmessage($LANG['operation_success'], '?mod=member&file=member&action=manage');
 
 		break;
 

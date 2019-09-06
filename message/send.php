@@ -15,6 +15,7 @@ switch($action)
 		{
 			$userid = $member->get_userid($username);
 			if(!$userid) exit($username.'会员不存在');
+			if($userid==$_userid) exit('不能给本人发短消息！');
 			$result = $member->get($userid, 'disabled');
 			if($result['disabled']) exit($username.'已经被禁用');
 		}
@@ -23,6 +24,7 @@ switch($action)
 	default:
 		if($dosubmit)
 		{
+			checkcode($checkcodestr, 1);
 			$arr_user = explode(',', $msgto);
 			foreach($arr_user as $username)
 			{

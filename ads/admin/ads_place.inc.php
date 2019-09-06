@@ -18,7 +18,6 @@ $adsplace = new ads_place();
 switch($action)
 {
 	case 'manage':
-        //error_reporting(E_ALL);
         $condition = array();
         if($passed >=0 && isset($passed))	$condition[] = "`passed` = '$passed' " ;
         if(trim($field))
@@ -54,7 +53,6 @@ switch($action)
 		}
 		else
 		{
-			if(!$priv_role->check('p_adsid', $placeid, 'input', $roleid)) showmessage($LANG['not_add_rights'], 'goback');
 			$groups = $GROUP;
 			$roles = $ROLE;
 			unset($GROUP, $ROLE);
@@ -65,7 +63,6 @@ switch($action)
         if($dosubmit)
         {
             $placeid = intval($placeid);
-            if(!$priv_role->check('p_adsid', $placeid, 'manage', $roleid)) showmessage($LANG['not_edit_rights'], 'goback');
             if(!$placeid) showmessage($LANG['illegal_move_parameters']);
             $where = ' `placeid`='.$placeid;
             if(!$adsplace->edit($place, $where)) showmessage($adsplace->msg(), '?mod=ads&file=ads_place');
@@ -106,7 +103,6 @@ switch($action)
         break;
 	case 'view':
         $placeid = intval($placeid);
-        if(!$priv_role->check('p_adsid', $placeid, 'view', $roleid)) showmessage($LANG['not_view_rights'], 'goback');
         if(!$placeid) showmessage($LANG['incorrect_parameters'], 'goback');
         $place = $db->get_one("SELECT * FROM ".DB_PRE."ads_place WHERE placeid=$placeid");
         echo "<SCRIPT LANGUAGE=\"JavaScript\">";
@@ -115,7 +111,6 @@ switch($action)
         break;
     case 'loadjs':
         $placeid = intval($placeid);
-        if(!$priv_role->check('p_adsid', $placeid, 'view', $roleid)) showmessage($LANG['not_view_rights'], 'goback');
         if(!$placeid) showmessage($LANG['incorrect_parameters'], 'goback');
         $loadadsplace = $db->get_one("SELECT * FROM ".DB_PRE."ads_place WHERE placeid=$placeid");
         if(!$loadadsplace) showmessage($LANG['incorrect_parameters']);

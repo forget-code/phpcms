@@ -47,10 +47,10 @@ include admin_tpl('header');
 <input name="forward" type="hidden" value="<?=$forward?>">
 <div class="tag_menu" style="width:99%;margin-top:10px;">
 <ul>
-  <li><a href="#" id='TabTitle0' onclick='ShowTabs(0)' class="selected">基本信息</a></li>
-  <li><a href="#" id='TabTitle2' onclick='ShowTabs(2)'>权限设置</a></li>
-  <li><a href="#" id='TabTitle3' onclick='ShowTabs(3)'>收费设置</a></li>
-  <li><a href="#" id='TabTitle4' onclick='ShowTabs(4)'>模板设置</a></li>
+  <li><a href="###" id='TabTitle0' onclick='ShowTabs(0)' class="selected">基本信息</a></li>
+  <li><a href="###" id='TabTitle2' onclick='ShowTabs(2)'>权限设置</a></li>
+  <li><a href="###" id='TabTitle3' onclick='ShowTabs(3)'>收费设置</a></li>
+  <li><a href="###" id='TabTitle4' onclick='ShowTabs(4)'>扩展设置</a></li>
 </ul></div>
 <table cellpadding="2" cellspacing="1" class="table_form">
   <tbody id='Tabs0' style='display:'>
@@ -93,7 +93,6 @@ include admin_tpl('header');
 	  <input type='radio' name='category[ismenu]' value='0'> 否
 	  </td>
     </tr>
-	<?php if($parentid==0) { ?>
     <tr>
       <th><strong>绑定域名：</strong><br>如果不绑定则请不要填写</th>
       <td>
@@ -102,7 +101,6 @@ include admin_tpl('header');
 		<?php } else echo "当前栏目绑定的模型为不生成静态，需要绑定二级域名，<a href='?mod=phpcms&file=model&action=edit&modelid=".$modelid."'>请点击这里设置</a>";?>
       </td>
     </tr>
-    <?php } ?>
     <tr>
       <th><strong>META Title（栏目标题）</strong><br/>针对搜索引擎设置的标题</th>
       <td><input name='setting[meta_title]' type='text' id='meta_title' size='60' maxlength='60'></td>
@@ -197,6 +195,26 @@ include admin_tpl('header');
     <tr>
       <th><strong>打印页模板</strong></th>
       <td><?=form::select_template('phpcms', 'setting[template_print]', 'template_print', $MODEL[$modelid]['template_print'], '','print')?></td>
+    </tr>
+	<tr>
+      <th width='30%'><strong>允许上传附件的类型</strong></th>
+      <td><input type="text" name="setting[upload_allowext]" value='<?=UPLOAD_ALLOWEXT?>' size='40'> </td>
+    </tr> 
+	<tr>
+      <th width='30%'><strong>允许上传文件的大小</strong></th>
+      <td><input type="text" name="setting[upload_maxsize]" value='<?=UPLOAD_MAXSIZE?>' size='15' maxlength='10'> Bytes</td>
+    </tr> 
+	<tr>
+      <th width='30%'><strong>是否启用缩略图</strong></th>
+      <td><label><input type="radio" name="setting[thumb_enable]" value=1 <?php if($PHPCMS['thumb_enable']==1) {?>checked<?php } ?>> 是</label> <label><input type="radio" name="setting[thumb_enable]" value=0 <?php if($PHPCMS['thumb_enable']==0) {?>checked<?php } ?>> 否</label> </td>
+    </tr> 
+	<tr>
+      <th width='30%'><strong>缩略图大小</strong></th>
+      <td><input name='setting[thumb_width]' type='text' id='thumb_width' value='<?=$PHPCMS['thumb_width']?>' size='5' maxlength='5'> X <input name='setting[thumb_height]' type='text' id='thumb_height' value='<?=$PHPCMS['thumb_width']?>' size='5' maxlength='5'> px </td>
+    </tr>
+	<tr>
+      <th width='30%'><strong>是否启用水印</strong></th>
+      <td><label><input type="radio" name="setting[watermark_enable]" value=1 <?php if($PHPCMS['watermark_enable']==1) {?>checked<?php } ?>> 是</label> <label><input type="radio" name="setting[watermark_enable]" value=0 <?php if($PHPCMS['watermark_enable']==0) {?>checked<?php } ?>> 否</label> <span style="color:#ff0000">水印的详细设置遵照网站配置下的附件设置里的设置。如果<a href='?mod=phpcms&file=setting&tab=4'>修改</a>将全站生效。</span></td>
     </tr>
   </tbody>
 </table>

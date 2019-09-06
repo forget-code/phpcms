@@ -36,11 +36,31 @@ class content_form
 			}
 			$func = $v['formtype'];
 			$value = isset($data[$field]) ? htmlspecialchars($data[$field], ENT_QUOTES) : '';
+			if($func=='pages' && isset($data['maxcharperpage']))
+			{
+				$value = $data['paginationtype'].'|'.$data['maxcharperpage'];
+			}
 			$form = $this->$func($field, $value, $v);
 			if($form !== false)
 			{
-				$star = $v['minlength'] || $v['pattern'] ? 1 : 0;
-				$info[$field] = array('name'=>$v['name'], 'tips'=>$v['tips'], 'form'=>$form, 'star'=>$star);
+				if(defined('IN_ADMIN'))
+				{
+					if($v['isbase'])
+					{
+						$star = $v['minlength'] || $v['pattern'] ? 1 : 0;
+						$info['base'][$field] = array('name'=>$v['name'], 'tips'=>$v['tips'], 'form'=>$form, 'star'=>$star);
+					}
+					else
+					{
+						$star = $v['minlength'] || $v['pattern'] ? 1 : 0;
+						$info['senior'][$field] = array('name'=>$v['name'], 'tips'=>$v['tips'], 'form'=>$form, 'star'=>$star);
+					}
+				}
+				else
+				{
+					$star = $v['minlength'] || $v['pattern'] ? 1 : 0;
+					$info[$field] = array('name'=>$v['name'], 'tips'=>$v['tips'], 'form'=>$form, 'star'=>$star);
+				}
 			}
 		}
 		return $info;

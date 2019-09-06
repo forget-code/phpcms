@@ -42,8 +42,8 @@ if(is_array($infos)){
 <td class="align_c"><a href="?mod=member&file=member&action=view&userid=<?=$info['userid']?>"><?=$info['username']?></td>
 <td class="align_c"><?=date('Y-m-d', $info['inputtime'])?></td>
 <td class="align_c">
-<a href="?mod=<?=$mod?>&file=<?=$file?>&action=view&contentid=<?=$info['contentid']?>">查看</a> | 
-<a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&contentid=<?=$info['contentid']?>">修改</a> 
+<a href="?mod=<?=$mod?>&file=<?=$file?>&action=view&catid=<?=$info['catid']?>&contentid=<?=$info['contentid']?>">查看</a> | 
+<a href="?mod=<?=$mod?>&file=<?=$file?>&action=edit&catid=<?=$info['catid']?>&contentid=<?=$info['contentid']?>">修改</a> 
 </td>
 </tr>
 <?php 

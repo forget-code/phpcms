@@ -15,12 +15,13 @@ switch($action)
 		{
 			if(!isset($count))
 			{
+				
 				$cids = array();
 				if(!isset($catids) || $catids[0] == 0) 
 				{
 					foreach($CATEGORY as $cid=>$v)
 					{
-						if($v['type'] <= 1) $catids[] = $cid;
+						if($v['type'] <= 1 && $v['module']=='phpcms') $catids[] = $cid;
 					}
 				}
                 foreach($catids as $k=>$id)
@@ -48,7 +49,6 @@ switch($action)
             }
 			else
 			{
-
 				$catids = cache_read('html_category_'.$_userid.'.php');
 				$page = max(intval($page), 1);
 				if($page == 1)
@@ -73,7 +73,7 @@ switch($action)
 						$pages = ceil($total/$pagesize);
 					}
 					$max = min($offset+$pagesize, $total);
-					for($i=$offset; $i<$max; $i++)
+					for($i=$offset; $i<=$max; $i++)
 					{
 						$html->category($catid, $i);
 					}

@@ -1,6 +1,3 @@
-{template 'phpcms','header'}
-<div id="main" class="bdr_1">
-<div id="position"><a href="">首页</a><a href="vote/">调查首页</a></div>
 <form action="{$M[url]}vote.php?voteid={$voteid}" method="post" id="voteform{$voteid}"  style="border:none;">
 <div id="vote_list">
  <dl>
@@ -87,7 +84,6 @@
     <a href="{$M[url]}show.php?voteid={$voteid}">查看结果</a>
     </p>
 </form>
-</div>
 <script>
 
 var sn;
@@ -111,4 +107,3 @@ $('span[sn]').css({width:'160px',display:'block',float:'left'});
 
 
 </script>
-{template 'phpcms','footer'}

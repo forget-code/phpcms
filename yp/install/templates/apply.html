@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>{$truename}的个人简历</title>
+<base href="{$PHPCMS[siteurl]}" />
+<style type="text/css">
+body{background:#f6fff1;margin:0;padding:0;font-size:12px;}
+#jianli_top{height:62px;margin-bottom:40px; background:url({$M[url]}images/jianli_top.jpg) right 0 no-repeat;}
+</style>
+</head>
+
+<body>
+<div id="jianli_top"></div>
+ <table width="98%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+              <td width="100%" align="center" height="50" valign="middle">
+                <div align="center"><b><font color="#FF7700" class="big">{$truename}</font> 的个人简历</b>                </div></td>
+            </tr>
+</table>
+<table width="800" height="19" align="center" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td>简历编号：{str_pad($applyid,8,0,STR_PAD_LEFT)}</td>
+              <td align="right">更新日期：{date("Y.m.d",$edittime)}</td>
+            </tr>
+</table>
+  <table width=800 border=0 cellpadding=5 cellspacing=1 align="center" bgcolor=#AAAAAA>
+    <tr bgcolor=#E5E5E5>
+      <td height="23" colspan="5" bgcolor="#FFFFFF"><font color=#777777><strong>&nbsp;基本信息</strong></font></td>
+    </tr>
+            <tr>
+              <td bgcolor=#FFFFFF align="right">姓　　名：</td>
+              <td bgcolor=#FFFFFF>{$truename}</td>
+              <td bgcolor=#FFFFFF align="right">性　　别：</td>
+              <td bgcolor=#FFFFFF>{if $r['gender']}女{else}男{/if}</td>
+              <td width=117 rowspan=6 align="center" bgcolor=#FFFFFF>
+			<img src="{if $userface}{$userface}{else}images/nophoto.gif{/if}" width="130" height="170"></td>
+            </tr>
+            <tr>
+              <td bgcolor=#FFFFFF align="right">身份证号：</td>
+              <td bgcolor=#FFFFFF>{substr($idcard,0,-6)}...</td>
+              <td bgcolor=#FFFFFF align="right">出生日期：</td>
+              <td bgcolor=#FFFFFF>{$birthday}</td>
+            </tr>
+       
+            <tr>
+              <td bgcolor=#FFFFFF align="right">户　　籍：</td>
+              <td bgcolor=#FFFFFF>{$province}{$city}</td>
+              <td bgcolor=#FFFFFF align="right">所 在 地：</td>
+              <td bgcolor=#FFFFFF>{$address}</td>
+            </tr>
+            <tr>
+              <td bgcolor=#FFFFFF align="right">工作年限：</td>
+              <td bgcolor=#FFFFFF>{$experience} 年</td>
+              <td bgcolor=#FFFFFF align="right">工作性质：</td>            
+              <td bgcolor=#FFFFFF>
+               {$worktype}              </td>
+            </tr>
+          </table>
+<table width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td height="8"></td>
+            </tr>
+</table>
+          <table width=800 border=0 cellpadding=5 cellspacing=1 align="center" bgcolor=#AAAAAA>
+            <tr bgcolor=#E5E5E5>
+              <td height="23" colspan="4" bgcolor="#FFFFFF"><font color=#777777><strong>&nbsp;教育/培训</strong></font></td>
+            </tr>
+            <tr>
+              <td width=18% height="24" align="right" bgcolor=#FFFFFF>毕业院校：</td>
+              <td width=32% height="24" bgcolor=#FFFFFF>{$school}</td>
+              <td width=18% height="24" align="right" bgcolor=#FFFFFF>最高学历：</td>
+              <td width=32% height="24" bgcolor=#FFFFFF>{$edulevel}</td>
+            </tr>
+            <tr>
+              <td height="24" align="right" bgcolor=#FFFFFF>专业名称：</td>
+              <td height="24" bgcolor=#FFFFFF>{$specialty}</td>
+              <td height="24" align="right" bgcolor=#FFFFFF>毕业日期：</td>
+              <td height="24" bgcolor=#FFFFFF>{$graduatetime}</td>
+            </tr>
+            
+</table>
+
+          <table width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td height="8"></td>
+            </tr>
+          </table>
+          <table width=800 border=0 cellpadding=5 cellspacing=1 align="center" bgcolor=#AAAAAA>
+            <tr bgcolor=#E5E5E5>
+              <td height="23" colspan="4" bgcolor="#FFFFFF"><font color=#777777><strong>&nbsp;求职意向</strong></font></td>
+            </tr>
+            <tr>
+              <td height="24" align="right" bgcolor=#FFFFFF>欲从事的工作</td>
+              
+              <td height="24" colspan="3" bgcolor=#FFFFFF>{$station}</td>
+            </tr>
+            <tr>
+              <td height="24" align="right" bgcolor=#FFFFFF>希望工作的地区</td>
+              
+              <td height="24" colspan="3" bgcolor=#FFFFFF>{$area}</td>
+            </tr>
+            <tr>
+              <td width=18% height="24" align="right" bgcolor=#FFFFFF>到岗时间：</td>
+              <td width=32% height="24" bgcolor=#FFFFFF>{if $period}{$period}天内{else}随时{/if}</td>
+              <td width=18% height="24" align="right" bgcolor=#FFFFFF>期望月薪：</td>
+              <td width=32% height="24" bgcolor=#FFFFFF>{if $pay}{$pay}{else}面议{/if}</td>
+            </tr>            
+		</table>
+
+          <table width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+              <td height="8"></td>
+            </tr>
+          </table>
+     {if $_userid}
+		{if $allowview}
+		  <table width=800 border=0 cellpadding=5 cellspacing=1 align="center" bgcolor=#AAAAAA>
+            <tr bgcolor=#E5E5E5>
+              <td height="23" colspan="4" bgcolor="#FFFFFF"><font color=#777777><strong>&nbsp;详细信息</strong></font></td>
+            </tr>
+            <tr>
+              <td height="24" align="right" bgcolor=#FFFFFF>工作经历</td>
+              
+              <td height="24" colspan="3" bgcolor=#FFFFFF>{$story}</td>
+            </tr>
+            <tr>
+              <td height="24" align="right" bgcolor=#FFFFFF>个人鉴定</td>
+              
+              <td height="24" colspan="3" bgcolor=#FFFFFF>{$introduce}</td>
+            </tr>
+            <tr>
+              <td width=18% height="24" align="right" bgcolor=#FFFFFF>电话：</td>
+              <td width=32% height="24" bgcolor=#FFFFFF>{$telephone}</td>
+              <td width=18% height="24" align="right" bgcolor=#FFFFFF>Email：</td>
+              <td width=32% height="24" bgcolor=#FFFFFF>{$email}</td>
+            </tr>
+</table>
+		  {else}
+		  <table width=800 border=0 cellpadding=5 cellspacing=1 align="center" bgcolor=#AAAAAA>
+            <tr>
+              <td align="center" bgcolor=#FFFFFF>
+                <br>
+                <font color=red>你所在的用户组没有权限查看详细资料，请联系管理，升级为VIP用户</font><br>
+				QQ:98359 100453<br>
+				电话：029-83998899
+              </td>
+            </tr>
+</table>			
+		   {/if}
+		{else}
+          <table width=800 border=0 cellpadding=5 cellspacing=1 align="center" bgcolor=#AAAAAA>
+            <tr>
+              <td align="center" bgcolor=#FFFFFF>
+                <br>
+                <font color=red>你还没有登陆&nbsp;&nbsp;&nbsp;&nbsp;<a href="{$MODULE[member][url]}login.php" target="_blank">立即登录</a></font><br><br>
+              </td>
+            </tr>
+</table>
+		  {/if}
+          <table width="100%"  border="0" cellpadding="5" cellspacing="1">
+            <tr>
+              <td height="15" align="center"><a href="javascript:window.print();" class="print_icon">打印本页</a>　<a href="javascript:window.close()" class="close_icon">关闭窗口</a></td>
+            </tr>
+          </table>
+          
+          
+          
+          
+          
+        </td>
+      </tr>
+    </table>
+
+</body>
+</html>

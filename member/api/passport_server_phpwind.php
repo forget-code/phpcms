@@ -13,11 +13,13 @@ else
 {
 	$jumpurl = $PHPCMS['passport_url'];
 }
+
+if(!$userid) $userid = $member->get_userid($username);
 $m = $member->get($userid, 'm.userid, m.username, m.password, m.email, m.amount, m.point', 1);
 
 $userdb['uid']		= $m['userid'];
 $userdb['username']	= $m['username'];
-$userdb['password']	= $m['password'];
+$userdb['password']	= $password;
 $userdb['email']	= $m['email'];
 $userdb['money']	= $m['amount'];
 $userdb['credit']	= $m['point'];
@@ -34,8 +36,17 @@ $db_hash = $passport_key;
 $userdb_encode = str_replace('=', '', StrCode($userdb_encode));
 
 if(substr($jumpurl, -1, 1) != '/') $jumpurl .= '/';
-if($action=='login')
+
+if($action=='login' || $action=='register')
 {
+	if($action == 'register')
+	{
+		if($memberinfo['modelid'] && $M['choosemodel'] && !$M['enablemailcheck'] && !$M['enableadmincheck'])
+		{
+			$result = $member->login($username, $memberinfo['password']);
+			$forward = $PHPCMS['siteurl'].'member/register_model.php';
+		}
+	}
 	$verify = md5("login$userdb_encode$forward$passport_key");
 	$url = $jumpurl."passport_client.php?action=login&userdb=".rawurlencode($userdb_encode)."&forward=".rawurlencode($forward)."&verify=".rawurlencode($verify);
 }

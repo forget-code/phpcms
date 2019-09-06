@@ -2,7 +2,7 @@
 require './include/common.inc.php';
 $catid = intval($catid);
 $catid or showmessage($LANG['illegal_parameters'], SITE_URL);
-if(!array_key_exists($catid, $CATEGORY)) showmessage($LANG['illegal_parameters'],'goback');
+if(!array_key_exists($catid, $CATEGORY) || $CATEGORY[$catid]['module']!=$mod) showmessage($LANG['illegal_parameters'],'goback');
 
 $CAT = cache_read('category_'.$catid.'.php');
 @extract($CAT);

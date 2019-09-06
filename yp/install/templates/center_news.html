@@ -1,0 +1,111 @@
+{template 'yp','center_header'}
+<div id="main">
+{template "yp","center_left"}
+{if $action=='add'}
+<div id="right">
+<form action="{URL}" method="post" name="myform"  enctype="multipart/form-data" >
+<table cellpadding="0" cellspacing="1" class="table_form">
+	<caption>发布新闻</caption>
+    {loop $forminfos $field $info}
+	<tr id="{$field}_id"> 
+      <th width="20%"> {if $info['star']} <font color="red">*</font>{/if} <strong>{$info[name]}</strong><br />
+	  {$info[tips]}
+	  </th>
+      <td>{$info[form]} </td>
+    </tr>
+	{/loop}
+    <tr> 
+      <td></td>
+      <td>
+	  <input type="hidden" name="forward" value="?file=news&action=add">
+	  <input type="submit" name="dosubmit" value=" 立刻发布 "> 
+	  </td>
+    </tr>
+</table>
+</form>
+</div>
+{elseif $action=='edit'}
+<div id="right">
+<form action="{URL}" method="post" name="myform"  enctype="multipart/form-data" >
+<table cellpadding="0" cellspacing="1" class="table_form">
+	<caption>修改新闻</caption>
+    {loop $forminfos $field $info}
+	<tr> 
+      <th width="20%"> {if $info['star']} <font color="red">*</font>{/if} <strong>{$info[name]}</strong><br />
+	  {$info[tips]}
+	  </th>
+      <td>{$info[form]} </td>
+    </tr>
+	{/loop}
+    <tr> 
+      <td></td>
+      <td> 
+	  <input type="hidden" name="forward" value="{$forward}"> 
+	  <input type="submit" name="dosubmit" value=" 确定修改 "> 
+	  </td>
+    </tr>
+</table>
+</form>
+</div>
+{else}
+	  <div id="right">
+		<table cellpadding="0" cellspacing="1" class="table_list">
+		  <caption>管理新闻</caption>
+		  <tr>
+			<th>标题</th>
+			<th width="50">点击</th>
+			<th width="50">状态</th>
+			<th width="110">更新时间</th>
+			<th width="40">操作</th>
+		  </tr>
+		{loop $infos $info}
+		{php $r = $c->get_count($info['id']);}
+		<tr>
+			<td class="align_left"><a href="{show_url('news',$info[id])}" target="_blank" title="{$info[title]}">{$info[title]}</a></td>
+			<td>{$r[hits]}</td>
+			<td>{if $info[status]==99}<font color=#009900>审核通过</font>{elseif $info[status]==1}<font color=#FF9900>待审核</font>{/if}</td>
+			<td>{date('Y-m-d H:i',$info[inputtime])}</td>
+			<td><a href="{BUSINESSDIR}?file={$file}&action=edit&id={$info[id]}"><img src="yp/images/edit.gif" alt="修改"></a> <a href="javascript:confirmurl('{BUSINESSDIR}?file={$file}&action=delete&id={$info[id]}','确认删除此信息吗？')"><img src="yp/images/delete.gif" alt="删除"></td>
+		</tr>
+		{/loop}
+		</table>
+		<div id="pages">{$pages}</div>
+		<table cellpadding="0" cellspacing="1" class="table_info">
+		  <caption>
+		  提示信息
+		  </caption>
+		  <tr>
+			<td> 您当前的级别为：{$GROUP[$_groupid]} 
+	<br/>
+			</td>
+		  </tr>
+		</table>
+	  </div>
+{/if}
+	</div>
+	<div class="clear"></div>
+{template 'phpcms','footer'}
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+$().ready(function() {
+  $('form').checkForm(1);
+});
+function buy_tid(typeid)
+{
+	if(typeid==2)
+	{
+		$("#thumb_id").css('display','none');
+		$("#price_id").css('display','none');
+
+	}
+	else
+	{
+		$("#thumb_id").css('display','');
+		$("#price_id").css('display','');
+	}
+
+}
+//-->
+</SCRIPT>
+<script type="text/javascript" src="images/js/form.js"></script>
+<script type="text/javascript" src="images/js/validator.js"></script>

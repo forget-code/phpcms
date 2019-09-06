@@ -1,0 +1,72 @@
+/*********************************/
+/*                               */
+/*  此样式为用户可自定义样式表   */
+/*                               */
+/*********************************/
+body{ color:#666666; background:#fff;}
+/*区块定义*/
+#top{ height:68px; line-height:24px; background:url(../images/green_top.jpg) repeat-x;margin-bottom:2px;}
+#top h1{padding-left:30px;color:#7aa507;font-size:16px; background:url(../images/green_top_line.jpg) no-repeat 0px 0px;height:68px;line-height:60px;}
+#top span{ padding-right:10px;color:#7aa507;background:url(../images/green_top_line.jpg) no-repeat 0px right;height:68px;line-height:60px;}
+#top span a:link,#top span a:visited{color:#7aa507;}
+#top a:hover{color:#fff; text-decoration:underline;}
+#content{ border:1px solid #c5ddbc;}
+#foot {line-height:24px;background:url(../images/green_foot.jpg) repeat-x;color:#666;height:50px;padding-top:10px;}
+
+/*导航menu样式*/
+#menu{ background:url(../images/green_menu.jpg) repeat-x;width:960px;margin-bottom:10px;margin-top:0;height:35px;border-bottom:5px solid #e2dbad;}
+#menu li{float:left;}
+#menu a{font-size:13px;color:#fff;width:100px;line-height:35px;text-align:center;height:35px;}
+#menu a:hover{ background:url(../images/green_menu_hover.gif) no-repeat center center;color:#598014;}
+
+#left h3,#right h3{background:url(../images/green_repeat_x2.gif) repeat-x; color:#4a7749;height:26px; line-height:26px;border:1px solid #c5ddbc;}
+
+/*边框*/
+.hot_nav,.box{border:1px solid #c5ddbc; border-top-width:0; background:#fff;}
+.box ul{padding-left:6px;}
+.box ul li a:link{color:#666;}
+.box ul li a:visited{color:#666;}
+.box ul li a:hover{color:#e8b019; text-decoration:underline;}
+/*热点导航*/
+.hot_nav{padding:2px 0;margin-bottom:10px;}
+.hot_nav ul{margin:0;padding:0;width:100%;}
+.hot_nav li{text-indent:10px;width:100%;}
+.hot_nav li a{display:block;height:25px;line-height:25px;}
+.hot_nav li a:hover{background:url(../images/green_hotnav.gif) no-repeat;height:25px;width:198px;}
+/*当前位置定义*/
+#position{border:1px solid #c5ddbc;}
+#position a{}
+
+#info{zoom:1; overflow:hidden;}
+#info img{ float:left; margin-right:20px;}
+#info p{ clear:right; text-indent:24px; line-height:24px;}
+
+/*修改分页按钮颜色*/
+#pages a { padding:3px 6px 2px; margin:3px; border:1px solid #a4e7a3; text-align:center; color:#2c752a;}
+#pages a.now{ background:#2c752a; color:#fff; border:0;}
+#pages a:hover,#pages a.now:hover{ background:#2c752a; color:#fff;}
+/*修改table里边文字颜色 table宽度*/
+th,td{color:#666;}
+th a{color:#666;}
+th a:visited{color:#666;}
+th a:hover{color:#f00;}
+
+/*图片列表*/
+.pic_list{ padding:5px 0 10px 0px;}
+.pic_list li{ width:100px;padding-right:11px;*padding-right:15px;margin:0 3px 0 0;_margin:0;line-height:20px;float:none;display:inline;display: -moz-inline-stack;/*FF2--FF私有属性*/
+display: inline-block;/*FF3*//*IE*/zoom: 1; /*MS haslayout*/*display: inline;vertical-align:top}
+.pic_list li img{ padding:1px; border:1px solid #ccc; display:block; margin-bottom:5px;}
+.pic_list li strong{display:block;}
+
+/*修改资质证书table颜色*/
+.table_list{ margin:0 auto; width:100%; *margin-top:6px;}
+.table_list th{text-align:center; background:#fafff6;}
+.table_list th,.table_list td{padding:0px; height:24px; line-height:24px; border:1px solid #c5ddbc; font-size:12px;color:#4a7749;text-align:center}
+.table_list td{padding:8px;}
+.certificate1{width:130px;}
+.certificate2{width:200px;}
+.certificate3{width:108px;}
+/*文字列表日期*/
+.txt_list li span{float:right;color:#999999;font-size:12px;}
+/*内容页发布日期*/
+#content h2 span {color:#999999;font-size:12px;}

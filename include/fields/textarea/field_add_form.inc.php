@@ -19,4 +19,8 @@
       <td>是否启用关联链接：</td>
       <td><input type="radio" name="setting[enablekeylink]" value="1"> 是 <input type="radio" name="setting[enablekeylink]" value="0" checked> 否  <input type="text" name="setting[replacenum]" value="1" size="4"> 替换次数 （留空则为替换全部）</td>
     </tr>
+	<tr> 
+      <td>是否启用剩余字符提示：</td>
+      <td><input type="radio" name="setting[checkcharacter]" value="1"> 是 <input type="radio" name="setting[checkcharacter]" value="0" checked> 否  <font color='#f00;'>启用此项，必填字符长度最大值</font></td>
+    </tr>
 </table>

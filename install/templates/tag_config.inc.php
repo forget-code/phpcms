@@ -3727,5 +3727,133 @@ return array (
     'modelid' => '0',
     'tagcode' => 'tag(\'phpcms\', \'tag_content_cat_list\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,description,userid,updatetime,inputtime,url FROM `phpcms2008_content` WHERE  status=99   AND  `typeid`=\'$c[typeid]\'  ORDER BY contentid DESC", 0, 10, array (  \'class\' => \'url\',  \'target\' => \'_blank\',  \'titlelen\' => \'46\',))',
   ),
+  '最新加入影片' => 
+  array (
+    'introduce' => '',
+    'mode' => '0',
+    'sql' => 'SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,userid,updatetime,inputtime,islink,url FROM `phpcms_content` WHERE  status=99  ".get_sql_catid($catid)." ORDER BY contentid DESC',
+    'selectfields' => 
+    array (
+      0 => 'contentid',
+      1 => 'catid',
+      2 => 'typeid',
+      3 => 'areaid',
+      4 => 'title',
+      5 => 'style',
+      6 => 'thumb',
+      7 => 'keywords',
+      8 => 'userid',
+      9 => 'updatetime',
+      10 => 'inputtime',
+      11 => 'islink',
+      12 => 'url',
+    ),
+    'orderby' => 'contentid DESC',
+    'page' => '0',
+    'number' => '10',
+    'template' => 'tag_content_video',
+    'var_description' => 
+    array (
+      1 => '日期格式',
+      2 => '打开窗口',
+      3 => '标题长度',
+      4 => '缩略图宽度',
+      5 => '缩略图高度',
+    ),
+    'var_name' => 
+    array (
+      1 => 'dateformat',
+      2 => 'target',
+      3 => 'titlelen',
+      4 => 'width',
+      5 => 'height',
+    ),
+    'var_value' => 
+    array (
+      1 => 'Y-m-d',
+      2 => '_blank',
+      3 => '46',
+      4 => '100',
+      5 => '75',
+    ),
+    'type' => 'content',
+    'where' => 
+    array (
+      'catid' => '$catid',
+      'typeid' => '',
+      'areaid' => '',
+      'keywords' => '',
+      'userid' => '',
+      'updatetime' => '',
+      'inputtime' => '',
+      'posids' => '0',
+    ),
+    'modelid' => '6',
+    'tagcode' => 'tag(\'phpcms\', \'tag_content_video\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,userid,updatetime,inputtime,islink,url FROM `phpcms_content` WHERE  status=99  ".get_sql_catid($catid)." ORDER BY contentid DESC", 0, 10, array (  \'dateformat\' => \'Y-m-d\',  \'target\' => \'_blank\',  \'titlelen\' => \'46\',  \'width\' => \'100\',  \'height\' => \'75\',))',
+  ),
+  '视频列表页' => 
+  array (
+    'introduce' => '',
+    'mode' => '0',
+    'sql' => 'SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,userid,updatetime,inputtime,islink,url FROM `phpcms_content` WHERE  status=99  ".get_sql_catid($catid)." ORDER BY contentid DESC',
+    'selectfields' => 
+    array (
+      0 => 'contentid',
+      1 => 'catid',
+      2 => 'typeid',
+      3 => 'areaid',
+      4 => 'title',
+      5 => 'style',
+      6 => 'thumb',
+      7 => 'keywords',
+      8 => 'userid',
+      9 => 'updatetime',
+      10 => 'inputtime',
+      11 => 'islink',
+      12 => 'url',
+    ),
+    'orderby' => 'contentid DESC',
+    'page' => '$page',
+    'number' => '10',
+    'template' => 'tag_content_videolist',
+    'var_description' => 
+    array (
+      1 => '日期格式',
+      2 => '打开窗口',
+      3 => '标题长度',
+      4 => '缩略图宽度',
+      5 => '缩略图高度',
+    ),
+    'var_name' => 
+    array (
+      1 => 'dateformat',
+      2 => 'target',
+      3 => 'titlelen',
+      4 => 'width',
+      5 => 'height',
+    ),
+    'var_value' => 
+    array (
+      1 => 'Y-m-d',
+      2 => '_blank',
+      3 => '46',
+      4 => '100',
+      5 => '75',
+    ),
+    'type' => 'content',
+    'where' => 
+    array (
+      'catid' => '$catid',
+      'typeid' => '',
+      'areaid' => '',
+      'keywords' => '',
+      'userid' => '',
+      'updatetime' => '',
+      'inputtime' => '',
+      'posids' => '0',
+    ),
+    'modelid' => '6',
+    'tagcode' => 'tag(\'phpcms\', \'tag_content_videolist\', "SELECT contentid,catid,typeid,areaid,title,style,thumb,keywords,userid,updatetime,inputtime,islink,url FROM `phpcms_content` WHERE  status=99  ".get_sql_catid($catid)." ORDER BY contentid DESC", $page, 10, array (  \'dateformat\' => \'Y-m-d\',  \'target\' => \'_blank\',  \'titlelen\' => \'46\',  \'width\' => \'100\',  \'height\' => \'75\',), $catid)',
+  ),
 );
 ?>

@@ -3,6 +3,11 @@ defined('IN_PHPCMS') or exit('Access Denied');
 include admin_tpl('header');
 ?>
 <body>
+<div class="button_box">
+<?php if(in_array(1, $_roleid) || in_array(2, $_roleid)){ ?>
+<span class="button_style" style="width:100px;margin-left:10px;"><a href='?mod=<?=$mod?>&file=<?=$file?>&action=manage&forward=<?=urlencode(URL)?>'>管理碎片</a></span>
+<?php } ?>
+</div>
 <table cellpadding="0" cellspacing="1" class="table_list">
     <caption>碎片管理</caption>
 <tr>
@@ -21,9 +26,6 @@ include admin_tpl('header');
 </table>
 <div class="button_box">
 <span class="button_style" style="width:100px;margin-left:10px;"><a href='?mod=<?=$mod?>&file=<?=$file?>&action=refresh&forward=<?=urlencode(URL)?>'>刷新碎片</a></span>
-<?php if(in_array(1, $_roleid) || in_array(2, $_roleid)){ ?>
-<span class="button_style" style="width:100px;margin-left:10px;"><a href='?mod=<?=$mod?>&file=<?=$file?>&action=manage&forward=<?=urlencode(URL)?>'>管理碎片</a></span>
-<?php } ?>
 </div>
 <table cellpadding="0" cellspacing="1" class="table_info">
   <caption>提示信息</caption>

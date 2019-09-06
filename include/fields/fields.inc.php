@@ -23,5 +23,7 @@ $fields = array('text'=>'单行文本',
 				'posid'=>'推荐位',
 				'template'=>'模板',
 				'islink'=>'转向链接',
+				'pages'=>'分页选择',
+				'flashupload'=>'视频',
 				);
 ?>

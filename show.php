@@ -42,8 +42,36 @@ if($C['defaultchargepoint'] || $r['readpoint'])
 		if($_SESSION['pay_contentid'] != $contentid) $allow_readpoint = 0;
 	}
 }
+if(isset($r['paginationtype']))
+{
+	$paginationtype = $r['paginationtype'];
+	$maxcharperpage = $r['maxcharperpage'];
+}
 $page = max(intval($page), 1);
 $pages = $titles = '';
+if($paginationtype==1)
+{
+	if(strpos($content, '[/page]')!==false)
+	{
+		$content = preg_replace("|\[page\](.*)\[/page\]|U", '', $content);
+	}
+	if(strpos($content, '[page]')!==false)
+	{
+		$content = str_replace('[page]', '', $content);
+	}
+	$content = contentpage($content, $maxcharperpage);
+}
+elseif($paginationtype==0)
+{
+	if(strpos($content, '[/page]')!==false)
+	{
+		$content = preg_replace("|\[page\](.*)\[/page\]|U", '', $content);
+	}
+	if(strpos($content, '[page]')!==false)
+	{
+		$content = str_replace('[page]', '', $content);
+	}
+}
 if(strpos($content, '[page]') !== false)
 {
 	require_once 'url.class.php';
@@ -74,7 +102,7 @@ if(strpos($content, '[page]') !== false)
 }
 $title = strip_tags($title);
 $head['title'] = $title.'_'.$C['catname'].'_'.$PHPCMS['sitename'];
-$head['keywords'] = $r['keywords'];
+$head['keywords'] = str_replace(' ', ',', $r['keywords']);
 $head['description'] = $r['description'];
 
 if(!$template) $template = $C['template_show'];

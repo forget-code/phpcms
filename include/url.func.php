@@ -57,8 +57,30 @@ function avatar($userid)
 		{
 			define('UC_API', $PHPCMS['uc_api']) ;
 		}
-		$avatar = UC_API."/avatar.php?uid=".$userid."&size=big";
+		//add by skyz
+		$avatar = 'images/nophoto.gif';
+		if(!is_a($member, 'member_api'))
+		{
+			$member_api = load('member_api.class.php', 'member', 'api');
+			$memberRelationRs=$member_api->get($userid,array('touserid','username'));
+			if($memberRelationRs['touserid']>0){
+				$avatar = UC_API."/avatar.php?uid=".$userid."&size=big";
+			}
+		}
 	}
 	return $avatar;
+}
+function company_url($userid = 0, $sitedomain = '')
+{
+	global $PHPCMS;
+	$M = cache_read('module_yp.php', '', 1);
+	if($M['enableSecondDomain'] && preg_match('/([A-Za-z0-9-]+)/i',$sitedomain))
+	{
+		return 'http://'.$sitedomain.'.'.$M['secondDomain'];
+	}
+	else
+	{
+		return $PHPCMS['siteurl'].'yp/web/?'.$userid;
+	}
 }
 ?>

@@ -195,7 +195,7 @@ class formguide_fields
 		}
 		else
 		{
-			return $this->db->get_one("SELECT * FROM $this->table WHERE field='$field'");
+			return $this->db->get_one("SELECT * FROM $this->table WHERE field='$field' AND `formid`='$formid'");
 		}
 	}
 
@@ -208,7 +208,7 @@ class formguide_fields
 		}
 		else
 		{
-			return $this->db->get_one("SELECT * FROM $this->table WHERE name='$name'");
+			return $this->db->get_one("SELECT * FROM $this->table WHERE name='$name' AND `formid`='$formid'");
 		}
 	}
 

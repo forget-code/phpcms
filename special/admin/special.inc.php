@@ -256,6 +256,24 @@ switch($action)
         }
         break;
 
+		case 'checkname':
+			$sql = '';
+			if($specialid)
+			{
+				$specialid = intval($specialid);
+				$sql .= " AND `specialid`!=$specialid";
+			}
+			$sql .= " AND `filename`='$value'";
+			if($special->get_id($sql))
+			{
+				exit('此文件名已存在！');
+			}
+			else
+			{
+				exit('success');
+			}
+			break;
+
         case 'manage_content':
             if($dosubmit)
             {

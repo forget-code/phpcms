@@ -30,6 +30,7 @@ define('SITE_URL', SCHEME.$_SERVER['HTTP_HOST'].PHPCMS_PATH);
 define('RELATE_URL', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : SCRIPT_NAME.(QUERY_STRING ? '?'.QUERY_STRING : PATH_INFO));
 define('URL', SCHEME.$_SERVER['HTTP_HOST'].RELATE_URL);
 define('RELATE_REFERER',urlencode(RELATE_URL));
+define('CACHE_FORM', PHPCMS_ROOT.'data/formguide/');
 
 if(function_exists('date_default_timezone_set')) date_default_timezone_set(TIMEZONE);
 header('Content-type: text/html; charset='.CHARSET);
@@ -60,9 +61,9 @@ if($_REQUEST)
 		$_POST = new_addslashes($_POST);
 		$_GET = new_addslashes($_GET);
 		$_COOKIE = new_addslashes($_COOKIE);
-		@extract($_POST, EXTR_SKIP);
-		@extract($_GET, EXTR_SKIP);
-		@extract($_COOKIE, EXTR_SKIP);
+		@extract($_POST);
+		@extract($_GET);
+		@extract($_COOKIE);
 	}
 	if(!defined('IN_ADMIN')) $_REQUEST = filter_xss($_REQUEST, ALLOWED_HTMLTAGS);
 	extract($db->escape($_REQUEST), EXTR_SKIP);

@@ -27,11 +27,15 @@
         	<th>保存到发件箱：</th>
             <td><input type="checkbox" name="savetooutbox" value="1"  /></td>
         </tr>
+		<tr>
+        	<th>验证码：</th>
+            <td>{form::checkcode('checkcodestr',5)}</td>
+        </tr>
         <tr>
         <th></th>
-        <td colspan="2"><label>
+        <td colspan="2">
           <input type="submit" name="dosubmit" id="button" value="确 定" />&nbsp;<input type="reset" name="button2" id="button2" value="取 消" />
-          </label></td>
+		</td>
       	</tr>        
         </table></form>
     </div>

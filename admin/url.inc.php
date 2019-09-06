@@ -70,7 +70,8 @@ if($dosubmit)
 	foreach($data as $r)
 	{
 		if($r['islink']) continue;
-		$url = $html->show($r['contentid']);
+		$info = $html->show($r['contentid']);
+		$url = $info[1];
 		$html->update($r['contentid'],$url);
 		if(!is_a($c, 'content'))
 		{

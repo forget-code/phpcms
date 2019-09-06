@@ -149,7 +149,7 @@ function preview_content()
 	myform.action = "preview.php";
 	myform.target = "_blank"; 
 	myform.submit(); 
-	myform.action = "manage.php?action=add&catid={$catid}";
+	myform.action = "manage.php?action={$action}&catid={$catid}&modelid={$modelid}";
 	myform.target="_self";
 }
 $().ready(function() {

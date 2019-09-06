@@ -17,7 +17,7 @@ $db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `d
 (".$parentid.", '添加订阅类别', '', '?mod=mail&file=type&action=add', '', 'right', '', '', '', '', 0, 0, 7, 0, '');");
 
 $db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES('".$member_1."', '邮件订阅', '', 'mail/', '', '', '', '', '', '', 0, 0, 0, 0, 'mail');");
-$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES('".$member_0."', '邮件订阅', '', 'mail/', '', '', '', '', '', '', 0, 0, 0, 0, 'pay');");
+$db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES('".$member_0."', '邮件订阅', '', 'mail/', '', '', '', '', '', '', 0, 0, 0, 0, 'mail');");
 
 $db->query("INSERT INTO `".DB_PRE."menu` (`parentid`, `name`, `image`, `url`, `description`, `target`, `style`, `js`, `groupids`, `roleids`, `isfolder`, `isopen`, `listorder`, `userid`, `keyid`) VALUES(7, '邮件订阅', '', '', '', '_self', '', '', '', '', 1, 0, 0, 0, 'member');");
 $parentid = $db->insert_id();

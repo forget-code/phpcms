@@ -17,7 +17,7 @@ $variable = array('0'=>'请选择类型','PHPCMS'=>'$PHPCMS', 'CATEGORY'=>'$CATE
 $action = $action ? $action : 'manage';
 
 $log = new log();
-
+$template = trim($template);
 switch($action)
 {
 	case 'add':
@@ -111,6 +111,7 @@ switch($action)
 
 	case 'tag':
 		$mod = $module;
+		if($mod == 'yp') require_once PHPCMS_ROOT."yp/include/output.func.php";
 		include admin_template($module, $template);
 		$data = ob_get_contents();
 		if(strpos($data, 'jquery') === false)
@@ -192,6 +193,8 @@ switch($action)
 		break;
 
 	case 'update':
+		$names = cache_read('name.inc.php', $templatedir);
+		$templatename = array_merge($names, $templatename);
 		cache_write('name.inc.php', $templatename, $templatedir);
 	    showmessage('模板名称更新成功！', $forward);
 		break;

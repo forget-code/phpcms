@@ -44,18 +44,21 @@ function dir_copy($fromdir, $todir)
 	if(!is_dir($fromdir)) return FALSE;
 	if(!is_dir($todir)) dir_create($todir);
 	$list = glob($fromdir.'*');
-	foreach($list as $v)
+	if(!empty($list))
 	{
-		$path = $todir.basename($v);
-		if(file_exists($path) && !is_writable($path)) dir_chmod($path);
-		if(is_dir($v))
+		foreach($list as $v)
 		{
-		    dir_copy($v, $path);
-		}
-		else
-		{
-			copy($v, $path);
-			@chmod($path, 0777);
+			$path = $todir.basename($v);
+			if(file_exists($path) && !is_writable($path)) dir_chmod($path);
+			if(is_dir($v))
+			{
+				dir_copy($v, $path);
+			}
+			else
+			{
+				copy($v, $path);
+				@chmod($path, 0777);
+			}
 		}
 	}
     return TRUE;

@@ -60,7 +60,7 @@ function AddMorePic(textid)
 				var arr_var=data.split('|');
 				$.each(arr_var, function(n){
 					var val = arr_var[n];
-					select += "<input type='hidden' name='"+textid+"[]' value='"+val+"'><div id='file_uploaded_1'><span style='width:30px'><input type='checkbox' name='"+textid+"_delete[]' value='"+val+"' title='删除'></span><a href='###' onMouseOut='javascript:FilePreview(\""+val+"\", 0);' onMouseOver='javascript:FilePreview(\""+val+"\", 1);'>"+val+"</a></div>";
+					select += "<input type='hidden' name='"+textid+"[]' value='"+val+"'><div id='file_uploaded_1'><span style='width:30px'><input type='checkbox' name='"+textid+"_delete[]' value='"+val+"' title='删除'></span><span style='width:60px'><input type='text' name='"+textid+"_description[]' value='' size='20' title='图片说明'></span><a href='###' onMouseOut='javascript:FilePreview(\""+val+"\", 0);' onMouseOver='javascript:FilePreview(\""+val+"\", 1);'>"+val+"</a></div>";
 				});
 				$('#'+textid).html(select);
 			}

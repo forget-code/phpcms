@@ -1,0 +1,129 @@
+{template 'yp', 'header'}
+<div id="main">
+  <div id="right">
+  <div id="position"><strong>当前位置：</strong><a href="yp/">企业黄页</a><a href="yp/product.php">产品</a>高级搜索</div>
+  <h3 class="bt mar_10">产品搜索</h3>
+  <div class="box hr_search">
+  <form name="myform" method="get" action="yp/product.php">
+  <table cellpadding="0" cellspacing="1" class="search_term">
+    <tr>
+      <th width="35%">分类</th>
+      <td><span class="select-type"><select style="width:160px;" name="catid">
+          <option value="0">不限</option>
+          {loop $CAT $type}
+		  <option value="{$type['catid']}">{$type['catname']}</option>
+		  {/loop}
+          </select></span>
+      </td>
+      </tr>
+	<tr>
+      <th width="35%">地点</th>
+      <td><span class="select-type"><select style="width:160px;" name="areaname">
+			<option value="0">所有地区</option>
+			<option value='江苏,浙江,上海'>江浙沪</option>
+			<option value='广州,深圳,中山,珠海,佛山,东莞,惠州'>珠三角</option>
+			<option value='香港,澳门,台湾'>港澳台</option>
+			<option value='海外'>海外</option>
+			<option value='北京'>北京</option>
+			<option value='上海'>上海</option>
+			<option value='杭州'>杭州</option>
+			<option value='广州'>广州</option>
+			<option value='深圳'>深圳</option>
+			<option value='南京'>南京</option>
+			<option value='武汉'>武汉</option>
+			<option value='天津'>天津</option>
+			<option value='成都'>成都</option>
+			<option value='哈尔滨'>哈尔滨</option>
+			<option value='重庆'>重庆</option>
+			<option value='宁波'>宁波</option>
+			<option value='无锡'>无锡</option>
+			<option value='济南'>济南</option>
+			<option value='苏州'>苏州</option>
+			<option value='温州'>温州</option>
+			<option value='青岛'>青岛</option>
+			<option value='沈阳'>沈阳</option>
+			<option value='福州'>福州</option>
+			<option value='西安'>西安</option>
+			<option value='长沙'>长沙</option>
+			<option value='合肥'>合肥</option>
+			<option value='南宁'>南宁</option>
+			<option value='南昌'>南昌</option>
+			<option value='郑州'>郑州</option>
+			<option value='厦门'>厦门</option>
+			<option value='大连'>大连</option>
+			<option value='常州'>常州</option>
+			<option value='石家庄'>石家庄</option>
+			<option value='东莞'>东莞</option>
+			<option value='安徽'>安徽</option>
+			<option value='福建'>福建</option>
+			<option value='甘肃'>甘肃</option>
+			<option value='广东'>广东</option>
+			<option value='广西'>广西</option>
+			<option value='贵州'>贵州</option>
+			<option value='海南'>海南</option>
+			<option value='河北'>河北</option>
+			<option value='黑龙江'>黑龙江</option>
+			<option value='河南'>河南</option>
+			<option value='湖北'>湖北</option>
+			<option value='湖南'>湖南</option>
+			<option value='江苏'>江苏</option>
+			<option value='江西'>江西</option>
+			<option value='吉林'>吉林</option>
+			<option value='辽宁'>辽宁</option>
+			<option value='内蒙古'>内蒙古</option>
+			<option value='宁夏'>宁夏</option>
+			<option value='青海'>青海</option>
+			<option value='山东'>山东</option>
+			<option value='山西'>山西</option>
+			<option value='陕西'>陕西</option>
+			<option value='四川'>四川</option>
+			<option value='新疆'>新疆</option>
+			<option value='西藏'>西藏</option>
+			<option value='云南'>云南</option>
+			<option value='浙江'>浙江</option>
+			<option value='other'>其它</option>
+          </select></span>
+      </td>
+      </tr>
+	<tr>
+      <th width="35%">价格</th>
+      <td>
+		<input name="lprice" type="text" value="" size="4" style="float:none"/> 至 <input name="hprice" value="" type="text" size="4" style="float:none"/> 元
+      </td>
+      </tr>
+	<tr>
+      <th width="35%">关键字</th>
+      <td>
+       <input name="q" class="input_blur" value="" type="text" style="width:156px;"/>
+      </td>
+      </tr>
+    <tr>
+      <th></th>
+       <td> 
+        <input type="submit" value="立即搜索" style="margin-right:5px;" />
+		<input type="hidden" value="searchlist" name="action"/>
+       <input type="reset" value="重新搜索" />
+       </td>
+    </tr>
+      </table>
+      </form>
+  </div>
+</div>
+  <!--right结束-->
+  <div id="left">
+    <div class="box_t">
+      <h3>最新产品列表</h3>
+    </div>
+    <div class="box_c">
+    <table width="222" border="0" cellspacing="0" cellpadding="0" class="table_list">
+	{get sql="SELECT * FROM phpcms_yp_product WHERE status = '99' ORDER BY id DESC" rows="10"}
+		<tr>
+		<td><a href="{show_url('product',$r[id])}" title="{$r['title']}">{str_cut($r['title'],24,'')}</a></td>
+		</tr>
+	{/get}  
+	</table>
+    </div>
+    <div class="box_b"></div>
+    </div>
+  </div>
+{template 'yp', 'footer'}

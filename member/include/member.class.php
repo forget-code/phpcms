@@ -51,6 +51,21 @@ class member
 		return $this->db->get_one($sql);
 	}
 
+    /**
+     * 根据整合系统用户ID,获得某个用户的信息
+     *
+     * @param CHAR $fields
+     * @param INT $touserid
+     * @param BOOL $ismore
+     * @return ARRAY
+     */
+	function get_by_touserid($touserid, $fields = '*', $ismore = 0)
+	{
+		$touserid = intval($touserid);
+		$sql = $ismore ? "SELECT $fields FROM $this->table_cache m LEFT JOIN $this->table_info i ON m.userid=i.userid WHERE m.touserid='$touserid'" : "SELECT $fields FROM $this->table_cache WHERE touserid='$touserid'";
+		return $this->db->get_one($sql);
+	}
+
 	/**
      * 根据用户名，获得用户ID
      *
@@ -237,6 +252,8 @@ class member
 		$phpcms_auth = phpcms_auth($this->_userid."\t".$md5_password, 'ENCODE', $phpcms_auth_key);
 		set_cookie('auth', $phpcms_auth, $cookietime);
 		set_cookie('cookietime', $_cookietime, $cookietime);
+		$username = $this->escape($username);
+		set_cookie('username', $username, $cookietime);
 		$this->db->query("UPDATE $this->table_info SET lastloginip='".IP."',lastlogintime=".TIME.",logintimes=logintimes+1 WHERE userid=$this->_userid");
 		require_once PHPCMS_ROOT.'member/include/group.class.php';
 		$group = new group();
@@ -397,7 +414,7 @@ class member
 		$userid = $_userid;
 		if($userid < 1) return false;
 		$member_fields = array('username', 'email', 'message', 'areaid');
-		$member_info_fields = array('question','answer','avatar');
+		$member_info_fields = array('question','answer','avatar', 'actortype');
 		if($member_fields['username']) $this->is_username($memberinfo['username']);
 		foreach ($memberinfo as $k=>$value)
 		{
@@ -853,5 +870,18 @@ class member
 		return $r ? $r['alloweditpassword'] : 0;
 	}
 
+	function escape($str)
+	{
+		preg_match_all("/[\x80-\xff].|[\x01-\x7f]+/",$str,$r);
+		$ar = $r[0];  
+		foreach($ar as $k=>$v)
+		{
+		  if(ord($v[0]) < 128)
+			  $ar[$k] = rawurlencode($v);
+		  else
+			  $ar[$k] = "%u".bin2hex(iconv("GB2312","UCS-2",$v));
+		}  
+		return join("",$ar);
+	}
 }
 ?>

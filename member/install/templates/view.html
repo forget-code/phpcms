@@ -23,10 +23,12 @@
             <tr>
             	<th width="25%"><strong>用户名：</strong></th><td width="*">{$username}</td>
             </tr>
+			{if $userid==$_userid}
 			<tr>
             	<th><strong>E-mail：</strong></th>
                 <td>{$email}</td>
             </tr>
+			{/if}
 			<tr>
             	<th><strong>用户组：</strong></th><td>{$GROUP[$groupid]}</td>
             </tr>

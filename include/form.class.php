@@ -80,7 +80,7 @@ class form
 
 	function checkcode($name = 'checkcode', $size = 4, $extra = '')
 	{
-		return '<input name="'.$name.'" id="'.$name.'" type="text" size="'.$size.'" '.$extra.' style="ime-mode:disabled;"> <img src="checkcode.php" id="checkcode" onclick="this.src=\'checkcode.php?id=\'+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/>';
+		return '<input name="'.$name.'" id="'.$name.'" type="text" size="'.$size.'" '.$extra.' style="ime-mode:disabled;"> <img src="'.SITE_URL.'checkcode.php" id="checkcode" onclick="this.src=\''.SITE_URL.'checkcode.php?id=\'+Math.random()*5;" style="cursor:pointer;" alt="验证码,看不清楚?请点击刷新验证码" align="absmiddle"/>';
 	}
 
 	function style($name = 'style', $style = '')
@@ -98,8 +98,8 @@ class form
 			$styleform .= "<option value=\"c".$i."\" ".($color == 'c'.$i ? "selected=\"selected\"" : "")." class=\"bg".$i."\"></option>\n";
 		}
 		$styleform = "<select name=\"style_color$styleid\" id=\"style_color$styleid\" onchange=\"document.all.style_id$styleid.value=document.all.style_color$styleid.value;if(document.all.style_strong$styleid.checked)document.all.style_id$styleid.value += ' '+document.all.style_strong$styleid.value;\">\n".$styleform."</select>\n";
-		$styleform .= " <input type=\"checkbox\" name=\"style_strong$styleid\" id=\"style_strong$styleid\" value=\"b\" ".($b == 'b' ? "checked=\"checked\"" : "")." onclick=\"document.all.style_id$styleid.value=document.all.style_color$styleid.value;if(document.all.style_strong$styleid.checked)document.all.style_id$styleid.value += ' '+document.all.style_strong$styleid.value;\"> ".$LANG['bold'];
-		$styleform .= "<input type=\"hidden\" name=\"".$name."\" id=\"style_id$styleid\" value=\"".$style."\">";
+		$styleform .= " <label><input type=\"checkbox\" name=\"style_strong$styleid\" id=\"style_strong$styleid\" value=\"b\" ".($b == 'b' ? "checked=\"checked\"" : "")." onclick=\"document.all.style_id$styleid.value=document.all.style_color$styleid.value;if(document.all.style_strong$styleid.checked)document.all.style_id$styleid.value += ' '+document.all.style_strong$styleid.value;\"> ".$LANG['bold'];
+		$styleform .= "</label><input type=\"hidden\" name=\"".$name."\" id=\"style_id$styleid\" value=\"".$style."\">";
 		return $styleform;
 	}
 
@@ -129,10 +129,15 @@ class form
 		return "<input type=\"$type\" name=\"$name\" id=\"$id\" value=\"$value\" size=\"$size\" class=\"$class\" $checkthis $ext/> ";
 	}
 
-	function textarea($name, $id = '', $value = '', $rows = 10, $cols = 50, $class = '', $ext = '')
+	function textarea($name, $id = '', $value = '', $rows = 10, $cols = 50, $class = '', $ext = '', $character = 0, $maxlength = 0)
 	{
 		if(!$id) $id = $name;
-		return "<textarea name=\"$name\" id=\"$id\" rows=\"$rows\" cols=\"$cols\" class=\"$class\" $ext>$value</textarea>";
+		if($character && $maxlength)
+		{
+			$data = ' <img src="images/icon.gif" width="12"> 还可以输入 <font id="ls_'.$id.'" color="#ff0000;">'.$maxlength.'</font> 个字符！<br />';
+		}
+		$data .= "<textarea name=\"$name\" id=\"$id\" rows=\"$rows\" cols=\"$cols\" class=\"$class\" $ext>$value</textarea>";
+		return $data;
 	}
 
 	function select($options, $name, $id = '', $value = '', $size = 1, $class = '', $ext = '')
@@ -180,7 +185,7 @@ class form
 		foreach($options as $k=>$v)
 		{
 			$checked = ($value && in_array($k, $value)) ? 'checked' : '';
-			$data .= "<span style=\"width:{$width}px\"><input type=\"checkbox\" boxid=\"{$id}\" name=\"{$name}[]\" id=\"{$id}\" value=\"{$k}\" style=\"border:0px\" $class {$ext} {$checked}/> {$v}</span>\n ";
+			$data .= "<span style=\"width:{$width}px\"><label><input type=\"checkbox\" boxid=\"{$id}\" name=\"{$name}[]\" id=\"{$id}\" value=\"{$k}\" style=\"border:0px\" $class {$ext} {$checked}/> {$v}</label></span>\n ";
 			if($i%$cols == 0) $data .= "<br />\n";
 			$i++;
 		}
@@ -197,7 +202,7 @@ class form
 		foreach($options as $k=>$v)
 		{
 			$checked = $k == $value ? 'checked' : '';
-			$data .= "<span style=\"width:{$width}px\"><input type=\"radio\" name=\"{$name}\" id=\"{$id}\" value=\"{$k}\" style=\"border:0px\" $class {$ext} {$checked}/> {$v}</span> ";
+			$data .= "<span style=\"width:{$width}px\"><label><input type=\"radio\" name=\"{$name}\" id=\"{$id}\" value=\"{$k}\" style=\"border:0px\" $class {$ext} {$checked}/> {$v}</label></span> ";
 			if($i%$cols == 0) $data .= "<br />\n";
 			$i++;
 		}
@@ -361,9 +366,9 @@ class form
 		return form::checkbox($GROUP, $name, $id, $groupids, $cols, '', '', $width);
 	}
 
-	function select_type($module = 'phpcms', $name = 'typeid', $id ='', $alt = '', $typeid = 0, $property = '')
+	function select_type($module = 'phpcms', $name = 'typeid', $id ='', $alt = '', $typeid = 0, $property = '', $modelid = 0)
 	{
-		$types = subtype($module);
+		$types = subtype($module, $modelid);
 		if(!$id) $id = $name;
 		$data = "<select name='$name' id='$id' $property>\n<option value='0'>$alt</option>\n";
 		foreach($types as $id=>$t)

@@ -8,7 +8,6 @@ if($PHPCMS['enableserverpassport'])
 	header('location:'.$registerurl);
 	exit;
 }
-
 if($_userid) showmessage($LANG['not_allow_register_repeat'],$MODULE['member']['url']);		//当用户以经登录存在$_userid时不得重复登录
 if(!$forward) $forward = HTTP_REFERER;
 if(!isset($action)) $action = 'register';
@@ -19,6 +18,7 @@ switch ($action)
 	case 'register':
 			if($dosubmit)
 			{
+				
 				checkcode($checkcodestr, $M['enablecheckcodeofreg'], $forward);
 				if($PHPCMS['uc'])
 				{
@@ -42,11 +42,24 @@ switch ($action)
 					$content = tpl_data($mod, 'register_mailcheck');
 					$sendmail->send($memberinfo['email'], $title, stripslashes($content), $PHPCMS['mail_user']);
 				}
+
 				if(!$M['enablemailcheck'] && !$M['enableadmincheck'])
 				{
 					$script = "<script language='javascript'>";
 					$script .= "setcookie('username', '".$memberinfo['username']."', 0);";
 					$script .= "</script>";
+				}
+				if($PHPCMS['enablepassport'])
+	            {
+					if($PHPCMS['passport_charset'] && $PHPCMS['passport_charset'] != CHARSET)
+					{
+						$info = str_charset(CHARSET, $PHPCMS['passport_charset'], $memberinfo);
+					}
+					
+					extract($memberinfo);
+					$password = md5($memberinfo['password']);
+					require MOD_ROOT.'api/passport_server_'.$PHPCMS['passport_file'].'.php';
+					header('location:'.$url);
 				}
 				if($memberinfo['modelid'] && $M['choosemodel'] && !$M['enablemailcheck'] && !$M['enableadmincheck'])
 				{
@@ -88,6 +101,14 @@ switch ($action)
 			}
 			else
 			{
+				if($M['preserve'])
+				{
+					$PRES = explode(',', $M['preserve']);
+					if(in_array($value, $PRES))
+					{
+						exit('此用户名受保护，不允许注册！');
+					}
+				}
 				exit('success');
 			}
 		break;

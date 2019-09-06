@@ -7,7 +7,19 @@ $attachment = new attachment($mod);
 $_SESSION['downfiles'] = 1;
 if($dosubmit)
 {
-	if(!$attachment->upload('uploadfile', UPLOAD_ALLOWEXT, UPLOAD_MAXSIZE, 1))
+	if($catid)
+	{
+		$C = cache_read('category_'.$catid.'.php');
+		$upload_allowext = $C['upload_allowext'] ? $C['upload_allowext'] : UPLOAD_ALLOWEXT;
+		$upload_maxsize = $C['upload_maxsize'] ? $C['upload_maxsize'] : UPLOAD_MAXSIZE;
+	}
+	else
+	{
+		$upload_allowext = UPLOAD_ALLOWEXT;
+		$upload_maxsize = UPLOAD_MAXSIZE;
+	}
+	$aids = $attachment->upload('uploadfile', $upload_allowext, $upload_maxsize, 1);
+	if(!$aids)
 	{
 		msg($attachment->error(), '', 6000);
 		exit;
@@ -22,7 +34,7 @@ if($dosubmit)
 		{
 			$name = basename($v['filename'],'.'.$v['fileext']);
 		}
-		echo '<script>var s = parent.document.getElementById("downurls").value == "" ? "" : "\n";parent.document.getElementById("downurls").value += s+"'.$name.'|'.UPLOAD_URL.$v['filepath'].'";parent.document.getElementById("filesize").value="'.$v['filesize'].'";</script>';
+		echo '<script>var s = parent.document.getElementById("downurls").value == "" ? "" : "\n";var t = parent.document.getElementById("downurls_aid").value == "" ? "" : ",";parent.document.getElementById("downurls").value += s+"'.$name.'|'.UPLOAD_URL.$v['filepath'].'";parent.document.getElementById("downurls_aid").value += t+"'.$aids[$k].'";parent.document.getElementById("filesize").value="'.$v['filesize'].'";</script>';
 	}
 	echo '<script>parent.document.getElementById("filesize").value="'.$filesize.'";</script>';
 	msg('上传成功', '', 3000);

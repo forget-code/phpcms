@@ -112,6 +112,67 @@ switch($action)
 		showmessage('操作成功！', $forward);
 		break;
 
+	case 'inspect':
+		if($dosubmit)
+		{
+			if($contentid=='') showmessage('请选择要批准的内容');
+			if($pass)
+			{
+				$passname = 'passstatus';
+			}
+			else
+			{
+				$passname = 'rejectstatus';
+			}
+			$c->inspect($contentid, $passname);
+		}
+		$STATU = $c->get_pro_status();
+		$t = $catids = '';
+		$submenu = array();
+		foreach($STATU as $s)
+		{
+			$submenu[] = array($s['name'], '?mod='.$mod.'&file='.$file.'&action=inspect&status='.$s['status']);
+		}
+		$menu = admin_menu('信息审核', $submenu);
+		foreach($CATEGORY AS $catid => $CATE)
+		{
+			if($priv_role->check('catid', $catid, 'check'))
+			{
+				$catids .= $t.$catid;
+				$t = ',';
+			}
+		}
+		$status = $status ? intval($status) : 3;
+		$where = " `catid` IN ($catids) AND `status`=".$status;
+		$infos = $c->listinfo($where, '`listorder` DESC,`contentid` DESC', $page, 20);
+		$pagetitle = '全部信息-审核';
+		include admin_tpl('content_inspect');
+		break;
+	
+	case 'inspect':
+		$STATU = $c->get_pro_status();
+		$t = $catids = '';
+		$submenu = array();
+		foreach($STATU as $s)
+		{
+			$submenu[] = array($s['name'], '?mod='.$mod.'&file='.$file.'&action=inspect&status='.$s['status']);
+		}
+		$menu = admin_menu('信息审核', $submenu);
+		foreach($CATEGORY AS $catid => $CATE)
+		{
+			if($priv_role->check('catid', $catid, 'check'))
+			{
+				$catids .= $t.$catid;
+				$t = ',';
+			}
+		}
+		$status = $status ? intval($status) : 3;
+		$where = " `catid` IN ($catids) AND `status`=".$status;
+		$infos = $c->listinfo($where, '`listorder` DESC,`contentid` DESC', $page, 20);
+		$pagetitle = '全部信息-审核';
+		include admin_tpl('content_inspect');
+		break;
+
 	default:
 		$status = isset($status) ? intval($status) : 99;
 	    if($status == 1000)

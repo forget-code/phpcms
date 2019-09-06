@@ -27,7 +27,7 @@ if($dosubmit)
 			$image->watermark($img, $img, $PHPCMS['watermark_pos'], $PHPCMS['watermark_img'], '', 5, '#ff0000', $PHPCMS['watermark_jpgquality']);
 		}
 	}
-	showmessage("文件上传成功！<script language='javascript'>	try{ window.opener.myform.".$uploadtext.".value='".$imgurl."';window.opener.myform.".$uploadtext."_aid.value='".$aid."';window.opener.myform.filesize.value='".$filesize."';}catch(e){} window.close();</script>", HTTP_REFERER);
+	showmessage("文件上传成功！<script language='javascript'>	try{ $(window.opener.document).find(\"form[@name='myform'] #$uploadtext\").val(\"$imgurl\");$(window.opener.document).find(\"form[@name='myform'] #{$uploadtext}_aid\").val(\"$aid\");$(window.opener.document).find(\"form[@name='myform'] #$filesize\").val(\"$filesize\");}catch(e){} window.close();</script>", HTTP_REFERER);
 }
 else
 {

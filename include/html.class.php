@@ -79,6 +79,11 @@ class html
 		}
 		$r = $c->get($contentid);
 		if(!$r) return false;
+		if(isset($r['paginationtype']))
+		{
+			$paginationtype = $r['paginationtype'];
+			$maxcharperpage = $r['maxcharperpage'];
+		}
 		if($r['catid']) $catid = $r['catid'];
 		if(!$MODEL[$CATEGORY[$catid]['modelid']]['ishtml']) return false;
 		if($is_update_related)
@@ -98,7 +103,9 @@ class html
 			}
 		}
 		if($r['status'] != 99) return true;
-		$show_url_path = $this->url->show($r['contentid'], 0, $r['catid'], $r['inputtime']);
+		$info = $this->url->show($r['contentid'], 0, $r['catid'], $r['inputtime']);
+		$show_url_path = $info[1];
+		unset($info);
 		$show_url_path = str_replace('.'.$PHPCMS['fileext'],'',$show_url_path);
 		$GLOBALS['show_url_path'] = $show_url_path;
 		
@@ -115,11 +122,34 @@ class html
 		extract($data);
 		$template = $GLOBALS['template_show_images'];
 
-		$head['keywords'] = $r['keywords'];
+		$head['keywords'] = str_replace(' ', ',', $r['keywords']);
 		$head['description'] = $r['description'];
 		
 		$allow_priv = $allow_readpoint = true;
 		$pages = $titles = '';
+		if($paginationtype==1)
+		{
+			if(strpos($content, '[/page]')!==false)
+			{
+				$content = preg_replace("|\[page\](.*)\[/page\]|U", '', $content);
+			}
+			if(strpos($content, '[page]')!==false)
+			{
+				$content = str_replace('[page]', '', $content);
+			}
+			$content = contentpage($content, $maxcharperpage);
+		}
+		elseif($paginationtype==0)
+		{
+			if(strpos($content, '[/page]')!==false)
+			{
+				$content = preg_replace("|\[page\](.*)\[/page\]|U", '', $content);
+			}
+			if(strpos($content, '[page]')!==false)
+			{
+				$content = str_replace('[page]', '', $content);
+			}
+		}
 		if(strpos($content, '[page]') !== false)
 		{
 			$contents = array_filter(explode('[page]', $content));
@@ -135,7 +165,7 @@ class html
 					foreach($m[1] as $k=>$v)
 					{
 						$page = $k+1;
-						$titles .= '<a href="'.$pageurls[$page].'">'.$page.'、'.$v.'</a>';
+						$titles .= '<a href="'.$pageurls[$page][0].'">'.$page.'、'.$v.'</a>';
 					}
 				}
 			}
@@ -152,7 +182,7 @@ class html
 				$head['title'] = $title.'_'.$C['catname'].'_'.$PHPCMS['sitename'];
 				ob_start();
 				include template('phpcms', $template);
-				$file = PHPCMS_ROOT.$pageurls[$page];
+				$file = PHPCMS_ROOT.$pageurls[$page][0];
 				$filesize += createhtml($file);
 			}
 			return $filesize;
@@ -165,11 +195,34 @@ class html
 			$title = strip_tags($title);
 			$head['title'] = $title.'_'.$C['catname'].'_'.$PHPCMS['sitename'];
 			$ishtml = 1;
-			$file = PHPCMS_ROOT.$this->url->show($r['contentid'], 0, $r['catid'], $r['inputtime']);
+			$info = $this->url->show($r['contentid'], 0, $r['catid'], $r['inputtime']);
+			$file = PHPCMS_ROOT.$info[0];
 			ob_start();
 			include template('phpcms', $template);
 			return createhtml($file);exit;
 		}
+	}
+
+	function delete($contentid, $table)
+	{
+		global $db;
+		$contentid = intval($contentid);
+		if(!$contentid) return FALSE;
+		$r = $db->get_one("SELECT * FROM `".DB_PRE."content` c, `$table` b WHERE c.contentid=b.contentid AND c.`contentid`=$contentid");
+		if($r['paginationtype']==1)
+		{
+			$r['content'] = contentpage($r['content'], $r['maxcharperpage']);
+		}
+		$contents = array_filter(explode('[page]', $r['content']));
+		$pagenumber = count($contents);
+		for($i=1; $i<=$pagenumber; $i++)
+		{
+			$info = $this->url->show($contentid, $i, $r['catid'], $r['inputtime']);
+			$fileurl = $info[0];
+			unset($info);
+			@unlink(PHPCMS_ROOT.$fileurl);
+		}
+		return TRUE;
 	}
 }
 ?>

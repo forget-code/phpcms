@@ -194,7 +194,20 @@ class menu
 	{
 		$menuid = intval($menuid);
 		$isfolder = $this->db->get_one("SELECT `menuid` FROM `$this->table` WHERE `parentid`=$menuid LIMIT 1") ? 1 : 0;
-		return $this->db->query("UPDATE `$this->table` SET `isfolder`=$isfolder WHERE `menuid`=$menuid");
+		if(!$isfolder)
+		{
+			$r = $this->db->get_one("SELECT `keyid` FROM `$this->table` WHERE `menuid`=$menuid");
+			$keyid = explode('_', $r['keyid']);
+			if(trim($keyid[0])=='catid')
+			{
+				$url = '?mod=phpcms&file=content&action=manage&catid='.trim($keyid[1]);
+			}
+		}
+		else
+		{
+			$url = '';
+		}
+		return $this->db->query("UPDATE `$this->table` SET `isfolder`=$isfolder, `url`='$url' WHERE `menuid`=$menuid");
 	}
 }
 ?>

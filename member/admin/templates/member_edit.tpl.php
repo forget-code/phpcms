@@ -163,7 +163,14 @@ areaid_reload();
     <?php
     		}
 		}
+	if($MODEL[$modelid]['tablename'] == 'company')
+	{
+		$r = $db->get_one("SELECT `endtime` FROM ".DB_PRE."member_company WHERE `userid`='$userid'");
     ?>
+	<tr>
+    	<th><strong>服务期截至：</strong></th><td><?=form::date('endtime',date('Y-m-d',$r['endtime']))?></td>
+    </tr>
+	<?php } ?>
     <tr>
 		<th></th>
       	<td>

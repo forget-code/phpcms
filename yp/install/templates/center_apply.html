@@ -1,0 +1,54 @@
+{template 'yp','center_header'}
+<div id="main">
+{template "yp","center_left"}
+	  <div id="right">
+		<div class="clear"></div>
+		<table cellpadding="0" cellspacing="1" class="table_list">
+		  <caption>人才库</caption>
+		  <tr>
+			<th>真实姓名</th>			
+			<th>职位名称</th>
+			<th width="110">投递时间</th>
+			<th width="100">状态</th>
+			<th width="100">操作</th>
+		  </tr>
+		 {loop $applys['result'] $result}
+		<tr>
+			<td><a href="{BUSINESSDIR}?file=apply&amp;action=showapply&amp;stockid={$result['stockid']}">{$result['truename']}</a></td>
+			<td><a href="{show_url('job',$result['jobid'])}">{$result['title']}</a></td>
+			<td>{date('Y.m.d',$result['addtime'])}</td>
+			<td style="color:red">{if $result['status'] == 2}已邀请面试{elseif $result['status'] == 1}已查看{else}未查看{/if}</td>
+			<td>{if $result['status'] == 2}无{elseif $result['status'] == 1}<a href="javascript:void(0)" onclick="javascript:invite({$result['stockid']})">邀请面试</a>{else}<a href="{BUSINESSDIR}?file=apply&amp;action=showapply&amp;stockid={$result['stockid']}">查看简历</a>{/if}</td>
+		</tr>
+		{/loop}
+		</table>
+		<div id="pages">{$pages}</div>
+		<table cellpadding="0" cellspacing="1" class="table_info">
+		  <caption>
+		  提示信息
+		  </caption>
+		  <tr>
+			<td> 您可以通过邀请面试来给面试者发送短消息和邮件。邀请后将不能再次邀请。
+	<br/>
+			</td>
+		  </tr>
+		</table>
+	  </div>
+	</div>
+	<div class="clear"></div>
+{template 'phpcms','footer'}
+<SCRIPT LANGUAGE="JavaScript">
+<!--
+$().ready(function() {
+  $('form').checkForm(1);
+});
+
+var invite = function(stockid)
+{
+	$.get("{BUSINESSDIR}",{'file':'apply','action':'invite','stockid':stockid,'rnd':Math.random()},function(data){if(data == 1){alert('邀请成功');window.location.reload();}});
+}
+//-->
+</SCRIPT>
+<script type="text/javascript" src="images/js/form.js"></script>
+<script type="text/javascript" src="images/js/validator.js"></script>
+<script type="text/javascript" src="yp/images/js/info_add.js"></script>

@@ -25,15 +25,15 @@ if($dosubmit)
 	{
 		showmessage($LANG['message_more'].$M['maxcontent'].$LANG['message_characters'],'goback'); 
 	}
-	if(empty($guestbook[username]))
+	if(empty($guestbook['username']))
 	{
 		showmessage($LANG['message_input_username'],'goback');
 	}
-	if(empty($guestbook[title]))
+	if(empty($guestbook['title']))
 	{
 		showmessage($LANG['message_input_subject'],'goback');
 	}
-	if(empty($guestbook[content]))
+	if(empty($guestbook['content']))
 	{
 		showmessage($LANG['message_input_content']);
 	}
@@ -66,6 +66,7 @@ if($dosubmit)
 else
 {
 	require 'form.class.php';
+	$face = $g->get_face();
 	$srchtype = isset($srchtype) ? $srchtype : 0;
 	$keyword = isset($keyword) ? $keyword : '';
 	$position = $M['name'];

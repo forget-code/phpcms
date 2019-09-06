@@ -6,14 +6,14 @@
 		if(!empty($addmorepic) && is_array($addmorepic))
 		{
 			$attachment->field = $field;
-			foreach($addmorepic AS $v)
+			foreach($addmorepic AS $i => $v)
 			{
 				if(in_array($v,$GLOBALS['addmore_'.$field.'_delete'])) continue;
 				$v = str_replace(UPLOAD_URL,'',$v);
 				$filename = basename($v);
 				$this->imageexts = $fileext = fileext($filename);
 				if(!preg_match("/^(jpg|jpeg|gif|bmp|png)$/", $fileext)) continue;
-				$uploadedfile = array('filename'=>$filename, 'filepath'=>$v, 'filetype'=>'', 'filesize'=>'', 'fileext'=>$fileext, 'description'=>'');
+				$uploadedfile = array('filename'=>$filename, 'filepath'=>$v, 'filetype'=>'', 'filesize'=>'', 'fileext'=>$fileext, 'description'=>$GLOBALS['addmore_'.$field.'_description'][$i]);
 				$attachment->add($uploadedfile);
 			}
 			$is_addmorepic = TRUE;
@@ -29,6 +29,13 @@
 		{
 		    $del_aids = implode(',', $GLOBALS[$field.'_delete']);
 			$attachment->delete("`aid` IN($del_aids)");
+		}
+		if(isset($GLOBALS[$field.'_description']))
+		{
+			foreach($GLOBALS[$field.'_description'] as $aid=>$description)
+			{
+				$attachment->description($aid, $description);
+			}
 		}
 		if($contentid) $result = $attachment->listinfo("contentid=$contentid AND field='$field'", 'aid');
 		$aids = $attachment->upload($field, $this->fields[$field]['upload_allowext'], $upload_maxsize, 1);

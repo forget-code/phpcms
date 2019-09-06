@@ -1,0 +1,37 @@
+  <div id="left">
+    <div id="treemenu">
+      <div class="treemenu_hd"><h5>商务管理中心</h5><span class="back_index"><a href="{BUSINESSDIR}">返回首页</a></span></div>
+      <ul>
+	    <li><span class="f_l"><a href="{BUSINESSDIR}?file=product&action=manage">管理产品</a></span>
+        <span class="f_r" id="fabu"><a href="{BUSINESSDIR}?file=product&action=add">【发布】</a></span>
+        <div class="clear"></div>
+        </li>        
+        
+	    <li><span class="f_l"><a href="{BUSINESSDIR}?file=buy&action=manage">管理商机</a></span><span class="f_r" id="fabu"><a href="{BUSINESSDIR}?file=buy&action=add">【发布】</a></span><div class="clear"></div></li>
+                
+	    <li><span class="f_l"><a href="{BUSINESSDIR}?file=news&action=manage">管理新闻</a></span><span class="f_r" id="fabu"><a href="{BUSINESSDIR}?file=news&action=add">【发布】</a></span><div class="clear"></div> </li>
+            
+	    <li><span class="f_l"><a href="{BUSINESSDIR}?file=job&action=manage">管理招聘</a></span><span class="f_r" id="fabu"><a href="{BUSINESSDIR}?file=job&action=add">【发布】</a></span><div class="clear"></div></li>
+	    <li><a href="{BUSINESSDIR}?file=apply">人才库</a></li>
+	    <li><a href="{BUSINESSDIR}?file=guestbook">留言管理</a></li>
+	    <li><a href="{BUSINESSDIR}?file=collect">我的收藏</a></li>
+	    <li><a href="{BUSINESSDIR}?file=template">风格管理</a></li>
+	    <li><a href="{BUSINESSDIR}?file=company">公司信息</a></li>
+	    <li><a href="{BUSINESSDIR}?file=map">地理位置标注</a></li>
+	    <li><a href="{BUSINESSDIR}?file=certificate">资质证书</a></li>
+	    <li><a href="{$MODULE[member][url]}editpwd.php">修改密码</a></li>
+	    <li><a href="{BUSINESSDIR}?file=menu">导航菜单管理</a></li>
+	    <li><a href="{$MODULE[member][url]}">进入会员中心</a></li>
+       
+      </ul>
+    </div>
+
+    <ol>
+      <li class="local"><a href="{BUSINESSDIR}">返回商务中心首页</a></li>
+      <li class="exit"><a href="{$MODULE['member']['url']}logout.php">退出登录</a></li>
+    </ol>
+
+  </div>
+  <script type="text/javascript">
+	$(document).ready(function(){$('#treemenu>ul>li').mouseover(function(){$(this).toggleClass("bg_se");}).mouseout(function(){$(this).toggleClass("bg_se");});}); 
+  </script>

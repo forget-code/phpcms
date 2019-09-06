@@ -25,10 +25,26 @@ switch($action)
 	    {
 			$setting['siteurl'] = SITE_URL;
 		}
+		/**
+		 *	发送Ku6联盟帐号去验证
+		 **/
+		if($setting['enableku6'])
+		{
+			$http = load('http.class.php');
+			$arrpost['username'] = $setting['general_username'];
+			$arrpost['s_key'] = $setting['general_skey'];
+			$arrpost['messageURL'] = $setting['general_url'] ? $setting['general_url'].'api/ku6video.php' : SITE_URL.'api/ku6video.php';
+			$http->post(KU6_UNION.'vip/phpcmsinterface.php', $arrpost);
+			if($http->get_data() != 200)
+			{
+				showmessage('Ku6联盟帐号不正确，请重新填写');		
+			}
+		}
 		filter_write($setting['filter_word']);
 		module_setting($mod, $setting);
 		set_config($setconfig);
 		phpcms_tm();
+		
 		if($PHPCMS['fileext'] != $setting['fileext'] || $PHPCMS['enable_urlencode'] != $setting['enable_urlencode'])
 	    {
 			showmessage('网站配置保存成功！开始更新内容页URL ...', '?mod=phpcms&file=url&forward='.urlencode(URL));
@@ -49,7 +65,7 @@ switch($action)
 		require_once 'sendmail.class.php';
         $sendmail = new sendmail();
         $sendmail->set($mail_server, $mail_port, $mail_user, $mail_password, $mail_type, $mail_user);
-        echo $sendmail->send($email_to, '邮件发送测试 - '.$PHPCMS['sitename'], '邮件发送测试！<br />'.$PHPCMS['mail_sign'], $mail_user) ? '邮件发送成功！' : '邮件发送失败！';
+        echo $sendmail->send($email_to, '邮件发送测试 - '.$PHPCMS['sitename'], '邮件发送测试！<br />'.$PHPCMS['mail_sign'], $mail_user) ? '邮件发送成功！' : $sendmail->error[0][1];
 		exit;
 		break;
 

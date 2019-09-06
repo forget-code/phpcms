@@ -6,7 +6,7 @@ require_once 'admin/content.class.php';
 require_once 'attachment.class.php';
 $c = new content();
 
-if(is_numeric($contentid))
+if(is_numeric($contentid) && $contentid>0)
 {
 	$data = $c->get($contentid);
 	$catid = $data['catid'];
@@ -47,7 +47,8 @@ else
 			if($priv_role->check('processid', $pid))
 			{
 				$allow_processids[] = $pid;
-				$submenu[] = array($processname, '?mod='.$mod.'&file='.$file.'&action=check&catid='.$catid.'&processid='.$pid);
+				if($pid==1) $add_status = '&status=3';
+				$submenu[] = array($processname, '?mod='.$mod.'&file='.$file.'&action=check&catid='.$catid.'&processid='.$pid.$add_status);
 			}
 		}
 	}
@@ -75,6 +76,7 @@ switch($action)
 		if($dosubmit)
 		{
 			$info['status'] = ($status == 2 || $status == 3) ? $status : ($allow_manage ? 99 : 3);
+			if(isset($info['inputtime'])) $info['updatetime'] = $info['inputtime'];
 			$contentid = $c->add($info,$cat_selected);
 			if($contentid) showmessage('发布成功！', '?mod=phpcms&file=content&action=add&catid='.$catid);
 		}
@@ -211,6 +213,18 @@ switch($action)
 
         $pagetitle = $CATEGORY[$catid]['catname'].'-审核';
 		include admin_tpl('content_check');
+		break;
+	
+	case 'check_title':
+		if(CHARSET=='gbk') $c_title = iconv('utf-8', 'gbk', $c_title);
+		if($c->get_contentid($c_title))
+		{	
+			echo '此标题已存在！';
+		}
+		else
+		{
+			echo '标题不存在！';
+		}
 		break;
 
     case 'browse':
@@ -399,10 +413,32 @@ switch($action)
 		include template('phpcms', $template);
 		break;
 
+	case 'posid':
+		if(!$posid) showmessage('不存在此推荐位！');
+		if(!$contentid) showmessage('没有被推荐的信息！');
+		if(!$priv_role->check('posid', $posid)) showmessage('您没有此推荐位的权限！');
+		foreach($contentid as $cid)
+		{
+			if($c->get_posid($cid, $posid)) continue;
+			$c->add_posid($cid, $posid);
+		}
+		showmessage('批量推荐成功！', '?mod='.$mod.'&file='.$file.'&action=manage&catid='.$catid);
+		break;
+
+	case 'typeid':
+		if(!$typeid) showmessage('不存在此类别！');
+		if(!$contentid) showmessage('没有信息被选中！');
+		foreach($contentid as $cid)
+		{
+			$c->add_typeid($cid, $typeid);
+		}
+		showmessage('批量加入类别到成功！', '?mod='.$mod.'&file='.$file.'&action=manage&catid='.$catid);
+		break;
+
 	default:
 		require_once 'admin/model_field.class.php';
         $model_field = new model_field($modelid);
-
+		
 	    $where = "`catid`=$catid AND `status`=99 ";
 	    if($typeid) $where .= " AND `typeid`='$typeid' ";
 	    if($areaid) $where .= " AND `areaid`='$areaid' ";
@@ -433,6 +469,14 @@ switch($action)
         $infos = $c->listinfo($where, '`listorder` DESC,`contentid` DESC', $page, 20);
 
         $pagetitle = $CATEGORY[$catid]['catname'].'-管理';
+		foreach($POS AS $key => $p)
+		{
+			if($priv_role->check('posid', $key))
+			{
+				$POSID[$key] = $p;
+			}
+		}
+		$POS = $POSID;
 		$POS[0] = '不限推荐位';
 
 		include admin_tpl('content_manage');

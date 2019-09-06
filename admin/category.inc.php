@@ -3,10 +3,12 @@ defined('IN_PHPCMS') or exit('Access Denied');
 
 require_once 'tree.class.php';
 require_once 'admin/category.class.php';
+require_once 'admin/content.class.php';
 
 $tree = new tree;
 $catid = isset($catid) ? intval($catid) : 0;
 $cat = new category($mod);
+$c = new content();
 
 $action = $action ? $action : 'manage';
 if(!$forward) $forward = '?mod='.$mod.'&file='.$file.'&action=manage';
@@ -22,6 +24,7 @@ switch($action)
 			$priv_group->update('catid', $catid, $priv_groupid);
 			$priv_role->update('catid', $catid, $priv_roleid);
 			cache_common();
+			$forward = '?mod='.$mod.'&file='.$file.'&action=repair';
 	        showmessage('添加成功！开始更新网站地图...', '?mod=phpcms&file=sitemap&dosubmit=1&forward='.urlencode($forward));
 		}
 		else
@@ -34,6 +37,7 @@ switch($action)
 					$modelid = $CATEGORY[$catid]['modelid'];
 				}
 			}
+			$forward = '?mod='.$mod.'&file='.$file.'&action=manage';
 		    include admin_tpl('category_add');
 		}
 		break;
@@ -48,6 +52,10 @@ switch($action)
 			$category['catname'] = trim($category['catname']);
 			$category['catdir'] = trim($category['catdir']);
 			$cat->edit($catid, $category, $setting);
+			if($createtype_application && $CATEGORY[$catid]['child'])
+			{
+				$cat->update_child($catid);
+			}
 			$priv_group->update('catid', $catid, $priv_groupid);
 			$priv_role->update('catid', $catid, $priv_roleid);
 			showmessage('操作成功！开始更新网站地图...', '?mod=phpcms&file=sitemap&dosubmit=1&forward='.urlencode($forward));
@@ -70,7 +78,7 @@ switch($action)
      case 'repair':
 
         $cat->repair();
-        showmessage('更新成功', $forward);
+        showmessage('更新成功', '?mod='.$mod.'&file='.$file.'&action=manage');
 		break;
 
      case 'delete':
@@ -143,7 +151,7 @@ switch($action)
 	case 'updatecache':
 		cache_common();
 		cache_category();
-		showmessage($LANG['category_cache_update_success'], $forward);
+		showmessage($LANG['category_cache_update_success'], '?mod=phpcms&file=category&action=manage');
 		break;
 
 	case 'manage':
@@ -262,5 +270,88 @@ switch($action)
 		    include admin_tpl('category_more');
 		}
         break;
+	case 'update_search':
+		if($dosubmit)
+		{
+			if(!$count)
+			{
+				if(!isset($catids) || $catids[0] == 0) 
+				{
+					foreach($CATEGORY as $cid=>$v)
+					{
+						if($v['type'] == 0) $catids[] = $cid;
+					}
+				}
+				foreach($catids as $k=>$id)
+				{
+					if($CATEGORY[$id]['type'] == 0 && $MODEL[$CATEGORY[$id]['modelid']]['enablesearch'] && $CATEGORY[$id]['child']==0)
+					{
+						$cids[] = $id;
+					}
+				}
+				if($cids)
+				{
+					cache_write('search_category_'.$_userid.'.php', $cids);
+					$count = count($cids);
+					$forward = urlencode($forward);
+					showmessage('开始遍历栏目...', "?mod=$mod&file=$file&action=$action&forward=$forward&pagesize=$pagesize&dosubmit=1&count=$count");
+				}
+				else
+				{
+					showmessage('更新完成！', "?mod=$mod&file=$file&action=$action");
+				}
+			}
+			else
+			{
+				$catids = cache_read('search_category_'.$_userid.'.php');
+				$page = max(intval($page), 1);
+				if($page == 1)
+				{
+				    $catid = array_shift($catids);
+					cache_write('search_category_'.$_userid.'.php', $catids);
+                }
+				$catname = $CATEGORY[$catid]['catname'];
+
+				if($CATEGORY[$catid]['child']==0)
+				{
+					$offset = $pagesize*($page-1);
+					if($page == 1)
+					{
+						$contents = cache_count("SELECT COUNT(*) AS `count` FROM `".DB_PRE."content` WHERE catid=$catid AND status=99");
+						$total = $contents;
+						$pages = ceil($total/$pagesize);
+					}
+					$max = min($offset+$pagesize, $total);
+					for($i=$offset; $i<$max; $i++)
+					{
+						$c->update_search($catid, $i);
+					}
+				}
+				if($pages > $page)
+				{
+					$page++;
+					$percent = round($max/$total, 2)*100;
+					$message = "正在更新 <font color='blue'>$catname</font> 栏目中内容的全站搜索，共需更新 <font color='red'>$total</font> 篇内容<br />已更新 <font color='red'>{$max}</font> 篇内容（<font color='red'>{$percent}%</font>）";
+					$forward = url_par("catid=$catid&page=$page&pages=$pages&total=$total");
+				}
+				elseif($catids)
+				{
+					$message = "<font color='blue'>$catname</font> 栏目更新完成！";
+					$forward = url_par("catid=0&page=0&pages=0&total=0");
+				}
+				else
+				{
+					cache_delete('search_category_'.$_userid.'.php');
+					$message = "更新完成！";
+					$forward = '?mod=phpcms&file=category&action=update_search';
+				}
+				showmessage($message, $forward);
+			}
+		}
+		else
+		{
+			include admin_tpl('category_search');
+		}
+		break;
 }
 ?>

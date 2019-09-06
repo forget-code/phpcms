@@ -19,8 +19,8 @@ ob_clean();
 if($enablegd)
 {
 	//create captcha
-	$consts = 'bcdfghjkmnpqrstwxyz';
-	$vowels = 'aei23456789';
+	$consts = 'cdfgkmnpqrstwxyz23456';
+	$vowels = 'aek23456789';
 	for ($x = 0; $x < 6; $x++)
 	{
 		$const[$x] = substr($consts, mt_rand(0,strlen($consts)-1),1);
@@ -29,7 +29,7 @@ if($enablegd)
 	$radomstring = $const[0] . $vow[0] .$const[2] . $const[1] . $vow[1] . $const[3] . $vow[3] . $const[4];
 	$_SESSION['checkcode'] = $string = substr($radomstring,0,4); //only display 4 str
 	//set up image, the first number is the width and the second is the height
-	$imageX = strlen($radomstring)*5.5;	//the image width
+	$imageX = strlen($radomstring)*8;	//the image width
 	$imageY = 20;						//the image height
 	$im = imagecreatetruecolor($imageX,$imageY);
 
@@ -46,18 +46,11 @@ if($enablegd)
 	//fill image with bgcolor
 	imagefill($im, 0, 0, imagecolorallocate($im, 250, 253, 254));
 	//writes string
-	imagestring($im, 5, 3, floor(rand(0,5))-1, $string[0], $foregroundArr[rand(0,3)]);
-	imagestring($im, 5, 13, floor(rand(0,5))-1, $string[1], $foregroundArr[rand(0,3)]);
-	imagestring($im, 5, 23, floor(rand(0,5))-1, $string[2], $foregroundArr[rand(0,3)]);
-	imagestring($im, 5, 33, floor(rand(0,5))-1, $string[3], $foregroundArr[rand(0,3)]);
-	for($i=0; $i<strlen($string); $i++)
-	{
-		if(mt_rand(0,ord(substr($string,$i,1)))%2 == 0)
-		{
-			$string{$i} = ' ';
-		}
-	}
-	imagestring($im, 2, 2, 0, $string, $foreground2);
+	imagettftext($im, 12, rand(30, -30), 5, rand(14, 16), $foregroundArr[rand(0,3)], PHPCMS_ROOT.'include/fonts/ALGER.TTF', $string[0]);
+	imagettftext($im, 12, rand(50, -50), 20, rand(14, 16), $foregroundArr[rand(0,3)], PHPCMS_ROOT.'include/fonts/ARIALNI.TTF', $string[1]);
+	imagettftext($im, 12, rand(50, -50), 35, rand(14, 16), $foregroundArr[rand(0,3)], PHPCMS_ROOT.'include/fonts/ALGER.TTF', $string[2]);
+	imagettftext($im, 12, rand(30, -30), 50, rand(14, 16), $foregroundArr[rand(0,3)], PHPCMS_ROOT.'include/fonts/arial.ttf', $string[3]);
+	
 	//strikethrough
 
 	$border = imagecolorallocate($im, 133, 153, 193);
@@ -65,24 +58,21 @@ if($enablegd)
 	imagerectangle($im, 0, 0, $imageX - 1, $imageY - 1, $border);
 
 	$pointcol = imagecolorallocate($im, rand(0,255), rand(0,255), rand(0,255));
-	for ($i=0;$i<20;$i++)
+	for ($i=0;$i<80;$i++)
 	{
 		imagesetpixel($im,rand(2,$imageX-2),rand(2,$imageX-2),$pointcol);
 	}
-	//rotate
-
-	$middleground = imagecolorallocatealpha($im, rand(160, 200), rand(160, 200), rand(160, 200), 80);
 	//random shapes
-	for ($x=0; $x<15;$x++)
+	for ($x=0; $x<9;$x++)
 	{
 		if(mt_rand(0,$x)%2==0)
 		{
-			imageline($im, rand(0, 120), rand(0, 120), rand(0, 120), rand(0, 120), $middleground);
+			imageline($im, rand(0, 120), rand(0, 120), rand(0, 120), rand(0, 120), rand(0, 999999));
 			imageellipse($im, rand(0, 120), rand(0, 120), rand(0, 120), rand(0, 120), $middleground2);
 		}
 		else
 		{
-			imageline($im, rand(0, 120), rand(0, 120), rand(0, 120), rand(0, 120), $middleground2);
+			imageline($im, rand(0, 120), rand(0, 120), rand(0, 120), rand(0, 120), rand(0, 999999));
 			imageellipse($im, rand(0, 120), rand(0, 120), rand(0, 120), rand(0, 120), $middleground);
 		}
 	}
