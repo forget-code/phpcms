@@ -250,17 +250,21 @@ class index extends foreground {
 			$this->message_db->messagecheck($this->_userid);
 			//检查此消息是否有权限回复 
 			$this->check_user($messageid,'to');
+			$info = array();
 			
- 			$_POST['info']['send_from_id'] = $this->_username;
-			$_POST['info']['message_time'] = SYS_TIME;
-			$_POST['info']['status'] = '1';
-			$_POST['info']['folder'] = 'inbox';
-			$_POST['info']['content'] = safe_replace($_POST['info']['content']);
-			$_POST['info']['subject'] = safe_replace($_POST['info']['subject']);
+ 			$info['send_from_id'] = $this->_username;
+			$info['message_time'] = SYS_TIME;
+			$info['status'] = '1';
+			$info['folder'] = 'inbox';
+			$info['content'] = safe_replace($_POST['info']['content']);
+			$info['subject'] = safe_replace($_POST['info']['subject']);
+			$info['replyid'] = intval($_POST['info']['replyid']);
 			if(empty($_POST['info']['send_to_id'])) {
 				showmessage(L('user_noempty'),HTTP_REFERER);
+			} else {
+				$info['send_to_id'] = $_POST['info']['send_to_id'];
 			}
-			$messageid = $this->message_db->insert($_POST['info'],true);
+			$messageid = $this->message_db->insert($info,true);
 			if(!$messageid) return FALSE; 
 			showmessage(L('operation_success'),HTTP_REFERER);
 			

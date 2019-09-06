@@ -35,6 +35,7 @@ class member_input {
 				if(empty($errortips)) $errortips = "$name 不符合要求！";
 				$length = empty($value) ? 0 : strlen($value);
 				if($minlength && $length < $minlength && !$isimport) showmessage("$name 不得少于 $minlength 个字符！");
+				if (!array_key_exists($field, $this->fields)) showmessage('模型中不存在'.$field.'字段');
 				if($maxlength && $length > $maxlength && !$isimport) {
 					showmessage("$name 不得超过 $maxlength 个字符！");
 				} else {

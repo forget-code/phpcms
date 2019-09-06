@@ -283,19 +283,22 @@ class content extends foreground {
 		$username = param::get_cookie('_username');
 		$userid = param::get_cookie('_userid');
 		$siteid = get_siteid();
-		$checkid = 'c-'.$id.'-'.$siteid;
+		$catid = intval($_GET['catid']);
+		$siteids = getcache('category_content', 'commons');
+		$siteid = $siteids[$catid];
+		$CATEGORYS = getcache('category_content_'.$siteid, 'commons');
+		$category = $CATEGORYS[$catid];
+		if(!$category){
+			showmessage(L('operation_failure'), HTTP_REFERER); 
+ 		}
+		$modelid = $category['modelid'];
+		$checkid = 'c-'.$id.'-'.$modelid;
  		$where = " checkid='$checkid' and username='$username' and status!=99 ";
 		$check_pushed_db = pc_base::load_model('content_check_model');
  		$array = $check_pushed_db->get_one($where);
 		if(!$array){
  			showmessage(L('operation_failure'), HTTP_REFERER); 
 		}else{
-			//获取模型ID
-			$CATEGORY = getcache('category_content_'.$siteid,'commons');
-			if(!$CATEGORY[$array['catid']]){
-				showmessage(L('operation_failure'), HTTP_REFERER); 
- 			}
-			$modelid = $CATEGORY[$array['catid']]['modelid']; 
 			$content_db = pc_base::load_model('content_model');
 			$content_db->set_model($modelid);
 			$table_name = $content_db->table_name;

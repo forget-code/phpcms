@@ -97,6 +97,7 @@ class category extends admin {
 			
 			if(isset($_POST['batch_add']) && empty($_POST['batch_add'])) {
 				if($_POST['info']['catname']=='') showmessage(L('input_catname'));
+				$_POST['info']['catname'] = safe_replace($_POST['info']['catname']);
 				if($_POST['info']['type']!=2) {
 					if($_POST['info']['catdir']=='') showmessage(L('input_dirname'));
 					if(!$this->public_check_catdir(0,$_POST['info']['catdir'])) showmessage(L('catname_have_exists'));
@@ -223,7 +224,7 @@ class category extends admin {
 			$_POST['info']['sethtml'] = $setting['create_to_html_root'];
 			$_POST['info']['setting'] = array2string($setting);
 			$_POST['info']['module'] = 'content';
-			$catname = CHARSET == 'gbk' ? $_POST['info']['catname'] : iconv('utf-8','gbk',$_POST['info']['catname']);
+			$catname = CHARSET == 'gbk' ? safe_replace($_POST['info']['catname']) : iconv('utf-8','gbk',safe_replace($_POST['info']['catname']));
 			$letters = gbk_to_pinyin($catname);
 			$_POST['info']['letter'] = strtolower(implode('', $letters));
 			
