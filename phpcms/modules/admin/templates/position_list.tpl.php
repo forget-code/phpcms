@@ -36,6 +36,11 @@ if(is_array($infos)){
 	<?php } else {?>
 	<a href="javascript:confirmurl('?m=admin&c=position&a=delete&posid=<?php echo $info['posid']?>', '<?php echo L('posid_del_cofirm')?>')"><?php echo L('delete')?></a>	
 	<?php } ?>
+	| 
+	<?php if($info['thumb']!=""){?>
+	<a href="javascript:preview('<?php echo $info['thumb'];?>','<?php echo $info['name'];?>')"><font color="green"><?php echo L('priview')?></font></a>
+	<?php }else{?> <?php echo L('no_priview')?><?php } ?>
+	
 	</td>
 	</tr>
 <?php 
@@ -60,6 +65,12 @@ if(is_array($infos)){
 	function edit(id, name) {
 	window.top.art.dialog({title:'<?php echo L('edit')?>--'+name, id:'edit', iframe:'?m=admin&c=position&a=edit&posid='+id ,width:'500px',height:'360px'}, 	function(){var d = window.top.art.dialog({id:'edit'}).data.iframe;
 	var form = d.document.getElementById('dosubmit');form.click();return false;}, function(){window.top.art.dialog({id:'edit'}).close()});
+}
+
+//预览视频
+function preview(thumb, name) {
+	window.top.art.dialog({id:'preview'}).close();
+	window.top.art.dialog({title:'预览 '+name+' ',id:'preview',iframe:'?m=admin&c=position&a=preview&thumb='+thumb,width:'530',height:'400'}, '', function(){window.top.art.dialog({id:'preview'}).close()});
 }
 //-->
 </script>

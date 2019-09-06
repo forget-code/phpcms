@@ -24,7 +24,7 @@ class position extends admin {
 			$pages = $this->db->pages;
 			$show_dialog = true;
 			$big_menu = array('javascript:window.top.art.dialog({id:\'add\',iframe:\'?m=admin&c=position&a=add\', title:\''.L('posid_add').'\', width:\'500\', height:\'360\', lock:true}, function(){var d = window.top.art.dialog({id:\'add\'}).data.iframe;var form = d.document.getElementById(\'dosubmit\');form.click();return false;}, function(){window.top.art.dialog({id:\'add\'}).close()});void(0);', L('posid_add'));
-			include $this->admin_tpl('position_list');
+ 			include $this->admin_tpl('position_list');
 	}
 	
 	/**
@@ -38,6 +38,7 @@ class position extends admin {
 			$_POST['info']['siteid'] = intval($_POST['info']['modelid']) ? get_siteid() : 0;
 			$_POST['info']['listorder'] = intval($_POST['info']['listorder']);
 			$_POST['info']['maxnum'] = intval($_POST['info']['maxnum']);
+			$_POST['info']['thumb'] = $_POST['info']['thumb'];
 			$insert_id = $this->db->insert($_POST['info'],true);
 			$this->_set_cache();
 			if($insert_id){
@@ -69,6 +70,7 @@ class position extends admin {
 			$_POST['info']['siteid'] = intval($_POST['info']['modelid']) ? get_siteid() : 0;
 			$_POST['info']['listorder'] = intval($_POST['info']['listorder']);
 			$_POST['info']['maxnum'] = intval($_POST['info']['maxnum']);			
+			$_POST['info']['thumb'] = $_POST['info']['thumb'];			
 			$this->db->update($_POST['info'],array('posid'=>$_POST['posid']));
 			$this->_set_cache();
 			showmessage(L('operation_success'), '', '', 'edit');
@@ -244,5 +246,9 @@ class position extends admin {
 		$posids = $this->db_data->get_one(array('id'=>$id,'modelid'=>$modelid)) ? 1 : 0;
 		return $this->db_content->update(array('posids'=>$posids),array('id'=>$id));
 	}	
+	public function preview(){
+		$thumb = $_GET['thumb'];
+		include $this->admin_tpl('position_priview');	
+	}
 }
 ?>

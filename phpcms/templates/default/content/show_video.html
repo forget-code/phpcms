@@ -6,15 +6,13 @@
 var vid = '{$video[vid]}';
 var id = '{$video_cache['style_projectid']}';//皮肤样式
 $(function(){
-	$('#html').val('<embed src="{pc_base::load_config('ku6server', 'player_url')}'+vid+'/style/'+id+'/" quality="high" width="600" height="500" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1" type="application/x-shockwave-flash" wmode="transparent"></embed>');
+	$('#html').val('<embed src="{pc_base::load_config('ku6server', 'player_url')}'+vid+'/style/'+id+'/" quality="high" width="600" height="500" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="" type="application/x-shockwave-flash" wmode="transparent"></embed>');
 	$('#tag1').tabs("div.tabn1 > ul");
-
 }) 
 
 function copy_text(matter){
 	matter.select();
-	js1=matter.createTextRange();
-	js1.execCommand("Copy");
+	document.execCommand("Copy");
 	alert('复制成功！');
 }
 
@@ -63,7 +61,7 @@ function copy_text(matter){
                 </li>
                 <li style="clear:both;">
                 <strong>嵌入代码：</strong>
-                <input name="html" id="html" type="text" size="50" class="fz_ipt" style="margin-left:2px;" ><input type="button" class="fz_btn" value="复制" onclick="copy_text(this);"> (*非IE浏览器，请双击复制哦！)
+                <input name="html" id="html" type="text" size="50" class="fz_ipt" style="margin-left:2px;" ><input type="button" class="fz_btn" value="复制" onclick="copy_text($('#html'));"> (*非IE浏览器，请双击复制哦！)
 				</li> 
             </ul>
         </div>

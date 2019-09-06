@@ -613,6 +613,11 @@ CREATE TABLE `phpcms_menu` (
   `data` char(100) NOT NULL default '',
   `listorder` smallint(6) unsigned NOT NULL default '0',
   `display` enum('1','0') NOT NULL default '1',
+  `project1` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `project2` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `project3` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `project4` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  `project5` tinyint(1) unsigned NOT NULL DEFAULT '1',
   PRIMARY KEY  (`id`),
   KEY `listorder` (`listorder`),
   KEY `parentid` (`parentid`),
@@ -849,6 +854,7 @@ CREATE TABLE `phpcms_position` (
   `extention` char(100) DEFAULT NULL,
   `listorder` smallint(5) unsigned NOT NULL DEFAULT '0',
   `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `thumb` varchar(200) NOT NULL DEFAULT '',
   PRIMARY KEY (`posid`)
 ) TYPE=MyISAM;
 

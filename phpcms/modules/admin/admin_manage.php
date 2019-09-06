@@ -184,11 +184,14 @@ class admin_manage extends admin {
 	 */
 	function public_email_ajx() {
 		$email = $_GET['email'];
-		if ($this->db->get_one(array('email'=>$email),'userid')){
+		$userid = $_SESSION['userid'];
+		$check = $this->db->get_one(array('email'=>$email),'userid');
+		if ($check && $check['userid']!=$userid){
 			exit('0');
+		}else{
+			exit('1');
 		}
-		exit('1');
-	}
+ 	}
 
 	//电子口令卡
 	function card() {

@@ -68,12 +68,12 @@ function video_filters($field = '',$modelid,$diyarr = array(),$isall = 1) {
 		$option[$k]['name'] = $v[0];
 		$option[$k]['value'] = $k;
 		$option[$k]['url'] = video_filters_url($field,array($field=>$k),2,$modelid);
-		$option[$k]['menu'] = $field_value == $k ? '<a href="#" class="ac">'.$v[0].'</a>' : '<a href='.$option[$k]['url'].'>'.$v[0].'</a>';
+		$option[$k]['menu'] = $field_value == $k ? '<a href="#" class="ac">'.$v[0].'</a>' : '<a href="'.$option[$k]['url'].'">'.$v[0].'</a>';
 	}
 	if ($isall) {
 		$all['name'] = L('all');
 		$all['url'] = video_filters_url($field,array($field=>''),2,$modelid);
-		$all['menu'] = $field_value == '' ? '<a href="#" class="ac">'.$all['name'].'</a>' : '<a href='.$all['url'].'>'.$all['name'].'</a>';
+		$all['menu'] = $field_value == '' ? '<a href="#" class="ac">'.$all['name'].'</a>' : '<a href="'.$all['url'].'">'.$all['name'].'</a>';
 		array_unshift($option,$all);
 	}
 	return $option;
@@ -90,21 +90,19 @@ function video_filters_url($fieldname,$array=array(),$type = 1,$modelid, $isphp 
 	} else {
 		$array = array_merge($_GET,$array);
 	}
-	$setting = getcache('yp_setting', 'yp');
+	//$setting = getcache('yp_setting', 'yp');
 	//TODO
 	$fields = getcache('model_field_'.$modelid,'model');
 	if(is_array($fields) && !empty($fields)) {
 		ksort($fields);
 		foreach ($fields as $_v=>$_k) {
 			if($_k['filtertype'] || $_k['rangetype']) {
-				if($setting['enable_rewrite'] == 0) $urlpars .= '&'.$_v.'={$'.$_v.'}';
-				else $urlpars .= '-{$'.$_v.'}';
+				$urlpars .= '&'.$_v.'={$'.$_v.'}';
 			}
 		}
 	}
 	//伪静态url规则管理，apache伪静态支持9个参数
-	if($setting['enable_rewrite'] == 0 || $isphp) $urlrule =APP_PATH.'index.php?m=content&c=index&a=lists&catid='.$_GET[catid].'&modelid='.$modelid.$urlpars.'&page={$page}';
-	else $urlrule =APP_PATH.'yp-list-'.$modelid.$urlpars.'-{$page}.html';
+	 $urlrule =APP_PATH.'index.php?m=content&c=index&a=lists&catid='.$_GET[catid].'&modelid='.$modelid.$urlpars.'&page={$page}';
 	//根据get传值构造URL
 	if (is_array($array)) foreach ($array as $_k=>$_v) {
 		if($_k=='page') $_v=1;

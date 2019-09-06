@@ -640,6 +640,20 @@ class content extends foreground {
 	 */
 	public function upload_video() {
 		
+		$memberinfo = $this->memberinfo;
+		$grouplist = getcache('grouplist');
+		//判断会员组是否允许投稿
+		if(!$grouplist[$memberinfo['groupid']]['allowpost']) {
+			showmessage(L('member_group').L('publish_deny'), HTTP_REFERER);
+		}
+		//判断每日投稿数
+		$this->content_check_db = pc_base::load_model('content_check_model');
+		$todaytime = strtotime(date('y-m-d',SYS_TIME));
+		$_username = $this->memberinfo['username'];
+		$allowpostnum = $this->content_check_db->count("`inputtime` > $todaytime AND `username`='$_username'");
+		if($grouplist[$memberinfo['groupid']]['allowpostnum'] > 0 && $allowpostnum >= $grouplist[$memberinfo['groupid']]['allowpostnum']) {
+			showmessage(L('allowpostnum_deny').$grouplist[$memberinfo['groupid']]['allowpostnum'], HTTP_REFERER);
+		}
 		//加载视频库配置信息 
 		pc_base::load_app_class('ku6api', 'video', 0);
 		$setting = getcache('video', 'video');
@@ -663,6 +677,11 @@ class content extends foreground {
 			$categorys = video_categorys();
 			if (is_array($categorys) && !empty($categorys)) {
 				$cat = array();
+				$priv_db = pc_base::load_model('category_priv_model'); //加载栏目权限表数据模型
+				foreach ($categorys as $cid=>$c) {
+					if($c['child']==0 && $c['type']==0 && !$priv_db->get_one(array('catid'=>$cid, 'roleid'=>$memberinfo['groupid'], 'is_admin'=>0, 'action'=>'add'))) unset($categorys[$cid]);
+				}
+				if (empty($categorys)) showmessage(L('category').L('publish_deny'), APP_PATH.'index.php?m=member');
 				foreach ($categorys as $cid => $c) {
 					if ($c['child']) {
 						$ischild = 1;

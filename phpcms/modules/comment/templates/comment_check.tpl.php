@@ -30,9 +30,9 @@ function check(id, type, commentid) {
 	if(type == -1 && !confirm('<?php echo L('are_you_sure_you_want_to_delete')?>')) {
 		return false;
 	}
-	$.get('?m=comment&c=check&a=ajax_checks&id='+id+'&type='+type+'&commentid='+commentid+'&'+Math.random(), function(data){if(data!=1){if(data==0){alert('<?php echo L('illegal_parameters')?>')}else{alert(data)}}else{$('#tbody_'+id).remove();
+	$.get('?m=comment&c=check&a=ajax_checks&id='+id+'&type='+type+'&commentid='+commentid+'&pc_hash='+pc_hash+'&'+Math.random(), function(data){if(data!=1){if(data==0){alert('<?php echo L('illegal_parameters')?>')}else{alert(data)}}else{$('#tbody_'+id).remove();
 
-	$.getJSON('?m=comment&c=check&a=public_get_one&'+Math.random(), function(data){
+	$.getJSON('?m=comment&c=check&a=public_get_one'+'&pc_hash='+pc_hash+Math.random(), function(data){
 		if (data) {
 			$('#wait').html(data.total);
 			val = data.data;

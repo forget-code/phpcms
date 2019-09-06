@@ -47,31 +47,30 @@ class video extends admin {
 	 * 视频列表
 	 */
 	public function init() {
-		$where = '1';
+		$where = '';
 		$page = $_GET['page'];
 		$pagesize = 20;
-		if (isset($_GET['type'])) {
-			if ($_GET['type']==1) {
-				$where .= ' AND `videoid`=\''.$_GET['q'].'\'';
-			} else {
-				$where .= " AND `title` LIKE '%".$_GET['q']."%'";
+		if($_GET['q']){
+			if (isset($_GET['type'])) {
+				if ($_GET['type']==1) {
+					$where .= ' `videoid`=\''.$_GET['q'].'\'';
+				} else {
+					$where .= " `title` LIKE '%".$_GET['q']."%'";
+				}
 			}
+ 		}
+ 		
+		if (isset($_GET['start_addtime']) && !empty($_GET['start_addtime'])) {
+ 			$where .= !empty($where) ? ' AND `addtime`>=\''.strtotime($_GET['start_addtime']).'\'' : ' `addtime`>=\''.strtotime($_GET['start_addtime']).'\'';
 		}
-		if (isset($_GET['start_time'])) {
-			$where .= ' AND `addtime`>=\''.strtotime($_GET['start_time']).'\'';
-		}
-		if (isset($_GET['end_time'])) {
-			$where .= ' AND `addtime`<=\''.strtotime($_GET['end_time']).'\'';
-		}
-		if (isset($_GET['status'])) {
-			$status = intval($_GET['status']);
-			$where .= ' AND `status`=\''.$status.'\'';
-		}
+		if (!empty($_GET['end_addtime'])) {
+			$where .= !empty($where) ? ' AND `addtime`<=\''.strtotime($_GET['end_addtime']).'\'' : ' `addtime`<=\''.strtotime($_GET['end_addtime']).'\'';
+ 		} 
 		$userupload = intval($_GET['userupload']);
 		if ($userupload) {
 			$where .= ' AND `userupload`=1';
 		}
-		$infos = $this->db->listinfo($where, 'videoid DESC', $page, $pagesize);
+ 		$infos = $this->db->listinfo($where, 'videoid DESC', $page, $pagesize);
 		$pages = $this->db->pages;
 		include $this->admin_tpl('video_list');		
 	}
@@ -494,6 +493,15 @@ class video extends admin {
 			}
  		}
 		return array();
+	}
+
+	public function public_view_video() {
+		$id = intval($_GET['id']);
+		if (!$id) showmessage('请选择要浏览的视频！');
+		$r = $this->db->get_one(array('videoid'=>$id), 'vid');
+		$video_cache = $this->setting;
+		$show_header = 1;
+		include $this->admin_tpl('view_video');
 	}
 }
 

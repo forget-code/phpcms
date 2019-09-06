@@ -740,4 +740,7 @@ $LANG['admin_url_tips'] = '例如：admin.domain.com，绑定后，只能通过�
 
 $LANG['setting_connect_qqnew'] = 'QQ号码登录';
 $LANG['setting_connect_qqcallback'] = '回调地址';
+$LANG['panel_switch'] = '面板切换';
+$LANG['full_menu'] = '全功能';
+$LANG['show_in_model'] = '在此模式中显示';
 ?>

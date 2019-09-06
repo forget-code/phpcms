@@ -129,7 +129,11 @@ if ($data['status']<0 || $data['status']==24) {
 			$modelid = intval($rs['modelid']);
 			$contentid = intval($rs['contentid']);
 			$content_db->set_model($modelid);
-			$content_db->update(array('status'=>99), array('id'=>$contentid));
+			$c_info = $content_db->get_one(array('id'=>$contentid), 'thumb');
+
+			$where = array('status'=>99);
+			if (!$c_info['thumb']) $where['thumb'] = $data['picpath'];
+			$content_db->update($where, array('id'=>$contentid));
 			$checkid = 'c-'.$contentid.'-'.$modelid;
 			$content_check_db->delete(array('checkid'=>$checkid));
 			$table_name = $content_db->table_name;

@@ -1,6 +1,9 @@
 <?php 
 defined('IN_PHPCMS') or exit('No permission resources.');
 
+$session_storage = 'session_'.pc_base::load_config('system','session_storage');
+pc_base::load_sys_class($session_storage);
+
 /**
  * 
  * ------------------------------------------
@@ -32,6 +35,10 @@ class video_for_ck {
 	 * 视频列表
 	 */
 	public function init() {
+		
+		if (!$this->check_priv('video2content')) {
+			showmessage('您没有权限操作该项','blank');
+		}
 		$where = '`status`=21';
 		$page = max(intval($_GET['page']), 1);
 		$pagesize = 6;
@@ -42,6 +49,7 @@ class video_for_ck {
 		$number = $this->db->number;
 		$pages = $this->pages($number, $page, $pagesize, 4, 'get_videoes');
 		$flash_info = $this->ku6api->flashuploadparam();
+
 		include template('content','video_for_ck');
 	}
 	
@@ -83,6 +91,7 @@ class video_for_ck {
 	 */
 	public function add_f_ckeditor () {
 		//首先处理，提交过来的数据
+
 		$data = array();
 		$data['vid'] = $_GET['vid'];
 		if (!$data['vid']) exit('1');
@@ -187,6 +196,23 @@ class video_for_ck {
 			}
 		} else {
 			exit('1');
+		}
+	}
+
+	/**
+	 * Function CHECK_priv
+	 * 检查权限
+	 */
+	private function check_priv($action = '') {
+		if (!$action) $action = 'init';
+		if (isset($_SESSION['roleid']) && !$_SESSION['roleid'] && $_SESSION['roleid']!=1) {
+			$siteid = get_siteid();
+			$admin_role_priv_db = pc_base::load_model('admin_role_priv_model');
+			$r = $admin_role_priv_db->get_one(array('m'=>'video','c'=>'video','a'=>$action,'roleid'=>$_SESSION['roleid'],'siteid'=>$siteid));
+			if ($r) return true;
+			else return false;
+		} else {
+			return true;
 		}
 	}
 }

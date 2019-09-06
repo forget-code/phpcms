@@ -58,6 +58,11 @@ class index{
 		pc_base::load_app_func('util','content');
 		$spid = $_GET['spid'];
 		$page = $_GET['page'];
+		if(isset($_GET['siteid'])) {
+			$siteid = intval($_GET['siteid']);
+		} else {
+			$siteid = 1;
+		}
  		include template('content','video_album');
 	}
 	

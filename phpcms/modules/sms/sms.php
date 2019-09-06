@@ -111,10 +111,21 @@ class sms extends admin {
 		}
 
 		if(isset($_POST['dosubmit'])) {
-			$content = $_POST['content'];
+			//组合短信参数内容
+			$content = '';
+			if(is_array($_POST['msg']) && !empty($_POST['msg'])){
+				foreach ($_POST['msg'] as $val) { 
+					$val = stripcslashes($val);
+					if($content==''){
+						$content.="$val";
+					}else{
+						$content.="||$val";
+					}
+				}
+			}
 			$mobile = explode("\r\n", trim($_POST['mobile'],"\r\n"));
 			$mobile = array_unique($mobile);
-			
+			$tplid = intval($_POST['tplid']);
 			//过滤非手机号码
 			foreach ($mobile as $k=>$v) {
 				if(!preg_match('/^1([0-9]{9})/',$v)) {
@@ -128,7 +139,7 @@ class sms extends admin {
 			}
 			
 			//发送短信
-			$return = $this->smsapi->send_sms($mobile, $content, $_POST['sendtime'], CHARSET);
+			$return = $this->smsapi->send_sms($mobile, $content, $_POST['sendtime'], CHARSET,'',$tplid);
 			
 			showmessage($return, HTTP_REFERER);
 		} else {
@@ -148,9 +159,46 @@ class sms extends admin {
 			foreach ($modellistarr as $k=>$v) {
 				$modellist[$k] = $v['name'];
 			}
+			//获取服务器场景，组成表单单选项
+			$smsscene_arr = $this->smsapi->get_scene(); 
+			
+			//获取默认模版
+			$default_tpl = $this->smsapi->get_default_tpl(2);
+			//显示默认模版
+			$show_default_tpl = $this->smsapi->show_default_tpl(16);
+			
 			include $this->admin_tpl('sms_sent');
 		}
 	}
+	
+	/*
+	* 获取短信模版,ajax处理
+	*/
+	public function public_get_tpl(){
+		$sceneid = intval($_GET['sceneid']);
+		if(!$sceneid){exit(0);}
+		//获取服务器场景，组成表单单选项
+		$tpl_arr = $this->smsapi->get_tpl($sceneid);
+		if(!empty($tpl_arr)){
+			exit($tpl_arr);
+		}else{
+			exit(0);
+		}
+ 	}
+	/*
+	* 显示短信内容,ajax处理
+	*/
+	public function public_show_tpl(){
+		$tplid = intval($_GET['tplid']);
+		if(!$tplid){exit(0);}
+		//获取模版内容
+		$tpl_arr = $this->smsapi->show_tpl($tplid);
+		if(!empty($tpl_arr)){
+			exit($tpl_arr);
+		}else{
+			exit(0);
+		}
+ 	}
 
 	public function exportmobile() {
 		$start_time = isset($_POST['start_time']) ? $_POST['start_time'] : '';

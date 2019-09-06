@@ -44,7 +44,7 @@ class ku6api {
 	 */
 	private function set_sn() {
 		//获取短信平台配置信息
-		$setting = getcache('video', 'video');
+		$setting = getcache('video');
 		if ($setting['sn'] && $setting['skey']) {
 			$this->ku6api_skey = $setting['skey'];
 			$this->ku6api_sn = $setting['sn'];
@@ -133,7 +133,7 @@ class ku6api {
 		$this->http->post($this->ku6api_url, $data);
 		$get_data = $this->http->get_data();
 		$get_data = json_decode($get_data, true);
-		if($get_data['code'] != 200) {
+		if($get_data['code'] != 200 && $get_data['code']!=112) {
 			$this->error_msg = $get_data['msg'];
 			return false;
 		}

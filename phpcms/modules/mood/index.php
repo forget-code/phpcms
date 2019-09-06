@@ -46,6 +46,7 @@ class index {
 	
 	//提交选中
 	public function post() {
+		if (isset($_GET['callback']) && !preg_match('/^[a-zA-Z_][a-zA-Z0-9_]+$/', $_GET['callback']))  unset($_GET['callback']);
 		$mood_id =& $this->mood_id;
 		$setting =& $this->setting;
 		$cookies = param::get_cookie('mood_id');

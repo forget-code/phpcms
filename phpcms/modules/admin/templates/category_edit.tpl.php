@@ -288,7 +288,7 @@ include $this->admin_tpl('header');?>
     <tr>
       <th><?php echo L('repeatchargedays');?></th>
       <td>
-	    <input name='setting[repeatchargedays]' type='text' value='1' size='4' maxlength='4' style='text-align:center'> <?php echo L('repeat_tips');?>&nbsp;&nbsp;
+	    <input name='setting[repeatchargedays]' type='text' value='<?php echo $setting['repeatchargedays'];?>' size='4' maxlength='4' style='text-align:center'> <?php echo L('repeat_tips');?>&nbsp;&nbsp;
         <font color="red"><?php echo L('repeat_tips2');?></font></td>
     </tr>
 </table>   

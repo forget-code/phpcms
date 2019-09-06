@@ -47,9 +47,9 @@ class index {
  			$link_db = pc_base::load_model(link_model);
  			$_POST['logo'] =new_html_special_chars($_POST['logo']);
 
-			$logo = safe_replace($_POST['logo']);
-			$name = safe_replace($_POST['name']);
-			$url = safe_replace($_POST['url']); 
+			$logo = safe_replace(strip_tags($_POST['logo']));
+			$name = safe_replace(strip_tags($_POST['name']));
+			$url = safe_replace(strip_tags($_POST['url'])); 
  			if($_POST['linktype']=='0'){
  				$sql = array('siteid'=>$siteid,'typeid'=>intval($_POST['typeid']),'linktype'=>intval($_POST['linktype']),'name'=>$name,'url'=>$url);
  			}else{

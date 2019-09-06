@@ -41,7 +41,7 @@ if(is_array($infos)){
 	<td align="center"><?php echo date('Y-m-d H:i', $info['addtime'])?></td>
 	<td align="center"><?php echo $info['keywords']?></td>
 	<td align="center"><?php if($info['status']<0 || $info['status']==24) { ?><font color="#ff5c5c"><?php } elseif ($info['status']==21) {?><font color="#3a895d"><?php }?><?php echo $status_arr[$info['status']]?> <?php if($info['status']<0 || $info['status']==24 || $info['status']==21) { ?></font><?php }?></td>
-	<td align="center"><a href="index.php?m=video&c=video&a=edit&vid=<?php echo $info['videoid']?>&menuid=<?php echo $_GET['menuid']?>"><?php echo L('edit');?></a><?php if($info['status']>=0 && $info['status']!=24) {?> | <a href="javascript:confirmurl('index.php?m=video&c=video&a=delete&vid=<?php echo $info['videoid']?>&menuid=<?php echo $_GET['menuid']?>', '是否删除该管理员?')"><?php echo L('delete');?></a><?php }?></td>
+	<td align="center"><?php if($info['status']==21) { ?><a href="javasrcipt:void(0);" onclick="view_video('<?php echo $info['videoid']?>')">预览</a> | <?php }?><a href="index.php?m=video&c=video&a=edit&vid=<?php echo $info['videoid']?>&menuid=<?php echo $_GET['menuid']?>"><?php echo L('edit');?></a><?php if($info['status']>=0 && $info['status']!=24) {?> | <a href="javascript:confirmurl('index.php?m=video&c=video&a=delete&vid=<?php echo $info['videoid']?>&menuid=<?php echo $_GET['menuid']?>', '<?php echo L('delete_this_video')?>')"><?php echo L('delete');?></a><?php }?></td>
 	</tr>
 <?php 
 	}
@@ -60,12 +60,8 @@ if(is_array($infos)){
 </html>
 <script type="text/javascript">
 <!--
-	function discount(id, name) {
-	window.top.art.dialog({title:'<?php echo L('discount')?>--'+name, id:'discount', iframe:'?m=pay&c=payment&a=discount&id='+id ,width:'500px',height:'200px'}, 	function(){var d = window.top.art.dialog({id:'discount'}).data.iframe;
-	var form = d.document.getElementById('dosubmit');form.click();return false;}, function(){window.top.art.dialog({id:'discount'}).close()});
-}
-function detail(id, name) {
-	window.top.art.dialog({title:'<?php echo L('discount')?>--'+name, id:'discount', iframe:'?m=pay&c=payment&a=public_pay_detail&id='+id ,width:'500px',height:'550px'});
+function view_video(id) {
+	window.top.art.dialog({title:'', id:'view', iframe:'?m=video&c=video&a=public_view_video&id='+id ,width:'450px',height:'350px'});
 }
 //-->
 </script>

@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" class="off">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET;?>" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET?>" />
 <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
 <title><?php echo L('admin_site_title')?></title>
 <link href="<?php echo CSS_PATH?>reset.css" rel="stylesheet" type="text/css" />
@@ -22,9 +22,33 @@ var pc_hash = '<?php echo $_SESSION['pc_hash']?>'
 </script>
 <style type="text/css">
 .objbody{overflow:hidden}
+
+.btns{background-color:#666;}
+.btns{position: absolute; top:116px; right:30px; z-index:1000; opacity:0.6;}
+.btns2{background-color:rgba(0,0,0,0.5); color:#fff; padding:2px; border-radius:3px; box-shadow:0px 0px 2px #333; padding:0px 6px; border:1px solid #ddd;}
+.btns:hover{opacity:1;}
+.btns h6{padding:4px; border-bottom:1px solid #666; text-shadow: 0px 0px 2px #000;}
+.btns .pd4{ padding-top:4px; border-top:1px solid #999;}
+.pd4 li{border-radius:0px 6spx 0px 6px; margin-top:2px; margin-bottom:3px; padding:2px 0px;}
+.btns .pd4 li span{padding:0px 6px;}
+.pd{padding:4px;}
+.ac{background-color:#333; color:#fff;}
+.hvs{background-color:#555; cursor: pointer;}
+.bg_btn{background: url(<?php echo IMG_PATH?>admin_img/icon2.jpg) no-repeat; width:32px; height:32px;}
 </style>
 </head>
 <body scroll="no" class="objbody">
+<div class="btns btns2" id="btnx">
+<div class="bg_btn"></div>
+<?php $model_types = pc_base::load_config('model_config');?>
+<h6><?php echo L('panel_switch');?></h6>
+<ul id="Site_model" class="pd4">
+		<li onclick="_Site_M();" class="ac"><span><?php echo L('full_menu')?></span></li>
+		<?php if (is_array($model_types)) { foreach ($model_types as $mt => $mn) {?>
+		<li onclick="_Site_M('<?php echo $mt;?>');"><span><?php echo $mn;?></span></li>
+		<?php } }?>
+	</ul>
+</div>
 <div id="dvLockScreen" class="ScreenLock" style="display:<?php if(isset($_SESSION['lock_screen']) && $_SESSION['lock_screen']==0) echo 'none';?>">
     <div id="dvLockScreenWin" class="inputpwd">
     <h5><b class="ico ico-info"></b><span id="lock_tips"><?php echo L('lockscreen_status');?></span></h5>
@@ -36,7 +60,7 @@ var pc_hash = '<?php echo $_SESSION['pc_hash']?>'
 <div class="header">
 	<div class="logo lf"><a href="<?php echo $currentsite['domain']?>" target="_blank"><span class="invisible"><?php echo L('phpcms_title')?></span></a></div>
     <div class="rt-col">
-    	<div class="tab_style white cut_line text-r"><a href="javascript:;" onclick="lock_screen()"><img src="<?php echo IMG_PATH.'icon/lockscreen.png'?>"> <?php echo L('lockscreen')?></a><span>|</span><a href="http://www.phpcms.cn" target="_blank"><?php echo L('official_site')?></a><span>|</span><a href="http://www.phpcms.cn/license/license.php" target="_blank"><?php echo L('authorization')?></a><span>|</span><a href="http://bbs.phpcms.cn" target="_blank"><?php echo L('igenus_for_postfix')?></a><span>|</span><a href="http://v9.help.phpcms.cn" target="_blank"><?php echo L('help')?></a>
+    	<div class="tab_style white cut_line text-r"><a href="javascript:;" onclick="lock_screen()"><img src="<?php echo IMG_PATH.'icon/lockscreen.png'?>"> <?php echo L('lockscreen')?></a><span>|</span><a href="http://video.grandcloud.cn" target="_blank">视频云</a><span>|</span><a href="http://www.phpcms.cn/license/license.php" target="_blank"><?php echo L('authorization')?></a><span>|</span><a href="http://forum.grandcloud.cn/index.php" target="_blank"><?php echo L('igenus_for_postfix')?></a><span>|</span><a href="http://forum.grandcloud.cn/index.php" target="_blank"><?php echo L('help')?></a>
     <ul id="Skin">
 		<li class="s1 styleswitch" rel="styles1"></li>
 		<li class="s2 styleswitch" rel="styles2"></li>
@@ -187,6 +211,13 @@ $(function(){
 	$(".tab-web-panel").mouseover(function(){clearh();$('.tab_web a').addClass('on')}).mouseout(function(){hidden_site_list_1();$('.tab_web a').removeClass('on')});
 	//默认载入左侧菜单
 	$("#leftMain").load("?m=admin&c=index&a=public_menu_left&menuid=10");
+
+	//面板切换
+	$("#btnx").removeClass("btns2");
+	$("#Site_model,#btnx h6").css("display","none");
+	$("#btnx").hover(function(){$("#Site_model,#btnx h6").css("display","block");$(this).addClass("btns2");$(".bg_btn").hide();},function(){$("#Site_model,#btnx h6").css("display","none");$(this).removeClass("btns2");$(".bg_btn").show();});
+	$("#Site_model li").hover(function(){$(this).toggleClass("hvs");},function(){$(this).toggleClass("hvs");});
+	$("#Site_model li").click(function(){$("#Site_model li").removeClass("ac"); $(this).addClass("ac");});
 })
 //站点选择
 function site_select(id,name, domain, siteid) {
@@ -403,6 +434,32 @@ function menuScroll(num){
 		Scroll.scrollTop = Scroll.scrollTop + 60;
 	}
 }
+function _Site_M(project) {
+	var id = '';
+	$('#top_menu li').each(function (){
+		var S_class = $(this).attr('class');
+		if ($(this).attr('id')){
+			$(this).hide();
+		}
+		if (S_class=='on top_menu' || S_class=='top_menu on'){
+			id = $(this).attr('id');
+		}
+	});
+	$('#'+id).show();
+	id = id.substring(2, id.length);
+	if (!project){
+		project = 0;
+	}
+	$.ajaxSettings.async = false; 
+	$.getJSON('index.php', {m:'admin', c:'index', a:'public_set_model', 'site_model':project, 'time':Math.random()}, function (data){
+		$.each(data, function(i, n){
+			$('#_M'+n).show();
+		})
+	})
+	$("#leftMain").load("?m=admin&c=index&a=public_menu_left&menuid="+id+'&time='+Math.random());
+}
+
+<?php if($site_model) { ?> _Site_M('<?php echo $site_model?>'); <?php }?>
 </script>
 </body>
 </html>

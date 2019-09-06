@@ -57,4 +57,5 @@ $LANG['ku6video_time']						=	'视频时长';
 $LANG['import_select_ku6video']				=	'导入所选视频'; 
 $LANG['ku6video_preview']					=	'点击预览该视频'; 
 $LANG['ku6video_edittitle']					=	'点击可修改标题哦！'; 
+$LANG['delete_this_video']					=	'是否删除该视频?'; 
 ?>

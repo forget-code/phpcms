@@ -31,7 +31,8 @@ $sms_pid = $sms_setting[$siteid]['productid'];//产品ID
 $sms_passwd = $sms_setting[$siteid]['sms_key'];//32位密码
 
 $id_code = random(6);//唯一吗，用于扩展验证
-$send_txt = '尊敬的用户您好，您在'.$sitename.'的注册验证码为：'.$id_code.'，验证码有效期为5分钟。';
+//$send_txt = '尊敬的用户您好，您在'.$sitename.'的注册验证码为：'.$id_code.'，验证码有效期为5分钟。';
+$send_txt = $sitename.'||'.$id_code;
 
 $send_userid = intval($_GET['send_userid']);//操作者id
 
@@ -40,9 +41,9 @@ $smsapi = new smsapi($sms_uid, $sms_pid, $sms_passwd); //初始化接口类
 $smsapi->get_price(); //获取短信剩余条数和限制短信发送的ip地址
 $mobile = explode(',',$mobile);
 $content = safe_replace($send_txt);
+$tplid = 13;
 $sent_time = intval($_POST['sendtype']) == 2 && !empty($_POST['sendtime'])  ? trim($_POST['sendtime']) : date('Y-m-d H:i:s',SYS_TIME);
-
-$smsapi->send_sms($mobile, $content, $sent_time, CHARSET,$id_code); //发送短信
-
-echo $smsapi->statuscode;
+$smsapi->send_sms($mobile, $content, $sent_time, CHARSET,$id_code,$tplid); //发送短信
+//echo $smsapi->statuscode; 由于服务器延迟的问题，先返回发送成功的提示，以免页面等待时候过长，体验不好
+echo 0;
 ?>

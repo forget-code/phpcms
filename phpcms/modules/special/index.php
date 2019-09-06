@@ -160,7 +160,7 @@ class index {
 			$video['vid'] = $v_r['vid'];
 		}
 		pc_base::load_sys_class('format', '', 0);
-		$inputtime = format::date($inputtime);
+		$inputtime = format::date($inputtime,1);
 		$SEO = seo($siteid, '', $title);
 		$template = $show_template ? $show_template : ($_special['show_template'] ? $_special['show_template'] : 'show');
 		$style = $style ? $style : 'default';

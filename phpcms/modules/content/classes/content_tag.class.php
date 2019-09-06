@@ -107,7 +107,13 @@ class content_tag {
 	 */
 	public function relation($data) {
 		$catid = intval($data['catid']);
-		if(!$this->set_modelid($catid)) return false;
+		$modelid = intval($data['modelid']);
+		if(!$this->set_modelid($catid) && $modelid) {
+			$this->db->set_model($modelid);
+			echo $this->tablename = $this->db->table_name;
+		} elseif(!$this->set_modelid($catid)) {
+			return false;
+		}
 		$order = $data['order'];
 		$sql = "`status`=99";
 		$limit = $data['id'] ? $data['limit']+1 : $data['limit'];

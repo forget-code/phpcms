@@ -58,7 +58,12 @@ class admin {
 	final public static function admin_menu($parentid, $with_self = 0) {
 		$parentid = intval($parentid);
 		$menudb = pc_base::load_model('menu_model');
-		$result =$menudb->select(array('parentid'=>$parentid,'display'=>1),'*',1000,'listorder ASC');
+		$site_model = param::get_cookie('site_model');
+		$where = array('parentid'=>$parentid,'display'=>1);
+		if ($site_model && $parentid) {
+			$where[$site_model] = 1;
+ 		}
+		$result =$menudb->select($where,'*',1000,'listorder ASC');
 		if($with_self) {
 			$result2[] = $menudb->get_one(array('id'=>$parentid));
 			$result = array_merge($result2,$result);

@@ -30,6 +30,7 @@
 					$videoid = $v_class->add($info);
 					$GLOBALS[$field][] = array('videoid' => $videoid, 'listorder' => $v['listorder']);
 				} else {
+					$v_class->edit(array('title'=>$v['title']), $v['videoid']);
 					$GLOBALS[$field][] = array('videoid' => $v['videoid'], 'listorder' => $v['listorder']);
 				}
 			}

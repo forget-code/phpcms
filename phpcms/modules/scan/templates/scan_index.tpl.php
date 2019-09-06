@@ -54,7 +54,7 @@ include $this->admin_tpl('header','admin');
 <script type="text/javascript">
 function check_form() {
 	var checked = 0;
-	$("input[type='checkbox'][name='dir[]']").each(function(i,n){if ($(this).attr('checked')==true) {checked = 1;}});
+	$("input[type='checkbox'][name='dir[]']").each(function(i,n){if ($(this).attr('checked')=='checked') {checked = 1;}});
 	if (checked) {
 		return true;
 	} else {

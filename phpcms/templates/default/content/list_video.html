@@ -1,8 +1,7 @@
 {template "content","header"}
 {php $c = isset($_GET['b'])?$_GET['b']:1;} 
-<link href="{CSS_PATH}vms/reset.css" rel="stylesheet" type="text/css" />
-<link href="{CSS_PATH}vms/sty.css" rel="stylesheet" type="text/css" />
 <link href="{CSS_PATH}vms/vms.css" rel="stylesheet" type="text/css" />
+<!--[if lt IE 9]><link href="{CSS_PATH}vms/ielt9.css" rel="stylesheet" type="text/css" /><![endif]-->
 <script type="text/javascript" src="{JS_PATH}cookie.js"></script>
 <div class="clr ct lst">
     <div class="lyt_4">
@@ -25,11 +24,6 @@
 				{$r[menu]}
 			{/loop}
              </li>
-            <li class="clr"><span>按分类：</span>
-			{loop video_filters('video_category',$modelid,$vision_rang) $r}
-			{$r[menu]}
-			{/loop}
-            </li> 
         </ul>
 		<ul class="clr ulitg">
             <li><a href="{APP_PATH}index.php?m=content&c=index&a=lists&catid={$catid}&b=1" {if $c==1}class="ac"{/if}>最近更新</a></li>
@@ -43,7 +37,7 @@
         	<ul class="clr col4 col5"> 
 			{php $urlrule = video_makeurlrule();}
   			{php $sql = video_filters_sql($modelid,$catid);$y=1;$listorder = array(1=>'price ASC', 'price DESC', 'updatetime ASC', 'updatetime DESC');}
- 			{pc:content action="lists" where="$sql" catid="$catid" num="15" order="listorder DESC" moreinfo="1" page="$page" urlrule="$urlrule"}
+ 			{pc:content action="lists" where="$sql" catid="$catid" num="15"  order=" listorder desc,id DESC" moreinfo="1" page="$page" urlrule="$urlrule"}
 			{php $nums=count($data)}
  			{loop $data $v}	
 			<!-- 获取视频详细信息 -->

@@ -92,3 +92,8 @@ div#areaid{border:1px solid #A7A6AA;height:18px;margin:0 5px 0 0;padding:2px 5px
 .r2 .l label{margin-right:2px;}
 .r2 .r{float:right;}
 .tbb{border-left:1px solid #eee;border-right:1px solid #eee; margin-bottom:8px;}
+
+/*20121207*/
+.common-form .tpl_style{}
+.common-form .tpl_style li{float:left; margin-right:10px; clear: none; border: 1px solid #ddd; background-color: #F5FAFE; padding:4px 12px; cursor: pointer;}
+.common-form .tpl_style li.ac{border:1px solid #639DCF;}

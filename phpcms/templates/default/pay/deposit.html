@@ -57,7 +57,7 @@ $(function(){
   <tr>
        <th>充值方式：</th>
        <td>     
-		{mk_pay_btn($pay_types)}
+		{if $pay_types}{mk_pay_btn($pay_types)}{else}本站暂未开启在线支付功能，如需帮助请联系管理员。{/if}
 	   </td>
      </tr>
   <tr>		

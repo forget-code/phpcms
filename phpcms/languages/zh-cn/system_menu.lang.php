@@ -529,4 +529,6 @@ $LANG['video_delete'] = '删除视频';
 $LANG['subscribe_manage'] = '订阅管理';
 $LANG['sub_delete'] = '删除订阅';
 $LANG['album_import'] = '视频专辑导入';
+$LANG['sys_setting'] = '设置';
+$LANG['module'] = '模块';
 ?>

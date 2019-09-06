@@ -24,7 +24,7 @@ class Sndapay extends paymentabstract{
 	
 	public function __construct($config = array()) {	
 		if (!empty($config)) $this->set_config($config);       
-		$this->config['gateway_url'] = 'http://netpay.sdo.com/paygate/default.aspx';
+		$this->config['gateway_url'] = 'https://mas.sdo.com/web-acquire-channel/cashier30.htm';
 		$this->config['gateway_method'] = 'POST';
 		$this->config['notify_url'] = return_url('sndapay',1);
 		$this->config['return_url'] = return_url('sndapay');

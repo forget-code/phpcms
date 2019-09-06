@@ -101,7 +101,7 @@ class cache_api {
 	 * 更新敏感词缓存方法
 	 */
 	public function badword() {
-		$infos = $this->db->select('','badid,badword','','badid ASC');
+		$infos = $this->db->select('','badid,badword,replaceword,level','','badid ASC');
 		setcache('badword', $infos, 'commons');
 		return true;
 	}

@@ -38,9 +38,35 @@
 <table width="100%" class="table_form">
 
 <tr>
-<td width="120"><?php echo L('content')?></td> 
-<td><textarea name="content" style="width:200px; height:100px" id="content" onkeyup="strlen_verify(this, 'content_len', 120)"></textarea> 还可输入<B><span id="content_len">120</span></B> 个字符  </td>
+<td width="120"><?php echo L('select_scene')?></td> 
+<td>
+<span id="scene">
+<?php echo $smsscene_arr;?>
+
+</span> 
+</td>
 </tr>
+
+<tr>
+<td width="120"><?php echo L('tpl_case')?></td> 
+<td>
+<ul id="tpl" class="tpl_style">
+<?php echo $default_tpl;?> 
+</ul> 
+<input type="hidden" value="16" id="tplid" name="tplid">
+</td>
+</tr>
+
+<tr>
+<td width="120"><?php echo L('msg_content')?></td> 
+<td>
+<span id="tpl_case">
+<?php echo $show_default_tpl;?> 
+</span>  
+</td>
+</tr>
+
+ 
 <tr>
 <td width="120"><?php echo L('mobile')?></td> 
 <td><textarea name="mobile" style="width:200px; height:100px" id="mobile"></textarea></td>
@@ -55,12 +81,75 @@
 </table>
 
 <div class="btn text-l">
-	<input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="button" id="dosubmit">
-	注意：群发100条以上的短信，建议先测试发送内容，以防有非法内容被屏蔽。
+	<input name="dosubmit" type="submit" value="<?php echo L('submit')?>" class="button" id="dosubmit" onclick="check();return true;">
+	<?php echo L('sms_remind')?>
 </div>
 <div class="bk15"></div>
 
 </form>
 </div>
+<script language="JavaScript">
+<!--
+//检查短信参数情况
+function check(){
+	$("input[name='msg[]']").keyup();
+}
+
+//选择短信模版
+function select_tpl(obj) {
+	var sceneid = obj.value;
+	if (sceneid == 0) {
+		return false;
+	}
+  	//$('#tpl_tr').show();
+ 	$('#tpl').html('<img src="<?php echo IMG_PATH.'msg_img/loading.gif';?>">');
+	$.get("index.php", {m:'sms', c:'sms', a:'public_get_tpl', sceneid:sceneid, tm:Math.random()}, function (data) {
+		if (data) {
+			$('#tpl').html(data);
+		} else {
+			alert('<?php echo L('检查选择的场景！')?>');
+		}
+	} );
+}
+//显示短信模版效果
+function show_tpl(id) {
+	var tplid = id;
+	if (tplid == 0) {
+		return false;
+	}
+	$("[name='tplarray[]']").removeClass();
+	$('#tpl_'+id).attr('class','ac');
+	$('#tplid').val(id);
+  	$('#tpl_case').html('<img src="<?php echo IMG_PATH.'msg_img/loading.gif';?>">');
+	$.get("index.php", {m:'sms', c:'sms', a:'public_show_tpl', tplid:tplid, tm:Math.random()}, function (data) {
+		if (data) {
+			$('#tpl_case').html(data);
+		} else {
+			alert('<?php echo L('检查选择的短信模版！')?>');
+		}
+	} );
+}
+
+function checkWord(len,evt){
+   if(evt==null)
+   evt = window.event;
+   var src = evt.srcElement? evt.srcElement : evt.target;
+   var str=src.value.trim();
+   myLen=0;
+   i=0;
+   for(;(i<str.length)&&(myLen<=len);i++){
+  //  if(str.charCodeAt(i)>0&&str.charCodeAt(i)<128)
+     myLen++;
+    // else
+     //myLen+=2;
+   }
+   if(myLen>len){
+    alert("您输入超过限定长度");
+    src.value=str.substring(0,i-1);
+	return false;
+   }
+}
+//-->
+</script>
 </body>
 </html>

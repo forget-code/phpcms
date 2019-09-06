@@ -24,7 +24,7 @@ class index {
 		$username = param::get_cookie('username') ? param::get_cookie('username') : '';
 		if($id) {
 			$siteid = isset($_GET['siteid']) ? intval($_GET['siteid']) : get_siteid();
-			$this->s_db->insert(array('siteid'=>$siteid, 'pid'=>$id, 'username'=>$username, 'area'=>$area, 'ip'=>$ip, 'referer'=>HTTP_REFERER, 'clicktime'=>SYS_TIME, 'type'=> 1));
+			$this->s_db->insert(array('siteid'=>$siteid, 'pid'=>$id, 'username'=>$username, 'area'=>$area, 'ip'=>$ip, 'referer'=>safe_replace(HTTP_REFERER), 'clicktime'=>SYS_TIME, 'type'=> 1));
 		}
 		$this->db->update(array('clicks'=>'+=1'), array('id'=>$id));
 		$setting = string2array($r['setting']);

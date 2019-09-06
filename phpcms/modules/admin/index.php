@@ -20,6 +20,7 @@ class index extends admin {
 		$currentsite = $this->get_siteinfo(param::get_cookie('siteid'));
 		/*管理员收藏栏*/
 		$adminpanel = $this->panel_db->select(array('userid'=>$userid), "*",20 , 'datetime');
+		$site_model = param::get_cookie('site_model');
 		include $this->admin_tpl('index');
 	}
 	
@@ -215,7 +216,7 @@ class index extends admin {
 		$adminpanel = $this->panel_db->select(array('userid'=>$userid), '*',20 , 'datetime');
 		$product_copyright = base64_decode('5LiK5rW355ub5aSn572R57uc5Y+R5bGV5pyJ6ZmQ5YWs5Y+4');
 		$architecture = base64_decode('546L5Y+C5Yqg');
-		$programmer = base64_decode('546L5Y+C5Yqg44CB6ZmI5a2m5pe644CB546L5a6Y5bqG44CB5byg5LqM5by644CB6YOd5Zu95paw44CB6YOd5bed44CB6LW15a6P5Lyf');
+		$programmer = base64_decode('546L5Y+C5Yqg44CB546L6ZOB5oiQ44CB6ZmI5a2m5pe644CB6ZmI6bmP44CB546L5a6Y5bqG44CB5byg5bqG44CB54aK55Sf5Y2O44CB5ZCV5a2Y55m9');
 		$designer = base64_decode('6JGj6aOe6b6Z44CB5byg5LqM5by6');
 		ob_start();
 		include $this->admin_tpl('main');
@@ -301,6 +302,36 @@ class index extends admin {
 				set_config(array('snda_status'=>$appid.'|'.$secretkey), 'snda');
 			}
 		}
+	}
+
+	/**
+	 * @设置网站模式 设置了模式后，后台仅出现在此模式中的菜单
+	 */
+	public function public_set_model() {
+		$model = $_GET['site_model'];
+		if (!$model) {
+			param::set_cookie('site_model','');
+		} else {
+			$models = pc_base::load_config('model_config');
+			if (in_array($model, array_keys($models))) {
+				param::set_cookie('site_model', $model);
+			} else {
+				param::set_cookie('site_model','');
+			}
+		}
+		$menudb = pc_base::load_model('menu_model');
+		$where = array('parentid'=>0,'display'=>1);
+		if ($model) {
+			$where[$model] = 1;
+ 		}
+		$result =$menudb->select($where,'id',1000,'listorder ASC');
+		$menuids = array();
+		if (is_array($result)) {
+			foreach ($result as $r) {
+				$menuids[] = $r['id'];
+			}
+		}
+		exit(json_encode($menuids));
 	}
 
 }

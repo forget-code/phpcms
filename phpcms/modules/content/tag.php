@@ -39,7 +39,7 @@ class tag {
 		$this->db->set_model($modelid);
 		$page = $_GET['page'];
 		$datas = $infos = array();
-		$infos = $this->db->listinfo("`keywords` LIKE '%$tag%'",'id DESC',$page,20);
+		$infos = $this->db->listinfo("`status`=99 AND `keywords` LIKE '%$tag%'",'id DESC',$page,20);
 		$total = $this->db->number;
 		if($total>0) {
 			$pages = $this->db->pages;

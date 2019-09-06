@@ -78,6 +78,10 @@ include $this->admin_tpl('header');?>
         <th><?php echo L('menu_display')?>：</th>
         <td><input type="radio" name="info[display]" value="1" checked> <?php echo L('yes')?><input type="radio" name="info[display]" value="0"> <?php echo L('no')?></td>
       </tr>
+	  <tr>
+        <th><?php echo L('show_in_model')?>：</th>
+        <td><?php foreach($models as $_k => $_m) {?><input type="checkbox" name="info[<?php echo $_k?>]" value="1"> <?php echo $_m?><?php }?></td>
+      </tr>
 </table>
 <!--table_form_off-->
 </div>
@@ -137,6 +141,10 @@ include $this->admin_tpl('header');?>
 	<tr>
         <th><?php echo L('menu_display')?>：</th>
         <td><input type="radio" name="info[display]" value="1" <?php if($display) echo 'checked';?>> <?php echo L('yes')?><input type="radio" name="info[display]" value="0" <?php if(!$display) echo 'checked';?>> <?php echo L('no')?></td>
+      </tr>
+	<tr>
+        <th><?php echo L('show_in_model')?>：</th>
+        <td><?php foreach($models as $_k => $_m) {?><input type="checkbox" name="info[<?php echo $_k?>]" value="1"<?php if (${$_k}) {?> checked<?php }?>> <?php echo $_m?><?php }?></td>
       </tr>
 
 </table>

@@ -20,7 +20,7 @@ include $this->admin_tpl('header','admin');
 <span id="catids"></span>&nbsp;&nbsp; 
 				<?php echo L('input_time')?>：
 				<?php $start_f = $_GET['start_time'] ? $_GET['start_time'] : format::date(SYS_TIME-2592000);$end_f = $_GET['end_time'] ? $_GET['end_time'] : format::date(SYS_TIME+86400);?>
-				<?php echo form::date('start_time', $start_f, 1)?> - <?php echo form::date('end_time', $end_f, 1)?>
+				<?php echo form::date('start_time')?> - <?php echo form::date('end_time')?>
 				 <input type="submit" name="search" class="button" value="<?php echo L('search')?>" />
 	</div>
 		</td>
