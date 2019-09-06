@@ -154,6 +154,7 @@ swfobject.embedSWF("{$flash_info['flashurl']}", "ku6uploader", "450", "45", "10.
         </div>
   </div>
 </div>
+{php $player_url = pc_base::load_config('ku6server', 'player_url');$video_setting = getcache('video', 'video');}
 <script type="text/javascript">
 	
 function get_videoes(page) {
@@ -171,7 +172,7 @@ var okListener = function(event){
 	var video_url = document.getElementById("video_url").value;
 	if (video_url=='') {
 	} else {
-		video_url = '<embed src="http://118.145.12.111:2012/phpvms/player/html/vid/'+video_url+'/style/rL9_7tSB0Is./" quality="high" width="414" height="305" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1" type="application/x-shockwave-flash"></embed>';
+		video_url = '<embed src="{$player_url}'+video_url+'/style/{$video_setting[style_projectid]}/" quality="high" width="414" height="305" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1" type="application/x-shockwave-flash"></embed>';
 		this._.editor.insertHtml(video_url);
 		CKEDITOR.dialog.getCurrent().removeListener("ok", okListener);
 	}
@@ -199,7 +200,7 @@ function a_click(obj) {
 		$("#ulic div.w9 a").removeClass("ac");
 		$(obj).addClass("ac");
 		$('#video_url').val(vid);
-		var html = '<embed src="http://118.145.12.111:2012/phpvms/player/html/vid/'+$(obj).attr('data-vid')+'/style/rL9_7tSB0Is./" quality="high" width="300" height="225" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1" type="application/x-shockwave-flash"></embed>';
+		var html = '<embed src="{$player_url}'+$(obj).attr('data-vid')+'/style/{$video_setting[style_projectid]}/" quality="high" width="300" height="225" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1" type="application/x-shockwave-flash"></embed>';
 		$('#video_view').html(html);
 	}
 }

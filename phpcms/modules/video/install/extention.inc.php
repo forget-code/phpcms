@@ -24,12 +24,16 @@ if (module_exists('special')) {
 	}
 }
 
+$database = pc_base::load_config('database');
+$db_charset = $database['default']['charset'];
+
 //判断视频模型是否存在
 $sitemodel = pc_base::load_model('sitemodel_model');
 $is_table =  $sitemodel->table_exists('video');
 if(!$is_table){
 	//模型不存在，建模型,加字段
 	$modelid = $sitemodel->insert(array('name'=>'视频模型', 'tablename'=>'video', 'category_template'=>'category_video', 'list_template'=>'list_video', 'show_template'=>'show_video', 'enablesearch'=>'1', 'default_style'=>'default','siteid'=>1), true);
+	
 	$sitemodel->query("CREATE TABLE IF NOT EXISTS `phpcms_video` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `catid` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -54,8 +58,9 @@ if(!$is_table){
   KEY `status` (`status`,`listorder`,`id`),
   KEY `listorder` (`catid`,`status`,`listorder`,`id`),
   KEY `catid` (`catid`,`status`,`id`)
-) ENGINE=MyISAM;");
-	$sitemodel->query("CREATE TABLE IF NOT EXISTS `phpcms_video_data` (
+) ENGINE=MyISAM DEFAULT CHARSET=".$db_charset.";");
+
+$sitemodel->query("CREATE TABLE IF NOT EXISTS `phpcms_video_data` (
   `id` mediumint(8) unsigned DEFAULT '0',
   `content` text NOT NULL,
   `readpoint` smallint(5) unsigned NOT NULL DEFAULT '0',
@@ -68,7 +73,8 @@ if(!$is_table){
   `relation` varchar(255) NOT NULL DEFAULT '',
   `video` tinyint(3) unsigned NOT NULL DEFAULT '0',
   KEY `id` (`id`)
-) ENGINE=MyISAM;");
+) ENGINE=MyISAM DEFAULT CHARSET=".$db_charset.";");
+	
 	$sitemodel->query("INSERT INTO `phpcms_model_field` (`modelid`, `siteid`, `field`, `name`, `tips`, `css`, `minlength`, `maxlength`, `pattern`, `errortips`, `formtype`, `setting`, `formattribute`, `unsetgroupids`, `unsetroleids`, `iscore`, `issystem`, `isunique`, `isbase`, `issearch`, `isadd`, `isfulltext`, `isposition`, `listorder`, `disabled`, `isomnipotent`) VALUES
 ($modelid, 1, 'catid', '栏目', '', '', 1, 6, '/^[0-9]{1,6}$/', '请选择栏目', 'catid', 'array (\n  ''defaultvalue'' => '''',\n)', '', '-99', '-99', 0, 1, 0, 1, 1, 1, 0, 0, 1, 0, 0),
 ($modelid, 1, 'typeid', '类别', '', '', 0, 0, '', '', 'typeid', 'array (\n  ''minnumber'' => '''',\n  ''defaultvalue'' => '''',\n)', '', '', '', 0, 1, 0, 1, 1, 1, 0, 0, 2, 0, 0),

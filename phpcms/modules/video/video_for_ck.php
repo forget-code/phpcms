@@ -172,7 +172,7 @@ class video_for_ck {
 	 */
 	public function check_vid() {
 		$vid = $_GET['vid'];
-		$url = 'http://118.145.12.111:2012/phpvms/player/html/vid/'.$vid.'/style/rL9_7tSB0Is./';
+		$url = pc_base::load_config('ku6server', 'player_url').$vid.'/style/'.$this->setting['style_projectid'].'/';
 		$data = @file_get_contents($url);
 		if ($data = json_decode($data,true)) {
 			if ($data['code']<0) {

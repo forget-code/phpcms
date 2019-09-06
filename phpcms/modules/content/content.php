@@ -274,8 +274,10 @@ class content extends admin {
 			$this->content_check_db = pc_base::load_model('content_check_model');
 			$this->position_data_db = pc_base::load_model('position_data_model');
 			$this->search_db = pc_base::load_model('search_model');
-			if (file_exists(PC_PATH.'model'.DIRECTORY_SEPARATOR.'video_content_model.class.php')) {
+			//判断视频模块是否安装 
+			if (module_exists('video') && file_exists(PC_PATH.'model'.DIRECTORY_SEPARATOR.'video_content_model.class.php')) {
 				$video_content_db = pc_base::load_model('video_content_model');
+				$video_install = 1;
 			}
 			$this->comment = pc_base::load_app_class('comment', 'comment');
 			$search_model = getcache('search_model_'.$this->siteid,'search');
@@ -321,7 +323,7 @@ class content extends admin {
 				//删除全站搜索中数据
 				$this->search_db->delete_search($typeid,$id);
 				//删除视频库与内容对应关系数据
-				if (is_object($video_content_db)) {
+				if ($video_install ==1) {
 					$video_content_db->delete(array('contentid'=>$id, 'modelid'=>$modelid));
 				}
 				

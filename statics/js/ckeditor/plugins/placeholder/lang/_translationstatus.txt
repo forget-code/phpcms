@@ -15,6 +15,7 @@ fr.js      Found: 5 Missing: 0
 he.js      Found: 5 Missing: 0
 hr.js      Found: 5 Missing: 0
 it.js      Found: 5 Missing: 0
+ku.js      Found: 5 Missing: 0
 nb.js      Found: 5 Missing: 0
 nl.js      Found: 5 Missing: 0
 no.js      Found: 5 Missing: 0

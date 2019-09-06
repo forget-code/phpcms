@@ -451,6 +451,7 @@ class index extends foreground {
 	
 	public function account_manage_password() {
 		if(isset($_POST['dosubmit'])) {
+			$updateinfo = array();
 			if(!is_password($_POST['info']['password'])) {
 				showmessage(L('password_format_incorrect'), HTTP_REFERER);
 			}
@@ -1513,7 +1514,7 @@ class index extends foreground {
 				if(empty($memberinfo['phpssouid'])) {
 					showmessage(L('operation_failure'), 'index.php?m=member&c=index&a=login');
 				}
-				
+				$updateinfo = array();
 				$password = random(8);
 				$updateinfo['password'] = password($password, $memberinfo['encrypt']);
 				
@@ -1622,6 +1623,7 @@ class index extends foreground {
 				showmessage("手机和验证码不对应，请通过正常渠道修改密码！", HTTP_REFERER);
 			}
 			//更新密码
+			$updateinfo = array();
 			$updateinfo['password'] = $password;
  			$this->db->update($updateinfo, array('userid'=>$this->memberinfo['userid']));
 			if(pc_base::load_config('system', 'phpsso')) {

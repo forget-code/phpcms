@@ -355,7 +355,7 @@ class ku6api {
 
 		//向vms post数据，并获取返回值
 		if ($data = $this->post($postdata)) {
-			return true;
+			return $data;
 		}
 		return false;
 	} 

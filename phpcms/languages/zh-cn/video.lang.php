@@ -44,4 +44,5 @@ $LANG['default_video_to_cat']				=	'默认视频入库栏目';
 $LANG['addtime']							=	'添加时间';
 $LANG['video_api_url']						=	'Open Api返回地址';
 $LANG['vms_sn_skey_error']					=	'身份识别码或加密密钥配置错误';
+$LANG['subscribe_for_default']				=	'默认用户不允许订阅';
 ?>

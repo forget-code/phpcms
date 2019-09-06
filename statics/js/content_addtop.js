@@ -117,8 +117,8 @@ function input_font_bold() {
 	}
 }
 function ruselinkurl() {
-	if($('#islink').attr('checked')==true) {
-		$('#linkurl').attr('disabled','');
+	if($('#islink').attr('checked')=='checked') {
+		$('#linkurl').attr('disabled',false);
 		var oEditor = CKEDITOR.instances.content;
 		oEditor.insertHtml('　');
 		return false;

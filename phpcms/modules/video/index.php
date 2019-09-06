@@ -13,14 +13,14 @@ defined('IN_PHPCMS') or exit('No permission resources.');
  */
 
 class index{
-	
 	public $db;
-	
-	public function __construct() {
-		$this->db = pc_base::load_model('video_model');
+	public function __construct() { 
 		pc_base::load_app_class('ku6api', 'video', 0);
 		$this->userid = param::get_cookie('userid');
 		$this->setting = getcache('video');
+		if(empty($this->setting)) {
+			showmessage(L('module_not_exists'));
+		}
 		$this->ku6api = new ku6api($this->setting['sn'], $this->setting['skey']);
 	}
 	
@@ -29,14 +29,7 @@ class index{
 	 * 视频列表
 	 */
 	public function init() {
-		
-		
-		$where = '';
-		$page = max(intval($_GET['page']), 1);
-		$pagesize = 20;
-		$infos = $this->db->listinfo($where, 'videoid DESC', $page, $pagesize);
-		$flash_info = $this->ku6api->flashuploadparam();
-		include template('content','video_for_ck');
+		 showmessage('正在转向首页...','index.php');
 	}
 	
 	/**
