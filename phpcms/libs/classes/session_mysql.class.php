@@ -18,6 +18,7 @@ class session_mysql {
 		$this->db = pc_base::load_model('session_model');
 		$this->lifetime = pc_base::load_config('system','session_ttl');
     	session_set_save_handler(array(&$this,'open'), array(&$this,'close'), array(&$this,'read'), array(&$this,'write'), array(&$this,'destroy'), array(&$this,'gc'));
+		ini_set("session.cookie_httponly", 1);
     	session_start();
     }
 /**

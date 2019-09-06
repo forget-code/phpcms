@@ -164,6 +164,9 @@ class attachment {
 		foreach($remotefileurls as $k=>$file) {
 			if(strpos($file, '://') === false || strpos($file, $upload_url) !== false) continue;
 			$filename = fileext($file);
+			if(!preg_match("/($ext)/is",$filename) || in_array($filename, array('php','phtml','php3','php4','jsp','dll','asp','cer','asa','shtml','shtm','aspx','asax','cgi','fcgi','pl'))){
+				continue;
+			}
 			$file_name = basename($file);
 			$filename = $this->getname($filename);
 

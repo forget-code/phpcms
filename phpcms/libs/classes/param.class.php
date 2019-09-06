@@ -86,14 +86,15 @@ class param {
 	public static function set_cookie($var, $value = '', $time = 0) {
 		$time = $time > 0 ? $time : ($value == '' ? SYS_TIME - 3600 : 0);
 		$s = $_SERVER['SERVER_PORT'] == '443' ? 1 : 0;
+		$httponly = $var=='userid'||$var=='auth'?true:false;
 		$var = pc_base::load_config('system','cookie_pre').$var;
 		$_COOKIE[$var] = $value;
 		if (is_array($value)) {
 			foreach($value as $k=>$v) {
-				setcookie($var.'['.$k.']', sys_auth($v, 'ENCODE'), $time, pc_base::load_config('system','cookie_path'), pc_base::load_config('system','cookie_domain'), $s);
+				setcookie($var.'['.$k.']', sys_auth($v, 'ENCODE'), $time, pc_base::load_config('system','cookie_path'), pc_base::load_config('system','cookie_domain'), $s, $httponly);
 			}
 		} else {
-			setcookie($var, sys_auth($value, 'ENCODE'), $time, pc_base::load_config('system','cookie_path'), pc_base::load_config('system','cookie_domain'), $s);
+			setcookie($var, sys_auth($value, 'ENCODE'), $time, pc_base::load_config('system','cookie_path'), pc_base::load_config('system','cookie_domain'), $s, $httponly);
 		}
 	}
 

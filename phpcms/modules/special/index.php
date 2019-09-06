@@ -190,7 +190,7 @@ class index {
 			$r = $this->db->get_one(array('id'=>intval($_POST['id'])), '`title`, `url`');
 			$comment = pc_base::load_app_class('comment', 'comment');
 			if ($comment->add($commentid, $siteid, array('userid'=>$userid, 'username'=>$username, 'content'=>addslashes($_POST['content'])), '', $r['title'], $r['url'])) {
-				exit($username.'|'.SYS_TIME.'|'.$_POST['content']);
+				exit(remove_xss($username.'|'.SYS_TIME.'|'.$_POST['content']));
 			} else {
 				exit(0);
 			}

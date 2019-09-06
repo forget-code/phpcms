@@ -28,7 +28,7 @@
 			break;
 
 			case 'multiple':
-				$string = form::select($option,$value,"name='info[$field][]' id='$field ' size=2 multiple='multiple' style='height:60px;' $fieldinfo[formattribute]");
+				$string = form::select($option,$value,"name='info[$field][]' id='$field' size=2 multiple='multiple' style='height:60px;' $fieldinfo[formattribute]");
 			break;
 		}
 		return $string;

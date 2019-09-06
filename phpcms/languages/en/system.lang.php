@@ -90,7 +90,7 @@ $LANG['ctrl_more_selected'] = 'Hold Ctrl to select multiple';
 $LANG['file_does_not_writable'] = 'Failed to write to file';
 $LANG['file_does_not_exists'] = 'File does not exists';
 $LANG['file_exists'] = 'Already exists';
-$LANG['copyright'] = 'CopyRight 2006-2015  <a href="http://www.ku6.com" target="_blank">KU6</a>  <a href="http://www.phpcms.cn" target="_blank">PHPCMS TEAM</a> ';
+$LANG['copyright'] = 'CopyRight 2006-2017  <a href="http://www.ku6.com" target="_blank">KU6</a>  <a href="http://www.phpcms.cn" target="_blank">PHPCMS TEAM</a> ';
 $LANG['input_right'] = 'Correct';
 $LANG['update_success'] = 'Updated successfully';
 $LANG['select_all'] = 'Select all';
