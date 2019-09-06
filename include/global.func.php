@@ -955,6 +955,7 @@ function pages($num, $curr_page, $perpage = 20, $urlrule = '', $array = array(),
 	global $PHPCMS;
 	if($PHPCMS['pagemode'] && $num > $perpage)
 	{
+		$url = load('url.class.php');
 		$multipage = '';
 		if($num > $perpage)
 		{

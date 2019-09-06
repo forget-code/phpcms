@@ -73,6 +73,16 @@ define('FTP_USER', ''); //Ftp帐号
 define('FTP_PW', ''); //Ftp密码
 define('FTP_PATH', '/'); //Ftp默认路径
 
+//附件Ftp相关配置
+define('UPLOAD_FTP_ROOT', 'uploadfile/'); //Ftp附件保存物理路径
+define('UPLOAD_FTP_ENABLE', 0); //Ftp附件主机
+define('UPLOAD_FTP_HOST', '127.0.0.1'); //Ftp附件主机
+define('UPLOAD_FTP_PORT', '21'); //Ftp附件端口
+define('UPLOAD_FTP_USER', ''); //Ftp附件帐号
+define('UPLOAD_FTP_PW', ''); //Ftp附件Ftp密码
+define('UPLOAD_FTP_PATH', ''); //Ftp附件Ftp默认路径
+define('UPLOAD_FTP_DOMAIN', 'http://upload.phpcms.cn/'); //Ftp附件默认域名
+
 define('CHARSET', 'utf-8'); //网站字符集
 define('TIMEZONE', 'Etc/GMT-8'); //网站时区（只对php 5.1以上版本有效），Etc/GMT-8 实际表示的是 GMT+8
 define('DEBUG', 1); //是否显示调试信息

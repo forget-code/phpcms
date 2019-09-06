@@ -94,7 +94,7 @@ switch($action)
 		}
 		else
 		{
-			showmessage('操作成功！', $forward);
+			showmessage('操作成功！', '?mod=video&file=tag&action=manage');
 		}
 		break;
 

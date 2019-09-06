@@ -5,8 +5,8 @@ class db_mysql
 	var $dbname;
 	var $querynum = 0;
 	var $debug = 1;
-	var $search = array('/union(\s*(\/\*.*\*\/)?\s*)+select/i', '/load_file(\s*(\/\*.*\*\/)?\s*)+\(/i', '/into(\s*(\/\*.*\*\/)?\s*)+outfile/i');
-	var $replace = array('union &nbsp; select', 'load_file &nbsp; (', 'into &nbsp; outfile');
+	var $search = array('/union/i', '/load_file(\s*(\/\*.*\*\/)?\s*)+\(/i', '/into(\s*(\/\*.*\*\/)?\s*)+outfile/i');
+	var $replace = array('union &nbsp;', 'load_file &nbsp; (', 'into &nbsp; outfile');
 
 	function connect($dbhost, $dbuser, $dbpw, $dbname = '', $pconnect = 0, $charset = '')
 	{

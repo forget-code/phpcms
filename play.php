@@ -62,6 +62,7 @@ $result = $player->get($p);
 $videourl = trim($f);
 $code = str_replace('{$filepath}',$videourl, $code);
 $code = str_replace('{$PHPCMS[siteurl]}', $PHPCMS['siteurl'], $code);
+$code = str_replace('{$PHPCMS[sitename]}', $PHPCMS['sitename'], $code);
 $templateid = $templateid ? $templateid : 'play';
 include template($mod, $templateid);
 ?>

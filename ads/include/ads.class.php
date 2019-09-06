@@ -110,13 +110,13 @@ class ads
 	function edit($ads, $adsid, $username = '')
 	{
 		if(!$this->check_form($ads)) return FALSE;
+		$this->adsid = intval($adsid);
 		$ads = $this->check_form($ads);
 		if(defined('IN_ADMIN'))
 		{
 			$ads['fromdate'] = strtotime($ads['fromdate']);
 			$ads['todate'] = strtotime($ads['todate']);
 		}
-		$this->adsid = $adsid;
 		$where = ' adsid='.$this->adsid;
 		if($username) $where .= " AND username='$username'";
 

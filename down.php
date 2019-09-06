@@ -9,7 +9,7 @@ parse_str($a_k);
 if(isset($i)) $i = intval($i);
 if(!isset($m)) showmessage($LANG['illegal_parameters']);
 if(empty($f)) showmessage('地址失效');
-if(preg_match('/\.php$/',$f) || strpos($f, ":\\")) showmessage('地址有误');
+if(preg_match('/\.php/i',$f) || strpos($f, ":\\")) showmessage('地址有误');
 if(!$i || $m<0) showmessage($LANG['illegal_parameters']);
 $allow_readpoint = 1;
 

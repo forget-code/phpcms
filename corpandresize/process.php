@@ -60,8 +60,22 @@ $percent = $width/$iw;
 
 $thumb = @imagecreatetruecolor($w, $h);
 $thumbfile = $_COOKIE['thumbfile'];
-if($thumbfile) @unlink(TMP_PATH.'/'.$thumbfile);
-$thumbfile = sprintf("%s_%s.jpg",date("ymsHis"),substr(md5($pic),8,16));
+if($thumbfile)
+{
+	$thumbarr = explode('_',$thumbfile);
+	if($thumbarr[0]!=$_userid)
+	{
+		printf("error:%s\n\n\n","7");
+		exit;
+	}
+	if(!preg_match('/([0-9]{1,8})_([0-9]{12})_([0-9a-z]{12}).jpg$/',$thumbfile))
+	{
+		printf("error:%s\n\n\n","7");
+		exit;
+	}
+	@unlink(TMP_PATH.'/'.$thumbfile);
+}
+$thumbfile = sprintf("%s_%s.jpg",$_userid.'_'.date("ymsHis"),substr(md5($pic),8,12));
 setcookie('thumbfile',$thumbfile);
 if(!@imagecopyresized($thumb, $source, 0, 0, $x * $percent, $y * $percent, $w, $h, $w * $percent, $h * $percent))
 {
