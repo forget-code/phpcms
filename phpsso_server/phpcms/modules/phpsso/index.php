@@ -589,17 +589,12 @@ class index extends phpsso {
 			mkdir($dir, 0777, true);
 		}
 		//存储flashpost图片
-		$filename = $dir.$this->uid.'.zip';
-		file_put_contents($filename, $this->avatardata);
-		
-		pc_base::load_sys_func('dir');
-		//解压缩文件
-		pc_base::load_app_class('pclzip', 'phpsso', 0);
-		$archive = new PclZip($filename);
-		$archive->allow_ext = array('jpg');
-		$list = $archive->extract(PCLZIP_OPT_PATH, $dir,PCLZIP_OPT_REMOVE_ALL_PATH);
-		
-		//判断文件安全，删除压缩包和非jpg图片
+		$filename = $dir.'180x180.jpg';
+
+		$fp = fopen($filename, 'w');
+		fwrite($fp, $this->avatardata);
+		fclose($fp);
+
 		$avatararr = array('180x180.jpg', '30x30.jpg', '45x45.jpg', '90x90.jpg');
 		$files = glob($dir."*");
 		foreach($files as $_files) {
@@ -621,6 +616,13 @@ class index extends phpsso {
 		    }
 		    closedir($handle);    
 		}
+
+		pc_base::load_sys_class('image','','0');
+		$image = new image(1,0);
+		$image->thumb($filename, $dir.'30x30.jpg', 30, 30);
+		$image->thumb($filename, $dir.'45x45.jpg', 45, 45);
+		$image->thumb($filename, $dir.'90x90.jpg', 90, 90);
+		
 		$this->db->update(array('avatar'=>1), array('uid'=>$this->uid));
 		exit('1');
 	}

@@ -122,10 +122,11 @@ class manage extends admin {
 	
 	public function pullic_delthumbs() {
 		$filepath = urldecode($_GET['filepath']);
+		$ext = fileext($filepath);
+		if(!in_array(strtoupper($ext),array('JPG','GIF','BMP','PNG','JPEG')))  exit('0');
 		$reslut = @unlink($filepath);
 		if($reslut) exit('1');
 		 exit('0');
 	}
-
 }
 ?>

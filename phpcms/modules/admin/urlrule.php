@@ -20,6 +20,7 @@ class urlrule extends admin {
 	}
 	function add() {
 		if(isset($_POST['dosubmit'])) {
+			$_POST['info']['urlrule'] = rtrim(trim($_POST['info']['urlrule']),'.php');
 			$this->db->insert($_POST['info']);
 			$this->public_cache_urlrule();
 			showmessage(L('add_success'),'','','add');
@@ -45,6 +46,7 @@ class urlrule extends admin {
 	function edit() {
 		if(isset($_POST['dosubmit'])) {
 			$urlruleid = intval($_POST['urlruleid']);
+			$_POST['info']['urlrule'] = rtrim(trim($_POST['info']['urlrule']),'.php');
 			$this->db->update($_POST['info'],array('urlruleid'=>$urlruleid));
 			$this->public_cache_urlrule();
 			showmessage(L('update_success'),'','','edit');

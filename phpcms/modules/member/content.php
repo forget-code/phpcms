@@ -58,7 +58,7 @@ class content extends foreground {
 			foreach($_POST['info'] as $_k=>$_v) {
 				if(in_array($_k, $fields)) $info[$_k] = new_html_special_chars(trim_script($_v));
 			}
-			$_POST['linkurl'] = str_replace(array('"','(',')',",",' '),'',new_html_special_chars($_POST['linkurl']));
+			$_POST['linkurl'] = str_replace(array('"','(',')',",",' ','%'),'',new_html_special_chars($_POST['linkurl']));
 			$post_fields = array_keys($_POST['info']);
 			$post_fields = array_intersect_assoc($fields,$post_fields);
 			$setting = string2array($category['setting']);

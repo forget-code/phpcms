@@ -31,8 +31,8 @@ a:hover,a:active{color:#ff6600;text-decoration: underline}
 	<input type="button" name="close" value=" 关闭 " onClick="window.close();">
 	{elseif $url_forward=="blank"}
 	{elseif $url_forward}
-	<a href="{$url_forward}">如果您的浏览器没有自动跳转，请点击这里</a>
-	<script language="javascript">setTimeout("redirect('{$url_forward}');",{$ms});</script> 
+	<a href="{remove_xss($url_forward)}">如果您的浏览器没有自动跳转，请点击这里</a>
+	<script language="javascript">setTimeout("redirect('{remove_xss($url_forward)}');",{$ms});</script> 
 	{/if}
 	{if $dialog}<script style="text/javascript">window.top.location.reload();window.top.art.dialog({id:"{$dialog}"}).close();</script>{/if}
         </div>

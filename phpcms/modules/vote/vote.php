@@ -60,7 +60,6 @@ class vote extends admin {
 		$data = $this->M;
 		$siteid = $this->get_siteid();//当前站点
 		if(isset($_POST['dosubmit'])) {
-			
 			$_POST['subject']['addtime'] = SYS_TIME;
 			$_POST['subject']['siteid'] = $this->get_siteid();
 			if(empty($_POST['subject']['subject'])) {
@@ -69,11 +68,12 @@ class vote extends admin {
  			//记录选项条数 optionnumber 
 			$_POST['subject']['optionnumber'] = count($_POST['option']);
 			$_POST['subject']['template'] = $_POST['vote_subject']['vote_tp_template'];
- 			
-			$subjectid = $this->db->insert($_POST['subject'],true);
+			
+ 			$post_data = trim_script($_POST);
+			$subjectid = $this->db->insert($post_data['subject'],true);
 			if(!$subjectid) return FALSE; //返回投票ID值, 以备下面添加对应选项用,不存在返回错误
 			//添加选项操作
-			$this->db2->add_options($_POST['option'],$subjectid,$this->get_siteid());
+			$this->db2->add_options($post_data['option'],$subjectid,$this->get_siteid());
 			//生成JS文件
 			$this->update_votejs($subjectid);
 			if(isset($_POST['from_api'])&& $_POST['from_api']) {
@@ -111,16 +111,17 @@ class vote extends admin {
 				if($subjectid < 1) return false;
 				if(!is_array($_POST['subject']) || empty($_POST['subject'])) return false;
 				if((!$_POST['subject']['subject']) || empty($_POST['subject']['subject'])) return false;
- 				$this->db2->update_options($_POST['option']);//先更新已有 投票选项,再添加新增加投票选项
+				$post_data = trim_script($_POST);
+ 				$this->db2->update_options($post_data['option']);//先更新已有 投票选项,再添加新增加投票选项
 				if(is_array($_POST['newoption'])&&!empty($_POST['newoption'])){
 					$siteid = $this->get_siteid();//新加选项站点ID
-					$this->db2->add_options($_POST['newoption'],$subjectid,$siteid);
+					$this->db2->add_options($post_data['newoption'],$subjectid,$siteid);
 				}
 				//模版 
 				$_POST['subject']['template'] = $_POST['vote_subject']['vote_tp_template'];
 				
 				$_POST['subject']['optionnumber'] = count($_POST['option'])+count($_POST['newoption']);
-	 			$this->db->update($_POST['subject'],array('subjectid'=>$subjectid));//更新投票选项总数
+	 			$this->db->update($post_data['subject'],array('subjectid'=>$subjectid));//更新投票选项总数
 				$this->update_votejs($subjectid);//生成JS文件
 				showmessage(L('operation_success'),'?m=vote&c=vote&a=edit','', 'edit');
 			}else{
