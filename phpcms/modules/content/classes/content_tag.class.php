@@ -110,7 +110,7 @@ class content_tag {
 		$modelid = intval($data['modelid']);
 		if(!$this->set_modelid($catid) && $modelid) {
 			$this->db->set_model($modelid);
-			echo $this->tablename = $this->db->table_name;
+			$this->tablename = $this->db->table_name;
 		} elseif(!$this->set_modelid($catid)) {
 			return false;
 		}
@@ -129,6 +129,7 @@ class content_tag {
 			$key_array = array();
 			$number = 0;
 			$i =1;
+			$sql .= " AND catid='$catid'";
 			foreach ($keywords_arr as $_k) {
 				$sql2 = $sql." AND `keywords` LIKE '%$_k%'".(isset($data['id']) && intval($data['id']) ? " AND `id` != '".abs(intval($data['id']))."'" : '');
 				$r = $this->db->select($sql2, '*', $limit, '','','id');

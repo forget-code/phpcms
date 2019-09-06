@@ -53,7 +53,7 @@ class model {
 	 * @param $pagesize
 	 * @return unknown_type
 	 */
-	final public function listinfo($where = '', $order = '', $page = 1, $pagesize = 20, $key='', $setpages = 10,$urlrule = '',$array = array()) {
+	final public function listinfo($where = '', $order = '', $page = 1, $pagesize = 20, $key='', $setpages = 10,$urlrule = '',$array = array(), $data = '*') {
 		$where = to_sqls($where);
 		$this->number = $this->count($where);
 		$page = max(intval($page), 1);
@@ -61,7 +61,7 @@ class model {
 		$this->pages = pages($this->number, $page, $pagesize, $urlrule, $array, $setpages);
 		$array = array();
 		if ($this->number > 0) {
-			return $this->select($where, '*', "$offset, $pagesize", $order, '', $key);
+			return $this->select($where, $data, "$offset, $pagesize", $order, '', $key);
 		} else {
 			return array();
 		}

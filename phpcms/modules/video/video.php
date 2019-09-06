@@ -304,9 +304,9 @@ class video extends admin {
 	 * 获取订阅列表
 	 */
 	public function subscribe_list() {
-		if (isset($_POST['dosubmit'])) {
-			if (is_array($_POST['sub']) && !empty($_POST['sub'])) {
-				$sub = $_POST['sub'];
+		if (isset($_GET['dosubmit'])) {
+			if (is_array($_GET['sub']) && !empty($_GET['sub'])) {
+				$sub = $_GET['sub'];
 				if (!$sub['channelid'] || !$sub['catid']) showmessage(L('please_choose_catid_and_channel'));
 				$sub['catid'] = intval($sub['catid']);
 				$sub['posid'] = intval($sub['posid']);
@@ -318,6 +318,7 @@ class video extends admin {
 				showmessage(L('please_choose_catid_and_channel'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid']);
 			}
 		} else {
+			$type = isset($_GET['type']) ? intval($_GET['type']) : 1;
 			if((empty($this->setting['sn']) || empty($this->setting['skey'])) && ROUTE_A!='open') {
 				header("Location: ".APP_PATH."index.php?m=video&c=video&a=open&meunid=".$_GET['meunid'].'&pc_hash='.$_GET['pc_hash']);
 			}
@@ -331,6 +332,7 @@ class video extends admin {
 			$CATEGORYS = getcache('category_content_'.$siteid, 'commons');
 			$ku6_channels = $this->ku6api->get_subscribetype();
 			$subscribes = $this->ku6api->get_subscribe();
+			$usersubscribes = $this->ku6api->get_usersubscribe();
 			$position = getcache('position','commons');
 			
 			include $this->admin_tpl('subscribe_list');
@@ -347,6 +349,18 @@ class video extends admin {
 		if ($this->ku6api->sub_del($id)) showmessage(L('operation_success'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid']);
 		else showmessage(L('delete_failed'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid']);
 	}
+	
+	/**
+	 * Function sub_del 删除订阅用户
+	 * 删除订阅用户方法
+	 */
+	public function user_sub_del() {
+		$id = intval($_GET['id']);
+		$type = intval($_GET['type']);
+		if (!$id) showmessage(L('illegal_parameters'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid']);
+		if ($this->ku6api->user_sub_del($id)) showmessage(L('operation_success'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid'].'&type='.$type);
+		else showmessage(L('delete_failed'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid'].'&type='.$type);
+	}	
 	
 	/**
 	 * Function video2content 视频库中视频
@@ -556,14 +570,15 @@ class video extends admin {
 	public function public_check_status() {
 		$id = intval($_GET['id']);
 		if (!$id) exit('1');
-		$r = $this->db->get_one(array('videoid'=>$id), 'vid,channelid,status');
+		$r = $this->db->get_one(array('videoid'=>$id), 'vid,channelid,status,picpath');
 		if (!$r) exit('2');
 		$return = $this->ku6api->check_status($r['vid']);
 		if (!$return) exit('3');
-
+		
+		$status_arr = pc_base::load_config('ku6status_config');
 		if ($return['ku6status'] != $r['status']) {
-			$status_arr = pc_base::load_config('ku6status_config');
-			$this->db->update(array('status'=>$return['ku6status'], 'picpath'=>$return['pcipath']), array('videoid'=>$id));
+			$this->db->update(array('status'=>$return['ku6status'], 'picpath'=>$return['picpath']), array('videoid'=>$id));
+			
 			if ($return['ku6status']==21) {
 				/**
 				 * 加载视频内容对应关系数据模型，检索与删除视频相关的内容。
@@ -613,10 +628,13 @@ class video extends admin {
 			} else {
 				$msg_r = json_encode(array('change'=>1, 'status'=>$return['ku6status'], 'statusname'=>iconv(CHARSET, 'UTF-8', $status_arr[$return['ku6status']])));
 			}
-		} else {
+		} else if (!$r['picpath'] && $return['picpath']) {
+			$this->db->update(array('picpath'=>$return['picpath']), array('videoid'=>$id));
+			$msg_r = json_encode(array('change'=>1, 'status'=>$return['ku6status'], 'statusname'=>iconv(CHARSET, 'UTF-8', $status_arr[$return['ku6status']])));
+		}else {
 			$msg_r = json_encode(array('change'=>0));
-		}
-		exit($msg_r);
+		}	
+		exit($msg_r);	
 	}
 	
 	/***********2013.1.15添加**********/
@@ -776,7 +794,40 @@ class video extends admin {
 		}
 	}
 	
-	
+	//获取userid下的视频
+	public function ajax_getuseridvideo(){
+		$userid = intval($_GET['userid']);
+		if (!$userid) exit(0);
+		$url = "http://v.ku6.com/video.htm?t=list&uid=" . $userid . "&p=1";
+		$data = @file_get_contents($url);
+		$data = json_decode($data, 1);
+		$list = $data['data'];
+		if (is_array($list)) {
+			$sub['userid'] = $userid;
+			$result = $this->ku6api->checkusersubscribe($sub);
+			$status = $result['status'];
+			exit($status);
+		} 
+		exit('0');
+	}
+
+	/**
+	 * 订阅用户视频
+	 */
+	public function subscribe_uservideo() {
+		if (is_array($_GET['sub']) && !empty($_GET['sub'])) {
+			$sub = $_GET['sub'];
+			if (!$sub['userid'] || !$sub['catid']) showmessage(L('please_choose_catid_and_channel'));
+			$sub['catid'] = intval($sub['catid']);
+			$sub['posid'] = intval($sub['posid']);
+			$result = $this->ku6api->usersubscribe($sub);
+			if ($result['check'] == 6) showmessage(L('subscribe_for_default')); 
+			if ($result['code'] == 200) showmessage(L('operation_success'), 'index.php?m=video&c=video&a=subscribe_list&type=2');
+			else showmessage(L('subscribe_set_failed'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid']);
+		} else {
+			showmessage(L('please_choose_catid_and_iputuserid'), 'index.php?m=video&c=video&a=subscribe_list&meunid='.$_GET['meunid'].'&type=2');
+		}
+	}	
 	
 }
 

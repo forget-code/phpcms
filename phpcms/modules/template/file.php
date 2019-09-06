@@ -133,7 +133,6 @@ class file extends admin {
 		$dir = isset($_GET['dir']) && trim($_GET['dir']) ? str_replace(array('..\\', '../', './', '.\\'), '', urldecode(trim($_GET['dir']))) : showmessage(L('illegal_operation'), HTTP_REFERER);
 		$file = isset($_GET['file']) && trim($_GET['file']) ? trim($_GET['file']) : showmessage(L('illegal_operation'), HTTP_REFERER);
 		ob_start();
-		//include $this->admin_tpl('base_tool');
 		include template($dir,basename($file, '.html'),$this->style);
 		$html = ob_get_contents();
 		ob_clean();

@@ -34,7 +34,8 @@ $LANG['choose_videoes']						=	'选择视频';
 $LANG['tags']								=	'标签';
 $LANG['separated_by_spaces']				=	'多个用空格隔开';
 $LANG['video_id']							=	'视频ID';
-$LANG['subscribe_notic']					=	'请正确填写相关资料开通视频应用！';
+$LANG['subscribe_notic']					=	'请到 v.ku6vms.com 申请开通帐号，申请地址：<a href="http://v.ku6vms.com/" target="_blank">http://v.ku6vms.com/</a>
+<br />订阅说明：订阅是将ku6的视频入库到本系统的功能。设置订阅后，ku6vms定时向设置的栏目及推荐位中添加ku6的推荐视频。';
 $LANG['pass_settings']						=	'通行证设置';
 $LANG['vms_sn']								=	'身份识别码';
 $LANG['vms_skey']							=	'加密密钥';
@@ -57,6 +58,7 @@ $LANG['import_select_ku6video']				=	'导入所选视频';
 $LANG['ku6video_preview']					=	'点击预览该视频'; 
 $LANG['ku6video_edittitle']					=	'点击可修改标题哦！'; 
 $LANG['delete_this_video']					=	'是否删除该视频?'; 
+$LANG['update_status']						=	'更新状态'; 
 $LANG['video_store']						=	'视频库';
 $LANG['view']								=	'预览';
 $LANG['succfull_create_index']				=	'操作完成。如果生成了静态，重新生成下视频模型的静态页！';
@@ -108,7 +110,15 @@ $LANG['not_exist_vidoe']					=	'视频库中不存在此视频！';
 $LANG['communication_failed']				=	'通信失败，请重试！'; 
 $LANG['video_status_update_successful']		=	'视频状态更新完成！'; 
 $LANG['video_status_not_change']			=	'视频状态未发生变化！'; 
-
-
+$LANG['user_subscribe']			=	'按用户订阅'; 
+$LANG['channel_subscribe']			=	'按频道订阅'; 
+$LANG['input_userid']			=	'请输入用户id：';
+$LANG['please_input_userid']			=	'请输入用户id'; 
+$LANG['input_right']			=	'输入正确';
+$LANG['user_no_video']			=	'此用户下无视频,不能订阅';
+$LANG['please_choose_catid_and_iputuserid']			=	'请输入用户id及入库栏目！';
+$LANG['instruction_usersub']			=	'订阅者用户id'; 
+$LANG['user_already_sub']			=	'用户已被订阅';
+$LANG['user_sub_nomore_than3']			=	'订阅超标,请联系客服:<a href="http://www.phpcms.cn" target="_blank" style="color:red; text-decoration:underline;">www.phpcms.cn</a>';
 
 ?>

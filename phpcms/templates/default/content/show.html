@@ -27,7 +27,7 @@
 {/if}
 			<div id="pages" class="text-c">{$pages}</div>
             <p style="margin-bottom:10px">
-            <strong>相关热词搜索：</strong>{loop $keywords $keyword}<a href="{APP_PATH}index.php?m=content&c=tag&catid={$catid}&tag={urlencode($keyword)}" class="blue">{$keyword}</a> 	{/loop}
+            <strong>相关热词搜索：</strong>{loop $keywords $keyword}<a href="{APP_PATH}index.php?m=content&c=tag&a=lists&tag={urlencode($keyword)}" class="blue">{$keyword}</a> 	{/loop}
             </p>
             <p class="f14">
                 <strong>上一篇：</strong><a href="{$previous_page[url]}">{$previous_page[title]}</a><br />

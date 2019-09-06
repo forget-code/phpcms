@@ -378,6 +378,39 @@ class ku6api {
 		}
 		return false;
 	} 
+
+	/**
+	 * function checkusersubscribe 判断用户是否已经订阅
+	 */
+	public function checkusersubscribe($datas = array()) {
+		$postdata['method'] = 'CheckUserSubscribe';
+		$postdata['userid'] = $datas['userid'];
+
+		//向vms post数据，并获取返回值
+		if ($data = $this->post($postdata)) {
+			return $data;
+		}
+		return false;
+	}	
+	
+	/**
+	 * function subscribe 按用户订阅处理
+	 * 该方法将用户的订阅信息post到vms里面记录
+	 * @param array $data 推送信息 例如： array(array('userid'=>102000, 'catid'=>16371, 'posid'=>8))
+	 */
+	public function usersubscribe($datas = array()) {
+		//构造post数据
+		$postdata['method'] = 'UserSubscribeAdd';
+		$postdata['userid'] = $datas['userid'];
+		$postdata['catid'] = $datas['catid'];
+		$postdata['posid'] = $datas['posid'] ? $datas['posid'] : 0;
+
+		//向vms post数据，并获取返回值
+		if ($data = $this->post($postdata)) {
+			return $data;
+		}
+		return false;
+	}	
 	
 	/**
 	 * Function sub_del 删除订阅
@@ -397,6 +430,23 @@ class ku6api {
 	}
 	
 	/**
+	 * Function user_sub_del 删除订阅用户
+	 * 删除订阅用户
+	 * @param int $id 订阅id
+	 */
+	public function user_sub_del($id = 0) {
+		if (!$id) return false;
+		//构造post数据
+		$postdata['method'] = 'UserSubscribeDel';
+		$postdata['sid'] = $id;
+		//向vms post数据，并获取返回值
+		if ($data = $this->post($postdata)) {
+			return true;
+		}
+		return false;
+	}	
+	
+	/**
 	 * fucntion get_subscribe 获取订阅
 	 * 获取自己的订阅信息
 	 */	
@@ -410,6 +460,21 @@ class ku6api {
 			return false;
 		}
 	}
+	
+	/**
+	 * fucntion get_subscribe 获取用户订阅
+	 * 获取用户自己的订阅信息
+	 */	
+	public function get_usersubscribe() {
+		//构造post数据
+		$postdata['method'] = 'UserSubscribeSearch';
+		//向vms post数据，并获取返回值
+		if ($data = $this->post($postdata)) {
+			return $data['data'];
+		} else {
+			return false;
+		}
+	}	
 	
 	/**
 	 * Function flashuploadparam 获取flash上传条属性

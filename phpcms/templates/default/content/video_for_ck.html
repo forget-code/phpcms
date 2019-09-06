@@ -177,7 +177,7 @@ var okListener = function(event){
 	var video_url = document.getElementById("video_url").value;
 	if (video_url=='') {
 	} else {
-		video_url = '<embed src="{$player_url}'+video_url+'/style/{$video_setting[style_projectid]}/" quality="high" width="414" height="305" align="middle" allowScriptAccess="always" allowfullscreen="true" flashvars="auto=1" type="application/x-shockwave-flash"></embed>';
+		video_url = $('#video_view').html();
 		this._.editor.insertHtml(video_url);
 		CKEDITOR.dialog.getCurrent().removeListener("ok", okListener);
 	}

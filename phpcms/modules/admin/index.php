@@ -216,8 +216,8 @@ class index extends admin {
 		$adminpanel = $this->panel_db->select(array('userid'=>$userid), '*',20 , 'datetime');
 		$product_copyright = base64_decode('5LiK5rW355ub5aSn572R57uc5Y+R5bGV5pyJ6ZmQ5YWs5Y+4');
 		$architecture = base64_decode('546L5Y+C5Yqg');
-		$programmer = base64_decode('546L5Y+C5Yqg44CB546L6ZOB5oiQ44CB6ZmI5a2m5pe644CB6ZmI6bmP44CB546L5a6Y5bqG44CB5byg5bqG44CB54aK55Sf5Y2O44CB5ZCV5a2Y55m9');
-		$designer = base64_decode('6JGj6aOe6b6Z44CB5byg5LqM5by6');
+		$programmer = base64_decode('546L5Y+C5Yqg44CB6ZmI5a2m5pe644CB546L5a6Y5bqG44CB5byg5LqM5by644CB6YOd5Zu95paw44CB6YOd5bed44CB6LW15a6P5Lyf');
+ 		$designer = base64_decode('5byg5LqM5by6');
 		ob_start();
 		include $this->admin_tpl('main');
 		$data = ob_get_contents();

@@ -110,4 +110,15 @@ $LANG['not_exist_vidoe']					=	'视频库中不存在此视频！';
 $LANG['communication_failed']				=	'通信失败，请重试！'; 
 $LANG['video_status_update_successful']		=	'视频状态更新完成！'; 
 $LANG['video_status_not_change']			=	'视频状态未发生变化！'; 
+$LANG['user_subscribe']			=	'按用户订阅'; 
+$LANG['channel_subscribe']			=	'按频道订阅'; 
+$LANG['input_userid']			=	'请输入用户id：';
+$LANG['please_input_userid']			=	'请输入用户id'; 
+$LANG['input_right']			=	'输入正确';
+$LANG['user_no_video']			=	'此用户下无视频,不能订阅';
+$LANG['please_choose_catid_and_iputuserid']			=	'请输入用户id及入库栏目！';
+$LANG['instruction_usersub']			=	'订阅者用户id'; 
+$LANG['user_already_sub']			=	'用户已被订阅';
+$LANG['user_sub_nomore_than3']			=	'订阅超标,请联系客服:<a href="http://www.phpcms.cn" target="_blank" style="color:red; text-decoration:underline;">www.phpcms.cn</a>';
+
 ?>

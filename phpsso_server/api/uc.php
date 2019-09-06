@@ -1,7 +1,7 @@
 <?php
 error_reporting(0);
 define('PHPCMS_PATH', dirname(__FILE__).'/../');
-include PHPCMS_PATH.'/phpcms/base.php';
+if(!defined('IN_PHPCMS')) include PHPCMS_PATH.'/phpcms/base.php';
 
 define('UC_KEY', pc_base::load_config('system', 'uc_key'));
 define('UCUSE', pc_base::load_config('system', 'ucuse'));
@@ -21,6 +21,7 @@ if(empty($get)) exit('Invalid Request');
 
 include dirname(__FILE__).'/uc_client/lib/xml.class.php';
 $post = xml_unserialize(file_get_contents('php://input'));
+
 
 $action = $get['action'];
 

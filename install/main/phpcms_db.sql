@@ -422,6 +422,35 @@ CREATE TABLE `phpcms_keylink` (
 ) TYPE=MyISAM;
 
 -- ----------------------------
+-- Table structure for `phpcms_keyword`
+-- ----------------------------
+DROP TABLE IF EXISTS `phpcms_keyword`;
+CREATE TABLE IF NOT EXISTS `phpcms_keyword` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `keyword` char(100) NOT NULL,
+  `pinyin` char(100) NOT NULL,
+  `videonum` int(11) NOT NULL DEFAULT '0',
+  `searchnums` int(10) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `keyword` (`keyword`,`siteid`)
+) TYPE=MyISAM;
+
+
+-- ----------------------------
+-- Table structure for `phpcms_keyword_data`
+-- ----------------------------
+DROP TABLE IF EXISTS `phpcms_keyword_data`;
+CREATE TABLE IF NOT EXISTS `phpcms_keyword_data` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `tagid` int(10) unsigned NOT NULL DEFAULT '0',
+  `siteid` smallint(5) unsigned NOT NULL DEFAULT '0',
+  `contentid` char(30) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tagid` (`tagid`,`siteid`)
+) TYPE=MyISAM;
+
+-- ----------------------------
 -- Table structure for `phpcms_linkage`
 -- ----------------------------
 DROP TABLE IF EXISTS `phpcms_linkage`;

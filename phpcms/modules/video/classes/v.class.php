@@ -66,7 +66,7 @@ class v {
 		$vid = intval($vid);
 		if (!$vid) return false;
 		//删除视频关联的内容，并更新内容页
-		$this->db->update(array('status'=>'-30'), array('videoid'=>$vid));
+		$this->db->delete(array('videoid'=>$vid));
 		return true;
 	}
 }

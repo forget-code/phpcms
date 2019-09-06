@@ -22,7 +22,9 @@
 </form>
 <div class="bk20 hr"></div>
 <ul class="video-list contentList" id="fsUploadProgress">
-<?php foreach($infos as $r) {?>
+<?php foreach($infos as $r) {
+	if($r['picpath']=='') $r['picpath'] = IMG_PATH.'nopic.jpg';
+	?>
 <li>
 	<div class="img-wrap">
 		<a href="javascript:;" vid="<?php echo $r['videoid']?>" picp="<?php echo $r['picpath']?>" onclick="javascript:album_cancel(this,'<?php echo $r['videoid']?>','<?php echo $r['picpath']?>')"><div class="icon"></div><img src="<?php echo $r['picpath']?>" vid="<?php echo $r['videoid'];?>" path="<?php echo $r['picpath'];?>" width="120" title="<?php echo $r['title']?>"/></a><?php echo $r['title'];?>

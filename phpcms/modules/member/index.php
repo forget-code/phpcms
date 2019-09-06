@@ -395,7 +395,7 @@ class index extends foreground {
 	public function account_manage_info() {
 		if(isset($_POST['dosubmit'])) {
 			//更新用户昵称
-			$nickname = isset($_POST['nickname']) && trim($_POST['nickname']) ? trim($_POST['nickname']) : '';
+			$nickname = isset($_POST['nickname']) && is_username(trim($_POST['nickname'])) ? trim($_POST['nickname']) : '';
 			if($nickname) {
 				$this->db->update(array('nickname'=>$nickname), array('userid'=>$this->memberinfo['userid']));
 				if(!isset($cookietime)) {

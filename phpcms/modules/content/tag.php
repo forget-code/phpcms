@@ -8,48 +8,52 @@ class tag {
 	private $db;
 	function __construct() {
 		$this->db = pc_base::load_model('content_model');
+		$this->keyword_db = pc_base::load_model('keyword_model');
+		$this->siteid = get_siteid();
 	}
+	
+	public function init() {
+
+		$page = max($_GET['page'], 1);
+		$pagesize = 20;
+		$where = '`siteid`='.$this->siteid;
+		$infos = $this->keyword_db->listinfo($where, '`searchnums` DESC, `videonum` DESC', $page, $pagesize);
+		$pages = $this->keyword_db->pages;
+		include template('content', 'tag');
+	}
+
 	/**
 	 * 按照模型搜索
 	 */
-	public function init() {
-		if(!isset($_GET['catid'])) showmessage(L('missing_part_parameters'));
-		$catid = intval($_GET['catid']);
-		$siteids = getcache('category_content','commons');
-		$siteid = $siteids[$catid];
-		$this->categorys = getcache('category_content_'.$siteid,'commons');
-		if(!isset($this->categorys[$catid])) showmessage(L('missing_part_parameters'));
-		if(isset($_GET['info']['catid']) && $_GET['info']['catid']) {
-			$catid = intval($_GET['info']['catid']);
-		} else {
-			$_GET['info']['catid'] = 0;
-		}
-		if(isset($_GET['tag']) && trim($_GET['tag']) != '') {
-			$tag = safe_replace(strip_tags($_GET['tag']));
-		} else {
-			showmessage(L('illegal_operation'));
-		}
-		$modelid = $this->categorys[$catid]['modelid'];
-		$modelid = intval($modelid);
-		if(!$modelid) showmessage(L('illegal_parameters'));
-		$CATEGORYS = $this->categorys;
+	public function lists() {
+		
+		$tag = safe_replace(addslashes($_GET['tag']));
+		$keyword_data_db = pc_base::load_model('keyword_data_model');
+		//获取标签id
+		$r = $this->keyword_db->get_one(array('keyword'=>$tag, 'siteid'=>$this->siteid), 'id');
+		if (!$r['id']) showmessage('不存在此关键字！');
+		$tagid = intval($r['id']);
 
-		$siteid = $this->categorys[$catid]['siteid'];
-		$siteurl = siteurl($siteid);
-		$this->db->set_model($modelid);
-		$page = $_GET['page'];
-		$datas = $infos = array();
-		$infos = $this->db->listinfo("`status`=99 AND `keywords` LIKE '%$tag%'",'id DESC',$page,20);
-		$total = $this->db->number;
-		if($total>0) {
-			$pages = $this->db->pages;
-			foreach($infos as $_v) {
-				if(strpos($_v['url'],'://')===false) $_v['url'] = $siteurl.$_v['url'];
-				$datas[] = $_v;
+		$page = max($_GET['page'], 1);
+		$pagesize = 20;
+		$where = '`tagid`=\''.$tagid.'\' AND `siteid`='.$this->siteid;
+		$infos = $keyword_data_db->listinfo($where, '`id` DESC', $page, $pagesize);
+		$pages = $keyword_data_db->pages;
+		$total = $keyword_data_db->number;
+		if (is_array($infos)) {
+			$datas = array();
+			foreach ($infos as $info) {
+				list($contentid, $modelid) = explode('-', $info['contentid']);
+				$this->db->set_model($modelid);
+				$res = $this->db->get_one(array('id'=>$contentid), 'title, description, url, inputtime, style');
+				$res['title'] = str_replace($tag, '<font color="#f00">'.$tag.'</font>', $res['title']);
+				$res['description'] = str_replace($tag, '<font color="#f00">'.$tag.'</font>', $res['description']);
+				$datas[] = $res;
 			}
 		}
-		$SEO = seo($siteid, $catid, $tag);
-		include template('content','tag');
+
+		$SEO = seo($siteid, '', $tag);
+		include template('content','tag_list');
 	}
 }
 ?>

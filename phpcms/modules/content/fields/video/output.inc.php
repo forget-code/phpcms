@@ -14,7 +14,6 @@
 			$pagenumber = count($result);
 			$return_data = array();
 			if ($pagenumber>0) {
-				$currpage = max(intval($_GET['page']),1);
 				if (is_array($result) && !empty($result)) {
 					//首先对$result按照$videos的videoid排序
 					foreach ($videos as $_vid => $v) {
@@ -34,10 +33,8 @@
 					else $arr = next($new_result);
 					$return_data['data'][$page]['title'] = $arr['title'] ? htmlspecialchars($arr['title']) : htmlspecialchars($this->data['title']);
 					$return_data['data'][$page]['url'] = $urls[0];
-					if ($page==$currpage) {
-						$return_data['vid'] = $arr['vid'];
-						$return_data['channelid'] = $arr['channelid'];
-					}
+					$return_data['vid'] = $arr['vid'];
+					$return_data['channelid'] = $arr['channelid'];
 				}
 
 				$category_db = pc_base::load_model('category_model');

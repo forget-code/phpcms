@@ -22,6 +22,7 @@
             <tr>
 			<th width="16"><input type="checkbox" value="" id="check_box" onclick="selectall('ids[]');"></th>
             <th width="6%">ID</th>
+            <th><?php echo L('thumb')?></th>
             <th><?php echo L('video_title')?></th>
             <th width="18%">vid</th>
             <th width="12%"><?php echo L('addtime')?></th>
@@ -39,6 +40,9 @@ if(is_array($infos)){
 	<tr>
 	<td align="center"><input class="inputcheckbox " name="ids[]" value="<?php echo $info['videoid'];?>" type="checkbox"></td>
 	<td align="center"><?php echo $info['videoid']?></td>
+	<td align="center">
+<img src="<?php echo $info['picpath'] ? $info['picpath'] : IMG_PATH.'admin_img/bfqicon1.jpg';?>" width="100px" />	
+</td>
 	<td><?php echo $info['title']?> <?php if($info['userupload']){?><img src="<?php echo IMG_PATH; ?>yc.jpg" height="16"><?php }?></td>
 	<td align="center"><?php echo $info['vid'];?></td>
 	<td align="center"><?php echo date('Y-m-d H:i', $info['addtime'])?></td>
@@ -53,7 +57,7 @@ if(is_array($infos)){
     </tbody>
     </table>
 <div class="btn text-l"><input type="hidden" value="<?php echo $pc_hash;?>" name="pc_hash">
-	<label for="check_box"><?php echo L('selected_all');?>/<?php echo L('cancel');?></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="button" value="<?php echo L('delete');?>" onclick="myform.action='?m=video&c=video&a=delete_all&dosubmit=1';myform.submit();"/>
+	<label for="check_box"><?php echo L('selected_all');?>/<?php echo L('cancel');?></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" class="button" value="<?php echo L('delete');?>" onclick="myform.action='?m=video&c=video&a=delete_all&dosubmit=1';return confirm_delete();"/>
 </div>
  <div id="pages"> <?php echo $pages?></div>
 </div>
@@ -96,6 +100,10 @@ function check_status(id) {
 			}
 		}
 	});
+}
+
+function confirm_delete(){
+	if(confirm('确认删除吗？')) $('#myform').submit();
 }
 
 function show_msg(msg) {

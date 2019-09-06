@@ -25,7 +25,11 @@ switch($_GET['act']) {
 function ajax_getlist() {
 
 	$cachefile = $_GET['cachefile'];
+	$cachefile = str_replace(array('/', '//'), '', $cachefile);
+	//$cachefile = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S', '', $cachefile);
 	$path = $_GET['path'];
+	$path = str_replace(array('/', '//'), '', $path);
+	//$path = preg_replace('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]+/S', '', $path);
 	$title = $_GET['title'];
 	$key = $_GET['key'];
 	$infos = getcache($cachefile,$path);
