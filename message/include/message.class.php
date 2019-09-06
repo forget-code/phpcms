@@ -269,7 +269,8 @@ class message
 		{
 			foreach($arrmsgid as $msgid)
 			{
-				$folder = $this->db->get_one("SELECT folder FROM $this->table WHERE messageid='$msgid'");
+				$folder = $this->db->get_one("SELECT folder FROM $this->table WHERE messageid='$msgid' AND (send_from_id='$userid' OR send_to_id='$userid')");
+				if(!$folder) return false;
 				if($folder['folder'] == 'all')
 				{
 					$arr_message = array('folder'=>'outbox', 'status'=>2);
@@ -287,7 +288,8 @@ class message
 		{
 			$msgid = intval($arrmsgid);
 			if($msgid < 1) return false;
-			$folder = $this->db->get_one("SELECT folder FROM $this->table WHERE messageid='$msgid'");
+			$folder = $this->db->get_one("SELECT folder FROM $this->table WHERE messageid='$msgid' AND (send_from_id='$userid' OR send_to_id='$userid')");
+			if(!$folder) return false;
 			if($folder['folder'] == 'all')
 			{
 				$arr_message = array('folder'=>'outbox', 'status'=>2);
@@ -322,7 +324,8 @@ class message
 		{
 			foreach($arrmsgid as $msgid)
 			{
-				$folder = $this->db->get_one("SELECT folder FROM $this->table WHERE messageid='$msgid'");
+				$folder = $this->db->get_one("SELECT folder FROM $this->table WHERE messageid='$msgid' AND (send_from_id='$userid' OR send_to_id='$userid')");
+				if(!$folder) return false;
 				if($folder['folder'] == 'all')
 				{
 					$arr_message = array('folder'=>'inbox', 'status'=>1);
@@ -341,7 +344,8 @@ class message
 		{
 			$msgid = intval($arrmsgid);
 			if($msgid < 1) return false;
-			$folder = $this->db->get_one("SELECT folder FROM $this->table WHERE messageid='$msgid'");
+			$folder = $this->db->get_one("SELECT folder FROM $this->table WHERE messageid='$msgid' AND (send_from_id='$userid' OR send_to_id='$userid')");
+			if(!$folder) return false;
 			if($folder['folder'] == 'all')
 			{
 				$arr_message = array('folder'=>'inbox', 'status'=>1);

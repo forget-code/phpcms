@@ -72,7 +72,19 @@ class url
 		if($catid == 0 || $time == 0 || $prefix == '')
 		{
 			$r = $this->db->get_one("SELECT * FROM `".DB_PRE."content` WHERE `contentid`='$contentid'");
-			if($r['isupgrade']) return $r['url'];
+			if($r['isupgrade'])
+			{
+				if($page>1)
+				{
+					$base_name = basename($r['url']);
+					$fileext = fileext($base_name);
+					return preg_replace('/.'.$fileext.'$/','_'.$page.'.'.$fileext,$r['url']);
+				}
+				else
+				{
+					return $r['url'];
+				}
+			}
 			$catid = $r['catid'];
 			$time = $r['inputtime'];
 			if(!$prefix) $prefix = $r['prefix'];

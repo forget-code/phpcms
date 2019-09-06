@@ -5,7 +5,7 @@ require_once MOD_ROOT.'include/ask.class.php';
 $ask = new ask();
 require_once MOD_ROOT.'include/answer.class.php';
 $answer = new answer();
-
+$id = intval($id);
 if(!isset($action)) $action = '';
 switch($action)
 {

@@ -1,7 +1,7 @@
 <?php
 require './include/common.inc.php';
-$pay_code = !empty($code) ? trim( $code ) : "";
-if ( empty( $pay_code ) )
+$pay_code = trim($code);
+if(empty($pay_code) || !in_array($pay_code,array('alipay','bank','chinabank','post','tenpay')))
 {
 	showmessage('校验失败');
 }
@@ -15,19 +15,16 @@ else
 		$result = $payment->respond();
 		if ($result)
 		{
-			//支付成功的处理信息
             $forward = get_cookie('orderid')?get_cookie('orderid'):'pay/online.php';
             showmessage('支付成功',$forward);
 		}
-		else if ( $payment->err )
+		else if($payment->err)
 		{
-			$msg = $payment->err;
-			showmessage($msg);
+			showmessage($payment->err);
 		}
 		else
 		{
-			$msg = "支付失败";
-			showmessage($msg);
+			showmessage('支付失败');
 		}
 	}
 	else

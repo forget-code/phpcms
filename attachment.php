@@ -15,6 +15,7 @@ switch($action)
 			$filename = $attachment->uploadedfiles[0]['filename'];
 			$filepath = $attachment->uploadedfiles[0]['filepath'];
 			$fileurl = UPLOAD_URL.$filepath;
+			$extension = fileext($filename);
 			
 			if($from == 'fckeditor')
 			{
@@ -32,23 +33,23 @@ switch($action)
 					$image = new image();
 					$image->watermark($imagefile, $imagefile, $PHPCMS['watermark_pos'], $PHPCMS['watermark_img']);
 				}
-				if($PHPCMS['thumb_enable'])
+				if($PHPCMS['thumb_enable']  && in_array($extension,array('jpg','jpeg','gif','png','bmp')))
 				{			
 					$imagefile = UPLOAD_ROOT.$filepath;
 					$image = new image();
 					$filename = $image->thumb($imagefile, $imagefile, $PHPCMS['thumb_width'], $PHPCMS['thumb_height']);			
 				}
+				$filename = basename($filepath);
 				if(isset($id)) 
 				{
 					$message = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8".CHARSET."\"><script language='javascript'>";
 					$message .= "window.parent.show_ok('0-".$id."','".md5($fileurl.AUTH_KEY)." $MM_objid $fileurl');";
 					$message .= "</script>";
 				}
-				else 
+				else
 				{
 					$message = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8".CHARSET."\"><script language='javascript'>";
 					$message .= "window.parent.SetUrl('$fileurl', '', '', '$filename');";
-					$message .= "window.parent.GetE('frmUpload').reset() ;";
 					$message .= "</script>";
 				}
 			}

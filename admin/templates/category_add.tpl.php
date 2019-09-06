@@ -97,7 +97,7 @@ include admin_tpl('header');
     <tr>
       <th><strong>绑定域名：</strong><br>如果不绑定则请不要填写</th>
       <td>
-		<?php if(!$MODELE[$modelid][ishtml]) {?>
+		<?php if($MODEL[$modelid]['ishtml']) {?>
       <input name='category[url]' type='text' id='domain' value='' size='60' maxlength='60'> 例如：http://soft.phpcms.cn
 		<?php } else echo "当前栏目绑定的模型为不生成静态，需要绑定二级域名，<a href='?mod=phpcms&file=model&action=edit&modelid=".$modelid."'>请点击这里设置</a>";?>
       </td>

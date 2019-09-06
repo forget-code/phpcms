@@ -55,12 +55,22 @@ class ask
 	{
 		$id = intval($id);
 		if(!$id || !is_array($info) || !is_array($posts)) return false;
+		$this->check_filed($info,array('catid','title','addtime','status','flag','answercount','anonymity','hits','ischeck'));
+		$this->check_filed($posts,array('message'));
 		if($userid) $sql = " AND userid=$userid AND status<4";
 		$this->db->update($this->table, $info, "askid=$id $sql");
 		$this->search_api($id);
 		return $this->db->update($this->table_posts, $posts, "askid=$id $sql");
 	}
 	
+	function check_filed($data,$fields)
+	{
+		foreach($data AS $k=>$v)
+		{
+			if(!in_array($k,$fields)) showmessage('无权修改'.$k.'字段');
+		}
+	}
+
 	function point($id)
 	{
 		$id = intval($id);
@@ -186,10 +196,12 @@ class ask
 
 	function accept_answer($id, $pid)
 	{
-		global $M,$LANG;
+		global $_userid,$M,$LANG;
 		$pid = intval($pid);
+		$r_m = $this->db->get_one("SELECT username FROM $this->table WHERE askid=$id AND userid='$_userid'");
+		if(!$r_m) return false;
 		$this->status($id,5);
-		$this->db->query("UPDATE $this->table_posts SET optimal=1,solvetime=".TIME." WHERE pid=$pid");
+		$this->db->query("UPDATE $this->table_posts SET optimal=1,solvetime=".TIME." WHERE pid=$pid AND askid=$id");
 		$r = $this->db->get_one("SELECT userid,username FROM $this->table_posts WHERE pid=$pid");
 		$this->db->query("UPDATE ".DB_PRE."member_info SET acceptcount=acceptcount+1 WHERE userid=$r[userid]");
 		if($M['answer_bounty_credit'])
@@ -211,7 +223,8 @@ class ask
 
 	function addscore($id, $point = 0)
 	{
-		global $_userid, $_username,$M;
+		global $_userid, $_username,$_point,$M;
+		if($point > $_point) return false;
 		$id = intval($id);
 		$point = intval($point);
 		$this->db->query("UPDATE $this->table SET reward=reward+$point,endtime=endtime+432000 WHERE askid=$id AND userid=$_userid");

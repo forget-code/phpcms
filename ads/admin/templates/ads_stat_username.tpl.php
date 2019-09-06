@@ -1,3 +1,6 @@
+<?php 
+defined('IN_PHPCMS') or exit('Access Denied');
+?>
 <table cellpadding="0" cellspacing="1" class="table_list">
 	<tr>
 		<th>用户账号</th>

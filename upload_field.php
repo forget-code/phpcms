@@ -1,6 +1,8 @@
 <?php
 require dirname(__FILE__).'/include/common.inc.php';
-if(!$_userid) exit;
+if(!$_userid || !$modelid || !$fieldid) exit;
+$modelid = intval($modelid);
+$fieldid = intval($fieldid);
 require_once 'attachment.class.php';
 require_once 'admin/model_field.class.php';
 $field = new model_field($modelid);

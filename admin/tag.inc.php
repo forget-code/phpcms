@@ -29,6 +29,7 @@ switch($action)
 		if(isset($tag_config)) extract($tag_config, EXTR_SKIP);
 		include admin_tpl('tag_'.$type.'_add');
 	break;
+
 	case 'edit':
 		$tagname = preg_replace("/^[^{]*[{]?tag_([^}]+)[}]?.*/", "\\1", trim($tagname));
 		$tag_config = $t->get_tag_config($tagname);
@@ -94,6 +95,7 @@ switch($action)
 	case 'update':
 		$tag_config['type'] = $type;
 		if($isadd && isset($t->TAG[$tagname])) showmessage('该标签已经存在');
+		$tagname = trim($tagname);
 		if($type == 'content')
 	    {
 			if(!$tag_config['mode'])
@@ -376,7 +378,7 @@ switch($action)
 		}
 	break;
 	case 'delete':
-		$tagname = preg_replace("/^[^{]*[{]?tag_([^}]+)[}]?.*/", "\\1", trim($tagname));
+		$tagname = preg_replace("/^[^{]*[{]?tag_([^}]+)[}]?.*/", "\\1", $tagname);
         $t->delete($tagname);
 		showmessage('操作成功！', "?mod=$mod&file=$file&action=manage&module=$module");
 		break;

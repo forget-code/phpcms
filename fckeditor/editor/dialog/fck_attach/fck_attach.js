@@ -160,7 +160,7 @@ function SetUrl( url, width, height, filename)
 	GetE('txtUrl').value = url ;
     if(filename) try {GetE('txtName').value = filename;}catch(e){}
 	UpdatePreview() ;
-
+	dialog.$( 'throbberBlock' ).style.visibility = 'hidden' ;
 	dialog.SetSelectedTab( 'Info' ) ;
 }
 

@@ -77,11 +77,13 @@ class db_mysql
 
 	function insert($tablename, $array)
 	{
+		$this->check_fields($tablename, $array);
 		return $this->query("INSERT INTO `$tablename`(`".implode('`,`', array_keys($array))."`) VALUES('".implode("','", $array)."')");
 	}
 
 	function update($tablename, $array, $where = '')
 	{
+		$this->check_fields($tablename, $array);
 		if($where)
 		{
 			$sql = '';
@@ -108,6 +110,19 @@ class db_mysql
 		}
 		$this->free_result($result);
 		return $r['Field'];
+	}
+
+	function check_fields($tablename, $array)
+	{
+		$fields = $this->get_fields($tablename);
+		foreach($array AS $k=>$v)
+		{
+			if(!in_array($k,$fields))
+			{
+				$this->halt('MySQL Query Error', "Unknown column '$k' in field list");
+				return false;
+			}
+		}
 	}
 
 	function get_fields($table)

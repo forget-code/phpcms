@@ -16,7 +16,7 @@ function getRelativePath($mainpath, $relativepath)
 			unset($mainpath_info[$mainpath_info_count-1]);
 			continue;
 		}
-		$mainpath_info[count($mainpath_info)] = $relativepath_info[$i];
+		$mainpath_info[count($mainpath_info)+1] = $relativepath_info[$i];
 	}
 	return implode('/', $mainpath_info);
 }

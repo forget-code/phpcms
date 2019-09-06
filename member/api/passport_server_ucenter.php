@@ -57,7 +57,7 @@ elseif ($action == 'login')
 	}
 	if($uid == '-2')
 	{
-		showmessage('密码错误');
+		showmessage('密码错误',$MODULE['member']['url'].'login.php');
 	}
     $code = uc_call('uc_user_synlogin', array($uid));
 	$result = $member->get_userid($username);
@@ -101,6 +101,6 @@ elseif ($action == 'editpwd')
 }
 elseif ($action == 'edit')
 {
-	uc_call("uc_user_edit", array($username, '', password, $email, 1));
+	uc_call("uc_user_edit", array($username, '', $password, $email, 1));
 }
 ?>

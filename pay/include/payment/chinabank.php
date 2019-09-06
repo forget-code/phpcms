@@ -1,4 +1,6 @@
 <?php
+defined('IN_PHPCMS') or exit('Access Denied');
+
 $payment_lang = 'languages/'.LANG.'/payment/chinabank.php';
 
 if (file_exists($payment_lang))

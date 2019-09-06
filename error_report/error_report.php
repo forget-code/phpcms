@@ -7,6 +7,10 @@ require_once MOD_ROOT.'/admin/include/error.class.php';
 if ($dosubmit)
 {
     checkcode($checkcode, $M['enablecheckcode']);
+	foreach($info AS $key=>$val)
+	{
+		if(!in_array($key,array('error_link','contentid','typeid','error_title','error_text','error_link'))) unset($info[$key]);
+	}
     if (strpos($info['error_link'], 'http://') === false && strpos($info['error_link'], 'https://') === false)
     {
         $info['error_link'] = 'http://' . trim($info['error_link']);

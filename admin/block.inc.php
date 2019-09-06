@@ -1,4 +1,6 @@
-<?php 
+<?php
+defined('IN_PHPCMS') or exit('Access Denied');
+
 require_once 'block.class.php';
 
 $block = new block();

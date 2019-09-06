@@ -4,6 +4,7 @@ require dirname(__FILE__).'/include/common.inc.php';
 $phpcms_auth_key = md5(AUTH_KEY.$_SERVER['HTTP_USER_AGENT']);
 $a_k = phpcms_auth($a_k, 'DECODE', $phpcms_auth_key);
 if(empty($a_k)) showmessage($LANG['illegal_parameters']);
+unset($i,$m,$f,$t,$ip);
 parse_str($a_k);
 
 if(isset($i)) $downid = intval($i);

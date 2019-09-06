@@ -170,18 +170,6 @@ switch($action)
 			$userids = $userids ? $userids : "''";
 			unset($arr_userid);
 		}
-		if($extgroup)
-		{
-			$result = $group_admin->group_list($extgroup);
-			foreach($result as $v)
-			{
-				$arr_userid[] = $v['userid'];
-			}
-
-			$ext_userid = implode(',', $arr_userid);
-			$ext_userid = $ext_userid ? $ext_userid : "''";
-			unset($arr_userid);
-		}
         if(!isset($username)) $username = '';
         $condition = '';
 		$condition .= ($modelid && $issearch) ? " AND m.userid IN ($userids)" : '';

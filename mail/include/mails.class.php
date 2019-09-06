@@ -221,15 +221,18 @@ class mails
 
     function check_mail($email, $flag='')
     {
-        $row = $this->db->get_one("SELECT `email` FROM `$this->table_email` WHERE `email` = '$email' ");
+		global $_userid;
+		if(!defined('IN_ADMIN')) $sql = " AND userid='$_userid' or userid=0";
+        $row = $this->db->get_one("SELECT `email` FROM `$this->table_email` WHERE `email` = '$email' $sql");
         if(empty($row['email']))
         {
             if($flag)
             {
-                $username   = '游客';
-                $userid     = '0';
-                $status = '0';
-                $ip = IP; $time = TIME;$status = 1;
+                $username = '游客';
+                $userid = $status= 0;
+                $ip = IP;
+				$time = TIME;
+				$status = 1;
                 $sql = "INSERT INTO `$this->table_email` (`email`, `userid`, `username`, `ip`, `addtime`, `status`, `authcode`) VALUES('$email','$userid', '$username', '$ip', '$time', '$status', '$authcode')";
                 $this->db->query($sql);
                 return true;

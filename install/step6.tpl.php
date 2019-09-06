@@ -30,9 +30,9 @@
 <tr>
 <th align="right">数据库字符集：</th>
 <td>
-<input name="dbcharset" type="radio" id="dbcharset" value="utf8" <?php if(strtolower(DB_CHARSET)=='') echo ' checked '?>/>默认
+<input name="dbcharset" type="radio" id="dbcharset" value="" <?php if(strtolower(DB_CHARSET)=='') echo ' checked '?>/>默认
 <input name="dbcharset" type="radio" id="dbcharset" value="gbk" <?php if(strtolower(DB_CHARSET)=='gbk') echo ' checked '?> disabled/>GBK
-<input name="dbcharset" type="radio" id="dbcharset" value="utf8" <?php if(strtolower(DB_CHARSET)=='utf8') echo ' checked '?>/>utf8 
+<input name="dbcharset" type="radio" id="dbcharset" value="utf8" <?php if(strtolower(DB_CHARSET)=='utf8') echo ' checked '?> />utf8 
 <input name="dbcharset" type="radio" id="dbcharset" value="latin1" <?php if(strtolower(DB_CHARSET)=='latin1') echo ' checked '?> />latin1 
 <img src="install/images/help.png" style="cursor:pointer;" title="如果Mysql版本为4.0.x，则请选择默认；&#10;如果Mysql版本为4.1.x或以上，则请选择其他字符集（一般选GBK）" align="absmiddle" />
 <span id='helpdbcharset'></span>
@@ -46,6 +46,13 @@
 <?php if(DB_PCONNECT==0) echo ' checked '?>/>否
 <img src="install/images/help.png" style="cursor:pointer;" title="如果启用持久连接，则数据库连接上后不释放，保存一直连接状态；如果不启用，则每次请求都会重新连接数据库，使用完自动关闭连接。" align="absmiddle" /><span id='helppconnect'></span>
 <span id='helptablepre'></span></td>
+</tr>
+<tr>
+	<th align="right">数据库策略：</th>
+	<td>
+	<input type="radio" name="dbsolution" value="1" title="高速模式适合使用独立主机的用户，可以最大限度提升系统速度，但比较占用数据库" onclick="alert(this.title);" checked>高速模式
+	<input type="radio" name="dbsolution" value="0" title="高效模式适合使用虚拟主机商用户，在不减少功能的前提下尽可能缩小数据库节约用户成本" onclick="alert(this.title);">高效模式
+	</td>
 </tr>
 </table>
 

@@ -1,11 +1,11 @@
 <?php
+defined('IN_PHPCMS') or exit('Access Denied');
 
 $payment_lang = 'languages/' .LANG. '/payment/tenpay.php';
 
 if (file_exists($payment_lang))
 {
     global $LANG;
-
     include_once($payment_lang);
 }
 

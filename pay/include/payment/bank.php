@@ -1,9 +1,9 @@
 <?php
-
+defined('IN_PHPCMS') or exit('Access Denied');
 
 $payment_lang = "languages/" .LANG. "/payment/bank.php";
 
-if (file_exists($payment_lang))
+if(file_exists($payment_lang))
 {
     global $LANG;
 

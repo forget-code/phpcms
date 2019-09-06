@@ -1,4 +1,8 @@
-<?php include admin_tpl('header');?>
+<?php
+defined('IN_PHPCMS') or exit('Access Denied');
+
+include admin_tpl('header');
+?>
 <?=$menu?>
 <table width="100%" cellpadding="0" cellspacing="1">
 <tr>

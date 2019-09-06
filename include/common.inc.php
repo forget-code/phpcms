@@ -55,6 +55,15 @@ if($_REQUEST)
 		$_REQUEST = new_stripslashes($_REQUEST);
 		if($_COOKIE) $_COOKIE = new_stripslashes($_COOKIE);
 	}
+	else
+	{
+		$_POST = new_addslashes($_POST);
+		$_GET = new_addslashes($_GET);
+		$_COOKIE = new_addslashes($_COOKIE);
+		@extract($_POST, EXTR_SKIP);
+		@extract($_GET, EXTR_SKIP);
+		@extract($_COOKIE, EXTR_SKIP);
+	}
 	if(!defined('IN_ADMIN')) $_REQUEST = filter_xss($_REQUEST, ALLOWED_HTMLTAGS);
 	extract($db->escape($_REQUEST), EXTR_SKIP);
 	if($_COOKIE) $db->escape($_COOKIE);

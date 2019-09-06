@@ -1,4 +1,5 @@
-<?php 
+<?php
+defined('IN_PHPCMS') or exit('Access Denied');
 define('CODETABLEDIR', PHPCMS_ROOT.'include/encoding/');
 
 function utf8_to_gbk($utfstr)

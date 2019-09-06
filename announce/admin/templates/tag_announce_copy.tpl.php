@@ -76,13 +76,13 @@ $().ready(function() {
       <td><b>时间显示格式</b></td>
       <td>
 	  <select name="tag_config[datetype]">
-		<option value="0">不显示时间</option>
-		<option value="1">格式：2008-01-11</option>
-		<option value="2">格式：01-11</option>
-		<option value="3">格式：2008/01/11</option>
-		<option value="4">格式：2008.01.11</option>
-		<option value="5">格式：2008-01-11 21:24:19</option>
-		<option value="6">格式：2008-01-11 21:24</option>
+		<option value="0" <?=$tag_config['datetype'] == 0 ? 'selected':''?>>不显示时间</option>
+		<option value="1" <?=$tag_config['datetype'] == 1 ? 'selected':''?>>格式：2008-01-11</option>
+		<option value="2" <?=$tag_config['datetype'] == 2 ? 'selected':''?>>格式：01-11</option>
+		<option value="3" <?=$tag_config['datetype'] == 3 ? 'selected':''?>>格式：2008/01/11</option>
+		<option value="4" <?=$tag_config['datetype'] == 4 ? 'selected':''?>>格式：2008.01.11</option>
+		<option value="5" <?=$tag_config['datetype'] == 5 ? 'selected':''?>>格式：2008-01-11 21:24:19</option>
+		<option value="6" <?=$tag_config['datetype'] == 6 ? 'selected':''?>>格式：2008-01-11 21:24</option>
 		</select>
       </td>
     </tr>

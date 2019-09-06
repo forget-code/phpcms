@@ -50,6 +50,7 @@ switch($action)
 				foreach($cats AS $k=>$v)
 				{
 					$selected = '';
+					if($v['child'] == 1) continue;
 					if($v['child'] == 0 && $catid == $k) $selected = 'selected';
 					$categorys .= "<option value='$k' $selected>$v[catname]</option>";
 				}

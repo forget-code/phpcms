@@ -20,10 +20,10 @@ include admin_tpl('header');
 	</tr>
     <tr>
 		<td>主会员组：
-		<?php 
+		<?php
 		foreach($GROUP as $id=>$groupname)
 		{
-			if(!$id) continue;
+			if(!$id || $id>6) continue;
 		?>
 		<a href="?mod=member&file=member&action=manage&groupid=<?=$id?>" id="groupinfo_<?=$id?>" title="<?=$groupname?>"><?php echo $groupname; ?></a>
 		<?php 
@@ -37,7 +37,7 @@ include admin_tpl('header');
 		foreach($ext_group as $ext_id=>$ext_groupname)
 		{
 		?>
-        <a href="<?=url_par("extgroup=$ext_id")?>" id="ext_groupid_<?=$ext_id?>" title="<?=$ext_groupname?>"><?php echo $ext_groupname; ?></a>
+        <a href="<?=url_par("groupid=$ext_id")?>" id="ext_groupid_<?=$ext_id?>" title="<?=$ext_groupname?>"><?php echo $ext_groupname; ?></a>
         <?php
 		}
 		?>

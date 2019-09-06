@@ -187,16 +187,16 @@ switch($step)
 					$db->select_db($dbname);
 				}
 			}
-
-			if(file_exists(PHPCMS_ROOT."install/main/phpcms.sql"))
+			$dbfile = $dbsolution ? 'phpcms_speed.sql' : 'phpcms_db.sql';
+			if(file_exists(PHPCMS_ROOT."install/main/".$dbfile))
 			{
-				$sql = file_get_contents(PHPCMS_ROOT."install/main/phpcms.sql");
+				$sql = file_get_contents(PHPCMS_ROOT."install/main/".$dbfile);
 				_sql_execute($sql);
 
 			}
 			else
 			{
-				echo 2;//数据库文件不存在
+				echo '2';//数据库文件不存在
 			}
             dir_copy(PHPCMS_ROOT.'install/templates/', PHPCMS_ROOT.'templates/'.TPL_NAME.'/phpcms/');
 			$data = file_get_contents(PHPCMS_ROOT.'templates/'.TPL_NAME.'/phpcms/tag_config.inc.php');
@@ -257,7 +257,10 @@ switch($step)
 		break;
 
 	case 'dbtest':
-		if(!mysql_connect($dbhost, $dbuser, $dbpw)) exit('2');
+		if(!mysql_connect($dbhost, $dbuser, $dbpw))
+		{
+			exit('2');
+		}
 		$server_info = mysql_get_server_info();
 		if($server_info < '4.0') exit('6');
 		if(!mysql_select_db($dbname))

@@ -30,15 +30,21 @@ if($PHPCMS['enablepassport'])
 	header('location:'.$url);
 	exit;
 }
-if($PHPCMS['uc'])
-{
-    $action = 'logout';
-    require MOD_ROOT.'api/passport_server_ucenter.php';
-}
+
 if($action == 'ajax')
 {
+	if($PHPCMS['uc'])
+	{
+		$action = 'logout';
+		require MOD_ROOT.'api/passport_server_ucenter.php';
+	}
 	echo 1;
 	exit;
+}
+elseif($PHPCMS['uc'])
+{
+	$action = 'logout';
+	require MOD_ROOT.'api/passport_server_ucenter.php';
 }
 
 if(!$forward) $forward = SITE_URL;

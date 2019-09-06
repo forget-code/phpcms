@@ -259,3 +259,8 @@ function CheckUpload()
 
 	return true ;
 }
+function show_ok(id,val)
+{
+	alert(val);
+	dialog.Cancel();
+}

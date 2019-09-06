@@ -87,7 +87,7 @@ class type
     //相同mod 下的 typename 相同
     function check($typename)
     {
-        $row =$this->db->get_one("SELECT `name` FROM `$this->table` WHERE `name` = '$typename' AND `module` = '$this->module'");
+        $row = $this->db->get_one("SELECT `name` FROM `$this->table` WHERE `name` = '$typename' AND `module` = '$this->module'");
         if(empty($row))
         {
             return false;
@@ -97,6 +97,22 @@ class type
             return true;
         }
     }
+    
+    function checkdir($dir, $typeid = 0)
+    {
+    	if($typeid)
+    	{
+    		$result = $this->db->get_one("SELECT `typeid` FROM `$this->table` WHERE `typedir`='$dir' AND `typeid`!='$typeid'");
+    		if($result) return false;
+    	}
+    	else 
+    	{
+    		$result = $this->db->get_one("SELECT `typeid` FROM `$this->table` WHERE `typedir`='$dir'");
+    		if($result) return false; 
+    	}
+    	return true;
+    }
+    
 	function cache()
 	{
         cache_type();

@@ -36,6 +36,7 @@ switch($action)
 			{
 				showmessage('超过你所有的最大值', $forward);
 			}
+			$inputCredit = $fromcredit;
 			$key = $toappid.'|'.$tocreditid;
 			$fromcredit = floor($fromcredit / $outcredit[$key]['ratio']);
 			$ucresult = uc_call('uc_credit_exchange_request', array($_userid, $fromcreditid, $tocreditid, $toappid, $fromcredit));
@@ -43,7 +44,7 @@ switch($action)
 			{
 				showmessage('API有误，请检查', $forward);
 			}
-			$pay_api->update_exchange($mod, $arr_credit[$fromcreditid], -$fromcredit, '兑换积分', $_userid);
+			$pay_api->update_exchange($mod, $arr_credit[$fromcreditid], -$inputCredit, '兑换积分', $_userid);
 			showmessage('操作成功', $forward);
 		}
 		else

@@ -46,7 +46,8 @@ class baidunews
 			if(strpos($data['url'],'http://') === false)
 			{
 				$link = SITE_URL.$data['url'];
-			}else
+			}
+			else
 			{
 				$link = $data['url'];
 			}
@@ -54,12 +55,13 @@ class baidunews
 			$description = htmlspecialchars(strip_tags($data['description']));
 			$text = htmlspecialchars(strip_tags($data['content']));
             $img = preg_replace("/<img\s+src=\"([a-z_0-9\.\/:-]+)\"\s+(.+)/i","\\1",$data['thumb']);
-            if(strpos($img,'http://') === false)
+            if(strpos($img,'http://') !== false)
 			{
 				$image = $img;
-			}else
+			}
+			elseif( strpos($img,'images/notip.gif') !== false )
 			{
-				$image = $img;
+				$image = SITE_URL.$img;
 			}
 			//$headlineimg = '';
 			$keywords = htmlspecialchars($data['keywords']);

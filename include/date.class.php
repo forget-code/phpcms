@@ -97,7 +97,7 @@ class date
 	{
 		if($this->month==2)
 		{
-			$lastday = $this->is_leapyear() ? 29 : 28;
+			$lastday = $this->is_leapyear($this->year) ? 29 : 28;
 		}
 		elseif($this->month==4 || $this->month==6 || $this->month==9 || $this->month==11)
 		{

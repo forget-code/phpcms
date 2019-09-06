@@ -1,6 +1,6 @@
 <?php
 require './include/common.inc.php';
-$page = $page ? intval($page) : 1;
+if(isset($page)) $page = max(intval($page), 1);
 $pagesize = $M['pagesize'] ? intval($M['pagesize']) : 12;
 $count = $db->get_one("SELECT COUNT(*)  AS num FROM ".DB_PRE."ads_place WHERE passed=1");
 $mumber = $count['num'];

@@ -74,6 +74,7 @@ class category
 			if($parentid) $this->menu->update('catid_'.$parentid, array('url'=>''));
 		}
 		if($category['type'] < 2) $this->url($catid);
+		$this->repair();
 		return $catid;
 	}
 
@@ -96,6 +97,7 @@ class category
             if($parentid) $this->menu->update('catid_'.$parentid, array('url'=>''));
 		}
 		if($category['type'] < 2) $this->url($catid);
+		$this->repair();
 		$this->cache();
 		return true;
 	}
@@ -382,40 +384,76 @@ class category
 
 	function url($catid, $is_update = 1)
 	{
+		global $MODEL;
 		$data = $this->get($catid);
 		if(!$data) return false;
 		$this->u->CATEGORY[$catid] = $data;
-		if($this->u->CATEGORY[$catid]['type'] == 2) return false;
+		if($this->category[$catid]['type'] == 2) return false;
 		cache_write('category_'.$catid.'.php', $data);
-		if(!preg_match('/:\/\//',$data['url']))
+		if($MODEL[$this->category[$catid]['modelid']]['ishtml'])
 		{
-			$url = $this->u->category($catid);
+			if(!preg_match('/:\/\//',$data['url']))
+			{
+				$url = $this->u->category($catid);
+			}
+			else
+			{
+				$url = $data['url'];
+			}
 		}
 		else
 		{
-			$url = $data['url'];
+			$url = $this->u->category($catid);
 		}
-
 		$url = preg_replace('/index\.[a-z]{3,5}$/', '', $url);
 		if($is_update)
 		{
-			$this->db->query("UPDATE `$this->table` SET url='$url' WHERE catid=$catid");
-			if(!$this->category[$catid]['parentid'])
+			$categorys_c = array();
+			$result = $this->db->query("SELECT * FROM `$this->table` WHERE `module`='$this->module'");
+			while($r = $this->db->fetch_array($result))
 			{
+				$categorys_c[$r['catid']] = $r;
+			}
+			if(!$categorys_c[$catid]['parentid'])
+			{
+				$this->db->query("UPDATE `$this->table` SET url='$url' WHERE catid=$catid");
 				$arrchildid = $data['arrchildid'];
 				$arrchild = explode(',',$arrchildid);
-				$length = strlen($this->category[$catid]['catdir']);
 				foreach($arrchild AS $k)
 				{
-					if($k == $catid || !$this->u->CATEGORY[$k]['ishtml']) continue;
-					$parentdir = substr($this->category[$k]['parentdir'],$length);					
-					if(substr($url, -1) == '/' && strpos($parentdir, '/') === 0) $url = substr($url, 0, -1);
-					$caturl = $url.$parentdir.$this->category[$k]['catdir'].'/';
+					$parentdir = $second_domain = '';
+					if($categorys_c[$k]['modelid'])
+					{
+						if($k == $catid || !$MODEL[$categorys_c[$k]['modelid']]['ishtml'] || $categorys_c[$k]['type'] == 2) continue;
+					}
+					else
+					{
+						$child_array_data = $this->get($k);
+						if($k == $catid || !$child_array_data['ishtml'] || $categorys_c[$k]['type'] == 2) continue;	
+					}
+					$arrparentid = $categorys_c[$k]['arrparentid'];
+					$arrparentid = explode(',',$arrparentid);
+					array_shift($arrparentid);
+					if(preg_match('/:\/\//',$categorys_c[$arrparentid[0]]['url']))
+					{
+						$second_domain = $categorys_c[$arrparentid[0]]['url'];
+						array_shift($arrparentid);
+					}
+					foreach($arrparentid AS $p)
+					{
+						$parentdir .= $categorys_c[$p]['catdir'].'/';
+					}
+					$caturl = $second_domain.'/'.$parentdir.$categorys_c[$k]['catdir'].'/';
 					$this->db->query("UPDATE `$this->table` SET url='$caturl' WHERE catid=$k");
 				}
 			}
+			else
+			{
+				$this->db->query("UPDATE `$this->table` SET url='$url' WHERE catid=$catid");
+			}
 			unset($url);
 		}
+		
 		return $url;
 	}
 

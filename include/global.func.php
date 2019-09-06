@@ -1103,7 +1103,7 @@ function magic_image($txt, $fonttype = 4)
 	if(empty($txt)) return false;
 	if(function_exists("imagepng"))
 	{
-		$txt = phpcms_auth($txt, 'ENCODE', AUTH_KEY);
+		$txt = urlencode(phpcms_auth($txt, 'ENCODE', AUTH_KEY));
 		$txt = '<img src="'.PHPCMS_PATH.'magic_image.php?gd=1&fonttype='.$fonttype.'&txt='.$txt.'" align="absmiddle">';
 	}
 	return $txt;

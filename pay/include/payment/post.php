@@ -1,6 +1,5 @@
 <?php
-
-
+defined('IN_PHPCMS') or exit('Access Denied');
 
 $payment_lang = 'languages/' .LANG. '/payment/post.php';
 

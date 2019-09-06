@@ -87,7 +87,7 @@ function alterUC(eID) {
                 链接地址：
                 <input name="ads[linkurl]" type="text" size="50" value="<?=$_ads['linkurl']?>" id="linkurl">
                 <font color="red">*</font><br />
-                上传图片1：<?=form::upload_image("ads[s_imageurl]", 'thumb', $_ads['s_imageurl'])?><br />
+                上传图片1：<?=form::upload_image("ads[s_imageurl]", 'thumb1', $_ads['s_imageurl'])?><br />
                 (第二张图片当广告为随屏移动广告或者对联广告的时有效) </td>
             </tr>
           </tbody>

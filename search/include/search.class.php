@@ -92,6 +92,7 @@ class search
 		$offset = $pasesize*($page-1);
 		if(!$M['fulltextenble'])
 		{
+			$q = str_replace(' ', '%', $q);
 			$where = " `data` LIKE '%$q%' ";
 		}
 		else

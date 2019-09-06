@@ -5,17 +5,20 @@ if($dosubmit)
 {
     if($mark)
     {
+		$baidunum = $baidunum ? intval($baidunum) : 20;
         include 'admin/baidunews.class.php';
-        $baidu = new baidunews($email, $time,$num);
+        $baidu = new baidunews($email, $time,$baidunum);
         $baidu->set_xml();
     }
-    $num = empty($num) ? $num : 20;
-    $today = date('Y-m-d');
+	
+    $num = $num ? intval($num) : 100;
+
+	$today = date('Y-m-d');
     $domain = SITE_URL;
     $sm     =& new google_sitemap();
     $smi    =& new google_sitemap_item($domain, $today, 'daily', '1.0');
     $sm->add_item($smi);
-
+	
     $result1 = $db->query("SELECT * FROM ".DB_PRE."content ORDER BY `inputtime` DESC LIMIT 0 , $num ");
     while($r = $db->fetch_array($result1))
     {

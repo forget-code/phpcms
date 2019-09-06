@@ -19,7 +19,7 @@ else
 	else
 	{
 		$email = implode(',',$email);
-		$sql = "SELECT `title` , `url` FROM ".DB_PRE."content WHERE contentid = '{$contentid}' ";
+		$sql = "SELECT `title` , `url` FROM ".DB_PRE."content WHERE contentid = '{$contentid}' AND status=99 ";
 		$row = $db->get_one($sql);
 		if(empty($row)) echo '0';
 		$content = '<a href='.$row[url].' target="_blank">'.$row[title].'</a><br/>';

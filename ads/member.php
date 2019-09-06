@@ -40,7 +40,11 @@ switch($action)
 			if(!$ads['flashurl']) showmessage($attachment->error(), 'goback');
 			$ads['flashurl'] = UPLOAD_URL.$ads['flashurl'];
 		}
-		if(!$c_ads->edit($ads, $adsid, $_username)) showmessage($c_ads->msg(), 'goback');
+		foreach($ads AS $k=>$v)
+		{
+			if(in_array($k,array('adsname','introduce','placeid','type','linkurl','imageurl','s_imageurl','alt','flashurl','wmode','text','code'))) $info[$k] = $v;
+		}
+		if(!$c_ads->edit($info, $adsid, $_username)) showmessage($c_ads->msg(), 'goback');
 		showmessage($LANG['edit_ads_success'], '?mod=ads&file=ads');
 	}
 	else

@@ -101,8 +101,16 @@ class member_api
 
 	function add($info, $import = 0)
 	{
+		global $M;		
 		$member_fields = array('userid', 'username','password','email','groupid','areaid','amount','point','modelid');
-		$info['groupid'] = $info['groupid'] ? intval($info['groupid']) : 6;
+		if($info['groupid'])
+		{
+			$info['groupid'] = intval($info['groupid']);
+		}
+		else
+		{
+			$info['groupid'] = $M['enablemailcheck'] ? 4 : ($M['enableadmincheck'] ? 5 : 6);
+		}
 		$info['modelid'] = $info['modelid'] ? intval($info['modelid']): 10;
 		$member_info_fields = $this->db->get_fields($this->table_info);
         foreach($info as $field=>$val)

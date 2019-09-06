@@ -87,8 +87,23 @@ class content
 		$modelinfo = $inputinfo['model'];
 		if(!$systeminfo['username']) $systeminfo['username'] = $_username;
 		if(!$systeminfo['userid']) $systeminfo['userid'] = $_userid;
-		if(!$systeminfo['inputtime']) $systeminfo['inputtime'] = TIME;
-		if(!$systeminfo['updatetime']) $systeminfo['updatetime'] = TIME;
+
+			if($data['inputtime'])
+			{
+				$systeminfo['inputtime'] = strtotime($data['inputtime']);
+			}
+			else
+			{
+				$systeminfo['inputtime'] = TIME;
+			}
+			if($data['updatetime'])
+			{
+				$systeminfo['updatetime'] = strtotime($data['updatetime']);
+			}
+			else
+			{
+				$systeminfo['updatetime'] = TIME;
+			}
 
 		$this->db->insert($this->table, $systeminfo);
 		$contentid = $this->db->insert_id();
@@ -113,8 +128,8 @@ class content
 			$relink_array['islink'] = 1;
 			$relink_array['username'] = $_username;
 			$relink_array['userid'] = $_userid;
-			$relink_array['inputtime'] = TIME;
-			$relink_array['updatetime'] = TIME;
+			$relink_array['inputtime'] = $systeminfo['inputtime'];
+			$relink_array['updatetime'] = $systeminfo['updatetime'];
 			$relink_array['status'] = $data['status'];
 			foreach($cat_selected AS $cid)
 			{

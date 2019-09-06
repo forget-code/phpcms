@@ -97,11 +97,13 @@ class database
 			$tabledump = "# phpcms bakfile\n# version:".PHPCMS_VERSION."\n# time:".date('Y-m-d H:i:s')."\n# type:phpcms\n# phpcms:http://www.phpcms.cn\n# --------------------------------------------------------\n\n\n".$tabledump;
 			$tableid = $i;
 			$filename = $tabletype.'_'.date('Ymd').'_'.$random.'_'.$fileid.'.sql';
+			$altid = $fileid;
 			$fileid++;
 			$bakfile = PHPCMS_ROOT.'data/bakup/'.$filename;
 			if(!is_writable(PHPCMS_ROOT.'/data/bakup/')) showmessage($this->lang['data_cannot_bak_to_server'], $forward);
 			file_put_contents($bakfile, $tabledump);
 			@chmod($bakfile, 0777);
+			if(!EXECUTION_SQL) $filename = '分卷：'.$altid.'#';
 			showmessage($this->lang['bak_file']." $filename ".$this->lang['write_success'], '?mod='.$this->mod.'&file='.$this->file.'&action='.$action.'&sizelimit='.$sizelimit.'&sqlcompat='.$sqlcompat.'&sqlcharset='.$sqlcharset.'&tableid='.$tableid.'&fileid='.$fileid.'&startfrom='.$startrow.'&random='.$random.'&dosubmit=1&tabletype='.$tabletype);
 		}
 		else
@@ -176,7 +178,7 @@ class database
         {
             return false;
         }
-        //sql鎵ц
+        //sql执行
         $sql = stripslashes($sql);
         $sql = str_replace("\\", "", $sql);
         $sql = str_replace("\r", "", $sql);
@@ -197,7 +199,7 @@ class database
                     return false;
                 }
             }
-            return true; //閫€鍑哄嚱鏁?
+            return true; //退出函数
         }
         else
         {

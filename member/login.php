@@ -47,6 +47,7 @@ switch($action)
 			{
 				$action = 'login';
 				require MOD_ROOT.'api/passport_server_ucenter.php';
+				$member->edit_password_username($username, $password);
 			}
 		    $info = $member->login($username, $password, $cookietime);
 		    if(!$info)

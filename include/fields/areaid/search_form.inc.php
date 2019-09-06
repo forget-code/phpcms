@@ -22,7 +22,7 @@
 		{
 			$areaname = $AREA[$value]['name'];
 			return "<input type=\"hidden\" name=\"$field\" id=\"$field\" value=\"$value\">
-			<span onclick=\"this.style.display='none';\$('reselect_$field').style.display='';\" style=\"cursor:pointer;\">$areaname <font color=\"red\">点击重选</font></span>
+			<span onclick=\"this.style.display='none';\$('#reselect_$field').show();\" style=\"cursor:pointer;\">$areaname <font color=\"red\">点击重选</font></span>
 			<span id=\"reselect_$field\" style=\"display:none;\">
 			<span id=\"load_$field\"></span> 
 			<a href=\"javascript:area_reload();\">重选</a>

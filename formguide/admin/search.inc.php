@@ -1,4 +1,6 @@
 <?php
+defined('IN_PHPCMS') or exit('Access Denied');
+
 if(!$forward) $forward = '?mod='.$mod.'&file='.$file;
 require CACHE_MODEL_PATH.'formguide_search_form.class.php';
 $formname = $FORMGUIDE[$formid]['name'];
@@ -16,6 +18,4 @@ if($dosubmit)
 	$total = $search->total;
 	include admin_tpl('search_result');
 }
-
-
 ?>

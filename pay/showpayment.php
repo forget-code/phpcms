@@ -15,6 +15,7 @@ switch ($action)
 		}
 		else
 		{
+			if(!in_array($pay,array('offline','online','card'))) showmessage('非法参数');
 			if('offline' == $pay)
 			{
 				$offlines = $payinfo->get_offline();
@@ -55,10 +56,20 @@ switch ($action)
             $paymentid = intval($paymentid);
         }
         set_cookie('orderid', $forward);
+		session_start();
 		$contactname	= new_htmlspecialchars($contactname);
 		$telephone		= is_numeric($telephone);
-		$order['order_sn']	= create_sn();
+		if(isset($_SESSION['order_sn']) && ( TIME< ($_SESSION['order_sn_time']+60)))
+		{
+			$order['order_sn'] = $_SESSION['order_sn'];
+		}
+		else
+		{
+			$_SESSION['order_sn'] = $order['order_sn']	= create_sn();
+			$_SESSION['order_sn_time'] = TIME;
+		}
 		$payment = $payinfo->get_payment($paymentid);
+		if(!$payment) showmessage('支付方式错误');
 		$payment['config']		= $payinfo->unserialize_config($payment['config']);
 
 		$payment['pay_fee']		= pay_fee($amount, $payment['pay_fee'].'%');//计算支付手续费

@@ -65,7 +65,7 @@ include admin_tpl('header');
     <tr>
       <th><strong>绑定域名：</strong><br>如果不绑定则请不要填写</th>
       <td>
-		<?php if(!$MODELE[$modelid]['ishtml']) {?>
+		<?php if($MODEL[$modelid]['ishtml']) {?>
       <input name='category[url]' type='text' id='domain' value='<?php if(preg_match('/:\/\//',$url)) echo $url;?>' size='60' maxlength='60'> 例如：http://soft.phpcms.cn
 		<?php } else echo "当前栏目绑定的模型为不生成静态，需要绑定二级域名，<a href='?mod=phpcms&file=model&action=edit&modelid=".$modelid."'>请点击这里设置</a>";?>
       </td>
@@ -273,7 +273,7 @@ function CheckForm(){
   <tr>
   <th width='25%'><strong>上级栏目</strong></th>
   <td>
-<?=form::select_category('phpcms', 0, 'category[parentid]', 'parentid', '无（作为一级栏目）', $parentid)?>  <font color="red">*</font>
+<?=form::select_category('phpcms', 0, 'category[parentid]', 'parentid', '无（作为一级栏目）', $parentid,'',2)?>  <font color="red">*</font>
   </td>
   </tr>
     <tr>
@@ -293,7 +293,7 @@ function CheckForm(){
     </tr>
 	<tr>
       <th><strong>链接地址</strong></th>
-      <td><input name='category[url]' type='text' id='url' size='60' maxlength='100' require="true" datatype="require" msg="链接地址不能为空">  <font color="red">*</font></td>
+      <td><input name='category[url]' type='text' id='url' size='60' maxlength='100' value="<?=$url?>" require="true" datatype="require" msg="链接地址不能为空">  <font color="red">*</font></td>
     </tr>
 	<tr>
      <td width='30%'></td>

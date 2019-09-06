@@ -81,6 +81,13 @@ switch($action)
 			showmessage('操作失败！');
 		}
 		break;
+    case 'checkdir':
+    	if(!$type->checkdir($value, $typeid))
+    	{
+    		exit('该目录已经存在');
+    	}
+    	exit('success');
+    	break;
     default :
 		$page = max(intval($page), 1);
 		$pagesize = max(intval($pagesize), 20);

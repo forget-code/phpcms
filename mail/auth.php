@@ -19,7 +19,7 @@ switch($ac)
             if($auth == md5($md5) && is_email($em))
             {
                 $m->checkMailType($em,$tp);
-                    showmessage('订阅成功!');
+                showmessage('订阅成功!');
             }
             else
             {
@@ -41,13 +41,8 @@ switch($ac)
             }
             if( $auth == md5($md5) && is_email($em))
             {
-                if($ui)
-                {}
-                else
-                {
-                    $m->delTpyeMail($em,$tp);
-                    showmessage('退订成功!');
-                }
+				$m->delTpyeMail($em,$tp);
+				showmessage('退订成功!');
             }
             else
             {
@@ -60,7 +55,8 @@ switch($ac)
         }
         break;
         case 'activate':
-            $em = trim($em); $om = trim($om);
+            $em = trim($em);
+			$om = trim($om);
             if(is_email($em) && is_email($om))
             {
                 if($m->setActivation($em, $om, $auth))

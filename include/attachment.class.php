@@ -105,7 +105,8 @@ class attachment
 			$savefile = preg_replace("/(php|phtml|php3|php4|jsp|exe|dll|asp|cer|asa|shtml|shtm|aspx|asax|cgi|fcgi|pl)(\.|$)/i", "_\\1\\2", $savefile);
 			$filepath = preg_replace("|^".UPLOAD_ROOT."|", "", $savefile);
 			if(!$this->overwrite && file_exists($savefile)) continue;
-			if(@move_uploaded_file($file['tmp_name'], $savefile) || @copy($file['tmp_name'], $savefile))
+			$upload_func = UPLOAD_FUNC;
+			if(@$upload_func($file['tmp_name'], $savefile))
 			{
 				$this->uploadeds++;
 				@chmod($savefile, 0644);
@@ -114,11 +115,21 @@ class attachment
 				$aids[] = $this->add($uploadedfile);
 			}
 		}
+		$attachments = get_cookie('attachments');
+		if(is_array($attachments) && !empty($attachments))
+		{
+			foreach($attachments as $k=>$v)
+			{
+				$attachments[$k] = '';
+			}
+		}
+		set_cookie('attachments', $attachments);
 		return $aids;
 	}
 
 	function download($field, $value, $ext = 'gif|jpg|jpeg|bmp|png', $absurl = '', $basehref = '')
 	{
+		
 		$this->field = $field;
 		$dir = date('Y/md/', TIME);
 		$uploadpath = PHPCMS_PATH.UPLOAD_URL.$dir;
@@ -138,7 +149,8 @@ class attachment
 		foreach($remotefileurls as $k=>$file)
 		{
 			if(strpos($file, '://') === false) continue;
-			$filename = basename($file);
+			$filename = fileext($file);
+			$filename = $this->getname($filename);
 			$newfile = $uploaddir.$filename;
 			$upload_func = UPLOAD_FUNC;
 			if(@$upload_func($file, $newfile))
@@ -277,11 +289,6 @@ class attachment
 				{
 					$aids[] = $aid;
 				}
-			}
-			if($aids_del)
-			{
-				$aids_del = implodeids($aids_del);
-				$this->delete("`aid` IN($aids_del)");
 			}
 		}
 		else

@@ -4,6 +4,7 @@ require_once MOD_ROOT.'include/ask.class.php';
 $ask = new ask();
 header('Content-type: text/html; charset=utf-8');
 if(strtolower(CHARSET) != 'utf-8') $q = iconv(CHARSET, 'utf-8', $q);
+$q = addslashes($q);
 if($q)
 {
 	$where = " title LIKE '%$q%' AND status = 5";

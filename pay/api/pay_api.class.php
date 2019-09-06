@@ -28,7 +28,6 @@ class pay_api
 
 	function update_exchange($module, $type, $number, $note = '', $userid =0, $authid = '')
 	{
-        error_reporting(E_ALL);
 		global $MODULE, $_userid, $_username, $_point, $_amount;
         $inputid = $_userid;
         $inputer = $_username;

@@ -137,6 +137,39 @@ th{ font-size:12px; background: url(admin/skin/images/bg_table.jpg) repeat-x 0 -
     <h3><span id="memo_mtime" style="float:right; padding-right:10px;"></span>我的备忘录</h3>
     <div class="bdr"><textarea name="data" id="memo_data" class="inputtext" style="height:170px;width:99%;margin:5px; padding:5px" onblur='$.post("?mod=phpcms&file=memo&action=set", { data: this.value }, function(data){$("#memo_mtime").html(data);});'></textarea></div>
 	<table cellpadding="0" cellspacing="1">
+	<caption>安全小卫士</caption>
+	<?php if(DEBUG) {?>
+		<tr>
+			<td class="align_l"><font color="red">网站上线后，建议关闭 DEBUG （前台SQL错误提示）</font> <BR>方法：打开文件 include/config.inc.php
+设置此项 define('DEBUG', <font color="red">0</font>);</td>
+		</tr>
+	<?php }
+	if(FILE_MANAGER) {?>
+		<tr>
+			<td class="align_l"><font color="red">建议关闭 FILE_MANAGER （文件管理器）</font> <BR>方法：打开文件 include/config.inc.php
+设置此项 define('FILE_MANAGER', '<font color="red">0</font>');</td>
+		</tr>
+	<?php } 
+	if(ACTION_TEMPLATE) {?>
+		<tr>
+			<td class="align_l"><font color="red">建议关闭 ACTION_TEMPLATE （在线编辑模板）</font> <BR>方法：打开文件 include/config.inc.php
+设置此项 define('ACTION_TEMPLATE', '<font color="red">0</font>');</td>
+		</tr>
+	<?php }
+	if(EXECUTION_SQL) {?>
+		<tr>
+			<td class="align_l"><font color="red">建议关闭 EXECUTION_SQL （执行SQL）</font> <BR>方法：打开文件 include/config.inc.php
+设置此项 define('EXECUTION_SQL', '<font color="red">0</font>');</td>
+		</tr>
+	<?php } 
+	if(@file_exists(PHPCMS_ROOT.'install/modules.inc.php')) {?>
+		<tr>
+			<td class="align_l"><font color="red">建议从空间删除安装文件目录 install/ </font></td>
+		</tr>
+	<?php } ?>
+	</table>
+
+	<table cellpadding="0" cellspacing="1">
 	<caption>Phpcms 授权信息</caption>
 		<tr>
 			<td width="60" class="align_r">版本号</td>
@@ -217,7 +250,7 @@ if($_message)
 {
 ?> 
 	<bgsound src="images/message.wav" id="message_sound" > 
-<? }
+<?php }
 ?>
 <script type="text/javascript" src="<?=$notice_url?>"></script>
 </body>

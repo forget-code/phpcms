@@ -4,6 +4,7 @@ if(!isset($a_k)) showmessage($LANG['illegal_parameters']);
 
 $a_k = phpcms_auth($a_k, 'DECODE', AUTH_KEY);
 if(empty($a_k)) showmessage($LANG['illegal_parameters']);
+unset($i,$m,$f);
 parse_str($a_k);
 if(isset($i)) $i = intval($i);
 if(!isset($m)) showmessage($LANG['illegal_parameters']);

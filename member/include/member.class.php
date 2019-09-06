@@ -183,10 +183,21 @@ class member
 			$this->msg = 'username_not_exist';
 			return FALSE;
 		}
-		if($r['password'] != $this->password($password) && $r['password'] != substr($this->password($password), 8, 16))
+
+		$md5_password = $this->password($password);
+		if($r['password'] != $md5_password)
 		{
-			$this->msg = 'password_not_right';
-			return FALSE;
+			if($r['password'] == substr($md5_password, 8, 16))
+			{
+				$arr_password = array('password'=>$md5_password);
+				$this->db->update($this->table, $arr_password, "userid='$userid'");
+				$this->db->update($this->table_cache, $arr_password, "userid='$userid'");
+			}
+			else
+			{
+				$this->msg = 'password_not_right';
+				return FALSE;
+			}
 		}
 		if($r['groupid'] == 1)
 		{
@@ -223,7 +234,7 @@ class member
 		$_cookietime = $cookietime ? intval($cookietime) : ($get_cookietime ? $get_cookietime : 0);
 		$cookietime = $_cookietime ? TIME + $_cookietime : 0;
 		$phpcms_auth_key = md5(AUTH_KEY.$_SERVER['HTTP_USER_AGENT']);
-		$phpcms_auth = phpcms_auth($this->_userid."\t".$this->password($password), 'ENCODE', $phpcms_auth_key);
+		$phpcms_auth = phpcms_auth($this->_userid."\t".$md5_password, 'ENCODE', $phpcms_auth_key);
 		set_cookie('auth', $phpcms_auth, $cookietime);
 		set_cookie('cookietime', $_cookietime, $cookietime);
 		$this->db->query("UPDATE $this->table_info SET lastloginip='".IP."',lastlogintime=".TIME.",logintimes=logintimes+1 WHERE userid=$this->_userid");
@@ -383,12 +394,10 @@ class member
 	function edit($memberinfo)
 	{
 		global $_userid;
-		$this->_userid = $_userid;
-		if(!$memberinfo['userid']) $memberinfo['userid'] = $this->_userid;
-		$userid = intval($memberinfo['userid']);
+		$userid = $_userid;
 		if($userid < 1) return false;
-		$member_fields = array('username', 'email', 'groupid', 'amount', 'message', 'point', 'areaid');
-		$member_info_fields = $this->db->get_fields($this->table_info);
+		$member_fields = array('username', 'email', 'message', 'areaid');
+		$member_info_fields = array('question','answer','avatar');
 		if($member_fields['username']) $this->is_username($memberinfo['username']);
 		foreach ($memberinfo as $k=>$value)
 		{
@@ -577,6 +586,18 @@ class member
 		}
 		$password = $this->password($password);
 		$sql = "UPDATE `$this->table_cache` c, `$this->table` m SET c.`password`='$password', m.`password`='$password' WHERE c.userid=m.userid AND c.userid='$userid'";
+		return $this->db->query($sql);
+	}
+	
+	function edit_password_username($username, $password)
+	{
+		if(!$this->is_password($password))
+		{
+			$this->msg = 'password_not_less_than_3_longer_than_20';
+			return false;
+		}
+		$password = $this->password($password);
+		$sql = "UPDATE `$this->table_cache` c, `$this->table` m SET c.`password`='$password', m.`password`='$password' WHERE c.username=m.username AND c.username='$username'";
 		return $this->db->query($sql);
 	}
 

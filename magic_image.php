@@ -3,7 +3,7 @@ require dirname(__FILE__).'/include/common.inc.php';
 if(isset($gd) && $gd==1 && $txt)
 {
 	header ("Content-type: image/png");
-	$txt = phpcms_auth($txt, 'DECODE', AUTH_KEY);
+	$txt = urldecode(phpcms_auth($txt, 'DECODE', AUTH_KEY));
 	$imageX = strlen($txt)*9;
 	$im = @imagecreate ($imageX, 16) or die ("Cannot Initialize new GD image stream");
 	$bgColor = ImageColorAllocate($im,255,255,255);

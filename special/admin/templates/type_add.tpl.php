@@ -17,7 +17,7 @@ include admin_tpl('header');
     </tr>
 	<tr>
       <th><strong>分类目录</strong></th>
-      <td><input type="text" name="info[typedir]" value="type" size="30"  regexp="^[a-z0-9_]+$" require="true" datatype="limit|custom" min="1" max="50"  msg="字符长度范围必须为1到50位|只能为数字、和字母，下划线" msgid="msgid2"> <font color="red">*</font><span id="msgid2"></span></td>
+      <td><input type="text" name="info[typedir]" value="" size="30"  regexp="^[a-z0-9_]+$" require="true" datatype="limit|custom|ajax" url="?mod=<?=$mod?>&file=<?=$file?>&action=checkdir" min="1" max="50"  msg="字符长度范围必须为1到50位|只能为数字、和字母，下划线|" msgid="msgid2"> <font color="red">*</font><span id="msgid2"></span></td>
     </tr>
 	<tr>
       <th><strong>分类模板</strong></th>

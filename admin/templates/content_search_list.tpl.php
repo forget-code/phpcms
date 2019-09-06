@@ -87,7 +87,7 @@ if(is_array($infos)){
 		<input type="button" name="listorder" value=" 排序 " onclick="myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=listorder&catid=<?=$catid?>&processid=<?=$processid?>&forward=<?=urlencode(URL)?>';myform.submit();"> 
 		<input type="button" name="delete" value=" 删除 " onclick="myform.action='?mod=<?=$mod?>&file=<?=$file?>&action=cancel&catid=<?=$catid?>&processid=<?=$processid?>&forward=<?=urlencode(URL)?>';myform.submit();"> 
 </div>
-<div id="pages"><?=$c->pages?></div>
+<div id="pages"><?=$content_search->pages?></div>
 </form>
 </body>
 </html>

@@ -136,8 +136,8 @@ class comment {
 		  $commentid = trim($commentid);
 		  $content = new_htmlspecialchars($content);
 		  if (empty($_username)) $data['username'] = '游客'; else $data['username'] = $_username;
-		  $r = $this->db->get_one("SELECT `content` FROM $this->_comment_table WHERE `commentid` = '$commentid' ");
-		  $data['content'] = '[quote][blue]引用网友'.'('.$data['username'].')'.'的帖子[/blue]'.$r['content'].'[/quote]'.$content;
+		  $r = $this->db->get_one("SELECT `content`,`username` FROM $this->_comment_table WHERE `commentid` = '$commentid' ");  //增加读取被引用帖子的发表用户名
+		  $data['content'] = '[quote][blue]引用网友'.'('.$r['username'].')'.'的帖子[/blue]'.$r['content'].'[/quote]'.$content;  //原来的$data['username']该为$r['username']
 		  $data['userid'] = $_userid;
 		  $data['ip'] = IP;
 		  $data['addtime'] = TIME;
@@ -155,7 +155,7 @@ class comment {
 		  {
 			return $this->db->insert($this->_comment_table, $data);
 		  }
-	  }
+	  } 
 	  //  0 不需要
 	  function updatecounter($keyid, $mark=1)
 	  {

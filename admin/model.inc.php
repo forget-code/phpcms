@@ -95,7 +95,7 @@ switch($action)
 			if(is_array($array['arr_field']) && !empty($array['arr_field']) && $modelid)
 			{
 				$tablename = DB_PRE.'c_'.$info['tablename'];
-				$arr_model_field = array('contentid', 'catid', 'typeid', 'areaid', 'title', 'style', 'thumb', 'keywords', 'description', 'posids', 'listorder', 'url', 'userid', 'updatetime', 'inputtime', 'status', 'template', 'content');
+				$arr_model_field = array('contentid', 'catid', 'typeid', 'areaid', 'title', 'style', 'thumb', 'keywords', 'description', 'posids', 'listorder', 'url', 'userid', 'updatetime', 'inputtime', 'status', 'template', 'content', 'islink', 'prefix');
 				foreach($array['arr_field'] as $arr_field)
 				{
 					$arr_field['modelid'] = $modelid;

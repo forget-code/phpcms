@@ -21,6 +21,10 @@ switch($action)
 			if(!$info['catid']) showmessage($LANG['select_category'],'goback');
 			if($info['reward'] > $_point) showmessage($LANG['credit_is_poor'],'goback');
 			$posts['isask'] = 1;
+			foreach($info AS $key=>$val)
+			{
+				if(!in_array($key,array('title','catid','reward','anonymity'))) unset($info[$key]);
+			}
 			$posts['message'] = $M['use_editor'] ? $message : strip_tags($message);
 			$info['addtime'] = $posts['addtime'] = TIME;
 			$info['endtime'] = TIME+1296000;

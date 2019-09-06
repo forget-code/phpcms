@@ -1,6 +1,6 @@
 <?php
 defined('IN_PHPCMS') or exit('Access Denied');
-if(!EXECUTION_SQL && ('export' != $action && 'repair' != $action))
+if(defined('EXECUTION_SQL') && !EXECUTION_SQL && ('export' != $action && 'repair' != $action && 'dbsolution' != $action))
 {
     $message = "<font color=\"red\">对不起，出于系统安全考虑，管理员关闭了该功能，如需要打开请自行修改 config.inc.php 文件内对应的相关安全配置信息。<br />（将define('EXECUTION_SQL', '0');替换为define('EXECUTION_SQL', '1');）</font>";
     include admin_tpl('message');
@@ -77,7 +77,7 @@ switch($action)
 			include admin_tpl('database_import');
 		}
 	break;
-
+	
 	case 'repair':
 		if($dosubmit)
 		{
@@ -177,6 +177,46 @@ switch($action)
 			$referer = urlencode('?mod='.$mod.'&file='.$file.'&action='.$action);
 			$type = '1';
 			include admin_tpl('database_replace');
+		}
+	break;
+	
+	case 'dbsolution':
+		$db_array = array('content', 'attachment');
+		if($dosubmit)
+		{
+			if($dbsolution)
+			{
+				foreach ($db_array as $dbname)
+				{
+					$result = $db->query("SHOW COLUMNS FROM `".DB_PRE.$dbname."`");
+					while($r = $db->fetch_array($result))
+					{	
+						if(preg_match('/^varchar*/', $r['Type']))
+						{
+							$db->query("ALTER TABLE `".DB_PRE.$dbname."` CHANGE `".$r['Field']."` `".$r['Field']."` ".str_replace('varchar', 'char', $r['Type'])." NOT NULL ");
+						}
+					}
+				}
+			}
+			else 
+			{
+				foreach ($db_array as $dbname)
+				{
+					$result = $db->query("SHOW COLUMNS FROM `".DB_PRE.$dbname."`");					
+					while($r = $db->fetch_array($result))
+					{	
+						if(preg_match('/^char*/', $r['Type']))
+						{
+							$db->query("ALTER TABLE `".DB_PRE.$dbname."` CHANGE `".$r['Field']."` `".$r['Field']."` ".str_replace('char', 'varchar', $r['Type'])." NOT NULL ");
+						}
+					}
+				}	
+			}
+			showmessage('转换成功', $forward);
+		}
+		else 
+		{
+			include admin_tpl('database_solution');
 		}
 	break;
 }

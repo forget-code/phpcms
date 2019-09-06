@@ -28,6 +28,7 @@ if(!$contribute)
 		foreach($cats AS $k=>$v)
 		{
 			$selected = '';
+			if($v['child'] == 1) continue;
 			if($v['child'] == 0 && $catid == $k) $selected = 'selected';
 			$categorys .= "<option value='$k' $selected>$v[catname]</option>";
 		}
@@ -42,6 +43,7 @@ if(!$contribute)
 else
 {
 	if($catid == '') showmessage('请选择栏目',$forward);
+	if($CATEGORY[$catid]['child']) showmessage('请选择的栏目不允许发布信息，请重新选择',$forward);
 	if(!isset($CATEGORY[$catid]) || $CATEGORY[$catid]['type'] != 0) showmessage('非法参数！');
 	$category = cache_read("category_$catid.php");
 	extract($category);

@@ -141,8 +141,8 @@ FCKConfig.ToolbarSets["basic"] = [
 	['Source','Bold','Italic','TextColor','-','OrderedList','UnorderedList','-','Link','Unlink','-','Image','Attach','Flash','Media']
 ] ;
 
-FCKConfig.EnterMode = 'p' ;			// p | div | br
-FCKConfig.ShiftEnterMode = 'br' ;	// p | div | br
+FCKConfig.EnterMode = 'br' ;			// p | div | br
+FCKConfig.ShiftEnterMode = 'p' ;	// p | div | br
 
 FCKConfig.Keystrokes = [
 	[ CTRL + 65 /*A*/, true ],

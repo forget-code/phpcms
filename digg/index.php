@@ -1,6 +1,6 @@
 <?php
 require './include/common.inc.php';
-
+if(isset($page)) $page = max(intval($page), 1);
 $head['title'] = $LANG['title'].' - '.$PHPCMS['sitename'];
 $head['keywords'] = $LANG['keywords'];
 $head['description'] = $LANG['keywords'].' - '.$PHPCMS['sitename'];

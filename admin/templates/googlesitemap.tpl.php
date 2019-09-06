@@ -20,7 +20,7 @@ Sitemaps 服务旨在使用 Feed 文件 sitemap.xml 通知 Google、Yahoo! 以�
 <font color="red">PHPCMS可自动生成网站的Sitemaps，但是您还需要向google或者baidu提交Sitemaps的访问地址。</font><br/>
 <font color="blue">您的网站的Sitemaps 访问地址为：</font><a href="<?=SITE_URL?>sitemaps.xml" target="_blank" title="点击查看Google Sitemaps"><?=SITE_URL?>sitemaps.xml</a><br/>
 <font color="red">PHPCMS可自动生成网站的<<互联网新闻开放协议>>，但是您还需要向baidu提交访问地址。</font><br/>
-<font color="blue">您的网站的Sitemaps 访问地址为：</font><a href="<?=SITE_URL?>sitemaps.xml" target="_blank" title="点击查看Google Sitemaps"><?=SITE_URL?>baidunews.xml</a><br/>
+<font color="blue">您的网站的Sitemaps 访问地址为：</font><a href="<?=SITE_URL?>baidunews.xml" target="_blank" title="互联网新闻开放协议"><?=SITE_URL?>baidunews.xml</a><br/>
 <font color="blue">更多关于Google Sitemaps的信息：</font><a href="https://www.google.com/webmasters/sitemaps/login?hl=zh_CN" target="_blank" title="点击了解更多关于Google Sitemaps的信息">https://www.google.com/webmasters/sitemaps/login?hl=zh_CN</font><br />
 <font color="blue">更多关于<<互联网新闻开放协议>>的信息：</font><a href="http://news.baidu.com/newsop.html#kg" target="_blank" title="点击了解更多关于<<互联网新闻开放协议>>的信息">http://news.baidu.com/newsop.html#kg</font>
 	 </td>
@@ -49,7 +49,7 @@ Sitemaps 服务旨在使用 Feed 文件 sitemap.xml 通知 Google、Yahoo! 以�
 </tr>
 <tr>
     <th><strong>生成数量</strong></th>
-    <td><input type="text" name="num" value="20" /></td>
+    <td><input type="text" name="baidunum" value="20" /></td>
 </tr>
 </table>
 <table cellpadding="0" cellspacing="1" class="table_form">
