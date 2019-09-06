@@ -13,6 +13,9 @@ $comments = new comment();
 switch ( $action )
 {
 	case 'vote':
+		if(!preg_match('/([a-z0-9\_\-]+)/',$field)) showmessage('非法操作');
+		if(!preg_match('/([a-z0-9\_\-]+)/',$id)) showmessage('非法操作');
+	
 		$count = $comments->ajaxupdate($field, $id);
 		echo ' '.$LANG[$field].'('.$count[$field].')';
 	break;

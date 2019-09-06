@@ -19,6 +19,7 @@ if ($dosubmit)
     {
         $info['error_link'] = trim($info['error_link']);
     }
+	$info['error_link'] = htmlspecialchars($info['error_link']);
     $forward = $info['error_link'];
     $errors = new error();
     if($errors->add($info)) showmessage('提交成功', $forward);
