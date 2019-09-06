@@ -273,6 +273,7 @@ function execute_time() {
 function random($length, $chars = '0123456789') {
 	$hash = '';
 	$max = strlen($chars) - 1;
+	mt_srand();
 	for($i = 0; $i < $length; $i++) {
 		$hash .= $chars[mt_rand(0, $max)];
 	}
@@ -1589,7 +1590,7 @@ function siteurl($siteid) {
  */
 
 function upload_key($args) {
-	$pc_auth_key = md5(pc_base::load_config('system','auth_key').$_SERVER['HTTP_USER_AGENT']);
+	$pc_auth_key = md5(PC_PATH.'upload'.pc_base::load_config('system','auth_key').$_SERVER['HTTP_USER_AGENT']);
 	$authkey = md5($args.$pc_auth_key);
 	return $authkey;
 }
@@ -1600,11 +1601,11 @@ function upload_key($args) {
  */
 function get_auth_key($prefix,$suffix="") {
 	if($prefix=='login'){
-		$pc_auth_key = md5(pc_base::load_config('system','auth_key').ip());
+		$pc_auth_key = md5(PC_PATH.'login'.pc_base::load_config('system','auth_key').ip());
 	}else if($prefix=='email'){
-		$pc_auth_key = md5(pc_base::load_config('system','auth_key'));
+		$pc_auth_key = md5(PC_PATH.'email'.pc_base::load_config('system','auth_key'));
 	}else{
-		$pc_auth_key = md5(pc_base::load_config('system','auth_key').$suffix);
+		$pc_auth_key = md5(PC_PATH.'other'.pc_base::load_config('system','auth_key').$suffix);
 	}
 	$authkey = md5($prefix.$pc_auth_key);
 	return $authkey;

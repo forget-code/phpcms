@@ -86,14 +86,15 @@ class param {
 	public static function set_cookie($var, $value = '', $time = 0) {
 		$time = $time > 0 ? $time : ($value == '' ? SYS_TIME - 3600 : 0);
 		$s = $_SERVER['SERVER_PORT'] == '443' ? 1 : 0;
+		$httponly = $var=='userid'||$var=='auth'?true:false;
 		$var = pc_base::load_config('system','cookie_pre').$var;
 		$_COOKIE[$var] = $value;
 		if (is_array($value)) {
 			foreach($value as $k=>$v) {
-				setcookie($var.'['.$k.']', sys_auth($v, 'ENCODE'), $time, pc_base::load_config('system','cookie_path'), pc_base::load_config('system','cookie_domain'), $s);
+				setcookie($var.'['.$k.']', sys_auth($v, 'ENCODE', md5(PC_PATH.'cookie'.$var).pc_base::load_config('system','auth_key')), $time, pc_base::load_config('system','cookie_path'), pc_base::load_config('system','cookie_domain'), $s, $httponly);
 			}
 		} else {
-			setcookie($var, sys_auth($value, 'ENCODE'), $time, pc_base::load_config('system','cookie_path'), pc_base::load_config('system','cookie_domain'), $s);
+			setcookie($var, sys_auth($value, 'ENCODE', md5(PC_PATH.'cookie'.$var).pc_base::load_config('system','auth_key')), $time, pc_base::load_config('system','cookie_path'), pc_base::load_config('system','cookie_domain'), $s, $httponly);
 		}
 	}
 
@@ -105,7 +106,13 @@ class param {
 	 */
 	public static function get_cookie($var, $default = '') {
 		$var = pc_base::load_config('system','cookie_pre').$var;
-		return isset($_COOKIE[$var]) ? sys_auth($_COOKIE[$var], 'DECODE') : $default;
+		$value = isset($_COOKIE[$var]) ? sys_auth($_COOKIE[$var], 'DECODE', md5(PC_PATH.'cookie'.$var).pc_base::load_config('system','auth_key')) : $default;
+		if(in_array($var,array('_userid','userid','siteid','_groupid','_roleid'))) {
+			$value = intval($value);
+		} elseif(in_array($var,array('_username','username','_nickname','admin_username','sys_lang'))) { //  site_model auth
+			$value = safe_replace($value);
+		}
+		return $value;
 	}
 
 	/**

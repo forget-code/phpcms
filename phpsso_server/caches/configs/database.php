@@ -8,7 +8,7 @@ return array (
 		'username' => '',
 		'password' => '',
 		'tablepre' => 'ps_',
-		'charset' => 'utf8',
+		'charset' => 'gbk',
 		'type' => 'mysqli',
 		'debug' => true,
 		'pconnect' => 0,

@@ -212,6 +212,7 @@ function execute_time() {
 function random($length, $chars = '0123456789') {
 	$hash = '';
 	$max = strlen($chars) - 1;
+	mt_srand();
 	for($i = 0; $i < $length; $i++) {
 		$hash .= $chars[mt_rand(0, $max)];
 	}

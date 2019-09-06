@@ -176,7 +176,7 @@ $LANG['setting_admin_log'] = '启用后台管理操作日志';
 $LANG['setting_error_log'] = '保存错误日志';
 $LANG['setting_error_log_size'] = '错误日志预警大小';
 $LANG['setting_adminaccessip'] = '允许访问后台的IP列表';
-$LANG['setting_maxloginfailedtimes'] = '后台最大登陆失败次数';
+$LANG['setting_maxloginfailedtimes'] = '后台最大登录失败次数';
 $LANG['setting_maxiplockedtime'] = 'IP锁定时间';
 $LANG['setting_minrefreshtime'] = '连续两次刷新最短间隔';
 $LANG['setting_phpsso'] = '启用PHPSSO';
@@ -738,7 +738,7 @@ $LANG['not_display_in_menu'] = '不在导航显示';
 
 $LANG['apply_to_child'] = '应用到子栏目：';
 $LANG['admin_url'] = '后台访问域名';
-$LANG['admin_url_tips'] = '例如：admin.domain.com，绑定后，只能通过该域名登陆，配置保存在 /caches/configs/system.php中，修改参数admin_url可手动取消绑定';
+$LANG['admin_url_tips'] = '例如：admin.domain.com，绑定后，只能通过该域名登录，配置保存在 /caches/configs/system.php中，修改参数admin_url可手动取消绑定';
 
 $LANG['setting_connect_qqnew'] = 'QQ号码登录';
 $LANG['setting_connect_qqcallback'] = '回调地址';
